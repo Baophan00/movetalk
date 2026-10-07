@@ -36,17 +36,16 @@ t('conv cards expose Play all', js.includes('playConversation(') && js.includes(
 // 5. conversation-line audio coverage is incremental: clips are rendered in
 //    batches and speak() falls back to the browser voice for anything missing.
 const fn = new Function('document', 'window', 'addEventListener', 'IntersectionObserver',
-  'localStorage', 'location', 'setInterval', 'clearInterval', 'setTimeout', js + '\nreturn TRACKS;');
+  'localStorage', 'location', 'setInterval', 'clearInterval', 'setTimeout', js + '\nreturn { TRACKS, LESSON_DATA };');
 const stub = {
   getElementById: () => ({ innerHTML: '', classList: { add() {}, remove() {}, toggle() {} }, textContent: '', dataset: {}, addEventListener() {}, querySelectorAll: () => [] }),
   querySelectorAll: () => [], querySelector: () => null,
   createElement: () => ({ classList: { add() {}, remove() {} }, style: {}, appendChild() {} }),
   documentElement: { dataset: {} },
 };
-const TRACKS = fn(stub, { innerWidth: 1400, scrollTo() {} }, () => {}, class { observe() {} }, { getItem: () => null, setItem() {} }, { hash: '' }, () => 0, () => {}, () => {});
+const { TRACKS, LESSON_DATA: LD } = fn(stub, { innerWidth: 1400, scrollTo() {} }, () => {}, class { observe() {} }, { getItem: () => null, setItem() {} }, { hash: '' }, () => 0, () => {}, () => {});
 
 let convLines = 0, covered = 0;
-const LD = fn(stub, { innerWidth: 1400, scrollTo() {} }, () => {}, class { observe() {} }, { getItem: () => null, setItem() {} }, { hash: '' }, () => 0, () => {}, () => {}).LESSON_DATA || {};
 for (const num of Object.keys(LD)) {
   for (const b of ((LD[num].parts || {}).conversations || [])) {
     if (b.t !== 'dialog') continue;
