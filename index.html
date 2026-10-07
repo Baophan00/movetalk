@@ -308,6 +308,8 @@ h3{font-size:clamp(20px,3vw,28px);font-weight:600;line-height:1.2;letter-spacing
 .e2-task-card{padding:20px;border-radius:14px;background:var(--surface);border:1px solid var(--border)}
 .e2-task-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);margin-bottom:8px}
 .e2-task-text{font-size:14px;line-height:1.6}
+.e2-say.primary{color:var(--lav);border-color:var(--pill-on-border);background:var(--pill-on-bg)}
+.e2-conv-actions{display:flex;gap:6px;flex-shrink:0}
 .e2-say{font-size:11px;color:var(--text2);background:none;border:1px solid var(--border);padding:3px 9px;border-radius:6px;cursor:pointer;transition:.15s;flex-shrink:0}
 .e2-say:hover{color:var(--lav);border-color:var(--pill-on-border)}
 .e2-quiz-item{padding:16px;border-radius:12px;background:var(--surface);border:1px solid var(--border);margin-bottom:10px}
@@ -897,7 +899,7 @@ const E2_LESSONS={
     q:'Answer: 1) What is the first rule? 2) What is the difference in the two examples? 3) What should you do if you cannot agree yet?'
   },
   conversations:[
-    {title:'A weekend plan',lines:[
+    {title:'A weekend plan',audio:'audio/ref-audio/weekend-plan.mp3',lines:[
       {speaker:'Mia',text:"I found a great hotel for our weekend trip. It's right in the city centre."},
       {speaker:'Alex',text:"It looks nice, but I don't think we should spend that much."},
       {speaker:'Mia',text:'Really? I think the location will save us a lot of time.'},
@@ -911,15 +913,19 @@ const E2_LESSONS={
       {speaker:'Mia',text:"Okay. Let's each choose two places and look at them tonight."},
       {speaker:'Alex',text:"Perfect. I'm sure we can work it out."}
     ]},
-    {title:'A shared apartment',lines:[
+    {title:'A shared apartment',audio:'audio/ref-audio/shared-apartment.mp3',lines:[
       {speaker:'Nina',text:'Ben, can I bring something up? The kitchen has been quite messy lately.'},
       {speaker:'Ben',text:"I know. Work has been exhausting, so I haven't cleaned much this week."},
       {speaker:'Nina',text:"I understand, but I can't keep doing all of it by myself."},
       {speaker:'Ben',text:"That's fair. I didn't realise you were doing most of the cleaning."},
-      {speaker:'Nina',text:'I didn\'t say anything because I wanted to avoid an argument.'},
+      {speaker:'Nina',text:"I didn't say anything because I wanted to avoid an argument."},
       {speaker:'Ben',text:'I wish you had told me earlier. We could have worked it out.'},
       {speaker:'Nina',text:"You're right. Could we make a simple cleaning schedule?"},
-      {speaker:'Ben',text:"I'm open to that, although I don't want it to be too strict."}
+      {speaker:'Ben',text:"I'm open to that, although I don't want it to be too strict."},
+      {speaker:'Nina',text:"Fair enough. How about we each choose the jobs we don't mind doing?"},
+      {speaker:'Ben',text:'That sounds reasonable. I can cook and take out the rubbish.'},
+      {speaker:'Nina',text:"Great. I'll do the shopping and we can share the rest."},
+      {speaker:'Ben',text:"Deal. If something bothers us, let's bring it up sooner."}
     ]}
   ],
   listening:[
@@ -961,7 +967,7 @@ const TRACK_NUM={},TRACK_PART={};
 function esc(s){return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;')}
 let AUDIO_EL=null;
 /* AUDIO_MAP:BEGIN */
-const AUDIO_MAP={"acquaintance": "audio/clips/5695170f672c.mp3","reliable": "audio/clips/c5e8cfa79b53.mp3","considerate": "audio/clips/6271c4b65000.mp3","easy-going": "audio/clips/b28d872db553.mp3","can't stand": "audio/clips/5129f8b266a0.mp3"};
+const AUDIO_MAP={"acquaintance": "audio/clips/5695170f672c.mp3","reliable": "audio/clips/c5e8cfa79b53.mp3","considerate": "audio/clips/6271c4b65000.mp3","easy-going": "audio/clips/b28d872db553.mp3","can't stand": "audio/clips/5129f8b266a0.mp3","put up with": "audio/clips/672335868491.mp3","get along with": "audio/clips/094de84ee009.mp3","lose touch with": "audio/clips/ef18eca2b8e0.mp3","have a lot in common": "audio/clips/adfb36832651.mp3","frustrating": "audio/clips/624f7c0dd6fb.mp3","How are things with your new colleague?": "audio/clips/1ddccedf8eb3.mp3"};
 /* AUDIO_MAP:END */
 function speak(text){
   if(AUDIO_EL){AUDIO_EL.pause();AUDIO_EL=null}
@@ -1002,6 +1008,25 @@ function playNextLine(){
   }
 }
 function stopConversation(){CONV_QUEUE=null;CONV_IDX=0;if(AUDIO_EL){AUDIO_EL.pause();AUDIO_EL=null}}
+let ORIG_BTN=null;
+function playOriginal(src,btn){
+  stopConversation();
+  if(ORIG_BTN&&ORIG_BTN!==btn){ORIG_BTN.textContent=ORIG_BTN.dataset.label;ORIG_BTN=null}
+  if(AUDIO_EL&&AUDIO_EL.dataset&&AUDIO_EL.dataset.orig==='1'){
+    AUDIO_EL.pause();AUDIO_EL=null;
+    if(btn){btn.textContent=btn.dataset.label;ORIG_BTN=null}
+    return;
+  }
+  if(AUDIO_EL){AUDIO_EL.pause();AUDIO_EL=null}
+  AUDIO_EL=new Audio(src);
+  AUDIO_EL.dataset.orig='1';
+  if(btn){
+    if(!btn.dataset.label)btn.dataset.label=btn.textContent;
+    ORIG_BTN=btn;btn.textContent='⏸ Dừng';
+  }
+  AUDIO_EL.onended=()=>{if(btn)btn.textContent=btn.dataset.label;ORIG_BTN=null;AUDIO_EL=null};
+  AUDIO_EL.play().catch(()=>{toast('Không phát được audio','err');if(btn)btn.textContent=btn.dataset.label});
+}
 function sayBtn(t){return `<button class="e2-say" onclick="speak('${esc(t)}')">🔊</button>`}
 
 function trackSkeleton(tk){
@@ -1057,10 +1082,10 @@ function renderTrack(tk){
   const P=TRACK_PARTS.find(p=>p.id===part);
   main.innerHTML=head+`<div class="e2-panel"><div class="e2-panel-head"><h3>${P.ico} ${P.name}</h3><button class="e2-panel-back" onclick="trackBack('${tk}')">← Danh sách phần</button></div><div id="${tk}-body"></div></div>`;
   const b=document.getElementById(tk+'-body');
-  if(b)b.innerHTML=trackBody(part,L);
+  if(b)b.innerHTML=trackBody(part,L,tk);
 }
 
-function trackBody(part,L){
+function trackBody(part,L,tk){
   const has=(k)=>L[k]!==undefined&&L[k]!==null&&!(Array.isArray(L[k])&&!L[k].length);
   if(!has(part)){
     const p=TRACK_PARTS.find(x=>x.id===part);
@@ -1070,7 +1095,7 @@ function trackBody(part,L){
     case 'vocab':return `<div class="e2-vocab-grid">${L.vocab.map(v=>`<div class="e2-vocab-item"><div class="e2-vocab-en">${v.en} ${sayBtn(v.en)}</div><div class="e2-vocab-vi">${v.vi||''}</div>${v.pattern?`<div class="e2-vocab-pattern">${v.pattern}</div>`:''}</div>`).join('')}</div>`;
     case 'grammar':return L.grammar.map(g=>`<div class="e2-gram-item"><div class="e2-gram-key">${g.key}</div><div class="e2-gram-ex">${g.ex}</div></div>`).join('');
     case 'reading':return `<div class="e2-read">${L.reading.text}</div>${L.reading.q?`<div class="e2-task-card" style="margin-top:14px"><div class="e2-task-label">Câu hỏi</div><div class="e2-task-text">${L.reading.q}</div></div>`:''}`;
-    case 'conversations':return L.conversations.map((c,ci)=>`<div class="e2-conv-card"><div class="e2-conv-title"><span>${c.title}</span><button class="e2-say" onclick="playConversation('${tk}',${TRACK_NUM[tk]},${ci})">▶ Play all</button></div>${c.lines.map(l=>`<div class="e2-conv-line"><span class="e2-conv-speaker">${l.speaker}</span><span style="flex:1">${l.text}</span>${sayBtn(l.text)}</div>`).join('')}</div>`).join('');
+    case 'conversations':return L.conversations.map((c,ci)=>`<div class="e2-conv-card"><div class="e2-conv-title"><span>${c.title}</span><span class="e2-conv-actions">${c.audio?`<button class="e2-say primary" onclick="playOriginal('${esc(c.audio)}',this)">🎧 Nghe bản gốc</button>`:''}<button class="e2-say" onclick="playConversation('${tk}',${TRACK_NUM[tk]||1},${ci})">▶ Play all</button></span></div>${c.lines.map(l=>`<div class="e2-conv-line"><span class="e2-conv-speaker">${l.speaker}</span><span style="flex:1">${l.text}</span>${sayBtn(l.text)}</div>`).join('')}</div>`).join('');
     case 'listening':return `<p class="faint text-sm" style="margin-bottom:14px">Nghe từng câu, sau đó nhắc lại (shadowing).</p>`+L.listening.map(s=>`<div class="e2-speaking-item"><span style="flex:1">${s}</span>${sayBtn(s)}</div>`).join('');
     case 'exercises':return L.exercises.map((e,i)=>`<div class="e2-quiz-item"><div class="e2-quiz-q">${i+1}. ${e.q}</div><div class="e2-quiz-opts">${e.options.map((o,j)=>`<button class="e2-quiz-opt" onclick="trackAnswer(this,${j===e.answer})">${o}</button>`).join('')}</div></div>`).join('');
     case 'speaking':return L.speaking.map((s,i)=>`<div class="e2-speaking-item"><span class="n">${i+1}</span><span style="flex:1">${s}</span>${sayBtn(s)}</div>`).join('');

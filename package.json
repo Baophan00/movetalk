@@ -2,7 +2,7 @@
   "name": "movetalk",
   "private": true,
   "scripts": {
-    "test": "node tests/unit.test.js",
+    "test": "node tests/unit.test.js && node tests/conversation.test.js && node tests/audio.test.js",
     "test:browser": "node tests/browser.test.js"
   },
   "devDependencies": { "ws": "^8.18.0" }

@@ -61,7 +61,7 @@ const L=api.TRACKS.e2.lessons[1];
 const req=['title','vocab','grammar','reading','conversations','listening','exercises','speaking','roleplay','finalTask','reference'];
 check('E2 L1 has all 10 sections', req.every(f=>L[f]!==undefined), req.filter(f=>L[f]===undefined).join(','));
 for(const p of api.TRACK_PARTS.map(x=>x.id)){
-  const html=api.trackBody(p,L);
+  const html=api.trackBody(p,L,'e2');
   check('E2 L1 body '+p, html.length>20 && !html.includes('undefined'), 'len='+html.length);
 }
 // navigate into a part
