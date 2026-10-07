@@ -3,7 +3,7 @@ const {spawn}=require('child_process');
 const http=require('http');
 const CHROME='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const PORT=9333;
-const proc=spawn(CHROME,['--headless=new','--remote-debugging-port='+PORT,'--no-first-run','--no-default-browser-check','--user-data-dir=/tmp/chrome-mt','--disable-gpu','about:blank'],{stdio:'ignore'});
+const proc=spawn(CHROME,['--headless=new','--remote-debugging-port='+PORT,'--no-first-run','--no-default-browser-check','--user-data-dir=/tmp/chrome-mt2','--disable-gpu','about:blank'],{stdio:'ignore'});
 
 const get=(path)=>new Promise((res,rej)=>{
   http.get({host:'127.0.0.1',port:PORT,path},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>res(JSON.parse(d)))}).on('error',rej);
@@ -30,7 +30,7 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
   await cmd('Page.enable');
   await cmd('Runtime.enable');
-  await cmd('Page.navigate',{url:'http://localhost:8080/'});
+  await cmd('Page.navigate',{url:'http://127.0.0.1:8080/'});
   await sleep(2500);
 
   let fail=0;

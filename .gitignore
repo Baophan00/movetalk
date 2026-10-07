@@ -1,1 +1,6 @@
 node_modules/
+.ttsvenv/
+audio/clips/*.wav
+audio/render.log
+audio/supervise.log
+audio/jobs.json

@@ -295,7 +295,7 @@ h3{font-size:clamp(20px,3vw,28px);font-weight:600;line-height:1.2;letter-spacing
 .e2-vocab-vi{font-size:12px;color:var(--text2);margin-top:4px}
 .e2-vocab-pattern{font-size:11px;color:var(--accent2);margin-top:4px;font-style:italic}
 .e2-conv-card{padding:16px;border-radius:12px;background:var(--surface);border:1px solid var(--border);margin-bottom:12px}
-.e2-conv-title{font-weight:600;font-size:14px;margin-bottom:10px}
+.e2-conv-title{font-weight:600;font-size:14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
 .e2-conv-line{padding:8px 12px;border-radius:8px;background:var(--surface2);margin-bottom:6px;font-size:13px;display:flex;gap:10px;align-items:flex-start}
 .e2-conv-speaker{font-weight:600;color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;flex-shrink:0;padding-top:2px;min-width:52px}
 .e2-speaking-item{padding:12px 16px;border-radius:10px;background:var(--surface);border:1px solid var(--border);margin-bottom:8px;font-size:14px;display:flex;gap:10px;align-items:flex-start}
@@ -906,7 +906,10 @@ const E2_LESSONS={
       {speaker:'Alex',text:'Neither do I. We could find a cheaper place nearby.'},
       {speaker:'Mia',text:'You have a point. What price range do you have in mind?'},
       {speaker:'Alex',text:'Maybe something under two million a night. Would that work?'},
-      {speaker:'Mia',text:"Possibly. I'm open to staying outside the centre if the transport is good."}
+      {speaker:'Mia',text:"Possibly. I'm open to staying outside the centre if the transport is good."},
+      {speaker:'Alex',text:'Fair enough. We can compare travel time as well as price.'},
+      {speaker:'Mia',text:"Okay. Let's each choose two places and look at them tonight."},
+      {speaker:'Alex',text:"Perfect. I'm sure we can work it out."}
     ]},
     {title:'A shared apartment',lines:[
       {speaker:'Nina',text:'Ben, can I bring something up? The kitchen has been quite messy lately.'},
@@ -956,7 +959,49 @@ TRACKS.e2.lessons=E2_LESSONS;
 const TRACK_NUM={},TRACK_PART={};
 
 function esc(s){return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;')}
-function speak(text){if('speechSynthesis' in window){const u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=.9;speechSynthesis.speak(u)}}
+let AUDIO_EL=null;
+/* AUDIO_MAP:BEGIN */
+const AUDIO_MAP={"acquaintance": "audio/clips/5695170f672c.mp3","reliable": "audio/clips/c5e8cfa79b53.mp3","considerate": "audio/clips/6271c4b65000.mp3","easy-going": "audio/clips/b28d872db553.mp3","can't stand": "audio/clips/5129f8b266a0.mp3"};
+/* AUDIO_MAP:END */
+function speak(text){
+  if(AUDIO_EL){AUDIO_EL.pause();AUDIO_EL=null}
+  const src=typeof AUDIO_MAP!=='undefined'?AUDIO_MAP[text]:null;
+  if(src){AUDIO_EL=new Audio(src);AUDIO_EL.play().catch(()=>fallbackSpeak(text));return}
+  fallbackSpeak(text);
+}
+function fallbackSpeak(text){
+  if('speechSynthesis' in window){
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang='en-US';u.rate=.9;speechSynthesis.speak(u);
+  }
+}
+let CONV_QUEUE=null,CONV_IDX=0;
+function playConversation(tk,num,ci){
+  stopConversation();
+  const L=TRACKS[tk]&&TRACKS[tk].lessons[num];
+  const conv=L&&L.conversations&&L.conversations[ci];
+  if(!conv||!conv.lines||!conv.lines.length)return;
+  CONV_QUEUE=conv.lines.map(l=>l.text);
+  CONV_IDX=0;
+  toast('Playing conversation…','ok');
+  playNextLine();
+}
+function playNextLine(){
+  if(!CONV_QUEUE||CONV_IDX>=CONV_QUEUE.length){stopConversation();return}
+  const text=CONV_QUEUE[CONV_IDX++];
+  const src=typeof AUDIO_MAP!=='undefined'?AUDIO_MAP[text]:null;
+  if(src){
+    AUDIO_EL=new Audio(src);
+    AUDIO_EL.onended=()=>setTimeout(playNextLine,320);
+    AUDIO_EL.onerror=()=>setTimeout(playNextLine,120);
+    AUDIO_EL.play().catch(()=>setTimeout(playNextLine,120));
+  } else {
+    fallbackSpeak(text);
+    setTimeout(playNextLine,Math.max(1400,text.length*70));
+  }
+}
+function stopConversation(){CONV_QUEUE=null;CONV_IDX=0;if(AUDIO_EL){AUDIO_EL.pause();AUDIO_EL=null}}
 function sayBtn(t){return `<button class="e2-say" onclick="speak('${esc(t)}')">🔊</button>`}
 
 function trackSkeleton(tk){
@@ -1025,7 +1070,7 @@ function trackBody(part,L){
     case 'vocab':return `<div class="e2-vocab-grid">${L.vocab.map(v=>`<div class="e2-vocab-item"><div class="e2-vocab-en">${v.en} ${sayBtn(v.en)}</div><div class="e2-vocab-vi">${v.vi||''}</div>${v.pattern?`<div class="e2-vocab-pattern">${v.pattern}</div>`:''}</div>`).join('')}</div>`;
     case 'grammar':return L.grammar.map(g=>`<div class="e2-gram-item"><div class="e2-gram-key">${g.key}</div><div class="e2-gram-ex">${g.ex}</div></div>`).join('');
     case 'reading':return `<div class="e2-read">${L.reading.text}</div>${L.reading.q?`<div class="e2-task-card" style="margin-top:14px"><div class="e2-task-label">Câu hỏi</div><div class="e2-task-text">${L.reading.q}</div></div>`:''}`;
-    case 'conversations':return L.conversations.map(c=>`<div class="e2-conv-card"><div class="e2-conv-title">${c.title}</div>${c.lines.map(l=>`<div class="e2-conv-line"><span class="e2-conv-speaker">${l.speaker}</span><span style="flex:1">${l.text}</span>${sayBtn(l.text)}</div>`).join('')}</div>`).join('');
+    case 'conversations':return L.conversations.map((c,ci)=>`<div class="e2-conv-card"><div class="e2-conv-title"><span>${c.title}</span><button class="e2-say" onclick="playConversation('${tk}',${TRACK_NUM[tk]},${ci})">▶ Play all</button></div>${c.lines.map(l=>`<div class="e2-conv-line"><span class="e2-conv-speaker">${l.speaker}</span><span style="flex:1">${l.text}</span>${sayBtn(l.text)}</div>`).join('')}</div>`).join('');
     case 'listening':return `<p class="faint text-sm" style="margin-bottom:14px">Nghe từng câu, sau đó nhắc lại (shadowing).</p>`+L.listening.map(s=>`<div class="e2-speaking-item"><span style="flex:1">${s}</span>${sayBtn(s)}</div>`).join('');
     case 'exercises':return L.exercises.map((e,i)=>`<div class="e2-quiz-item"><div class="e2-quiz-q">${i+1}. ${e.q}</div><div class="e2-quiz-opts">${e.options.map((o,j)=>`<button class="e2-quiz-opt" onclick="trackAnswer(this,${j===e.answer})">${o}</button>`).join('')}</div></div>`).join('');
     case 'speaking':return L.speaking.map((s,i)=>`<div class="e2-speaking-item"><span class="n">${i+1}</span><span style="flex:1">${s}</span>${sayBtn(s)}</div>`).join('');
