@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoveTalk — English for Work</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root,[data-theme="dark"]{
+  --bg:#040515;--surface:#0B0D1A;--surface2:#10121F;
+  --text:#F5F5FF;--text2:#A8ACBD;
+  --border:rgba(255,255,255,.08);
+  --accent:#6366F1;--accent2:#8D8FF8;--lav:#D6D6FF;
+  --glow:rgba(99,102,241,.12);
+  --grid:rgba(255,255,255,.03);
+  --header-bg:rgba(4,5,21,.8);
+  --nav-bg:rgba(4,5,21,.95);
+  --bottom-bg:rgba(11,13,26,.9);
+  --hero-glow:rgba(99,102,241,.15);
+  --hero-glow2:rgba(141,143,248,.08);
+  --badge-bg:rgba(99,102,241,.1);
+  --badge2-bg:rgba(255,255,255,.04);
+  --fc-back:linear-gradient(135deg,#6366F1,#8D8FF8);
+  --quiz-border:rgba(255,255,255,.06);
+  --quiz-hover:rgba(255,255,255,.03);
+  --input-border:rgba(255,255,255,.08);
+  --btn2-border:rgba(255,255,255,.12);
+  --pill-border:rgba(255,255,255,.1);
+  --pill-on-bg:rgba(99,102,241,.15);
+  --pill-on-border:rgba(99,102,241,.3);
+  --card-glow:linear-gradient(90deg,transparent,rgba(99,102,241,.4),transparent);
+  --divider:rgba(255,255,255,.06);
+  --hover:rgba(255,255,255,.02);
+  --shadow:rgba(0,0,0,.5);
+  --green:#4ade80;--yellow:#facc15;
+  --hero-cta2:rgba(255,255,255,.1);
+  --hero-cta2-hover:rgba(255,255,255,.2);
+  --scrollbar:rgba(255,255,255,.1);
+  --sel:rgba(99,102,241,.3);
+  --toast-border:rgba(255,255,255,.08);
+  --toast-ok:rgba(99,102,241,.3);
+  --toast-err:rgba(239,68,68,.3);
+  --avatar:linear-gradient(135deg,#6366F1,#8D8FF8);
+  --btn-primary:linear-gradient(135deg,#6366F1,#8D8FF8);
+  --btn-primary-shadow:rgba(99,102,241,.4);
+  --progress:linear-gradient(90deg,#6366F1,#8D8FF8);
+  --vip-bg:linear-gradient(135deg,#0B0D1A,#10121F);
+  --vip-badge:rgba(99,102,241,.15);
+  --menu-border:rgba(255,255,255,.06);
+  --bottom-active:rgba(99,102,241,.1);
+  --fc-border:rgba(255,255,255,.08);
+  --quiz-correct:rgba(99,102,241,.5);
+  --quiz-wrong:rgba(239,68,68,.5);
+  --card-hover-border:rgba(99,102,241,.3);
+  --input-focus:rgba(99,102,241,.4);
+  --input-focus-shadow:rgba(99,102,241,.1);
+  --btn2-hover-border:rgba(99,102,241,.4);
+  --btn2-hover-bg:rgba(99,102,241,.05);
+  --sidebar-w:260px;
+  --sidebar-bg:rgba(11,13,26,.98);
+  --sidebar-border:rgba(255,255,255,.06);
+  --sidebar-hover:rgba(255,255,255,.04);
+  --sidebar-active:rgba(99,102,241,.12);
+  --sidebar-active-border:rgba(99,102,241,.3);
+}
+[data-theme="light"]{
+  --bg:#ffffff;--surface:#f8f9fc;--surface2:#f1f2f6;
+  --text:#1a1b2e;--text2:#6b7280;
+  --border:rgba(0,0,0,.08);
+  --accent:#6366F1;--accent2:#818cf8;--lav:#e0e7ff;
+  --glow:rgba(99,102,241,.06);
+  --grid:rgba(0,0,0,.02);
+  --header-bg:rgba(255,255,255,.85);
+  --nav-bg:rgba(255,255,255,.95);
+  --bottom-bg:rgba(255,255,255,.9);
+  --hero-glow:rgba(99,102,241,.08);
+  --hero-glow2:rgba(141,143,248,.04);
+  --badge-bg:rgba(99,102,241,.08);
+  --badge2-bg:rgba(0,0,0,.03);
+  --fc-back:linear-gradient(135deg,#6366F1,#8D8FF8);
+  --quiz-border:rgba(0,0,0,.08);
+  --quiz-hover:rgba(0,0,0,.02);
+  --input-border:rgba(0,0,0,.1);
+  --btn2-border:rgba(0,0,0,.12);
+  --pill-border:rgba(0,0,0,.1);
+  --pill-on-bg:rgba(99,102,241,.1);
+  --pill-on-border:rgba(99,102,241,.3);
+  --card-glow:linear-gradient(90deg,transparent,rgba(99,102,241,.3),transparent);
+  --divider:rgba(0,0,0,.06);
+  --hover:rgba(0,0,0,.02);
+  --shadow:rgba(0,0,0,.08);
+  --green:#16a34a;--yellow:#ca8a04;
+  --hero-cta2:rgba(0,0,0,.04);
+  --hero-cta2-hover:rgba(0,0,0,.08);
+  --scrollbar:rgba(0,0,0,.15);
+  --sel:rgba(99,102,241,.2);
+  --toast-border:rgba(0,0,0,.08);
+  --toast-ok:rgba(99,102,241,.3);
+  --toast-err:rgba(239,68,68,.3);
+  --avatar:linear-gradient(135deg,#6366F1,#8D8FF8);
+  --btn-primary:linear-gradient(135deg,#6366F1,#8D8FF8);
+  --btn-primary-shadow:rgba(99,102,241,.3);
+  --progress:linear-gradient(90deg,#6366F1,#8D8FF8);
+  --vip-bg:linear-gradient(135deg,#f8f9fc,#eef0f8);
+  --vip-badge:rgba(99,102,241,.1);
+  --menu-border:rgba(0,0,0,.06);
+  --bottom-active:rgba(99,102,241,.08);
+  --fc-border:rgba(0,0,0,.08);
+  --quiz-correct:rgba(99,102,241,.5);
+  --quiz-wrong:rgba(239,68,68,.5);
+  --card-hover-border:rgba(99,102,241,.3);
+  --input-focus:rgba(99,102,241,.4);
+  --input-focus-shadow:rgba(99,102,241,.1);
+  --btn2-hover-border:rgba(99,102,241,.4);
+  --btn2-hover-bg:rgba(99,102,241,.05);
+  --sidebar-bg:rgba(255,255,255,.98);
+  --sidebar-border:rgba(0,0,0,.06);
+  --sidebar-hover:rgba(0,0,0,.03);
+  --sidebar-active:rgba(99,102,241,.08);
+  --sidebar-active-border:rgba(99,102,241,.3);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;font-size:15px;line-height:1.6;overflow-x:hidden;transition:background .3s,color .3s}
+.mono{font-family:'JetBrains Mono',monospace}
+.faint{color:var(--text2)}
+.faint2{color:var(--accent2)}
+.bg-grid{position:fixed;inset:0;z-index:0;opacity:.3;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+.bg-glow{position:fixed;top:-20%;left:50%;transform:translateX(-50%);width:1200px;height:600px;background:radial-gradient(ellipse,var(--glow) 0%,transparent 70%);z-index:0;pointer-events:none;animation:glowFloat 20s ease-in-out infinite}
+.bg-glow2{position:fixed;bottom:-10%;right:-10%;width:800px;height:400px;background:radial-gradient(ellipse,var(--glow) 0%,transparent 70%);z-index:0;pointer-events:none;animation:glowFloat 25s ease-in-out infinite reverse}
+@keyframes glowFloat{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(30px)}}
+h1{font-size:clamp(40px,6vw,72px);font-weight:700;line-height:1.1;letter-spacing:-.02em}
+h2{font-size:clamp(28px,4vw,44px);font-weight:700;line-height:1.15;letter-spacing:-.01em}
+h3{font-size:clamp(20px,3vw,28px);font-weight:600;line-height:1.2;letter-spacing:-.01em}
+.section-label{font-size:12px;font-weight:600;letter-spacing:.15em;color:var(--accent2);text-transform:uppercase;margin-bottom:16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:20px;transition:border-color .2s,background .2s,transform .2s}
+.card-hover{cursor:pointer}
+.card-hover:hover{border-color:var(--card-hover-border);background:var(--surface2);transform:translateY(-2px)}
+.card-glow{position:relative;overflow:hidden}
+.card-glow::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--card-glow);opacity:0;transition:opacity .3s}
+.card-glow:hover::before{opacity:1}
+.btn-primary{background:var(--btn-primary);color:#fff;font-weight:600;padding:14px 28px;border-radius:12px;transition:.2s;border:none;cursor:pointer;font-size:14px;position:relative;overflow:hidden}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 32px -8px var(--btn-primary-shadow)}
+.btn-secondary{background:transparent;color:var(--text);font-weight:500;padding:14px 28px;border-radius:12px;border:1px solid var(--btn2-border);transition:.2s;cursor:pointer;font-size:14px}
+.btn-secondary:hover{border-color:var(--btn2-hover-border);background:var(--btn2-hover-bg)}
+.pill{font-size:12px;font-weight:500;padding:6px 14px;border-radius:6px;color:var(--text2);transition:.15s;white-space:nowrap;cursor:pointer;border:1px solid transparent;background:transparent}
+.pill:hover{color:var(--text);border-color:var(--pill-border)}
+.pill.on{background:var(--pill-on-bg);color:var(--lav);border-color:var(--pill-on-border)}
+.nav-btn{font-size:14px;font-weight:400;padding:8px 16px;border-radius:8px;color:var(--text2);transition:.15s;cursor:pointer;border:none;background:none}
+.nav-btn:hover{color:var(--nav-btn-hover)}
+.nav-btn.on{color:var(--nav-btn-active);font-weight:500}
+.progress-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--progress);border-radius:2px;transition:width .3s}
+.toast{position:fixed;top:20px;right:20px;z-index:300;display:flex;flex-direction:column;gap:8px;max-width:min(380px,calc(100vw - 40px));pointer-events:none}
+.toast-item{pointer-events:auto;display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border-radius:12px;background:var(--surface2);border:1px solid var(--toast-border);color:var(--text);font-size:14px;font-weight:400;line-height:1.4;animation:tin .3s ease-out;box-shadow:0 16px 48px -12px var(--shadow)}
+.toast-item.ok{border-color:var(--toast-ok)}
+.toast-item.err{border-color:var(--toast-err)}
+@keyframes tin{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+.modal-overlay{position:fixed;inset:0;z-index:200;background:var(--modal-overlay);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .2s}
+.modal-box{background:var(--surface);border:1px solid var(--border);border-radius:24px;max-width:460px;width:100%;max-height:90vh;overflow-y:auto;padding:36px;animation:slideUp .3s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.input{width:100%;padding:14px 18px;border:1px solid var(--input-border);border-radius:12px;font-size:14px;font-family:inherit;transition:.15s;background:var(--surface2);color:var(--text)}
+.input:focus{outline:none;border-color:var(--input-focus);box-shadow:0 0 0 3px var(--input-focus-shadow)}
+.input::placeholder{color:var(--text2)}
+.label{font-size:12px;font-weight:500;color:var(--text2);margin-bottom:8px;display:block;letter-spacing:.02em}
+.badge{font-size:11px;font-weight:500;padding:4px 10px;border-radius:4px;letter-spacing:.02em}
+.divider{height:1px;background:var(--divider);margin:24px 0}
+.flashcard{perspective:1200px;cursor:pointer}
+.flashcard-inner{transition:transform .6s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;position:relative}
+.flashcard.flipped .flashcard-inner{transform:rotateY(180deg)}
+.flashcard-face{backface-visibility:hidden;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;border-radius:20px;padding:32px;font-weight:600;font-size:20px}
+.flashcard-back{transform:rotateY(180deg)}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--scrollbar);border-radius:2px}
+::selection{background:var(--sel);color:var(--text)}
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.fade-up.visible{opacity:1;transform:none}
+.hamburger{display:none}
+.mobile-menu{display:none}
+
+/* ===== SIDEBAR ===== */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--sidebar-bg);border-right:1px solid var(--sidebar-border);z-index:100;display:flex;flex-direction:column;transition:transform .3s ease;backdrop-filter:blur(16px)}
+.sidebar-header{display:flex;align-items:center;gap:10px;padding:20px 20px 16px;border-bottom:1px solid var(--sidebar-border)}
+.sidebar-logo{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;background:var(--avatar)}
+.sidebar-title{font-weight:600;font-size:16px;letter-spacing:-.01em}
+.sidebar-nav{flex:1;overflow-y:auto;padding:12px 0}
+.nav-section{margin-bottom:2px}
+.nav-section-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;padding:10px 20px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text2);background:none;border:none;cursor:pointer;transition:color .15s}
+.nav-section-toggle:hover{color:var(--text)}
+.nav-section-toggle svg{width:14px;height:14px;transition:transform .2s;opacity:.5}
+.nav-section-toggle.expanded svg{transform:rotate(90deg)}
+.nav-section-items{overflow:hidden;max-height:0;transition:max-height .3s ease}
+.nav-section-items.expanded{max-height:200px}
+.nav-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 20px 9px 32px;font-size:13px;font-weight:400;color:var(--text2);background:none;border:none;cursor:pointer;transition:.15s;text-align:left;border-left:2px solid transparent}
+.nav-item:hover{color:var(--text);background:var(--sidebar-hover)}
+.nav-item.active{color:var(--lav);background:var(--sidebar-active);border-left-color:var(--accent);font-weight:500}
+.nav-item .nav-code{font-size:10px;font-weight:600;color:var(--accent2);background:var(--badge-bg);padding:2px 6px;border-radius:4px;min-width:24px;text-align:center}
+.sidebar-footer{padding:16px 20px;border-top:1px solid var(--sidebar-border)}
+.sidebar-footer-btn{width:100%;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;color:var(--text2);background:none;border:none;cursor:pointer;transition:.15s}
+.sidebar-footer-btn:hover{color:var(--text);background:var(--sidebar-hover)}
+
+/* ===== MAIN LAYOUT ===== */
+.main-content{margin-left:var(--sidebar-w);min-height:100vh;transition:margin-left .3s ease}
+
+/* ===== HOME PAGE ===== */
+.hero{position:relative;padding:80px 40px 60px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;pointer-events:none}
+.hero-orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.4;animation:orbFloat 12s ease-in-out infinite}
+.hero-orb-1{width:400px;height:400px;background:var(--accent);top:-100px;left:-100px}
+.hero-orb-2{width:300px;height:300px;background:var(--accent2);bottom:-50px;right:-50px;animation-delay:-6s}
+@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-30px) scale(1.1)}}
+.hero-content{position:relative;z-index:1;max-width:800px;margin:0 auto;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:100px;background:var(--badge-bg);border:1px solid var(--pill-on-border);font-size:12px;font-weight:500;color:var(--lav);margin-bottom:24px;animation:fadeIn .6s ease}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero-title{font-size:clamp(36px,5vw,64px);font-weight:800;line-height:1.05;letter-spacing:-.03em;margin-bottom:20px;animation:slideUp .8s ease}
+.gradient-text{background:linear-gradient(135deg,var(--accent),var(--accent2),var(--lav));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200% 200%;animation:gradientShift 4s ease infinite}
+@keyframes gradientShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.hero-desc{font-size:16px;color:var(--text2);max-width:560px;margin:0 auto 32px;line-height:1.7;animation:slideUp .8s ease .1s both}
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:slideUp .8s ease .2s both}
+.hero-cta .btn-primary{padding:14px 32px;font-size:15px}
+.hero-cta .btn-secondary{padding:14px 32px;font-size:15px}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* Stats bar */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:0 40px 40px;max-width:800px;margin:0 auto}
+.stat-item{text-align:center;padding:20px;border-radius:16px;background:var(--surface);border:1px solid var(--border)}
+.stat-num{font-size:28px;font-weight:700;background:var(--btn-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+
+/* MOVE Method */
+.move-method{padding:40px;max-width:900px;margin:0 auto}
+.move-method .section-label{text-align:center}
+.move-method h2{text-align:center;font-size:28px;margin-bottom:32px}
+.method-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.method-card{padding:24px 16px;border-radius:16px;background:var(--surface);border:1px solid var(--border);text-align:center;transition:.2s;cursor:default}
+.method-card:hover{border-color:var(--card-hover-border);transform:translateY(-4px)}
+.method-num{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-weight:700;font-size:16px;background:var(--badge-bg);color:var(--accent2)}
+.method-name{font-weight:600;font-size:14px;margin-bottom:4px}
+.method-desc{font-size:12px;color:var(--text2)}
+
+/* Roadmap preview */
+.roadmap-preview{padding:40px;max-width:900px;margin:0 auto}
+.roadmap-preview .section-label{text-align:center}
+.roadmap-preview h2{text-align:center;font-size:28px;margin-bottom:32px}
+.path-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.path-card{padding:28px;border-radius:20px;background:var(--surface);border:1px solid var(--border);transition:.2s;cursor:pointer}
+.path-card:hover{border-color:var(--card-hover-border);transform:translateY(-4px)}
+.path-card h3{font-size:18px;margin-bottom:8px}
+.path-card p{font-size:13px;color:var(--text2);margin-bottom:16px}
+.path-tags{display:flex;flex-wrap:wrap;gap:6px}
+.path-tag{font-size:11px;padding:4px 10px;border-radius:6px;background:var(--badge-bg);color:var(--accent2);font-weight:500}
+
+/* Quick access */
+.quick-access{padding:40px;max-width:900px;margin:0 auto}
+.quick-access .section-label{text-align:center}
+.quick-access h2{text-align:center;font-size:28px;margin-bottom:32px}
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.quick-card{padding:20px;border-radius:16px;background:var(--surface);border:1px solid var(--border);text-align:center;transition:.2s;cursor:pointer}
+.quick-card:hover{border-color:var(--card-hover-border);transform:translateY(-4px)}
+.quick-icon{font-size:28px;margin-bottom:8px}
+.quick-title{font-weight:600;font-size:14px}
+.quick-desc{font-size:12px;color:var(--text2);margin-top:4px}
+
+/* Section wrapper for scroll animation */
+.scroll-section{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+.scroll-section.visible{opacity:1;transform:none}
+
+/* ===== E2 VIEW (vnjpclub-style) ===== */
+.e2-wrap{display:grid;grid-template-columns:1fr 240px;gap:32px;padding:28px 40px 60px;align-items:start}
+.e2-main{min-width:0}
+.e2-crumb{font-size:12px;color:var(--text2);margin-bottom:14px}
+.e2-crumb b{color:var(--text);font-weight:600}
+.e2-lesson-title{font-size:26px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px}
+.e2-lesson-goal{font-size:13px;color:var(--text2);margin-bottom:22px}
+.e2-part-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+.e2-part{display:flex;flex-direction:column;gap:10px;padding:16px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--border);cursor:pointer;transition:.18s;text-align:left}
+.e2-part:hover{border-color:var(--card-hover-border);transform:translateY(-2px);background:var(--surface2)}
+.e2-part.active{border-color:var(--pill-on-border);background:var(--pill-on-bg)}
+.e2-part-ico{font-size:20px;line-height:1}
+.e2-part-name{font-size:12.5px;font-weight:600;line-height:1.35}
+.e2-part-sub{font-size:10.5px;color:var(--text2);letter-spacing:.04em;text-transform:uppercase}
+.e2-panel{margin-top:6px}
+.e2-panel-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--divider)}
+.e2-panel-head h3{font-size:17px;font-weight:600}
+.e2-panel-back{margin-left:auto;font-size:12px;color:var(--text2);background:none;border:1px solid var(--border);padding:6px 12px;border-radius:8px;cursor:pointer;transition:.15s}
+.e2-panel-back:hover{color:var(--text);border-color:var(--card-hover-border)}
+.e2-vocab-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.e2-vocab-item{padding:16px;border-radius:12px;background:var(--surface);border:1px solid var(--border)}
+.e2-vocab-en{font-weight:600;font-size:14px}
+.e2-vocab-vi{font-size:12px;color:var(--text2);margin-top:4px}
+.e2-vocab-pattern{font-size:11px;color:var(--accent2);margin-top:4px;font-style:italic}
+.e2-conv-card{padding:16px;border-radius:12px;background:var(--surface);border:1px solid var(--border);margin-bottom:12px}
+.e2-conv-title{font-weight:600;font-size:14px;margin-bottom:10px}
+.e2-conv-line{padding:8px 12px;border-radius:8px;background:var(--surface2);margin-bottom:6px;font-size:13px;display:flex;gap:10px;align-items:flex-start}
+.e2-conv-speaker{font-weight:600;color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;flex-shrink:0;padding-top:2px;min-width:52px}
+.e2-speaking-item{padding:12px 16px;border-radius:10px;background:var(--surface);border:1px solid var(--border);margin-bottom:8px;font-size:14px;display:flex;gap:10px;align-items:flex-start}
+.e2-speaking-item .n{font-size:11px;font-weight:700;color:var(--accent2);padding-top:3px}
+.e2-roleplay-card{padding:16px;border-radius:12px;background:var(--surface);border:1px solid var(--border);margin-bottom:12px}
+.e2-roleplay-title{font-weight:600;font-size:14px;margin-bottom:8px}
+.e2-roleplay-steps{list-style:none;padding:0}
+.e2-roleplay-steps li{font-size:13px;color:var(--text2);padding:4px 0;padding-left:16px;position:relative}
+.e2-roleplay-steps li::before{content:'→';position:absolute;left:0;color:var(--accent2)}
+.e2-task-card{padding:20px;border-radius:14px;background:var(--surface);border:1px solid var(--border)}
+.e2-task-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);margin-bottom:8px}
+.e2-task-text{font-size:14px;line-height:1.6}
+.e2-say{font-size:11px;color:var(--text2);background:none;border:1px solid var(--border);padding:3px 9px;border-radius:6px;cursor:pointer;transition:.15s;flex-shrink:0}
+.e2-say:hover{color:var(--lav);border-color:var(--pill-on-border)}
+.e2-quiz-item{padding:16px;border-radius:12px;background:var(--surface);border:1px solid var(--border);margin-bottom:10px}
+.e2-quiz-q{font-size:14px;font-weight:500;margin-bottom:10px}
+.e2-quiz-opts{display:flex;flex-wrap:wrap;gap:8px}
+.e2-quiz-opt{font-size:13px;padding:8px 14px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);cursor:pointer;transition:.15s;color:var(--text)}
+.e2-quiz-opt:hover{border-color:var(--card-hover-border)}
+.e2-quiz-opt.ok{border-color:var(--green);color:var(--green)}
+.e2-quiz-opt.no{border-color:#ef4444;color:#ef4444}
+.e2-gram-item{padding:14px 16px;border-radius:12px;background:var(--surface);border:1px solid var(--border);margin-bottom:10px;display:flex;gap:12px;align-items:baseline}
+.e2-gram-key{font-weight:600;font-size:13.5px;min-width:150px;color:var(--lav)}
+.e2-gram-ex{font-size:13px;color:var(--text2);font-style:italic}
+.e2-read{font-size:14.5px;line-height:1.85;color:var(--text2);padding:20px;border-radius:14px;background:var(--surface);border:1px solid var(--border)}
+.e2-read b{color:var(--text);font-weight:600}
+.e2-ref{font-size:13px;color:var(--text2);line-height:1.9;padding-left:18px}
+.e2-ref li{margin-bottom:4px}
+/* right number grid */
+.e2-side{position:sticky;top:20px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px}
+.e2-side-head{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;margin-bottom:12px}
+.e2-side-head .dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.e2-num-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:14px}
+.e2-num{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:600;border-radius:7px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:.15s}
+.e2-num:hover{border-color:var(--card-hover-border);color:var(--text)}
+.e2-num.live{background:var(--badge-bg);color:var(--accent2);border-color:var(--pill-on-border)}
+.e2-num.active{background:var(--btn-primary);color:#fff;border-color:transparent}
+.e2-num.locked{opacity:.35;cursor:not-allowed}
+.e2-side-note{font-size:10.5px;color:var(--text2);line-height:1.6;border-top:1px solid var(--divider);padding-top:10px}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1023px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main-content{margin-left:0}
+  .hamburger{display:flex}
+  .mobile-menu{display:block;position:fixed;inset:0;z-index:150;background:var(--nav-bg);backdrop-filter:blur(12px);padding:80px 24px 24px;animation:fadeIn .2s}
+  .mobile-menu .nav-btn{display:block;width:100%;text-align:left;padding:16px;font-size:18px;border-bottom:1px solid var(--menu-border)}
+  .bottom-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--bottom-bg);backdrop-filter:blur(12px);border-top:1px solid var(--border);padding:8px 4px calc(8px + env(safe-area-inset-bottom))}
+  .bottom-nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 2px;border-radius:8px;font-size:10px;font-weight:500;color:var(--text2);transition:.15s;border:none;background:none}
+  .bottom-nav button.on{color:var(--lav);background:var(--bottom-active)}
+  .bottom-nav svg{width:20px;height:20px}
+  main{padding-bottom:80px}
+  h1{font-size:clamp(32px,8vw,48px)}
+  h2{font-size:clamp(24px,6vw,36px)}
+  .hero{padding:60px 20px 40px}
+  .stats-bar{grid-template-columns:repeat(2,1fr);padding:0 20px 30px}
+  .move-method,.roadmap-preview,.quick-access{padding:30px 20px}
+  .method-grid{grid-template-columns:repeat(2,1fr)}
+  .path-grid{grid-template-columns:1fr}
+  .quick-grid{grid-template-columns:repeat(2,1fr)}
+  .e2-wrap{grid-template-columns:1fr;gap:20px;padding:20px 20px 60px}
+  .e2-side{position:static;order:-1}
+  .e2-part-grid{grid-template-columns:repeat(2,1fr)}
+  .e2-vocab-grid{grid-template-columns:1fr}
+  .e2-num-grid{grid-template-columns:repeat(10,1fr)}
+  .e2-lesson-title{font-size:21px}
+  .e2-gram-item{flex-direction:column;gap:4px}
+  .e2-gram-key{min-width:0}
+}
+@media(min-width:1024px){.bottom-nav{display:none}}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+<div class="bg-glow2"></div>
+<div id="toasts" class="toast"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">M</div>
+    <span class="sidebar-title">MoveTalk</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <button class="nav-section-toggle expanded" data-section="foundation">
+        <span>Foundation</span>
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+      <div class="nav-section-items expanded" id="nav-foundation">
+        <button class="nav-item" data-view="f1"><span class="nav-code">F1</span> Build the Sentence</button>
+        <button class="nav-item" data-view="f2"><span class="nav-code">F2</span> Control Time</button>
+      </div>
+    </div>
+    <div class="nav-section">
+      <button class="nav-section-toggle expanded" data-section="activation">
+        <span>Activation</span>
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+      <div class="nav-section-items expanded" id="nav-activation">
+        <button class="nav-item" data-view="a1"><span class="nav-code">A1</span> Map & Diagnose</button>
+        <button class="nav-item" data-view="a2"><span class="nav-code">A2</span> Language Repair</button>
+      </div>
+    </div>
+    <div class="nav-section">
+      <button class="nav-section-toggle expanded" data-section="expand">
+        <span>Expand</span>
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+      <div class="nav-section-items expanded" id="nav-expand">
+        <button class="nav-item" data-view="e1"><span class="nav-code">E1</span> MOVE Expand 1</button>
+        <button class="nav-item" data-view="e2"><span class="nav-code">E2</span> MOVE Expand 2</button>
+      </div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <button class="sidebar-footer-btn" onclick="toggleTheme()">
+      <span>🌓</span> Toggle theme
+    </button>
+    <button class="sidebar-footer-btn" onclick="showAuth()">
+      <span>👤</span> <span id="sidebar-auth-label">Sign In</span>
+    </button>
+  </div>
+</aside>
+
+<!-- MOBILE MENU -->
+<div id="mobile-menu" class="mobile-menu hidden">
+  <button onclick="go('home');toggleMobileMenu()" class="nav-btn">Home</button>
+  <button onclick="go('f1');toggleMobileMenu()" class="nav-btn">F1 · Build the Sentence</button>
+  <button onclick="go('f2');toggleMobileMenu()" class="nav-btn">F2 · Control Time</button>
+  <button onclick="go('a1');toggleMobileMenu()" class="nav-btn">A1 · Map & Diagnose</button>
+  <button onclick="go('a2');toggleMobileMenu()" class="nav-btn">A2 · Language Repair</button>
+  <button onclick="go('e1');toggleMobileMenu()" class="nav-btn">E1 · MOVE Expand 1</button>
+  <button onclick="go('e2');toggleMobileMenu()" class="nav-btn">E2 · MOVE Expand 2</button>
+  <button onclick="go('dashboard');toggleMobileMenu()" class="nav-btn">Dashboard</button>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+  <main class="relative z-10">
+
+    <!-- HOME -->
+    <section id="v-home" class="view">
+      <!-- Hero -->
+      <div class="hero">
+        <div class="hero-bg">
+          <div class="hero-orb hero-orb-1"></div>
+          <div class="hero-orb hero-orb-2"></div>
+        </div>
+        <div class="hero-content">
+          <div class="hero-badge"><span class="dot"></span> English for Working Professionals</div>
+          <h1 class="hero-title">Speak English at work.<br><span class="gradient-text">Confidently. Clearly. Naturally.</span></h1>
+          <p class="hero-desc">Meetings, emails, presentations, small talk — practical English skills for your career. Learn by doing, not by memorizing.</p>
+          <div class="hero-cta">
+            <button onclick="go('e2')" class="btn-primary">Start Learning</button>
+            <button onclick="go('e1')" class="btn-secondary">Browse Courses</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-bar scroll-section">
+        <div class="stat-item"><div class="stat-num">6</div><div class="stat-label">Levels</div></div>
+        <div class="stat-item"><div class="stat-num">12</div><div class="stat-label">Courses</div></div>
+        <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">MOVE Lessons</div></div>
+        <div class="stat-item"><div class="stat-num">4</div><div class="stat-label">Skills</div></div>
+      </div>
+
+      <!-- MOVE Method -->
+      <div class="move-method scroll-section">
+        <p class="section-label">The MOVE Method</p>
+        <h2>How you'll learn</h2>
+        <div class="method-grid">
+          <div class="method-card"><div class="method-num">1</div><div class="method-name">Meet</div><div class="method-desc">Language in context</div></div>
+          <div class="method-card"><div class="method-num">2</div><div class="method-name">Own</div><div class="method-desc">Understand & retrieve</div></div>
+          <div class="method-card"><div class="method-num">3</div><div class="method-name">Vary</div><div class="method-desc">Change person, time, context</div></div>
+          <div class="method-card"><div class="method-num">4</div><div class="method-name">Express</div><div class="method-desc">Use for real things</div></div>
+        </div>
+      </div>
+
+      <!-- Roadmap Preview -->
+      <div class="roadmap-preview scroll-section">
+        <p class="section-label">Your Learning Path</p>
+        <h2>Choose your path</h2>
+        <div class="path-grid">
+          <div class="path-card" onclick="go('f1')">
+            <h3>🏗️ Foundation</h3>
+            <p>Build the system from scratch. For beginners or those who need to rebuild.</p>
+            <div class="path-tags"><span class="path-tag">F1</span><span class="path-tag">F2</span><span class="path-tag">F3</span><span class="path-tag">F4</span><span class="path-tag">F5</span><span class="path-tag">F6</span></div>
+          </div>
+          <div class="path-card" onclick="go('a1')">
+            <h3>⚡ Activation</h3>
+            <p>Activate & repair. For those with a foundation who need to fix gaps and speak more.</p>
+            <div class="path-tags"><span class="path-tag">A1</span><span class="path-tag">A2</span><span class="path-tag">A3</span><span class="path-tag">A4</span><span class="path-tag">A5</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Access -->
+      <div class="quick-access scroll-section">
+        <p class="section-label">Quick Access</p>
+        <h2>Jump right in</h2>
+        <div class="quick-grid">
+          <div class="quick-card" onclick="go('e2')"><div class="quick-icon">📖</div><div class="quick-title">MOVE Lessons</div><div class="quick-desc">L01–L03</div></div>
+          <div class="quick-card" onclick="go('e1')"><div class="quick-icon">📚</div><div class="quick-title">Courses</div><div class="quick-desc">12 courses</div></div>
+          <div class="quick-card" onclick="go('practice')"><div class="quick-icon">🎯</div><div class="quick-title">Practice</div><div class="quick-desc">Daily exercises</div></div>
+          <div class="quick-card" onclick="go('tests')"><div class="quick-icon">📝</div><div class="quick-title">Tests</div><div class="quick-desc">Measure progress</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- F1 -->
+    <section id="v-f1" class="view hidden"></section>
+
+    <!-- F2 -->
+    <section id="v-f2" class="view hidden"></section>
+
+    <!-- A1 -->
+    <section id="v-a1" class="view hidden"></section>
+
+    <!-- A2 -->
+    <section id="v-a2" class="view hidden"></section>
+
+    <!-- E1 -->
+    <section id="v-e1" class="view hidden"></section>
+
+    <!-- E2 -->
+    <section id="v-e2" class="view hidden"></section>
+
+    <!-- DASHBOARD -->
+    <section id="v-dashboard" class="view hidden">
+      <div class="p-8 md:p-12 max-w-4xl mx-auto">
+        <div id="dash-gate" class="card p-16 max-w-lg mx-auto text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center mb-6" style="background:var(--badge-bg)">
+            <svg class="w-6 h-6" style="color:var(--accent2)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 12v8H4v-8M2 8h20v4H2zM12 3v5"/></svg>
+          </div>
+          <h2 class="text-2xl font-semibold mb-2">Your Dashboard</h2>
+          <p class="faint text-sm mb-8">Sign in to see your progress, assignments, and study plan.</p>
+          <button onclick="showAuth()" class="btn-primary">Sign In</button>
+        </div>
+        <div id="dash-body" class="hidden space-y-6">
+          <div class="card p-8">
+            <div class="flex items-center gap-4 mb-8">
+              <div id="dash-avatar" class="w-12 h-12 rounded-full text-white font-semibold flex items-center justify-center text-sm" style="background:var(--avatar)"></div>
+              <div><p id="dash-name" class="font-semibold text-lg">—</p><p id="dash-email" class="faint text-sm">—</p></div>
+              <button onclick="logout()" class="ml-auto text-xs font-medium faint hover:text-[var(--text)]">Sign Out</button>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div class="p-5 rounded-2xl" style="background:var(--surface2)"><p class="text-xs font-medium faint mb-2">LESSONS DONE</p><p id="dash-lessons" class="font-semibold mono text-2xl">0</p></div>
+              <div class="p-5 rounded-2xl" style="background:var(--surface2)"><p class="text-xs font-medium faint mb-2">WORDS LEARNED</p><p id="dash-words" class="font-semibold mono text-2xl">0</p></div>
+              <div class="p-5 rounded-2xl" style="background:var(--surface2)"><p class="text-xs font-medium faint mb-2">STREAK</p><p id="dash-streak" class="font-semibold mono text-2xl">0</p></div>
+              <div class="p-5 rounded-2xl" style="background:var(--surface2)"><p class="text-xs font-medium faint mb-2">LEVEL</p><p id="dash-level" class="font-semibold mono text-2xl">—</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+  </main>
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button onclick="go('home')" data-bn="home" class="on">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10"/></svg>
+    <span>Home</span>
+  </button>
+  <button onclick="go('e2')" data-bn="e2">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+    <span>Lessons</span>
+  </button>
+  <button onclick="go('e1')" data-bn="e1">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 16V9M12 16v-4M16 16V7"/></svg>
+    <span>Courses</span>
+  </button>
+  <button onclick="go('dashboard')" data-bn="dashboard">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span>Me</span>
+  </button>
+</nav>
+
+<!-- AUTH MODAL -->
+<div id="auth-modal" class="modal-overlay hidden" onclick="if(event.target===this)hideAuth()">
+  <div class="modal-box">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="font-semibold text-xl" id="auth-title">Sign In</h2>
+      <button onclick="hideAuth()" class="text-2xl faint hover:text-[var(--text)]">&times;</button>
+    </div>
+    <div class="space-y-5">
+      <div><label class="label">Email</label><input type="email" id="auth-email" class="input" placeholder="you@example.com"></div>
+      <div><label class="label">Password</label><input type="password" id="auth-pass" class="input" placeholder="••••••••"></div>
+      <div id="auth-name-field" class="hidden"><label class="label">Full Name</label><input type="text" id="auth-name" class="input" placeholder="Your name"></div>
+      <div id="auth-role-field" class="hidden"><label class="label">I am a</label><div class="flex gap-2"><button onclick="setRole('student')" class="pill flex-1 on" data-role="student">Student</button><button onclick="setRole('teacher')" class="pill flex-1" data-role="teacher">Teacher</button></div></div>
+      <button onclick="doAuth()" class="btn-primary w-full" id="auth-submit">Sign In</button>
+      <p class="text-center text-sm faint"><span id="auth-switch-text">Don't have an account?</span> <button onclick="toggleAuthMode()" class="font-medium hover:underline" style="color:var(--accent2)" id="auth-switch-btn">Sign Up</button></p>
+    </div>
+  </div>
+</div>
+
+<!-- VIP MODAL -->
+<div id="vip-modal" class="modal-overlay hidden" onclick="if(event.target===this)hideVIP()">
+  <div class="modal-box">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="font-semibold text-xl">MoveTalk VIP</h2>
+      <button onclick="hideVIP()" class="text-2xl faint hover:text-[var(--text)]">&times;</button>
+    </div>
+    <div class="space-y-4 text-sm">
+      <div class="flex items-center gap-4 p-5 rounded-2xl" style="background:var(--surface2)"><span class="text-xl">📚</span><div><p class="font-semibold">Unlimited Lessons</p><p class="faint text-xs mt-1">Access all courses and levels</p></div></div>
+      <div class="flex items-center gap-4 p-5 rounded-2xl" style="background:var(--surface2)"><span class="text-xl">🎤</span><div><p class="font-semibold">AI Speaking Feedback</p><p class="faint text-xs mt-1">Get instant pronunciation feedback</p></div></div>
+      <div class="flex items-center gap-4 p-5 rounded-2xl" style="background:var(--surface2)"><span class="text-xl">📋</span><div><p class="font-semibold">Personal Study Plan</p><p class="faint text-xs mt-1">Customized learning path</p></div></div>
+      <div class="flex items-center gap-4 p-5 rounded-2xl" style="background:var(--surface2)"><span class="text-xl">📜</span><div><p class="font-semibold">Certificate</p><p class="faint text-xs mt-1">Official completion certificate</p></div></div>
+    </div>
+    <div class="divider"></div>
+    <p class="text-center text-sm faint">Contact us to upgrade</p>
+    <button onclick="hideVIP()" class="btn-secondary w-full">Close</button>
+  </div>
+</div>
+
+<script>
+// ---- DATA ----
+// ---- STATE ----
+let USER=null,AUTH_MODE='login',USER_ROLE='student';
+
+// ---- STORAGE ----
+function save(k,v){localStorage.setItem('mt_'+k,JSON.stringify(v))}
+function load(k,d){try{const v=localStorage.getItem('mt_'+k);return v?JSON.parse(v):d}catch(e){return d}}
+
+// ---- THEME ----
+function toggleTheme(){
+  const html=document.documentElement;
+  const next=html.dataset.theme==='dark'?'light':'dark';
+  html.dataset.theme=next;
+  save('theme',next);
+}
+(function(){const t=load('theme','dark');document.documentElement.dataset.theme=t})();
+
+// ---- TOAST ----
+function toast(msg,kind=''){
+  const el=document.getElementById('toasts');
+  const item=document.createElement('div');
+  item.className='toast-item '+kind;
+  item.innerHTML=`<span style="color:${kind==='ok'?'var(--accent)':kind==='err'?'#ef4444':'var(--text2)'}">${kind==='ok'?'✓':kind==='err'?'✕':'·'}</span><span>${msg}</span>`;
+  el.appendChild(item);
+  setTimeout(()=>{item.style.transition='opacity .25s';item.style.opacity='0';setTimeout(()=>item.remove(),260)},3000);
+}
+
+// ---- MOBILE MENU ----
+function toggleMobileMenu(){document.getElementById('mobile-menu').classList.toggle('hidden')}
+
+// ---- SIDEBAR ----
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open')}
+document.querySelectorAll('.nav-section-toggle').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const items=document.getElementById('nav-'+btn.dataset.section);
+    items.classList.toggle('expanded');
+    btn.classList.toggle('expanded');
+  });
+});
+document.querySelectorAll('.nav-item').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    go(btn.dataset.view);
+    if(window.innerWidth<1024)toggleSidebar();
+  });
+});
+
+// ---- NAV ----
+function go(v){
+  if(!document.getElementById('v-'+v))v='home';
+  document.querySelectorAll('.view').forEach(e=>e.classList.add('hidden'));
+  document.getElementById('v-'+v).classList.remove('hidden');
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+  document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.toggle('on',b.dataset.bn===v));
+  if(v==='dashboard')renderDashboard();
+  if(TRACKS[v])renderTrack(v);
+  if(v==='home')renderHome();
+  location.hash=v;window.scrollTo(0,0);
+}
+addEventListener('hashchange',()=>go(location.hash.slice(1)||'home'));
+
+// ---- HOME ----
+function renderHome(){
+  // Animate stats
+  const stats=document.querySelectorAll('.stat-num');
+  stats.forEach((el,i)=>{
+    const target=parseInt(el.textContent);
+    let current=0;
+    const increment=Math.ceil(target/20);
+    const timer=setInterval(()=>{
+      current+=increment;
+      if(current>=target){current=target;clearInterval(timer)}
+      el.textContent=current;
+    },50+i*100);
+  });
+}
+
+// ---- SCROLL ANIMATIONS ----
+const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}})},{threshold:.1});
+document.querySelectorAll('.scroll-section').forEach(el=>observer.observe(el));
+
+// ================= TRACK ENGINE (dùng chung cho F1,F2,A1,A2,E1,E2) =================
+// Mỗi track: {badge, title, sub, gridTitle, gridTotal, lessons:{n:{...}}}
+// Mỗi bài (lesson) có 10 phần giống nhau: xem TRACK_PARTS.
+const TRACK_PARTS=[
+ {id:'vocab',ico:'📕',name:'Phần 1: Từ vựng',sub:'Vocabulary'},
+ {id:'grammar',ico:'📘',name:'Phần 2: Ngữ pháp',sub:'Grammar'},
+ {id:'reading',ico:'📗',name:'Phần 3: Luyện đọc',sub:'Reading'},
+ {id:'conversations',ico:'💬',name:'Phần 4: Hội thoại',sub:'Conversation'},
+ {id:'listening',ico:'🎧',name:'Phần 5: Luyện nghe',sub:'Listening'},
+ {id:'exercises',ico:'✏️',name:'Phần 6: Bài tập',sub:'Exercises'},
+ {id:'speaking',ico:'🗣️',name:'Phần 7: Luyện nói',sub:'Speaking'},
+ {id:'roleplay',ico:'🎭',name:'Phần 8: Đóng vai',sub:'Role-play'},
+ {id:'finalTask',ico:'🎯',name:'Phần 9: Bài tập tổng hợp',sub:'Final Task'},
+ {id:'reference',ico:'📌',name:'Phần 10: Tham khảo',sub:'Reference'}
+];
+
+const TRACKS={
+ f1:{badge:'FOUNDATION · F1',title:'Build the Sentence',sub:'Xây dựng câu — WHO → VERB → INFORMATION.',gridTitle:'50 bài F1',gridTotal:50,lessons:{}},
+ f2:{badge:'FOUNDATION · F2',title:'Control Time',sub:'Kiểm soát thì — Present, Past, Perfect, Future.',gridTitle:'50 bài F2',gridTotal:50,lessons:{}},
+ a1:{badge:'ACTIVATION · A1',title:'Map & Diagnose',sub:'Đánh giá và xác định lỗ hổng.',gridTitle:'50 bài A1',gridTotal:50,lessons:{}},
+ a2:{badge:'ACTIVATION · A2',title:'Language Repair',sub:'Sửa lỗi ngữ pháp chặn bạn nói.',gridTitle:'50 bài A2',gridTotal:50,lessons:{}},
+ e1:{badge:'EXPAND · E1',title:'MOVE Expand 1',sub:'Bài học theo chủ đề.',gridTitle:'50 bài E1',gridTotal:50,lessons:{}},
+ e2:{badge:'EXPAND · E2',title:'MOVE Expand 2',sub:'Speaking lessons by Phoebe Trương.',gridTitle:'50 bài E2',gridTotal:50,lessons:{}}
+};
+
+const E2_LESSONS={
+ 1:{
+  title:'People in Your Life',vi:'Những người trong cuộc sống của bạn',
+  goal:'Describe people you know and explain how you feel about them.',
+  vocab:[
+    {en:'acquaintance',vi:'người quen, chưa phải bạn thân',pattern:'an acquaintance from...'},
+    {en:'reliable',vi:'đáng tin cậy',pattern:"She's very reliable."},
+    {en:'considerate',vi:'biết nghĩ cho người khác',pattern:"He's very considerate."},
+    {en:'easy-going',vi:'dễ tính, thoải mái',pattern:"He's quite easy-going."},
+    {en:"can't stand",vi:'không thể chịu được',pattern:"I can't stand + noun/V-ing"},
+    {en:'put up with',vi:'chịu đựng một điều khó chịu',pattern:'I can put up with...'},
+    {en:'get along with',vi:'hợp với ai đó',pattern:'I get along with...'},
+    {en:'lose touch with',vi:'mất liên lạc với ai',pattern:'I lost touch with...'},
+    {en:'have a lot in common',vi:'có nhiều điểm chung',pattern:'We have a lot in common.'},
+    {en:'frustrating',vi:'gây bực bội',pattern:'It becomes really frustrating.'}
+  ],
+  grammar:[
+    {key:'Mệnh đề quan hệ who / that',ex:'She is the person who always helps me. — người mà luôn giúp tôi'},
+    {key:'can\'t stand + V-ing',ex:"I can't stand people interrupting others. — tôi không chịu được việc người khác ngắt lời"},
+    {key:'put up with + noun/V-ing',ex:'I can put up with it once or twice. — tôi có thể chịu được một hai lần'},
+    {key:'get along with + somebody',ex:'I get along with most of my colleagues.'},
+    {key:'find it + adj + to V',ex:'I find it easy to talk to her. — tôi thấy dễ nói chuyện với cô ấy'},
+    {key:'However / Although để đối lập',ex:'However, I try to react calmly.'}
+  ],
+  reading:{
+    text:'My closest colleague is <b>Lan</b>. We have worked together for four years and we <b>get along</b> surprisingly well because we <b>have a lot in common</b>. She is extremely <b>reliable</b> — if she promises something, she always does it. She is also <b>considerate</b>: she notices when someone is under pressure and offers help without being asked. Of course, nobody is perfect. What I <b>can\'t stand</b> is people who interrupt, and she sometimes does it when she is excited. I <b>put up with</b> it because everything else about working with her is excellent.',
+    q:'Answer: 1) How long have they worked together? 2) Why do they get along? 3) What can\'t the writer stand?'
+  },
+  conversations:[
+    {title:'A new colleague',lines:[
+      {speaker:'Nina',text:'How are things with your new colleague?'},
+      {speaker:'Emma',text:"Pretty good. She's very reliable, and I find it easy to talk to her. We have quite a lot in common, so we get along surprisingly well."},
+      {speaker:'Nina',text:"That's nice. What do you have in common?"}
+    ]},
+    {title:'A difficult person',lines:[
+      {speaker:'Alex',text:"Is there anything you can't stand at work?"},
+      {speaker:'Mia',text:"Honestly, I can't stand people who constantly interrupt others. I can put up with it once or twice, but it becomes really frustrating when it happens in every meeting. However, I try to react calmly."},
+      {speaker:'Alex',text:'I know what you mean. How do you handle it?'}
+    ]}
+  ],
+  listening:[
+    'How are things with your new colleague?',
+    "She's very reliable, and I find it easy to talk to her.",
+    'We have quite a lot in common, so we get along surprisingly well.',
+    "Honestly, I can't stand people who constantly interrupt others.",
+    'I can put up with it once or twice, but it becomes really frustrating.'
+  ],
+  exercises:[
+    {q:'She is the person ___ always helps me.',options:['who','which','whose','whom'],answer:0},
+    {q:"I can't stand people ___ others.",options:['interrupt','interrupting','to interrupt','interrupted'],answer:1},
+    {q:'We ___ surprisingly well.',options:['get along','get up','get off','get out'],answer:0},
+    {q:'I find it easy ___ to her.',options:['talk','talking','to talk','talked'],answer:2},
+    {q:'I can put ___ with it once or twice.',options:['on','up','in','off'],answer:1}
+  ],
+  speaking:[
+    'Who is the most reliable person you know?',
+    'What makes someone considerate?',
+    'Do you get along with most of your colleagues?',
+    "What behaviour can't you put up with?",
+    'Is it easy for you to talk to new people?',
+    'Who would you like to get back in touch with?'
+  ],
+  roleplay:[
+    {title:'Meeting an old friend',steps:['Ask who they still keep in touch with.','Talk about someone you both knew.','Describe what that person was like.','Mention someone you lost touch with.','Say whether you would like to reconnect.']},
+    {title:'A colleague',steps:['Ask what kind of person is easy to work with.','Describe two qualities and explain why.','Ask about one difficult behaviour.',"Use can't stand or put up with. Give an example.",'React and share a similar experience.']}
+  ],
+  finalTask:'Three-minute shared conversation. Talk about people in your work or daily life. Describe someone you get along with. Mention one behaviour you can\'t stand or have to put up with. Ask your partner at least two related questions.',
+  homePractice:'Record 45–60 seconds: What kind of people do you find easy or difficult to get along with? Include one reason, one example, and one sentence with who or that.',
+  reference:['reliable /ri-LAI-ơ-bồ/ — trọng âm rơi vào âm tiết thứ hai','considerate /kồn-SI-đờ-rịt/ — âm tiết thứ hai','acquaintance /ờ-QUÂYN-tần/ — âm tiết thứ hai','frustrating /FRỚS-trây-ting/ — âm tiết thứ nhất','Cấu trúc: WHO + V (người làm chủ ngữ), THAT + V (người/vật)','Phân biệt: put up with (chịu đựng) ≠ get along with (hòa hợp)']
+ },
+ 2:{
+  title:'Keeping in Touch',vi:'Giữ liên lạc',
+  goal:'Talk naturally about staying connected, losing touch, and reconnecting.',
+  vocab:[
+    {en:'keep in touch',vi:'giữ liên lạc với ai',pattern:"We've kept in touch for years."},
+    {en:'catch up',vi:'gặp để cập nhật chuyện gần đây',pattern:'I caught up with Minh yesterday.'},
+    {en:'reach out',vi:'chủ động liên hệ với ai',pattern:'I finally reached out to her.'},
+    {en:'make time for',vi:'dành thời gian cho ai',pattern:'I make time for close friends.'},
+    {en:'drift apart',vi:'dần xa cách',pattern:'We gradually drifted apart.'},
+    {en:'get back in touch',vi:'liên lạc lại với ai',pattern:"I'd like to get back in touch with him."},
+    {en:'stay connected',vi:'duy trì kết nối',pattern:'We still stay connected online.'},
+    {en:'have a lot going on',vi:'đang có rất nhiều việc',pattern:'We both have a lot going on.'},
+    {en:'pick up where we left off',vi:'tiếp tục tự nhiên như trước',pattern:"We'll quickly pick up where we left off."},
+    {en:'used to + V',vi:'đã từng (thói quen quá khứ)',pattern:'We used to spend every weekend together.'}
+  ],
+  grammar:[
+    {key:'used to + V (thói quen quá khứ)',ex:'We used to spend nearly every weekend together.'},
+    {key:'Hiện tại hoàn thành + for/since',ex:"We've kept in touch for years."},
+    {key:'drift apart (nội động từ)',ex:'We moved to different cities and gradually drifted apart.'},
+    {key:'not as ... as (so sánh bằng phủ định)',ex:'We talk, but not as often as before.'},
+    {key:'a bit of both (cả hai)',ex:"A bit of both. She has children, and my job has become busier."},
+    {key:'so that / so we can (mục đích)',ex:"We're planning a video call so we can catch up."}
+  ],
+  reading:{
+    text:'Sophie and I were inseparable at university. We <b>used to</b> spend nearly every weekend together, and we told each other everything. After graduation we moved to different cities and slowly <b>drifted apart</b>. We still <b>kept in touch</b> on birthdays, but the messages became shorter every year. Last month she found an old photo of us and decided to <b>reach out</b>. We talked for two hours and it felt like we <b>picked up where we left off</b>. Now we <b>make time for</b> a video call every month. The truth is that friendships do not end — they just wait.',
+    q:'Answer: 1) What did they use to do? 2) Why did they drift apart? 3) How do they stay connected now?'
+  },
+  conversations:[
+    {title:'An unexpected message',lines:[
+      {speaker:'Daniel',text:'You look surprised. Is everything okay?'},
+      {speaker:'Maya',text:'Yes. I just got a message from Sophie, an old university friend.'},
+      {speaker:'Daniel',text:'Were you close?'},
+      {speaker:'Maya',text:'Very close. We used to spend nearly every weekend together. We moved to different cities and gradually drifted apart.'},
+      {speaker:'Daniel',text:'So why did she message you now?'},
+      {speaker:'Maya',text:"She found an old photo of us and decided to reach out. We're planning a video call this weekend so we can catch up."}
+    ]},
+    {title:'Busy lives',lines:[
+      {speaker:'Liam',text:'You and Carla used to be really close. Do you still talk?'},
+      {speaker:'Nora',text:'We do, but not as often as before. We both have a lot going on.'},
+      {speaker:'Liam',text:'Is it mainly work, or have your lives just changed?'},
+      {speaker:'Nora',text:'A bit of both. She has two young children, and my job has become busier. I miss our long conversations, especially when I need advice.'}
+    ]}
+  ],
+  listening:[
+    'We used to spend nearly every weekend together.',
+    'We moved to different cities and gradually drifted apart.',
+    'She found an old photo of us and decided to reach out.',
+    "We're planning a video call this weekend so we can catch up.",
+    'We do, but not as often as before. We both have a lot going on.'
+  ],
+  exercises:[
+    {q:'We ___ spend every weekend together.',options:['use to','used to','used','using'],answer:1},
+    {q:"We've kept in touch ___ years.",options:['since','for','from','during'],answer:1},
+    {q:'We gradually ___.',options:['drifted apart','drifted out','drifted off','drifted in'],answer:0},
+    {q:'She decided to ___ after a long silence.',options:['reach out','reach in','reach up','reach on'],answer:0},
+    {q:'We talk, but not ___ often as before.',options:['so','as','too','more'],answer:1}
+  ],
+  speaking:[
+    'Who have you stayed in touch with for a long time?',
+    'Who did you use to see more often?',
+    'Have you ever reached out after a long silence?',
+    'What helps long-distance friendships last?',
+    'Is it easy for you to maintain friendships?',
+    'Why do people sometimes drift apart?'
+  ],
+  roleplay:[
+    {title:'An unexpected reunion',steps:['React and ask what your friend has been doing.','Share two life changes and ask about A.','Explain why you lost touch without blaming anyone.','Suggest a realistic way to get back in touch.','Agree on a next step and end naturally.']},
+    {title:'A busy friend',steps:['Explain how you feel without sounding accusatory.','Explain what has made life busy.','Suggest one simple way to stay connected.','Respond honestly and offer another option.','Choose a plan that feels realistic.']}
+  ],
+  finalTask:'Four-minute shared conversation. Talk about how your relationships have changed over time. Share one person you have stayed in touch with. Talk about someone you drifted apart from or reconnected with. Respond to your partner and ask at least three follow-up questions.',
+  homePractice:'Record 60–90 seconds: How have one of your friendships changed over time? Include: how you met, what you used to do, how you stay connected now, one future plan.',
+  reference:['used to + V — chỉ thói quen QUÁ KHỨ, nay không còn','be used to + V-ing — quen với việc gì (hiện tại)','drift apart /ĐRÍP-tờ A-PÁT/ — xa cách dần','reach out /RÍTCH AUT/ — chủ động liên hệ','catch up with somebody — gặp để cập nhật tin tức','pick up where we left off — tiếp tục như chưa từng gián đoạn']
+ },
+ 3:{
+  title:'Handling Disagreement',vi:'Xử lý bất đồng',
+  goal:'Disagree without sounding cold and keep the conversation moving.',
+  vocab:[
+    {en:'agree with',vi:'đồng ý với ai / ý kiến',pattern:'I agree with you about the price.'},
+    {en:'disagree with',vi:'không đồng ý với ai / ý kiến',pattern:'I disagree with that idea.'},
+    {en:'have a point',vi:'có lý',pattern:'You have a point.'},
+    {en:'see your point',vi:'hiểu ý của bạn',pattern:'I see your point, but…'},
+    {en:'not necessarily',vi:'không hẳn',pattern:'Not necessarily. It depends…'},
+    {en:'bring it up',vi:'đề cập chuyện đó',pattern:'Can I bring something up?'},
+    {en:'work it out',vi:'cùng giải quyết',pattern:'We can work it out together.'},
+    {en:'compromise',vi:'thỏa hiệp',pattern:'Could we compromise?'},
+    {en:'change my mind',vi:'đổi ý',pattern:'It might change my mind.'},
+    {en:'be open to',vi:'sẵn sàng cân nhắc',pattern:"I'm open to trying it once."},
+    {en:'accusatory',vi:'mang tính buộc tội',pattern:'without sounding accusatory'},
+    {en:'acknowledge',vi:'ghi nhận, thừa nhận',pattern:"acknowledge B's good point"}
+  ],
+  grammar:[
+    {key:'I see your point, but …',ex:"I see your point, but we'll only be there for two nights."},
+    {key:'You have a point / That\'s fair',ex:'You have a point. What price range do you have in mind?'},
+    {key:'Although / True, although …',ex:"True, although I don't want to stay somewhere uncomfortable."},
+    {key:'Could we + V? (đề xuất mềm)',ex:'Could we make a simple cleaning schedule?'},
+    {key:'I wish + quá khứ hoàn thành',ex:'I wish you had told me earlier.'},
+    {key:'Neither do I / So do I',ex:'Neither do I. We could find a cheaper place nearby.'},
+    {key:'be open to + V-ing',ex:"I'm open to staying outside the centre if the transport is good."}
+  ],
+  reading:{
+    text:'Disagreeing well is a skill. The first rule is to <b>acknowledge</b> the other person before you disagree: “<b>I see your point</b>, but…” or “<b>You have a point</b>.” This keeps the conversation open instead of turning it into an argument. The second rule is to describe the problem, not the person. Compare “The kitchen has been messy lately” with “You are lazy.” The first invites a solution; the second invites a fight. The third rule is to offer an option: “<b>Could we</b> make a simple schedule?” Finally, be willing to <b>compromise</b> — and if you cannot agree yet, say so honestly instead of pretending.',
+    q:'Answer: 1) What is the first rule? 2) What is the difference in the two examples? 3) What should you do if you cannot agree yet?'
+  },
+  conversations:[
+    {title:'A weekend plan',lines:[
+      {speaker:'Mia',text:"I found a great hotel for our weekend trip. It's right in the city centre."},
+      {speaker:'Alex',text:"It looks nice, but I don't think we should spend that much."},
+      {speaker:'Mia',text:'Really? I think the location will save us a lot of time.'},
+      {speaker:'Alex',text:"I see your point, but we'll only be there for two nights."},
+      {speaker:'Mia',text:"True, although I don't want to stay somewhere uncomfortable."},
+      {speaker:'Alex',text:'Neither do I. We could find a cheaper place nearby.'},
+      {speaker:'Mia',text:'You have a point. What price range do you have in mind?'},
+      {speaker:'Alex',text:'Maybe something under two million a night. Would that work?'},
+      {speaker:'Mia',text:"Possibly. I'm open to staying outside the centre if the transport is good."}
+    ]},
+    {title:'A shared apartment',lines:[
+      {speaker:'Nina',text:'Ben, can I bring something up? The kitchen has been quite messy lately.'},
+      {speaker:'Ben',text:"I know. Work has been exhausting, so I haven't cleaned much this week."},
+      {speaker:'Nina',text:"I understand, but I can't keep doing all of it by myself."},
+      {speaker:'Ben',text:"That's fair. I didn't realise you were doing most of the cleaning."},
+      {speaker:'Nina',text:'I didn\'t say anything because I wanted to avoid an argument.'},
+      {speaker:'Ben',text:'I wish you had told me earlier. We could have worked it out.'},
+      {speaker:'Nina',text:"You're right. Could we make a simple cleaning schedule?"},
+      {speaker:'Ben',text:"I'm open to that, although I don't want it to be too strict."}
+    ]}
+  ],
+  listening:[
+    "I see your point, but we'll only be there for two nights.",
+    'Neither do I. We could find a cheaper place nearby.',
+    'You have a point. What price range do you have in mind?',
+    'Can I bring something up? The kitchen has been quite messy lately.',
+    'I wish you had told me earlier. We could have worked it out.'
+  ],
+  exercises:[
+    {q:'I see your ___, but I don\'t agree.',options:['point','place','part','piece'],answer:0},
+    {q:'Could we ___ a simple schedule?',options:['do','make','take','give'],answer:1},
+    {q:'Can I ___ something up?',options:['take','bring','put','get'],answer:1},
+    {q:"I'm open ___ trying it once.",options:['for','to','with','at'],answer:1},
+    {q:'I wish you ___ told me earlier.',options:['have','had','has','having'],answer:1}
+  ],
+  speaking:[
+    'Texting is better than calling.',
+    'Friends should always reply quickly.',
+    "It's okay to cancel plans at the last minute.",
+    'Living alone is better than sharing a home.',
+    'People should avoid difficult conversations by text.',
+    "It's better to be honest than polite."
+  ],
+  roleplay:[
+    {title:'House rules',steps:['You need quiet after 10 p.m. Bring the issue up calmly.','You often call friends late. Explain why.','Respond to B\'s reason and suggest one rule.','Disagree with one detail and offer another option.','Compromise on quiet hours and exceptions.']},
+    {title:'A group plan',steps:['Prefer a quiet dinner because the person dislikes crowds.','Prefer a surprise party because it feels more memorable.',"Explain one risk and acknowledge B's good point.",'Ask a clarifying question and adjust your idea.','Choose a plan, budget, and one next step.']}
+  ],
+  finalTask:'Four-minute shared conversation. Choose one real-life decision on which you may disagree. State your view and explain why. Acknowledge one point from your partner. Ask at least two follow-up questions. Agree on a compromise or explain why you cannot agree yet.',
+  homePractice:'Record 90 seconds: Describe a disagreement that ended well. What helped? Include: the issue, both views, one useful response, the final solution.',
+  reference:['I see your point ≠ I agree — chỉ là ghi nhận','Neither do I / So do I — phải đảo trợ động từ','I wish + had + V3 — tiếc vì đã không làm gì','without sounding accusatory — không nghe như đang buộc tội','compromise /KHÓM-prờ-maiz/ — thỏa hiệp','work it out — cùng nhau giải quyết']
+ }
+};
+TRACKS.e2.lessons=E2_LESSONS;
+
+// state
+const TRACK_NUM={},TRACK_PART={};
+
+function esc(s){return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;')}
+function speak(text){if('speechSynthesis' in window){const u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=.9;speechSynthesis.speak(u)}}
+function sayBtn(t){return `<button class="e2-say" onclick="speak('${esc(t)}')">🔊</button>`}
+
+function trackSkeleton(tk){
+  const T=TRACKS[tk];
+  return `<div class="e2-wrap">
+    <div class="e2-main" id="${tk}-main"></div>
+    <aside class="e2-side">
+      <div class="e2-side-head"><span class="dot"></span> ${T.gridTitle}</div>
+      <div class="e2-num-grid" id="${tk}-grid"></div>
+      <div class="e2-side-note">Ô sáng = bài đã có nội dung. Các ô còn lại sẽ được cập nhật sau.</div>
+    </aside>
+  </div>`;
+}
+
+function trackGrid(tk){
+  const T=TRACKS[tk],cur=TRACK_NUM[tk]||1;
+  let h='';
+  for(let i=1;i<=T.gridTotal;i++){
+    const live=!!T.lessons[i];
+    const cls='e2-num'+(i===cur?' active':(live?' live':' locked'));
+    h+=`<button class="${cls}" ${live?`onclick="trackGo('${tk}',${i})"`:'disabled'} title="${live?('Bài '+i):'Chưa cập nhật'}">${i}</button>`;
+  }
+  const g=document.getElementById(tk+'-grid');
+  if(g)g.innerHTML=h;
+}
+
+function trackGo(tk,n){TRACK_NUM[tk]=n;TRACK_PART[tk]=null;renderTrack(tk)}
+function trackPart(tk,p){TRACK_PART[tk]=p;renderTrack(tk)}
+function trackBack(tk){TRACK_PART[tk]=null;renderTrack(tk)}
+
+function renderTrack(tk){
+  const T=TRACKS[tk];
+  if(!T)return;
+  const sec=document.getElementById('v-'+tk);
+  if(sec&&!document.getElementById(tk+'-main'))sec.innerHTML=trackSkeleton(tk);
+  if(!TRACK_NUM[tk])TRACK_NUM[tk]=1;
+  trackGrid(tk);
+  const main=document.getElementById(tk+'-main');
+  if(!main)return;
+  const n=TRACK_NUM[tk],L=T.lessons[n];
+  const head=`<div class="e2-crumb">${T.badge} / <b>Bài ${n}</b>${L?(' / '+L.title):''}</div>
+    <div class="e2-lesson-title">${L?(n+': '+L.title):('Bài '+n)}</div>
+    <div class="e2-lesson-goal">${L?(L.vi?L.vi+' · ':'')+(L.goal||''):(T.sub+' — nội dung bài này sẽ được cập nhật sau.')}</div>`;
+  if(!L){
+    main.innerHTML=head+`<div class="e2-task-card"><div class="e2-task-label">Đang cập nhật</div><div class="e2-task-text">Nội dung bài ${n} của <b>${T.title}</b> sẽ được bổ sung sau. Các phần sẽ gồm: ${TRACK_PARTS.map(p=>p.name.replace('Phần ','')).join(' · ')}.</div></div>`;
+    return;
+  }
+  const part=TRACK_PART[tk];
+  if(!part){
+    main.innerHTML=head+`<div class="e2-part-grid">${TRACK_PARTS.map(p=>`<button class="e2-part" onclick="trackPart('${tk}','${p.id}')"><span class="e2-part-ico">${p.ico}</span><span class="e2-part-name">${p.name}</span><span class="e2-part-sub">${p.sub}</span></button>`).join('')}</div>`;
+    return;
+  }
+  const P=TRACK_PARTS.find(p=>p.id===part);
+  main.innerHTML=head+`<div class="e2-panel"><div class="e2-panel-head"><h3>${P.ico} ${P.name}</h3><button class="e2-panel-back" onclick="trackBack('${tk}')">← Danh sách phần</button></div><div id="${tk}-body"></div></div>`;
+  const b=document.getElementById(tk+'-body');
+  if(b)b.innerHTML=trackBody(part,L);
+}
+
+function trackBody(part,L){
+  const has=(k)=>L[k]!==undefined&&L[k]!==null&&!(Array.isArray(L[k])&&!L[k].length);
+  if(!has(part)){
+    const p=TRACK_PARTS.find(x=>x.id===part);
+    return `<div class="e2-task-card"><div class="e2-task-label">Đang cập nhật</div><div class="e2-task-text">Phần <b>${p?p.name:part}</b> của bài này sẽ được bổ sung sau.</div></div>`;
+  }
+  switch(part){
+    case 'vocab':return `<div class="e2-vocab-grid">${L.vocab.map(v=>`<div class="e2-vocab-item"><div class="e2-vocab-en">${v.en} ${sayBtn(v.en)}</div><div class="e2-vocab-vi">${v.vi||''}</div>${v.pattern?`<div class="e2-vocab-pattern">${v.pattern}</div>`:''}</div>`).join('')}</div>`;
+    case 'grammar':return L.grammar.map(g=>`<div class="e2-gram-item"><div class="e2-gram-key">${g.key}</div><div class="e2-gram-ex">${g.ex}</div></div>`).join('');
+    case 'reading':return `<div class="e2-read">${L.reading.text}</div>${L.reading.q?`<div class="e2-task-card" style="margin-top:14px"><div class="e2-task-label">Câu hỏi</div><div class="e2-task-text">${L.reading.q}</div></div>`:''}`;
+    case 'conversations':return L.conversations.map(c=>`<div class="e2-conv-card"><div class="e2-conv-title">${c.title}</div>${c.lines.map(l=>`<div class="e2-conv-line"><span class="e2-conv-speaker">${l.speaker}</span><span style="flex:1">${l.text}</span>${sayBtn(l.text)}</div>`).join('')}</div>`).join('');
+    case 'listening':return `<p class="faint text-sm" style="margin-bottom:14px">Nghe từng câu, sau đó nhắc lại (shadowing).</p>`+L.listening.map(s=>`<div class="e2-speaking-item"><span style="flex:1">${s}</span>${sayBtn(s)}</div>`).join('');
+    case 'exercises':return L.exercises.map((e,i)=>`<div class="e2-quiz-item"><div class="e2-quiz-q">${i+1}. ${e.q}</div><div class="e2-quiz-opts">${e.options.map((o,j)=>`<button class="e2-quiz-opt" onclick="trackAnswer(this,${j===e.answer})">${o}</button>`).join('')}</div></div>`).join('');
+    case 'speaking':return L.speaking.map((s,i)=>`<div class="e2-speaking-item"><span class="n">${i+1}</span><span style="flex:1">${s}</span>${sayBtn(s)}</div>`).join('');
+    case 'roleplay':return L.roleplay.map(r=>`<div class="e2-roleplay-card"><div class="e2-roleplay-title">${r.title}</div><ul class="e2-roleplay-steps">${r.steps.map(s=>`<li>${s}</li>`).join('')}</ul></div>`).join('');
+    case 'finalTask':return `<div class="e2-task-card"><div class="e2-task-label">Final Task</div><div class="e2-task-text">${L.finalTask}</div></div>${L.homePractice?`<div class="e2-task-card" style="margin-top:12px"><div class="e2-task-label">Home Practice</div><div class="e2-task-text">${L.homePractice}</div></div>`:''}`;
+    case 'reference':return `<ul class="e2-ref">${L.reference.map(r=>`<li>${r}</li>`).join('')}</ul>`;
+    default:return '';
+  }
+}
+function trackAnswer(btn,ok){
+  btn.classList.remove('ok','no');
+  btn.classList.add(ok?'ok':'no');
+  toast(ok?'Correct!':'Wrong answer',ok?'ok':'err');
+}
+
+// ---- AUTH ----
+function showAuth(){document.getElementById('auth-modal').classList.remove('hidden')}
+function hideAuth(){document.getElementById('auth-modal').classList.add('hidden')}
+function toggleAuthMode(){AUTH_MODE=AUTH_MODE==='login'?'signup':'login';document.getElementById('auth-title').textContent=AUTH_MODE==='login'?'Sign In':'Sign Up';document.getElementById('auth-submit').textContent=AUTH_MODE==='login'?'Sign In':'Sign Up';document.getElementById('auth-switch-text').textContent=AUTH_MODE==='login'?"Don't have an account?":'Already have an account?';document.getElementById('auth-switch-btn').textContent=AUTH_MODE==='login'?'Sign Up':'Sign In';document.getElementById('auth-name-field').classList.toggle('hidden',AUTH_MODE==='login');document.getElementById('auth-role-field').classList.toggle('hidden',AUTH_MODE==='login')}
+function setRole(r){USER_ROLE=r;document.querySelectorAll('[data-role]').forEach(b=>b.classList.toggle('on',b.dataset.role===r))}
+function doAuth(){
+  const email=document.getElementById('auth-email').value;const pass=document.getElementById('auth-pass').value;const name=document.getElementById('auth-name').value||email.split('@')[0];
+  if(!email||!pass){toast('Please fill in all fields','err');return}
+  if(AUTH_MODE==='signup'){USER={name,email,role:USER_ROLE,joined:new Date().toLocaleDateString()};save('user',USER);toast('Account created!','ok')}
+  else{const saved=load('user',null);if(saved&&saved.email===email){USER=saved;toast('Welcome back!','ok')}else{USER={name:email.split('@')[0],email,role:'student',joined:new Date().toLocaleDateString()};save('user',USER);toast('Signed in!','ok')}}
+  hideAuth();updateAuthUI();go('dashboard');
+}
+function logout(){USER=null;localStorage.removeItem('mt_user');updateAuthUI();toast('Signed out','ok');go('home')}
+function updateAuthUI(){const label=document.getElementById('sidebar-auth-label');if(USER){label.textContent=USER.name||'Account'}else{label.textContent='Sign In'}}
+
+// ---- DASHBOARD ----
+function renderDashboard(){
+  if(!USER){document.getElementById('dash-gate').classList.remove('hidden');document.getElementById('dash-body').classList.add('hidden');return}
+  document.getElementById('dash-gate').classList.add('hidden');document.getElementById('dash-body').classList.remove('hidden');
+  document.getElementById('dash-avatar').textContent=USER.name?.[0]?.toUpperCase()||'U';
+  document.getElementById('dash-name').textContent=USER.name;document.getElementById('dash-email').textContent=USER.email;
+  const progress=load('progress',{});const lessonsDone=Object.keys(progress).filter(k=>k.includes('_l')).length;
+  document.getElementById('dash-lessons').textContent=lessonsDone;document.getElementById('dash-words').textContent=load('wordsLearned',0);document.getElementById('dash-streak').textContent=load('streak',0);document.getElementById('dash-level').textContent=load('selectedLevel','—');
+}
+
+// ---- VIP ----
+function showVIP(){document.getElementById('vip-modal').classList.remove('hidden')}
+function hideVIP(){document.getElementById('vip-modal').classList.add('hidden')}
+
+// ---- INIT ----
+USER=load('user',null);updateAuthUI();go(location.hash.slice(1)||'home');
+</script>
+</body>
+</html>
