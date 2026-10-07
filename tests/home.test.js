@@ -43,9 +43,9 @@ async function main() {
   // sections from the roadmap PDF
   const sectionIds = ['roadmap'];
   for (const s of sectionIds) t(`#${s} section exists`, await evalJs(`!!document.getElementById('${s}')`));
-  t('placement section', (await evalJs(`document.querySelectorAll('.path-card').length`)) === 2);
-  t('foundation has 6 stages', (await evalJs(`document.querySelectorAll('.roadmap .stage-item:not(.act)').length`)) === 6);
-  t('activation has 5 stages', (await evalJs(`document.querySelectorAll('.roadmap .stage-item.act').length`)) === 5);
+  t('placement quiz renders', (await evalJs(`document.querySelectorAll('#placement-quiz .quiz-q').length`)) === 5);
+  t('foundation has 6 stages', (await evalJs(`document.querySelectorAll('.roadmap .tl-item:not(.act)').length`)) === 6);
+  t('activation has 5 stages', (await evalJs(`document.querySelectorAll('.roadmap .tl-item.act').length`)) === 5);
   t('flow has 4 cards', (await evalJs(`document.querySelectorAll('.flow-card').length`)) === 4);
   t('spiral has 2 columns', (await evalJs(`document.querySelectorAll('.spiral-col').length`)) === 2);
   t('8 topics', (await evalJs(`document.querySelectorAll('.topic-card').length`)) === 8);
@@ -56,16 +56,22 @@ async function main() {
 
   // method
   t('4 method cards', (await evalJs(`document.querySelectorAll('.method-card').length`)) === 4);
+  t('each method card has a colored badge', (await evalJs(`[...document.querySelectorAll('.method-badge')].every(b=>getComputedStyle(b).backgroundImage.includes('gradient'))`)));
 
-  // counters
-  await evalJs(`document.getElementById('roadmap').scrollIntoView()`);
-  await sleep(400);
-  await evalJs(`window.scrollTo(0,0)`);
-  await sleep(1600);
-  const counted = await evalJs(`[...document.querySelectorAll('.stat-num')].map(e=>e.textContent).join(',')`);
-  t('stat counters ran', counted !== '0,0,0,0', counted);
+  // tinted home blocks
+  t('9 tinted home blocks', (await evalJs(`document.querySelectorAll('.home-block').length`)) === 9);
+
+  // placement quiz interaction
+  await evalJs(`PLACEMENT_ANSWERS=[0,0,0,0,0];renderPlacementQuiz()`);
+  await sleep(300);
+  t('quiz shows a result after 5 answers', await evalJs(`!!document.querySelector('.quiz-result')`));
+  await evalJs(`PLACEMENT_ANSWERS=[null,null,null,null,null];renderPlacementQuiz()`);
+  await sleep(200);
+  t('quiz resets to questions', (await evalJs(`document.querySelectorAll('.quiz-q').length`)) === 5);
 
   // scroll animation classes
+  await evalJs(`document.querySelector('.move-method').scrollIntoView()`);
+  await sleep(800);
   const vis = await evalJs(`document.querySelectorAll('.scroll-section.visible').length`);
   t('scroll sections became visible', vis > 0, 'visible=' + vis);
 
