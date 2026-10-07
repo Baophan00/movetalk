@@ -59,7 +59,7 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   let parts=await evalJs("document.querySelectorAll('#e2-main .e2-part').length");
   t('E2 lesson1: 10 part cards', parts===10, 'got '+parts);
   await evalJs("document.querySelectorAll('#e2-main .e2-part')[0].click()"); await sleep(120);
-  const vocab=await evalJs("document.querySelectorAll('#e2-body .e2-vocab-item').length");
+  const vocab=await evalJs("document.querySelectorAll('#e2-body .blk-word').length");
   t('E2 part1 vocabulary items', vocab>0, 'items='+vocab);
   const panel=await evalJs("document.querySelector('#e2-main .e2-panel-head h3').innerText");
   t('E2 panel title', panel.includes('Phần 1'), panel);

@@ -2,8 +2,10 @@
   "name": "movetalk",
   "private": true,
   "scripts": {
-    "test": "node tests/unit.test.js && node tests/conversation.test.js && node tests/audio.test.js",
-    "test:browser": "node tests/browser.test.js"
+    "data": "python3 tools/build_data.py",
+    "test": "node tests/unit.test.js && node tests/lesson-data.test.js && node tests/conversation.test.js && node tests/audio.test.js",
+    "test:live": "node tests/browser.test.js && node tests/live.test.js && node tests/home.test.js",
+    "test:all": "npm test && npm run test:live"
   },
   "devDependencies": { "ws": "^8.18.0" }
 }

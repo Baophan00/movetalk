@@ -9,7 +9,7 @@
 <style>
 :root,[data-theme="dark"]{
   --bg:#040515;--surface:#0B0D1A;--surface2:#10121F;
-  --text:#F5F5FF;--text2:#A8ACBD;
+  --text:#F5F5FF;--text2:#C4C8DC;
   --border:rgba(255,255,255,.08);
   --accent:#6366F1;--accent2:#8D8FF8;--lav:#D6D6FF;
   --glow:rgba(99,102,241,.12);
@@ -19,7 +19,7 @@
   --bottom-bg:rgba(11,13,26,.9);
   --hero-glow:rgba(99,102,241,.15);
   --hero-glow2:rgba(141,143,248,.08);
-  --badge-bg:rgba(99,102,241,.1);
+  --badge-bg:rgba(99,102,241,.18);
   --badge2-bg:rgba(255,255,255,.04);
   --fc-back:linear-gradient(135deg,#6366F1,#8D8FF8);
   --quiz-border:rgba(255,255,255,.06);
@@ -27,8 +27,8 @@
   --input-border:rgba(255,255,255,.08);
   --btn2-border:rgba(255,255,255,.12);
   --pill-border:rgba(255,255,255,.1);
-  --pill-on-bg:rgba(99,102,241,.15);
-  --pill-on-border:rgba(99,102,241,.3);
+  --pill-on-bg:rgba(99,102,241,.22);
+  --pill-on-border:rgba(99,102,241,.5);
   --card-glow:linear-gradient(90deg,transparent,rgba(99,102,241,.4),transparent);
   --divider:rgba(255,255,255,.06);
   --hover:rgba(255,255,255,.02);
@@ -61,12 +61,12 @@
   --sidebar-bg:rgba(11,13,26,.98);
   --sidebar-border:rgba(255,255,255,.06);
   --sidebar-hover:rgba(255,255,255,.04);
-  --sidebar-active:rgba(99,102,241,.12);
+  --sidebar-active:rgba(99,102,241,.18);
   --sidebar-active-border:rgba(99,102,241,.3);
 }
 [data-theme="light"]{
   --bg:#ffffff;--surface:#f8f9fc;--surface2:#f1f2f6;
-  --text:#1a1b2e;--text2:#6b7280;
+  --text:#1a1b2e;--text2:#4b5563;
   --border:rgba(0,0,0,.08);
   --accent:#6366F1;--accent2:#818cf8;--lav:#e0e7ff;
   --glow:rgba(99,102,241,.06);
@@ -76,7 +76,7 @@
   --bottom-bg:rgba(255,255,255,.9);
   --hero-glow:rgba(99,102,241,.08);
   --hero-glow2:rgba(141,143,248,.04);
-  --badge-bg:rgba(99,102,241,.08);
+  --badge-bg:rgba(99,102,241,.15);
   --badge2-bg:rgba(0,0,0,.03);
   --fc-back:linear-gradient(135deg,#6366F1,#8D8FF8);
   --quiz-border:rgba(0,0,0,.08);
@@ -134,6 +134,124 @@ h1{font-size:clamp(40px,6vw,72px);font-weight:700;line-height:1.1;letter-spacing
 h2{font-size:clamp(28px,4vw,44px);font-weight:700;line-height:1.15;letter-spacing:-.01em}
 h3{font-size:clamp(20px,3vw,28px);font-weight:600;line-height:1.2;letter-spacing:-.01em}
 .section-label{font-size:12px;font-weight:600;letter-spacing:.15em;color:var(--accent2);text-transform:uppercase;margin-bottom:16px}
+.section-sub{font-size:14px;color:var(--text2);text-align:center;max-width:640px;margin:-20px auto 32px;line-height:1.7}
+
+/* ---- home: hero extras ---- */
+.hero-orb-3{width:260px;height:260px;background:var(--lav);top:40%;right:10%;opacity:.14;animation-delay:-3s}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse at center,black 10%,transparent 72%);-webkit-mask-image:radial-gradient(ellipse at center,black 10%,transparent 72%)}
+.hero-flow{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:36px;animation:slideUp .8s ease .3s both}
+.hero-flow-step{font-size:10.5px;font-weight:700;letter-spacing:.14em;color:var(--text);padding:7px 14px;border-radius:99px;background:var(--badge-bg);border:1px solid var(--pill-on-border)}
+.hero-flow-arrow{color:var(--accent);font-size:13px;animation:arrowPulse 2s ease-in-out infinite}
+.hero-flow-arrow:nth-of-type(2){animation-delay:.4s}
+@keyframes arrowPulse{0%,100%{opacity:.35;transform:translateX(0)}50%{opacity:1;transform:translateX(3px)}}
+
+/* ---- home: sections ---- */
+.placement,.roadmap,.flow-section,.spiral,.topics,.missions,.progress-section,.destination{padding:48px 40px;max-width:960px;margin:0 auto}
+.placement .section-label,.roadmap .section-label,.flow-section .section-label,.spiral .section-label,.topics .section-label,.missions .section-label,.progress-section .section-label,.destination .section-label{text-align:center}
+.placement h2,.roadmap h2,.flow-section h2,.spiral h2,.topics h2,.missions h2,.progress-section h2,.destination h2{text-align:center;font-size:28px;margin-bottom:16px}
+.placement-note{font-size:13px;color:var(--text2);text-align:center;margin-top:22px;line-height:1.7;max-width:680px;margin-left:auto;margin-right:auto}
+.placement-note b{color:var(--text)}
+
+/* placement quiz */
+.quiz-wrap{max-width:640px;margin:0 auto}
+.quiz-q{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-bottom:14px;transition:.2s}
+.quiz-q:hover{border-color:var(--card-hover-border)}
+.quiz-q-text{font-size:14px;font-weight:600;margin-bottom:14px;line-height:1.5}
+.quiz-q-opts{display:flex;flex-direction:column;gap:8px}
+.quiz-opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);cursor:pointer;transition:.15s;font-size:13px;text-align:left}
+.quiz-opt:hover{border-color:var(--pill-on-border);background:var(--pill-on-bg)}
+.quiz-opt.selected{border-color:var(--accent);background:var(--pill-on-bg)}
+.quiz-opt-letter{width:22px;height:22px;border-radius:6px;background:var(--badge-bg);color:var(--accent2);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.quiz-result{max-width:640px;margin:24px auto 0;padding:28px;border-radius:16px;background:var(--vip-bg);border:1px solid var(--pill-on-border);text-align:center;animation:slideUp .5s ease}
+.quiz-result-path{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--accent2);margin-bottom:8px}
+.quiz-result-name{font-size:24px;font-weight:800;margin-bottom:8px}
+.quiz-result-desc{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:18px}
+.quiz-result-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:10px;background:var(--btn-primary);color:#fff;font-size:13px;font-weight:600;border:none;cursor:pointer;transition:.15s}
+.quiz-result-btn:hover{opacity:.9;transform:translateY(-1px)}
+.quiz-reset{font-size:12px;color:var(--text2);background:none;border:none;cursor:pointer;margin-top:14px;text-decoration:underline}
+
+/* timeline */
+.timeline{position:relative;max-width:640px;margin:0 auto;padding-left:28px}
+.timeline::before{content:'';position:absolute;left:8px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg,var(--accent),var(--accent2));border-radius:2px}
+.tl-item{position:relative;padding:14px 0}
+.tl-item::before{content:'';position:absolute;left:-24px;top:20px;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--bg)}
+.tl-item.act::before{background:var(--accent2)}
+.tl-name{font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text);margin-bottom:2px}
+.tl-desc{font-size:12.5px;color:var(--text2)}
+
+/* flow icons */
+.flow-ico{font-size:24px;margin-bottom:8px}
+
+/* topic icons */
+.topic-ico{font-size:28px;margin-bottom:6px}
+
+/* mission icons */
+.mission-ico{font-size:24px;margin-bottom:6px}
+
+/* progress bars */
+.prog-bar{height:6px;border-radius:3px;background:var(--surface2);margin:10px 0;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;background:var(--btn-primary);transition:width 1s ease}
+
+/* path cards */
+
+
+/* stage list */
+
+
+/* flow cards */
+.flow-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.flow-card{padding:18px;border-radius:12px;background:var(--surface);border:1px solid var(--border)}
+.flow-tag{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--accent2);margin-bottom:9px}
+.flow-card p{font-size:13px;color:var(--text2);line-height:1.65;margin:0}
+
+/* spiral */
+.spiral-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.spiral-col{padding:18px;border-radius:12px;background:var(--surface);border:1px solid var(--border)}
+.spiral-title{font-size:10.5px;font-weight:700;letter-spacing:.12em;color:var(--accent2);margin-bottom:12px}
+.spiral-items{display:flex;flex-wrap:wrap;gap:7px}
+.spiral-items span{font-size:11.5px;padding:5px 11px;border-radius:99px;background:var(--surface2);color:var(--text2);border:1px solid var(--border)}
+
+/* topics */
+.topic-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.topic-card{padding:16px;border-radius:12px;background:var(--surface);border:1px solid var(--border);transition:.2s}
+.topic-card:hover{border-color:var(--card-hover-border);transform:translateY(-2px)}
+.topic-name{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--accent2);margin-bottom:6px}
+.topic-desc{font-size:12.5px;color:var(--text2);line-height:1.55}
+
+/* missions */
+.mission-track{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;position:relative}
+.mission-step{padding:16px;border-radius:12px;background:var(--surface);border:1px solid var(--border);text-align:center}
+.mission-num{font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:8px}
+.mission-name{font-size:11.5px;font-weight:700;letter-spacing:.08em;color:var(--text);margin-bottom:6px}
+.mission-desc{font-size:12px;color:var(--text2);line-height:1.55}
+
+/* progress */
+.prog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:22px}
+.prog-card{padding:18px;border-radius:12px;background:var(--surface);border:1px solid var(--border)}
+.prog-title{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--accent2);margin-bottom:9px}
+.prog-card p{font-size:13px;color:var(--text2);line-height:1.65;margin:0}
+.scale-row{display:flex;justify-content:center;gap:26px;flex-wrap:wrap;margin-bottom:8px}
+.scale-item{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text2)}
+.scale-mark{font-size:15px;color:var(--accent2);width:18px;text-align:center}
+
+/* destination */
+.destination{padding-bottom:64px}
+.dest-inner{padding:40px 32px;border-radius:20px;background:var(--vip-bg);border:1px solid var(--pill-on-border);text-align:center;position:relative;overflow:hidden}
+.dest-inner::before{content:'';position:absolute;top:-60%;left:50%;width:340px;height:340px;transform:translateX(-50%);background:radial-gradient(circle,var(--glow),transparent 70%);pointer-events:none}
+.dest-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:560px;margin:24px auto}
+.dest-card{padding:18px;border-radius:12px;background:var(--surface);border:1px solid var(--border)}
+.dest-tag{font-size:9.5px;font-weight:700;letter-spacing:.12em;color:var(--accent2);margin-bottom:8px}
+.dest-title{font-size:14px;font-weight:700;color:var(--text);letter-spacing:.04em}
+.dest-final{font-size:clamp(18px,3vw,26px);font-weight:800;letter-spacing:-.01em;background:var(--btn-primary);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin:22px 0 12px}
+.dest-motto{font-size:14px;color:var(--text2);font-style:italic}
+
+@media(max-width:820px){
+  .spiral-grid,.dest-grid{grid-template-columns:1fr}
+  .hero-flow{gap:8px}
+  .hero-flow-step{font-size:9.5px;padding:6px 10px}
+  .placement,.roadmap,.flow-section,.spiral,.topics,.missions,.progress-section,.destination{padding:36px 20px}
+  .scale-row{gap:14px}
+}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:20px;transition:border-color .2s,background .2s,transform .2s}
 .card-hover{cursor:pointer}
 .card-hover:hover{border-color:var(--card-hover-border);background:var(--surface2);transform:translateY(-2px)}
@@ -146,7 +264,7 @@ h3{font-size:clamp(20px,3vw,28px);font-weight:600;line-height:1.2;letter-spacing
 .btn-secondary:hover{border-color:var(--btn2-hover-border);background:var(--btn2-hover-bg)}
 .pill{font-size:12px;font-weight:500;padding:6px 14px;border-radius:6px;color:var(--text2);transition:.15s;white-space:nowrap;cursor:pointer;border:1px solid transparent;background:transparent}
 .pill:hover{color:var(--text);border-color:var(--pill-border)}
-.pill.on{background:var(--pill-on-bg);color:var(--lav);border-color:var(--pill-on-border)}
+.pill.on{background:var(--pill-on-bg);color:var(--text);border-color:var(--pill-on-border)}
 .nav-btn{font-size:14px;font-weight:400;padding:8px 16px;border-radius:8px;color:var(--text2);transition:.15s;cursor:pointer;border:none;background:none}
 .nav-btn:hover{color:var(--nav-btn-hover)}
 .nav-btn.on{color:var(--nav-btn-active);font-weight:500}
@@ -190,13 +308,13 @@ h3{font-size:clamp(20px,3vw,28px);font-weight:600;line-height:1.2;letter-spacing
 .nav-section{margin-bottom:2px}
 .nav-section-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;padding:10px 20px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text2);background:none;border:none;cursor:pointer;transition:color .15s}
 .nav-section-toggle:hover{color:var(--text)}
-.nav-section-toggle svg{width:14px;height:14px;transition:transform .2s;opacity:.5}
+.nav-section-toggle svg{width:14px;height:14px;transition:transform .2s;opacity:.8}
 .nav-section-toggle.expanded svg{transform:rotate(90deg)}
 .nav-section-items{overflow:hidden;max-height:0;transition:max-height .3s ease}
 .nav-section-items.expanded{max-height:200px}
 .nav-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 20px 9px 32px;font-size:13px;font-weight:400;color:var(--text2);background:none;border:none;cursor:pointer;transition:.15s;text-align:left;border-left:2px solid transparent}
 .nav-item:hover{color:var(--text);background:var(--sidebar-hover)}
-.nav-item.active{color:var(--lav);background:var(--sidebar-active);border-left-color:var(--accent);font-weight:500}
+.nav-item.active{color:var(--text);background:var(--sidebar-active);border-left-color:var(--accent);font-weight:600}
 .nav-item .nav-code{font-size:10px;font-weight:600;color:var(--accent2);background:var(--badge-bg);padding:2px 6px;border-radius:4px;min-width:24px;text-align:center}
 .sidebar-footer{padding:16px 20px;border-top:1px solid var(--sidebar-border)}
 .sidebar-footer-btn{width:100%;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;color:var(--text2);background:none;border:none;cursor:pointer;transition:.15s}
@@ -213,7 +331,7 @@ h3{font-size:clamp(20px,3vw,28px);font-weight:600;line-height:1.2;letter-spacing
 .hero-orb-2{width:300px;height:300px;background:var(--accent2);bottom:-50px;right:-50px;animation-delay:-6s}
 @keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-30px) scale(1.1)}}
 .hero-content{position:relative;z-index:1;max-width:800px;margin:0 auto;text-align:center}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:100px;background:var(--badge-bg);border:1px solid var(--pill-on-border);font-size:12px;font-weight:500;color:var(--lav);margin-bottom:24px;animation:fadeIn .6s ease}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:100px;background:var(--badge-bg);border:1px solid var(--pill-on-border);font-size:12px;font-weight:600;color:var(--text);margin-bottom:24px;animation:fadeIn .6s ease}
 .hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .hero-title{font-size:clamp(36px,5vw,64px);font-weight:800;line-height:1.05;letter-spacing:-.03em;margin-bottom:20px;animation:slideUp .8s ease}
@@ -227,33 +345,38 @@ h3{font-size:clamp(20px,3vw,28px);font-weight:600;line-height:1.2;letter-spacing
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
 /* Stats bar */
-.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:0 40px 40px;max-width:800px;margin:0 auto}
-.stat-item{text-align:center;padding:20px;border-radius:16px;background:var(--surface);border:1px solid var(--border)}
-.stat-num{font-size:28px;font-weight:700;background:var(--btn-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.stat-label{font-size:11px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+
 
 /* MOVE Method */
 .move-method{padding:40px;max-width:900px;margin:0 auto}
 .move-method .section-label{text-align:center}
 .move-method h2{text-align:center;font-size:28px;margin-bottom:32px}
-.method-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.method-card{padding:24px 16px;border-radius:16px;background:var(--surface);border:1px solid var(--border);text-align:center;transition:.2s;cursor:default}
-.method-card:hover{border-color:var(--card-hover-border);transform:translateY(-4px)}
-.method-num{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-weight:700;font-size:16px;background:var(--badge-bg);color:var(--accent2)}
-.method-name{font-weight:600;font-size:14px;margin-bottom:4px}
-.method-desc{font-size:12px;color:var(--text2)}
+.method-grid{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:0;position:relative;align-items:stretch}
+.method-card{padding:28px 20px;border-radius:16px;text-align:center;transition:.2s;cursor:default;position:relative;z-index:1}
+.method-card:hover{transform:translateY(-4px)}
+.method-card:nth-child(1){background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(99,102,241,.05));border:1px solid rgba(99,102,241,.3)}
+.method-card:nth-child(2){background:linear-gradient(135deg,rgba(139,92,246,.15),rgba(139,92,246,.05));border:1px solid rgba(139,92,246,.3)}
+.method-card:nth-child(3){background:linear-gradient(135deg,rgba(236,72,153,.15),rgba(236,72,153,.05));border:1px solid rgba(236,72,153,.3)}
+.method-card:nth-child(4){background:linear-gradient(135deg,rgba(34,197,94,.15),rgba(34,197,94,.05));border:1px solid rgba(34,197,94,.3)}
+.method-num{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-weight:800;font-size:18px;color:#fff}
+.method-card:nth-child(1) .method-num{background:linear-gradient(135deg,#6366F1,#818CF8)}
+.method-card:nth-child(2) .method-num{background:linear-gradient(135deg,#8B5CF6,#A78BFA)}
+.method-card:nth-child(3) .method-num{background:linear-gradient(135deg,#EC4899,#F472B6)}
+.method-card:nth-child(4) .method-num{background:linear-gradient(135deg,#22C55E,#4ADE80)}
+.method-name{font-weight:700;font-size:15px;margin-bottom:6px}
+.method-card:nth-child(1) .method-name{color:#818CF8}
+.method-card:nth-child(2) .method-name{color:#A78BFA}
+.method-card:nth-child(3) .method-name{color:#F472B6}
+.method-card:nth-child(4) .method-name{color:#4ADE80}
+.method-desc{font-size:12.5px;color:var(--text2);line-height:1.5}
+.method-arrow{display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--text2);padding:0 4px;align-self:center}
+@media(max-width:820px){.method-grid{grid-template-columns:repeat(2,1fr);gap:12px}.method-arrow{display:none}}
 
 /* Roadmap preview */
 .roadmap-preview{padding:40px;max-width:900px;margin:0 auto}
 .roadmap-preview .section-label{text-align:center}
 .roadmap-preview h2{text-align:center;font-size:28px;margin-bottom:32px}
-.path-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.path-card{padding:28px;border-radius:20px;background:var(--surface);border:1px solid var(--border);transition:.2s;cursor:pointer}
-.path-card:hover{border-color:var(--card-hover-border);transform:translateY(-4px)}
-.path-card h3{font-size:18px;margin-bottom:8px}
-.path-card p{font-size:13px;color:var(--text2);margin-bottom:16px}
-.path-tags{display:flex;flex-wrap:wrap;gap:6px}
-.path-tag{font-size:11px;padding:4px 10px;border-radius:6px;background:var(--badge-bg);color:var(--accent2);font-weight:500}
+
 
 /* Quick access */
 .quick-access{padding:40px;max-width:900px;margin:0 auto}
@@ -270,6 +393,24 @@ h3{font-size:clamp(20px,3vw,28px);font-weight:600;line-height:1.2;letter-spacing
 .scroll-section{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
 .scroll-section.visible{opacity:1;transform:none}
 
+/* ---- home: per-section tinted blocks ---- */
+.tint-block{border-radius:24px;border:1px solid var(--tint-border);background:var(--tint-bg);position:relative;overflow:hidden;margin:0 auto 28px;max-width:1000px}
+.tint-block::after{content:'';position:absolute;top:-140px;right:-100px;width:340px;height:340px;border-radius:50%;background:var(--tint-glow);filter:blur(70px);pointer-events:none;opacity:.7}
+.tint-block > *{position:relative;z-index:1}
+
+.move-method.tint-block{--tint-bg:linear-gradient(150deg,rgba(99,102,241,.14),rgba(99,102,241,.03));--tint-border:rgba(99,102,241,.28);--tint-glow:rgba(99,102,241,.45);--tint-accent:#818CF8}
+.placement.tint-block{--tint-bg:linear-gradient(150deg,rgba(14,165,233,.14),rgba(14,165,233,.03));--tint-border:rgba(14,165,233,.28);--tint-glow:rgba(14,165,233,.45);--tint-accent:#38BDF8}
+.roadmap.tint-block{--tint-bg:linear-gradient(150deg,rgba(139,92,246,.14),rgba(139,92,246,.03));--tint-border:rgba(139,92,246,.28);--tint-glow:rgba(139,92,246,.45);--tint-accent:#A78BFA}
+.flow-section.tint-block{--tint-bg:linear-gradient(150deg,rgba(59,130,246,.14),rgba(59,130,246,.03));--tint-border:rgba(59,130,246,.28);--tint-glow:rgba(59,130,246,.45);--tint-accent:#60A5FA}
+.spiral.tint-block{--tint-bg:linear-gradient(150deg,rgba(236,72,153,.14),rgba(236,72,153,.03));--tint-border:rgba(236,72,153,.28);--tint-glow:rgba(236,72,153,.45);--tint-accent:#F472B6}
+.topics.tint-block{--tint-bg:linear-gradient(150deg,rgba(245,158,11,.14),rgba(245,158,11,.03));--tint-border:rgba(245,158,11,.28);--tint-glow:rgba(245,158,11,.45);--tint-accent:#FBBF24}
+.missions.tint-block{--tint-bg:linear-gradient(150deg,rgba(34,197,94,.14),rgba(34,197,94,.03));--tint-border:rgba(34,197,94,.28);--tint-glow:rgba(34,197,94,.45);--tint-accent:#4ADE80}
+.progress-section.tint-block{--tint-bg:linear-gradient(150deg,rgba(20,184,166,.14),rgba(20,184,166,.03));--tint-border:rgba(20,184,166,.28);--tint-glow:rgba(20,184,166,.45);--tint-accent:#2DD4BF}
+.quick-access.tint-block{--tint-bg:linear-gradient(150deg,rgba(148,163,184,.12),rgba(148,163,184,.03));--tint-border:rgba(148,163,184,.25);--tint-glow:rgba(148,163,184,.35);--tint-accent:#CBD5E1}
+
+.tint-block .section-label{color:var(--tint-accent)}
+@media(max-width:820px){.tint-block{border-radius:18px;margin-bottom:18px}}
+
 /* ===== E2 VIEW (vnjpclub-style) ===== */
 .e2-wrap{display:grid;grid-template-columns:1fr 240px;gap:32px;padding:28px 40px 60px;align-items:start}
 .e2-main{min-width:0}
@@ -280,7 +421,7 @@ h3{font-size:clamp(20px,3vw,28px);font-weight:600;line-height:1.2;letter-spacing
 .e2-part-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
 .e2-part{display:flex;flex-direction:column;gap:10px;padding:16px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--border);cursor:pointer;transition:.18s;text-align:left}
 .e2-part:hover{border-color:var(--card-hover-border);transform:translateY(-2px);background:var(--surface2)}
-.e2-part.active{border-color:var(--pill-on-border);background:var(--pill-on-bg)}
+.e2-part.active{border-color:var(--pill-on-border);background:var(--pill-on-bg);color:var(--text)}
 .e2-part-ico{font-size:20px;line-height:1}
 .e2-part-name{font-size:12.5px;font-weight:600;line-height:1.35}
 .e2-part-sub{font-size:10.5px;color:var(--text2);letter-spacing:.04em;text-transform:uppercase}
@@ -308,8 +449,86 @@ h3{font-size:clamp(20px,3vw,28px);font-weight:600;line-height:1.2;letter-spacing
 .e2-task-card{padding:20px;border-radius:14px;background:var(--surface);border:1px solid var(--border)}
 .e2-task-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);margin-bottom:8px}
 .e2-task-text{font-size:14px;line-height:1.6}
-.e2-say.primary{color:var(--lav);border-color:var(--pill-on-border);background:var(--pill-on-bg)}
+.e2-say.primary{color:var(--text);border-color:var(--pill-on-border);background:var(--pill-on-bg)}
 .e2-conv-actions{display:flex;gap:6px;flex-shrink:0}
+.e2-today{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.e2-today-chip{font-size:11px;padding:4px 10px;border-radius:99px;background:var(--badge-bg);color:var(--text);border:1px solid var(--pill-on-border)}
+.e2-part.empty{opacity:.45;cursor:not-allowed}
+
+/* ---- content blocks ---- */
+.blk-h{font-size:15px;font-weight:600;margin:26px 0 12px;padding-left:12px;border-left:3px solid var(--accent);line-height:1.3}
+.blk-h:first-child{margin-top:0}
+.blk-p{font-size:14px;line-height:1.75;color:var(--text);margin-bottom:12px}
+.blk-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);margin:18px 0 8px}
+.blk-ex{font-size:13px;line-height:1.6;color:var(--lav);padding:10px 14px;border-radius:8px;background:var(--surface2);border-left:2px solid var(--accent);margin-bottom:12px;font-style:italic}
+.blk-note{display:flex;gap:9px;font-size:12.5px;line-height:1.65;color:var(--text2);padding:11px 14px;border-radius:9px;background:var(--hover);border:1px solid var(--border);margin:12px 0}
+.blk-note-ico{flex-shrink:0;opacity:.8}
+.blk-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.blk-chip{font-size:11.5px;padding:5px 11px;border-radius:99px;background:var(--pill-on-bg);color:var(--lav);border:1px solid var(--pill-on-border)}
+.blk-list{margin:0 0 12px;padding-left:20px}
+.blk-list li{font-size:13.5px;line-height:1.75;color:var(--text);margin-bottom:5px}
+.blk-say{margin-bottom:12px}
+.blk-say-row{display:flex;gap:10px;align-items:flex-start;padding:9px 13px;border-radius:9px;background:var(--surface);border:1px solid var(--border);margin-bottom:6px;font-size:13.5px;line-height:1.6}
+.blk-say-row>span{flex:1}
+.blk-bank{display:flex;flex-wrap:wrap;gap:7px;align-items:center;padding:12px 14px;border-radius:10px;background:var(--surface2);border:1px dashed var(--pill-on-border);margin-bottom:14px}
+.blk-bank-label{font-size:9.5px;font-weight:700;letter-spacing:.12em;color:var(--accent2);width:100%;margin-bottom:2px}
+.blk-bank-item{font-size:12.5px;padding:4px 10px;border-radius:6px;background:var(--badge-bg);color:var(--text);font-weight:500}
+.blk-words{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-bottom:12px}
+.blk-word{padding:12px 14px;border-radius:10px;background:var(--surface);border:1px solid var(--border)}
+.blk-word-en{font-size:13.5px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:7px;justify-content:space-between}
+.blk-word-vi{font-size:12px;color:var(--accent2);margin-top:5px}
+.blk-word-def{font-size:11.5px;color:var(--text2);margin-top:4px;line-height:1.5}
+.blk-table-wrap{overflow-x:auto;margin-bottom:14px;border:1px solid var(--border);border-radius:10px}
+.blk-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.blk-table th{text-align:left;padding:10px 13px;background:var(--surface2);color:var(--accent2);font-weight:600;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.blk-table td{padding:10px 13px;border-bottom:1px solid var(--border);color:var(--text);line-height:1.6;vertical-align:top}
+.blk-table tr:last-child td{border-bottom:none}
+.blk-table td:first-child{font-weight:600;color:var(--lav);white-space:nowrap}
+.blk-frame-group{margin-bottom:16px}
+.blk-frame-name{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);margin-bottom:8px}
+.blk-frame-items{display:flex;flex-direction:column;gap:6px}
+.blk-frame-item{display:flex;gap:10px;align-items:center;font-size:13px;padding:9px 13px;border-radius:8px;background:var(--surface);border:1px solid var(--border)}
+.blk-frame-item>span{flex:1}
+.blk-layers{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.blk-layer{padding:13px 15px;border-radius:10px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent)}
+.blk-layer-head{display:flex;align-items:center;gap:9px;margin-bottom:6px}
+.blk-layer-num{width:19px;height:19px;border-radius:50%;background:var(--badge-bg);color:var(--accent2);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.blk-layer-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2)}
+.blk-layer-text{font-size:13.5px;line-height:1.65;color:var(--text);display:flex;gap:9px;align-items:flex-start}
+.blk-layer-text>span:first-child{flex:1}
+.blk-quiz{display:flex;flex-direction:column;gap:11px;margin-bottom:14px}
+.blk-quiz-item{padding:15px;border-radius:11px;background:var(--surface);border:1px solid var(--border)}
+.blk-quiz-q{font-size:13.5px;font-weight:500;margin-bottom:11px;line-height:1.6}
+.blk-quiz-opts{display:flex;flex-wrap:wrap;gap:7px}
+.blk-quiz-opt{font-size:12.5px;padding:8px 14px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;transition:.15s;text-align:left}
+.blk-quiz-opt:hover{border-color:var(--pill-on-border);background:var(--hover)}
+.blk-quiz-opt.ok{border-color:var(--quiz-correct);background:var(--pill-on-bg);color:var(--lav);font-weight:600}
+.blk-quiz-opt.no{border-color:var(--quiz-wrong);background:rgba(239,68,68,.08);color:#fca5a5}
+.blk-fill{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.blk-fill-line{display:flex;gap:11px;align-items:flex-start;padding:10px 14px;border-radius:9px;background:var(--surface);border:1px solid var(--border);font-size:13.5px;line-height:1.65}
+.blk-fill-speaker{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent2);flex-shrink:0;padding-top:3px;min-width:52px}
+.blk-fill-text{flex:1}
+.blk-meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:11px}
+.blk-meta-tag{font-size:11px;padding:4px 10px;border-radius:99px;background:var(--badge-bg);color:var(--accent2);border:1px solid var(--pill-on-border)}
+.blk-dialog-q{font-size:13px;color:var(--lav);padding:10px 13px;border-radius:8px;background:var(--hover);margin-bottom:12px;font-style:italic}
+.blk-check{margin-top:14px;padding:14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border)}
+.blk-check-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);margin-bottom:9px}
+.blk-check-list{margin:0;padding-left:20px}
+.blk-check-list li{font-size:13px;line-height:1.7;margin-bottom:5px}
+.blk-answers{margin-top:10px;font-size:12.5px;color:var(--text2)}
+.blk-answers summary{cursor:pointer;color:var(--accent2);font-weight:600;font-size:11.5px}
+.blk-answers>div{margin-top:8px;padding:10px 13px;border-radius:8px;background:var(--hover);line-height:1.7}
+.blk-context{font-size:12.5px;color:var(--accent2);margin-bottom:11px;font-style:italic}
+.blk-steps{margin:0 0 12px;padding-left:20px}
+.blk-steps li{font-size:13.5px;line-height:1.7;margin-bottom:6px}
+.blk-useful{font-size:12.5px;color:var(--text2);padding:10px 13px;border-radius:8px;background:var(--surface2);line-height:1.6}
+.blk-useful b{color:var(--accent2)}
+.blk-retrieval{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.blk-ret-item{display:flex;align-items:center;gap:11px;padding:10px 14px;border-radius:9px;background:var(--surface);border:1px solid var(--border);font-size:13px}
+.blk-ret-vi{flex:1;color:var(--text2)}
+.blk-ret-arrow{color:var(--accent2);flex-shrink:0}
+.blk-ret-en{font-weight:600;color:var(--lav)}
+
 .e2-say{font-size:11px;color:var(--text2);background:none;border:1px solid var(--border);padding:3px 9px;border-radius:6px;cursor:pointer;transition:.15s;flex-shrink:0}
 .e2-say:hover{color:var(--lav);border-color:var(--pill-on-border)}
 .e2-quiz-item{padding:16px;border-radius:12px;background:var(--surface);border:1px solid var(--border);margin-bottom:10px}
@@ -354,10 +573,8 @@ h3{font-size:clamp(20px,3vw,28px);font-weight:600;line-height:1.2;letter-spacing
   h1{font-size:clamp(32px,8vw,48px)}
   h2{font-size:clamp(24px,6vw,36px)}
   .hero{padding:60px 20px 40px}
-  .stats-bar{grid-template-columns:repeat(2,1fr);padding:0 20px 30px}
   .move-method,.roadmap-preview,.quick-access{padding:30px 20px}
   .method-grid{grid-template-columns:repeat(2,1fr)}
-  .path-grid{grid-template-columns:1fr}
   .quick-grid{grid-template-columns:repeat(2,1fr)}
   .e2-wrap{grid-template-columns:1fr;gap:20px;padding:20px 20px 60px}
   .e2-side{position:static;order:-1}
@@ -448,65 +665,177 @@ h3{font-size:clamp(20px,3vw,28px);font-weight:600;line-height:1.2;letter-spacing
         <div class="hero-bg">
           <div class="hero-orb hero-orb-1"></div>
           <div class="hero-orb hero-orb-2"></div>
+          <div class="hero-orb hero-orb-3"></div>
+          <div class="hero-grid"></div>
         </div>
         <div class="hero-content">
-          <div class="hero-badge"><span class="dot"></span> English for Working Professionals</div>
-          <h1 class="hero-title">Speak English at work.<br><span class="gradient-text">Confidently. Clearly. Naturally.</span></h1>
-          <p class="hero-desc">Meetings, emails, presentations, small talk — practical English skills for your career. Learn by doing, not by memorizing.</p>
+          <div class="hero-badge"><span class="dot"></span> MOVE English · Phoebe Trương</div>
+          <h1 class="hero-title">One system. Two pathways.<br><span class="gradient-text">One destination.</span></h1>
+          <p class="hero-desc">Learn a little. Use it now. Meet it again. Use it better. — MOVE không bán một danh sách grammar. MOVE xây khả năng dùng tiếng Anh.</p>
           <div class="hero-cta">
-            <button onclick="go('e2')" class="btn-primary">Start Learning</button>
-            <button onclick="go('e1')" class="btn-secondary">Browse Courses</button>
+            <button onclick="go('e2')" class="btn-primary">Bắt đầu học →</button>
+            <button onclick="scrollToId('roadmap')" class="btn-secondary">Xem lộ trình</button>
+          </div>
+          <div class="hero-flow">
+            <span class="hero-flow-step">FOUNDATION</span>
+            <span class="hero-flow-arrow">→</span>
+            <span class="hero-flow-step">ACTIVATION</span>
+            <span class="hero-flow-arrow">→</span>
+            <span class="hero-flow-step">REAL-LIFE USE</span>
           </div>
         </div>
-      </div>
-
-      <!-- Stats -->
-      <div class="stats-bar scroll-section">
-        <div class="stat-item"><div class="stat-num">6</div><div class="stat-label">Levels</div></div>
-        <div class="stat-item"><div class="stat-num">12</div><div class="stat-label">Courses</div></div>
-        <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">MOVE Lessons</div></div>
-        <div class="stat-item"><div class="stat-num">4</div><div class="stat-label">Skills</div></div>
       </div>
 
       <!-- MOVE Method -->
-      <div class="move-method scroll-section">
-        <p class="section-label">The MOVE Method</p>
-        <h2>How you'll learn</h2>
+      <div class="move-method scroll-section tint-block">
+        <p class="section-label">The Method</p>
+        <h2>Phương pháp MOVE — chỉ cần nhớ 4 bước</h2>
+        <p class="section-sub">Học một ít → dùng ngay → gặp lại → dùng tốt hơn.</p>
         <div class="method-grid">
-          <div class="method-card"><div class="method-num">1</div><div class="method-name">Meet</div><div class="method-desc">Language in context</div></div>
-          <div class="method-card"><div class="method-num">2</div><div class="method-name">Own</div><div class="method-desc">Understand & retrieve</div></div>
-          <div class="method-card"><div class="method-num">3</div><div class="method-name">Vary</div><div class="method-desc">Change person, time, context</div></div>
-          <div class="method-card"><div class="method-num">4</div><div class="method-name">Express</div><div class="method-desc">Use for real things</div></div>
+          <div class="method-card"><div class="method-num">01</div><div class="method-name">Meet</div><div class="method-desc">Gặp language trong câu, audio hoặc tình huống rõ ràng</div></div>
+          <div class="method-arrow">→</div>
+          <div class="method-card"><div class="method-num">02</div><div class="method-name">Own</div><div class="method-desc">Hiểu cách hoạt động và tự lấy lại mà không nhìn đáp án</div></div>
+          <div class="method-arrow">→</div>
+          <div class="method-card"><div class="method-num">03</div><div class="method-name">Vary</div><div class="method-desc">Đổi người, thời gian, ngữ cảnh và thông tin</div></div>
+          <div class="method-arrow">→</div>
+          <div class="method-card"><div class="method-num">04</div><div class="method-name">Express</div><div class="method-desc">Dùng để nói điều thật của chính bạn</div></div>
         </div>
       </div>
 
-      <!-- Roadmap Preview -->
-      <div class="roadmap-preview scroll-section">
-        <p class="section-label">Your Learning Path</p>
-        <h2>Choose your path</h2>
-        <div class="path-grid">
-          <div class="path-card" onclick="go('f1')">
-            <h3>🏗️ Foundation</h3>
-            <p>Build the system from scratch. For beginners or those who need to rebuild.</p>
-            <div class="path-tags"><span class="path-tag">F1</span><span class="path-tag">F2</span><span class="path-tag">F3</span><span class="path-tag">F4</span><span class="path-tag">F5</span><span class="path-tag">F6</span></div>
+      <!-- Placement Quiz -->
+      <div class="placement scroll-section tint-block" id="placement">
+        <p class="section-label">Placement</p>
+        <h2>Bạn thuộc Path nào?</h2>
+        <p class="section-sub">Trả lời 5 câu — không cần đúng/sai, chỉ cần trung thực.</p>
+        <div class="quiz-wrap" id="placement-quiz"></div>
+      </div>
+
+      <!-- Roadmap -->
+      <div class="roadmap scroll-section tint-block" id="roadmap">
+        <p class="section-label">Lộ trình</p>
+        <h2>Foundation · 6 stages</h2>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-body"><div class="tl-name">BUILD THE SENTENCE</div><div class="tl-desc">Câu đúng · BE/ACTION · questions</div></div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-body"><div class="tl-name">CONTROL TIME</div><div class="tl-desc">Routine · hiện tại · quá khứ · kế hoạch</div></div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-body"><div class="tl-name">EXPAND THE MESSAGE</div><div class="tl-desc">Reason · detail · example · comparison</div></div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-body"><div class="tl-name">BUILD COMPLEX IDEAS</div><div class="tl-desc">Kết nối · diễn đạt ý phức tạp</div></div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-body"><div class="tl-name">COMMUNICATE</div><div class="tl-desc">Storytelling · opinion · problem solving</div></div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-body"><div class="tl-name">TRANSFER</div><div class="tl-desc">Natural listening · Real Talk</div></div></div>
+        </div>
+
+        <h2 style="margin-top:48px">Activation · 5 stages</h2>
+        <div class="timeline">
+          <div class="tl-item act"><div class="tl-dot"></div><div class="tl-body"><div class="tl-name">MAP &amp; DIAGNOSE</div><div class="tl-desc">Nhìn sentence · questions · time · listening</div></div></div>
+          <div class="tl-item act"><div class="tl-dot"></div><div class="tl-body"><div class="tl-name">LANGUAGE REPAIR</div><div class="tl-desc">Sửa đúng grammar/pattern đang cản</div></div></div>
+          <div class="tl-item act"><div class="tl-dot"></div><div class="tl-body"><div class="tl-name">SPEAKING DEVELOPMENT</div><div class="tl-desc">Extend · explain · compare · stories</div></div></div>
+          <div class="tl-item act"><div class="tl-dot"></div><div class="tl-body"><div class="tl-name">LISTENING DEVELOPMENT</div><div class="tl-desc">Natural speed · linking · weak forms</div></div></div>
+          <div class="tl-item act"><div class="tl-dot"></div><div class="tl-body"><div class="tl-name">REAL TALK &amp; TRANSFER</div><div class="tl-desc">Nói từ đời sống thật → feedback → retry</div></div></div>
+        </div>
+      </div>
+
+      <!-- How classes flow -->
+      <div class="flow-section scroll-section tint-block">
+        <p class="section-label">How classes flow</p>
+        <h2>Không phải 3 môn tách rời</h2>
+        <div class="flow-grid">
+          <div class="flow-card"><div class="flow-ico">🔨</div><div class="flow-tag">CORE</div><p>Build / repair năng lực chính</p></div>
+          <div class="flow-card"><div class="flow-ico">💬</div><div class="flow-tag">REAL TALK</div><p>Nói → sửa → nói lại</p></div>
+          <div class="flow-card"><div class="flow-ico">🎯</div><div class="flow-tag">SKILL</div><p>Listening · Pronunciation</p></div>
+          <div class="flow-card"><div class="flow-ico">🎭</div><div class="flow-tag">TRANSFER</div><p>Role-play · problem solving</p></div>
+        </div>
+      </div>
+
+      <!-- Skills spiral -->
+      <div class="spiral scroll-section tint-block">
+        <p class="section-label">Listening &amp; Pronunciation</p>
+        <h2>Spiral — quay lại nhiều lần</h2>
+        <div class="spiral-grid">
+          <div class="spiral-col">
+            <div class="spiral-title">PRONUNCIATION</div>
+            <div class="spiral-items">
+              <span>contractions</span><span>final sounds</span><span>word stress</span><span>sentence stress</span>
+              <span>weak forms</span><span>linking</span><span>reductions</span><span>intonation</span>
+            </div>
           </div>
-          <div class="path-card" onclick="go('a1')">
-            <h3>⚡ Activation</h3>
-            <p>Activate & repair. For those with a foundation who need to fix gaps and speak more.</p>
-            <div class="path-tags"><span class="path-tag">A1</span><span class="path-tag">A2</span><span class="path-tag">A3</span><span class="path-tag">A4</span><span class="path-tag">A5</span></div>
+          <div class="spiral-col">
+            <div class="spiral-title">LISTENING</div>
+            <div class="spiral-items">
+              <span>key words</span><span>gist</span><span>details</span><span>known language</span>
+              <span>longer turns</span><span>natural speed</span><span>speakers</span><span>respond</span>
+            </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Topics -->
+      <div class="topics scroll-section tint-block">
+        <p class="section-label">Topics</p>
+        <h2>8 chủ đề · spiral lại nhiều lần</h2>
+        <div class="topic-grid">
+          <div class="topic-card"><div class="topic-ico">👤</div><div class="topic-name">SELF</div></div>
+          <div class="topic-card"><div class="topic-ico">👥</div><div class="topic-name">PEOPLE</div></div>
+          <div class="topic-card"><div class="topic-ico">✈️</div><div class="topic-name">EXPERIENCES</div></div>
+          <div class="topic-card"><div class="topic-ico">🎯</div><div class="topic-name">PLANS</div></div>
+          <div class="topic-card"><div class="topic-ico">🏠</div><div class="topic-name">DAILY LIFE</div></div>
+          <div class="topic-card"><div class="topic-ico">💼</div><div class="topic-name">WORK</div></div>
+          <div class="topic-card"><div class="topic-ico">⚠️</div><div class="topic-name">PROBLEMS</div></div>
+          <div class="topic-card"><div class="topic-ico">💡</div><div class="topic-name">IDEAS</div></div>
+        </div>
+      </div>
+
+      <!-- Missions -->
+      <div class="missions scroll-section tint-block">
+        <p class="section-label">Between lessons</p>
+        <h2>5 bước Mission</h2>
+        <div class="mission-track">
+          <div class="mission-step"><div class="mission-ico">📝</div><div class="mission-name">PRACTICE</div></div>
+          <div class="mission-step"><div class="mission-ico">✏️</div><div class="mission-name">PERSONAL</div></div>
+          <div class="mission-step"><div class="mission-ico">🌍</div><div class="mission-name">REAL-LIFE</div></div>
+          <div class="mission-step"><div class="mission-ico">🔄</div><div class="mission-name">REFLECT</div></div>
+          <div class="mission-step"><div class="mission-ico">🔁</div><div class="mission-name">RETURN</div></div>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-section scroll-section tint-block">
+        <p class="section-label">Progress</p>
+        <h2>Đo bằng việc bạn làm được</h2>
+        <div class="prog-grid">
+          <div class="prog-card"><div class="prog-title">FOUNDATION</div><div class="prog-bar"><div class="prog-fill" style="width:33%"></div></div><p>Build câu → hỏi đúng → nói dài hơn</p></div>
+          <div class="prog-card"><div class="prog-title">ACTIVATION</div><div class="prog-bar"><div class="prog-fill" style="width:66%"></div></div><p>Ít freeze → phản ứng nhanh → ổn hơn</p></div>
+          <div class="prog-card"><div class="prog-title">BOTH</div><div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div><p>Tự sửa → retrieve → chuyển tình huống</p></div>
+        </div>
+        <div class="scale-row">
+          <div class="scale-item"><span class="scale-mark">—</span><span>Chưa ổn</span></div>
+          <div class="scale-item"><span class="scale-mark">△</span><span>Có hỗ trợ</span></div>
+          <div class="scale-item"><span class="scale-mark">◐</span><span>Đang ổn</span></div>
+          <div class="scale-item"><span class="scale-mark">●</span><span>Tự dùng</span></div>
+        </div>
+      </div>
+
+      <!-- Destination -->
+      <div class="destination scroll-section">
+        <div class="dest-inner">
+          <p class="section-label">The destination</p>
+          <h2>Bạn không cần học lại tất cả.</h2>
+          <div class="dest-grid">
+            <div class="dest-card"><div class="dest-tag">FOUNDATION</div><div class="dest-title">BUILD THE SYSTEM</div></div>
+            <div class="dest-card"><div class="dest-tag">ACTIVATION</div><div class="dest-title">ACTIVATE &amp; REPAIR</div></div>
+          </div>
+          <div class="dest-final">USE ENGLISH IN REAL LIFE</div>
+          <p class="dest-motto">Learn a little. Use it now. Meet it again. Use it better.</p>
         </div>
       </div>
 
       <!-- Quick Access -->
-      <div class="quick-access scroll-section">
+      <div class="quick-access scroll-section tint-block">
         <p class="section-label">Quick Access</p>
         <h2>Jump right in</h2>
         <div class="quick-grid">
-          <div class="quick-card" onclick="go('e2')"><div class="quick-icon">📖</div><div class="quick-title">MOVE Lessons</div><div class="quick-desc">L01–L03</div></div>
-          <div class="quick-card" onclick="go('e1')"><div class="quick-icon">📚</div><div class="quick-title">Courses</div><div class="quick-desc">12 courses</div></div>
-          <div class="quick-card" onclick="go('practice')"><div class="quick-icon">🎯</div><div class="quick-title">Practice</div><div class="quick-desc">Daily exercises</div></div>
-          <div class="quick-card" onclick="go('tests')"><div class="quick-icon">📝</div><div class="quick-title">Tests</div><div class="quick-desc">Measure progress</div></div>
+          <div class="quick-card" onclick="go('e2')"><div class="quick-icon">📖</div><div class="quick-title">MOVE Expand 1</div><div class="quick-desc">L01–L03 đã có nội dung</div></div>
+          <div class="quick-card" onclick="go('e1')"><div class="quick-icon">📚</div><div class="quick-title">MOVE Expand 2</div><div class="quick-desc">50 bài</div></div>
+          <div class="quick-card" onclick="go('f1')"><div class="quick-icon">🏗️</div><div class="quick-title">Foundation</div><div class="quick-desc">F1–F6</div></div>
+          <div class="quick-card" onclick="go('a1')"><div class="quick-icon">⚡</div><div class="quick-title">Activation</div><div class="quick-desc">A1–A5</div></div>
         </div>
       </div>
     </section>
@@ -675,28 +1004,93 @@ function go(v){
   document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.toggle('on',b.dataset.bn===v));
   if(v==='dashboard')renderDashboard();
   if(TRACKS[v])renderTrack(v);
-  if(v==='home')renderHome();
+  if(v==='home'){renderHome();renderPlacementQuiz();}
   location.hash=v;window.scrollTo(0,0);
 }
 addEventListener('hashchange',()=>go(location.hash.slice(1)||'home'));
 
 // ---- HOME ----
 function renderHome(){
-  // Animate stats
-  const stats=document.querySelectorAll('.stat-num');
-  stats.forEach((el,i)=>{
-    const target=parseInt(el.textContent);
-    let current=0;
-    const increment=Math.ceil(target/20);
-    const timer=setInterval(()=>{
-      current+=increment;
-      if(current>=target){current=target;clearInterval(timer)}
-      el.textContent=current;
-    },50+i*100);
-  });
+  // Home is now fully static — no stats bar to animate.
 }
 
 // ---- SCROLL ANIMATIONS ----
+function scrollToId(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
+
+// ---- Placement Quiz ----
+const PLACEMENT_QUIZ = [
+  {q:"Khi nói tiếng Anh, bạn thường…",opts:[
+    {t:"Cần dịch từng từ từ Việt sang Anh",f:2},
+    {t:"Nói được vài câu ngắn nhưng hay bị vướng",f:1},
+    {t:"Nói được nhưng thiếu tự tin, hay lặp lại lỗi cũ",a:1},
+    {t:"Nói trôi chảy, chỉ cần mở rộng từ vựng và ngữ cảnh",a:2}
+  ]},
+  {q:"Khi nghe tiếng Anh, bạn…",opts:[
+    {t:"Gần như không hiểu gì",f:2},
+    {t:"Bắt được vài từ khóa nhưng mất ý chính",f:1},
+    {t:"Hiểu ý chính nhưng bỏ lỡ chi tiết",a:1},
+    {t:"Hiểu tốt, kể cả khi nói nhanh",a:2}
+  ]},
+  {q:"Khi đọc email công việc bằng tiếng Anh, bạn…",opts:[
+    {t:"Cần dịch từng câu, mất nhiều thời gian",f:2},
+    {t:"Hiểu đại ý nhưng vướng từ vựng chuyên ngành",f:1},
+    {t:"Hiểu tốt, chỉ cần tra từ đôi khi",a:1},
+    {t:"Đọc nhanh, hiểu ngay cả ý hàm ý",a:2}
+  ]},
+  {q:"Khi viết tiếng Anh công việc, bạn…",opts:[
+    {t:"Không tự viết được, cần mẫu",f:2},
+    {t:"Viết được nhưng lo sai grammar",f:1},
+    {t:"Viết ổn, chỉ cần sửa lỗi nhỏ",a:1},
+    {t:"Viết tự tin, rõ ràng, chuyên nghiệp",a:2}
+  ]},
+  {q:"Khi gặp tình huống bất ngờ bằng tiếng Anh (gọi điện, meeting, xử lý sự cố), bạn…",opts:[
+    {t:"Hoàn toàn bối rồi, không biết phải làm gì",f:2},
+    {t:"Cố gắng nhưng phải dùng ngôn ngữ đơn giản",f:1},
+    {t:"Xử lý được nhưng cần thời gian suy nghĩ",a:1},
+    {t:"Tự tin xử lý, phản ứng nhanh",a:2}
+  ]}
+];
+let PLACEMENT_ANSWERS = new Array(PLACEMENT_QUIZ.length).fill(null);
+function renderPlacementQuiz(){
+  const wrap = document.getElementById('placement-quiz');
+  if(!wrap) return;
+  const done = PLACEMENT_ANSWERS.filter(a=>a!==null).length;
+  if(done === PLACEMENT_QUIZ.length){
+    let f=0, a=0;
+    PLACEMENT_ANSWERS.forEach((ai,i)=>{
+      const opt = PLACEMENT_QUIZ[i].opts[ai];
+      if(opt.f) f+=opt.f;
+      if(opt.a) a+=opt.a;
+    });
+    let path, desc, view;
+    if(f > a){ path='PATH 01 · FOUNDATION'; desc='Bạn đang ở giai đoạn xây hệ thống từ gốc. Bắt đầu từ F1 sẽ giúp bạn có nền tảng vững chắc nhất.'; view='f1'; }
+    else if(a > f){ path='PATH 02 · ACTIVATION'; desc='Bạn đã có nền tảng. Activation sẽ giúp bạn kích hoạt lại, sửa lỗi và giao tiếp tự tin hơn.'; view='a1'; }
+    else { path='RANH GIỚI'; desc='Bạn ở giữa hai path. Khuyến nghị bắt đầu từ Foundation để chắc nền, hoặc Activation nếu bạn cảm thấy đã quá quen với cơ bản.'; view='f1'; }
+    wrap.innerHTML = `<div class="quiz-result">
+      <div class="quiz-result-path">${path}</div>
+      <div class="quiz-result-name">${f>a?'Foundation':a>f?'Activation':'Cân bằng'}</div>
+      <div class="quiz-result-desc">${desc}</div>
+      <button class="quiz-result-btn" onclick="go('${view}')">Bắt đầu học →</button>
+      <br><button class="quiz-reset" onclick="PLACEMENT_ANSWERS=new Array(PLACEMENT_QUIZ.length).fill(null);renderPlacementQuiz()">Làm lại</button>
+    </div>`;
+    return;
+  }
+  wrap.innerHTML = PLACEMENT_QUIZ.map((q,qi)=>{
+    const answered = PLACEMENT_ANSWERS[qi] !== null;
+    return `<div class="quiz-q">
+      <div class="quiz-q-text">${qi+1}. ${q.q}</div>
+      <div class="quiz-q-opts">
+        ${q.opts.map((o,oi)=>{
+          const sel = PLACEMENT_ANSWERS[qi]===oi;
+          return `<button class="quiz-opt${sel?' selected':''}" onclick="PLACEMENT_ANSWERS[${qi}]=${oi};renderPlacementQuiz()">
+            <span class="quiz-opt-letter">${'ABCD'[oi]}</span>${o.t}
+          </button>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
 const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}})},{threshold:.1});
 document.querySelectorAll('.scroll-section').forEach(el=>observer.observe(el));
 
@@ -716,6 +1110,9 @@ const TRACK_PARTS=[
  {id:'reference',ico:'📌',name:'Phần 10: Tham khảo',sub:'Reference'}
 ];
 
+/* LESSON_DATA:BEGIN */
+const LESSON_DATA={"1":{"title":"People in Your Life","vi":"Những người quanh bạn","goal":"By the end of the lesson, you can describe people you know and explain how you feel about them.","today":["Notice words in context","Build short answers","Keep the conversation going","Two to four sentences is enough"],"parts":{"vocab":[{"t":"h","text":"People around you"},{"t":"note","text":"Choose two people. Say who they are and one thing you like or dislike about them. Accept simple language — ask one follow-up: How do you know them? or What are they like?"},{"t":"words","items":[{"en":"a close friend","vi":"bạn thân","def":"someone you trust"},{"en":"an acquaintance","vi":"người quen, chưa phải bạn thân","def":"someone you know, but not well"},{"en":"an easy-going colleague","vi":"đồng nghiệp dễ tính","def":"someone who is relaxed"},{"en":"a reliable person","vi":"người đáng tin cậy","def":"someone you can depend on"},{"en":"a difficult person","vi":"người khó chịu","def":"someone who is hard to deal with"},{"en":"someone you lost touch with","vi":"người bạn mất liên lạc","def":"someone you no longer contact"}]},{"t":"h","text":"Vocabulary in context · People"},{"t":"bank","items":["acquaintance","reliable","considerate","easy-going"]},{"t":"quiz","items":[{"q":"Mai always does what she promises. She's very ______.","options":["acquaintance","reliable","considerate","easy-going"],"answer":1},{"q":"Ben is relaxed and rarely gets upset. He's quite ______.","options":["easy-going","reliable","considerate","acquaintance"],"answer":0},{"q":"Linh notices when other people need help. She's very ______.","options":["reliable","easy-going","considerate","acquaintance"],"answer":2},{"q":"I know James from a course, but we aren't close friends. He's an ______.","options":["reliable","acquaintance","considerate","easy-going"],"answer":1}]},{"t":"note","text":"Đáp án: 1 reliable · 2 easy-going · 3 considerate · 4 acquaintance. Which clue helped you choose each word? Gạch chân từ gợi ý trước khi chọn."},{"t":"h","text":"Meaning check · Small differences"},{"t":"note","text":"Trả lời trước khi xem đáp án. Sau đó kể tên một người thật khớp với một tính từ."},{"t":"words","items":[{"en":"acquaintance","vi":"người quen","def":"Do you know this person very well? — No"},{"en":"reliable","vi":"đáng tin cậy","def":"Can people depend on this person? — Yes"},{"en":"considerate","vi":"biết nghĩ cho người khác","def":"Does this person think about other people's feelings? — Yes"},{"en":"easy-going","vi":"dễ tính","def":"Does this person usually stay relaxed? — Yes"}]},{"t":"h","text":"Vocabulary in context · Relationships"},{"t":"bank","items":["can't stand","put up with","get along with","lose touch with"]},{"t":"quiz","items":[{"q":"I really like my new manager. We ______ each other very well.","options":["can't stand","put up with","get along with","lose touch with"],"answer":2},{"q":"I ______ people who interrupt all the time. It drives me crazy.","options":["get along with","can't stand","put up with","lose touch with"],"answer":1},{"q":"The noise is annoying, but I can ______ it for another hour.","options":["get along with","lose touch with","can't stand","put up with"],"answer":3},{"q":"We used to be close, but we gradually ______ each other after graduation.","options":["got along with","lost touch with","put up with","can't stand"],"answer":1}]},{"t":"note","text":"Đáp án: 1 get along with · 2 can't stand · 3 put up with · 4 lost touch with. Chú ý dạng quá khứ lost."},{"t":"h","text":"Form and word partners"},{"t":"table","head":["Expression","What follows","Natural example"],"rows":[["can't stand","noun / V-ing","I can't stand loud music. / I can't stand waiting."],["put up with","noun / person / V-ing","I can't put up with the noise."],["get along with","a person","I get along with most of my colleagues."],["lose touch with","a person","I lost touch with an old classmate."],["find it","adjective + to + verb","I find it easy to talk to her."]]},{"t":"note","text":"Tập trung vào dạng đi sau mỗi cụm. Drill thay thế: people who complain · waiting in traffic · loud neighbours · a former colleague."}],"grammar":[{"t":"h","text":"Language lift · Useful sentence patterns"},{"t":"table","head":["Pattern","Example","Use"],"rows":[["WHO / THAT","I like people who listen carefully.","mệnh đề quan hệ tả người"],["FIND IT + ADJ + TO","I find it easy to talk to her.","tả trải nghiệm của bạn"],["ADJ + TO","She's easy to work with.","tả người hoặc tình huống"],["THAT-CLAUSE","I think that reliability matters.","mở đầu một ý kiến"],["WHAT I LIKE IS…","What I like most is her honesty.","nhấn mạnh một phẩm chất"]]},{"t":"note","text":"Học như khung nói, không phải bài giảng ngữ pháp. Chọn 2 mẫu và đặt 1 câu thật với mỗi mẫu."},{"t":"h","text":"Language lift · Starting and connecting"},{"t":"frames","groups":[{"group":"START NATURALLY","items":["Personally,","Honestly,","Generally,","In my experience,"]},{"group":"ADD A REASON","items":["because…","mainly because…","especially when…"]},{"group":"ADD A DETAIL","items":["For example,","One thing I've noticed is…","In my case,…"]},{"group":"ADD A CONTRAST","items":["However,","Although…,","Even though…,"]}]},{"t":"note","text":"Chọn 1 mẫu yêu thích từ mỗi nhóm. Tránh dùng nhiều connector trong một câu trả lời ngắn."},{"t":"h","text":"Language lift · More precise descriptions"},{"t":"frames","groups":[{"group":"DESCRIBE A PERSON","items":["reliable","considerate","easy-going","open-minded","impatient","judgmental"]},{"group":"DESCRIBE HOW SOMEONE ACTS","items":["listen carefully","communicate clearly","react calmly","interrupt constantly","work efficiently"]},{"group":"ADD DEGREE","items":["quite reliable","extremely patient","slightly awkward","surprisingly well","particularly helpful"]}]},{"t":"ex","text":"She's quite easy-going, and she communicates very clearly."},{"t":"h","text":"Answer building · Two to four sentences"},{"t":"layers","items":[{"label":"1 · ANSWER","text":"I can't stand unnecessary meetings."},{"label":"2 · REASON","text":"They waste a lot of time."},{"label":"3 · EXAMPLE","text":"For example, some meetings could be replaced with a short email."},{"label":"4 · CONTRAST","text":"However, I don't mind meetings that have a clear purpose."}]},{"t":"note","text":"Dừng sau câu 2, 3 hoặc 4 khi câu trả lời đã đủ. Không cần đủ 4 tầng cho mọi câu hỏi."}],"reading":[{"t":"h","text":"Model answer · A complete turn"},{"t":"p","text":"Honestly, I can't stand unnecessary meetings. They waste a lot of time mainly because nothing gets decided. For example, some meetings could be replaced with a short email. However, I don't mind meetings that have a clear purpose. In my experience, a short agenda makes a meeting worth the time."},{"t":"quiz","items":[{"q":"Câu nào nêu quan điểm chính?","options":["Câu 1","Câu 2","Câu 3","Câu 4"],"answer":0},{"q":"Câu nào nêu lý do?","options":["Câu 1","Câu 2","Câu 3","Câu 4"],"answer":1},{"q":"Câu nào cho ví dụ?","options":["Câu 2","Câu 3","Câu 4","Câu 5"],"answer":1},{"q":"Câu nào thể hiện tương phản?","options":["Câu 3","Câu 4","Câu 5","Không có"],"answer":1},{"q":"Từ nào mở đầu câu trả lời tự nhiên?","options":["Honestly","However","For example","mainly"],"answer":0}]},{"t":"h","text":"Guided response practice"},{"t":"note","text":"Chọn 2 câu hỏi. Dùng 1 target expression và 1 language lift. Cho 10 giây chuẩn bị, trả lời 2–4 câu. Đối tác phản hồi và hỏi 1 câu nối tiếp. Đổi vai sau câu 1."},{"t":"list","items":["Who is the most reliable person you know?","What makes someone considerate?","Do you get along with most of your colleagues?","What behaviour can't you put up with?","Is it easy for you to talk to new people?","Who would you like to get back in touch with?"]}],"conversations":[{"t":"dialog","title":"A new colleague","target":"reliable · get along with","lift":"find it easy to… · surprisingly well","lines":[{"speaker":"Nina","text":"How are things with your new colleague?"},{"speaker":"Emma","text":"Pretty good. She's very reliable, and I find it easy to talk to her. We have quite a lot in common, so we get along surprisingly well."},{"speaker":"Nina","text":"That's nice. What do you have in common?"}],"check":["What two qualities does Emma mention?","Why do Emma and her colleague get along?","Which expression means 'talking to her does not feel difficult'?","Which adverb makes 'well' more expressive?","What follow-up question keeps the conversation going?"],"answers":"1 reliable and easy to talk to · 2 they have a lot in common · 3 find it easy to talk to her · 4 surprisingly · 5 What do you have in common?","note":"Đọc to trước khi xem slide nếu có thể. Hỏi: Why does Emma like working with her colleague? Which words make the answer more detailed?"},{"t":"dialog","title":"A difficult person","target":"can't stand · put up with","lift":"Honestly · constantly · However · calmly","lines":[{"speaker":"Alex","text":"Is there anything you can't stand at work?"},{"speaker":"Mia","text":"Honestly, I can't stand people who constantly interrupt others. I can put up with it once or twice, but it becomes really frustrating when it happens in every meeting. However, I try to react calmly."},{"speaker":"Alex","text":"I know what you mean. How do you handle it?"}],"check":["I can't stand waiting in long lines. — noun hay V-ing?","I put up with the noise for two hours. — nghĩa là tolerated hay enjoyed?","People who interrupt others annoy me. — mệnh đề quan hệ hay câu hỏi?","I try to react calmly. — adjective hay adverb?"],"answers":"1 V-ing · 2 tolerated · 3 mệnh đề quan hệ · 4 adverb","note":"Nhận xét: câu trả lời giữ một chủ đề. Chú ý who constantly interrupt others là mệnh đề quan hệ, react calmly là verb + adverb."},{"t":"h","text":"Dialogue practice · Fill in the blanks"},{"t":"bank","items":["acquaintance","reliable","get along with","in common","easy to talk to"]},{"t":"fill","items":[{"speaker":"A","text":"Who were you talking to?"},{"speaker":"B","text":"That was Leo. He's an __________ from my previous job."},{"speaker":"A","text":"You seemed quite comfortable together."},{"speaker":"B","text":"Yes, we __________ each other well. He's very __________."},{"speaker":"A","text":"What do you have __________?"},{"speaker":"B","text":"We both enjoy travelling, and I find him __________."}]},{"t":"note","text":"Đáp án: acquaintance · get along with · reliable · in common · easy to talk to. Đọc cùng đáp án, che word bank, rồi thay Leo bằng một người thật."}],"listening":[{"t":"h","text":"Shadowing · Nghe từng câu rồi nhắc lại"},{"t":"note","text":"Bấm 🔊 để nghe từng câu, sau đó nhắc lại y hệt ngữ điệu. Làm 2 lượt: lượt 1 nhìn chữ, lượt 2 che chữ."},{"t":"say","items":["How are things with your new colleague?","She's very reliable, and I find it easy to talk to her.","We have quite a lot in common, so we get along surprisingly well.","That's nice. What do you have in common?","Is there anything you can't stand at work?","Honestly, I can't stand people who constantly interrupt others.","I can put up with it once or twice, but it becomes really frustrating.","However, I try to react calmly."]},{"t":"h","text":"Micro-focus · Trọng âm câu"},{"t":"table","head":["Câu","Từ được nhấn"],"rows":[["She's very REliable.","REliable — âm tiết 2"],["I find it EA-sy to talk to her.","EA-sy — tính từ chính"],["We get along surPRISingly well.","surPRISingly + well"],["I CAN'T STAND people who constantly interRUPT.","CAN'T STAND + interRUPT"]]},{"t":"note","text":"Từ mang thông tin mới được nhấn; từ chức năng (to, the, of) thường yếu và nối với nhau."}],"exercises":[{"t":"h","text":"Bài tập 1 · Chọn từ đúng"},{"t":"quiz","items":[{"q":"Mai always does what she promises. She's very ______.","options":["acquaintance","reliable","considerate","easy-going"],"answer":1},{"q":"Ben is relaxed and rarely gets upset. He's quite ______.","options":["easy-going","reliable","considerate","acquaintance"],"answer":0},{"q":"Linh notices when other people need help. She's very ______.","options":["reliable","easy-going","considerate","acquaintance"],"answer":2},{"q":"I know James from a course, but we aren't close friends. He's an ______.","options":["reliable","acquaintance","considerate","easy-going"],"answer":1},{"q":"I really like my new manager. We ______ each other very well.","options":["can't stand","put up with","get along with","lose touch with"],"answer":2},{"q":"I ______ people who interrupt all the time. It drives me crazy.","options":["get along with","can't stand","put up with","lose touch with"],"answer":1},{"q":"The noise is annoying, but I can ______ it for another hour.","options":["get along with","lose touch with","can't stand","put up with"],"answer":3},{"q":"We used to be close, but we gradually ______ each other after graduation.","options":["got along with","lost touch with","put up with","can't stand"],"answer":1}]},{"t":"h","text":"Bài tập 2 · Điền vào đoạn hội thoại"},{"t":"bank","items":["acquaintance","reliable","get along with","in common","easy to talk to"]},{"t":"fill","items":[{"speaker":"A","text":"Who were you talking to?"},{"speaker":"B","text":"That was Leo. He's an __________ from my previous job."},{"speaker":"A","text":"You seemed quite comfortable together."},{"speaker":"B","text":"Yes, we __________ each other well. He's very __________."},{"speaker":"A","text":"What do you have __________?"},{"speaker":"B","text":"We both enjoy travelling, and I find him __________."}]},{"t":"h","text":"Bài tập 3 · Đúng hay sai về dạng"},{"t":"quiz","items":[{"q":"I can't stand to wait in long lines.","options":["Đúng","Sai — phải là waiting"],"answer":1},{"q":"I find easy to talk to her.","options":["Đúng","Sai — phải là I find IT easy"],"answer":1},{"q":"I like people who listen carefully.","options":["Đúng","Sai"],"answer":0},{"q":"We have a lot in common.","options":["Đúng","Sai"],"answer":0}]}],"speaking":[{"t":"h","text":"Question lab · What can't you stand?"},{"t":"p","text":"Is there anything you can't stand at work or in daily life?"},{"t":"bank","items":["interrupt","complain","arrive late","speak rudely","make unnecessary noise"]},{"t":"frames","groups":[{"group":"BUILD YOUR ANSWER","items":["Honestly, I can't stand…","It bothers me mainly because…","For example,…","However, I can put up with it when…"]}]},{"t":"note","text":"Mục tiêu: 2–4 câu liên kết. Hỏi 1 câu nối tiếp duy nhất. Khuyến khích can't stand + V-ing và một trạng từ như constantly hoặc rudely."},{"t":"h","text":"Question lab · Who is easy to get along with?"},{"t":"p","text":"What kind of person do you find easy to get along with?"},{"t":"bank","items":["easy-going","considerate","open-minded","listen carefully","communicate clearly"]},{"t":"frames","groups":[{"group":"BUILD YOUR ANSWER","items":["Personally, I get along with people who…","I find it easy to talk to people who…","What I appreciate most is…","That's why I usually feel comfortable around…"]}]},{"t":"note","text":"Hướng tới 1 tính từ, 1 mệnh đề quan hệ, 1 lý do. Không ép dùng đủ 4 khung."},{"t":"h","text":"Question lab · Friends and acquaintances"},{"t":"fill","items":[{"speaker":"Q","text":"Do you have many acquaintances?"},{"speaker":"A","text":"I have quite a few acquaintances from…"},{"speaker":"A","text":"However, I only have a small number of close friends."},{"speaker":"Q","text":"Have you ever lost touch with someone?"},{"speaker":"A","text":"I gradually lost touch with…"},{"speaker":"A","text":"Even though we were close, our lives became very different."}]},{"t":"note","text":"Thêm 1 chi tiết thật. Sau đó hỏi lại câu hỏi. Gợi ý nối tiếp: How did you meet? Why did you lose touch? Would you like to contact them again?"},{"t":"h","text":"Speaking round · Trả lời 2–4 câu"},{"t":"say","items":["Who is the most reliable person you know?","What makes someone considerate?","Do you get along with most of your colleagues?","What behaviour can't you put up with?","Is it easy for you to talk to new people?","Who would you like to get back in touch with?"]}],"roleplay":[{"t":"steps","title":"Meeting an old friend","context":"You meet an old friend after several years apart.","steps":["Ask who they still keep in touch with.","Talk about someone you both knew.","Describe what that person was like.","Mention someone you lost touch with.","Say whether you would like to reconnect."],"useful":"keep in touch with · lose touch with · acquaintance · easy-going · reliable"},{"t":"steps","title":"A colleague","context":"A colleague asks how you feel about working with different people.","steps":["COLLEAGUE: Ask what kind of person is easy to work with.","YOU: Describe two qualities and explain why.","COLLEAGUE: Ask about one difficult behaviour.","YOU: Use can't stand or put up with. Give an example.","COLLEAGUE: React and share a similar experience."],"useful":"easy-going · considerate · can't stand · put up with · get along with"},{"t":"h","text":"Dialogue transfer · Make it personal"},{"t":"note","text":"Điền thông tin thật vào đoạn hội thoại. Sau đó đóng slide và lặp lại. Lượt 1 có gợi ý, lượt 2 che slide, lượt 3 (nếu thoải mái) đổi người và thêm 1 câu nối tiếp bất ngờ."},{"t":"fill","items":[{"speaker":"A","text":"Who is someone you really get along with?"},{"speaker":"B","text":"I get along with __________ because __________."},{"speaker":"A","text":"What are they like?"},{"speaker":"B","text":"They're quite __________, and they __________."},{"speaker":"A","text":"Is there anything about people that you can't stand?"},{"speaker":"B","text":"Honestly, I can't stand __________."},{"speaker":"A","text":"How do you normally react?"},{"speaker":"B","text":"I usually __________, although __________."}]}],"finalTask":[{"t":"h","text":"Final mission · Talk about people naturally"},{"t":"label","text":"THREE-MINUTE SHARED CONVERSATION"},{"t":"p","text":"Talk about people in your work or daily life. Describe someone you get along with. Mention one behaviour you can't stand or have to put up with. Ask your partner at least two related questions."},{"t":"chips","items":["use 5 target words","answer in 2–4 sentences","ask something back"]},{"t":"ex","text":"A conversation grows through short, relevant turns."},{"t":"note","text":"Feedback focus: chọn từ phù hợp, 1 language lift thành công, và tương tác. Không đếm mọi lỗi ngữ pháp trong lúc nói."},{"t":"h","text":"Home practice"},{"t":"label","text":"CORE RETRIEVAL"},{"t":"p","text":"Choose 6 target expressions. Write one true sentence with each."},{"t":"label","text":"VOICE NOTE · Record 45–60 seconds"},{"t":"p","text":"What kind of people do you find easy or difficult to get along with? Include one reason, one example, and one sentence with who or that."},{"t":"note","text":"Có thể dùng ghi chú, nhưng không viết hoặc học thuộc cả script. L02 sẽ recycle lại 8 mục cốt lõi này."}],"reference":[{"t":"h","text":"Retrieval challenge · 5 giây mỗi từ"},{"t":"note","text":"Che cột tiếng Anh, dịch từ tiếng Việt. Sau đó đảo chiều. Chạy lượt 2 theo thứ tự ngẫu nhiên."},{"t":"retrieval","items":[{"vi":"người quen, chưa phải bạn thân","en":"acquaintance"},{"vi":"đáng tin cậy","en":"reliable"},{"vi":"biết nghĩ cho người khác","en":"considerate"},{"vi":"dễ tính, thoải mái","en":"easy-going"},{"vi":"không thể chịu được","en":"can't stand"},{"vi":"chịu đựng một điều khó chịu","en":"put up with"},{"vi":"hợp với ai đó","en":"get along with"},{"vi":"mất liên lạc với ai","en":"lose touch with"},{"vi":"có điểm chung","en":"have something in common"},{"vi":"tôi thấy dễ để…","en":"I find it easy to…"},{"vi":"người mà luôn lắng nghe","en":"someone who always listens"},{"vi":"phản ứng một cách bình tĩnh","en":"react calmly"}]},{"t":"h","text":"Phát âm cần nhớ"},{"t":"table","head":["Từ","Phiên âm","Trọng âm"],"rows":[["reliable","ri-LAI-ơ-bồ","âm tiết 2"],["considerate","kồn-SI-đờ-rịt","âm tiết 2"],["acquaintance","ờ-QUÂYN-tần","âm tiết 2"],["frustrating","FRỚS-trây-ting","âm tiết 1"]]},{"t":"h","text":"Lỗi thường gặp"},{"t":"list","items":["can't stand + V-ing — KHÔNG dùng can't stand + to V","find it + ADJ + to V — không nói 'I find easy to talk to her'","put up with (chịu đựng) ≠ get along with (hòa hợp)","WHO + V khi người làm chủ ngữ; THAT dùng được cho cả người và vật","lose touch with — chú ý dạng quá khứ bất quy tắc: lose → lost"]}]}},"2":{"title":"Keeping in Touch","vi":"Giữ liên lạc","goal":"By the end of the lesson, you can talk naturally about staying connected, losing touch, and reconnecting.","today":["Speak first","Notice useful words","Build longer turns","Ask better follow-ups","Most of the lesson is conversation"],"parts":{"vocab":[{"t":"h","text":"Vocabulary in context · Staying connected"},{"t":"bank","items":["keep in touch","catch up","reach out","make time for"]},{"t":"quiz","items":[{"q":"We don't meet often, but we ______ by texting every few weeks.","options":["keep in touch","reach out","catch up","make time for"],"answer":0},{"q":"I haven't spoken to Lan in months. I should ______ to her.","options":["keep in touch","reach out","catch up","make time for"],"answer":1},{"q":"We had coffee yesterday and ______ on everything that had happened.","options":["kept in touch","reached out","caught up","made time for"],"answer":2},{"q":"Even when I'm busy, I try to ______ the people I care about.","options":["keep in touch","reach out","catch up","make time for"],"answer":3}]},{"t":"note","text":"Đáp án: 1 keep in touch · 2 reach out · 3 caught up · 4 make time for. Câu nào đúng nhất với bạn?"},{"t":"h","text":"Meaning check · Which situation fits?"},{"t":"table","head":["Expression","Meaning"],"rows":[["keep in touch","You continue communicating over time."],["reach out to someone","You contact someone, often after a quiet period."],["catch up with someone","You share recent news after not talking for a while."],["make time for someone","You create space in your schedule for them."]]},{"t":"note","text":"Quick talk: Which one do you need to do this week? Nêu 1 tên thật và lý do."},{"t":"h","text":"Vocabulary in context · Changing relationships"},{"t":"bank","items":["drift apart","get back in touch","stay connected","have a lot going on","pick up where we left off"]},{"t":"quiz","items":[{"q":"We were once close, but we slowly ______ after university.","options":["drifted apart","got back in touch","stayed connected","caught up"],"answer":0},{"q":"I'd love to ______ with my old roommate.","options":["drift apart","get back in touch","stay connected","have a lot going on"],"answer":1},{"q":"She hasn't replied because she ______ at the moment.","options":["drifted apart","got back in touch","has a lot going on","stayed connected"],"answer":2},{"q":"Even though we live far apart, we still ______ online.","options":["drift apart","get back in touch","have a lot going on","stay connected"],"answer":3},{"q":"When we finally meet, we usually ______, as if no time has passed.","options":["drift apart","pick up where we left off","stay connected","make time for"],"answer":1}]},{"t":"note","text":"Đáp án: 1 drifted apart · 2 get back in touch · 3 has a lot going on · 4 stay connected · 5 pick up where we left off. Cụm cuối là receptive-plus — không bắt buộc phải dùng được."},{"t":"h","text":"Form and word partners"},{"t":"table","head":["Expression","What follows","Natural example"],"rows":[["keep / stay","in touch / connected","We've stayed in touch for years."],["reach out","to + person","I finally reached out to her."],["catch up","with + person / on + news","I caught up with Minh yesterday."],["make time","for + person / activity","I make time for close friends."],["drift apart","from + person","We gradually drifted apart."],["get back in touch","with + person","I'd like to get back in touch with him."]]},{"t":"note","text":"Chạy như drill thay thế, không phải bài giảng. Giáo viên đưa một người hoặc ngữ cảnh. Học viên tạo câu hoàn chỉnh trong 5 giây."},{"t":"h","text":"Language lift · Relationships over time"},{"t":"frames","groups":[{"group":"TIME","items":["We've stayed in touch for years.","We haven't spoken since March.","We've been close ever since."]},{"group":"PAST HABIT","items":["We used to talk every day.","We would meet after work."]},{"group":"CHANGE","items":["Over time, we gradually drifted apart.","As our lives changed, we spoke less often."]},{"group":"BALANCE","items":["Even though we rarely meet, we're still close.","Although she's busy, she always replies."]}]},{"t":"note","text":"Chọn 1 cụm từ 2 nhóm khác nhau và tạo một câu thật."}],"grammar":[{"t":"h","text":"Answer building · A connected turn"},{"t":"layers","items":[{"label":"DIRECT ANSWER","text":"I find it difficult to maintain every friendship."},{"label":"REASON","text":"As people get busier, their schedules become harder to match."},{"label":"PERSONAL DETAIL","text":"For example, one of my closest friends now lives in another city."},{"label":"BALANCE","text":"Even though we don't talk often, we still reach out when something important happens."},{"label":"RETURN","text":"How about you? Do you find it easy to stay connected?"}]},{"t":"note","text":"Dùng 3–5 câu. Dừng sớm nếu câu trả lời đã đủ. Sau đó che slide và hỏi câu mới: Is it easy to stay close to friends as you get older?"},{"t":"h","text":"Follow-up questions · Stay on the topic"},{"t":"table","head":["Nhóm","Câu hỏi nối tiếp"],"rows":[["PERSON","Who was that? · How did you meet? · What were they like?"],["TIME","How long has it been? · When did you last speak?"],["REASON","Why did you drift apart? · What made you reach out?"],["FEELING","Did it feel awkward? · How did you feel afterwards?"],["NEXT STEP","Will you contact them again? · What would you do differently?"]]},{"t":"ex","text":"Rule · Ask about the last detail you heard."},{"t":"note","text":"Chọn 2 câu nối tiếp từ 2 nhóm khác nhau. Sau đó lặp lại mà không nhìn slide."},{"t":"h","text":"Useful starts · Nêu ý kiến"},{"t":"frames","groups":[{"group":"USEFUL STARTS","items":["I agree to some extent…","In my experience…","That depends on…","I see your point, but…"]}]}],"reading":[{"t":"h","text":"Speak first · Your real life"},{"t":"note","text":"Chọn 1 câu. Nói 30–45 giây. Đối tác hỏi 2 câu nối tiếp. Nghe 1 chi tiết và hỏi về chi tiết đó thay vì đổi chủ đề."},{"t":"list","items":["Who do you talk to almost every day?","Who would you like to reconnect with?","Is it easy for you to maintain friendships?","Why do people sometimes drift apart?"]},{"t":"ex","text":"ROUND 2 · Change partners or choose a new question."},{"t":"h","text":"L01 recycle · People in your life"},{"t":"note","text":"Dùng 1 cụm từ L01 trong mỗi câu trả lời. Mỗi lượt dưới 30 giây. Sau mỗi câu trả lời: phản hồi + hỏi 1 câu liên quan."},{"t":"bank","items":["get along with","reliable","can't stand","lose touch with"]},{"t":"list","items":["Who is someone you get along with well?","What quality makes a person reliable?","What behaviour can't you stand?","Have you ever lost touch with someone?"]},{"t":"h","text":"Speaking round 2 · Opinions"},{"t":"note","text":"Chọn 1 nhận định. Đồng ý, đồng ý một phần, hoặc không đồng ý. Nêu lý do và 1 ví dụ. Đối tác: phản biện 1 điểm một cách lịch sự."},{"t":"list","items":["\"Real friends can go years without talking.\"","\"Social media helps people stay genuinely close.\"","\"Busy people should still make time for friendships.\"","\"Some friendships naturally have an ending.\""]},{"t":"h","text":"Speaking round 1 · Personal experience"},{"t":"note","text":"Chọn 2 câu hỏi. Nói 45 giây mỗi câu. Đối tác phải phản hồi trước khi hỏi thêm. Phản hồi mẫu: \"That makes sense because…\" hoặc \"I've had a similar experience…\""},{"t":"list","items":["Who have you stayed in touch with for a long time?","Who did you use to see more often?","Have you ever reached out after a long silence?","What helps long-distance friendships last?"]}],"conversations":[{"t":"dialog","title":"An unexpected message","target":"drift apart · reach out · catch up","lift":"pick up where we left off","question":"Read or listen. What changed between Maya and Sophie?","lines":[{"speaker":"Daniel","text":"You look surprised. Is everything okay?"},{"speaker":"Maya","text":"Yes. I just got a message from Sophie, an old university friend."},{"speaker":"Daniel","text":"I don't think you've mentioned her before. Were you close?"},{"speaker":"Maya","text":"Very close. We used to spend nearly every weekend together."},{"speaker":"Daniel","text":"What happened? Did you have an argument?"},{"speaker":"Maya","text":"No. We moved to different cities and gradually drifted apart."},{"speaker":"Daniel","text":"So why did she message you now?"},{"speaker":"Maya","text":"She found an old photo of us and decided to reach out."},{"speaker":"Daniel","text":"That's nice. Are you going to get back in touch properly?"},{"speaker":"Maya","text":"Definitely. We're planning a video call this weekend so we can catch up."},{"speaker":"Daniel","text":"Do you think it'll feel awkward after so long?"},{"speaker":"Maya","text":"Maybe at first, but I think we'll quickly pick up where we left off."}],"check":["Why did Maya and Sophie drift apart?","Which phrase means 'contact someone again'?","Which phrase means 'share recent news'?","Would you reply if an old friend contacted you? Why?","What would you want to ask them first?"],"answers":"different cities · reach out / get back in touch · catch up","note":"Đọc lời thoại trước khi xem slide. Học viên nghe để tìm mối quan hệ và lý do họ xa cách. Sau đó xác định 3 câu hỏi nối tiếp, đọc theo vai, đổi vai và lặp lại không nhìn từng dòng."},{"t":"dialog","title":"Busy lives","target":"have a lot going on · stay connected","lift":"without adding pressure","question":"Read or listen. Is the friendship still important to both speakers?","lines":[{"speaker":"Liam","text":"You and Carla used to be really close. Do you still talk?"},{"speaker":"Nora","text":"We do, but not as often as before. We both have a lot going on."},{"speaker":"Liam","text":"Is it mainly work, or have your lives just changed?"},{"speaker":"Nora","text":"A bit of both. She has two young children, and my job has become busier."},{"speaker":"Liam","text":"Does it bother you that you don't speak regularly?"},{"speaker":"Nora","text":"Sometimes. I miss our long conversations, especially when I need advice."},{"speaker":"Liam","text":"Have you told her that?"},{"speaker":"Nora","text":"Not directly. I know she's busy, so I don't want to make her feel guilty."},{"speaker":"Liam","text":"Maybe you could suggest something simple, like a monthly call."},{"speaker":"Nora","text":"That might work. It would help us stay connected without adding pressure."},{"speaker":"Liam","text":"Exactly. Good friendships still need time, even when life gets busy."},{"speaker":"Nora","text":"You're right. I'll reach out tonight and see when she's free."}],"check":["have a lot going on — nghĩa là gì?","make someone feel guilty — nghĩa là gì?","without adding pressure — nghĩa là gì?","stay connected — nghĩa là gì?","reach out tonight — nghĩa là gì?"],"answers":"be very busy with several things · cause someone to feel responsible or bad · without making the situation more stressful · continue having contact · contact the person tonight","note":"Lần nghe 1: quyết định xem tình bạn còn quan trọng không. Lần 2: tìm 2 lý do họ ít nói chuyện hơn. Chú ý Nora trả lời cân bằng thay vì đổ lỗi cho bạn."},{"t":"h","text":"Dialogue rebuild · Complete the exchange"},{"t":"note","text":"KHÔNG dùng word bank trước. Điền theo trí nhớ hoặc thông tin của bạn. Đọc 1 lần, che slide, rồi dựng lại ý nghĩa thay vì đúng từng chữ."},{"t":"fill","items":[{"speaker":"A","text":"You look surprised. Is everything okay?"},{"speaker":"B","text":"I just got a message from ____________________."},{"speaker":"A","text":"Were you close?"},{"speaker":"B","text":"Yes, but we gradually ____________________."},{"speaker":"A","text":"Why did they reach out?"},{"speaker":"B","text":"_________________________________________________."},{"speaker":"A","text":"Are you going to get back in touch?"},{"speaker":"B","text":"Yes. We're planning to ____________________."},{"speaker":"A","text":"Do you think it'll feel awkward?"},{"speaker":"B","text":"Maybe, but I think ________________________."}]},{"t":"h","text":"Speak from the dialogue"},{"t":"note","text":"Chọn 1 hướng. Nói 45–60 giây. Đối tác hỏi 2 câu nối tiếp. Partner task: nghe 1 chi tiết và hỏi về chi tiết đó."},{"t":"frames","groups":[{"group":"A REAL PERSON","items":["Talk about someone you lost touch with.","How did you know them?","Why did you drift apart?","Would you like to reconnect?","What would you say first?"]},{"group":"A POSSIBLE SITUATION","items":["Imagine an old friend contacts you.","How would you react?","What would you ask?","Would a call or meeting feel better?","Could you pick up where you left off?"]}]}],"listening":[{"t":"h","text":"Shadowing · Nghe từng câu rồi nhắc lại"},{"t":"note","text":"Bấm 🔊 để nghe từng câu, sau đó nhắc lại y hệt ngữ điệu. Làm 2 lượt: lượt 1 nhìn chữ, lượt 2 che chữ."},{"t":"say","items":["You look surprised. Is everything okay?","I just got a message from Sophie, an old university friend.","We moved to different cities and gradually drifted apart.","She found an old photo of us and decided to reach out.","I think we'll quickly pick up where we left off.","We both have a lot going on.","It would help us stay connected without adding pressure.","I'll reach out tonight and see when she's free."]},{"t":"h","text":"Micro-focus · Nối âm và dạng yếu"},{"t":"table","head":["Cụm","Cách đọc tự nhiên"],"rows":[["used to","/juːstə/ — 's' nghe như /s/, không phải /z/"],["want to","/wɒnə/ — nối thành 1 âm"],["going to","/ɡənə/ — trong lời nói nhanh"],["kind of","/kaɪndə/ — dạng yếu"],["a lot of","/ə lɒtə/ — 'of' yếu"]]},{"t":"note","text":"Trong câu, từ chức năng (to, of, a) thường yếu và nối với từ trước. Nghe từ khóa mang thông tin, không nghe từng từ."}],"exercises":[{"t":"h","text":"Bài tập 1 · Chọn từ đúng"},{"t":"quiz","items":[{"q":"We don't meet often, but we ______ by texting every few weeks.","options":["keep in touch","reach out","catch up","make time for"],"answer":0},{"q":"I haven't spoken to Lan in months. I should ______ to her.","options":["keep in touch","reach out","catch up","make time for"],"answer":1},{"q":"We had coffee yesterday and ______ on everything that had happened.","options":["kept in touch","reached out","caught up","made time for"],"answer":2},{"q":"Even when I'm busy, I try to ______ the people I care about.","options":["keep in touch","reach out","catch up","make time for"],"answer":3},{"q":"We were once close, but we slowly ______ after university.","options":["drifted apart","got back in touch","stayed connected","caught up"],"answer":0},{"q":"I'd love to ______ with my old roommate.","options":["drift apart","get back in touch","stay connected","have a lot going on"],"answer":1},{"q":"She hasn't replied because she ______ at the moment.","options":["drifted apart","got back in touch","has a lot going on","stayed connected"],"answer":2},{"q":"Even though we live far apart, we still ______ online.","options":["drift apart","get back in touch","have a lot going on","stay connected"],"answer":3}]},{"t":"h","text":"Bài tập 2 · Điền vào đoạn hội thoại"},{"t":"bank","items":["drifted apart","reach out","catch up","make time for","keep in touch","a lot going on"]},{"t":"fill","items":[{"speaker":"A","text":"Have you spoken to Emma recently?"},{"speaker":"B","text":"Not really. We've both had __________, so we slowly __________."},{"speaker":"A","text":"That's a shame. Why don't you __________ to her?"},{"speaker":"B","text":"I want to, but I'm worried the conversation might feel awkward."},{"speaker":"A","text":"You could ask her to meet for coffee and __________."},{"speaker":"B","text":"Good idea. I need to __________ the people I care about."},{"speaker":"A","text":"Exactly. You can still __________ even when life gets busy."}]},{"t":"h","text":"Bài tập 3 · Dạng đúng"},{"t":"quiz","items":[{"q":"We've stayed ______ for years.","options":["in touch","on touch","with touch","touch"],"answer":0},{"q":"I finally reached out ______ her.","options":["for","to","with","on"],"answer":1},{"q":"I caught up ______ Minh yesterday.","options":["to","on","with","for"],"answer":2},{"q":"We gradually drifted apart ______ each other.","options":["to","with","on","from"],"answer":3},{"q":"I make time ______ close friends.","options":["for","to","with","on"],"answer":0}]}],"speaking":[{"t":"h","text":"Partner interview · One person, five questions"},{"t":"note","text":"Chọn 1 người bạn, họ hàng, hoặc đồng nghiệp cũ. Đối tác phỏng vấn bạn. Người phỏng vấn hỏi thêm 1 câu không có trên slide. Lượt 1: A nói. Lượt 2: đổi vai."},{"t":"list","items":["How did you meet?","What did you use to do together?","How often do you keep in touch now?","Has the relationship changed over time?","What helps you stay connected?"]},{"t":"h","text":"Speaking round · Trả lời 45 giây"},{"t":"say","items":["Who have you stayed in touch with for a long time?","Who did you use to see more often?","Have you ever reached out after a long silence?","What helps long-distance friendships last?","Who do you talk to almost every day?","Who would you like to reconnect with?"]},{"t":"h","text":"Personal response"},{"t":"p","text":"What is a realistic way for busy friends to stay connected?"},{"t":"note","text":"Trả lời ít nhất 45 giây. Dùng 1 cụm từ từ phần từ vựng."}],"roleplay":[{"t":"steps","title":"An unexpected reunion","context":"You unexpectedly meet an old friend at a café after five years.","steps":["A: React and ask what your friend has been doing.","B: Share two life changes and ask about A.","A: Explain why you lost touch without blaming anyone.","B: Suggest a realistic way to get back in touch.","BOTH: Agree on a next step and end naturally."],"useful":"used to · drift apart · get back in touch · catch up · stay connected"},{"t":"steps","title":"A busy friend","context":"You want more contact, but your friend has a lot going on.","steps":["YOU: Explain how you feel without sounding accusatory.","FRIEND: Explain what has made life busy.","YOU: Suggest one simple way to stay connected.","FRIEND: Respond honestly and offer another option.","BOTH: Choose a plan that feels realistic."],"useful":"I know you've been busy, but… · I don't want to add pressure. · Would it work if…?"},{"t":"h","text":"Cách chạy role-play"},{"t":"note","text":"Lượt 1 chạy có gợi ý. Lượt 2 che slide và đổi 1 chi tiết. Chỉ khuyến khích lượt 3–5 câu khi nội dung thực sự cần. Model chỉ 1 câu mở đầu, để học viên tự thương lượng phần còn lại."}],"finalTask":[{"t":"h","text":"Final mission · A shared conversation"},{"t":"label","text":"FOUR-MINUTE CONVERSATION"},{"t":"p","text":"Talk about how your relationships have changed over time. Share one person you have stayed in touch with. Talk about someone you drifted apart from or reconnected with. Respond to your partner and ask at least three follow-up questions."},{"t":"chips","items":["use 6 target expressions","give connected turns","follow the last detail"]},{"t":"ex","text":"Both speakers should introduce new information."},{"t":"note","text":"Lưu ý: 4 phút hội thoại không phải 4 phút độc thoại. Mỗi lượt nên tập trung và có tương tác. Feedback: dùng từ chính xác, 1 lượt mở rộng tốt, 1 câu nối tiếp thành công, và 1 mục tiêu tiếp theo."},{"t":"h","text":"Home practice"},{"t":"label","text":"VOICE NOTE · Record 60–90 seconds"},{"t":"p","text":"How have one of your friendships changed over time? Include: how you met · what you used to do · how you stay connected now · one future plan."},{"t":"label","text":"RETRIEVAL"},{"t":"p","text":"Choose 8 expressions from L01–L02. Make one true sentence with each."},{"t":"note","text":"Chỉ dùng từ khóa. Không viết hoặc học thuộc cả script. L03 sẽ recycle 4 mục L01 và 6 mục L02."}],"reference":[{"t":"h","text":"Retrieval challenge · 5 giây mỗi từ"},{"t":"note","text":"Che cột tiếng Anh, dịch từ tiếng Việt. Sau đó đảo chiều. Chạy lượt 2 theo thứ tự ngẫu nhiên."},{"t":"retrieval","items":[{"vi":"giữ liên lạc với ai","en":"keep in touch with"},{"vi":"chủ động liên hệ với ai","en":"reach out to"},{"vi":"gặp để cập nhật chuyện gần đây","en":"catch up with"},{"vi":"dành thời gian cho ai","en":"make time for"},{"vi":"dần xa cách","en":"drift apart"},{"vi":"liên lạc lại với ai","en":"get back in touch with"},{"vi":"duy trì kết nối","en":"stay connected"},{"vi":"đang có rất nhiều việc","en":"have a lot going on"},{"vi":"tiếp tục tự nhiên như trước","en":"pick up where we left off"},{"vi":"chúng tôi từng nói chuyện mỗi ngày","en":"we used to talk every day"},{"vi":"chúng tôi đã thân nhau nhiều năm","en":"we have been close for years"},{"vi":"mặc dù hiếm khi gặp nhau","en":"even though we rarely meet"}]},{"t":"h","text":"Phát âm cần nhớ"},{"t":"table","head":["Từ / cụm","Cách đọc tự nhiên"],"rows":[["used to","/juːstə/ — âm /s/, không phải /z/"],["reach out","nối /tʃaʊt/ — nhấn out"],["catch up","/kætʃʌp/ — nhấn up"],["drift apart","nhấn apart, âm tiết 2"],["pressure","/ˈpreʃə/ — âm tiết 1"]]},{"t":"h","text":"Lỗi thường gặp"},{"t":"list","items":["reach out TO somebody — không nói reach out somebody","catch up WITH somebody (người) / catch up ON something (tin tức)","drift apart FROM each other","used to + V (thói quen quá khứ) ≠ be used to + V-ing (quen với việc gì)","pick up where we left off — dùng khi gặp lại sau thời gian dài, không dùng cho cuộc gọi đầu tiên"]}]}},"3":{"title":"Handling Disagreement","vi":"Xử lý bất đồng","goal":"By the end of the lesson, you can disagree without sounding cold and keep the conversation moving.","today":["Review L02","Learn useful words","Build stronger answers","Solve a real problem","Conversation first"],"parts":{"vocab":[{"t":"h","text":"L02 review · Complete the conversation"},{"t":"bank","items":["keep in touch","catch up","reach out","drift apart","a lot going on","make time for"]},{"t":"fill","items":[{"speaker":"A","text":"Have you spoken to Emma recently?"},{"speaker":"B","text":"Not really. We've both had __________, so we slowly __________."},{"speaker":"A","text":"That's a shame. Why don't you __________ to her?"},{"speaker":"B","text":"I want to, but I'm worried the conversation might feel awkward."},{"speaker":"A","text":"You could ask her to meet for coffee and __________."},{"speaker":"B","text":"Good idea. I need to __________ the people I care about."},{"speaker":"A","text":"Exactly. You can still __________ even when life gets busy."}]},{"t":"note","text":"Đáp án: a lot going on · drifted apart · reach out · catch up · make time for · keep in touch. Làm một mình trước, sau đó so sánh bằng lời nói. Pair practice: đọc 1 lần, rồi thay Emma bằng người thật và đổi ít nhất 2 chi tiết. Thêm 2 câu nối tiếp: Who is the person? · Why did you lose touch? · What would you say first?"},{"t":"h","text":"Vocabulary in context · Different views"},{"t":"bank","items":["agree with","disagree with","have a point","see your point","not necessarily"]},{"t":"quiz","items":[{"q":"I ______ you about the price. It is too expensive.","options":["agree with","disagree with","have a point","not necessarily"],"answer":0},{"q":"I ______ that idea because it would create more work.","options":["agree with","disagree with","have a point","see your point"],"answer":1},{"q":"You ______. We should check the details before deciding.","options":["agree with","disagree with","have a point","not necessarily"],"answer":2},{"q":"I can ______, but I still feel differently.","options":["agree with","disagree with","see your point","not necessarily"],"answer":2},{"q":"'Is working from home always easier?' '______. It depends on your home.'","options":["You have a point","I agree with","Not necessarily","See your point"],"answer":2}]},{"t":"note","text":"Đáp án: 1 agree with · 2 disagree with · 3 have a point · 4 see your point · 5 Not necessarily. Giải thích 1 đáp án bằng lý do của bạn."},{"t":"h","text":"Meaning, pronunciation, and form · Different views"},{"t":"table","head":["Expression","IPA","Meaning","Natural pattern"],"rows":[["agree with","","cùng quan điểm","agree with + person / idea"],["disagree with","/ˌdɪsəˈɡriː/","không đồng ý","disagree with + person / idea"],["have a point","","có lý","You have a point."],["see your point","","hiểu ý của bạn","I see your point, but…"],["not necessarily","/ˌnesəˈserəli/","không hẳn","Not necessarily. It depends…"]]},{"t":"note","text":"Đọc disagree với trọng âm ở âm tiết cuối. Drill necessarily chậm trước, rồi tốc độ tự nhiên. 5-second drill: giáo viên đưa 1 ý. Học viên chọn 1 cách đáp và thêm 1 lý do."},{"t":"h","text":"Vocabulary in context · Solving the problem"},{"t":"bank","items":["bring it up","work it out","compromise","change my mind","be open to"]},{"t":"quiz","items":[{"q":"Something has been bothering me, so I need to ______ calmly.","options":["bring it up","work it out","compromise","be open to"],"answer":0},{"q":"We disagree, but I'm sure we can ______ together.","options":["bring it up","work it out","compromise","change my mind"],"answer":1},{"q":"Neither option is perfect. We may need to ______.","options":["bring it up","work it out","compromise","be open to"],"answer":2},{"q":"Your example is convincing. It might ______.","options":["bring it up","work it out","change my mind","be open to"],"answer":2},{"q":"I don't love the idea, but I'm ______ trying it once.","options":["bring it up","work it out","compromise","open to"],"answer":3}]},{"t":"note","text":"Đáp án: 1 bring it up · 2 work it out · 3 compromise · 4 change my mind · 5 open to."},{"t":"h","text":"Meaning, pronunciation, and form · Solving the problem"},{"t":"table","head":["Expression","IPA","Meaning","Natural pattern"],"rows":[["bring it up","","đề cập chuyện đó","bring + topic + up"],["work it out","","cùng giải quyết","work it out together"],["compromise","/ˈkɒmprəmaɪz/","thỏa hiệp","compromise on + noun"],["change my mind","","đổi ý","change someone's mind"],["be open to","/ˈəʊpən/","sẵn sàng cân nhắc","be open to + noun / V-ing"]]},{"t":"ex","text":"Complete aloud: I'm open to ______ing. We could compromise on ______."},{"t":"note","text":"Chú ý open to + V-ing, KHÔNG dùng to + động từ nguyên thể. Compromise nhấn âm tiết đầu."},{"t":"h","text":"Quick choice · What would you say?"},{"t":"table","head":["Tình huống","Câu nói"],"rows":[["Your friend makes a good point.","You have a point."],["You understand but still disagree.","I see your point, but…"],["You want to discuss a problem.","Can I bring something up?"],["You want both people to adjust.","Could we compromise?"],["You may consider a new option.","I'm open to trying it."]]},{"t":"note","text":"PAIR CHALLENGE · Thêm 1 câu thứ hai thực tế — lý do, ví dụ, hoặc câu hỏi — cho mỗi cách đáp."},{"t":"h","text":"Language lift · Softer disagreement"},{"t":"table","head":["Quá trực tiếp","Mềm hơn"],"rows":[["That's wrong.","I'm not sure I agree."],["That won't work.","I'm not sure that would work."],["You don't understand.","I may not have explained my point clearly."],["No.","Not necessarily. It may depend on the situation."],["Do this instead.","Could we try another option?"]]},{"t":"note","text":"Drill với ngữ điệu ấm và tông xuống-lên ở 'I'm not sure'. Sau đó học viên làm mềm 3 câu trực tiếp mới từ giáo viên."}],"grammar":[{"t":"h","text":"Answer building · More depth, still on topic"},{"t":"layers","items":[{"label":"VIEW","text":"I don't necessarily think friends should reply immediately."},{"label":"REASON","text":"Sometimes people are busy or need time to think."},{"label":"DETAIL","text":"For example, a thoughtful reply may be better than a quick one."},{"label":"BALANCE","text":"However, if the message is urgent, they should respond as soon as possible."},{"label":"RETURN","text":"What do you think?"}]},{"t":"note","text":"Một câu trả lời hoàn chỉnh có thể là 2, 3, hoặc 4 câu. Dừng khi ý đã rõ. Xây câu trả lời thứ hai cùng nhau: People should never discuss serious issues by text."},{"t":"h","text":"Language lift · Upgrade one sentence"},{"t":"table","head":["Cấu trúc","Ví dụ"],"rows":[["THAT-CLAUSE","I think that the plan is too expensive. · I don't agree that everyone needs to join."],["RELATIVE CLAUSE","A friend who listens calmly is easier to talk to. · The option that costs less may be better."],["ADJECTIVE + TO","It's difficult to stay calm. · I'm happy to consider another option."],["ADVERB + VERB","She explained her view calmly. · We eventually found a solution."]]},{"t":"note","text":"Cho 1 câu cơ bản như 'The plan is bad.' Học viên nâng cấp bằng MỘT cấu trúc duy nhất. Tránh xếp chồng mọi cấu trúc vào một câu."},{"t":"h","text":"Follow-up questions · Understand before replying"},{"t":"table","head":["Nhóm","Câu hỏi nối tiếp"],"rows":[["CLARIFY","What do you mean by that? · Could you give an example?"],["REASON","What makes you feel that way? · Why do you think so?"],["CONDITION","Would you feel differently if…?"],["PRIORITY","Which matters more to you: time, money, or comfort?"],["SOLUTION","What would be a fair compromise?"]]},{"t":"ex","text":"Rule · Understand the reason before defending your view."},{"t":"note","text":"Đối tác hỏi 2 câu nối tiếp từ 2 nhóm khác nhau trước khi đưa ý kiến của mình."}],"reading":[{"t":"h","text":"Speak first · Small disagreements"},{"t":"note","text":"Chọn 1 ý. Nêu quan điểm trong 2–4 câu. Đối tác phản hồi. Nghe trước, phản hồi 1 điểm trước khi thêm ý của bạn."},{"t":"list","items":["Texting is better than calling.","Friends should always reply quickly.","It's okay to cancel plans at the last minute.","Living alone is better than sharing a home."]},{"t":"h","text":"Speak from the dialogue · Chọn 1 quyết định"},{"t":"note","text":"Thảo luận 2 phút và đi đến kết quả. Cho 30 giây chuẩn bị im lặng, sau đó 2 phút không ngắt lời. Dùng ít nhất 3 cụm: I see your point · You have a point · I'm open to… · Could we compromise? · Let's compare…"},{"t":"list","items":["a hotel for a short trip","a restaurant for a celebration","how to travel to another city","how much to spend on a gift"]},{"t":"ex","text":"Result required · choose one option."},{"t":"h","text":"Speaking round · Everyday opinions"},{"t":"note","text":"Chọn 2 ý. Trả lời tập trung. Đối tác phản hồi vào LÝ DO của bạn. Mỗi lượt trao đổi kéo dài khoảng 90 giây gồm cả câu nối tiếp."},{"t":"list","items":["People should avoid difficult conversations by text.","It's better to be honest than polite.","Couples should share every expense equally.","Friends do not need to agree on important issues."]},{"t":"ex","text":"Try: Not necessarily… · I see your point, but… · That depends on… · You have a point."},{"t":"h","text":"Problem-solving circle · One issue, one result"},{"t":"list","items":["A friend often arrives late.","A colleague plays music while working.","A family member shares your photos online.","A friend cancels plans too often."]},{"t":"frames","groups":[{"group":"BỐN BƯỚC","items":["bring it up","listen and clarify","suggest two options","compromise"]}]},{"t":"note","text":"Dùng nhóm 3 người nếu có thể: 2 người nói và 1 người quan sát. Người quan sát nghe: ngôn ngữ tôn trọng · lý do rõ ràng · một quyết định thật."}],"conversations":[{"t":"dialog","title":"A weekend plan","audio":"audio/ref-audio/weekend-plan.mp3","target":"I see your point · I'm open to · work it out","lift":"right in the city centre · save us a lot of time","question":"Listen once for the main idea. What do Mia and Alex disagree about, and how do they solve it?","lines":[{"speaker":"Mia","text":"I found a great hotel for our weekend trip. It's right in the city centre."},{"speaker":"Alex","text":"It looks nice, but I don't think we should spend that much."},{"speaker":"Mia","text":"Really? I think the location will save us a lot of time."},{"speaker":"Alex","text":"I see your point, but we'll only be there for two nights."},{"speaker":"Mia","text":"True, although I don't want to stay somewhere uncomfortable."},{"speaker":"Alex","text":"Neither do I. We could find a cheaper place nearby."},{"speaker":"Mia","text":"You have a point. What price range do you have in mind?"},{"speaker":"Alex","text":"Maybe something under two million a night. Would that work?"},{"speaker":"Mia","text":"Possibly. I'm open to staying outside the centre if the transport is good."},{"speaker":"Alex","text":"Fair enough. We can compare travel time as well as price."},{"speaker":"Mia","text":"Okay. Let's each choose two places and look at them tonight."},{"speaker":"Alex","text":"Perfect. I'm sure we can work it out."}],"check":["Why does Mia prefer the first hotel?","What price does Alex suggest?","How does Alex show that he understands Mia?","Which line shows that Mia becomes flexible?","Whose suggestion seems more reasonable to you? Why?"],"answers":"location saves time · under two million · I see your point · I'm open to staying outside the centre","note":"Phát audio đầy đủ với lời thoại che trước. Lần 2: hiện slide. Sau đó chia vai. Các cụm được đánh dấu là cách bất đồng lịch sự và giải quyết vấn đề."},{"t":"dialog","title":"A shared apartment","audio":"audio/ref-audio/shared-apartment.mp3","target":"bring something up · work it out · sound reasonable","lift":"avoid an argument · too strict","question":"Listen for the problem and the solution. What was bothering Nina, and what solution did they agree on?","lines":[{"speaker":"Nina","text":"Ben, can I bring something up? The kitchen has been quite messy lately."},{"speaker":"Ben","text":"I know. Work has been exhausting, so I haven't cleaned much this week."},{"speaker":"Nina","text":"I understand, but I can't keep doing all of it by myself."},{"speaker":"Ben","text":"That's fair. I didn't realise you were doing most of the cleaning."},{"speaker":"Nina","text":"I didn't say anything because I wanted to avoid an argument."},{"speaker":"Ben","text":"I wish you had told me earlier. We could have worked it out."},{"speaker":"Nina","text":"You're right. Could we make a simple cleaning schedule?"},{"speaker":"Ben","text":"I'm open to that, although I don't want it to be too strict."},{"speaker":"Nina","text":"Fair enough. How about we each choose the jobs we don't mind doing?"},{"speaker":"Ben","text":"That sounds reasonable. I can cook and take out the rubbish."},{"speaker":"Nina","text":"Great. I'll do the shopping, and we can share the rest."},{"speaker":"Ben","text":"Deal. If something bothers us, let's bring it up sooner."}],"check":["What problem does Nina bring up?","Why hasn't Ben cleaned much this week?","Why did Nina avoid talking about the problem earlier?","What solution do they finally agree on?","What exact phrase does Nina use to introduce the problem politely?","Which three short responses help reduce the tension?"],"answers":"1 The kitchen has been messy and Nina has been doing most of the cleaning. · 2 Work has been exhausting. · 3 She wanted to avoid an argument. · 4 They agree to make a flexible schedule, choose jobs they do not mind, and bring up future problems sooner. · 5 Can I bring something up? · 6 That's fair; I'm open to that; Fair enough / That sounds reasonable.","note":"Lần nghe 1: che lời thoại và xác định vấn đề. Lần 2: hiện slide. Sau đó đọc theo vai với tông bình tĩnh, xây dựng. KHÔNG hiện transcript trước khi hỏi các câu trên."},{"t":"h","text":"Conversation 2 · Meaning and language"},{"t":"table","head":["Cụm","Nghĩa"],"rows":[["bring something up","start talking about a concern"],["by myself","without help from another person"],["avoid an argument","try not to start a conflict"],["too strict","not flexible enough"],["sound reasonable","seem fair and practical"]]},{"t":"p","text":"Personal response: Is it better to bring up a small problem immediately?"},{"t":"note","text":"Trả lời 3–4 câu, có 1 ví dụ thật hoặc tưởng tượng."},{"t":"h","text":"Dialogue rebuild · Use the meaning"},{"t":"note","text":"CHE BẢN GỐC. Học viên có thể tái tạo bản gốc hoặc tạo kế hoạch chuyến đi mới. Độ chính xác về ý nghĩa quan trọng hơn từng chữ."},{"t":"fill","items":[{"speaker":"A","text":"I found a great __________ for our trip."},{"speaker":"B","text":"It looks nice, but __________________________."},{"speaker":"A","text":"I think the location will ____________________."},{"speaker":"B","text":"I see your point, but ________________________."},{"speaker":"A","text":"You have a point. What ______________________?"},{"speaker":"B","text":"Maybe something under _______________________."},{"speaker":"A","text":"I'm open to __________ if ____________________."},{"speaker":"B","text":"Fair enough. We can compare _________________ ."},{"speaker":"A","text":"Let's ______________________________________."},{"speaker":"B","text":"Great. I'm sure we can work it out."}]}],"listening":[{"t":"h","text":"Shadowing · Nghe từng câu rồi nhắc lại"},{"t":"note","text":"Bấm 🔊 để nghe từng câu, sau đó nhắc lại y hệt ngữ điệu. Làm 2 lượt: lượt 1 nhìn chữ, lượt 2 che chữ."},{"t":"say","items":["I see your point, but we'll only be there for two nights.","You have a point. What price range do you have in mind?","I'm open to staying outside the centre if the transport is good.","Fair enough. We can compare travel time as well as price.","Ben, can I bring something up? The kitchen has been quite messy lately.","I understand, but I can't keep doing all of it by myself.","I wish you had told me earlier. We could have worked it out.","Deal. If something bothers us, let's bring it up sooner."]},{"t":"h","text":"Micro-focus · Ngữ điệu bất đồng lịch sự"},{"t":"table","head":["Câu","Ngữ điệu"],"rows":[["I'm not sure I agree.","xuống-lên ở 'sure' — nghe mềm, không gay gắt"],["I see your point, but…","lên nhẹ ở 'point', rồi xuống ở 'but'"],["That's fair.","xuống ở 'fair' — công nhận thật lòng"],["Would that work?","lên ở cuối — câu hỏi thật, không phải thách thức"],["I'm open to that, although…","xuống ở 'open', lên nhẹ ở 'although'"]]},{"t":"note","text":"Cùng một câu, ngữ điệu khác nhau sẽ nghe lịch sự hoặc gay gắt. Luyện nói câu 'I'm not sure' với giọng ấm, không cau mày."}],"exercises":[{"t":"h","text":"Bài tập 1 · Chọn từ đúng"},{"t":"quiz","items":[{"q":"I ______ you about the price. It is too expensive.","options":["agree with","disagree with","have a point","not necessarily"],"answer":0},{"q":"I ______ that idea because it would create more work.","options":["agree with","disagree with","have a point","see your point"],"answer":1},{"q":"You ______. We should check the details before deciding.","options":["agree with","disagree with","have a point","not necessarily"],"answer":2},{"q":"I can ______, but I still feel differently.","options":["agree with","disagree with","see your point","not necessarily"],"answer":2},{"q":"Something has been bothering me, so I need to ______ calmly.","options":["bring it up","work it out","compromise","be open to"],"answer":0},{"q":"We disagree, but I'm sure we can ______ together.","options":["bring it up","work it out","compromise","change my mind"],"answer":1},{"q":"Neither option is perfect. We may need to ______.","options":["bring it up","work it out","compromise","be open to"],"answer":2},{"q":"Your example is convincing. It might ______.","options":["bring it up","work it out","change my mind","be open to"],"answer":2}]},{"t":"h","text":"Bài tập 2 · Điền vào đoạn hội thoại (ôn L02)"},{"t":"bank","items":["keep in touch","catch up","reach out","drift apart","a lot going on","make time for"]},{"t":"fill","items":[{"speaker":"A","text":"Have you spoken to Emma recently?"},{"speaker":"B","text":"Not really. We've both had __________, so we slowly __________."},{"speaker":"A","text":"That's a shame. Why don't you __________ to her?"},{"speaker":"B","text":"I want to, but I'm worried the conversation might feel awkward."},{"speaker":"A","text":"You could ask her to meet for coffee and __________."},{"speaker":"B","text":"Good idea. I need to __________ the people I care about."},{"speaker":"A","text":"Exactly. You can still __________ even when life gets busy."}]},{"t":"h","text":"Bài tập 3 · Làm mềm câu quá trực tiếp"},{"t":"quiz","items":[{"q":"\"That's wrong.\" — cách nói mềm hơn?","options":["I'm not sure I agree.","You don't understand.","No.","That won't work."],"answer":0},{"q":"\"That won't work.\" — cách nói mềm hơn?","options":["No.","I'm not sure that would work.","Do this instead.","That's wrong."],"answer":1},{"q":"\"You don't understand.\" — cách nói mềm hơn?","options":["No.","That's wrong.","I may not have explained my point clearly.","Do this instead."],"answer":2},{"q":"\"Do this instead.\" — cách nói mềm hơn?","options":["No.","That's wrong.","You don't understand.","Could we try another option?"],"answer":3}]},{"t":"h","text":"Bài tập 4 · Dạng đúng"},{"t":"quiz","items":[{"q":"I'm open to ______ it once.","options":["try","trying","tried","tries"],"answer":1},{"q":"We could compromise ______ the price.","options":["on","with","to","for"],"answer":0},{"q":"I need to bring ______ up calmly.","options":["that","it","this one","them"],"answer":1},{"q":"Neither do I. — dùng khi nào?","options":["Khi đồng ý với câu khẳng định","Khi đồng ý với câu phủ định","Khi không đồng ý","Khi hỏi lại"],"answer":1}]}],"speaking":[{"t":"h","text":"Question lab · Nêu quan điểm"},{"t":"say","items":["People should avoid difficult conversations by text.","It's better to be honest than polite.","Couples should share every expense equally.","Friends do not need to agree on important issues.","Texting is better than calling.","Friends should always reply quickly.","It's okay to cancel plans at the last minute.","Living alone is better than sharing a home."]},{"t":"note","text":"Mỗi lượt khoảng 90 giây gồm cả câu nối tiếp. Dùng: Not necessarily… · I see your point, but… · That depends on… · You have a point."},{"t":"h","text":"Answer building · Luyện xây câu trả lời"},{"t":"p","text":"People should never discuss serious issues by text."},{"t":"layers","items":[{"label":"VIEW","text":"I don't necessarily think friends should reply immediately."},{"label":"REASON","text":"Sometimes people are busy or need time to think."},{"label":"DETAIL","text":"For example, a thoughtful reply may be better than a quick one."},{"label":"BALANCE","text":"However, if the message is urgent, they should respond as soon as possible."},{"label":"RETURN","text":"What do you think?"}]},{"t":"note","text":"Xây từng câu một. Không cần đủ 5 tầng. Dừng khi ý đã rõ."},{"t":"h","text":"Nâng cấp một câu · Luyện cấu trúc"},{"t":"table","head":["Cấu trúc","Mẫu"],"rows":[["THAT-CLAUSE","I think that the plan is too expensive."],["RELATIVE CLAUSE","A friend who listens calmly is easier to talk to."],["ADJECTIVE + TO","It's difficult to stay calm."],["ADVERB + VERB","She explained her view calmly."]]},{"t":"note","text":"Lấy câu cơ bản 'The plan is bad.' và nâng cấp bằng MỘT cấu trúc. Đừng xếp chồng."}],"roleplay":[{"t":"steps","title":"House rules","context":"Two people share a home but have different habits.","steps":["A: You need quiet after 10 p.m. Bring the issue up calmly.","B: You often call friends late. Explain why.","A: Respond to B's reason and suggest one rule.","B: Disagree with one detail and offer another option.","BOTH: Compromise on quiet hours and exceptions."],"useful":"bring it up · I understand, but… · I'm open to… · Could we compromise?"},{"t":"steps","title":"A group plan","context":"Two friends are planning a birthday for someone else.","steps":["A: Prefer a quiet dinner because the person dislikes crowds.","B: Prefer a surprise party because it feels more memorable.","A: Explain one risk and acknowledge B's good point.","B: Ask a clarifying question and adjust your idea.","BOTH: Choose a plan, budget, and one next step."],"useful":"I'm not sure I agree · You have a point · I'm open to… · Could we compromise?"},{"t":"h","text":"Cách chạy role-play"},{"t":"note","text":"Không viết sẵn câu. Cho 30 giây chỉ ghi từ khóa. Chạy 1 lần có gợi ý, sau đó đổi vai và đổi vấn đề sang việc dọn nhà hoặc khách đến chơi."},{"t":"h","text":"Dialogue transfer · Make it personal"},{"t":"note","text":"Điền thông tin thật. Lượt 1 có gợi ý. Lượt 2 che slide."},{"t":"fill","items":[{"speaker":"A","text":"I've noticed something and I'd like to bring it up."},{"speaker":"B","text":"Sure, go ahead. What's on your mind?"},{"speaker":"A","text":"I __________, and honestly it's been bothering me."},{"speaker":"B","text":"I see your point. I didn't realise __________."},{"speaker":"A","text":"Could we __________?"},{"speaker":"B","text":"I'm open to that, although __________."},{"speaker":"A","text":"Fair enough. How about __________?"},{"speaker":"B","text":"That sounds reasonable. Let's work it out."}]}],"finalTask":[{"t":"h","text":"Final mission · Find common ground"},{"t":"label","text":"FOUR-MINUTE SHARED CONVERSATION"},{"t":"p","text":"Choose one real-life decision on which you may disagree. State your view and explain why. Acknowledge one point from your partner. Ask at least two follow-up questions. Agree on a compromise or explain why you cannot agree yet."},{"t":"chips","items":["use 5 target items","give focused answers","reach a clear result"]},{"t":"note","text":"Mục tiêu: bất đồng với Ý TƯỞNG, không công kích NGƯỜI. Ghi âm nếu học viên đồng ý. Feedback nêu 1 cách đáp thành công, 1 phần mở rộng hữu ích, và 1 mục tiêu ngôn ngữ."},{"t":"h","text":"Home practice"},{"t":"label","text":"VOICE NOTE · Record 90 seconds"},{"t":"p","text":"Describe a disagreement that ended well. What helped? Include: the issue · both views · one useful response · the final solution."},{"t":"label","text":"RETRIEVAL"},{"t":"p","text":"Choose 8 items from L03. Make one true or realistic sentence with each."},{"t":"note","text":"Chỉ dùng từ khóa. Không viết và học thuộc cả script. L04 (Setting Boundaries) sẽ bắt đầu bằng một đoạn hội thoại ngắn recycle L03."}],"reference":[{"t":"h","text":"Lesson summary · Từ vựng trọng tâm"},{"t":"table","head":["English","Tiếng Việt","Dạng dùng tự nhiên"],"rows":[["agree / disagree with","đồng ý / không đồng ý với","with + người / ý kiến"],["have a point","có lý","You have a point."],["see your point","hiểu quan điểm của bạn","I see your point, but…"],["not necessarily","không hẳn","Not necessarily. It depends…"],["bring it up","đề cập chuyện đó","bring + vấn đề + up"],["work it out","cùng giải quyết","work it out together"],["compromise","thỏa hiệp","compromise on + danh từ"],["change my mind","đổi ý","change someone's mind"],["be open to","sẵn sàng cân nhắc","open to + danh từ / V-ing"],["sound reasonable","nghe hợp lý","That sounds reasonable."]]},{"t":"note","text":"Che cột tiếng Anh và nhớ lại từ tiếng Việt, sau đó đảo chiều."},{"t":"h","text":"IPA cần nhớ"},{"t":"table","head":["Từ","IPA","Lưu ý"],"rows":[["disagree","/ˌdɪsəˈɡriː/","trọng âm âm tiết CUỐI"],["necessarily","/ˌnesəˈserəli/","đọc chậm trước, rồi nhanh"],["compromise","/ˈkɒmprəmaɪz/","trọng âm âm tiết ĐẦU"],["open","/ˈəʊpən/","trọng âm âm tiết đầu"]]},{"t":"h","text":"Retrieval challenge · 5 giây mỗi từ"},{"t":"retrieval","items":[{"vi":"đồng ý với ai / ý kiến","en":"agree with"},{"vi":"không đồng ý với ai / ý kiến","en":"disagree with"},{"vi":"bạn có lý","en":"you have a point"},{"vi":"tôi hiểu ý bạn","en":"I see your point"},{"vi":"không hẳn","en":"not necessarily"},{"vi":"đề cập vấn đề","en":"bring it up"},{"vi":"cùng giải quyết","en":"work it out"},{"vi":"thỏa hiệp về việc gì","en":"compromise on"},{"vi":"đổi ý","en":"change my mind"},{"vi":"sẵn sàng cân nhắc","en":"be open to"},{"vi":"nghe có vẻ hợp lý","en":"sound reasonable"},{"vi":"tránh tranh cãi","en":"avoid an argument"}]},{"t":"h","text":"Lỗi thường gặp"},{"t":"list","items":["I see your point ≠ I agree — chỉ là ghi nhận, không phải đồng ý","Neither do I / So do I — phải đảo trợ động từ, không nói 'Me too' trong văn trang trọng","I wish + had + V3 — tiếc vì đã không làm gì trong quá khứ","be open to + V-ing, KHÔNG dùng to + động từ nguyên thể","compromise ON + danh từ — không nói compromise with something","without sounding accusatory — không nghe như đang buộc tội"]}]}}};
+/* LESSON_DATA:END */
 const TRACKS={
  f1:{badge:'FOUNDATION · F1',title:'Build the Sentence',sub:'Xây dựng câu — WHO → VERB → INFORMATION.',gridTitle:'50 bài F1',gridTotal:50,lessons:{}},
  f2:{badge:'FOUNDATION · F2',title:'Control Time',sub:'Kiểm soát thì — Present, Past, Perfect, Future.',gridTitle:'50 bài F2',gridTotal:50,lessons:{}},
@@ -725,241 +1122,7 @@ const TRACKS={
  e2:{badge:'EXPAND · E2',title:'MOVE Expand 2',sub:'Speaking lessons by Phoebe Trương.',gridTitle:'50 bài E2',gridTotal:50,lessons:{}}
 };
 
-const E2_LESSONS={
- 1:{
-  title:'People in Your Life',vi:'Những người trong cuộc sống của bạn',
-  goal:'Describe people you know and explain how you feel about them.',
-  vocab:[
-    {en:'acquaintance',vi:'người quen, chưa phải bạn thân',pattern:'an acquaintance from...'},
-    {en:'reliable',vi:'đáng tin cậy',pattern:"She's very reliable."},
-    {en:'considerate',vi:'biết nghĩ cho người khác',pattern:"He's very considerate."},
-    {en:'easy-going',vi:'dễ tính, thoải mái',pattern:"He's quite easy-going."},
-    {en:"can't stand",vi:'không thể chịu được',pattern:"I can't stand + noun/V-ing"},
-    {en:'put up with',vi:'chịu đựng một điều khó chịu',pattern:'I can put up with...'},
-    {en:'get along with',vi:'hợp với ai đó',pattern:'I get along with...'},
-    {en:'lose touch with',vi:'mất liên lạc với ai',pattern:'I lost touch with...'},
-    {en:'have a lot in common',vi:'có nhiều điểm chung',pattern:'We have a lot in common.'},
-    {en:'frustrating',vi:'gây bực bội',pattern:'It becomes really frustrating.'}
-  ],
-  grammar:[
-    {key:'Mệnh đề quan hệ who / that',ex:'She is the person who always helps me. — người mà luôn giúp tôi'},
-    {key:'can\'t stand + V-ing',ex:"I can't stand people interrupting others. — tôi không chịu được việc người khác ngắt lời"},
-    {key:'put up with + noun/V-ing',ex:'I can put up with it once or twice. — tôi có thể chịu được một hai lần'},
-    {key:'get along with + somebody',ex:'I get along with most of my colleagues.'},
-    {key:'find it + adj + to V',ex:'I find it easy to talk to her. — tôi thấy dễ nói chuyện với cô ấy'},
-    {key:'However / Although để đối lập',ex:'However, I try to react calmly.'}
-  ],
-  reading:{
-    text:'My closest colleague is <b>Lan</b>. We have worked together for four years and we <b>get along</b> surprisingly well because we <b>have a lot in common</b>. She is extremely <b>reliable</b> — if she promises something, she always does it. She is also <b>considerate</b>: she notices when someone is under pressure and offers help without being asked. Of course, nobody is perfect. What I <b>can\'t stand</b> is people who interrupt, and she sometimes does it when she is excited. I <b>put up with</b> it because everything else about working with her is excellent.',
-    q:'Answer: 1) How long have they worked together? 2) Why do they get along? 3) What can\'t the writer stand?'
-  },
-  conversations:[
-    {title:'A new colleague',lines:[
-      {speaker:'Nina',text:'How are things with your new colleague?'},
-      {speaker:'Emma',text:"Pretty good. She's very reliable, and I find it easy to talk to her. We have quite a lot in common, so we get along surprisingly well."},
-      {speaker:'Nina',text:"That's nice. What do you have in common?"}
-    ]},
-    {title:'A difficult person',lines:[
-      {speaker:'Alex',text:"Is there anything you can't stand at work?"},
-      {speaker:'Mia',text:"Honestly, I can't stand people who constantly interrupt others. I can put up with it once or twice, but it becomes really frustrating when it happens in every meeting. However, I try to react calmly."},
-      {speaker:'Alex',text:'I know what you mean. How do you handle it?'}
-    ]}
-  ],
-  listening:[
-    'How are things with your new colleague?',
-    "She's very reliable, and I find it easy to talk to her.",
-    'We have quite a lot in common, so we get along surprisingly well.',
-    "Honestly, I can't stand people who constantly interrupt others.",
-    'I can put up with it once or twice, but it becomes really frustrating.'
-  ],
-  exercises:[
-    {q:'She is the person ___ always helps me.',options:['who','which','whose','whom'],answer:0},
-    {q:"I can't stand people ___ others.",options:['interrupt','interrupting','to interrupt','interrupted'],answer:1},
-    {q:'We ___ surprisingly well.',options:['get along','get up','get off','get out'],answer:0},
-    {q:'I find it easy ___ to her.',options:['talk','talking','to talk','talked'],answer:2},
-    {q:'I can put ___ with it once or twice.',options:['on','up','in','off'],answer:1}
-  ],
-  speaking:[
-    'Who is the most reliable person you know?',
-    'What makes someone considerate?',
-    'Do you get along with most of your colleagues?',
-    "What behaviour can't you put up with?",
-    'Is it easy for you to talk to new people?',
-    'Who would you like to get back in touch with?'
-  ],
-  roleplay:[
-    {title:'Meeting an old friend',steps:['Ask who they still keep in touch with.','Talk about someone you both knew.','Describe what that person was like.','Mention someone you lost touch with.','Say whether you would like to reconnect.']},
-    {title:'A colleague',steps:['Ask what kind of person is easy to work with.','Describe two qualities and explain why.','Ask about one difficult behaviour.',"Use can't stand or put up with. Give an example.",'React and share a similar experience.']}
-  ],
-  finalTask:'Three-minute shared conversation. Talk about people in your work or daily life. Describe someone you get along with. Mention one behaviour you can\'t stand or have to put up with. Ask your partner at least two related questions.',
-  homePractice:'Record 45–60 seconds: What kind of people do you find easy or difficult to get along with? Include one reason, one example, and one sentence with who or that.',
-  reference:['reliable /ri-LAI-ơ-bồ/ — trọng âm rơi vào âm tiết thứ hai','considerate /kồn-SI-đờ-rịt/ — âm tiết thứ hai','acquaintance /ờ-QUÂYN-tần/ — âm tiết thứ hai','frustrating /FRỚS-trây-ting/ — âm tiết thứ nhất','Cấu trúc: WHO + V (người làm chủ ngữ), THAT + V (người/vật)','Phân biệt: put up with (chịu đựng) ≠ get along with (hòa hợp)']
- },
- 2:{
-  title:'Keeping in Touch',vi:'Giữ liên lạc',
-  goal:'Talk naturally about staying connected, losing touch, and reconnecting.',
-  vocab:[
-    {en:'keep in touch',vi:'giữ liên lạc với ai',pattern:"We've kept in touch for years."},
-    {en:'catch up',vi:'gặp để cập nhật chuyện gần đây',pattern:'I caught up with Minh yesterday.'},
-    {en:'reach out',vi:'chủ động liên hệ với ai',pattern:'I finally reached out to her.'},
-    {en:'make time for',vi:'dành thời gian cho ai',pattern:'I make time for close friends.'},
-    {en:'drift apart',vi:'dần xa cách',pattern:'We gradually drifted apart.'},
-    {en:'get back in touch',vi:'liên lạc lại với ai',pattern:"I'd like to get back in touch with him."},
-    {en:'stay connected',vi:'duy trì kết nối',pattern:'We still stay connected online.'},
-    {en:'have a lot going on',vi:'đang có rất nhiều việc',pattern:'We both have a lot going on.'},
-    {en:'pick up where we left off',vi:'tiếp tục tự nhiên như trước',pattern:"We'll quickly pick up where we left off."},
-    {en:'used to + V',vi:'đã từng (thói quen quá khứ)',pattern:'We used to spend every weekend together.'}
-  ],
-  grammar:[
-    {key:'used to + V (thói quen quá khứ)',ex:'We used to spend nearly every weekend together.'},
-    {key:'Hiện tại hoàn thành + for/since',ex:"We've kept in touch for years."},
-    {key:'drift apart (nội động từ)',ex:'We moved to different cities and gradually drifted apart.'},
-    {key:'not as ... as (so sánh bằng phủ định)',ex:'We talk, but not as often as before.'},
-    {key:'a bit of both (cả hai)',ex:"A bit of both. She has children, and my job has become busier."},
-    {key:'so that / so we can (mục đích)',ex:"We're planning a video call so we can catch up."}
-  ],
-  reading:{
-    text:'Sophie and I were inseparable at university. We <b>used to</b> spend nearly every weekend together, and we told each other everything. After graduation we moved to different cities and slowly <b>drifted apart</b>. We still <b>kept in touch</b> on birthdays, but the messages became shorter every year. Last month she found an old photo of us and decided to <b>reach out</b>. We talked for two hours and it felt like we <b>picked up where we left off</b>. Now we <b>make time for</b> a video call every month. The truth is that friendships do not end — they just wait.',
-    q:'Answer: 1) What did they use to do? 2) Why did they drift apart? 3) How do they stay connected now?'
-  },
-  conversations:[
-    {title:'An unexpected message',lines:[
-      {speaker:'Daniel',text:'You look surprised. Is everything okay?'},
-      {speaker:'Maya',text:'Yes. I just got a message from Sophie, an old university friend.'},
-      {speaker:'Daniel',text:'Were you close?'},
-      {speaker:'Maya',text:'Very close. We used to spend nearly every weekend together. We moved to different cities and gradually drifted apart.'},
-      {speaker:'Daniel',text:'So why did she message you now?'},
-      {speaker:'Maya',text:"She found an old photo of us and decided to reach out. We're planning a video call this weekend so we can catch up."}
-    ]},
-    {title:'Busy lives',lines:[
-      {speaker:'Liam',text:'You and Carla used to be really close. Do you still talk?'},
-      {speaker:'Nora',text:'We do, but not as often as before. We both have a lot going on.'},
-      {speaker:'Liam',text:'Is it mainly work, or have your lives just changed?'},
-      {speaker:'Nora',text:'A bit of both. She has two young children, and my job has become busier. I miss our long conversations, especially when I need advice.'}
-    ]}
-  ],
-  listening:[
-    'We used to spend nearly every weekend together.',
-    'We moved to different cities and gradually drifted apart.',
-    'She found an old photo of us and decided to reach out.',
-    "We're planning a video call this weekend so we can catch up.",
-    'We do, but not as often as before. We both have a lot going on.'
-  ],
-  exercises:[
-    {q:'We ___ spend every weekend together.',options:['use to','used to','used','using'],answer:1},
-    {q:"We've kept in touch ___ years.",options:['since','for','from','during'],answer:1},
-    {q:'We gradually ___.',options:['drifted apart','drifted out','drifted off','drifted in'],answer:0},
-    {q:'She decided to ___ after a long silence.',options:['reach out','reach in','reach up','reach on'],answer:0},
-    {q:'We talk, but not ___ often as before.',options:['so','as','too','more'],answer:1}
-  ],
-  speaking:[
-    'Who have you stayed in touch with for a long time?',
-    'Who did you use to see more often?',
-    'Have you ever reached out after a long silence?',
-    'What helps long-distance friendships last?',
-    'Is it easy for you to maintain friendships?',
-    'Why do people sometimes drift apart?'
-  ],
-  roleplay:[
-    {title:'An unexpected reunion',steps:['React and ask what your friend has been doing.','Share two life changes and ask about A.','Explain why you lost touch without blaming anyone.','Suggest a realistic way to get back in touch.','Agree on a next step and end naturally.']},
-    {title:'A busy friend',steps:['Explain how you feel without sounding accusatory.','Explain what has made life busy.','Suggest one simple way to stay connected.','Respond honestly and offer another option.','Choose a plan that feels realistic.']}
-  ],
-  finalTask:'Four-minute shared conversation. Talk about how your relationships have changed over time. Share one person you have stayed in touch with. Talk about someone you drifted apart from or reconnected with. Respond to your partner and ask at least three follow-up questions.',
-  homePractice:'Record 60–90 seconds: How have one of your friendships changed over time? Include: how you met, what you used to do, how you stay connected now, one future plan.',
-  reference:['used to + V — chỉ thói quen QUÁ KHỨ, nay không còn','be used to + V-ing — quen với việc gì (hiện tại)','drift apart /ĐRÍP-tờ A-PÁT/ — xa cách dần','reach out /RÍTCH AUT/ — chủ động liên hệ','catch up with somebody — gặp để cập nhật tin tức','pick up where we left off — tiếp tục như chưa từng gián đoạn']
- },
- 3:{
-  title:'Handling Disagreement',vi:'Xử lý bất đồng',
-  goal:'Disagree without sounding cold and keep the conversation moving.',
-  vocab:[
-    {en:'agree with',vi:'đồng ý với ai / ý kiến',pattern:'I agree with you about the price.'},
-    {en:'disagree with',vi:'không đồng ý với ai / ý kiến',pattern:'I disagree with that idea.'},
-    {en:'have a point',vi:'có lý',pattern:'You have a point.'},
-    {en:'see your point',vi:'hiểu ý của bạn',pattern:'I see your point, but…'},
-    {en:'not necessarily',vi:'không hẳn',pattern:'Not necessarily. It depends…'},
-    {en:'bring it up',vi:'đề cập chuyện đó',pattern:'Can I bring something up?'},
-    {en:'work it out',vi:'cùng giải quyết',pattern:'We can work it out together.'},
-    {en:'compromise',vi:'thỏa hiệp',pattern:'Could we compromise?'},
-    {en:'change my mind',vi:'đổi ý',pattern:'It might change my mind.'},
-    {en:'be open to',vi:'sẵn sàng cân nhắc',pattern:"I'm open to trying it once."},
-    {en:'accusatory',vi:'mang tính buộc tội',pattern:'without sounding accusatory'},
-    {en:'acknowledge',vi:'ghi nhận, thừa nhận',pattern:"acknowledge B's good point"}
-  ],
-  grammar:[
-    {key:'I see your point, but …',ex:"I see your point, but we'll only be there for two nights."},
-    {key:'You have a point / That\'s fair',ex:'You have a point. What price range do you have in mind?'},
-    {key:'Although / True, although …',ex:"True, although I don't want to stay somewhere uncomfortable."},
-    {key:'Could we + V? (đề xuất mềm)',ex:'Could we make a simple cleaning schedule?'},
-    {key:'I wish + quá khứ hoàn thành',ex:'I wish you had told me earlier.'},
-    {key:'Neither do I / So do I',ex:'Neither do I. We could find a cheaper place nearby.'},
-    {key:'be open to + V-ing',ex:"I'm open to staying outside the centre if the transport is good."}
-  ],
-  reading:{
-    text:'Disagreeing well is a skill. The first rule is to <b>acknowledge</b> the other person before you disagree: “<b>I see your point</b>, but…” or “<b>You have a point</b>.” This keeps the conversation open instead of turning it into an argument. The second rule is to describe the problem, not the person. Compare “The kitchen has been messy lately” with “You are lazy.” The first invites a solution; the second invites a fight. The third rule is to offer an option: “<b>Could we</b> make a simple schedule?” Finally, be willing to <b>compromise</b> — and if you cannot agree yet, say so honestly instead of pretending.',
-    q:'Answer: 1) What is the first rule? 2) What is the difference in the two examples? 3) What should you do if you cannot agree yet?'
-  },
-  conversations:[
-    {title:'A weekend plan',audio:'audio/ref-audio/weekend-plan.mp3',lines:[
-      {speaker:'Mia',text:"I found a great hotel for our weekend trip. It's right in the city centre."},
-      {speaker:'Alex',text:"It looks nice, but I don't think we should spend that much."},
-      {speaker:'Mia',text:'Really? I think the location will save us a lot of time.'},
-      {speaker:'Alex',text:"I see your point, but we'll only be there for two nights."},
-      {speaker:'Mia',text:"True, although I don't want to stay somewhere uncomfortable."},
-      {speaker:'Alex',text:'Neither do I. We could find a cheaper place nearby.'},
-      {speaker:'Mia',text:'You have a point. What price range do you have in mind?'},
-      {speaker:'Alex',text:'Maybe something under two million a night. Would that work?'},
-      {speaker:'Mia',text:"Possibly. I'm open to staying outside the centre if the transport is good."},
-      {speaker:'Alex',text:'Fair enough. We can compare travel time as well as price.'},
-      {speaker:'Mia',text:"Okay. Let's each choose two places and look at them tonight."},
-      {speaker:'Alex',text:"Perfect. I'm sure we can work it out."}
-    ]},
-    {title:'A shared apartment',audio:'audio/ref-audio/shared-apartment.mp3',lines:[
-      {speaker:'Nina',text:'Ben, can I bring something up? The kitchen has been quite messy lately.'},
-      {speaker:'Ben',text:"I know. Work has been exhausting, so I haven't cleaned much this week."},
-      {speaker:'Nina',text:"I understand, but I can't keep doing all of it by myself."},
-      {speaker:'Ben',text:"That's fair. I didn't realise you were doing most of the cleaning."},
-      {speaker:'Nina',text:"I didn't say anything because I wanted to avoid an argument."},
-      {speaker:'Ben',text:'I wish you had told me earlier. We could have worked it out.'},
-      {speaker:'Nina',text:"You're right. Could we make a simple cleaning schedule?"},
-      {speaker:'Ben',text:"I'm open to that, although I don't want it to be too strict."},
-      {speaker:'Nina',text:"Fair enough. How about we each choose the jobs we don't mind doing?"},
-      {speaker:'Ben',text:'That sounds reasonable. I can cook and take out the rubbish.'},
-      {speaker:'Nina',text:"Great. I'll do the shopping and we can share the rest."},
-      {speaker:'Ben',text:"Deal. If something bothers us, let's bring it up sooner."}
-    ]}
-  ],
-  listening:[
-    "I see your point, but we'll only be there for two nights.",
-    'Neither do I. We could find a cheaper place nearby.',
-    'You have a point. What price range do you have in mind?',
-    'Can I bring something up? The kitchen has been quite messy lately.',
-    'I wish you had told me earlier. We could have worked it out.'
-  ],
-  exercises:[
-    {q:'I see your ___, but I don\'t agree.',options:['point','place','part','piece'],answer:0},
-    {q:'Could we ___ a simple schedule?',options:['do','make','take','give'],answer:1},
-    {q:'Can I ___ something up?',options:['take','bring','put','get'],answer:1},
-    {q:"I'm open ___ trying it once.",options:['for','to','with','at'],answer:1},
-    {q:'I wish you ___ told me earlier.',options:['have','had','has','having'],answer:1}
-  ],
-  speaking:[
-    'Texting is better than calling.',
-    'Friends should always reply quickly.',
-    "It's okay to cancel plans at the last minute.",
-    'Living alone is better than sharing a home.',
-    'People should avoid difficult conversations by text.',
-    "It's better to be honest than polite."
-  ],
-  roleplay:[
-    {title:'House rules',steps:['You need quiet after 10 p.m. Bring the issue up calmly.','You often call friends late. Explain why.','Respond to B\'s reason and suggest one rule.','Disagree with one detail and offer another option.','Compromise on quiet hours and exceptions.']},
-    {title:'A group plan',steps:['Prefer a quiet dinner because the person dislikes crowds.','Prefer a surprise party because it feels more memorable.',"Explain one risk and acknowledge B's good point.",'Ask a clarifying question and adjust your idea.','Choose a plan, budget, and one next step.']}
-  ],
-  finalTask:'Four-minute shared conversation. Choose one real-life decision on which you may disagree. State your view and explain why. Acknowledge one point from your partner. Ask at least two follow-up questions. Agree on a compromise or explain why you cannot agree yet.',
-  homePractice:'Record 90 seconds: Describe a disagreement that ended well. What helped? Include: the issue, both views, one useful response, the final solution.',
-  reference:['I see your point ≠ I agree — chỉ là ghi nhận','Neither do I / So do I — phải đảo trợ động từ','I wish + had + V3 — tiếc vì đã không làm gì','without sounding accusatory — không nghe như đang buộc tội','compromise /KHÓM-prờ-maiz/ — thỏa hiệp','work it out — cùng nhau giải quyết']
- }
-};
-TRACKS.e2.lessons=E2_LESSONS;
+TRACKS.e2.lessons=LESSON_DATA;
 
 // state
 const TRACK_NUM={},TRACK_PART={};
@@ -1069,14 +1232,19 @@ function renderTrack(tk){
   const n=TRACK_NUM[tk],L=T.lessons[n];
   const head=`<div class="e2-crumb">${T.badge} / <b>Bài ${n}</b>${L?(' / '+L.title):''}</div>
     <div class="e2-lesson-title">${L?(n+': '+L.title):('Bài '+n)}</div>
-    <div class="e2-lesson-goal">${L?(L.vi?L.vi+' · ':'')+(L.goal||''):(T.sub+' — nội dung bài này sẽ được cập nhật sau.')}</div>`;
+    <div class="e2-lesson-goal">${L?(L.vi?L.vi+' · ':'')+(L.goal||''):(T.sub+' — nội dung bài này sẽ được cập nhật sau.')}</div>
+    ${L&&L.today?`<div class="e2-today">${L.today.map(t=>`<span class="e2-today-chip">${t}</span>`).join('')}</div>`:''}`;
   if(!L){
     main.innerHTML=head+`<div class="e2-task-card"><div class="e2-task-label">Đang cập nhật</div><div class="e2-task-text">Nội dung bài ${n} của <b>${T.title}</b> sẽ được bổ sung sau. Các phần sẽ gồm: ${TRACK_PARTS.map(p=>p.name.replace('Phần ','')).join(' · ')}.</div></div>`;
     return;
   }
   const part=TRACK_PART[tk];
   if(!part){
-    main.innerHTML=head+`<div class="e2-part-grid">${TRACK_PARTS.map(p=>`<button class="e2-part" onclick="trackPart('${tk}','${p.id}')"><span class="e2-part-ico">${p.ico}</span><span class="e2-part-name">${p.name}</span><span class="e2-part-sub">${p.sub}</span></button>`).join('')}</div>`;
+    main.innerHTML=head+`<div class="e2-part-grid">${TRACK_PARTS.map(p=>{
+      const blocks=(L.parts&&L.parts[p.id])||[];
+      const n=blocks.length;
+      return `<button class="e2-part${n?'':' empty'}" ${n?`onclick="trackPart('${tk}','${p.id}')"`:'disabled'}><span class="e2-part-ico">${p.ico}</span><span class="e2-part-name">${p.name}</span><span class="e2-part-sub">${p.sub}${n?' · '+n+' mục':''}</span></button>`;
+    }).join('')}</div>`;
     return;
   }
   const P=TRACK_PARTS.find(p=>p.id===part);
@@ -1086,25 +1254,64 @@ function renderTrack(tk){
 }
 
 function trackBody(part,L,tk){
-  const has=(k)=>L[k]!==undefined&&L[k]!==null&&!(Array.isArray(L[k])&&!L[k].length);
-  if(!has(part)){
+  const blocks=(L.parts&&L.parts[part])||[];
+  if(!blocks.length){
     const p=TRACK_PARTS.find(x=>x.id===part);
     return `<div class="e2-task-card"><div class="e2-task-label">Đang cập nhật</div><div class="e2-task-text">Phần <b>${p?p.name:part}</b> của bài này sẽ được bổ sung sau.</div></div>`;
   }
-  switch(part){
-    case 'vocab':return `<div class="e2-vocab-grid">${L.vocab.map(v=>`<div class="e2-vocab-item"><div class="e2-vocab-en">${v.en} ${sayBtn(v.en)}</div><div class="e2-vocab-vi">${v.vi||''}</div>${v.pattern?`<div class="e2-vocab-pattern">${v.pattern}</div>`:''}</div>`).join('')}</div>`;
-    case 'grammar':return L.grammar.map(g=>`<div class="e2-gram-item"><div class="e2-gram-key">${g.key}</div><div class="e2-gram-ex">${g.ex}</div></div>`).join('');
-    case 'reading':return `<div class="e2-read">${L.reading.text}</div>${L.reading.q?`<div class="e2-task-card" style="margin-top:14px"><div class="e2-task-label">Câu hỏi</div><div class="e2-task-text">${L.reading.q}</div></div>`:''}`;
-    case 'conversations':return L.conversations.map((c,ci)=>`<div class="e2-conv-card"><div class="e2-conv-title"><span>${c.title}</span><span class="e2-conv-actions">${c.audio?`<button class="e2-say primary" onclick="playOriginal('${esc(c.audio)}',this)">🎧 Nghe bản gốc</button>`:''}<button class="e2-say" onclick="playConversation('${tk}',${TRACK_NUM[tk]||1},${ci})">▶ Play all</button></span></div>${c.lines.map(l=>`<div class="e2-conv-line"><span class="e2-conv-speaker">${l.speaker}</span><span style="flex:1">${l.text}</span>${sayBtn(l.text)}</div>`).join('')}</div>`).join('');
-    case 'listening':return `<p class="faint text-sm" style="margin-bottom:14px">Nghe từng câu, sau đó nhắc lại (shadowing).</p>`+L.listening.map(s=>`<div class="e2-speaking-item"><span style="flex:1">${s}</span>${sayBtn(s)}</div>`).join('');
-    case 'exercises':return L.exercises.map((e,i)=>`<div class="e2-quiz-item"><div class="e2-quiz-q">${i+1}. ${e.q}</div><div class="e2-quiz-opts">${e.options.map((o,j)=>`<button class="e2-quiz-opt" onclick="trackAnswer(this,${j===e.answer})">${o}</button>`).join('')}</div></div>`).join('');
-    case 'speaking':return L.speaking.map((s,i)=>`<div class="e2-speaking-item"><span class="n">${i+1}</span><span style="flex:1">${s}</span>${sayBtn(s)}</div>`).join('');
-    case 'roleplay':return L.roleplay.map(r=>`<div class="e2-roleplay-card"><div class="e2-roleplay-title">${r.title}</div><ul class="e2-roleplay-steps">${r.steps.map(s=>`<li>${s}</li>`).join('')}</ul></div>`).join('');
-    case 'finalTask':return `<div class="e2-task-card"><div class="e2-task-label">Final Task</div><div class="e2-task-text">${L.finalTask}</div></div>${L.homePractice?`<div class="e2-task-card" style="margin-top:12px"><div class="e2-task-label">Home Practice</div><div class="e2-task-text">${L.homePractice}</div></div>`:''}`;
-    case 'reference':return `<ul class="e2-ref">${L.reference.map(r=>`<li>${r}</li>`).join('')}</ul>`;
+  let di=0;
+  return blocks.map(b=>{if(b.t==='dialog'){b.__i=di++}return renderBlock(b,tk,part)}).join('');
+}
+
+function renderBlock(b,tk,part){
+  if(!b||!b.t)return '';
+  switch(b.t){
+    case 'h':return `<h4 class="blk-h">${b.text}</h4>`;
+    case 'p':return `<p class="blk-p">${b.text}</p>`;
+    case 'label':return `<div class="blk-label">${b.text}</div>`;
+    case 'ex':return `<div class="blk-ex">${b.text}</div>`;
+    case 'note':return `<div class="blk-note"><span class="blk-note-ico">💡</span><span>${b.text}</span></div>`;
+    case 'chips':return `<div class="blk-chips">${b.items.map(c=>`<span class="blk-chip">${c}</span>`).join('')}</div>`;
+    case 'list':return `<ul class="blk-list">${b.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+    case 'say':return `<div class="blk-say">${b.items.map(s=>`<div class="blk-say-row"><span>${s}</span>${sayBtn(s)}</div>`).join('')}</div>`;
+    case 'bank':return `<div class="blk-bank"><span class="blk-bank-label">WORD BANK</span>${b.items.map(w=>`<span class="blk-bank-item">${w}</span>`).join('')}</div>`;
+    case 'words':return `<div class="blk-words">${b.items.map(w=>`<div class="blk-word"><div class="blk-word-en">${w.en} ${sayBtn(w.en)}</div>${w.vi?`<div class="blk-word-vi">${w.vi}</div>`:''}${w.def?`<div class="blk-word-def">${w.def}</div>`:''}</div>`).join('')}</div>`;
+    case 'table':return `<div class="blk-table-wrap"><table class="blk-table"><thead><tr>${b.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    case 'frames':return b.groups.map(g=>`<div class="blk-frame-group"><div class="blk-frame-name">${g.group}</div><div class="blk-frame-items">${g.items.map(i=>`<div class="blk-frame-item"><span>${i}</span>${sayBtn(i)}</div>`).join('')}</div></div>`).join('');
+    case 'layers':return `<div class="blk-layers">${b.items.map((l,i)=>`<div class="blk-layer"><div class="blk-layer-head"><span class="blk-layer-num">${i+1}</span><span class="blk-layer-label">${l.label}</span></div><div class="blk-layer-text">${l.text} ${sayBtn(l.text)}</div></div>`).join('')}</div>`;
+    case 'quiz':return `<div class="blk-quiz">${b.items.map((e,i)=>`<div class="blk-quiz-item"><div class="blk-quiz-q">${i+1}. ${e.q}</div><div class="blk-quiz-opts">${e.options.map((o,j)=>`<button class="blk-quiz-opt" onclick="blockAnswer(this,${j===e.answer})">${o}</button>`).join('')}</div></div>`).join('')}</div>`;
+    case 'fill':return `<div class="blk-fill">${b.items.map(l=>`<div class="blk-fill-line"><span class="blk-fill-speaker">${l.speaker}</span><span class="blk-fill-text">${l.text}</span>${sayBtn(l.text)}</div>`).join('')}</div>`;
+    case 'dialog':{
+      const lines=(b.lines||[]).map(l=>`<div class="blk-fill-line"><span class="blk-fill-speaker">${l.speaker}</span><span class="blk-fill-text">${l.text}</span>${sayBtn(l.text)}</div>`).join('');
+      const meta=[b.target?`<span class="blk-meta-tag">🎯 ${b.target}</span>`:'',b.lift?`<span class="blk-meta-tag">⬆️ ${b.lift}</span>`:''].join('');
+      const acts=[b.audio?`<button class="e2-say primary" onclick="playOriginal('${esc(b.audio)}',this)">🎧 Nghe bản gốc</button>`:'',`<button class="e2-say" onclick="playBlockDialog('${tk}','${part}',${b.__i||0})">▶ Play all</button>`].join('');
+      return `<div class="e2-conv-card"><div class="e2-conv-title"><span>${b.title}</span><span class="e2-conv-actions">${acts}</span></div>${meta?`<div class="blk-meta">${meta}</div>`:''}${b.question?`<div class="blk-dialog-q">❓ ${b.question}</div>`:''}${lines}${b.check?`<div class="blk-check"><div class="blk-check-label">Conversation check</div><ol class="blk-check-list">${b.check.map(c=>`<li>${c}</li>`).join('')}</ol></div>`:''}${b.answers?`<details class="blk-answers"><summary>Xem đáp án</summary><div>${b.answers}</div></details>`:''}${b.note?`<div class="blk-note"><span class="blk-note-ico">💡</span><span>${b.note}</span></div>`:''}</div>`;
+    }
+    case 'steps':return `<div class="e2-roleplay-card"><div class="e2-roleplay-title">${b.title}</div>${b.context?`<div class="blk-context">${b.context}</div>`:''}<ol class="blk-steps">${b.steps.map(s=>`<li>${s}</li>`).join('')}</ol>${b.useful?`<div class="blk-useful"><b>Useful language:</b> ${b.useful}</div>`:''}</div>`;
+    case 'retrieval':return `<div class="blk-retrieval">${b.items.map(r=>`<div class="blk-ret-item"><span class="blk-ret-vi">${r.vi}</span><span class="blk-ret-arrow">→</span><span class="blk-ret-en">${r.en}</span>${sayBtn(r.en)}</div>`).join('')}</div>`;
     default:return '';
   }
 }
+
+function blockAnswer(btn,ok){
+  btn.classList.remove('ok','no');
+  btn.classList.add(ok?'ok':'no');
+  toast(ok?'Correct!':'Wrong answer',ok?'ok':'err');
+}
+
+function playBlockDialog(tk,part,ci){
+  stopConversation();
+  const L=TRACKS[tk]&&TRACKS[tk].lessons[TRACK_NUM[tk]];
+  const blocks=(L&&L.parts&&L.parts[part])||[];
+  const dialogs=blocks.filter(b=>b.t==='dialog');
+  const d=dialogs[ci];
+  if(!d||!d.lines||!d.lines.length)return;
+  CONV_QUEUE=d.lines.map(l=>l.text);
+  CONV_IDX=0;
+  toast('Playing conversation…','ok');
+  playNextLine();
+}
+
 function trackAnswer(btn,ok){
   btn.classList.remove('ok','no');
   btn.classList.add(ok?'ok':'no');

@@ -58,8 +58,7 @@ api.trackGo('e2',1);
 let main=global.document.getElementById('e2-main').innerHTML;
 check('E2 L1 shows 10 part cards', (main.match(/class="e2-part"/g)||[]).length===10);
 const L=api.TRACKS.e2.lessons[1];
-const req=['title','vocab','grammar','reading','conversations','listening','exercises','speaking','roleplay','finalTask','reference'];
-check('E2 L1 has all 10 sections', req.every(f=>L[f]!==undefined), req.filter(f=>L[f]===undefined).join(','));
+check('E2 L1 has all 10 part sets', api.TRACK_PARTS.every(p=>Array.isArray(L.parts[p.id])), Object.keys(L.parts).join(','));
 for(const p of api.TRACK_PARTS.map(x=>x.id)){
   const html=api.trackBody(p,L,'e2');
   check('E2 L1 body '+p, html.length>20 && !html.includes('undefined'), 'len='+html.length);
@@ -68,7 +67,7 @@ for(const p of api.TRACK_PARTS.map(x=>x.id)){
 api.trackPart('e2','exercises');
 main=global.document.getElementById('e2-main').innerHTML;
 const body=global.document.getElementById('e2-body').innerHTML;
-check('E2 exercises panel opens', main.includes('Phần 6: Bài tập') && (body.match(/e2-quiz-item/g)||[]).length===5);
+check('E2 exercises panel opens', main.includes('Phần 6: Bài tập') && (body.match(/blk-quiz-opt/g)||[]).length>=32, 'opts='+(body.match(/blk-quiz-opt/g)||[]).length);
 // back
 api.trackBack('e2');
 main=global.document.getElementById('e2-main').innerHTML;

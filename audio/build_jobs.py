@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Build the render job list for every lesson in MoveTalk.
 
-Reads TRACKS data straight out of index.html (the <script> block), assigns a
+Reads LESSON_DATA (block schema) straight out of index.html, assigns a
 voice per string, and prints a JSON job array on stdout.
 
 Voice assignment
 ----------------
-* conversations -> the line's speaker (male names -> alex, else mia)
-* everything else -> the lesson's default voice (DEFAULT_VOICE)
+* dialog lines -> the line's speaker (male names -> alex, else mia)
+* everything else -> DEFAULT_VOICE (mia)
 
 Output paths are content-hashed so editing one sentence only re-renders that
 one file, and identical sentences are rendered once.
@@ -26,12 +26,9 @@ CLIPS = os.path.join(AUDIO, "clips")
 MALE = {"alex", "ben", "daniel", "liam", "dan", "tom", "david", "john", "mark"}
 DEFAULT_VOICE = "mia"
 
-# Which TRACKS keys hold spoken strings, and how to read them.
-SPOKEN_FIELDS = ("vocab", "conversations", "listening", "speaking")
 
-
-def load_tracks():
-    """Evaluate the TRACKS object out of index.html without a browser."""
+def load_lesson_data():
+    """Evaluate LESSON_DATA out of index.html without a browser."""
     import subprocess
     import tempfile
 
@@ -53,7 +50,7 @@ def load_tracks():
         "globalThis.clearInterval = () => {};",
         "globalThis.setTimeout = () => {};",
         js,
-        "console.log(JSON.stringify(TRACKS));",
+        "console.log(JSON.stringify(LESSON_DATA));",
     ])
     with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False, encoding="utf-8") as fh:
         fh.write(driver)
@@ -63,7 +60,7 @@ def load_tracks():
     finally:
         os.unlink(path)
     if out.returncode:
-        sys.exit("failed to evaluate TRACKS:\n" + out.stderr)
+        sys.exit("failed to evaluate LESSON_DATA:\n" + out.stderr)
     return json.loads(out.stdout)
 
 
@@ -73,31 +70,6 @@ def slug(text):
 
 def voice_for(speaker):
     return "alex" if (speaker or "").strip().lower() in MALE else DEFAULT_VOICE
-
-
-def collect(tracks):
-    """-> list of (text, voice) in a stable order, deduped."""
-    seen = {}
-    order = []
-    for tk in sorted(tracks):
-        lessons = tracks[tk].get("lessons") or {}
-        for num in sorted(lessons, key=lambda n: int(n)):
-            L = lessons[num]
-            for field in SPOKEN_FIELDS:
-                val = L.get(field)
-                if not val:
-                    continue
-                if field == "vocab":
-                    for v in val:
-                        add(seen, order, v["en"], DEFAULT_VOICE)
-                elif field == "conversations":
-                    for conv in val:
-                        for line in conv.get("lines", []):
-                            add(seen, order, line["text"], voice_for(line.get("speaker")))
-                else:
-                    for s in val:
-                        add(seen, order, s, DEFAULT_VOICE)
-    return order
 
 
 def add(seen, order, text, voice):
@@ -111,9 +83,52 @@ def add(seen, order, text, voice):
     order.append((text, voice))
 
 
+def collect(lessons):
+    """-> list of (text, voice) in a stable order, deduped."""
+    seen = {}
+    order = []
+    for num in sorted(lessons, key=lambda n: int(n)):
+        L = lessons[num]
+        parts = L.get("parts") or {}
+        for part_id in sorted(parts):
+            blocks = parts[part_id] or []
+            for b in blocks:
+                t = b.get("t")
+                if t == "words":
+                    for item in b.get("items", []):
+                        if isinstance(item, dict):
+                            add(seen, order, item.get("en"), DEFAULT_VOICE)
+                        else:
+                            add(seen, order, item, DEFAULT_VOICE)
+                elif t == "bank":
+                    for item in b.get("items", []):
+                        if isinstance(item, dict):
+                            add(seen, order, item.get("en"), DEFAULT_VOICE)
+                        else:
+                            add(seen, order, item, DEFAULT_VOICE)
+                elif t == "quiz":
+                    for item in b.get("items", []):
+                        add(seen, order, item.get("q"), DEFAULT_VOICE)
+                        for opt in item.get("options", item.get("opts", [])):
+                            add(seen, order, opt, DEFAULT_VOICE)
+                elif t == "dialog":
+                    for line in b.get("lines", []):
+                        add(seen, order, line.get("text"), voice_for(line.get("speaker")))
+                elif t == "fill":
+                    for item in b.get("items", []):
+                        add(seen, order, item.get("before"), DEFAULT_VOICE)
+                        add(seen, order, item.get("after"), DEFAULT_VOICE)
+                elif t == "p":
+                    add(seen, order, b.get("text"), DEFAULT_VOICE)
+                elif t == "ex":
+                    for item in b.get("items", []):
+                        add(seen, order, item.get("en"), DEFAULT_VOICE)
+    return order
+
+
 def main():
-    tracks = load_tracks()
-    items = collect(tracks)
+    lessons = load_lesson_data()
+    items = collect(lessons)
     jobs = [
         {
             "text": text,
