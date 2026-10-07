@@ -27,8 +27,8 @@ t('3 lessons', Object.keys(lessons).length === 3, 'got ' + Object.keys(lessons).
 
 const EXPECT = {
   1: { title: 'People in Your Life', vocab: 17, grammar: 12, reading: 6, conversations: 6, listening: 6, exercises: 7, speaking: 15, roleplay: 5, finalTask: 12, reference: 7 },
-  2: { title: 'Keeping in Touch', vocab: 17, grammar: 9, reading: 14, conversations: 8, listening: 6, exercises: 7, speaking: 8, roleplay: 4, finalTask: 12, reference: 7 },
-  3: { title: 'Handling Disagreement', vocab: 25, grammar: 10, reading: 15, conversations: 9, listening: 6, exercises: 9, speaking: 10, roleplay: 7, finalTask: 11, reference: 9 },
+  2: { title: 'Keeping in Touch', vocab: 21, grammar: 9, reading: 14, conversations: 8, listening: 6, exercises: 7, speaking: 8, roleplay: 4, finalTask: 12, reference: 7 },
+  3: { title: 'Handling Disagreement', vocab: 29, grammar: 10, reading: 15, conversations: 9, listening: 6, exercises: 9, speaking: 10, roleplay: 7, finalTask: 11, reference: 9 },
 };
 
 for (const num of ['1', '2', '3']) {

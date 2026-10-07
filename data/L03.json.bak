@@ -1,0 +1,448 @@
+{
+  "title": "Handling Disagreement",
+  "vi": "Xử lý bất đồng",
+  "goal": "By the end of the lesson, you can disagree without sounding cold and keep the conversation moving.",
+  "today": ["Review L02", "Learn useful words", "Build stronger answers", "Solve a real problem", "Conversation first"],
+  "parts": {
+    "vocab": [
+      { "t": "h", "text": "L02 review · Complete the conversation" },
+      { "t": "bank", "items": ["keep in touch", "catch up", "reach out", "drift apart", "a lot going on", "make time for"] },
+      { "t": "fill", "items": [
+        { "speaker": "A", "text": "Have you spoken to Emma recently?" },
+        { "speaker": "B", "text": "Not really. We've both had __________, so we slowly __________." },
+        { "speaker": "A", "text": "That's a shame. Why don't you __________ to her?" },
+        { "speaker": "B", "text": "I want to, but I'm worried the conversation might feel awkward." },
+        { "speaker": "A", "text": "You could ask her to meet for coffee and __________." },
+        { "speaker": "B", "text": "Good idea. I need to __________ the people I care about." },
+        { "speaker": "A", "text": "Exactly. You can still __________ even when life gets busy." }
+      ]},
+      { "t": "note", "text": "Đáp án: a lot going on · drifted apart · reach out · catch up · make time for · keep in touch. Làm một mình trước, sau đó so sánh bằng lời nói. Pair practice: đọc 1 lần, rồi thay Emma bằng người thật và đổi ít nhất 2 chi tiết. Thêm 2 câu nối tiếp: Who is the person? · Why did you lose touch? · What would you say first?" },
+
+      { "t": "h", "text": "Vocabulary in context · Different views" },
+      { "t": "bank", "items": ["agree with", "disagree with", "have a point", "see your point", "not necessarily"] },
+      { "t": "quiz", "items": [
+        { "q": "I ______ you about the price. It is too expensive.", "options": ["agree with", "disagree with", "have a point", "not necessarily"], "answer": 0 },
+        { "q": "I ______ that idea because it would create more work.", "options": ["agree with", "disagree with", "have a point", "see your point"], "answer": 1 },
+        { "q": "You ______. We should check the details before deciding.", "options": ["agree with", "disagree with", "have a point", "not necessarily"], "answer": 2 },
+        { "q": "I can ______, but I still feel differently.", "options": ["agree with", "disagree with", "see your point", "not necessarily"], "answer": 2 },
+        { "q": "'Is working from home always easier?' '______. It depends on your home.'", "options": ["You have a point", "I agree with", "Not necessarily", "See your point"], "answer": 2 }
+      ]},
+      { "t": "note", "text": "Đáp án: 1 agree with · 2 disagree with · 3 have a point · 4 see your point · 5 Not necessarily. Giải thích 1 đáp án bằng lý do của bạn." },
+
+      { "t": "h", "text": "Meaning, pronunciation, and form · Different views" },
+      { "t": "table", "head": ["Expression", "IPA", "Meaning", "Natural pattern"], "rows": [
+        ["agree with", "", "cùng quan điểm", "agree with + person / idea"],
+        ["disagree with", "/ˌdɪsəˈɡriː/", "không đồng ý", "disagree with + person / idea"],
+        ["have a point", "", "có lý", "You have a point."],
+        ["see your point", "", "hiểu ý của bạn", "I see your point, but…"],
+        ["not necessarily", "/ˌnesəˈserəli/", "không hẳn", "Not necessarily. It depends…"]
+      ]},
+      { "t": "note", "text": "Đọc disagree với trọng âm ở âm tiết cuối. Drill necessarily chậm trước, rồi tốc độ tự nhiên. 5-second drill: giáo viên đưa 1 ý. Học viên chọn 1 cách đáp và thêm 1 lý do." },
+
+      { "t": "h", "text": "Vocabulary in context · Solving the problem" },
+      { "t": "bank", "items": ["bring it up", "work it out", "compromise", "change my mind", "be open to"] },
+      { "t": "quiz", "items": [
+        { "q": "Something has been bothering me, so I need to ______ calmly.", "options": ["bring it up", "work it out", "compromise", "be open to"], "answer": 0 },
+        { "q": "We disagree, but I'm sure we can ______ together.", "options": ["bring it up", "work it out", "compromise", "change my mind"], "answer": 1 },
+        { "q": "Neither option is perfect. We may need to ______.", "options": ["bring it up", "work it out", "compromise", "be open to"], "answer": 2 },
+        { "q": "Your example is convincing. It might ______.", "options": ["bring it up", "work it out", "change my mind", "be open to"], "answer": 2 },
+        { "q": "I don't love the idea, but I'm ______ trying it once.", "options": ["bring it up", "work it out", "compromise", "open to"], "answer": 3 }
+      ]},
+      { "t": "note", "text": "Đáp án: 1 bring it up · 2 work it out · 3 compromise · 4 change my mind · 5 open to." },
+
+      { "t": "h", "text": "Meaning, pronunciation, and form · Solving the problem" },
+      { "t": "table", "head": ["Expression", "IPA", "Meaning", "Natural pattern"], "rows": [
+        ["bring it up", "", "đề cập chuyện đó", "bring + topic + up"],
+        ["work it out", "", "cùng giải quyết", "work it out together"],
+        ["compromise", "/ˈkɒmprəmaɪz/", "thỏa hiệp", "compromise on + noun"],
+        ["change my mind", "", "đổi ý", "change someone's mind"],
+        ["be open to", "/ˈəʊpən/", "sẵn sàng cân nhắc", "be open to + noun / V-ing"]
+      ]},
+      { "t": "ex", "text": "Complete aloud: I'm open to ______ing. We could compromise on ______." },
+      { "t": "note", "text": "Chú ý open to + V-ing, KHÔNG dùng to + động từ nguyên thể. Compromise nhấn âm tiết đầu." },
+
+      { "t": "h", "text": "Quick choice · What would you say?" },
+      { "t": "table", "head": ["Tình huống", "Câu nói"], "rows": [
+        ["Your friend makes a good point.", "You have a point."],
+        ["You understand but still disagree.", "I see your point, but…"],
+        ["You want to discuss a problem.", "Can I bring something up?"],
+        ["You want both people to adjust.", "Could we compromise?"],
+        ["You may consider a new option.", "I'm open to trying it."]
+      ]},
+      { "t": "note", "text": "PAIR CHALLENGE · Thêm 1 câu thứ hai thực tế — lý do, ví dụ, hoặc câu hỏi — cho mỗi cách đáp." },
+
+      { "t": "h", "text": "Language lift · Softer disagreement" },
+      { "t": "table", "head": ["Quá trực tiếp", "Mềm hơn"], "rows": [
+        ["That's wrong.", "I'm not sure I agree."],
+        ["That won't work.", "I'm not sure that would work."],
+        ["You don't understand.", "I may not have explained my point clearly."],
+        ["No.", "Not necessarily. It may depend on the situation."],
+        ["Do this instead.", "Could we try another option?"]
+      ]},
+      { "t": "note", "text": "Drill với ngữ điệu ấm và tông xuống-lên ở 'I'm not sure'. Sau đó học viên làm mềm 3 câu trực tiếp mới từ giáo viên." }
+    ],
+
+    "grammar": [
+      { "t": "h", "text": "Answer building · More depth, still on topic" },
+      { "t": "layers", "items": [
+        { "label": "VIEW", "text": "I don't necessarily think friends should reply immediately." },
+        { "label": "REASON", "text": "Sometimes people are busy or need time to think." },
+        { "label": "DETAIL", "text": "For example, a thoughtful reply may be better than a quick one." },
+        { "label": "BALANCE", "text": "However, if the message is urgent, they should respond as soon as possible." },
+        { "label": "RETURN", "text": "What do you think?" }
+      ]},
+      { "t": "note", "text": "Một câu trả lời hoàn chỉnh có thể là 2, 3, hoặc 4 câu. Dừng khi ý đã rõ. Xây câu trả lời thứ hai cùng nhau: People should never discuss serious issues by text." },
+
+      { "t": "h", "text": "Language lift · Upgrade one sentence" },
+      { "t": "table", "head": ["Cấu trúc", "Ví dụ"], "rows": [
+        ["THAT-CLAUSE", "I think that the plan is too expensive. · I don't agree that everyone needs to join."],
+        ["RELATIVE CLAUSE", "A friend who listens calmly is easier to talk to. · The option that costs less may be better."],
+        ["ADJECTIVE + TO", "It's difficult to stay calm. · I'm happy to consider another option."],
+        ["ADVERB + VERB", "She explained her view calmly. · We eventually found a solution."]
+      ]},
+      { "t": "note", "text": "Cho 1 câu cơ bản như 'The plan is bad.' Học viên nâng cấp bằng MỘT cấu trúc duy nhất. Tránh xếp chồng mọi cấu trúc vào một câu." },
+
+      { "t": "h", "text": "Follow-up questions · Understand before replying" },
+      { "t": "table", "head": ["Nhóm", "Câu hỏi nối tiếp"], "rows": [
+        ["CLARIFY", "What do you mean by that? · Could you give an example?"],
+        ["REASON", "What makes you feel that way? · Why do you think so?"],
+        ["CONDITION", "Would you feel differently if…?"],
+        ["PRIORITY", "Which matters more to you: time, money, or comfort?"],
+        ["SOLUTION", "What would be a fair compromise?"]
+      ]},
+      { "t": "ex", "text": "Rule · Understand the reason before defending your view." },
+      { "t": "note", "text": "Đối tác hỏi 2 câu nối tiếp từ 2 nhóm khác nhau trước khi đưa ý kiến của mình." }
+    ],
+
+    "reading": [
+      { "t": "h", "text": "Speak first · Small disagreements" },
+      { "t": "note", "text": "Chọn 1 ý. Nêu quan điểm trong 2–4 câu. Đối tác phản hồi. Nghe trước, phản hồi 1 điểm trước khi thêm ý của bạn." },
+      { "t": "list", "items": [
+        "Texting is better than calling.",
+        "Friends should always reply quickly.",
+        "It's okay to cancel plans at the last minute.",
+        "Living alone is better than sharing a home."
+      ]},
+
+      { "t": "h", "text": "Speak from the dialogue · Chọn 1 quyết định" },
+      { "t": "note", "text": "Thảo luận 2 phút và đi đến kết quả. Cho 30 giây chuẩn bị im lặng, sau đó 2 phút không ngắt lời. Dùng ít nhất 3 cụm: I see your point · You have a point · I'm open to… · Could we compromise? · Let's compare…" },
+      { "t": "list", "items": [
+        "a hotel for a short trip",
+        "a restaurant for a celebration",
+        "how to travel to another city",
+        "how much to spend on a gift"
+      ]},
+      { "t": "ex", "text": "Result required · choose one option." },
+
+      { "t": "h", "text": "Speaking round · Everyday opinions" },
+      { "t": "note", "text": "Chọn 2 ý. Trả lời tập trung. Đối tác phản hồi vào LÝ DO của bạn. Mỗi lượt trao đổi kéo dài khoảng 90 giây gồm cả câu nối tiếp." },
+      { "t": "list", "items": [
+        "People should avoid difficult conversations by text.",
+        "It's better to be honest than polite.",
+        "Couples should share every expense equally.",
+        "Friends do not need to agree on important issues."
+      ]},
+      { "t": "ex", "text": "Try: Not necessarily… · I see your point, but… · That depends on… · You have a point." },
+
+      { "t": "h", "text": "Problem-solving circle · One issue, one result" },
+      { "t": "list", "items": [
+        "A friend often arrives late.",
+        "A colleague plays music while working.",
+        "A family member shares your photos online.",
+        "A friend cancels plans too often."
+      ]},
+      { "t": "frames", "groups": [
+        { "group": "BỐN BƯỚC", "items": ["bring it up", "listen and clarify", "suggest two options", "compromise"] }
+      ]},
+      { "t": "note", "text": "Dùng nhóm 3 người nếu có thể: 2 người nói và 1 người quan sát. Người quan sát nghe: ngôn ngữ tôn trọng · lý do rõ ràng · một quyết định thật." }
+    ],
+
+    "conversations": [
+      { "t": "dialog", "title": "A weekend plan", "audio": "audio/ref-audio/weekend-plan.mp3",
+        "target": "I see your point · I'm open to · work it out", "lift": "right in the city centre · save us a lot of time",
+        "question": "Listen once for the main idea. What do Mia and Alex disagree about, and how do they solve it?",
+        "lines": [
+          { "speaker": "Mia", "text": "I found a great hotel for our weekend trip. It's right in the city centre." },
+          { "speaker": "Alex", "text": "It looks nice, but I don't think we should spend that much." },
+          { "speaker": "Mia", "text": "Really? I think the location will save us a lot of time." },
+          { "speaker": "Alex", "text": "I see your point, but we'll only be there for two nights." },
+          { "speaker": "Mia", "text": "True, although I don't want to stay somewhere uncomfortable." },
+          { "speaker": "Alex", "text": "Neither do I. We could find a cheaper place nearby." },
+          { "speaker": "Mia", "text": "You have a point. What price range do you have in mind?" },
+          { "speaker": "Alex", "text": "Maybe something under two million a night. Would that work?" },
+          { "speaker": "Mia", "text": "Possibly. I'm open to staying outside the centre if the transport is good." },
+          { "speaker": "Alex", "text": "Fair enough. We can compare travel time as well as price." },
+          { "speaker": "Mia", "text": "Okay. Let's each choose two places and look at them tonight." },
+          { "speaker": "Alex", "text": "Perfect. I'm sure we can work it out." }
+        ],
+        "check": [
+          "Why does Mia prefer the first hotel?",
+          "What price does Alex suggest?",
+          "How does Alex show that he understands Mia?",
+          "Which line shows that Mia becomes flexible?",
+          "Whose suggestion seems more reasonable to you? Why?"
+        ],
+        "answers": "location saves time · under two million · I see your point · I'm open to staying outside the centre",
+        "note": "Phát audio đầy đủ với lời thoại che trước. Lần 2: hiện slide. Sau đó chia vai. Các cụm được đánh dấu là cách bất đồng lịch sự và giải quyết vấn đề." },
+
+      { "t": "dialog", "title": "A shared apartment", "audio": "audio/ref-audio/shared-apartment.mp3",
+        "target": "bring something up · work it out · sound reasonable", "lift": "avoid an argument · too strict",
+        "question": "Listen for the problem and the solution. What was bothering Nina, and what solution did they agree on?",
+        "lines": [
+          { "speaker": "Nina", "text": "Ben, can I bring something up? The kitchen has been quite messy lately." },
+          { "speaker": "Ben", "text": "I know. Work has been exhausting, so I haven't cleaned much this week." },
+          { "speaker": "Nina", "text": "I understand, but I can't keep doing all of it by myself." },
+          { "speaker": "Ben", "text": "That's fair. I didn't realise you were doing most of the cleaning." },
+          { "speaker": "Nina", "text": "I didn't say anything because I wanted to avoid an argument." },
+          { "speaker": "Ben", "text": "I wish you had told me earlier. We could have worked it out." },
+          { "speaker": "Nina", "text": "You're right. Could we make a simple cleaning schedule?" },
+          { "speaker": "Ben", "text": "I'm open to that, although I don't want it to be too strict." },
+          { "speaker": "Nina", "text": "Fair enough. How about we each choose the jobs we don't mind doing?" },
+          { "speaker": "Ben", "text": "That sounds reasonable. I can cook and take out the rubbish." },
+          { "speaker": "Nina", "text": "Great. I'll do the shopping, and we can share the rest." },
+          { "speaker": "Ben", "text": "Deal. If something bothers us, let's bring it up sooner." }
+        ],
+        "check": [
+          "What problem does Nina bring up?",
+          "Why hasn't Ben cleaned much this week?",
+          "Why did Nina avoid talking about the problem earlier?",
+          "What solution do they finally agree on?",
+          "What exact phrase does Nina use to introduce the problem politely?",
+          "Which three short responses help reduce the tension?"
+        ],
+        "answers": "1 The kitchen has been messy and Nina has been doing most of the cleaning. · 2 Work has been exhausting. · 3 She wanted to avoid an argument. · 4 They agree to make a flexible schedule, choose jobs they do not mind, and bring up future problems sooner. · 5 Can I bring something up? · 6 That's fair; I'm open to that; Fair enough / That sounds reasonable.",
+        "note": "Lần nghe 1: che lời thoại và xác định vấn đề. Lần 2: hiện slide. Sau đó đọc theo vai với tông bình tĩnh, xây dựng. KHÔNG hiện transcript trước khi hỏi các câu trên." },
+
+      { "t": "h", "text": "Conversation 2 · Meaning and language" },
+      { "t": "table", "head": ["Cụm", "Nghĩa"], "rows": [
+        ["bring something up", "start talking about a concern"],
+        ["by myself", "without help from another person"],
+        ["avoid an argument", "try not to start a conflict"],
+        ["too strict", "not flexible enough"],
+        ["sound reasonable", "seem fair and practical"]
+      ]},
+      { "t": "p", "text": "Personal response: Is it better to bring up a small problem immediately?" },
+      { "t": "note", "text": "Trả lời 3–4 câu, có 1 ví dụ thật hoặc tưởng tượng." },
+
+      { "t": "h", "text": "Dialogue rebuild · Use the meaning" },
+      { "t": "note", "text": "CHE BẢN GỐC. Học viên có thể tái tạo bản gốc hoặc tạo kế hoạch chuyến đi mới. Độ chính xác về ý nghĩa quan trọng hơn từng chữ." },
+      { "t": "fill", "items": [
+        { "speaker": "A", "text": "I found a great __________ for our trip." },
+        { "speaker": "B", "text": "It looks nice, but __________________________." },
+        { "speaker": "A", "text": "I think the location will ____________________." },
+        { "speaker": "B", "text": "I see your point, but ________________________." },
+        { "speaker": "A", "text": "You have a point. What ______________________?" },
+        { "speaker": "B", "text": "Maybe something under _______________________." },
+        { "speaker": "A", "text": "I'm open to __________ if ____________________." },
+        { "speaker": "B", "text": "Fair enough. We can compare _________________ ." },
+        { "speaker": "A", "text": "Let's ______________________________________." },
+        { "speaker": "B", "text": "Great. I'm sure we can work it out." }
+      ]}
+    ],
+
+    "listening": [
+      { "t": "h", "text": "Shadowing · Nghe từng câu rồi nhắc lại" },
+      { "t": "note", "text": "Bấm 🔊 để nghe từng câu, sau đó nhắc lại y hệt ngữ điệu. Làm 2 lượt: lượt 1 nhìn chữ, lượt 2 che chữ." },
+      { "t": "say", "items": [
+        "I see your point, but we'll only be there for two nights.",
+        "You have a point. What price range do you have in mind?",
+        "I'm open to staying outside the centre if the transport is good.",
+        "Fair enough. We can compare travel time as well as price.",
+        "Ben, can I bring something up? The kitchen has been quite messy lately.",
+        "I understand, but I can't keep doing all of it by myself.",
+        "I wish you had told me earlier. We could have worked it out.",
+        "Deal. If something bothers us, let's bring it up sooner."
+      ]},
+      { "t": "h", "text": "Micro-focus · Ngữ điệu bất đồng lịch sự" },
+      { "t": "table", "head": ["Câu", "Ngữ điệu"], "rows": [
+        ["I'm not sure I agree.", "xuống-lên ở 'sure' — nghe mềm, không gay gắt"],
+        ["I see your point, but…", "lên nhẹ ở 'point', rồi xuống ở 'but'"],
+        ["That's fair.", "xuống ở 'fair' — công nhận thật lòng"],
+        ["Would that work?", "lên ở cuối — câu hỏi thật, không phải thách thức"],
+        ["I'm open to that, although…", "xuống ở 'open', lên nhẹ ở 'although'"]
+      ]},
+      { "t": "note", "text": "Cùng một câu, ngữ điệu khác nhau sẽ nghe lịch sự hoặc gay gắt. Luyện nói câu 'I'm not sure' với giọng ấm, không cau mày." }
+    ],
+
+    "exercises": [
+      { "t": "h", "text": "Bài tập 1 · Chọn từ đúng" },
+      { "t": "quiz", "items": [
+        { "q": "I ______ you about the price. It is too expensive.", "options": ["agree with", "disagree with", "have a point", "not necessarily"], "answer": 0 },
+        { "q": "I ______ that idea because it would create more work.", "options": ["agree with", "disagree with", "have a point", "see your point"], "answer": 1 },
+        { "q": "You ______. We should check the details before deciding.", "options": ["agree with", "disagree with", "have a point", "not necessarily"], "answer": 2 },
+        { "q": "I can ______, but I still feel differently.", "options": ["agree with", "disagree with", "see your point", "not necessarily"], "answer": 2 },
+        { "q": "Something has been bothering me, so I need to ______ calmly.", "options": ["bring it up", "work it out", "compromise", "be open to"], "answer": 0 },
+        { "q": "We disagree, but I'm sure we can ______ together.", "options": ["bring it up", "work it out", "compromise", "change my mind"], "answer": 1 },
+        { "q": "Neither option is perfect. We may need to ______.", "options": ["bring it up", "work it out", "compromise", "be open to"], "answer": 2 },
+        { "q": "Your example is convincing. It might ______.", "options": ["bring it up", "work it out", "change my mind", "be open to"], "answer": 2 }
+      ]},
+
+      { "t": "h", "text": "Bài tập 2 · Điền vào đoạn hội thoại (ôn L02)" },
+      { "t": "bank", "items": ["keep in touch", "catch up", "reach out", "drift apart", "a lot going on", "make time for"] },
+      { "t": "fill", "items": [
+        { "speaker": "A", "text": "Have you spoken to Emma recently?" },
+        { "speaker": "B", "text": "Not really. We've both had __________, so we slowly __________." },
+        { "speaker": "A", "text": "That's a shame. Why don't you __________ to her?" },
+        { "speaker": "B", "text": "I want to, but I'm worried the conversation might feel awkward." },
+        { "speaker": "A", "text": "You could ask her to meet for coffee and __________." },
+        { "speaker": "B", "text": "Good idea. I need to __________ the people I care about." },
+        { "speaker": "A", "text": "Exactly. You can still __________ even when life gets busy." }
+      ]},
+
+      { "t": "h", "text": "Bài tập 3 · Làm mềm câu quá trực tiếp" },
+      { "t": "quiz", "items": [
+        { "q": "\"That's wrong.\" — cách nói mềm hơn?", "options": ["I'm not sure I agree.", "You don't understand.", "No.", "That won't work."], "answer": 0 },
+        { "q": "\"That won't work.\" — cách nói mềm hơn?", "options": ["No.", "I'm not sure that would work.", "Do this instead.", "That's wrong."], "answer": 1 },
+        { "q": "\"You don't understand.\" — cách nói mềm hơn?", "options": ["No.", "That's wrong.", "I may not have explained my point clearly.", "Do this instead."], "answer": 2 },
+        { "q": "\"Do this instead.\" — cách nói mềm hơn?", "options": ["No.", "That's wrong.", "You don't understand.", "Could we try another option?"], "answer": 3 }
+      ]},
+
+      { "t": "h", "text": "Bài tập 4 · Dạng đúng" },
+      { "t": "quiz", "items": [
+        { "q": "I'm open to ______ it once.", "options": ["try", "trying", "tried", "tries"], "answer": 1 },
+        { "q": "We could compromise ______ the price.", "options": ["on", "with", "to", "for"], "answer": 0 },
+        { "q": "I need to bring ______ up calmly.", "options": ["that", "it", "this one", "them"], "answer": 1 },
+        { "q": "Neither do I. — dùng khi nào?", "options": ["Khi đồng ý với câu khẳng định", "Khi đồng ý với câu phủ định", "Khi không đồng ý", "Khi hỏi lại"], "answer": 1 }
+      ]}
+    ],
+
+    "speaking": [
+      { "t": "h", "text": "Question lab · Nêu quan điểm" },
+      { "t": "say", "items": [
+        "People should avoid difficult conversations by text.",
+        "It's better to be honest than polite.",
+        "Couples should share every expense equally.",
+        "Friends do not need to agree on important issues.",
+        "Texting is better than calling.",
+        "Friends should always reply quickly.",
+        "It's okay to cancel plans at the last minute.",
+        "Living alone is better than sharing a home."
+      ]},
+      { "t": "note", "text": "Mỗi lượt khoảng 90 giây gồm cả câu nối tiếp. Dùng: Not necessarily… · I see your point, but… · That depends on… · You have a point." },
+
+      { "t": "h", "text": "Answer building · Luyện xây câu trả lời" },
+      { "t": "p", "text": "People should never discuss serious issues by text." },
+      { "t": "layers", "items": [
+        { "label": "VIEW", "text": "I don't necessarily think friends should reply immediately." },
+        { "label": "REASON", "text": "Sometimes people are busy or need time to think." },
+        { "label": "DETAIL", "text": "For example, a thoughtful reply may be better than a quick one." },
+        { "label": "BALANCE", "text": "However, if the message is urgent, they should respond as soon as possible." },
+        { "label": "RETURN", "text": "What do you think?" }
+      ]},
+      { "t": "note", "text": "Xây từng câu một. Không cần đủ 5 tầng. Dừng khi ý đã rõ." },
+
+      { "t": "h", "text": "Nâng cấp một câu · Luyện cấu trúc" },
+      { "t": "table", "head": ["Cấu trúc", "Mẫu"], "rows": [
+        ["THAT-CLAUSE", "I think that the plan is too expensive."],
+        ["RELATIVE CLAUSE", "A friend who listens calmly is easier to talk to."],
+        ["ADJECTIVE + TO", "It's difficult to stay calm."],
+        ["ADVERB + VERB", "She explained her view calmly."]
+      ]},
+      { "t": "note", "text": "Lấy câu cơ bản 'The plan is bad.' và nâng cấp bằng MỘT cấu trúc. Đừng xếp chồng." }
+    ],
+
+    "roleplay": [
+      { "t": "steps", "title": "House rules", "context": "Two people share a home but have different habits.",
+        "steps": [
+          "A: You need quiet after 10 p.m. Bring the issue up calmly.",
+          "B: You often call friends late. Explain why.",
+          "A: Respond to B's reason and suggest one rule.",
+          "B: Disagree with one detail and offer another option.",
+          "BOTH: Compromise on quiet hours and exceptions."
+        ],
+        "useful": "bring it up · I understand, but… · I'm open to… · Could we compromise?" },
+
+      { "t": "steps", "title": "A group plan", "context": "Two friends are planning a birthday for someone else.",
+        "steps": [
+          "A: Prefer a quiet dinner because the person dislikes crowds.",
+          "B: Prefer a surprise party because it feels more memorable.",
+          "A: Explain one risk and acknowledge B's good point.",
+          "B: Ask a clarifying question and adjust your idea.",
+          "BOTH: Choose a plan, budget, and one next step."
+        ],
+        "useful": "I'm not sure I agree · You have a point · I'm open to… · Could we compromise?" },
+
+      { "t": "h", "text": "Cách chạy role-play" },
+      { "t": "note", "text": "Không viết sẵn câu. Cho 30 giây chỉ ghi từ khóa. Chạy 1 lần có gợi ý, sau đó đổi vai và đổi vấn đề sang việc dọn nhà hoặc khách đến chơi." },
+
+      { "t": "h", "text": "Dialogue transfer · Make it personal" },
+      { "t": "note", "text": "Điền thông tin thật. Lượt 1 có gợi ý. Lượt 2 che slide." },
+      { "t": "fill", "items": [
+        { "speaker": "A", "text": "I've noticed something and I'd like to bring it up." },
+        { "speaker": "B", "text": "Sure, go ahead. What's on your mind?" },
+        { "speaker": "A", "text": "I __________, and honestly it's been bothering me." },
+        { "speaker": "B", "text": "I see your point. I didn't realise __________." },
+        { "speaker": "A", "text": "Could we __________?" },
+        { "speaker": "B", "text": "I'm open to that, although __________." },
+        { "speaker": "A", "text": "Fair enough. How about __________?" },
+        { "speaker": "B", "text": "That sounds reasonable. Let's work it out." }
+      ]}
+    ],
+
+    "finalTask": [
+      { "t": "h", "text": "Final mission · Find common ground" },
+      { "t": "label", "text": "FOUR-MINUTE SHARED CONVERSATION" },
+      { "t": "p", "text": "Choose one real-life decision on which you may disagree. State your view and explain why. Acknowledge one point from your partner. Ask at least two follow-up questions. Agree on a compromise or explain why you cannot agree yet." },
+      { "t": "chips", "items": ["use 5 target items", "give focused answers", "reach a clear result"] },
+      { "t": "note", "text": "Mục tiêu: bất đồng với Ý TƯỞNG, không công kích NGƯỜI. Ghi âm nếu học viên đồng ý. Feedback nêu 1 cách đáp thành công, 1 phần mở rộng hữu ích, và 1 mục tiêu ngôn ngữ." },
+
+      { "t": "h", "text": "Home practice" },
+      { "t": "label", "text": "VOICE NOTE · Record 90 seconds" },
+      { "t": "p", "text": "Describe a disagreement that ended well. What helped? Include: the issue · both views · one useful response · the final solution." },
+      { "t": "label", "text": "RETRIEVAL" },
+      { "t": "p", "text": "Choose 8 items from L03. Make one true or realistic sentence with each." },
+      { "t": "note", "text": "Chỉ dùng từ khóa. Không viết và học thuộc cả script. L04 (Setting Boundaries) sẽ bắt đầu bằng một đoạn hội thoại ngắn recycle L03." }
+    ],
+
+    "reference": [
+      { "t": "h", "text": "Lesson summary · Từ vựng trọng tâm" },
+      { "t": "table", "head": ["English", "Tiếng Việt", "Dạng dùng tự nhiên"], "rows": [
+        ["agree / disagree with", "đồng ý / không đồng ý với", "with + người / ý kiến"],
+        ["have a point", "có lý", "You have a point."],
+        ["see your point", "hiểu quan điểm của bạn", "I see your point, but…"],
+        ["not necessarily", "không hẳn", "Not necessarily. It depends…"],
+        ["bring it up", "đề cập chuyện đó", "bring + vấn đề + up"],
+        ["work it out", "cùng giải quyết", "work it out together"],
+        ["compromise", "thỏa hiệp", "compromise on + danh từ"],
+        ["change my mind", "đổi ý", "change someone's mind"],
+        ["be open to", "sẵn sàng cân nhắc", "open to + danh từ / V-ing"],
+        ["sound reasonable", "nghe hợp lý", "That sounds reasonable."]
+      ]},
+      { "t": "note", "text": "Che cột tiếng Anh và nhớ lại từ tiếng Việt, sau đó đảo chiều." },
+
+      { "t": "h", "text": "IPA cần nhớ" },
+      { "t": "table", "head": ["Từ", "IPA", "Lưu ý"], "rows": [
+        ["disagree", "/ˌdɪsəˈɡriː/", "trọng âm âm tiết CUỐI"],
+        ["necessarily", "/ˌnesəˈserəli/", "đọc chậm trước, rồi nhanh"],
+        ["compromise", "/ˈkɒmprəmaɪz/", "trọng âm âm tiết ĐẦU"],
+        ["open", "/ˈəʊpən/", "trọng âm âm tiết đầu"]
+      ]},
+
+      { "t": "h", "text": "Retrieval challenge · 5 giây mỗi từ" },
+      { "t": "retrieval", "items": [
+        { "vi": "đồng ý với ai / ý kiến", "en": "agree with" },
+        { "vi": "không đồng ý với ai / ý kiến", "en": "disagree with" },
+        { "vi": "bạn có lý", "en": "you have a point" },
+        { "vi": "tôi hiểu ý bạn", "en": "I see your point" },
+        { "vi": "không hẳn", "en": "not necessarily" },
+        { "vi": "đề cập vấn đề", "en": "bring it up" },
+        { "vi": "cùng giải quyết", "en": "work it out" },
+        { "vi": "thỏa hiệp về việc gì", "en": "compromise on" },
+        { "vi": "đổi ý", "en": "change my mind" },
+        { "vi": "sẵn sàng cân nhắc", "en": "be open to" },
+        { "vi": "nghe có vẻ hợp lý", "en": "sound reasonable" },
+        { "vi": "tránh tranh cãi", "en": "avoid an argument" }
+      ]},
+
+      { "t": "h", "text": "Lỗi thường gặp" },
+      { "t": "list", "items": [
+        "I see your point ≠ I agree — chỉ là ghi nhận, không phải đồng ý",
+        "Neither do I / So do I — phải đảo trợ động từ, không nói 'Me too' trong văn trang trọng",
+        "I wish + had + V3 — tiếc vì đã không làm gì trong quá khứ",
+        "be open to + V-ing, KHÔNG dùng to + động từ nguyên thể",
+        "compromise ON + danh từ — không nói compromise with something",
+        "without sounding accusatory — không nghe như đang buộc tội"
+      ]}
+    ]
+  }
+}

@@ -37,15 +37,17 @@ async function main() {
   const title = await evalJs(`document.querySelector('.hero-title').innerText`);
   t('hero title updated', title.includes('One system'), title.replace(/\n/g, ' '));
   t('hero flow has 3 steps', (await evalJs(`document.querySelectorAll('.hero-flow-step').length`)) === 3);
-  t('hero has 3 orbs', (await evalJs(`document.querySelectorAll('.hero-orb').length`)) === 3);
+  t('hero has no decorative orbs', (await evalJs(`document.querySelectorAll('.hero-orb').length`)) === 0);
   t('hero grid overlay present', await evalJs(`!!document.querySelector('.hero-grid')`));
+  t('home has a footer', await evalJs(`!!document.querySelector('.home-footer')`));
+  t('home uses the page container', (await evalJs(`document.querySelectorAll('#v-home .page').length`)) >= 10);
 
   // sections from the roadmap PDF
   const sectionIds = ['roadmap'];
   for (const s of sectionIds) t(`#${s} section exists`, await evalJs(`!!document.getElementById('${s}')`));
-  t('placement section', (await evalJs(`document.querySelectorAll('.path-card').length`)) === 2);
-  t('foundation has 6 stages', (await evalJs(`document.querySelectorAll('.roadmap .stage-item:not(.act)').length`)) === 6);
-  t('activation has 5 stages', (await evalJs(`document.querySelectorAll('.roadmap .stage-item.act').length`)) === 5);
+  t('placement quiz renders 5 questions', (await evalJs(`document.querySelectorAll('#placement-quiz .quiz-q').length`)) === 5);
+  t('foundation has 6 stages', (await evalJs(`document.querySelectorAll('.roadmap .tl-item:not(.act)').length`)) === 6);
+  t('activation has 5 stages', (await evalJs(`document.querySelectorAll('.roadmap .tl-item.act').length`)) === 5);
   t('flow has 4 cards', (await evalJs(`document.querySelectorAll('.flow-card').length`)) === 4);
   t('spiral has 2 columns', (await evalJs(`document.querySelectorAll('.spiral-col').length`)) === 2);
   t('8 topics', (await evalJs(`document.querySelectorAll('.topic-card').length`)) === 8);
@@ -62,8 +64,6 @@ async function main() {
   await sleep(400);
   await evalJs(`window.scrollTo(0,0)`);
   await sleep(1600);
-  const counted = await evalJs(`[...document.querySelectorAll('.stat-num')].map(e=>e.textContent).join(',')`);
-  t('stat counters ran', counted !== '0,0,0,0', counted);
 
   // scroll animation classes
   const vis = await evalJs(`document.querySelectorAll('.scroll-section.visible').length`);
