@@ -1,349 +1,648 @@
 {
-  "title": "People in Your Life",
-  "vi": "Những người quanh bạn",
-  "goal": "By the end of the lesson, you can describe people you know and explain how you feel about them.",
-  "today": ["Notice words in context", "Build short answers", "Keep the conversation going", "Two to four sentences is enough"],
+  "title": "Reconnect the System",
+  "vi": "Kết nối lại hệ thống",
+  "goal": "By the end of this lesson, you can understand the 4 sentence types in English and practice Yes-No questions with DO/ARE to distinguish action verbs from 'to be'.",
+  "today": [
+    "Notice the 4 sentence types",
+    "Practice Do you...? vs Are you...?",
+    "Answer with Yes, I do / Yes, I am",
+    "Build short conversations"
+  ],
   "parts": {
     "vocab": [
-      { "t": "h", "text": "People around you" },
-      { "t": "note", "text": "Choose two people. Say who they are and one thing you like or dislike about them. Accept simple language — ask one follow-up: How do you know them? or What are they like?" },
-      { "t": "words", "items": [
-        { "en": "a close friend", "vi": "bạn thân", "def": "someone you trust" },
-        { "en": "an acquaintance", "vi": "người quen, chưa phải bạn thân", "def": "someone you know, but not well" },
-        { "en": "an easy-going colleague", "vi": "đồng nghiệp dễ tính", "def": "someone who is relaxed" },
-        { "en": "a reliable person", "vi": "người đáng tin cậy", "def": "someone you can depend on" },
-        { "en": "a difficult person", "vi": "người khó chịu", "def": "someone who is hard to deal with" },
-        { "en": "someone you lost touch with", "vi": "người bạn mất liên lạc", "def": "someone you no longer contact" }
-      ]},
-
-      { "t": "h", "text": "Vocabulary in context · People" },
-      { "t": "bank", "items": ["acquaintance", "reliable", "considerate", "easy-going"] },
-      { "t": "quiz", "items": [
-        { "q": "Mai always does what she promises. She's very ______.", "options": ["acquaintance", "reliable", "considerate", "easy-going"], "answer": 1 },
-        { "q": "Ben is relaxed and rarely gets upset. He's quite ______.", "options": ["easy-going", "reliable", "considerate", "acquaintance"], "answer": 0 },
-        { "q": "Linh notices when other people need help. She's very ______.", "options": ["reliable", "easy-going", "considerate", "acquaintance"], "answer": 2 },
-        { "q": "I know James from a course, but we aren't close friends. He's an ______.", "options": ["reliable", "acquaintance", "considerate", "easy-going"], "answer": 1 }
-      ]},
-      { "t": "note", "text": "Đáp án: 1 reliable · 2 easy-going · 3 considerate · 4 acquaintance. Which clue helped you choose each word? Gạch chân từ gợi ý trước khi chọn." },
-
-      { "t": "h", "text": "Meaning check · Small differences" },
-      { "t": "note", "text": "Trả lời trước khi xem đáp án. Sau đó kể tên một người thật khớp với một tính từ." },
-      { "t": "words", "items": [
-        { "en": "acquaintance", "vi": "người quen", "def": "Do you know this person very well? — No" },
-        { "en": "reliable", "vi": "đáng tin cậy", "def": "Can people depend on this person? — Yes" },
-        { "en": "considerate", "vi": "biết nghĩ cho người khác", "def": "Does this person think about other people's feelings? — Yes" },
-        { "en": "easy-going", "vi": "dễ tính", "def": "Does this person usually stay relaxed? — Yes" }
-      ]},
-
-      { "t": "h", "text": "Vocabulary in context · Relationships" },
-      { "t": "bank", "items": ["can't stand", "put up with", "get along with", "lose touch with"] },
-      { "t": "quiz", "items": [
-        { "q": "I really like my new manager. We ______ each other very well.", "options": ["can't stand", "put up with", "get along with", "lose touch with"], "answer": 2 },
-        { "q": "I ______ people who interrupt all the time. It drives me crazy.", "options": ["get along with", "can't stand", "put up with", "lose touch with"], "answer": 1 },
-        { "q": "The noise is annoying, but I can ______ it for another hour.", "options": ["get along with", "lose touch with", "can't stand", "put up with"], "answer": 3 },
-        { "q": "We used to be close, but we gradually ______ each other after graduation.", "options": ["got along with", "lost touch with", "put up with", "can't stand"], "answer": 1 }
-      ]},
-      { "t": "note", "text": "Đáp án: 1 get along with · 2 can't stand · 3 put up with · 4 lost touch with. Chú ý dạng quá khứ lost." },
-
-      { "t": "h", "text": "Form and word partners" },
-      { "t": "table", "head": ["Expression", "What follows", "Natural example"], "rows": [
-        ["can't stand", "noun / V-ing", "I can't stand loud music. / I can't stand waiting."],
-        ["put up with", "noun / person / V-ing", "I can't put up with the noise."],
-        ["get along with", "a person", "I get along with most of my colleagues."],
-        ["lose touch with", "a person", "I lost touch with an old classmate."],
-        ["find it", "adjective + to + verb", "I find it easy to talk to her."]
-      ]},
-      { "t": "note", "text": "Tập trung vào dạng đi sau mỗi cụm. Drill thay thế: people who complain · waiting in traffic · loud neighbours · a former colleague." }
+      {
+        "t": "h",
+        "text": "People around you"
+      },
+      {
+        "t": "flashcard",
+        "items": [
+          {
+            "word": "colleague",
+            "phonetic": "/ˈkɒliːɡ/",
+            "vi": "đồng nghiệp",
+            "def": "someone you work with",
+            "examples": [
+              {
+                "text": "I have a meeting with my colleague.",
+                "context": "work"
+              },
+              {
+                "text": "My colleague is very helpful.",
+                "context": "daily"
+              }
+            ]
+          },
+          {
+            "word": "acquaintance",
+            "phonetic": "/əˈkweɪntəns/",
+            "vi": "người quen",
+            "def": "someone you know, but not well",
+            "examples": [
+              {
+                "text": "He's just an acquaintance, not a close friend.",
+                "context": "daily"
+              },
+              {
+                "text": "I met an acquaintance at the conference.",
+                "context": "work"
+              }
+            ]
+          },
+          {
+            "word": "reliable",
+            "phonetic": "/rɪˈlaɪəbl/",
+            "vi": "đáng tin cậy",
+            "def": "you can depend on this person",
+            "examples": [
+              {
+                "text": "She's very reliable — always on time.",
+                "context": "work"
+              },
+              {
+                "text": "My brother is reliable. I can count on him.",
+                "context": "daily"
+              }
+            ]
+          },
+          {
+            "word": "considerate",
+            "phonetic": "/kənˈsɪdərət/",
+            "vi": "biết nghĩ cho người khác",
+            "def": "thinks about other people's feelings",
+            "examples": [
+              {
+                "text": "He's very considerate — he always asks how I feel.",
+                "context": "daily"
+              },
+              {
+                "text": "Please be considerate of other people's time.",
+                "context": "work"
+              }
+            ]
+          },
+          {
+            "word": "easy-going",
+            "phonetic": "/ˈiːzi ˈɡəʊɪŋ/",
+            "vi": "dễ tính",
+            "def": "relaxed, rarely gets upset",
+            "examples": [
+              {
+                "text": "My manager is easy-going. She never shouts.",
+                "context": "work"
+              },
+              {
+                "text": "He's easy-going — nothing stresses him out.",
+                "context": "daily"
+              }
+            ]
+          },
+          {
+            "word": "get along with",
+            "phonetic": "/ɡet əˈlɒŋ wɪð/",
+            "vi": "hòa hợp với",
+            "def": "have a good relationship with",
+            "examples": [
+              {
+                "text": "I get along with my coworkers.",
+                "context": "work"
+              },
+              {
+                "text": "She gets along with everyone in the family.",
+                "context": "daily"
+              }
+            ]
+          },
+          {
+            "word": "lose touch with",
+            "phonetic": "/luːz tʌtʃ wɪð/",
+            "vi": "mất liên lạc",
+            "def": "no longer contact someone",
+            "examples": [
+              {
+                "text": "I lost touch with my old classmates.",
+                "context": "daily"
+              },
+              {
+                "text": "We lost touch after he changed jobs.",
+                "context": "work"
+              }
+            ]
+          },
+          {
+            "word": "can't stand",
+            "phonetic": "/kɑːnt stænd/",
+            "vi": "không chịu nổi",
+            "def": "really dislike",
+            "examples": [
+              {
+                "text": "I can't stand rude people.",
+                "context": "daily"
+              },
+              {
+                "text": "She can't stand long meetings.",
+                "context": "work"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "t": "note",
+        "text": "Choose two people. Say who they are and one thing you like or dislike about them. Accept simple language — ask one follow-up: How do you know them? or What are they like?"
+      }
     ],
-
     "grammar": [
-      { "t": "h", "text": "Language lift · Useful sentence patterns" },
-      { "t": "table", "head": ["Pattern", "Example", "Use"], "rows": [
-        ["WHO / THAT", "I like people who listen carefully.", "mệnh đề quan hệ tả người"],
-        ["FIND IT + ADJ + TO", "I find it easy to talk to her.", "tả trải nghiệm của bạn"],
-        ["ADJ + TO", "She's easy to work with.", "tả người hoặc tình huống"],
-        ["THAT-CLAUSE", "I think that reliability matters.", "mở đầu một ý kiến"],
-        ["WHAT I LIKE IS…", "What I like most is her honesty.", "nhấn mạnh một phẩm chất"]
-      ]},
-      { "t": "note", "text": "Học như khung nói, không phải bài giảng ngữ pháp. Chọn 2 mẫu và đặt 1 câu thật với mỗi mẫu." },
-
-      { "t": "h", "text": "Language lift · Starting and connecting" },
-      { "t": "frames", "groups": [
-        { "group": "START NATURALLY", "items": ["Personally,", "Honestly,", "Generally,", "In my experience,"] },
-        { "group": "ADD A REASON", "items": ["because…", "mainly because…", "especially when…"] },
-        { "group": "ADD A DETAIL", "items": ["For example,", "One thing I've noticed is…", "In my case,…"] },
-        { "group": "ADD A CONTRAST", "items": ["However,", "Although…,", "Even though…,"] }
-      ]},
-      { "t": "note", "text": "Chọn 1 mẫu yêu thích từ mỗi nhóm. Tránh dùng nhiều connector trong một câu trả lời ngắn." },
-
-      { "t": "h", "text": "Language lift · More precise descriptions" },
-      { "t": "frames", "groups": [
-        { "group": "DESCRIBE A PERSON", "items": ["reliable", "considerate", "easy-going", "open-minded", "impatient", "judgmental"] },
-        { "group": "DESCRIBE HOW SOMEONE ACTS", "items": ["listen carefully", "communicate clearly", "react calmly", "interrupt constantly", "work efficiently"] },
-        { "group": "ADD DEGREE", "items": ["quite reliable", "extremely patient", "slightly awkward", "surprisingly well", "particularly helpful"] }
-      ]},
-      { "t": "ex", "text": "She's quite easy-going, and she communicates very clearly." },
-
-      { "t": "h", "text": "Answer building · Two to four sentences" },
-      { "t": "layers", "items": [
-        { "label": "1 · ANSWER", "text": "I can't stand unnecessary meetings." },
-        { "label": "2 · REASON", "text": "They waste a lot of time." },
-        { "label": "3 · EXAMPLE", "text": "For example, some meetings could be replaced with a short email." },
-        { "label": "4 · CONTRAST", "text": "However, I don't mind meetings that have a clear purpose." }
-      ]},
-      { "t": "note", "text": "Dừng sau câu 2, 3 hoặc 4 khi câu trả lời đã đủ. Không cần đủ 4 tầng cho mọi câu hỏi." }
+      {
+        "t": "h",
+        "text": "Language lift · Useful sentence patterns"
+      },
+      {
+        "t": "table",
+        "head": [
+          "Pattern",
+          "Example",
+          "Use"
+        ],
+        "rows": [
+          [
+            "WHO / THAT",
+            "I like people who listen carefully.",
+            "mệnh đề quan hệ tả người"
+          ],
+          [
+            "FIND IT + ADJ + TO",
+            "I find it easy to talk to her.",
+            "tả trải nghiệm của bạn"
+          ],
+          [
+            "ADJ + TO",
+            "She's easy to work with.",
+            "tả người hoặc tình huống"
+          ],
+          [
+            "THAT-CLAUSE",
+            "I think that reliability matters.",
+            "mở đầu một ý kiến"
+          ],
+          [
+            "WHAT I LIKE IS…",
+            "What I like most is her honesty.",
+            "nhấn mạnh một phẩm chất"
+          ]
+        ]
+      },
+      {
+        "t": "h",
+        "text": "The 4 sentence types"
+      },
+      {
+        "t": "table",
+        "head": [
+          "Type",
+          "Structure",
+          "Example"
+        ],
+        "rows": [
+          [
+            "Affirmative",
+            "S + V1(s/es) + O",
+            "I study English."
+          ],
+          [
+            "Negative",
+            "S + don't/doesn't + V1 + O",
+            "I don't study English."
+          ],
+          [
+            "Yes-No",
+            "Do/Does + S + V1 + O?",
+            "Do you study English?"
+          ],
+          [
+            "Wh-",
+            "Wh- + do/does + S + V1?",
+            "Why do you study English?"
+          ]
+        ]
+      },
+      {
+        "t": "h",
+        "text": "DO vs ARE — the engine"
+      },
+      {
+        "t": "table",
+        "head": [
+          "Want to know",
+          "Engine",
+          "Question",
+          "Answer"
+        ],
+        "rows": [
+          [
+            "Action",
+            "DO",
+            "Do you work nearby?",
+            "Yes, I do. / No, I don't."
+          ],
+          [
+            "BE information",
+            "ARE",
+            "Are you busy today?",
+            "Yes, I am. / No, I'm not."
+          ],
+          [
+            "Action (he/she/it)",
+            "DOES",
+            "Does she work in sales?",
+            "Yes, she does. / No, she doesn't."
+          ],
+          [
+            "BE (he/she/it)",
+            "IS",
+            "Is he your manager?",
+            "Yes, he is. / No, he isn't."
+          ]
+        ]
+      }
     ],
-
     "reading": [
-      { "t": "h", "text": "Model answer · A complete turn" },
-      { "t": "p", "text": "Honestly, I can't stand unnecessary meetings. They waste a lot of time mainly because nothing gets decided. For example, some meetings could be replaced with a short email. However, I don't mind meetings that have a clear purpose. In my experience, a short agenda makes a meeting worth the time." },
-      { "t": "quiz", "items": [
-        { "q": "Câu nào nêu quan điểm chính?", "options": ["Câu 1", "Câu 2", "Câu 3", "Câu 4"], "answer": 0 },
-        { "q": "Câu nào nêu lý do?", "options": ["Câu 1", "Câu 2", "Câu 3", "Câu 4"], "answer": 1 },
-        { "q": "Câu nào cho ví dụ?", "options": ["Câu 2", "Câu 3", "Câu 4", "Câu 5"], "answer": 1 },
-        { "q": "Câu nào thể hiện tương phản?", "options": ["Câu 3", "Câu 4", "Câu 5", "Không có"], "answer": 1 },
-        { "q": "Từ nào mở đầu câu trả lời tự nhiên?", "options": ["Honestly", "However", "For example", "mainly"], "answer": 0 }
-      ]},
-
-      { "t": "h", "text": "Guided response practice" },
-      { "t": "note", "text": "Chọn 2 câu hỏi. Dùng 1 target expression và 1 language lift. Cho 10 giây chuẩn bị, trả lời 2–4 câu. Đối tác phản hồi và hỏi 1 câu nối tiếp. Đổi vai sau câu 1." },
-      { "t": "list", "items": [
-        "Who is the most reliable person you know?",
-        "What makes someone considerate?",
-        "Do you get along with most of your colleagues?",
-        "What behaviour can't you put up with?",
-        "Is it easy for you to talk to new people?",
-        "Who would you like to get back in touch with?"
-      ]}
+      {
+        "t": "h",
+        "text": "Model answer · A complete turn"
+      },
+      {
+        "t": "p",
+        "text": "Honestly, I can't stand unnecessary meetings. They waste a lot of time mainly because nothing gets decided. For example, some meetings could be replaced with a short email. However, I don't mind meetings that have a clear purpose. In my experience, a short agenda makes a meeting worth the time."
+      },
+      {
+        "t": "note",
+        "text": "Notice: can't stand + noun, don't mind + V-ing, worth + noun. These are natural ways to express opinions."
+      }
     ],
-
     "conversations": [
-      { "t": "dialog", "title": "A new colleague", "target": "reliable · get along with", "lift": "find it easy to… · surprisingly well",
+      {
+        "t": "dialog",
+        "title": "A new colleague",
+        "target": "reliable · get along with",
+        "lift": "find it easy to… · surprisingly well",
         "lines": [
-          { "speaker": "Nina", "text": "How are things with your new colleague?" },
-          { "speaker": "Emma", "text": "Pretty good. She's very reliable, and I find it easy to talk to her. We have quite a lot in common, so we get along surprisingly well." },
-          { "speaker": "Nina", "text": "That's nice. What do you have in common?" }
+          {
+            "speaker": "Nina",
+            "text": "How are things with your new colleague?"
+          },
+          {
+            "speaker": "Tom",
+            "text": "Good. She's very reliable — always on time."
+          },
+          {
+            "speaker": "Nina",
+            "text": "Do you get along with her?"
+          },
+          {
+            "speaker": "Tom",
+            "text": "Yes, I do. I find it easy to talk to her."
+          },
+          {
+            "speaker": "Nina",
+            "text": "That's great. Is she easy-going?"
+          },
+          {
+            "speaker": "Tom",
+            "text": "Yes, she is. She's surprisingly well-organized too."
+          }
         ],
         "check": [
-          "What two qualities does Emma mention?",
-          "Why do Emma and her colleague get along?",
-          "Which expression means 'talking to her does not feel difficult'?",
-          "Which adverb makes 'well' more expressive?",
-          "What follow-up question keeps the conversation going?"
+          "What is Tom's new colleague like?",
+          "Does Tom get along with her?",
+          "Is she easy-going?"
         ],
-        "answers": "1 reliable and easy to talk to · 2 they have a lot in common · 3 find it easy to talk to her · 4 surprisingly · 5 What do you have in common?",
-        "note": "Đọc to trước khi xem slide nếu có thể. Hỏi: Why does Emma like working with her colleague? Which words make the answer more detailed?"
+        "answers": "1. She's reliable and well-organized. 2. Yes, he does. 3. Yes, she is.",
+        "note": "Notice: reliable, easy-going, get along with, find it easy to…"
       },
-
-      { "t": "dialog", "title": "A difficult person", "target": "can't stand · put up with", "lift": "Honestly · constantly · However · calmly",
+      {
+        "t": "dialog",
+        "title": "At the coffee machine",
+        "target": "can't stand · put up with",
+        "lift": "I don't mind… · It's not that bad",
         "lines": [
-          { "speaker": "Alex", "text": "Is there anything you can't stand at work?" },
-          { "speaker": "Mia", "text": "Honestly, I can't stand people who constantly interrupt others. I can put up with it once or twice, but it becomes really frustrating when it happens in every meeting. However, I try to react calmly." },
-          { "speaker": "Alex", "text": "I know what you mean. How do you handle it?" }
+          {
+            "speaker": "Anna",
+            "text": "Do you like the new office coffee?"
+          },
+          {
+            "speaker": "Ben",
+            "text": "No, I don't. I can't stand it — it's too bitter."
+          },
+          {
+            "speaker": "Anna",
+            "text": "Really? I don't mind it. It's not that bad."
+          },
+          {
+            "speaker": "Ben",
+            "text": "I guess I'm just used to the old one."
+          },
+          {
+            "speaker": "Anna",
+            "text": "Are you going to buy your own?"
+          },
+          {
+            "speaker": "Ben",
+            "text": "Yes, I am. I can't put up with this every morning."
+          }
         ],
         "check": [
-          "I can't stand waiting in long lines. — noun hay V-ing?",
-          "I put up with the noise for two hours. — nghĩa là tolerated hay enjoyed?",
-          "People who interrupt others annoy me. — mệnh đề quan hệ hay câu hỏi?",
-          "I try to react calmly. — adjective hay adverb?"
+          "Does Ben like the new coffee?",
+          "Does Anna mind it?",
+          "Is Ben going to buy his own?"
         ],
-        "answers": "1 V-ing · 2 tolerated · 3 mệnh đề quan hệ · 4 adverb",
-        "note": "Nhận xét: câu trả lời giữ một chủ đề. Chú ý who constantly interrupt others là mệnh đề quan hệ, react calmly là verb + adverb."
+        "answers": "1. No, he doesn't. 2. No, she doesn't. 3. Yes, he is.",
+        "note": "Notice: can't stand, don't mind, put up with, used to"
       },
-
-      { "t": "h", "text": "Dialogue practice · Fill in the blanks" },
-      { "t": "bank", "items": ["acquaintance", "reliable", "get along with", "in common", "easy to talk to"] },
-      { "t": "fill", "items": [
-        { "speaker": "A", "text": "Who were you talking to?" },
-        { "speaker": "B", "text": "That was Leo. He's an __________ from my previous job." },
-        { "speaker": "A", "text": "You seemed quite comfortable together." },
-        { "speaker": "B", "text": "Yes, we __________ each other well. He's very __________." },
-        { "speaker": "A", "text": "What do you have __________?" },
-        { "speaker": "B", "text": "We both enjoy travelling, and I find him __________." }
-      ]},
-      { "t": "note", "text": "Đáp án: acquaintance · get along with · reliable · in common · easy to talk to. Đọc cùng đáp án, che word bank, rồi thay Leo bằng một người thật." }
+      {
+        "t": "dialog",
+        "title": "Weekend plans",
+        "target": "lose touch with · catch up",
+        "lift": "It's been ages · pick up where we left off",
+        "lines": [
+          {
+            "speaker": "Mia",
+            "text": "Are you free this weekend?"
+          },
+          {
+            "speaker": "Lan",
+            "text": "Yes, I am. Why?"
+          },
+          {
+            "speaker": "Mia",
+            "text": "I'm meeting an old friend. We lost touch years ago."
+          },
+          {
+            "speaker": "Lan",
+            "text": "That's nice! Do you have plans to catch up?"
+          },
+          {
+            "speaker": "Mia",
+            "text": "Yes, we're going for coffee. It's been ages!"
+          }
+        ],
+        "check": [
+          "Is Lan free this weekend?",
+          "Did Mia lose touch with her friend?",
+          "Are they going for coffee?"
+        ],
+        "answers": "1. Yes, she is. 2. Yes, she did. 3. Yes, they are.",
+        "note": "Notice: lose touch with, catch up, It's been ages"
+      }
     ],
-
     "listening": [
-      { "t": "h", "text": "Shadowing · Nghe từng câu rồi nhắc lại" },
-      { "t": "note", "text": "Bấm 🔊 để nghe từng câu, sau đó nhắc lại y hệt ngữ điệu. Làm 2 lượt: lượt 1 nhìn chữ, lượt 2 che chữ." },
-      { "t": "say", "items": [
-        "How are things with your new colleague?",
-        "She's very reliable, and I find it easy to talk to her.",
-        "We have quite a lot in common, so we get along surprisingly well.",
-        "That's nice. What do you have in common?",
-        "Is there anything you can't stand at work?",
-        "Honestly, I can't stand people who constantly interrupt others.",
-        "I can put up with it once or twice, but it becomes really frustrating.",
-        "However, I try to react calmly."
-      ]},
-      { "t": "h", "text": "Micro-focus · Trọng âm câu" },
-      { "t": "table", "head": ["Câu", "Từ được nhấn"], "rows": [
-        ["She's very REliable.", "REliable — âm tiết 2"],
-        ["I find it EA-sy to talk to her.", "EA-sy — tính từ chính"],
-        ["We get along surPRISingly well.", "surPRISingly + well"],
-        ["I CAN'T STAND people who constantly interRUPT.", "CAN'T STAND + interRUPT"]
-      ]},
-      { "t": "note", "text": "Từ mang thông tin mới được nhấn; từ chức năng (to, the, of) thường yếu và nối với nhau." }
+      {
+        "t": "h",
+        "text": "Shadowing · Nghe từng câu rồi nhắc lại"
+      },
+      {
+        "t": "note",
+        "text": "Bấm 🔊 để nghe từng câu, sau đó nhắc lại y hệt ngữ điệu. Làm 2 lượt: lượt 1 nhìn chữ, lượt 2 che chữ."
+      },
+      {
+        "t": "say",
+        "items": [
+          "Do you work nearby?",
+          "Are you busy today?",
+          "Does she work in sales?",
+          "Is he your manager?",
+          "Do they work together?",
+          "Are we ready?"
+        ]
+      }
     ],
-
     "exercises": [
-      { "t": "h", "text": "Bài tập 1 · Chọn từ đúng" },
-      { "t": "quiz", "items": [
-        { "q": "Mai always does what she promises. She's very ______.", "options": ["acquaintance", "reliable", "considerate", "easy-going"], "answer": 1 },
-        { "q": "Ben is relaxed and rarely gets upset. He's quite ______.", "options": ["easy-going", "reliable", "considerate", "acquaintance"], "answer": 0 },
-        { "q": "Linh notices when other people need help. She's very ______.", "options": ["reliable", "easy-going", "considerate", "acquaintance"], "answer": 2 },
-        { "q": "I know James from a course, but we aren't close friends. He's an ______.", "options": ["reliable", "acquaintance", "considerate", "easy-going"], "answer": 1 },
-        { "q": "I really like my new manager. We ______ each other very well.", "options": ["can't stand", "put up with", "get along with", "lose touch with"], "answer": 2 },
-        { "q": "I ______ people who interrupt all the time. It drives me crazy.", "options": ["get along with", "can't stand", "put up with", "lose touch with"], "answer": 1 },
-        { "q": "The noise is annoying, but I can ______ it for another hour.", "options": ["get along with", "lose touch with", "can't stand", "put up with"], "answer": 3 },
-        { "q": "We used to be close, but we gradually ______ each other after graduation.", "options": ["got along with", "lost touch with", "put up with", "can't stand"], "answer": 1 }
-      ]},
-
-      { "t": "h", "text": "Bài tập 2 · Điền vào đoạn hội thoại" },
-      { "t": "bank", "items": ["acquaintance", "reliable", "get along with", "in common", "easy to talk to"] },
-      { "t": "fill", "items": [
-        { "speaker": "A", "text": "Who were you talking to?" },
-        { "speaker": "B", "text": "That was Leo. He's an __________ from my previous job." },
-        { "speaker": "A", "text": "You seemed quite comfortable together." },
-        { "speaker": "B", "text": "Yes, we __________ each other well. He's very __________." },
-        { "speaker": "A", "text": "What do you have __________?" },
-        { "speaker": "B", "text": "We both enjoy travelling, and I find him __________." }
-      ]},
-
-      { "t": "h", "text": "Bài tập 3 · Đúng hay sai về dạng" },
-      { "t": "quiz", "items": [
-        { "q": "I can't stand to wait in long lines.", "options": ["Đúng", "Sai — phải là waiting"], "answer": 1 },
-        { "q": "I find easy to talk to her.", "options": ["Đúng", "Sai — phải là I find IT easy"], "answer": 1 },
-        { "q": "I like people who listen carefully.", "options": ["Đúng", "Sai"], "answer": 0 },
-        { "q": "We have a lot in common.", "options": ["Đúng", "Sai"], "answer": 0 }
-      ]}
+      {
+        "t": "h",
+        "text": "Bài tập 1 · Chọn từ đúng"
+      },
+      {
+        "t": "quiz",
+        "items": [
+          {
+            "q": "Mai always does what she promises. She's very ______.",
+            "options": [
+              "acquaintance",
+              "reliable",
+              "considerate",
+              "easy-going"
+            ],
+            "answer": 1
+          },
+          {
+            "q": "Ben is relaxed and rarely gets upset. He's quite ______.",
+            "options": [
+              "easy-going",
+              "reliable",
+              "considerate",
+              "acquaintance"
+            ],
+            "answer": 0
+          },
+          {
+            "q": "Linh notices when other people need help. She's very ______.",
+            "options": [
+              "reliable",
+              "easy-going",
+              "considerate",
+              "acquaintance"
+            ],
+            "answer": 2
+          },
+          {
+            "q": "I know James from a course, but we aren't close friends. He's an ______.",
+            "options": [
+              "reliable",
+              "acquaintance",
+              "easy-going",
+              "considerate"
+            ],
+            "answer": 1
+          }
+        ]
+      },
+      {
+        "t": "note",
+        "text": "Đáp án: 1 reliable · 2 easy-going · 3 considerate · 4 acquaintance. Which clue helped you choose each word? Gạch chân từ gợi ý trước khi chọn."
+      },
+      {
+        "t": "h",
+        "text": "Bài tập 2 · DO hay ARE?"
+      },
+      {
+        "t": "quiz",
+        "items": [
+          {
+            "q": "___ you work nearby?",
+            "options": [
+              "Do",
+              "Are",
+              "Is",
+              "Does"
+            ],
+            "answer": 0
+          },
+          {
+            "q": "___ you busy today?",
+            "options": [
+              "Do",
+              "Are",
+              "Is",
+              "Does"
+            ],
+            "answer": 1
+          },
+          {
+            "q": "___ she work in sales?",
+            "options": [
+              "Do",
+              "Are",
+              "Is",
+              "Does"
+            ],
+            "answer": 3
+          },
+          {
+            "q": "___ he your manager?",
+            "options": [
+              "Do",
+              "Are",
+              "Is",
+              "Does"
+            ],
+            "answer": 2
+          },
+          {
+            "q": "___ they work together?",
+            "options": [
+              "Do",
+              "Are",
+              "Is",
+              "Does"
+            ],
+            "answer": 0
+          },
+          {
+            "q": "___ we ready?",
+            "options": [
+              "Do",
+              "Are",
+              "Is",
+              "Does"
+            ],
+            "answer": 1
+          }
+        ]
+      },
+      {
+        "t": "note",
+        "text": "Đáp án: 1 Do · 2 Are · 3 Does · 4 Is · 5 Do · 6 Are. Quy tắc: action verb → DO/DOES, BE information → ARE/IS."
+      }
     ],
-
     "speaking": [
-      { "t": "h", "text": "Question lab · What can't you stand?" },
-      { "t": "p", "text": "Is there anything you can't stand at work or in daily life?" },
-      { "t": "bank", "items": ["interrupt", "complain", "arrive late", "speak rudely", "make unnecessary noise"] },
-      { "t": "frames", "groups": [
-        { "group": "BUILD YOUR ANSWER", "items": ["Honestly, I can't stand…", "It bothers me mainly because…", "For example,…", "However, I can put up with it when…"] }
-      ]},
-      { "t": "note", "text": "Mục tiêu: 2–4 câu liên kết. Hỏi 1 câu nối tiếp duy nhất. Khuyến khích can't stand + V-ing và một trạng từ như constantly hoặc rudely." },
-
-      { "t": "h", "text": "Question lab · Who is easy to get along with?" },
-      { "t": "p", "text": "What kind of person do you find easy to get along with?" },
-      { "t": "bank", "items": ["easy-going", "considerate", "open-minded", "listen carefully", "communicate clearly"] },
-      { "t": "frames", "groups": [
-        { "group": "BUILD YOUR ANSWER", "items": ["Personally, I get along with people who…", "I find it easy to talk to people who…", "What I appreciate most is…", "That's why I usually feel comfortable around…"] }
-      ]},
-      { "t": "note", "text": "Hướng tới 1 tính từ, 1 mệnh đề quan hệ, 1 lý do. Không ép dùng đủ 4 khung." },
-
-      { "t": "h", "text": "Question lab · Friends and acquaintances" },
-      { "t": "fill", "items": [
-        { "speaker": "Q", "text": "Do you have many acquaintances?" },
-        { "speaker": "A", "text": "I have quite a few acquaintances from…" },
-        { "speaker": "A", "text": "However, I only have a small number of close friends." },
-        { "speaker": "Q", "text": "Have you ever lost touch with someone?" },
-        { "speaker": "A", "text": "I gradually lost touch with…" },
-        { "speaker": "A", "text": "Even though we were close, our lives became very different." }
-      ]},
-      { "t": "note", "text": "Thêm 1 chi tiết thật. Sau đó hỏi lại câu hỏi. Gợi ý nối tiếp: How did you meet? Why did you lose touch? Would you like to contact them again?" },
-
-      { "t": "h", "text": "Speaking round · Trả lời 2–4 câu" },
-      { "t": "say", "items": [
-        "Who is the most reliable person you know?",
-        "What makes someone considerate?",
-        "Do you get along with most of your colleagues?",
-        "What behaviour can't you put up with?",
-        "Is it easy for you to talk to new people?",
-        "Who would you like to get back in touch with?"
-      ]}
+      {
+        "t": "h",
+        "text": "Question lab · What can't you stand?"
+      },
+      {
+        "t": "p",
+        "text": "Is there anything you can't stand at work or in daily life?"
+      },
+      {
+        "t": "say",
+        "items": [
+          "I can't stand rude people.",
+          "I can't stand long meetings.",
+          "I can't stand waiting in traffic.",
+          "I can't stand loud music.",
+          "I can't stand being late."
+        ]
+      },
+      {
+        "t": "note",
+        "text": "Use: I can't stand + noun / V-ing. Ask a partner: What about you?"
+      }
     ],
-
     "roleplay": [
-      { "t": "steps", "title": "Meeting an old friend", "context": "You meet an old friend after several years apart.",
+      {
+        "t": "steps",
+        "title": "60-second engine challenge",
+        "context": "Work with a partner. Take turns asking and answering Yes-No questions with DO and ARE.",
         "steps": [
-          "Ask who they still keep in touch with.",
-          "Talk about someone you both knew.",
-          "Describe what that person was like.",
-          "Mention someone you lost touch with.",
-          "Say whether you would like to reconnect."
+          "Partner A asks: Do you…? (action)",
+          "Partner B answers: Yes, I do. / No, I don't.",
+          "Partner A asks: Are you…? (BE information)",
+          "Partner B answers: Yes, I am. / No, I'm not.",
+          "Switch roles. Keep it fast — 10 seconds per question."
         ],
-        "useful": "keep in touch with · lose touch with · acquaintance · easy-going · reliable" },
-
-      { "t": "steps", "title": "A colleague", "context": "A colleague asks how you feel about working with different people.",
-        "steps": [
-          "COLLEAGUE: Ask what kind of person is easy to work with.",
-          "YOU: Describe two qualities and explain why.",
-          "COLLEAGUE: Ask about one difficult behaviour.",
-          "YOU: Use can't stand or put up with. Give an example.",
-          "COLLEAGUE: React and share a similar experience."
-        ],
-        "useful": "easy-going · considerate · can't stand · put up with · get along with" },
-
-      { "t": "h", "text": "Dialogue transfer · Make it personal" },
-      { "t": "note", "text": "Điền thông tin thật vào đoạn hội thoại. Sau đó đóng slide và lặp lại. Lượt 1 có gợi ý, lượt 2 che slide, lượt 3 (nếu thoải mái) đổi người và thêm 1 câu nối tiếp bất ngờ." },
-      { "t": "fill", "items": [
-        { "speaker": "A", "text": "Who is someone you really get along with?" },
-        { "speaker": "B", "text": "I get along with __________ because __________." },
-        { "speaker": "A", "text": "What are they like?" },
-        { "speaker": "B", "text": "They're quite __________, and they __________." },
-        { "speaker": "A", "text": "Is there anything about people that you can't stand?" },
-        { "speaker": "B", "text": "Honestly, I can't stand __________." },
-        { "speaker": "A", "text": "How do you normally react?" },
-        { "speaker": "B", "text": "I usually __________, although __________." }
-      ]}
+        "useful": "Do you work nearby? · Are you busy today? · Does she work in sales? · Is he your manager?"
+      }
     ],
-
     "finalTask": [
-      { "t": "h", "text": "Final mission · Talk about people naturally" },
-      { "t": "label", "text": "THREE-MINUTE SHARED CONVERSATION" },
-      { "t": "p", "text": "Talk about people in your work or daily life. Describe someone you get along with. Mention one behaviour you can't stand or have to put up with. Ask your partner at least two related questions." },
-      { "t": "chips", "items": ["use 5 target words", "answer in 2–4 sentences", "ask something back"] },
-      { "t": "ex", "text": "A conversation grows through short, relevant turns." },
-      { "t": "note", "text": "Feedback focus: chọn từ phù hợp, 1 language lift thành công, và tương tác. Không đếm mọi lỗi ngữ pháp trong lúc nói." },
-
-      { "t": "h", "text": "Home practice" },
-      { "t": "label", "text": "CORE RETRIEVAL" },
-      { "t": "p", "text": "Choose 6 target expressions. Write one true sentence with each." },
-      { "t": "label", "text": "VOICE NOTE · Record 45–60 seconds" },
-      { "t": "p", "text": "What kind of people do you find easy or difficult to get along with? Include one reason, one example, and one sentence with who or that." },
-      { "t": "note", "text": "Có thể dùng ghi chú, nhưng không viết hoặc học thuộc cả script. L02 sẽ recycle lại 8 mục cốt lõi này." }
+      {
+        "t": "label",
+        "text": "THREE-MINUTE SHARED CONVERSATION"
+      },
+      {
+        "t": "p",
+        "text": "Work with a partner. Have a 3-minute conversation about people you know. Use DO/ARE questions and answer with full sentences."
+      },
+      {
+        "t": "note",
+        "text": "Goal: 10+ questions, 10+ full answers. Notice when you use DO vs ARE."
+      }
     ],
-
     "reference": [
-      { "t": "h", "text": "Retrieval challenge · 5 giây mỗi từ" },
-      { "t": "note", "text": "Che cột tiếng Anh, dịch từ tiếng Việt. Sau đó đảo chiều. Chạy lượt 2 theo thứ tự ngẫu nhiên." },
-      { "t": "retrieval", "items": [
-        { "vi": "người quen, chưa phải bạn thân", "en": "acquaintance" },
-        { "vi": "đáng tin cậy", "en": "reliable" },
-        { "vi": "biết nghĩ cho người khác", "en": "considerate" },
-        { "vi": "dễ tính, thoải mái", "en": "easy-going" },
-        { "vi": "không thể chịu được", "en": "can't stand" },
-        { "vi": "chịu đựng một điều khó chịu", "en": "put up with" },
-        { "vi": "hợp với ai đó", "en": "get along with" },
-        { "vi": "mất liên lạc với ai", "en": "lose touch with" },
-        { "vi": "có điểm chung", "en": "have something in common" },
-        { "vi": "tôi thấy dễ để…", "en": "I find it easy to…" },
-        { "vi": "người mà luôn lắng nghe", "en": "someone who always listens" },
-        { "vi": "phản ứng một cách bình tĩnh", "en": "react calmly" }
-      ]},
-
-      { "t": "h", "text": "Phát âm cần nhớ" },
-      { "t": "table", "head": ["Từ", "Phiên âm", "Trọng âm"], "rows": [
-        ["reliable", "ri-LAI-ơ-bồ", "âm tiết 2"],
-        ["considerate", "kồn-SI-đờ-rịt", "âm tiết 2"],
-        ["acquaintance", "ờ-QUÂYN-tần", "âm tiết 2"],
-        ["frustrating", "FRỚS-trây-ting", "âm tiết 1"]
-      ]},
-
-      { "t": "h", "text": "Lỗi thường gặp" },
-      { "t": "list", "items": [
-        "can't stand + V-ing — KHÔNG dùng can't stand + to V",
-        "find it + ADJ + to V — không nói 'I find easy to talk to her'",
-        "put up with (chịu đựng) ≠ get along with (hòa hợp)",
-        "WHO + V khi người làm chủ ngữ; THAT dùng được cho cả người và vật",
-        "lose touch with — chú ý dạng quá khứ bất quy tắc: lose → lost"
-      ]}
+      {
+        "t": "h",
+        "text": "Retrieval challenge · 5 giây mỗi từ"
+      },
+      {
+        "t": "note",
+        "text": "Che cột tiếng Anh, dịch từ tiếng Việt. Sau đó đảo chiều. Chạy lượt 2 theo thứ tự ngẫu nhiên."
+      },
+      {
+        "t": "retrieval",
+        "items": [
+          {
+            "vi": "đồng nghiệp",
+            "en": "colleague"
+          },
+          {
+            "vi": "người quen",
+            "en": "acquaintance"
+          },
+          {
+            "vi": "đáng tin cậy",
+            "en": "reliable"
+          },
+          {
+            "vi": "biết nghĩ cho người khác",
+            "en": "considerate"
+          },
+          {
+            "vi": "dễ tính",
+            "en": "easy-going"
+          },
+          {
+            "vi": "hòa hợp với",
+            "en": "get along with"
+          },
+          {
+            "vi": "mất liên lạc",
+            "en": "lose touch with"
+          },
+          {
+            "vi": "không chịu nổi",
+            "en": "can't stand"
+          }
+        ]
+      }
     ]
   }
 }

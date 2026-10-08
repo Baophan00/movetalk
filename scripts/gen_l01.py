@@ -1,0 +1,228 @@
+#!/usr/bin/env python3
+"""Generate L01 data with interactive flashcards + conversations.
+
+Flashcard schema:
+{
+  "t": "flashcard",
+  "items": [
+    {
+      "word": "colleague",
+      "phonetic": "/ˈkɒliːɡ/",
+      "vi": "đồng nghiệp",
+      "def": "someone you work with",
+      "examples": [
+        {"text": "I have a meeting with my colleague.", "context": "work"},
+        {"text": "My colleague is very helpful.", "context": "daily"}
+      ]
+    }
+  ]
+}
+
+Conversation schema (existing):
+{
+  "t": "dialog",
+  "title": "A new colleague",
+  "target": "reliable · get along with",
+  "lift": "find it easy to… · surprisingly well",
+  "lines": [{"speaker": "Nina", "text": "..."}],
+  "check": ["..."],
+  "answers": "...",
+  "note": "..."
+}
+"""
+import json
+import os
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA = os.path.join(ROOT, "data")
+
+# L01: Reconnect the System — Yes-No questions with DO/ARE
+# Focus: Do you...? / Are you...? → Yes, I do / Yes, I am / No, I don't / No, I'm not
+
+lesson = {
+    "title": "Reconnect the System",
+    "vi": "Kết nối lại hệ thống",
+    "goal": "By the end of this lesson, you can understand the 4 sentence types in English and practice Yes-No questions with DO/ARE to distinguish action verbs from 'to be'.",
+    "today": [
+        "Notice the 4 sentence types",
+        "Practice Do you...? vs Are you...?",
+        "Answer with Yes, I do / Yes, I am",
+        "Build short conversations"
+    ],
+    "parts": {
+        "vocab": [
+            {"t": "h", "text": "People around you"},
+            {"t": "flashcard", "items": [
+                {"word": "colleague", "phonetic": "/ˈkɒliːɡ/", "vi": "đồng nghiệp", "def": "someone you work with", "examples": [
+                    {"text": "I have a meeting with my colleague.", "context": "work"},
+                    {"text": "My colleague is very helpful.", "context": "daily"}
+                ]},
+                {"word": "acquaintance", "phonetic": "/əˈkweɪntəns/", "vi": "người quen", "def": "someone you know, but not well", "examples": [
+                    {"text": "He's just an acquaintance, not a close friend.", "context": "daily"},
+                    {"text": "I met an acquaintance at the conference.", "context": "work"}
+                ]},
+                {"word": "reliable", "phonetic": "/rɪˈlaɪəbl/", "vi": "đáng tin cậy", "def": "you can depend on this person", "examples": [
+                    {"text": "She's very reliable — always on time.", "context": "work"},
+                    {"text": "My brother is reliable. I can count on him.", "context": "daily"}
+                ]},
+                {"word": "considerate", "phonetic": "/kənˈsɪdərət/", "vi": "biết nghĩ cho người khác", "def": "thinks about other people's feelings", "examples": [
+                    {"text": "He's very considerate — he always asks how I feel.", "context": "daily"},
+                    {"text": "Please be considerate of other people's time.", "context": "work"}
+                ]},
+                {"word": "easy-going", "phonetic": "/ˈiːzi ˈɡəʊɪŋ/", "vi": "dễ tính", "def": "relaxed, rarely gets upset", "examples": [
+                    {"text": "My manager is easy-going. She never shouts.", "context": "work"},
+                    {"text": "He's easy-going — nothing stresses him out.", "context": "daily"}
+                ]},
+                {"word": "get along with", "phonetic": "/ɡet əˈlɒŋ wɪð/", "vi": "hòa hợp với", "def": "have a good relationship with", "examples": [
+                    {"text": "I get along with my coworkers.", "context": "work"},
+                    {"text": "She gets along with everyone in the family.", "context": "daily"}
+                ]},
+                {"word": "lose touch with", "phonetic": "/luːz tʌtʃ wɪð/", "vi": "mất liên lạc", "def": "no longer contact someone", "examples": [
+                    {"text": "I lost touch with my old classmates.", "context": "daily"},
+                    {"text": "We lost touch after he changed jobs.", "context": "work"}
+                ]},
+                {"word": "can't stand", "phonetic": "/kɑːnt stænd/", "vi": "không chịu nổi", "def": "really dislike", "examples": [
+                    {"text": "I can't stand rude people.", "context": "daily"},
+                    {"text": "She can't stand long meetings.", "context": "work"}
+                ]}
+            ]},
+            {"t": "note", "text": "Choose two people. Say who they are and one thing you like or dislike about them. Accept simple language — ask one follow-up: How do you know them? or What are they like?"}
+        ],
+        "grammar": [
+            {"t": "h", "text": "Language lift · Useful sentence patterns"},
+            {"t": "table", "head": ["Pattern", "Example", "Use"], "rows": [
+                ["WHO / THAT", "I like people who listen carefully.", "mệnh đề quan hệ tả người"],
+                ["FIND IT + ADJ + TO", "I find it easy to talk to her.", "tả trải nghiệm của bạn"],
+                ["ADJ + TO", "She's easy to work with.", "tả người hoặc tình huống"],
+                ["THAT-CLAUSE", "I think that reliability matters.", "mở đầu một ý kiến"],
+                ["WHAT I LIKE IS…", "What I like most is her honesty.", "nhấn mạnh một phẩm chất"]
+            ]},
+            {"t": "h", "text": "The 4 sentence types"},
+            {"t": "table", "head": ["Type", "Structure", "Example"], "rows": [
+                ["Affirmative", "S + V1(s/es) + O", "I study English."],
+                ["Negative", "S + don't/doesn't + V1 + O", "I don't study English."],
+                ["Yes-No", "Do/Does + S + V1 + O?", "Do you study English?"],
+                ["Wh-", "Wh- + do/does + S + V1?", "Why do you study English?"]
+            ]},
+            {"t": "h", "text": "DO vs ARE — the engine"},
+            {"t": "table", "head": ["Want to know", "Engine", "Question", "Answer"], "rows": [
+                ["Action", "DO", "Do you work nearby?", "Yes, I do. / No, I don't."],
+                ["BE information", "ARE", "Are you busy today?", "Yes, I am. / No, I'm not."],
+                ["Action (he/she/it)", "DOES", "Does she work in sales?", "Yes, she does. / No, she doesn't."],
+                ["BE (he/she/it)", "IS", "Is he your manager?", "Yes, he is. / No, he isn't."]
+            ]}
+        ],
+        "reading": [
+            {"t": "h", "text": "Model answer · A complete turn"},
+            {"t": "p", "text": "Honestly, I can't stand unnecessary meetings. They waste a lot of time mainly because nothing gets decided. For example, some meetings could be replaced with a short email. However, I don't mind meetings that have a clear purpose. In my experience, a short agenda makes a meeting worth the time."},
+            {"t": "note", "text": "Notice: can't stand + noun, don't mind + V-ing, worth + noun. These are natural ways to express opinions."}
+        ],
+        "conversations": [
+            {"t": "dialog", "title": "A new colleague", "target": "reliable · get along with", "lift": "find it easy to… · surprisingly well", "lines": [
+                {"speaker": "Nina", "text": "How are things with your new colleague?"},
+                {"speaker": "Tom", "text": "Good. She's very reliable — always on time."},
+                {"speaker": "Nina", "text": "Do you get along with her?"},
+                {"speaker": "Tom", "text": "Yes, I do. I find it easy to talk to her."},
+                {"speaker": "Nina", "text": "That's great. Is she easy-going?"},
+                {"speaker": "Tom", "text": "Yes, she is. She's surprisingly well-organized too."}
+            ], "check": ["What is Tom's new colleague like?", "Does Tom get along with her?", "Is she easy-going?"], "answers": "1. She's reliable and well-organized. 2. Yes, he does. 3. Yes, she is.", "note": "Notice: reliable, easy-going, get along with, find it easy to…"},
+            {"t": "dialog", "title": "At the coffee machine", "target": "can't stand · put up with", "lift": "I don't mind… · It's not that bad", "lines": [
+                {"speaker": "Anna", "text": "Do you like the new office coffee?"},
+                {"speaker": "Ben", "text": "No, I don't. I can't stand it — it's too bitter."},
+                {"speaker": "Anna", "text": "Really? I don't mind it. It's not that bad."},
+                {"speaker": "Ben", "text": "I guess I'm just used to the old one."},
+                {"speaker": "Anna", "text": "Are you going to buy your own?"},
+                {"speaker": "Ben", "text": "Yes, I am. I can't put up with this every morning."}
+            ], "check": ["Does Ben like the new coffee?", "Does Anna mind it?", "Is Ben going to buy his own?"], "answers": "1. No, he doesn't. 2. No, she doesn't. 3. Yes, he is.", "note": "Notice: can't stand, don't mind, put up with, used to"},
+            {"t": "dialog", "title": "Weekend plans", "target": "lose touch with · catch up", "lift": "It's been ages · pick up where we left off", "lines": [
+                {"speaker": "Mia", "text": "Are you free this weekend?"},
+                {"speaker": "Lan", "text": "Yes, I am. Why?"},
+                {"speaker": "Mia", "text": "I'm meeting an old friend. We lost touch years ago."},
+                {"speaker": "Lan", "text": "That's nice! Do you have plans to catch up?"},
+                {"speaker": "Mia", "text": "Yes, we're going for coffee. It's been ages!"}
+            ], "check": ["Is Lan free this weekend?", "Did Mia lose touch with her friend?", "Are they going for coffee?"], "answers": "1. Yes, she is. 2. Yes, she did. 3. Yes, they are.", "note": "Notice: lose touch with, catch up, It's been ages"}
+        ],
+        "listening": [
+            {"t": "h", "text": "Shadowing · Nghe từng câu rồi nhắc lại"},
+            {"t": "note", "text": "Bấm 🔊 để nghe từng câu, sau đó nhắc lại y hệt ngữ điệu. Làm 2 lượt: lượt 1 nhìn chữ, lượt 2 che chữ."},
+            {"t": "say", "items": [
+                "Do you work nearby?",
+                "Are you busy today?",
+                "Does she work in sales?",
+                "Is he your manager?",
+                "Do they work together?",
+                "Are we ready?"
+            ]}
+        ],
+        "exercises": [
+            {"t": "h", "text": "Bài tập 1 · Chọn từ đúng"},
+            {"t": "quiz", "items": [
+                {"q": "Mai always does what she promises. She's very ______.", "options": ["acquaintance", "reliable", "considerate", "easy-going"], "answer": 1},
+                {"q": "Ben is relaxed and rarely gets upset. He's quite ______.", "options": ["easy-going", "reliable", "considerate", "acquaintance"], "answer": 0},
+                {"q": "Linh notices when other people need help. She's very ______.", "options": ["reliable", "easy-going", "considerate", "acquaintance"], "answer": 2},
+                {"q": "I know James from a course, but we aren't close friends. He's an ______.", "options": ["reliable", "acquaintance", "easy-going", "considerate"], "answer": 1}
+            ]},
+            {"t": "note", "text": "Đáp án: 1 reliable · 2 easy-going · 3 considerate · 4 acquaintance. Which clue helped you choose each word? Gạch chân từ gợi ý trước khi chọn."},
+            {"t": "h", "text": "Bài tập 2 · DO hay ARE?"},
+            {"t": "quiz", "items": [
+                {"q": "___ you work nearby?", "options": ["Do", "Are", "Is", "Does"], "answer": 0},
+                {"q": "___ you busy today?", "options": ["Do", "Are", "Is", "Does"], "answer": 1},
+                {"q": "___ she work in sales?", "options": ["Do", "Are", "Is", "Does"], "answer": 3},
+                {"q": "___ he your manager?", "options": ["Do", "Are", "Is", "Does"], "answer": 2},
+                {"q": "___ they work together?", "options": ["Do", "Are", "Is", "Does"], "answer": 0},
+                {"q": "___ we ready?", "options": ["Do", "Are", "Is", "Does"], "answer": 1}
+            ]},
+            {"t": "note", "text": "Đáp án: 1 Do · 2 Are · 3 Does · 4 Is · 5 Do · 6 Are. Quy tắc: action verb → DO/DOES, BE information → ARE/IS."}
+        ],
+        "speaking": [
+            {"t": "h", "text": "Question lab · What can't you stand?"},
+            {"t": "p", "text": "Is there anything you can't stand at work or in daily life?"},
+            {"t": "say", "items": [
+                "I can't stand rude people.",
+                "I can't stand long meetings.",
+                "I can't stand waiting in traffic.",
+                "I can't stand loud music.",
+                "I can't stand being late."
+            ]},
+            {"t": "note", "text": "Use: I can't stand + noun / V-ing. Ask a partner: What about you?"}
+        ],
+        "roleplay": [
+            {"t": "steps", "title": "60-second engine challenge", "context": "Work with a partner. Take turns asking and answering Yes-No questions with DO and ARE.", "steps": [
+                "Partner A asks: Do you…? (action)",
+                "Partner B answers: Yes, I do. / No, I don't.",
+                "Partner A asks: Are you…? (BE information)",
+                "Partner B answers: Yes, I am. / No, I'm not.",
+                "Switch roles. Keep it fast — 10 seconds per question."
+            ], "useful": "Do you work nearby? · Are you busy today? · Does she work in sales? · Is he your manager?"}
+        ],
+        "finalTask": [
+            {"t": "label", "text": "THREE-MINUTE SHARED CONVERSATION"},
+            {"t": "p", "text": "Work with a partner. Have a 3-minute conversation about people you know. Use DO/ARE questions and answer with full sentences."},
+            {"t": "note", "text": "Goal: 10+ questions, 10+ full answers. Notice when you use DO vs ARE."}
+        ],
+        "reference": [
+            {"t": "h", "text": "Retrieval challenge · 5 giây mỗi từ"},
+            {"t": "note", "text": "Che cột tiếng Anh, dịch từ tiếng Việt. Sau đó đảo chiều. Chạy lượt 2 theo thứ tự ngẫu nhiên."},
+            {"t": "retrieval", "items": [
+                {"vi": "đồng nghiệp", "en": "colleague"},
+                {"vi": "người quen", "en": "acquaintance"},
+                {"vi": "đáng tin cậy", "en": "reliable"},
+                {"vi": "biết nghĩ cho người khác", "en": "considerate"},
+                {"vi": "dễ tính", "en": "easy-going"},
+                {"vi": "hòa hợp với", "en": "get along with"},
+                {"vi": "mất liên lạc", "en": "lose touch with"},
+                {"vi": "không chịu nổi", "en": "can't stand"}
+            ]}
+        ]
+    }
+}
+
+# Write to data/L01.json
+out = os.path.join(DATA, "L01.json")
+with open(out, "w", encoding="utf-8") as f:
+    json.dump(lesson, f, ensure_ascii=False, indent=2)
+print(f"Written {out}")
+print(f"  title: {lesson['title']}")
+print(f"  parts: {list(lesson['parts'].keys())}")
+print(f"  vocab flashcards: {len(lesson['parts']['vocab'][1]['items'])}")
+print(f"  conversations: {len(lesson['parts']['conversations'])}")

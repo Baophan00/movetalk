@@ -1,0 +1,191 @@
+#!/usr/bin/env python3
+"""Generate L02 data from PPTX content."""
+import json
+import os
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA = os.path.join(ROOT, "data")
+
+lesson = {
+    "title": "Expand the Subject",
+    "vi": "Mở rộng chủ ngữ",
+    "goal": "By the end of this lesson, you can use subject pronouns (he/she/it/we/they) with the correct auxiliary verbs (does/is/do/are) and answer Yes-No questions naturally.",
+    "today": [
+        "Review DO/ARE from L01",
+        "Learn he/she/it → does/is",
+        "Learn we/they → do/are",
+        "Practice short answers"
+    ],
+    "parts": {
+        "vocab": [
+            {"t": "h", "text": "People around you"},
+            {"t": "flashcard", "items": [
+                {"word": "teammate", "phonetic": "/ˈtiːmmeɪt/", "vi": "đồng đội", "def": "someone on your team", "examples": [
+                    {"text": "My teammate is very supportive.", "context": "work"},
+                    {"text": "I play basketball with my teammates.", "context": "daily"}
+                ]},
+                {"word": "colleague", "phonetic": "/ˈkɒliːɡ/", "vi": "đồng nghiệp", "def": "someone you work with", "examples": [
+                    {"text": "I have a meeting with my colleague.", "context": "work"},
+                    {"text": "My colleague is very helpful.", "context": "daily"}
+                ]},
+                {"word": "manager", "phonetic": "/ˈmænɪdʒə/", "vi": "quản lý", "def": "the person who leads your team", "examples": [
+                    {"text": "My manager is very supportive.", "context": "work"},
+                    {"text": "I asked my manager for advice.", "context": "work"}
+                ]},
+                {"word": "client", "phonetic": "/ˈklaɪənt/", "vi": "khách hàng", "def": "someone who buys your service", "examples": [
+                    {"text": "My client is very happy with our work.", "context": "work"},
+                    {"text": "I have a meeting with a new client.", "context": "work"}
+                ]},
+                {"word": "report", "phonetic": "/rɪˈpɔːt/", "vi": "báo cáo", "def": "a document with information", "examples": [
+                    {"text": "I need to finish the report today.", "context": "work"},
+                    {"text": "The report is due tomorrow.", "context": "work"}
+                ]},
+                {"word": "deadline", "phonetic": "/ˈdedlaɪn/", "vi": "hạn chót", "def": "the time when something must be finished", "examples": [
+                    {"text": "The deadline is next Friday.", "context": "work"},
+                    {"text": "I'm working hard to meet the deadline.", "context": "work"}
+                ]},
+                {"word": "supportive", "phonetic": "/səˈpɔːtɪv/", "vi": "hỗ trợ", "def": "giving help and encouragement", "examples": [
+                    {"text": "My team is very supportive.", "context": "work"},
+                    {"text": "My family is always supportive.", "context": "daily"}
+                ]},
+                {"word": "helpful", "phonetic": "/ˈhelpfl/", "vi": "hữu ích", "def": "giving useful help", "examples": [
+                    {"text": "My colleague is very helpful.", "context": "work"},
+                    {"text": "This app is very helpful for learning.", "context": "daily"}
+                ]}
+            ]},
+            {"t": "note", "text": "Choose two people. Say who they are and one thing you like or dislike about them. Accept simple language — ask one follow-up: How do you know them? or What are they like?"}
+        ],
+        "grammar": [
+            {"t": "h", "text": "Subject → Engine → Answer"},
+            {"t": "table", "head": ["Subject", "Engine", "Question", "Answer"], "rows": [
+                ["I", "DO", "Do you work nearby?", "Yes, I do. / No, I don't."],
+                ["You", "DO", "Do you like coffee?", "Yes, I do. / No, I don't."],
+                ["He/She/It", "DOES", "Does she work in sales?", "Yes, she does. / No, she doesn't."],
+                ["We", "DO", "Do we have enough time?", "Yes, we do. / No, we don't."],
+                ["They", "DO", "Do they work together?", "Yes, they do. / No, they don't."],
+                ["He/She/It", "IS", "Is he your manager?", "Yes, he is. / No, he isn't."],
+                ["We", "ARE", "Are we ready?", "Yes, we are. / No, we aren't."],
+                ["They", "ARE", "Are they your coworkers?", "Yes, they are. / No, they aren't."]
+            ]},
+            {"t": "h", "text": "Key rules"},
+            {"t": "list", "items": [
+                "He/She/It → DOES (not DO)",
+                "We/They → DO (not DOES)",
+                "DOES steals the -s: Does she WORK…? (not Does she works…?)",
+                "IS for BE information: Is he busy? (not Does he busy?)"
+            ]}
+        ],
+        "reading": [
+            {"t": "h", "text": "Model answer · A complete turn"},
+            {"t": "p", "text": "I work with a small sales team. Anna is our new teammate. She's friendly, and she's very good with clients. Minh is our manager. He's usually busy, but he's always helpful. We're working on a new project this week, so we're in the office every day. Our clients are in Singapore. They're easy to work with, but they need regular updates. I like my team because we support each other."},
+            {"t": "note", "text": "Notice: she's + adjective, he's + noun, we're + V-ing, they're + adjective. These are natural ways to describe people."}
+        ],
+        "conversations": [
+            {"t": "dialog", "title": "A new teammate", "target": "she's · he's · we're · they're", "lift": "find it easy to… · surprisingly well", "lines": [
+                {"speaker": "Mia", "text": "Is Anna your new teammate?"},
+                {"speaker": "Lan", "text": "Yes, she is. She works in sales."},
+                {"speaker": "Mia", "text": "Does she work with you every day?"},
+                {"speaker": "Lan", "text": "Yes, she does. We work on the same team."},
+                {"speaker": "Mia", "text": "Are you and Anna busy this week?"},
+                {"speaker": "Lan", "text": "Yes, we are. We have a new client."},
+                {"speaker": "Mia", "text": "Do they need the report today?"},
+                {"speaker": "Lan", "text": "No, they don't. They need it tomorrow."}
+            ], "check": ["Is Anna Lan's new teammate?", "Does she work with Lan every day?", "Are they busy this week?", "Do they need the report today?"], "answers": "1. Yes, she is. 2. Yes, she does. 3. Yes, they are. 4. No, they don't.", "note": "Notice: she's, he's, we're, they're — contractions are natural in conversation."},
+            {"t": "dialog", "title": "At the coffee machine", "target": "does he…? · is she…? · do they…?", "lift": "I'm not sure · Let me check", "lines": [
+                {"speaker": "Anna", "text": "Does he work in sales?"},
+                {"speaker": "Ben", "text": "Yes, he does. He's the new manager."},
+                {"speaker": "Anna", "text": "Is she your colleague?"},
+                {"speaker": "Ben", "text": "No, she isn't. She's my sister."},
+                {"speaker": "Anna", "text": "Do they work together?"},
+                {"speaker": "Ben", "text": "Yes, they do. They're on the same team."}
+            ], "check": ["Does he work in sales?", "Is she Ben's colleague?", "Do they work together?"], "answers": "1. Yes, he does. 2. No, she isn't. 3. Yes, they do.", "note": "Notice: does he…? is she…? do they…? — the engine changes with the subject."},
+            {"t": "dialog", "title": "Weekend plans", "target": "are we…? · do we…? · is it…?", "lift": "I'm not sure · Let me think", "lines": [
+                {"speaker": "Mia", "text": "Are we ready for the meeting?"},
+                {"speaker": "Lan", "text": "Yes, we are. We have everything."},
+                {"speaker": "Mia", "text": "Do we need to bring anything?"},
+                {"speaker": "Lan", "text": "No, we don't. Just our laptops."},
+                {"speaker": "Mia", "text": "Is it time to start?"},
+                {"speaker": "Lan", "text": "Yes, it is. Let's go."}
+            ], "check": ["Are we ready?", "Do we need to bring anything?", "Is it time to start?"], "answers": "1. Yes, we are. 2. No, we don't. 3. Yes, it is.", "note": "Notice: are we…? do we…? is it…? — the engine changes with the subject."}
+        ],
+        "listening": [
+            {"t": "h", "text": "Shadowing · Nghe từng câu rồi nhắc lại"},
+            {"t": "note", "text": "Bấm 🔊 để nghe từng câu, sau đó nhắc lại y hệt ngữ điệu. Làm 2 lượt: lượt 1 nhìn chữ, lượt 2 che chữ."},
+            {"t": "say", "items": [
+                "Does she work in sales?",
+                "Is he your manager?",
+                "Do they work together?",
+                "Are we ready?",
+                "Is it time to start?",
+                "Does he live near here?"
+            ]}
+        ],
+        "exercises": [
+            {"t": "h", "text": "Bài tập 1 · Chọn engine đúng"},
+            {"t": "quiz", "items": [
+                {"q": "___ she work in sales?", "options": ["Do", "Does", "Is", "Are"], "answer": 1},
+                {"q": "___ he your manager?", "options": ["Do", "Does", "Is", "Are"], "answer": 2},
+                {"q": "___ they work together?", "options": ["Do", "Does", "Is", "Are"], "answer": 0},
+                {"q": "___ we ready?", "options": ["Do", "Does", "Is", "Are"], "answer": 3},
+                {"q": "___ it time to start?", "options": ["Do", "Does", "Is", "Are"], "answer": 2}
+            ]},
+            {"t": "note", "text": "Đáp án: 1 Does · 2 Is · 3 Do · 4 Are · 5 Is. Quy tắc: he/she/it → does/is, we/they → do/are."},
+            {"t": "h", "text": "Bài tập 2 · Trả lời ngắn"},
+            {"t": "quiz", "items": [
+                {"q": "Does she work in sales?", "options": ["Yes, she does.", "Yes, she is.", "Yes, she do.", "Yes, she are."], "answer": 0},
+                {"q": "Is he your manager?", "options": ["Yes, he does.", "Yes, he is.", "Yes, he do.", "Yes, he are."], "answer": 1},
+                {"q": "Do they work together?", "options": ["Yes, they does.", "Yes, they is.", "Yes, they do.", "Yes, they are."], "answer": 2},
+                {"q": "Are we ready?", "options": ["Yes, we does.", "Yes, we is.", "Yes, we do.", "Yes, we are."], "answer": 3}
+            ]},
+            {"t": "note", "text": "Đáp án: 1 Yes, she does. 2 Yes, he is. 3 Yes, they do. 4 Yes, we are. Quy tắc: trả lời đúng engine với câu hỏi."}
+        ],
+        "speaking": [
+            {"t": "h", "text": "Question lab · Ask about people"},
+            {"t": "p", "text": "Work with a partner. Ask 5 Yes-No questions about people you know. Use does/is/do/are correctly."},
+            {"t": "say", "items": [
+                "Does she work in sales?",
+                "Is he your manager?",
+                "Do they work together?",
+                "Are we ready?",
+                "Is it time to start?"
+            ]},
+            {"t": "note", "text": "Use: Does he/she…? Is he/she…? Do they…? Are they…? Answer with Yes, … does/is/do/are."}
+        ],
+        "roleplay": [
+            {"t": "steps", "title": "60-second engine challenge", "context": "Work with a partner. Take turns asking and answering Yes-No questions with DOES/IS/DO/ARE.", "steps": [
+                "Partner A asks: Does he/she…? (action)",
+                "Partner B answers: Yes, he/she does. / No, he/she doesn't.",
+                "Partner A asks: Is he/she…? (BE information)",
+                "Partner B answers: Yes, he/she is. / No, he/she isn't.",
+                "Switch roles. Keep it fast — 10 seconds per question."
+            ], "useful": "Does she work in sales? · Is he your manager? · Do they work together? · Are we ready?"}
+        ],
+        "finalTask": [
+            {"t": "label", "text": "THREE-MINUTE SHARED CONVERSATION"},
+            {"t": "p", "text": "Work with a partner. Have a 3-minute conversation about people you know. Use DOES/IS/DO/ARE questions and answer with full sentences."},
+            {"t": "note", "text": "Goal: 10+ questions, 10+ full answers. Notice when you use DOES vs IS."}
+        ],
+        "reference": [
+            {"t": "h", "text": "Retrieval challenge · 5 giây mỗi từ"},
+            {"t": "note", "text": "Che cột tiếng Anh, dịch từ tiếng Việt. Sau đó đảo chiều. Chạy lượt 2 theo thứ tự ngẫu nhiên."},
+            {"t": "retrieval", "items": [
+                {"vi": "đồng đội", "en": "teammate"},
+                {"vi": "đồng nghiệp", "en": "colleague"},
+                {"vi": "quản lý", "en": "manager"},
+                {"vi": "khách hàng", "en": "client"},
+                {"vi": "báo cáo", "en": "report"},
+                {"vi": "hạn chót", "en": "deadline"},
+                {"vi": "hỗ trợ", "en": "supportive"},
+                {"vi": "hữu ích", "en": "helpful"}
+            ]}
+        ]
+    }
+}
+
+out = os.path.join(DATA, "L02.json")
+with open(out, "w", encoding="utf-8") as f:
+    json.dump(lesson, f, ensure_ascii=False, indent=2)
+print(f"Written {out}")
+print(f"  title: {lesson['title']}")
+print(f"  vocab flashcards: {len(lesson['parts']['vocab'][1]['items'])}")
+print(f"  conversations: {len(lesson['parts']['conversations'])}")

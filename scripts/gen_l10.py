@@ -1,0 +1,170 @@
+#!/usr/bin/env python3
+"""Generate L10 data: Adverbs."""
+import json, os
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA = os.path.join(ROOT, "data")
+
+lesson = {
+    "title": "Adverbs & Linking Verbs",
+    "vi": "Trạng từ và động từ nối",
+    "goal": "By the end of this lesson, you can use adverbs (-ly) correctly, understand their function and position, and use linking verbs (feel/sound/look/taste/smell/become) + adjective to describe experiences.",
+    "today": [
+        "Review tenses from L09",
+        "Learn adverb formation (-ly)",
+        "Practice adverb position",
+        "Learn linking verbs + adjective"
+    ],
+    "parts": {
+        "vocab": [
+            {"t": "h", "text": "Adverbs & linking verbs"},
+            {"t": "flashcard", "items": [
+                {"word": "quickly", "phonetic": "/ˈkwɪkli/", "vi": "nhanh chóng", "def": "in a fast way", "examples": [{"text": "She finished the report quickly.", "context": "work"}, {"text": "He ran quickly to catch the bus.", "context": "daily"}]},
+                {"word": "carefully", "phonetic": "/ˈkeəfəli/", "vi": "cẩn thận", "def": "in a careful way", "examples": [{"text": "Please read the contract carefully.", "context": "work"}, {"text": "Drive carefully on wet roads.", "context": "daily"}]},
+                {"word": "usually", "phonetic": "/ˈjuːʒuəli/", "vi": "thường", "def": "most of the time", "examples":[{"text": "I usually start work at 9.", "context": "work"}, {"text": "She usually drinks coffee in the morning.", "context": "daily"}]},
+                {"word": "sometimes", "phonetic": "/ˈsʌmtaɪmz/", "vi": "đôi khi", "def": "occasionally", "examples":[{"text": "I sometimes work from home.", "context": "work"}, {"text": "We sometimes eat out on Fridays.", "context": "daily"}]},
+                {"word": "never", "phonetic": "/ˈnevə/", "vi": "không bao giờ", "def": "not at any time", "examples": [{"text": "I never arrive late.", "context": "work"}, {"text": "She never drinks alcohol.", "context": "daily"}]},
+                {"word": "always", "phonetic": "/ˈɔːlweɪz/", "vi": "luôn", "def": "every time", "examples": [{"text": "He always helps his colleagues.", "context": "work"}, {"text": "She always calls her mom on Sundays.", "context": "daily"}]},
+                {"word": "feel", "phonetic": "/fiːl/", "vi": "cảm thấy", "def": "to experience an emotion or sensation", "examples":[{"text": "I feel tired today.", "context": "work"}, {"text": "She feels happy about the news.", "context": "daily"}]},
+                {"word": "sound", "phonetic": "/saʊnd/", "vi": "nghe có vẻ", "def": "to seem based on what you hear", "examples": [{"text": "That sounds like a good idea.", "context": "work"}, {"text": "You sound tired.", "context": "daily"}]},
+                {"word": "look", "phonetic": "/lʊk/", "vi": "trông có vẻ", "def": "to seem based on appearance", "examples":[{"text": "You look busy.", "context": "work"}, {"text": "That looks delicious.", "context": "daily"}]},
+                {"word": "taste", "phonetic": "/teɪst/", "vi": "có vị", "def": "to have a particular flavor", "examples": [{"text": "This coffee tastes bitter.", "context": "daily"}, {"text": "The soup tastes good.", "context": "daily"}]},
+                {"word": "smell", "phonetic": "/smel/", "vi": "có mùi", "def": "to have a particular odor", "examples": [{"text": "The flowers smell wonderful.", "context": "daily"}, {"text": "Something smells burning.", "context": "daily"}]},
+                {"word": "become", "phonetic": "/bɪˈkʌm/", "vi": "trở nên", "def": "to start to be something", "examples": [{"text": "She became a manager last year.", "context": "work"}, {"text": "It became a popular trend.", "context": "daily"}]}
+            ]},
+            {"t": "note", "text": "Choose two people. Describe how they feel, look, sound, taste, smell, or become. Use adverbs and linking verbs."}
+        ],
+        "grammar": [
+            {"t": "h", "text": "Adverb formation — -ly"},
+            {"t": "table", "head": ["Adjective", "Adverb", "Rule", "Example"], "rows": [
+                ["quick", "quickly", "adj + ly", "She works quickly."],
+                ["careful", "carefully", "adj + ly", "Drive carefully."],
+                ["easy", "easily", "y → i + ly", "He finished easily."],
+                ["happy", "happily", "y → i + ly", "She smiled happily."],
+                ["good", "well", "irregular", "He speaks English well."],
+                ["fast", "fast", "same form", "She runs fast."],
+                ["hard", "hard", "same form", "He works hard."],
+                ["late", "late", "same form", "She arrived late."]
+            ]},
+            {"t": "h", "text": "Adverb position"},
+            {"t": "table", "head": ["Type", "Position", "Example"], "rows": [
+                ["Manner (-ly)", "after verb/object", "She works quickly."],
+                ["Frequency", "before main verb", "I usually work at 9."],
+                ["Time", "end of sentence", "I worked yesterday."],
+                ["Place", "end of sentence", "I work at home."]
+            ]},
+            {"t": "h", "text": "Linking verbs + adjective"},
+            {"t": "table", "head": ["Verb", "Sense", "Example"], "rows": [
+                ["feel", "emotion", "I feel tired."],
+                ["sound", "hearing", "That sounds good."],
+                ["look", "sight", "You look busy."],
+                ["taste", "taste", "This tastes sweet."],
+                ["smell", "smell", "It smells nice."],
+                ["become", "change", "She became a manager."]
+            ]},
+            {"t": "note", "text": "Linking verbs + adjective (not adverb). She looks beautiful (not beautifully)."}
+        ],
+        "reading": [
+            {"t": "h", "text": "Model answer · A complete turn"},
+            {"t": "p", "text": "I usually start work at 9. I carefully read my emails and quickly respond to urgent ones. I sometimes feel tired in the afternoon, but I always try to stay focused. My manager sounds happy with my work. The office looks busy today. I became more confident after six months here."},
+            {"t": "note", "text": "Notice: usually (frequency), carefully/quickly (manner), sometimes (frequency), always (frequency), feel/sound/look/become + adjective."}
+        ],
+        "conversations": [
+            {"t": "dialog", "title": "How are you today?", "target": "feel · look · sound", "lift": "I feel… · You look… · That sounds…", "lines": [
+                {"speaker": "Mia", "text": "How do you feel today?"},
+                {"speaker": "Lan", "text": "I feel tired. I worked late last night."},
+                {"speaker": "Mia", "text": "You look busy."},
+                {"speaker": "Lan", "text": "Yes, I have a lot of work today."},
+                {"speaker": "Mia", "text": "That sounds difficult."},
+                {"speaker": "Lan", "text": "It is, but I always try to stay positive."}
+            ], "check": ["How does Lan feel today?", "How does she look?", "What does Mia say about Lan's situation?"], "answers": "1. Tired. 2. Busy. 3. That sounds difficult.", "note": "Notice: feel + adjective, look + adjective, sound + adjective. Linking verbs + adjective, not adverb."},
+            {"t": "dialog", "title": "Adverb position", "target": "usually · sometimes · never · always", "lift": "I usually… · I sometimes… · I never…", "lines": [
+                {"speaker": "Mia", "text": "Do you usually work from home?"},
+                {"speaker": "Lan", "text": "No, I usually work at the office."},
+                {"speaker": "Mia", "text": "Do you sometimes work late?"},
+                {"speaker": "Lan", "text": "Yes, I sometimes work late."},
+                {"speaker": "Mia", "text": "Do you never take breaks?"},
+                {"speaker": "Lan", "text": "No, I always take breaks."}
+            ], "check": ["Does Lan usually work from home?", "Does she sometimes work late?", "Does she never take breaks?"], "answers": "1. No, she usually works at the office. 2. Yes, she sometimes works late. 3. No, she always takes breaks.", "note": "Notice: frequency adverbs go before the main verb. I usually work, not I work usually."},
+            {"t": "dialog", "title": "Linking verbs", "target": "taste · smell · become", "lift": "This tastes… · It smells… · She became…", "lines": [
+                {"speaker": "Mia", "text": "How does the coffee taste?"},
+                {"speaker": "Lan", "text": "It tastes bitter."},
+                {"speaker": "Mia", "text": "How do the flowers smell?"},
+                {"speaker": "Lan", "text": "They smell wonderful."},
+                {"speaker": "Mia", "text": "How did she become a manager?"},
+                {"speaker": "Lan", "text": "She worked hard and became a manager."}
+            ], "check": ["How does the coffee taste?", "How do the flowers smell?", "How did she become a manager?"], "answers": "1. Bitter. 2. Wonderful. 3. She worked hard.", "note": "Notice: taste/smell/become + adjective. Linking verbs + adjective, not adverb."}
+        ],
+        "listening": [
+            {"t": "h", "text": "Shadowing · Nghe từng câu rồi nhắc lại"},
+            {"t": "note", "text": "Bấm 🔊 để nghe từng câu, sau đó nhắc lại y hệt ngữ điệu. Làm 2 lượt: lượt 1 nhìn chữ, lượt 2 che chữ."},
+            {"t": "say", "items": ["She works quickly.", "Drive carefully.", "I usually start work at 9.", "I sometimes feel tired.", "I never arrive late.", "I always try to stay positive."]}
+        ],
+        "exercises": [
+            {"t": "h", "text": "Bài tập 1 · Chọn trạng từ đúng"},
+            {"t": "quiz", "items": [
+                {"q": "She works ___.", "options": ["quick", "quickly", "quicker", "quickest"], "answer": 1},
+                {"q": "Please drive ___.", "options": ["careful", "carefully", "carefullier", "carefulest"], "answer": 1},
+                {"q": "He speaks English ___.", "options": ["good", "well", "better", "best"], "answer": 1},
+                {"q": "She runs ___.", "options": ["fast", "fastly", "faster", "fastest"], "answer": 0},
+                {"q": "He works ___.", "options": ["hard", "hardly", "harder", "hardest"], "answer": 0}
+            ]},
+            {"t": "note", "text": "Đáp án: 1 quickly · 2 carefully · 3 well · 4 fast · 5 hard. Quy tắc: adj + ly → adverb, good → well, fast/hard → same form."},
+            {"t": "h", "text": "Bài tập 2 · Chọn vị trí trạng từ đúng"},
+            {"t": "quiz", "items": [
+                {"q": "I ___ work at 9.", "options": ["usually", "always", "sometimes", "never"], "answer": 0},
+                {"q": "I work ___.", "options": ["yesterday", "quickly", "usually", "always"], "answer": 1},
+                {"q": "I ___ arrive late.", "options": ["never", "always", "sometimes", "usually"], "answer": 0},
+                {"q": "I ___ take breaks.", "options": ["always", "never", "sometimes", "usually"], "answer": 0}
+            ]},
+            {"t": "note", "text": "Đáp án: 1 usually · 2 quickly · 3 never · 4 always. Quy tắc: frequency adverbs before main verb, manner adverbs after verb/object."}
+        ],
+        "speaking": [
+            {"t": "h", "text": "Question lab · Use adverbs and linking verbs"},
+            {"t": "p", "text": "Work with a partner. Ask 5 questions about how people feel, look, sound, taste, smell, or become. Use adverbs and linking verbs."},
+            {"t": "say", "items": ["How do you feel today?", "How does the coffee taste?", "How do the flowers smell?", "How did she become a manager?", "Do you usually work from home?", "Do you sometimes work late?"]},
+            {"t": "note", "text": "Use: feel/look/sound/taste/smell/become + adjective. Use adverbs: usually, sometimes, never, always, quickly, carefully."}
+        ],
+        "roleplay": [
+            {"t": "steps", "title": "60-second engine challenge", "context": "Work with a partner. Take turns asking and answering questions using adverbs and linking verbs.", "steps": [
+                "Partner A asks: How do you feel today?",
+                "Partner B answers with feel + adjective.",
+                "Partner A asks: How does the coffee taste?",
+                "Partner B answers with taste + adjective.",
+                "Partner A asks: Do you usually work from home?",
+                "Partner B answers with usually + verb.",
+                "Switch roles. Keep it fast — 10 seconds per question."
+            ], "useful": "How do you feel? · How does it taste? · Do you usually…? · Do you sometimes…? · I never… · I always…"}
+        ],
+        "finalTask": [
+            {"t": "label", "text": "THREE-MINUTE SHARED CONVERSATION"},
+            {"t": "p", "text": "Work with a partner. Have a 3-minute conversation using adverbs and linking verbs. Describe how people feel, look, sound, taste, smell, or become. Use adverbs: usually, sometimes, never, always, quickly, carefully."},
+            {"t": "note", "text": "Goal: 10+ questions, 10+ full answers. Notice when you use adverbs and linking verbs correctly."}
+        ],
+        "reference": [
+            {"t": "h", "text": "Retrieval challenge · 5 giây mỗi từ"},
+            {"t": "note", "text": "Che cột tiếng Anh, dịch từ tiếng Việt. Sau đó đảo chiều. Chạy lượt 2 theo thứ tự ngẫu nhiên."},
+            {"t": "retrieval", "items": [
+                {"vi": "nhanh chóng", "en": "quickly"},
+                {"vi": "cẩn thận", "en": "carefully"},
+                {"vi": "thường", "en": "usually"},
+                {"vi": "đôi khi", "en": "sometimes"},
+                {"vi": "không bao giờ", "en": "never"},
+                {"vi": "luôn", "en": "always"},
+                {"vi": "cảm thấy", "en": "feel"},
+                {"vi": "nghe có vẻ", "en": "sound"},
+                {"vi": "trông có vẻ", "en": "look"},
+                {"vi": "có vị", "en": "taste"},
+                {"vi": "có mùi", "en": "smell"},
+                {"vi": "trở nên", "en": "become"}
+            ]}
+        ]
+    }
+}
+
+out = os.path.join(DATA, "L10.json")
+with open(out, "w", encoding="utf-8") as f:
+    json.dump(lesson, f, ensure_ascii=False, indent=2)
+print(f"Written {out}")
+print(f"  title: {lesson['title']}")
+print(f"  vocab flashcards: {len(lesson['parts']['vocab'][1]['items'])}")
+print(f"  conversations: {len(lesson['parts']['conversations'])}")

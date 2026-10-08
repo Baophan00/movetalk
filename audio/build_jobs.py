@@ -72,9 +72,29 @@ def voice_for(speaker):
     return "alex" if (speaker or "").strip().lower() in MALE else DEFAULT_VOICE
 
 
+def is_english(text):
+    """False for Vietnamese labels/answers — the cloned voices are English only."""
+    t = text.strip()
+    if not t:
+        return False
+    # Vietnamese diacritics are decisive
+    if re.search(r"[àáảãạăâđêôơưèéẻẽẹìíỉĩịòóỏõọùúủũụỳýỷỹỵ]", t.lower()):
+        return False
+    # a string with no latin letters at all is not worth speaking
+    if not re.search(r"[a-zA-Z]", t):
+        return False
+    # Vietnamese function words that carry no diacritics
+    vi_words = r"\b(cau|nao|hay|chon|dien|dung|sai|bai|tu|ngu|nghia|tra loi|vi du)\b"
+    if re.search(vi_words, t.lower()):
+        return False
+    return True
+
+
 def add(seen, order, text, voice):
     text = (text or "").strip()
     if not text:
+        return
+    if not is_english(text):
         return
     key = text.lower()
     if key in seen:

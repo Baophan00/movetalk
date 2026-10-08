@@ -23,15 +23,22 @@ const api = fn(stub, { innerWidth: 1400, scrollTo() {} }, () => {}, class { obse
 // ---- data shape
 t('LESSON_DATA present', !!api.LESSON_DATA);
 const lessons = api.LESSON_DATA || {};
-t('3 lessons', Object.keys(lessons).length === 3, 'got ' + Object.keys(lessons).length);
+t('10 lessons in A1', Object.keys(lessons).length === 10, 'got ' + Object.keys(lessons).length);
 
 const EXPECT = {
-  1: { title: 'People in Your Life', vocab: 17, grammar: 12, reading: 6, conversations: 6, listening: 6, exercises: 7, speaking: 15, roleplay: 5, finalTask: 12, reference: 7 },
-  2: { title: 'Keeping in Touch', vocab: 21, grammar: 9, reading: 14, conversations: 8, listening: 6, exercises: 7, speaking: 8, roleplay: 4, finalTask: 12, reference: 7 },
-  3: { title: 'Handling Disagreement', vocab: 29, grammar: 10, reading: 15, conversations: 9, listening: 6, exercises: 9, speaking: 10, roleplay: 7, finalTask: 11, reference: 9 },
+  1: { title: 'Reconnect the System' },
+  2: { title: 'Expand the Subject' },
+  3: { title: 'Build the Message' },
+  4: { title: 'Build the Noun Phrase' },
+  5: { title: 'Point, Ask & Connect' },
+  6: { title: 'What Is Around You?' },
+  7: { title: 'Confusing Quantifiers & Determiners' },
+  8: { title: 'Wh- Questions' },
+  9: { title: 'Tenses & Time' },
+  10: { title: 'Adverbs & Linking Verbs' },
 };
 
-for (const num of ['1', '2', '3']) {
+for (const num of Object.keys(lessons)) {
   const L = lessons[num];
   t(`L${num} exists`, !!L);
   if (!L) continue;
@@ -42,7 +49,7 @@ for (const num of ['1', '2', '3']) {
   t(`L${num} has all 10 parts`, api.TRACK_PARTS.every(p => Array.isArray(L.parts[p.id])), Object.keys(L.parts).join(','));
   for (const p of api.TRACK_PARTS) {
     const n = (L.parts[p.id] || []).length;
-    t(`L${num}.${p.id} block count`, n === EXPECT[num][p.id], `got ${n} want ${EXPECT[num][p.id]}`);
+    t(`L${num}.${p.id} has blocks`, n > 0, `got ${n}`);
   }
 }
 
@@ -50,11 +57,11 @@ for (const num of ['1', '2', '3']) {
 const BAD_TYPES = new Set();
 for (const num of Object.keys(lessons)) {
   for (const p of api.TRACK_PARTS) {
-    const html = api.trackBody(p.id, lessons[num], 'e2');
+    const html = api.trackBody(p.id, lessons[num], 'a1');
     t(`L${num}.${p.id} renders`, html.length > 40, 'len=' + html.length);
     t(`L${num}.${p.id} no undefined`, !html.includes('undefined'));
     for (const b of lessons[num].parts[p.id]) {
-      const one = api.renderBlock(b,'e2',p.id);
+      const one = api.renderBlock(b,'a1',p.id);
       if (!one && b.t !== 'h') BAD_TYPES.add(b.t);
     }
   }
@@ -62,19 +69,17 @@ for (const num of Object.keys(lessons)) {
 t('no unrendered block types', BAD_TYPES.size === 0, [...BAD_TYPES].join(','));
 
 // ---- audio buttons present where expected
-const l3conv = api.trackBody('conversations', lessons['3'], 'e2');
-t('L3 conversations has both original recordings',
-  l3conv.includes('audio/ref-audio/weekend-plan.mp3') && l3conv.includes('audio/ref-audio/shared-apartment.mp3'));
+const l3conv = api.trackBody('conversations', lessons['3'], 'a1');
 t('L3 conversations has Play all', l3conv.includes('playBlockDialog'));
 t('L3 conversations has answers reveal', l3conv.includes('Xem đáp án'));
 
 // ---- quizzes are interactive
-const l1ex = api.trackBody('exercises', lessons['1'], 'e2');
+const l1ex = api.trackBody('exercises', lessons['1'], 'a1');
 t('L1 exercises renders quiz options', l1ex.includes('blockAnswer'));
 t('L1 exercises option count', (l1ex.match(/blk-quiz-opt/g) || []).length >= 30, 'opts=' + (l1ex.match(/blk-quiz-opt/g) || []).length);
 
 // ---- TRACKS.e2 now points at the rich data
-t('TRACKS.e2.lessons is LESSON_DATA', api.TRACKS.e2.lessons === api.LESSON_DATA);
+t('TRACKS.a1.lessons is LESSON_DATA', api.TRACKS.a1.lessons === api.LESSON_DATA);
 t('playBlockDialog resolves a dialog', js.includes('blocks.filter(b=>b.t===\'dialog\')'));
 
 console.log(`\n${pass} passed, ${fail} failed`);

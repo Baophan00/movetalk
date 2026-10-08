@@ -1,0 +1,154 @@
+#!/usr/bin/env python3
+"""Generate L08 data: Wh- Questions."""
+import json, os
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA = os.path.join(ROOT, "data")
+
+lesson = {
+    "title": "Wh- Questions",
+    "vi": "Câu hỏi Wh-",
+    "goal": "By the end of this lesson, you can ask Wh- questions: how long, how far, what+N, which+N, how much/many/often. You can choose the right question word and build natural questions.",
+    "today": [
+        "Review Yes-No questions from L01",
+        "Learn Wh- question words",
+        "Practice what+N, which+N",
+        "Build information questions"
+    ],
+    "parts": {
+        "vocab": [
+            {"t": "h", "text": "Question words"},
+            {"t": "flashcard", "items": [
+                {"word": "how long", "phonetic": "/haʊ lɒŋ/", "vi": "bao lâu", "def": "asks about duration", "examples": [{"text": "How long have you worked here?", "context": "work"}, {"text": "How long is the movie?", "context": "daily"}]},
+                {"word": "how far", "phonetic": "/haʊ fɑː/", "vi": "bao xa", "def": "asks about distance", "examples": [{"text": "How far is the office?", "context": "work"}, {"text": "How far is the beach?", "context": "daily"}]},
+                {"word": "how often", "phonetic": "/haʊ ˈɒfn/", "vi": "thường xuyên đến mức nào", "def": "asks about frequency", "examples":[{"text": "How often do you have meetings?", "context": "work"}, {"text": "How often do you go to the gym?", "context": "daily"}]},
+                {"word": "how much", "phonetic": "/haʊ mʌtʃ/", "vi": "bao nhiêu (không đếm được)", "def": "asks about amount of uncountable noun", "examples":[{"text": "How much time do you have?", "context": "work"}, {"text": "How much coffee do you drink?", "context": "daily"}]},
+                {"word": "how many", "phonetic": "/haʊ ˈmeni/", "vi": "bao nhiêu (đếm được)", "def": "asks about number of countable noun", "examples":[{"text": "How many meetings do you have?", "context": "work"}, {"text": "How many friends do you have here?", "context": "daily"}]},
+                {"word": "what kind of", "phonetic": "/wɒt kaɪnd əv/", "vi": "loại nào", "def": "asks about type", "examples":[{"text": "What kind of work do you do?", "context": "work"}, {"text": "What kind of music do you like?", "context": "daily"}]},
+                {"word": "which", "phonetic": "/wɪtʃ/", "vi": "cái nào", "def": "asks about choice from a group", "examples":[{"text": "Which day is better for you?", "context": "work"}, {"text": "Which café do you prefer?", "context": "daily"}]},
+                {"word": "how about", "phonetic": "/haʊ əˈbaʊt/", "vi": "còn… thì sao?", "def": "makes a suggestion or asks for opinion", "examples":[{"text": "How about a meeting tomorrow?", "context": "work"}, {"text": "How about going to the beach?", "context": "daily"}]}
+            ]},
+            {"t": "note", "text": "Choose two people. Ask them Wh- questions. Answer with full sentences."}
+        ],
+        "grammar": [
+            {"t": "h", "text": "Wh- question structure"},
+            {"t": "table", "head": ["Question word", "Asks about", "Structure", "Example"], "rows": [
+                ["What", "thing", "What + N + do/does + S + V?", "What do you do?"],
+                ["Which", "choice", "Which + N + do/does + S + V?", "Which day is better?"],
+                ["How long", "duration", "How long + have/has + S + V-ed?", "How long have you worked here?"],
+                ["How far", "distance", "How far + is/are + N?", "How far is the office?"],
+                ["How often", "frequency", "How often + do/does + S + V?", "How often do you have meetings?"],
+                ["How much", "amount (uncountable)", "How much + N + do/does + S + V?", "How much time do you have?"],
+                ["How many", "number (countable)", "How many + N + do/does + S + V?", "How many meetings do you have?"],
+                ["How about", "suggestion", "How about + V-ing/N?", "How about a meeting tomorrow?"]
+            ]},
+            {"t": "h", "text": "What+N vs Which+N"},
+            {"t": "table", "head": ["Pattern", "Use", "Example"], "rows": [
+                ["What + N", "open choice", "What kind of work do you do?"],
+                ["Which + N", "limited choice", "Which day is better, Monday or Tuesday?"],
+                ["What + N", "general", "What music do you like?"],
+                ["Which + N", "specific", "Which café do you prefer, A or B?"]
+            ]}
+        ],
+        "reading": [
+            {"t": "h", "text": "Model answer · A complete turn"},
+            {"t": "p", "text": "I work as a sales manager. I have been working here for three years. My office is about two kilometers from my house. I usually have three meetings every day. I drink too much coffee, but I try to exercise every weekend. How about you?"},
+            {"t": "note", "text": "Notice: how long (duration), how far (distance), how often (frequency), how much (uncountable), how many (countable)."}
+        ],
+        "conversations": [
+            {"t": "dialog", "title": "Getting to know you", "target": "how long · how far · how often", "lift": "What about you? · How about…?", "lines": [
+                {"speaker": "Mia", "text": "How long have you worked here?"},
+                {"speaker": "Lan", "text": "I have worked here for three years."},
+                {"speaker": "Mia", "text": "How far is the office from your house?"},
+                {"speaker": "Lan", "text": "It is about two kilometers."},
+                {"speaker": "Mia", "text": "How often do you have meetings?"},
+                {"speaker": "Lan", "text": "I usually have three meetings every day."},
+                {"speaker": "Mia", "text": "How about you?"},
+                {"speaker": "Lan", "text": "I have worked here for two years."}
+            ], "check": ["How long has Lan worked here?", "How far is the office from her house?", "How often does she have meetings?", "How long has Mia worked here?"], "answers": "1. For three years. 2. About two kilometers. 3. Three meetings every day. 4. For two years.", "note": "Notice: how long + present perfect, how far + is, how often + do/does."},
+            {"t": "dialog", "title": "What kind of…?", "target": "what kind of · which", "lift": "I prefer… · I like…", "lines": [
+                {"speaker": "Mia", "text": "What kind of work do you do?"},
+                {"speaker": "Lan", "text": "I work in sales."},
+                {"speaker": "Mia", "text": "Which day is better for you, Monday or Tuesday?"},
+                {"speaker": "Lan", "text": "Monday is better."},
+                {"speaker": "Mia", "text": "What kind of music do you like?"},
+                {"speaker": "Lan", "text": "I like pop music."},
+                {"speaker": "Mia", "text": "Which café do you prefer, A or B?"},
+                {"speaker": "Lan", "text": "I prefer café A."}
+            ], "check": ["What kind of work does Lan do?", "Which day is better for her?", "What kind of music does she like?", "Which café does she prefer?"], "answers": "1. Sales. 2. Monday. 3. Pop music. 4. Café A.", "note": "Notice: what kind of + N (open choice), which + N (limited choice)."},
+            {"t": "dialog", "title": "How much or how many?", "target": "how much time · how many meetings", "lift": "too much · too many", "lines": [
+                {"speaker": "Mia", "text": "How much time do you have?"},
+                {"speaker": "Lan", "text": "Not much. I have too much work today."},
+                {"speaker": "Mia", "text": "How many meetings do you have?"},
+                {"speaker": "Lan", "text": "Too many. I have a lot of meetings."},
+                {"speaker": "Mia", "text": "How about a break?"},
+                {"speaker": "Lan", "text": "That is a good idea."}
+            ], "check": ["How much time does Lan have?", "How many meetings does she have?", "What is her suggestion?"], "answers": "1. Not much. 2. Too many. 3. A break.", "note": "Notice: how much + uncountable, how many + countable, how about + V-ing/N."}
+        ],
+        "listening": [
+            {"t": "h", "text": "Shadowing · Nghe từng câu rồi nhắc lại"},
+            {"t": "note", "text": "Bấm 🔊 để nghe từng câu, sau đó nhắc lại y hệt ngữ điệu. Làm 2 lượt: lượt 1 nhìn chữ, lượt 2 che chữ."},
+            {"t": "say", "items": ["How long have you worked here?", "How far is the office?", "How often do you have meetings?", "How much time do you have?", "How many meetings do you have?", "What kind of work do you do?"]}
+        ],
+        "exercises": [
+            {"t": "h", "text": "Bài tập 1 · Chọn question word đúng"},
+            {"t": "quiz", "items": [
+                {"q": "___ have you worked here?", "options": ["How long", "How far", "How often", "How much"], "answer": 0},
+                {"q": "___ is the office from your house?", "options": ["How long", "How far", "How often", "How much"], "answer": 1},
+                {"q": "___ do you have meetings?", "options": ["How long", "How far", "How often", "How much"], "answer": 2},
+                {"q": "___ time do you have?", "options": ["How long", "How far", "How often", "How much"], "answer": 3},
+                {"q": "___ meetings do you have?", "options": ["How much", "How many", "How long", "How far"], "answer": 1}
+            ]},
+            {"t": "note", "text": "Đáp án: 1 How long · 2 How far · 3 How often · 4 How much · 5 How many. Quy tắc: how long (duration), how far (distance), how often (frequency), how much (uncountable), how many (countable)."},
+            {"t": "h", "text": "Bài tập 2 · What+N hay Which+N?"},
+            {"t": "quiz", "items": [
+                {"q": "___ kind of work do you do?", "options": ["What", "Which", "How", "Where"], "answer": 0},
+                {"q": "___ day is better, Monday or Tuesday?", "options": ["What", "Which", "How", "Where"], "answer": 1},
+                {"q": "___ music do you like?", "options": ["What", "Which", "How", "Where"], "answer": 0},
+                {"q": "___ café do you prefer, A or B?", "options": ["What", "Which", "How", "Where"], "answer": 1}
+            ]},
+            {"t": "note", "text": "Đáp án: 1 What · 2 Which · 3 What · 4 Which. Quy tắc: what + N (open choice), which + N (limited choice)."}
+        ],
+        "speaking": [
+            {"t": "h", "text": "Question lab · Ask Wh- questions"},
+            {"t": "p", "text": "Work with a partner. Ask 5 Wh- questions: How long…? How far…? How often…? How much…? How many…? What kind of…? Which…? Answer with full sentences."},
+            {"t": "say", "items": ["How long have you worked here?", "How far is the office?", "How often do you have meetings?", "How much time do you have?", "How many meetings do you have?", "What kind of work do you do?"]},
+            {"t": "note", "text": "Use: How long…? How far…? How often…? How much…? How many…? What kind of…? Which…? Answer with full sentences."}
+        ],
+        "roleplay": [
+            {"t": "steps", "title": "60-second engine challenge", "context": "Work with a partner. Take turns asking and answering Wh- questions.", "steps": [
+                "Partner A asks: How long…? / How far…? / How often…?",
+                "Partner B answers with full sentences.",
+                "Partner A asks: How much…? / How many…? / What kind of…? / Which…?",
+                "Partner B answers with full sentences.",
+                "Switch roles. Keep it fast — 10 seconds per question."
+            ], "useful": "How long have you worked here? · How far is the office? · How often do you have meetings? · How much time do you have? · How many meetings do you have? · What kind of work do you do? · Which day is better?"}
+        ],
+        "finalTask": [
+            {"t": "label", "text": "THREE-MINUTE SHARED CONVERSATION"},
+            {"t": "p", "text": "Work with a partner. Have a 3-minute conversation using Wh- questions. Ask about work, daily life, preferences. Use How long, How far, How often, How much, How many, What kind of, Which, How about."},
+            {"t": "note", "text": "Goal: 10+ questions, 10+ full answers. Notice when you use each question word correctly."}
+        ],
+        "reference": [
+            {"t": "h", "text": "Retrieval challenge · 5 giây mỗi từ"},
+            {"t": "note", "text": "Che cột tiếng Anh, dịch từ tiếng Việt. Sau đó đảo chiều. Chạy lượt 2 theo thứ tự ngẫu nhiên."},
+            {"t": "retrieval", "items": [
+                {"vi": "bao lâu", "en": "how long"},
+                {"vi": "bao xa", "en": "how far"},
+                {"vi": "thường xuyên đến mức nào", "en": "how often"},
+                {"vi": "bao nhiêu (không đếm được)", "en": "how much"},
+                {"vi": "bao nhiêu (đếm được)", "en": "how many"},
+                {"vi": "loại nào", "en": "what kind of"},
+                {"vi": "cái nào", "en": "which"},
+                {"vi": "còn… thì sao?", "en": "how about"}
+            ]}
+        ]
+    }
+}
+
+out = os.path.join(DATA, "L08.json")
+with open(out, "w", encoding="utf-8") as f:
+    json.dump(lesson, f, ensure_ascii=False, indent=2)
+print(f"Written {out}")
+print(f"  title: {lesson['title']}")
+print(f"  vocab flashcards: {len(lesson['parts']['vocab'][1]['items'])}")
+print(f"  conversations: {len(lesson['parts']['conversations'])}")

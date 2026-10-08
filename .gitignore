@@ -1,5 +1,7 @@
 node_modules/
 .ttsvenv/
+audio/__pycache__/
+__pycache__/
 audio/clips/*.wav
 audio/render.log
 audio/supervise.log

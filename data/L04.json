@@ -1,0 +1,674 @@
+{
+  "title": "Build the Noun Phrase",
+  "vi": "Xây dựng cụm danh từ",
+  "goal": "By the end of this lesson, you can name people and things in the English order: Determiner + Description + Noun + Extra detail. You can use this phrase as Subject, Object, or after BE.",
+  "today": [
+    "Review full messages from L03",
+    "Learn the noun phrase structure",
+    "Practice this/that/these/those + adj + N",
+    "Practice my/her/their + adj + N"
+  ],
+  "parts": {
+    "vocab": [
+      {
+        "t": "h",
+        "text": "People, things & ownership"
+      },
+      {
+        "t": "flashcard",
+        "items": [
+          {
+            "word": "this new laptop",
+            "phonetic": "/ðɪs njuː ˈlæptɒp/",
+            "vi": "chiếc laptop mới này",
+            "def": "a specific laptop near you",
+            "examples": [
+              {
+                "text": "Is this your new laptop?",
+                "context": "work"
+              },
+              {
+                "text": "This new laptop is very fast.",
+                "context": "daily"
+              }
+            ]
+          },
+          {
+            "word": "my new work laptop",
+            "phonetic": "/maɪ njuː wɜːk ˈlæptɒp/",
+            "vi": "chiếc laptop công việc mới của tôi",
+            "def": "a laptop for work that belongs to you",
+            "examples": [
+              {
+                "text": "I bought a new work laptop.",
+                "context": "work"
+              },
+              {
+                "text": "My new work laptop is very light.",
+                "context": "work"
+              }
+            ]
+          },
+          {
+            "word": "those client files",
+            "phonetic": "/ðəʊz ˈklaɪənt faɪlz/",
+            "vi": "những tập hồ sơ khách hàng kia",
+            "def": "files for clients, far from you",
+            "examples": [
+              {
+                "text": "Are those your client files?",
+                "context": "work"
+              },
+              {
+                "text": "Those client files are on the desk.",
+                "context": "work"
+              }
+            ]
+          },
+          {
+            "word": "those blue files",
+            "phonetic": "/ðəʊz bluː faɪlz/",
+            "vi": "những tập hồ sơ màu xanh kia",
+            "def": "blue files, far from you",
+            "examples": [
+              {
+                "text": "Those blue files are my manager's.",
+                "context": "work"
+              },
+              {
+                "text": "I need those blue files for the meeting.",
+                "context": "work"
+              }
+            ]
+          },
+          {
+            "word": "my manager's files",
+            "phonetic": "/maɪ ˈmænɪdʒəz faɪlz/",
+            "vi": "tập hồ sơ của quản lý tôi",
+            "def": "files that belong to your manager",
+            "examples": [
+              {
+                "text": "These are my manager's files.",
+                "context": "work"
+              },
+              {
+                "text": "I borrowed my manager's files.",
+                "context": "work"
+              }
+            ]
+          },
+          {
+            "word": "that woman near the window",
+            "phonetic": "/ðæt ˈwʊmən nɪə ðə ˈwɪndəʊ/",
+            "vi": "người phụ nữ gần cửa sổ kia",
+            "def": "a specific woman, far from you",
+            "examples": [
+              {
+                "text": "Who's that woman near the window?",
+                "context": "work"
+              },
+              {
+                "text": "That woman near the window is our new manager.",
+                "context": "work"
+              }
+            ]
+          },
+          {
+            "word": "our new sales manager",
+            "phonetic": "/ˈaʊə njuː seɪlz ˈmænɪdʒə/",
+            "vi": "quản lý bán hàng mới của chúng tôi",
+            "def": "the new manager of our sales team",
+            "examples": [
+              {
+                "text": "Our new sales manager is very friendly.",
+                "context": "work"
+              },
+              {
+                "text": "I met our new sales manager yesterday.",
+                "context": "work"
+              }
+            ]
+          },
+          {
+            "word": "her office",
+            "phonetic": "/hɜːr ˈɒfɪs/",
+            "vi": "văn phòng của cô ấy",
+            "def": "the office that belongs to her",
+            "examples": [
+              {
+                "text": "Her office is on the second floor.",
+                "context": "work"
+              },
+              {
+                "text": "I went to her office to discuss the project.",
+                "context": "work"
+              }
+            ]
+          },
+          {
+            "word": "the second floor",
+            "phonetic": "/ðə ˈsekənd flɔː/",
+            "vi": "tầng hai",
+            "def": "the floor above the ground floor",
+            "examples": [
+              {
+                "text": "Her office is on the second floor.",
+                "context": "work"
+              },
+              {
+                "text": "The meeting room is on the second floor.",
+                "context": "work"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "t": "note",
+        "text": "Choose two people. Say who they are and one thing you like or dislike about them. Accept simple language — ask one follow-up: How do you know them? or What are they like?"
+      }
+    ],
+    "grammar": [
+      {
+        "t": "h",
+        "text": "The noun phrase map"
+      },
+      {
+        "t": "table",
+        "head": [
+          "Part",
+          "What",
+          "Example"
+        ],
+        "rows": [
+          [
+            "1 · FRONT DOOR",
+            "determiner",
+            "my, this, the, a"
+          ],
+          [
+            "2 · HOW MANY",
+            "number / quantity",
+            "two, some, every"
+          ],
+          [
+            "3 · WHAT KIND",
+            "description",
+            "new, sales, blue"
+          ],
+          [
+            "4 · THE THING",
+            "noun",
+            "coworkers, files, office"
+          ],
+          [
+            "5 · EXTRA DETAIL",
+            "after the noun",
+            "from Hanoi, on the desk"
+          ]
+        ]
+      },
+      {
+        "t": "h",
+        "text": "The front door — 4 groups"
+      },
+      {
+        "t": "table",
+        "head": [
+          "Group",
+          "Words",
+          "Example"
+        ],
+        "rows": [
+          [
+            "NAME",
+            "a · an · the",
+            "a client · the office"
+          ],
+          [
+            "POINT",
+            "this · that · these · those",
+            "this phone · those files"
+          ],
+          [
+            "OWNER",
+            "my · your · his · her · our · their",
+            "my job · her manager"
+          ],
+          [
+            "AMOUNT / CHOICE",
+            "some · any · two · every · which · whose",
+            "some coffee · which room"
+          ]
+        ]
+      },
+      {
+        "t": "note",
+        "text": "ONE FRONT DOOR: my phone, this phone, the phone. Never: the my phone."
+      },
+      {
+        "t": "h",
+        "text": "Vietnamese vs English — word order"
+      },
+      {
+        "t": "table",
+        "head": [
+          "Vietnamese",
+          "English",
+          "Example"
+        ],
+        "rows": [
+          [
+            "NOUN + CHỈ ĐỊNH",
+            "DEMONSTRATIVE + NOUN",
+            "điện thoại này → this phone"
+          ],
+          [
+            "NOUN + CỦA + OWNER",
+            "POSSESSIVE + NOUN",
+            "đồng nghiệp của tôi → my coworker"
+          ],
+          [
+            "NOUN + ADJ",
+            "ADJ + NOUN",
+            "đồng nghiệp mới → new coworker"
+          ]
+        ]
+      }
+    ],
+    "reading": [
+      {
+        "t": "h",
+        "text": "Model answer · A complete turn"
+      },
+      {
+        "t": "p",
+        "text": "This morning, I met our new sales manager at a small coffee shop near the office. She brought her work laptop and two client files. Those blue files contained the details of our new project. During the meeting, my manager showed me this simple sales plan and a list of our international clients. Her clear explanation helped me understand the next steps."
+      },
+      {
+        "t": "note",
+        "text": "Notice: our new sales manager, her work laptop, those blue files, this simple sales plan. The noun phrase can be Subject, Object, or after BE."
+      }
+    ],
+    "conversations": [
+      {
+        "t": "dialog",
+        "title": "A new laptop",
+        "target": "this new laptop · my new work laptop",
+        "lift": "It's… · I just got…",
+        "lines": [
+          {
+            "speaker": "Mia",
+            "text": "Is this your new laptop?"
+          },
+          {
+            "speaker": "Lan",
+            "text": "Yes. It's my new work laptop."
+          },
+          {
+            "speaker": "Mia",
+            "text": "Are those your client files?"
+          },
+          {
+            "speaker": "Lan",
+            "text": "No. Those blue files are my manager's files."
+          },
+          {
+            "speaker": "Mia",
+            "text": "Who's that woman near the window?"
+          },
+          {
+            "speaker": "Lan",
+            "text": "She's our new sales manager."
+          },
+          {
+            "speaker": "Mia",
+            "text": "Does your new manager work here every day?"
+          },
+          {
+            "speaker": "Lan",
+            "text": "Yes. Her office is on the second floor."
+          }
+        ],
+        "check": [
+          "Is this Lan's new laptop?",
+          "Are those Lan's client files?",
+          "Who's that woman near the window?",
+          "Does the new manager work here every day?"
+        ],
+        "answers": "1. Yes, it is. 2. No, they aren't. 3. She's the new sales manager. 4. Yes, she does.",
+        "note": "Notice: this new laptop, my new work laptop, those blue files, my manager's files, that woman near the window, our new sales manager, her office, the second floor."
+      },
+      {
+        "t": "dialog",
+        "title": "At the coffee machine",
+        "target": "this cup · that chair · these keys · those windows",
+        "lift": "Is this…? · Are these…?",
+        "lines": [
+          {
+            "speaker": "Anna",
+            "text": "Is this your cup?"
+          },
+          {
+            "speaker": "Ben",
+            "text": "Yes, it is. This is my cup."
+          },
+          {
+            "speaker": "Anna",
+            "text": "Is that your chair?"
+          },
+          {
+            "speaker": "Ben",
+            "text": "No, it isn't. That chair is free."
+          },
+          {
+            "speaker": "Anna",
+            "text": "Are these your keys?"
+          },
+          {
+            "speaker": "Ben",
+            "text": "Yes, they are. These are my keys."
+          },
+          {
+            "speaker": "Anna",
+            "text": "Are those your windows?"
+          },
+          {
+            "speaker": "Ben",
+            "text": "No, they aren't. Those windows are open."
+          }
+        ],
+        "check": [
+          "Is this Ben's cup?",
+          "Is that Ben's chair?",
+          "Are these Ben's keys?",
+          "Are those Ben's windows?"
+        ],
+        "answers": "1. Yes, it is. 2. No, it isn't. 3. Yes, they are. 4. No, they aren't.",
+        "note": "Notice: this/that + is, these/those + are. Near vs far, one vs many."
+      },
+      {
+        "t": "dialog",
+        "title": "Possessives",
+        "target": "my coworker · her boss · our office · their clients",
+        "lift": "I work with… · She works for…",
+        "lines": [
+          {
+            "speaker": "Mia",
+            "text": "Is this your coworker?"
+          },
+          {
+            "speaker": "Lan",
+            "text": "Yes, she is. She's my coworker."
+          },
+          {
+            "speaker": "Mia",
+            "text": "Is that her boss?"
+          },
+          {
+            "speaker": "Lan",
+            "text": "Yes, he is. He's her boss."
+          },
+          {
+            "speaker": "Mia",
+            "text": "Is this our office?"
+          },
+          {
+            "speaker": "Lan",
+            "text": "Yes, it is. This is our office."
+          },
+          {
+            "speaker": "Mia",
+            "text": "Are those their clients?"
+          },
+          {
+            "speaker": "Lan",
+            "text": "Yes, they are. Those are their clients."
+          }
+        ],
+        "check": [
+          "Is this Lan's coworker?",
+          "Is that her boss?",
+          "Is this their office?",
+          "Are those their clients?"
+        ],
+        "answers": "1. Yes, she is. 2. Yes, he is. 3. Yes, it is. 4. Yes, they are.",
+        "note": "Notice: my coworker, her boss, our office, their clients. Owner first, then noun."
+      }
+    ],
+    "listening": [
+      {
+        "t": "h",
+        "text": "Shadowing · Nghe từng câu rồi nhắc lại"
+      },
+      {
+        "t": "note",
+        "text": "Bấm 🔊 để nghe từng câu, sau đó nhắc lại y hệt ngữ điệu. Làm 2 lượt: lượt 1 nhìn chữ, lượt 2 che chữ."
+      },
+      {
+        "t": "say",
+        "items": [
+          "This is my new work laptop.",
+          "Those blue files are my manager's.",
+          "That woman near the window is our new sales manager.",
+          "Her office is on the second floor.",
+          "Is this your cup?",
+          "Are these your keys?"
+        ]
+      }
+    ],
+    "exercises": [
+      {
+        "t": "h",
+        "text": "Bài tập 1 · Chọn determiner đúng"
+      },
+      {
+        "t": "quiz",
+        "items": [
+          {
+            "q": "___ phone is mine.",
+            "options": [
+              "This",
+              "These",
+              "That",
+              "Those"
+            ],
+            "answer": 0
+          },
+          {
+            "q": "___ chairs are free.",
+            "options": [
+              "This",
+              "These",
+              "That",
+              "Those"
+            ],
+            "answer": 3
+          },
+          {
+            "q": "___ keys are on the table.",
+            "options": [
+              "This",
+              "These",
+              "That",
+              "Those"
+            ],
+            "answer": 1
+          },
+          {
+            "q": "___ woman is our manager.",
+            "options": [
+              "This",
+              "These",
+              "That",
+              "Those"
+            ],
+            "answer": 2
+          }
+        ]
+      },
+      {
+        "t": "note",
+        "text": "Đáp án: 1 This · 2 Those · 3 These · 4 That. Quy tắc: this/that + is, these/those + are. Near vs far."
+      },
+      {
+        "t": "h",
+        "text": "Bài tập 2 · Sắp xếp cụm danh từ"
+      },
+      {
+        "t": "quiz",
+        "items": [
+          {
+            "q": "manager / new / our",
+            "options": [
+              "our new manager",
+              "new our manager",
+              "manager our new",
+              "new manager our"
+            ],
+            "answer": 0
+          },
+          {
+            "q": "these / client / important / files",
+            "options": [
+              "these important client files",
+              "client these important files",
+              "important these client files",
+              "these client important files"
+            ],
+            "answer": 0
+          },
+          {
+            "q": "coffee shop / that / small",
+            "options": [
+              "that small coffee shop",
+              "small that coffee shop",
+              "coffee shop that small",
+              "that coffee shop small"
+            ],
+            "answer": 0
+          },
+          {
+            "q": "their / two / new / employees",
+            "options": [
+              "their two new employees",
+              "two their new employees",
+              "new their two employees",
+              "their new two employees"
+            ],
+            "answer": 0
+          }
+        ]
+      },
+      {
+        "t": "note",
+        "text": "Đáp án: 1 our new manager · 2 these important client files · 3 that small coffee shop · 4 their two new employees. Quy tắc: FRONT DOOR → NUMBER → DESCRIPTION → NOUN → EXTRA DETAIL."
+      }
+    ],
+    "speaking": [
+      {
+        "t": "h",
+        "text": "Question lab · Point and ask"
+      },
+      {
+        "t": "p",
+        "text": "Work with a partner. Point to objects in the room. Ask: Is this your…? / Are these your…? Answer with full noun phrases."
+      },
+      {
+        "t": "say",
+        "items": [
+          "Is this your phone?",
+          "Are these your keys?",
+          "Is that your chair?",
+          "Are those your files?",
+          "Is this your cup?",
+          "Are those your windows?"
+        ]
+      },
+      {
+        "t": "note",
+        "text": "Use: Is this your…? / Are these your…? Answer with Yes, it is. / Yes, they are. + full noun phrase."
+      }
+    ],
+    "roleplay": [
+      {
+        "t": "steps",
+        "title": "60-second engine challenge",
+        "context": "Work with a partner. Take turns pointing to objects and asking Yes-No questions with this/that/these/those.",
+        "steps": [
+          "Partner A points and asks: Is this your…?",
+          "Partner B answers: Yes, it is. / No, it isn't.",
+          "Partner A points and asks: Are these your…?",
+          "Partner B answers: Yes, they are. / No, they aren't.",
+          "Switch roles. Keep it fast — 10 seconds per question."
+        ],
+        "useful": "Is this your phone? · Are these your keys? · Is that your chair? · Are those your files?"
+      }
+    ],
+    "finalTask": [
+      {
+        "t": "label",
+        "text": "THREE-MINUTE SHARED CONVERSATION"
+      },
+      {
+        "t": "p",
+        "text": "Work with a partner. Have a 3-minute conversation about people and things around you. Use this/that/these/those + noun phrases and my/her/their + noun phrases."
+      },
+      {
+        "t": "note",
+        "text": "Goal: 10+ questions, 10+ full answers. Notice when you use this vs these, my vs their."
+      }
+    ],
+    "reference": [
+      {
+        "t": "h",
+        "text": "Retrieval challenge · 5 giây mỗi từ"
+      },
+      {
+        "t": "note",
+        "text": "Che cột tiếng Anh, dịch từ tiếng Việt. Sau đó đảo chiều. Chạy lượt 2 theo thứ tự ngẫu nhiên."
+      },
+      {
+        "t": "retrieval",
+        "items": [
+          {
+            "vi": "chiếc laptop mới này",
+            "en": "this new laptop"
+          },
+          {
+            "vi": "chiếc laptop công việc mới của tôi",
+            "en": "my new work laptop"
+          },
+          {
+            "vi": "những tập hồ sơ khách hàng kia",
+            "en": "those client files"
+          },
+          {
+            "vi": "những tập hồ sơ màu xanh kia",
+            "en": "those blue files"
+          },
+          {
+            "vi": "tập hồ sơ của quản lý tôi",
+            "en": "my manager's files"
+          },
+          {
+            "vi": "người phụ nữ gần cửa sổ kia",
+            "en": "that woman near the window"
+          },
+          {
+            "vi": "quản lý bán hàng mới của chúng tôi",
+            "en": "our new sales manager"
+          },
+          {
+            "vi": "văn phòng của cô ấy",
+            "en": "her office"
+          },
+          {
+            "vi": "tầng hai",
+            "en": "the second floor"
+          }
+        ]
+      }
+    ]
+  }
+}

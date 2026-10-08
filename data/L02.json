@@ -1,1265 +1,615 @@
 {
- "title": "Keeping in Touch",
- "vi": "Giữ liên lạc",
- "goal": "By the end of the lesson, you can talk naturally about staying connected, losing touch, and reconnecting.",
- "today": [
-  "Speak first",
-  "Notice useful words",
-  "Build longer turns",
-  "Ask better follow-ups",
-  "Most of the lesson is conversation"
- ],
- "parts": {
-  "vocab": [
-   {
-    "t": "h",
-    "text": "Vocabulary in context · Staying connected"
-   },
-   {
-    "t": "bank",
-    "items": [
-     "keep in touch",
-     "catch up",
-     "reach out",
-     "make time for"
-    ]
-   },
-   {
-    "t": "words",
-    "items": [
-     {
-      "en": "keep in touch",
-      "vi": "giữ liên lạc với ai",
-      "def": "You continue communicating over time."
-     },
-     {
-      "en": "catch up",
-      "vi": "gặp để cập nhật chuyện gần đây",
-      "def": "You share recent news after not talking for a while."
-     },
-     {
-      "en": "reach out",
-      "vi": "chủ động liên hệ với ai",
-      "def": "You contact someone, often after a quiet period."
-     },
-     {
-      "en": "make time for",
-      "vi": "dành thời gian cho ai",
-      "def": "You create space in your schedule for them."
-     }
-    ]
-   },
-   {
-    "t": "quiz",
-    "items": [
-     {
-      "q": "We don't meet often, but we ______ by texting every few weeks.",
-      "options": [
-       "keep in touch",
-       "reach out",
-       "catch up",
-       "make time for"
-      ],
-      "answer": 0
-     },
-     {
-      "q": "I haven't spoken to Lan in months. I should ______ to her.",
-      "options": [
-       "keep in touch",
-       "reach out",
-       "catch up",
-       "make time for"
-      ],
-      "answer": 1
-     },
-     {
-      "q": "We had coffee yesterday and ______ on everything that had happened.",
-      "options": [
-       "kept in touch",
-       "reached out",
-       "caught up",
-       "made time for"
-      ],
-      "answer": 2
-     },
-     {
-      "q": "Even when I'm busy, I try to ______ the people I care about.",
-      "options": [
-       "keep in touch",
-       "reach out",
-       "catch up",
-       "make time for"
-      ],
-      "answer": 3
-     }
-    ]
-   },
-   {
-    "t": "note",
-    "text": "Đáp án: 1 keep in touch · 2 reach out · 3 caught up · 4 make time for. Câu nào đúng nhất với bạn?"
-   },
-   {
-    "t": "h",
-    "text": "Meaning check · Which situation fits?"
-   },
-   {
-    "t": "table",
-    "head": [
-     "Expression",
-     "Meaning"
-    ],
-    "rows": [
-     [
-      "keep in touch",
-      "You continue communicating over time."
-     ],
-     [
-      "reach out to someone",
-      "You contact someone, often after a quiet period."
-     ],
-     [
-      "catch up with someone",
-      "You share recent news after not talking for a while."
-     ],
-     [
-      "make time for someone",
-      "You create space in your schedule for them."
-     ]
-    ]
-   },
-   {
-    "t": "note",
-    "text": "Quick talk: Which one do you need to do this week? Nêu 1 tên thật và lý do."
-   },
-   {
-    "t": "h",
-    "text": "Vocabulary in context · Changing relationships"
-   },
-   {
-    "t": "bank",
-    "items": [
-     "drift apart",
-     "get back in touch",
-     "stay connected",
-     "have a lot going on",
-     "pick up where we left off"
-    ]
-   },
-   {
-    "t": "words",
-    "items": [
-     {
-      "en": "drift apart",
-      "vi": "dần xa cách",
-      "def": "you gradually become less close"
-     },
-     {
-      "en": "get back in touch",
-      "vi": "liên lạc lại với ai",
-      "def": "contact someone again after a long time"
-     },
-     {
-      "en": "stay connected",
-      "vi": "duy trì kết nối",
-      "def": "continue having contact"
-     },
-     {
-      "en": "have a lot going on",
-      "vi": "đang có rất nhiều việc",
-      "def": "be very busy with several things"
-     },
-     {
-      "en": "pick up where we left off",
-      "vi": "tiếp tục tự nhiên như trước",
-      "def": "continue naturally, as if no time passed"
-     }
-    ]
-   },
-   {
-    "t": "quiz",
-    "items": [
-     {
-      "q": "We were once close, but we slowly ______ after university.",
-      "options": [
-       "drifted apart",
-       "got back in touch",
-       "stayed connected",
-       "caught up"
-      ],
-      "answer": 0
-     },
-     {
-      "q": "I'd love to ______ with my old roommate.",
-      "options": [
-       "drift apart",
-       "get back in touch",
-       "stay connected",
-       "have a lot going on"
-      ],
-      "answer": 1
-     },
-     {
-      "q": "She hasn't replied because she ______ at the moment.",
-      "options": [
-       "drifted apart",
-       "got back in touch",
-       "has a lot going on",
-       "stayed connected"
-      ],
-      "answer": 2
-     },
-     {
-      "q": "Even though we live far apart, we still ______ online.",
-      "options": [
-       "drift apart",
-       "get back in touch",
-       "have a lot going on",
-       "stay connected"
-      ],
-      "answer": 3
-     },
-     {
-      "q": "When we finally meet, we usually ______, as if no time has passed.",
-      "options": [
-       "drift apart",
-       "pick up where we left off",
-       "stay connected",
-       "make time for"
-      ],
-      "answer": 1
-     }
-    ]
-   },
-   {
-    "t": "note",
-    "text": "Đáp án: 1 drifted apart · 2 get back in touch · 3 has a lot going on · 4 stay connected · 5 pick up where we left off. Cụm cuối là receptive-plus — không bắt buộc phải dùng được."
-   },
-   {
-    "t": "h",
-    "text": "Form and word partners"
-   },
-   {
-    "t": "table",
-    "head": [
-     "Expression",
-     "What follows",
-     "Natural example"
-    ],
-    "rows": [
-     [
-      "keep / stay",
-      "in touch / connected",
-      "We've stayed in touch for years."
-     ],
-     [
-      "reach out",
-      "to + person",
-      "I finally reached out to her."
-     ],
-     [
-      "catch up",
-      "with + person / on + news",
-      "I caught up with Minh yesterday."
-     ],
-     [
-      "make time",
-      "for + person / activity",
-      "I make time for close friends."
-     ],
-     [
-      "drift apart",
-      "from + person",
-      "We gradually drifted apart."
-     ],
-     [
-      "get back in touch",
-      "with + person",
-      "I'd like to get back in touch with him."
-     ]
-    ]
-   },
-   {
-    "t": "note",
-    "text": "Chạy như drill thay thế, không phải bài giảng. Giáo viên đưa một người hoặc ngữ cảnh. Học viên tạo câu hoàn chỉnh trong 5 giây."
-   },
-   {
-    "t": "h",
-    "text": "Meaning and language · Busy lives"
-   },
-   {
-    "t": "words",
-    "items": [
-     {
-      "en": "make someone feel guilty",
-      "vi": "khiến ai thấy có lỗi",
-      "def": "cause someone to feel responsible or bad"
-     },
-     {
-      "en": "without adding pressure",
-      "vi": "không tạo thêm áp lực",
-      "def": "without making the situation more stressful"
-     },
-     {
-      "en": "stay connected",
-      "vi": "duy trì kết nối",
-      "def": "continue having contact"
-     },
-     {
-      "en": "reach out tonight",
-      "vi": "liên hệ tối nay",
-      "def": "contact the person tonight"
-     },
-     {
-      "en": "have a lot going on",
-      "vi": "đang có rất nhiều việc",
-      "def": "be very busy with several things"
-     }
-    ]
-   },
-   {
-    "t": "h",
-    "text": "Language lift · Relationships over time"
-   },
-   {
-    "t": "frames",
-    "groups": [
-     {
-      "group": "TIME",
-      "items": [
-       "We've stayed in touch for years.",
-       "We haven't spoken since March.",
-       "We've been close ever since."
-      ]
-     },
-     {
-      "group": "PAST HABIT",
-      "items": [
-       "We used to talk every day.",
-       "We would meet after work."
-      ]
-     },
-     {
-      "group": "CHANGE",
-      "items": [
-       "Over time, we gradually drifted apart.",
-       "As our lives changed, we spoke less often."
-      ]
-     },
-     {
-      "group": "BALANCE",
-      "items": [
-       "Even though we rarely meet, we're still close.",
-       "Although she's busy, she always replies."
-      ]
-     }
-    ]
-   },
-   {
-    "t": "note",
-    "text": "Chọn 1 cụm từ 2 nhóm khác nhau và tạo một câu thật."
-   }
+  "title": "Expand the Subject",
+  "vi": "Mở rộng chủ ngữ",
+  "goal": "By the end of this lesson, you can use subject pronouns (he/she/it/we/they) with the correct auxiliary verbs (does/is/do/are) and answer Yes-No questions naturally.",
+  "today": [
+    "Review DO/ARE from L01",
+    "Learn he/she/it → does/is",
+    "Learn we/they → do/are",
+    "Practice short answers"
   ],
-  "grammar": [
-   {
-    "t": "h",
-    "text": "Answer building · A connected turn"
-   },
-   {
-    "t": "layers",
-    "items": [
-     {
-      "label": "DIRECT ANSWER",
-      "text": "I find it difficult to maintain every friendship."
-     },
-     {
-      "label": "REASON",
-      "text": "As people get busier, their schedules become harder to match."
-     },
-     {
-      "label": "PERSONAL DETAIL",
-      "text": "For example, one of my closest friends now lives in another city."
-     },
-     {
-      "label": "BALANCE",
-      "text": "Even though we don't talk often, we still reach out when something important happens."
-     },
-     {
-      "label": "RETURN",
-      "text": "How about you? Do you find it easy to stay connected?"
-     }
-    ]
-   },
-   {
-    "t": "note",
-    "text": "Dùng 3–5 câu. Dừng sớm nếu câu trả lời đã đủ. Sau đó che slide và hỏi câu mới: Is it easy to stay close to friends as you get older?"
-   },
-   {
-    "t": "h",
-    "text": "Follow-up questions · Stay on the topic"
-   },
-   {
-    "t": "table",
-    "head": [
-     "Nhóm",
-     "Câu hỏi nối tiếp"
+  "parts": {
+    "vocab": [
+      {
+        "t": "h",
+        "text": "People around you"
+      },
+      {
+        "t": "flashcard",
+        "items": [
+          {
+            "word": "teammate",
+            "phonetic": "/ˈtiːmmeɪt/",
+            "vi": "đồng đội",
+            "def": "someone on your team",
+            "examples": [
+              {
+                "text": "My teammate is very supportive.",
+                "context": "work"
+              },
+              {
+                "text": "I play basketball with my teammates.",
+                "context": "daily"
+              }
+            ]
+          },
+          {
+            "word": "colleague",
+            "phonetic": "/ˈkɒliːɡ/",
+            "vi": "đồng nghiệp",
+            "def": "someone you work with",
+            "examples": [
+              {
+                "text": "I have a meeting with my colleague.",
+                "context": "work"
+              },
+              {
+                "text": "My colleague is very helpful.",
+                "context": "daily"
+              }
+            ]
+          },
+          {
+            "word": "manager",
+            "phonetic": "/ˈmænɪdʒə/",
+            "vi": "quản lý",
+            "def": "the person who leads your team",
+            "examples": [
+              {
+                "text": "My manager is very supportive.",
+                "context": "work"
+              },
+              {
+                "text": "I asked my manager for advice.",
+                "context": "work"
+              }
+            ]
+          },
+          {
+            "word": "client",
+            "phonetic": "/ˈklaɪənt/",
+            "vi": "khách hàng",
+            "def": "someone who buys your service",
+            "examples": [
+              {
+                "text": "My client is very happy with our work.",
+                "context": "work"
+              },
+              {
+                "text": "I have a meeting with a new client.",
+                "context": "work"
+              }
+            ]
+          },
+          {
+            "word": "report",
+            "phonetic": "/rɪˈpɔːt/",
+            "vi": "báo cáo",
+            "def": "a document with information",
+            "examples": [
+              {
+                "text": "I need to finish the report today.",
+                "context": "work"
+              },
+              {
+                "text": "The report is due tomorrow.",
+                "context": "work"
+              }
+            ]
+          },
+          {
+            "word": "deadline",
+            "phonetic": "/ˈdedlaɪn/",
+            "vi": "hạn chót",
+            "def": "the time when something must be finished",
+            "examples": [
+              {
+                "text": "The deadline is next Friday.",
+                "context": "work"
+              },
+              {
+                "text": "I'm working hard to meet the deadline.",
+                "context": "work"
+              }
+            ]
+          },
+          {
+            "word": "supportive",
+            "phonetic": "/səˈpɔːtɪv/",
+            "vi": "hỗ trợ",
+            "def": "giving help and encouragement",
+            "examples": [
+              {
+                "text": "My team is very supportive.",
+                "context": "work"
+              },
+              {
+                "text": "My family is always supportive.",
+                "context": "daily"
+              }
+            ]
+          },
+          {
+            "word": "helpful",
+            "phonetic": "/ˈhelpfl/",
+            "vi": "hữu ích",
+            "def": "giving useful help",
+            "examples": [
+              {
+                "text": "My colleague is very helpful.",
+                "context": "work"
+              },
+              {
+                "text": "This app is very helpful for learning.",
+                "context": "daily"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "t": "note",
+        "text": "Choose two people. Say who they are and one thing you like or dislike about them. Accept simple language — ask one follow-up: How do you know them? or What are they like?"
+      }
     ],
-    "rows": [
-     [
-      "PERSON",
-      "Who was that? · How did you meet? · What were they like?"
-     ],
-     [
-      "TIME",
-      "How long has it been? · When did you last speak?"
-     ],
-     [
-      "REASON",
-      "Why did you drift apart? · What made you reach out?"
-     ],
-     [
-      "FEELING",
-      "Did it feel awkward? · How did you feel afterwards?"
-     ],
-     [
-      "NEXT STEP",
-      "Will you contact them again? · What would you do differently?"
-     ]
-    ]
-   },
-   {
-    "t": "ex",
-    "text": "Rule · Ask about the last detail you heard."
-   },
-   {
-    "t": "note",
-    "text": "Chọn 2 câu nối tiếp từ 2 nhóm khác nhau. Sau đó lặp lại mà không nhìn slide."
-   },
-   {
-    "t": "h",
-    "text": "Useful starts · Nêu ý kiến"
-   },
-   {
-    "t": "frames",
-    "groups": [
-     {
-      "group": "USEFUL STARTS",
-      "items": [
-       "I agree to some extent…",
-       "In my experience…",
-       "That depends on…",
-       "I see your point, but…"
-      ]
-     }
-    ]
-   }
-  ],
-  "reading": [
-   {
-    "t": "h",
-    "text": "Speak first · Your real life"
-   },
-   {
-    "t": "note",
-    "text": "Chọn 1 câu. Nói 30–45 giây. Đối tác hỏi 2 câu nối tiếp. Nghe 1 chi tiết và hỏi về chi tiết đó thay vì đổi chủ đề."
-   },
-   {
-    "t": "list",
-    "items": [
-     "Who do you talk to almost every day?",
-     "Who would you like to reconnect with?",
-     "Is it easy for you to maintain friendships?",
-     "Why do people sometimes drift apart?"
-    ]
-   },
-   {
-    "t": "ex",
-    "text": "ROUND 2 · Change partners or choose a new question."
-   },
-   {
-    "t": "h",
-    "text": "L01 recycle · People in your life"
-   },
-   {
-    "t": "note",
-    "text": "Dùng 1 cụm từ L01 trong mỗi câu trả lời. Mỗi lượt dưới 30 giây. Sau mỗi câu trả lời: phản hồi + hỏi 1 câu liên quan."
-   },
-   {
-    "t": "bank",
-    "items": [
-     "get along with",
-     "reliable",
-     "can't stand",
-     "lose touch with"
-    ]
-   },
-   {
-    "t": "list",
-    "items": [
-     "Who is someone you get along with well?",
-     "What quality makes a person reliable?",
-     "What behaviour can't you stand?",
-     "Have you ever lost touch with someone?"
-    ]
-   },
-   {
-    "t": "h",
-    "text": "Speaking round 2 · Opinions"
-   },
-   {
-    "t": "note",
-    "text": "Chọn 1 nhận định. Đồng ý, đồng ý một phần, hoặc không đồng ý. Nêu lý do và 1 ví dụ. Đối tác: phản biện 1 điểm một cách lịch sự."
-   },
-   {
-    "t": "list",
-    "items": [
-     "\"Real friends can go years without talking.\"",
-     "\"Social media helps people stay genuinely close.\"",
-     "\"Busy people should still make time for friendships.\"",
-     "\"Some friendships naturally have an ending.\""
-    ]
-   },
-   {
-    "t": "h",
-    "text": "Speaking round 1 · Personal experience"
-   },
-   {
-    "t": "note",
-    "text": "Chọn 2 câu hỏi. Nói 45 giây mỗi câu. Đối tác phải phản hồi trước khi hỏi thêm. Phản hồi mẫu: \"That makes sense because…\" hoặc \"I've had a similar experience…\""
-   },
-   {
-    "t": "list",
-    "items": [
-     "Who have you stayed in touch with for a long time?",
-     "Who did you use to see more often?",
-     "Have you ever reached out after a long silence?",
-     "What helps long-distance friendships last?"
-    ]
-   }
-  ],
-  "conversations": [
-   {
-    "t": "dialog",
-    "title": "An unexpected message",
-    "target": "drift apart · reach out · catch up",
-    "lift": "pick up where we left off",
-    "question": "Read or listen. What changed between Maya and Sophie?",
-    "lines": [
-     {
-      "speaker": "Daniel",
-      "text": "You look surprised. Is everything okay?"
-     },
-     {
-      "speaker": "Maya",
-      "text": "Yes. I just got a message from Sophie, an old university friend."
-     },
-     {
-      "speaker": "Daniel",
-      "text": "I don't think you've mentioned her before. Were you close?"
-     },
-     {
-      "speaker": "Maya",
-      "text": "Very close. We used to spend nearly every weekend together."
-     },
-     {
-      "speaker": "Daniel",
-      "text": "What happened? Did you have an argument?"
-     },
-     {
-      "speaker": "Maya",
-      "text": "No. We moved to different cities and gradually drifted apart."
-     },
-     {
-      "speaker": "Daniel",
-      "text": "So why did she message you now?"
-     },
-     {
-      "speaker": "Maya",
-      "text": "She found an old photo of us and decided to reach out."
-     },
-     {
-      "speaker": "Daniel",
-      "text": "That's nice. Are you going to get back in touch properly?"
-     },
-     {
-      "speaker": "Maya",
-      "text": "Definitely. We're planning a video call this weekend so we can catch up."
-     },
-     {
-      "speaker": "Daniel",
-      "text": "Do you think it'll feel awkward after so long?"
-     },
-     {
-      "speaker": "Maya",
-      "text": "Maybe at first, but I think we'll quickly pick up where we left off."
-     }
+    "grammar": [
+      {
+        "t": "h",
+        "text": "Subject → Engine → Answer"
+      },
+      {
+        "t": "table",
+        "head": [
+          "Subject",
+          "Engine",
+          "Question",
+          "Answer"
+        ],
+        "rows": [
+          [
+            "I",
+            "DO",
+            "Do you work nearby?",
+            "Yes, I do. / No, I don't."
+          ],
+          [
+            "You",
+            "DO",
+            "Do you like coffee?",
+            "Yes, I do. / No, I don't."
+          ],
+          [
+            "He/She/It",
+            "DOES",
+            "Does she work in sales?",
+            "Yes, she does. / No, she doesn't."
+          ],
+          [
+            "We",
+            "DO",
+            "Do we have enough time?",
+            "Yes, we do. / No, we don't."
+          ],
+          [
+            "They",
+            "DO",
+            "Do they work together?",
+            "Yes, they do. / No, they don't."
+          ],
+          [
+            "He/She/It",
+            "IS",
+            "Is he your manager?",
+            "Yes, he is. / No, he isn't."
+          ],
+          [
+            "We",
+            "ARE",
+            "Are we ready?",
+            "Yes, we are. / No, we aren't."
+          ],
+          [
+            "They",
+            "ARE",
+            "Are they your coworkers?",
+            "Yes, they are. / No, they aren't."
+          ]
+        ]
+      },
+      {
+        "t": "h",
+        "text": "Key rules"
+      },
+      {
+        "t": "list",
+        "items": [
+          "He/She/It → DOES (not DO)",
+          "We/They → DO (not DOES)",
+          "DOES steals the -s: Does she WORK…? (not Does she works…?)",
+          "IS for BE information: Is he busy? (not Does he busy?)"
+        ]
+      }
     ],
-    "check": [
-     "Why did Maya and Sophie drift apart?",
-     "Which phrase means 'contact someone again'?",
-     "Which phrase means 'share recent news'?",
-     "Would you reply if an old friend contacted you? Why?",
-     "What would you want to ask them first?"
+    "reading": [
+      {
+        "t": "h",
+        "text": "Model answer · A complete turn"
+      },
+      {
+        "t": "p",
+        "text": "I work with a small sales team. Anna is our new teammate. She's friendly, and she's very good with clients. Minh is our manager. He's usually busy, but he's always helpful. We're working on a new project this week, so we're in the office every day. Our clients are in Singapore. They're easy to work with, but they need regular updates. I like my team because we support each other."
+      },
+      {
+        "t": "note",
+        "text": "Notice: she's + adjective, he's + noun, we're + V-ing, they're + adjective. These are natural ways to describe people."
+      }
     ],
-    "answers": "different cities · reach out / get back in touch · catch up",
-    "note": "Đọc lời thoại trước khi xem slide. Học viên nghe để tìm mối quan hệ và lý do họ xa cách. Sau đó xác định 3 câu hỏi nối tiếp, đọc theo vai, đổi vai và lặp lại không nhìn từng dòng."
-   },
-   {
-    "t": "dialog",
-    "title": "Busy lives",
-    "target": "have a lot going on · stay connected",
-    "lift": "without adding pressure",
-    "question": "Read or listen. Is the friendship still important to both speakers?",
-    "lines": [
-     {
-      "speaker": "Liam",
-      "text": "You and Carla used to be really close. Do you still talk?"
-     },
-     {
-      "speaker": "Nora",
-      "text": "We do, but not as often as before. We both have a lot going on."
-     },
-     {
-      "speaker": "Liam",
-      "text": "Is it mainly work, or have your lives just changed?"
-     },
-     {
-      "speaker": "Nora",
-      "text": "A bit of both. She has two young children, and my job has become busier."
-     },
-     {
-      "speaker": "Liam",
-      "text": "Does it bother you that you don't speak regularly?"
-     },
-     {
-      "speaker": "Nora",
-      "text": "Sometimes. I miss our long conversations, especially when I need advice."
-     },
-     {
-      "speaker": "Liam",
-      "text": "Have you told her that?"
-     },
-     {
-      "speaker": "Nora",
-      "text": "Not directly. I know she's busy, so I don't want to make her feel guilty."
-     },
-     {
-      "speaker": "Liam",
-      "text": "Maybe you could suggest something simple, like a monthly call."
-     },
-     {
-      "speaker": "Nora",
-      "text": "That might work. It would help us stay connected without adding pressure."
-     },
-     {
-      "speaker": "Liam",
-      "text": "Exactly. Good friendships still need time, even when life gets busy."
-     },
-     {
-      "speaker": "Nora",
-      "text": "You're right. I'll reach out tonight and see when she's free."
-     }
+    "conversations": [
+      {
+        "t": "dialog",
+        "title": "A new teammate",
+        "target": "she's · he's · we're · they're",
+        "lift": "find it easy to… · surprisingly well",
+        "lines": [
+          {
+            "speaker": "Mia",
+            "text": "Is Anna your new teammate?"
+          },
+          {
+            "speaker": "Lan",
+            "text": "Yes, she is. She works in sales."
+          },
+          {
+            "speaker": "Mia",
+            "text": "Does she work with you every day?"
+          },
+          {
+            "speaker": "Lan",
+            "text": "Yes, she does. We work on the same team."
+          },
+          {
+            "speaker": "Mia",
+            "text": "Are you and Anna busy this week?"
+          },
+          {
+            "speaker": "Lan",
+            "text": "Yes, we are. We have a new client."
+          },
+          {
+            "speaker": "Mia",
+            "text": "Do they need the report today?"
+          },
+          {
+            "speaker": "Lan",
+            "text": "No, they don't. They need it tomorrow."
+          }
+        ],
+        "check": [
+          "Is Anna Lan's new teammate?",
+          "Does she work with Lan every day?",
+          "Are they busy this week?",
+          "Do they need the report today?"
+        ],
+        "answers": "1. Yes, she is. 2. Yes, she does. 3. Yes, they are. 4. No, they don't.",
+        "note": "Notice: she's, he's, we're, they're — contractions are natural in conversation."
+      },
+      {
+        "t": "dialog",
+        "title": "At the coffee machine",
+        "target": "does he…? · is she…? · do they…?",
+        "lift": "I'm not sure · Let me check",
+        "lines": [
+          {
+            "speaker": "Anna",
+            "text": "Does he work in sales?"
+          },
+          {
+            "speaker": "Ben",
+            "text": "Yes, he does. He's the new manager."
+          },
+          {
+            "speaker": "Anna",
+            "text": "Is she your colleague?"
+          },
+          {
+            "speaker": "Ben",
+            "text": "No, she isn't. She's my sister."
+          },
+          {
+            "speaker": "Anna",
+            "text": "Do they work together?"
+          },
+          {
+            "speaker": "Ben",
+            "text": "Yes, they do. They're on the same team."
+          }
+        ],
+        "check": [
+          "Does he work in sales?",
+          "Is she Ben's colleague?",
+          "Do they work together?"
+        ],
+        "answers": "1. Yes, he does. 2. No, she isn't. 3. Yes, they do.",
+        "note": "Notice: does he…? is she…? do they…? — the engine changes with the subject."
+      },
+      {
+        "t": "dialog",
+        "title": "Weekend plans",
+        "target": "are we…? · do we…? · is it…?",
+        "lift": "I'm not sure · Let me think",
+        "lines": [
+          {
+            "speaker": "Mia",
+            "text": "Are we ready for the meeting?"
+          },
+          {
+            "speaker": "Lan",
+            "text": "Yes, we are. We have everything."
+          },
+          {
+            "speaker": "Mia",
+            "text": "Do we need to bring anything?"
+          },
+          {
+            "speaker": "Lan",
+            "text": "No, we don't. Just our laptops."
+          },
+          {
+            "speaker": "Mia",
+            "text": "Is it time to start?"
+          },
+          {
+            "speaker": "Lan",
+            "text": "Yes, it is. Let's go."
+          }
+        ],
+        "check": [
+          "Are we ready?",
+          "Do we need to bring anything?",
+          "Is it time to start?"
+        ],
+        "answers": "1. Yes, we are. 2. No, we don't. 3. Yes, it is.",
+        "note": "Notice: are we…? do we…? is it…? — the engine changes with the subject."
+      }
     ],
-    "check": [
-     "have a lot going on — nghĩa là gì?",
-     "make someone feel guilty — nghĩa là gì?",
-     "without adding pressure — nghĩa là gì?",
-     "stay connected — nghĩa là gì?",
-     "reach out tonight — nghĩa là gì?"
+    "listening": [
+      {
+        "t": "h",
+        "text": "Shadowing · Nghe từng câu rồi nhắc lại"
+      },
+      {
+        "t": "note",
+        "text": "Bấm 🔊 để nghe từng câu, sau đó nhắc lại y hệt ngữ điệu. Làm 2 lượt: lượt 1 nhìn chữ, lượt 2 che chữ."
+      },
+      {
+        "t": "say",
+        "items": [
+          "Does she work in sales?",
+          "Is he your manager?",
+          "Do they work together?",
+          "Are we ready?",
+          "Is it time to start?",
+          "Does he live near here?"
+        ]
+      }
     ],
-    "answers": "be very busy with several things · cause someone to feel responsible or bad · without making the situation more stressful · continue having contact · contact the person tonight",
-    "note": "Lần nghe 1: quyết định xem tình bạn còn quan trọng không. Lần 2: tìm 2 lý do họ ít nói chuyện hơn. Chú ý Nora trả lời cân bằng thay vì đổ lỗi cho bạn."
-   },
-   {
-    "t": "h",
-    "text": "Dialogue rebuild · Complete the exchange"
-   },
-   {
-    "t": "note",
-    "text": "KHÔNG dùng word bank trước. Điền theo trí nhớ hoặc thông tin của bạn. Đọc 1 lần, che slide, rồi dựng lại ý nghĩa thay vì đúng từng chữ."
-   },
-   {
-    "t": "fill",
-    "items": [
-     {
-      "speaker": "A",
-      "text": "You look surprised. Is everything okay?"
-     },
-     {
-      "speaker": "B",
-      "text": "I just got a message from ____________________."
-     },
-     {
-      "speaker": "A",
-      "text": "Were you close?"
-     },
-     {
-      "speaker": "B",
-      "text": "Yes, but we gradually ____________________."
-     },
-     {
-      "speaker": "A",
-      "text": "Why did they reach out?"
-     },
-     {
-      "speaker": "B",
-      "text": "_________________________________________________."
-     },
-     {
-      "speaker": "A",
-      "text": "Are you going to get back in touch?"
-     },
-     {
-      "speaker": "B",
-      "text": "Yes. We're planning to ____________________."
-     },
-     {
-      "speaker": "A",
-      "text": "Do you think it'll feel awkward?"
-     },
-     {
-      "speaker": "B",
-      "text": "Maybe, but I think ________________________."
-     }
-    ]
-   },
-   {
-    "t": "h",
-    "text": "Speak from the dialogue"
-   },
-   {
-    "t": "note",
-    "text": "Chọn 1 hướng. Nói 45–60 giây. Đối tác hỏi 2 câu nối tiếp. Partner task: nghe 1 chi tiết và hỏi về chi tiết đó."
-   },
-   {
-    "t": "frames",
-    "groups": [
-     {
-      "group": "A REAL PERSON",
-      "items": [
-       "Talk about someone you lost touch with.",
-       "How did you know them?",
-       "Why did you drift apart?",
-       "Would you like to reconnect?",
-       "What would you say first?"
-      ]
-     },
-     {
-      "group": "A POSSIBLE SITUATION",
-      "items": [
-       "Imagine an old friend contacts you.",
-       "How would you react?",
-       "What would you ask?",
-       "Would a call or meeting feel better?",
-       "Could you pick up where you left off?"
-      ]
-     }
-    ]
-   }
-  ],
-  "listening": [
-   {
-    "t": "h",
-    "text": "Shadowing · Nghe từng câu rồi nhắc lại"
-   },
-   {
-    "t": "note",
-    "text": "Bấm 🔊 để nghe từng câu, sau đó nhắc lại y hệt ngữ điệu. Làm 2 lượt: lượt 1 nhìn chữ, lượt 2 che chữ."
-   },
-   {
-    "t": "say",
-    "items": [
-     "You look surprised. Is everything okay?",
-     "I just got a message from Sophie, an old university friend.",
-     "We moved to different cities and gradually drifted apart.",
-     "She found an old photo of us and decided to reach out.",
-     "I think we'll quickly pick up where we left off.",
-     "We both have a lot going on.",
-     "It would help us stay connected without adding pressure.",
-     "I'll reach out tonight and see when she's free."
-    ]
-   },
-   {
-    "t": "h",
-    "text": "Micro-focus · Nối âm và dạng yếu"
-   },
-   {
-    "t": "table",
-    "head": [
-     "Cụm",
-     "Cách đọc tự nhiên"
+    "exercises": [
+      {
+        "t": "h",
+        "text": "Bài tập 1 · Chọn engine đúng"
+      },
+      {
+        "t": "quiz",
+        "items": [
+          {
+            "q": "___ she work in sales?",
+            "options": [
+              "Do",
+              "Does",
+              "Is",
+              "Are"
+            ],
+            "answer": 1
+          },
+          {
+            "q": "___ he your manager?",
+            "options": [
+              "Do",
+              "Does",
+              "Is",
+              "Are"
+            ],
+            "answer": 2
+          },
+          {
+            "q": "___ they work together?",
+            "options": [
+              "Do",
+              "Does",
+              "Is",
+              "Are"
+            ],
+            "answer": 0
+          },
+          {
+            "q": "___ we ready?",
+            "options": [
+              "Do",
+              "Does",
+              "Is",
+              "Are"
+            ],
+            "answer": 3
+          },
+          {
+            "q": "___ it time to start?",
+            "options": [
+              "Do",
+              "Does",
+              "Is",
+              "Are"
+            ],
+            "answer": 2
+          }
+        ]
+      },
+      {
+        "t": "note",
+        "text": "Đáp án: 1 Does · 2 Is · 3 Do · 4 Are · 5 Is. Quy tắc: he/she/it → does/is, we/they → do/are."
+      },
+      {
+        "t": "h",
+        "text": "Bài tập 2 · Trả lời ngắn"
+      },
+      {
+        "t": "quiz",
+        "items": [
+          {
+            "q": "Does she work in sales?",
+            "options": [
+              "Yes, she does.",
+              "Yes, she is.",
+              "Yes, she do.",
+              "Yes, she are."
+            ],
+            "answer": 0
+          },
+          {
+            "q": "Is he your manager?",
+            "options": [
+              "Yes, he does.",
+              "Yes, he is.",
+              "Yes, he do.",
+              "Yes, he are."
+            ],
+            "answer": 1
+          },
+          {
+            "q": "Do they work together?",
+            "options": [
+              "Yes, they does.",
+              "Yes, they is.",
+              "Yes, they do.",
+              "Yes, they are."
+            ],
+            "answer": 2
+          },
+          {
+            "q": "Are we ready?",
+            "options": [
+              "Yes, we does.",
+              "Yes, we is.",
+              "Yes, we do.",
+              "Yes, we are."
+            ],
+            "answer": 3
+          }
+        ]
+      },
+      {
+        "t": "note",
+        "text": "Đáp án: 1 Yes, she does. 2 Yes, he is. 3 Yes, they do. 4 Yes, we are. Quy tắc: trả lời đúng engine với câu hỏi."
+      }
     ],
-    "rows": [
-     [
-      "used to",
-      "/juːstə/ — 's' nghe như /s/, không phải /z/"
-     ],
-     [
-      "want to",
-      "/wɒnə/ — nối thành 1 âm"
-     ],
-     [
-      "going to",
-      "/ɡənə/ — trong lời nói nhanh"
-     ],
-     [
-      "kind of",
-      "/kaɪndə/ — dạng yếu"
-     ],
-     [
-      "a lot of",
-      "/ə lɒtə/ — 'of' yếu"
-     ]
-    ]
-   },
-   {
-    "t": "note",
-    "text": "Trong câu, từ chức năng (to, of, a) thường yếu và nối với từ trước. Nghe từ khóa mang thông tin, không nghe từng từ."
-   }
-  ],
-  "exercises": [
-   {
-    "t": "h",
-    "text": "Bài tập 1 · Chọn từ đúng"
-   },
-   {
-    "t": "quiz",
-    "items": [
-     {
-      "q": "We don't meet often, but we ______ by texting every few weeks.",
-      "options": [
-       "keep in touch",
-       "reach out",
-       "catch up",
-       "make time for"
-      ],
-      "answer": 0
-     },
-     {
-      "q": "I haven't spoken to Lan in months. I should ______ to her.",
-      "options": [
-       "keep in touch",
-       "reach out",
-       "catch up",
-       "make time for"
-      ],
-      "answer": 1
-     },
-     {
-      "q": "We had coffee yesterday and ______ on everything that had happened.",
-      "options": [
-       "kept in touch",
-       "reached out",
-       "caught up",
-       "made time for"
-      ],
-      "answer": 2
-     },
-     {
-      "q": "Even when I'm busy, I try to ______ the people I care about.",
-      "options": [
-       "keep in touch",
-       "reach out",
-       "catch up",
-       "make time for"
-      ],
-      "answer": 3
-     },
-     {
-      "q": "We were once close, but we slowly ______ after university.",
-      "options": [
-       "drifted apart",
-       "got back in touch",
-       "stayed connected",
-       "caught up"
-      ],
-      "answer": 0
-     },
-     {
-      "q": "I'd love to ______ with my old roommate.",
-      "options": [
-       "drift apart",
-       "get back in touch",
-       "stay connected",
-       "have a lot going on"
-      ],
-      "answer": 1
-     },
-     {
-      "q": "She hasn't replied because she ______ at the moment.",
-      "options": [
-       "drifted apart",
-       "got back in touch",
-       "has a lot going on",
-       "stayed connected"
-      ],
-      "answer": 2
-     },
-     {
-      "q": "Even though we live far apart, we still ______ online.",
-      "options": [
-       "drift apart",
-       "get back in touch",
-       "have a lot going on",
-       "stay connected"
-      ],
-      "answer": 3
-     }
-    ]
-   },
-   {
-    "t": "h",
-    "text": "Bài tập 2 · Điền vào đoạn hội thoại"
-   },
-   {
-    "t": "bank",
-    "items": [
-     "drifted apart",
-     "reach out",
-     "catch up",
-     "make time for",
-     "keep in touch",
-     "a lot going on"
-    ]
-   },
-   {
-    "t": "fill",
-    "items": [
-     {
-      "speaker": "A",
-      "text": "Have you spoken to Emma recently?"
-     },
-     {
-      "speaker": "B",
-      "text": "Not really. We've both had __________, so we slowly __________."
-     },
-     {
-      "speaker": "A",
-      "text": "That's a shame. Why don't you __________ to her?"
-     },
-     {
-      "speaker": "B",
-      "text": "I want to, but I'm worried the conversation might feel awkward."
-     },
-     {
-      "speaker": "A",
-      "text": "You could ask her to meet for coffee and __________."
-     },
-     {
-      "speaker": "B",
-      "text": "Good idea. I need to __________ the people I care about."
-     },
-     {
-      "speaker": "A",
-      "text": "Exactly. You can still __________ even when life gets busy."
-     }
-    ]
-   },
-   {
-    "t": "h",
-    "text": "Bài tập 3 · Dạng đúng"
-   },
-   {
-    "t": "quiz",
-    "items": [
-     {
-      "q": "We've stayed ______ for years.",
-      "options": [
-       "in touch",
-       "on touch",
-       "with touch",
-       "touch"
-      ],
-      "answer": 0
-     },
-     {
-      "q": "I finally reached out ______ her.",
-      "options": [
-       "for",
-       "to",
-       "with",
-       "on"
-      ],
-      "answer": 1
-     },
-     {
-      "q": "I caught up ______ Minh yesterday.",
-      "options": [
-       "to",
-       "on",
-       "with",
-       "for"
-      ],
-      "answer": 2
-     },
-     {
-      "q": "We gradually drifted apart ______ each other.",
-      "options": [
-       "to",
-       "with",
-       "on",
-       "from"
-      ],
-      "answer": 3
-     },
-     {
-      "q": "I make time ______ close friends.",
-      "options": [
-       "for",
-       "to",
-       "with",
-       "on"
-      ],
-      "answer": 0
-     }
-    ]
-   }
-  ],
-  "speaking": [
-   {
-    "t": "h",
-    "text": "Partner interview · One person, five questions"
-   },
-   {
-    "t": "note",
-    "text": "Chọn 1 người bạn, họ hàng, hoặc đồng nghiệp cũ. Đối tác phỏng vấn bạn. Người phỏng vấn hỏi thêm 1 câu không có trên slide. Lượt 1: A nói. Lượt 2: đổi vai."
-   },
-   {
-    "t": "list",
-    "items": [
-     "How did you meet?",
-     "What did you use to do together?",
-     "How often do you keep in touch now?",
-     "Has the relationship changed over time?",
-     "What helps you stay connected?"
-    ]
-   },
-   {
-    "t": "h",
-    "text": "Speaking round · Trả lời 45 giây"
-   },
-   {
-    "t": "say",
-    "items": [
-     "Who have you stayed in touch with for a long time?",
-     "Who did you use to see more often?",
-     "Have you ever reached out after a long silence?",
-     "What helps long-distance friendships last?",
-     "Who do you talk to almost every day?",
-     "Who would you like to reconnect with?"
-    ]
-   },
-   {
-    "t": "h",
-    "text": "Personal response"
-   },
-   {
-    "t": "p",
-    "text": "What is a realistic way for busy friends to stay connected?"
-   },
-   {
-    "t": "note",
-    "text": "Trả lời ít nhất 45 giây. Dùng 1 cụm từ từ phần từ vựng."
-   }
-  ],
-  "roleplay": [
-   {
-    "t": "steps",
-    "title": "An unexpected reunion",
-    "context": "You unexpectedly meet an old friend at a café after five years.",
-    "steps": [
-     "A: React and ask what your friend has been doing.",
-     "B: Share two life changes and ask about A.",
-     "A: Explain why you lost touch without blaming anyone.",
-     "B: Suggest a realistic way to get back in touch.",
-     "BOTH: Agree on a next step and end naturally."
+    "speaking": [
+      {
+        "t": "h",
+        "text": "Question lab · Ask about people"
+      },
+      {
+        "t": "p",
+        "text": "Work with a partner. Ask 5 Yes-No questions about people you know. Use does/is/do/are correctly."
+      },
+      {
+        "t": "say",
+        "items": [
+          "Does she work in sales?",
+          "Is he your manager?",
+          "Do they work together?",
+          "Are we ready?",
+          "Is it time to start?"
+        ]
+      },
+      {
+        "t": "note",
+        "text": "Use: Does he/she…? Is he/she…? Do they…? Are they…? Answer with Yes, … does/is/do/are."
+      }
     ],
-    "useful": "used to · drift apart · get back in touch · catch up · stay connected"
-   },
-   {
-    "t": "steps",
-    "title": "A busy friend",
-    "context": "You want more contact, but your friend has a lot going on.",
-    "steps": [
-     "YOU: Explain how you feel without sounding accusatory.",
-     "FRIEND: Explain what has made life busy.",
-     "YOU: Suggest one simple way to stay connected.",
-     "FRIEND: Respond honestly and offer another option.",
-     "BOTH: Choose a plan that feels realistic."
+    "roleplay": [
+      {
+        "t": "steps",
+        "title": "60-second engine challenge",
+        "context": "Work with a partner. Take turns asking and answering Yes-No questions with DOES/IS/DO/ARE.",
+        "steps": [
+          "Partner A asks: Does he/she…? (action)",
+          "Partner B answers: Yes, he/she does. / No, he/she doesn't.",
+          "Partner A asks: Is he/she…? (BE information)",
+          "Partner B answers: Yes, he/she is. / No, he/she isn't.",
+          "Switch roles. Keep it fast — 10 seconds per question."
+        ],
+        "useful": "Does she work in sales? · Is he your manager? · Do they work together? · Are we ready?"
+      }
     ],
-    "useful": "I know you've been busy, but… · I don't want to add pressure. · Would it work if…?"
-   },
-   {
-    "t": "h",
-    "text": "Cách chạy role-play"
-   },
-   {
-    "t": "note",
-    "text": "Lượt 1 chạy có gợi ý. Lượt 2 che slide và đổi 1 chi tiết. Chỉ khuyến khích lượt 3–5 câu khi nội dung thực sự cần. Model chỉ 1 câu mở đầu, để học viên tự thương lượng phần còn lại."
-   }
-  ],
-  "finalTask": [
-   {
-    "t": "h",
-    "text": "Final mission · A shared conversation"
-   },
-   {
-    "t": "label",
-    "text": "FOUR-MINUTE CONVERSATION"
-   },
-   {
-    "t": "p",
-    "text": "Talk about how your relationships have changed over time. Share one person you have stayed in touch with. Talk about someone you drifted apart from or reconnected with. Respond to your partner and ask at least three follow-up questions."
-   },
-   {
-    "t": "chips",
-    "items": [
-     "use 6 target expressions",
-     "give connected turns",
-     "follow the last detail"
-    ]
-   },
-   {
-    "t": "ex",
-    "text": "Both speakers should introduce new information."
-   },
-   {
-    "t": "note",
-    "text": "Lưu ý: 4 phút hội thoại không phải 4 phút độc thoại. Mỗi lượt nên tập trung và có tương tác. Feedback: dùng từ chính xác, 1 lượt mở rộng tốt, 1 câu nối tiếp thành công, và 1 mục tiêu tiếp theo."
-   },
-   {
-    "t": "h",
-    "text": "Home practice"
-   },
-   {
-    "t": "label",
-    "text": "VOICE NOTE · Record 60–90 seconds"
-   },
-   {
-    "t": "p",
-    "text": "How have one of your friendships changed over time? Include: how you met · what you used to do · how you stay connected now · one future plan."
-   },
-   {
-    "t": "label",
-    "text": "RETRIEVAL"
-   },
-   {
-    "t": "p",
-    "text": "Choose 8 expressions from L01–L02. Make one true sentence with each."
-   },
-   {
-    "t": "note",
-    "text": "Chỉ dùng từ khóa. Không viết hoặc học thuộc cả script. L03 sẽ recycle 4 mục L01 và 6 mục L02."
-   }
-  ],
-  "reference": [
-   {
-    "t": "h",
-    "text": "Retrieval challenge · 5 giây mỗi từ"
-   },
-   {
-    "t": "note",
-    "text": "Che cột tiếng Anh, dịch từ tiếng Việt. Sau đó đảo chiều. Chạy lượt 2 theo thứ tự ngẫu nhiên."
-   },
-   {
-    "t": "retrieval",
-    "items": [
-     {
-      "vi": "giữ liên lạc với ai",
-      "en": "keep in touch with"
-     },
-     {
-      "vi": "chủ động liên hệ với ai",
-      "en": "reach out to"
-     },
-     {
-      "vi": "gặp để cập nhật chuyện gần đây",
-      "en": "catch up with"
-     },
-     {
-      "vi": "dành thời gian cho ai",
-      "en": "make time for"
-     },
-     {
-      "vi": "dần xa cách",
-      "en": "drift apart"
-     },
-     {
-      "vi": "liên lạc lại với ai",
-      "en": "get back in touch with"
-     },
-     {
-      "vi": "duy trì kết nối",
-      "en": "stay connected"
-     },
-     {
-      "vi": "đang có rất nhiều việc",
-      "en": "have a lot going on"
-     },
-     {
-      "vi": "tiếp tục tự nhiên như trước",
-      "en": "pick up where we left off"
-     },
-     {
-      "vi": "chúng tôi từng nói chuyện mỗi ngày",
-      "en": "we used to talk every day"
-     },
-     {
-      "vi": "chúng tôi đã thân nhau nhiều năm",
-      "en": "we have been close for years"
-     },
-     {
-      "vi": "mặc dù hiếm khi gặp nhau",
-      "en": "even though we rarely meet"
-     }
-    ]
-   },
-   {
-    "t": "h",
-    "text": "Phát âm cần nhớ"
-   },
-   {
-    "t": "table",
-    "head": [
-     "Từ / cụm",
-     "Cách đọc tự nhiên"
+    "finalTask": [
+      {
+        "t": "label",
+        "text": "THREE-MINUTE SHARED CONVERSATION"
+      },
+      {
+        "t": "p",
+        "text": "Work with a partner. Have a 3-minute conversation about people you know. Use DOES/IS/DO/ARE questions and answer with full sentences."
+      },
+      {
+        "t": "note",
+        "text": "Goal: 10+ questions, 10+ full answers. Notice when you use DOES vs IS."
+      }
     ],
-    "rows": [
-     [
-      "used to",
-      "/juːstə/ — âm /s/, không phải /z/"
-     ],
-     [
-      "reach out",
-      "nối /tʃaʊt/ — nhấn out"
-     ],
-     [
-      "catch up",
-      "/kætʃʌp/ — nhấn up"
-     ],
-     [
-      "drift apart",
-      "nhấn apart, âm tiết 2"
-     ],
-     [
-      "pressure",
-      "/ˈpreʃə/ — âm tiết 1"
-     ]
+    "reference": [
+      {
+        "t": "h",
+        "text": "Retrieval challenge · 5 giây mỗi từ"
+      },
+      {
+        "t": "note",
+        "text": "Che cột tiếng Anh, dịch từ tiếng Việt. Sau đó đảo chiều. Chạy lượt 2 theo thứ tự ngẫu nhiên."
+      },
+      {
+        "t": "retrieval",
+        "items": [
+          {
+            "vi": "đồng đội",
+            "en": "teammate"
+          },
+          {
+            "vi": "đồng nghiệp",
+            "en": "colleague"
+          },
+          {
+            "vi": "quản lý",
+            "en": "manager"
+          },
+          {
+            "vi": "khách hàng",
+            "en": "client"
+          },
+          {
+            "vi": "báo cáo",
+            "en": "report"
+          },
+          {
+            "vi": "hạn chót",
+            "en": "deadline"
+          },
+          {
+            "vi": "hỗ trợ",
+            "en": "supportive"
+          },
+          {
+            "vi": "hữu ích",
+            "en": "helpful"
+          }
+        ]
+      }
     ]
-   },
-   {
-    "t": "h",
-    "text": "Lỗi thường gặp"
-   },
-   {
-    "t": "list",
-    "items": [
-     "reach out TO somebody — không nói reach out somebody",
-     "catch up WITH somebody (người) / catch up ON something (tin tức)",
-     "drift apart FROM each other",
-     "used to + V (thói quen quá khứ) ≠ be used to + V-ing (quen với việc gì)",
-     "pick up where we left off — dùng khi gặp lại sau thời gian dài, không dùng cho cuộc gọi đầu tiên"
-    ]
-   }
-  ]
- }
+  }
 }

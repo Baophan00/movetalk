@@ -1,0 +1,210 @@
+#!/usr/bin/env python3
+"""Generate L03 data from PPTX content."""
+import json
+import os
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA = os.path.join(ROOT, "data")
+
+lesson = {
+    "title": "Build the Message",
+    "vi": "Xây dựng thông điệp",
+    "goal": "By the end of this lesson, you can turn short answers into complete messages, distinguish S+V (action) from S+BE (information), and use -s/-es correctly with he/she/it.",
+    "today": [
+        "Review short answers from L02",
+        "Learn S+V vs S+BE",
+        "Practice -s/-es with he/she/it",
+        "Build complete messages"
+    ],
+    "parts": {
+        "vocab": [
+            {"t": "h", "text": "Everyday action chunks"},
+            {"t": "flashcard", "items": [
+                {"word": "work in sales", "phonetic": "/wɜːk ɪn seɪlz/", "vi": "làm trong ngành bán hàng", "def": "to have a job in the sales department", "examples": [
+                    {"text": "She works in sales.", "context": "work"},
+                    {"text": "I work in sales for a tech company.", "context": "work"}
+                ]},
+                {"word": "work from home", "phonetic": "/wɜːk frəm həʊm/", "vi": "làm việc tại nhà", "def": "to do your job at home", "examples": [
+                    {"text": "He works from home three days a week.", "context": "work"},
+                    {"text": "I work from home on Fridays.", "context": "work"}
+                ]},
+                {"word": "handle client calls", "phonetic": "/ˈhændl ˈklaɪənt kɔːlz/", "vi": "xử lý cuộc gọi khách hàng", "def": "to manage phone calls from customers", "examples": [
+                    {"text": "She handles client calls every day.", "context": "work"},
+                    {"text": "He handles most of our client calls.", "context": "work"}
+                ]},
+                {"word": "support the team", "phonetic": "/səˈpɔːt ðə tiːm/", "vi": "hỗ trợ nhóm", "def": "to help your team members", "examples": [
+                    {"text": "He supports the whole team.", "context": "work"},
+                    {"text": "We support each other in our team.", "context": "work"}
+                ]},
+                {"word": "need regular updates", "phonetic": "/niːd ˈreɡjələr ˈʌpdeɪts/", "vi": "cần cập nhật thường xuyên", "def": "to require frequent progress reports", "examples": [
+                    {"text": "They need regular updates on the project.", "context": "work"},
+                    {"text": "My manager needs regular updates.", "context": "work"}
+                ]},
+                {"word": "talk after work", "phonetic": "/tɔːk ˈɑːftə wɜːk/", "vi": "nói chuyện sau giờ làm", "def": "to have conversations after finishing work", "examples": [
+                    {"text": "We usually talk after work.", "context": "work"},
+                    {"text": "They talk after work at the coffee shop.", "context": "daily"}
+                ]},
+                {"word": "use English at work", "phonetic": "/juːz ˈɪŋɡlɪʃ æt wɜːk/", "vi": "dùng tiếng Anh trong công việc", "def": "to communicate in English during work", "examples": [
+                    {"text": "I use English at work every day.", "context": "work"},
+                    {"text": "She uses English at work with international clients.", "context": "work"}
+                ]},
+                {"word": "be easy to talk to", "phonetic": "/biː ˈiːzi tə tɔːk tuː/", "vi": "dễ nói chuyện", "def": "someone who is approachable and friendly", "examples": [
+                    {"text": "She's very easy to talk to.", "context": "work"},
+                    {"text": "My manager is easy to talk to.", "context": "work"}
+                ]},
+                {"word": "be good with clients", "phonetic": "/biː ɡʊd wɪð ˈklaɪənts/", "vi": "giao tiếp tốt với khách", "def": "to handle customers well", "examples": [
+                    {"text": "He's very good with clients.", "context": "work"},
+                    {"text": "She's good with difficult clients.", "context": "work"}
+                ]},
+                {"word": "be busy this week", "phonetic": "/biː ˈbɪzi ðɪs wiːk/", "vi": "bận tuần này", "def": "to have many tasks this week", "examples": [
+                    {"text": "They're busy this week.", "context": "work"},
+                    {"text": "I'm busy this week with deadlines.", "context": "work"}
+                ]},
+                {"word": "be at a meeting", "phonetic": "/biː æt ə ˈmiːtɪŋ/", "vi": "đang ở cuộc họp", "def": "to be in a meeting room", "examples": [
+                    {"text": "He's at a client meeting.", "context": "work"},
+                    {"text": "She's at a meeting right now.", "context": "work"}
+                ]},
+                {"word": "be free after work", "phonetic": "/biː friː ˈɑːftə wɜːk/", "vi": "rảnh sau giờ làm", "def": "to have free time after work", "examples": [
+                    {"text": "She's free after work.", "context": "daily"},
+                    {"text": "Are you free after work today?", "context": "daily"}
+                ]}
+            ]},
+            {"t": "note", "text": "Choose two people. Say who they are and one thing you like or dislike about them. Accept simple language — ask one follow-up: How do you know them? or What are they like?"}
+        ],
+        "grammar": [
+            {"t": "h", "text": "S+V vs S+BE — two ways to say a complete thought"},
+            {"t": "table", "head": ["Type", "Structure", "Example"], "rows": [
+                ["ACTION", "S + V1/V-s(es) + …", "She works in sales."],
+                ["BE information", "S + am/is/are + …", "She's friendly."],
+                ["ACTION (he/she/it)", "S + V-s(es) + …", "He handles client calls."],
+                ["BE (he/she/it)", "S + is + …", "He's a manager."],
+                ["ACTION (we/they)", "S + V1 + …", "They work from home."],
+                ["BE (we/they)", "S + are + …", "They're at work."]
+            ]},
+            {"t": "h", "text": "-s/-es rule — voiceless vs voiced"},
+            {"t": "table", "head": ["Sound", "Ending", "Example"], "rows": [
+                ["Voiceless (no vibration)", "/s/", "works, helps, talks"],
+                ["Voiced (vibration)", "/z/", "lives, needs, calls"],
+                ["Sibilant (/s/, /z/, /ʃ/, /tʃ/, /dʒ/)", "/ɪz/", "uses, manages, watches"]
+            ]},
+            {"t": "note", "text": "Put your hand on your throat. If it vibrates → /z/. If not → /s/. If the word ends in a sibilant sound → /ɪz/."}
+        ],
+        "reading": [
+            {"t": "h", "text": "Model answer · A complete turn"},
+            {"t": "p", "text": "I work with a woman named Anna. She's our sales coordinator, and she's very easy to talk to. She works from home three days a week, but she comes to the office on Tuesdays and Thursdays. She handles most of our client calls and gives the team regular updates. She's usually busy in the morning, but she's free after lunch. We work closely together, and she always supports the team when we need help."},
+            {"t": "note", "text": "Notice: she's + adjective/noun, she + verb-s. These are natural ways to describe people."}
+        ],
+        "conversations": [
+            {"t": "dialog", "title": "A weekend plan", "audio": "audio/ref-audio/weekend-plan.mp3", "target": "she's · he's · they're", "lift": "find it easy to… · surprisingly well", "lines": [
+                {"speaker": "Mia", "text": "Are you free this weekend?"},
+                {"speaker": "Lan", "text": "Yes, I am. Why?"},
+                {"speaker": "Mia", "text": "I'm meeting an old friend. We lost touch years ago."},
+                {"speaker": "Lan", "text": "That's nice! Do you have plans to catch up?"},
+                {"speaker": "Mia", "text": "Yes, we're going for coffee. It's been ages!"}
+            ], "check": ["Is Lan free this weekend?", "Did Mia lose touch with her friend?", "Are they going for coffee?"], "answers": "1. Yes, she is. 2. Yes, she did. 3. Yes, they are.", "note": "Notice: lose touch with, catch up, It's been ages."},
+            {"t": "dialog", "title": "A shared apartment", "audio": "audio/ref-audio/shared-apartment.mp3", "target": "yes, she does → she works in sales", "lift": "I see your point · I'm open to", "lines": [
+                {"speaker": "Teacher", "text": "Does she work in sales?"},
+                {"speaker": "Student", "text": "Yes, she does."},
+                {"speaker": "Teacher", "text": "Now say the full message."},
+                {"speaker": "Student", "text": "She works in sales."},
+                {"speaker": "Teacher", "text": "Is he busy today?"},
+                {"speaker": "Student", "text": "No, he isn't."},
+                {"speaker": "Teacher", "text": "Full message?"},
+                {"speaker": "Student", "text": "He isn't busy today."}
+            ], "check": ["Does she work in sales?", "Is he busy today?", "What is the full message for each?"], "answers": "1. Yes, she does. 2. No, he isn't. 3. She works in sales. / He isn't busy today.", "note": "Notice: short answer → full message. The engine changes with the subject."},
+            {"t": "dialog", "title": "At the coffee machine", "target": "does he…? · is she…? · do they…?", "lift": "I'm not sure · Let me check", "lines": [
+                {"speaker": "Anna", "text": "Does he work in sales?"},
+                {"speaker": "Ben", "text": "Yes, he does. He's the new manager."},
+                {"speaker": "Anna", "text": "Is she your colleague?"},
+                {"speaker": "Ben", "text": "No, she isn't. She's my sister."},
+                {"speaker": "Anna", "text": "Do they work together?"},
+                {"speaker": "Ben", "text": "Yes, they do. They're on the same team."}
+            ], "check": ["Does he work in sales?", "Is she Ben's colleague?", "Do they work together?"], "answers": "1. Yes, he does. 2. No, she isn't. 3. Yes, they do.", "note": "Notice: does he…? is she…? do they…? — the engine changes with the subject."}
+        ],
+        "listening": [
+            {"t": "h", "text": "Shadowing · Nghe từng câu rồi nhắc lại"},
+            {"t": "note", "text": "Bấm 🔊 để nghe từng câu, sau đó nhắc lại y hệt ngữ điệu. Làm 2 lượt: lượt 1 nhìn chữ, lượt 2 che chữ."},
+            {"t": "say", "items": [
+                "She works in sales.",
+                "He handles client calls.",
+                "They work from home.",
+                "She's friendly.",
+                "He's a manager.",
+                "They're at work."
+            ]}
+        ],
+        "exercises": [
+            {"t": "h", "text": "Bài tập 1 · Chọn dạng động từ đúng"},
+            {"t": "quiz", "items": [
+                {"q": "She ___ in sales.", "options": ["work", "works", "working", "worked"], "answer": 1},
+                {"q": "He ___ client calls.", "options": ["handle", "handles", "handling", "handled"], "answer": 1},
+                {"q": "They ___ from home.", "options": ["work", "works", "working", "worked"], "answer": 0},
+                {"q": "She ___ friendly.", "options": ["is", "are", "am", "be"], "answer": 0},
+                {"q": "He ___ a manager.", "options": ["is", "are", "am", "be"], "answer": 0},
+                {"q": "They ___ at work.", "options": ["is", "are", "am", "be"], "answer": 1}
+            ]},
+            {"t": "note", "text": "Đáp án: 1 works · 2 handles · 3 work · 4 is · 5 is · 6 are. Quy tắc: he/she/it → V-s/es, we/they → V1."},
+            {"t": "h", "text": "Bài tập 2 · Short answer → full message"},
+            {"t": "quiz", "items": [
+                {"q": "Does she work in sales? → Yes, she does. → Full message?", "options": ["She works in sales.", "She work in sales.", "She working in sales.", "She worked in sales."], "answer": 0},
+                {"q": "Is he your manager? → Yes, he is. → Full message?", "options": ["He's my manager.", "He are my manager.", "He am my manager.", "He be my manager."], "answer": 0},
+                {"q": "Do they work from home? → No, they don't. → Full message?", "options": ["They works at the office.", "They work at the office.", "They working at the office.", "They worked at the office."], "answer": 1}
+            ]},
+            {"t": "note", "text": "Đáp án: 1 She works in sales. 2 He's my manager. 3 They work at the office. Quy tắc: short answer → full message, đúng engine."}
+        ],
+        "speaking": [
+            {"t": "h", "text": "Question lab · Build complete messages"},
+            {"t": "p", "text": "Work with a partner. Ask 5 Yes-No questions about people you know. Answer with short answers, then say the full message."},
+            {"t": "say", "items": [
+                "Does she work in sales? → Yes, she does. → She works in sales.",
+                "Is he your manager? → Yes, he is. → He's my manager.",
+                "Do they work from home? → No, they don't. → They work at the office.",
+                "Is she busy today? → No, she isn't. → She's free this afternoon.",
+                "Does he handle client calls? → Yes, he does. → He handles client calls."
+            ]},
+            {"t": "note", "text": "Use: Does he/she…? Is he/she…? Do they…? Are they…? Answer with short answer → full message."}
+        ],
+        "roleplay": [
+            {"t": "steps", "title": "60-second engine challenge", "context": "Work with a partner. Take turns asking and answering Yes-No questions with DOES/IS/DO/ARE, then say the full message.", "steps": [
+                "Partner A asks: Does he/she…? (action)",
+                "Partner B answers: Yes, he/she does. / No, he/she doesn't.",
+                "Partner B says the full message: He/She works… / He/She doesn't work…",
+                "Partner A asks: Is he/she…? (BE information)",
+                "Partner B answers: Yes, he/she is. / No, he/she isn't.",
+                "Partner B says the full message: He/She is… / He/He isn't…",
+                "Switch roles. Keep it fast — 10 seconds per question."
+            ], "useful": "Does she work in sales? · Is he your manager? · Do they work together? · Are we ready?"}
+        ],
+        "finalTask": [
+            {"t": "label", "text": "THREE-MINUTE SHARED CONVERSATION"},
+            {"t": "p", "text": "Work with a partner. Have a 3-minute conversation about people you know. Use DOES/IS/DO/ARE questions, answer with short answers, then say the full message."},
+            {"t": "note", "text": "Goal: 10+ questions, 10+ short answers, 10+ full messages. Notice when you use DOES vs IS."}
+        ],
+        "reference": [
+            {"t": "h", "text": "Retrieval challenge · 5 giây mỗi từ"},
+            {"t": "note", "text": "Che cột tiếng Anh, dịch từ tiếng Việt. Sau đó đảo chiều. Chạy lượt 2 theo thứ tự ngẫu nhiên."},
+            {"t": "retrieval", "items": [
+                {"vi": "làm trong ngành bán hàng", "en": "work in sales"},
+                {"vi": "làm việc tại nhà", "en": "work from home"},
+                {"vi": "xử lý cuộc gọi khách hàng", "en": "handle client calls"},
+                {"vi": "hỗ trợ nhóm", "en": "support the team"},
+                {"vi": "cần cập nhật thường xuyên", "en": "need regular updates"},
+                {"vi": "nói chuyện sau giờ làm", "en": "talk after work"},
+                {"vi": "dùng tiếng Anh trong công việc", "en": "use English at work"},
+                {"vi": "dễ nói chuyện", "en": "be easy to talk to"},
+                {"vi": "giao tiếp tốt với khách", "en": "be good with clients"},
+                {"vi": "bận tuần này", "en": "be busy this week"},
+                {"vi": "đang ở cuộc họp", "en": "be at a meeting"},
+                {"vi": "rảnh sau giờ làm", "en": "be free after work"}
+            ]}
+        ]
+    }
+}
+
+out = os.path.join(DATA, "L03.json")
+with open(out, "w", encoding="utf-8") as f:
+    json.dump(lesson, f, ensure_ascii=False, indent=2)
+print(f"Written {out}")
+print(f"  title: {lesson['title']}")
+print(f"  vocab flashcards: {len(lesson['parts']['vocab'][1]['items'])}")
+print(f"  conversations: {len(lesson['parts']['conversations'])}")

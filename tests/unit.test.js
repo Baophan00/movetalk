@@ -48,30 +48,31 @@ for(const tk of TKS){
   check(tk+' lesson1 renders '+(hasContent?'content':'placeholder'), hasContent?main.includes('e2-part'):main.includes('sẽ được cập nhật sau'));
   check(tk+' breadcrumb has badge', main.includes(T.badge));
 }
-// E2 has 3 live lessons, others 0
-check('E2 has 3 lessons', Object.keys(api.TRACKS.e2.lessons).length===3);
-for(const tk of ['f1','f2','a1','a2','e1']){
+// A1 has 10 live lessons, others 0
+check('A1 has 10 lessons', Object.keys(api.TRACKS.a1.lessons).length===10);
+for(const tk of ['f1','f2','a2','e1']){
   check(tk+' has 0 lessons (awaiting content)', Object.keys(api.TRACKS[tk].lessons).length===0);
 }
-// E2 lesson 1: 10 part cards then each part body non-empty
-api.trackGo('e2',1);
-let main=global.document.getElementById('e2-main').innerHTML;
-check('E2 L1 shows 10 part cards', (main.match(/class="e2-part"/g)||[]).length===10);
-const L=api.TRACKS.e2.lessons[1];
-check('E2 L1 has all 10 part sets', api.TRACK_PARTS.every(p=>Array.isArray(L.parts[p.id])), Object.keys(L.parts).join(','));
+check('E2 has 3 lessons', Object.keys(api.TRACKS.e2.lessons).length===3);
+// A1 lesson 1: 10 part cards then each part body non-empty
+api.trackGo('a1',1);
+let main=global.document.getElementById('a1-main').innerHTML;
+check('A1 L1 shows 10 part cards', (main.match(/class="e2-part"/g)||[]).length===10);
+const L=api.TRACKS.a1.lessons[1];
+check('A1 L1 has all 10 part sets', api.TRACK_PARTS.every(p=>Array.isArray(L.parts[p.id])), Object.keys(L.parts).join(','));
 for(const p of api.TRACK_PARTS.map(x=>x.id)){
-  const html=api.trackBody(p,L,'e2');
-  check('E2 L1 body '+p, html.length>20 && !html.includes('undefined'), 'len='+html.length);
+  const html=api.trackBody(p,L,'a1');
+  check('A1 L1 body '+p, html.length>20 && !html.includes('undefined'), 'len='+html.length);
 }
 // navigate into a part
-api.trackPart('e2','exercises');
-main=global.document.getElementById('e2-main').innerHTML;
-const body=global.document.getElementById('e2-body').innerHTML;
-check('E2 exercises panel opens', main.includes('Phần 6: Bài tập') && (body.match(/blk-quiz-opt/g)||[]).length>=32, 'opts='+(body.match(/blk-quiz-opt/g)||[]).length);
+api.trackPart('a1','exercises');
+main=global.document.getElementById('a1-main').innerHTML;
+const body=global.document.getElementById('a1-body').innerHTML;
+check('A1 exercises panel opens', main.includes('Phần 6: Bài tập') && (body.match(/blk-quiz-opt/g)||[]).length>=32, 'opts='+(body.match(/blk-quiz-opt/g)||[]).length);
 // back
-api.trackBack('e2');
-main=global.document.getElementById('e2-main').innerHTML;
-check('E2 back to part list', (main.match(/class="e2-part"/g)||[]).length===10);
+api.trackBack('a1');
+main=global.document.getElementById('a1-main').innerHTML;
+check('A1 back to part list', (main.match(/class="e2-part"/g)||[]).length===10);
 // all views navigate without throwing
 for(const v of ['home','f1','f2','a1','a2','e1','e2','dashboard']){
   let err=null; try{ api.go(v); }catch(e){ err=e.message; }
