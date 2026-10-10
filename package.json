@@ -3,9 +3,11 @@
   "private": true,
   "scripts": {
     "data": "python3 tools/build_data.py",
-    "test": "node tests/unit.test.js && node tests/lesson-data.test.js && node tests/conversation.test.js && node tests/audio.test.js",
+    "build": "python3 tools/build_data.py && python3 tools/build_homework.py",
+    "test": "node tests/unit.test.js && node tests/lesson-data.test.js && node tests/conversation.test.js && node tests/audio.test.js && node tests/homework.test.js",
+    "test:sql": "bash tests/sql/run.sh",
     "test:live": "node tests/browser.test.js && node tests/live.test.js && node tests/home.test.js",
-    "test:all": "npm test && npm run test:live"
+    "test:all": "npm test && npm run test:sql && npm run test:live"
   },
   "devDependencies": { "ws": "^8.18.0" }
 }
