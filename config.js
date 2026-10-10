@@ -4,5 +4,5 @@
      Postgres (xem sql/001_homework.sql), không phụ thuộc việc giấu key.
    - Để trống = app chạy chế độ khách như trước giờ (tiến độ trong browser),
      khu Homework/Teaching sẽ báo chưa kết nối backend. */
-const SUPABASE_URL = '';
-const SUPABASE_ANON_KEY = '';
+const SUPABASE_URL = 'https://csluztgxlauiijzbipuh.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_fxQlAJnzji6Exb5iaof8tw_Qhi4SPof';
