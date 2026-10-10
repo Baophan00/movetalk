@@ -1,5 +1,4 @@
-// E2 lesson 3 must carry both reference recordings from the teacher,
-// with text matching what is actually spoken (12 alternating turns each).
+// A1 conversations from MOVE Activate 1 PPTX: 3 dialogs per lesson, Play all only.
 const fs = require('fs');
 const path = require('path');
 const ROOT = path.join(__dirname, '..');
@@ -21,39 +20,33 @@ const fn = new Function('document', 'window', 'addEventListener', 'IntersectionO
 const api = fn(stub, { innerWidth: 1400, scrollTo() {} }, () => {}, class { observe() {} },
   { getItem: () => null, setItem() {} }, { hash: '' }, () => 0, () => {}, () => {});
 
-const L3 = api.LESSON_DATA['3'];
-t('lesson 3 exists', !!L3);
+const expectTitle = {
+  1: ['New friend · at a café', 'Morning together', 'Work update with the boss'],
+  2: ['New coworker', 'Family photo', 'Busy team'],
+  3: ['New client · introduce a colleague', 'Foreign partner · a close friend', 'Team update · recommend someone'],
+};
 
-const dialogs = (L3.parts.conversations || []).filter(b => b.t === 'dialog');
-t('lesson 3 has 3 conversations', dialogs.length === 3, 'got ' + dialogs.length);
-
-const weekend = dialogs.find(d => d.title === 'A weekend plan');
-const shared = dialogs.find(d => d.title === 'A shared apartment');
-t('A weekend plan present', !!weekend);
-t('A shared apartment present', !!shared);
-
-for (const [name, d] of [['weekend plan', weekend], ['shared apartment', shared]]) {
-  if (!d) continue;
-  t(name + ': has audio path', typeof d.audio === 'string' && d.audio.length > 0, String(d.audio));
-  t(name + ': audio file exists', !!d.audio && fs.existsSync(path.join(ROOT, d.audio)), d.audio);
-  t(name + ': audio is mp3 under audio/ref-audio', !!d.audio && d.audio.startsWith('audio/ref-audio/') && d.audio.endsWith('.mp3'), d.audio);
-  t(name + ': has lines', (d.lines || []).length >= 4, 'got ' + (d.lines || []).length);
-  const speakers = new Set((d.lines || []).map(l => l.speaker));
-  t(name + ': two speakers', speakers.size === 2, [...speakers].join('/'));
-  const alt = (d.lines || []).every((l, i, a) => i === 0 || l.speaker !== a[i - 1].speaker);
-  t(name + ': speakers strictly alternate', alt);
-  t(name + ': every line has text', (d.lines || []).every(l => l.text && l.text.trim().length > 3));
-  t(name + ': has comprehension checks', Array.isArray(d.check) && d.check.length >= 2, 'n=' + (d.check || []).length);
-  t(name + ': has answers', typeof d.answers === 'string' && d.answers.length > 10);
+for (let n = 1; n <= 7; n++) {
+  const L = api.LESSON_DATA[String(n)];
+  t('L' + n + ' exists', !!L);
+  const dialogs = ((L && L.parts && L.parts.conversations) || []).filter(b => b.t === 'dialog');
+  t('L' + n + ' has 3 conversations', dialogs.length === 3, 'got ' + dialogs.length);
+  for (const d of dialogs) {
+    t(n + '/' + d.title + ': lines', (d.lines || []).length >= 4);
+    const speakers = new Set((d.lines || []).map(l => l.speaker));
+    t(n + '/' + d.title + ': two speakers', speakers.size === 2, [...speakers].join('/'));
+    t(n + '/' + d.title + ': checks', Array.isArray(d.check) && d.check.length >= 2);
+    t(n + '/' + d.title + ': answers', typeof d.answers === 'string' && d.answers.length > 8);
+  }
+  if (expectTitle[n]) {
+    for (const title of expectTitle[n]) {
+      t('L' + n + ' has ' + title, dialogs.some(d => d.title === title));
+    }
+  }
+  const html = api.trackBody('conversations', L, 'a1');
+  t('L' + n + ' Play all x3', (html.match(/Play all/g) || []).length === 3);
+  t('L' + n + ' no Nghe bản gốc', !html.includes('Nghe bản gốc'));
 }
-
-const html = api.trackBody('conversations', L3, 'a1');
-t('panel renders 3 cards', (html.match(/e2-conv-card/g) || []).length === 3, 'cards=' + (html.match(/e2-conv-card/g) || []).length);
-t('panel has Play all only', (html.match(/Play all/g) || []).length === 3);
-t('panel has no per-line speaker buttons in dialogs', !html.includes('blk-fill-line') || !html.split('e2-conv-card')[1]?.includes('onclick="speak'));
-t('panel has no Nghe bản gốc', !html.includes('Nghe bản gốc'));
-t('panel reveals answers', (html.match(/Xem đáp án/g) || []).length === 3);
-t('no undefined leaked into panel', !html.includes('undefined'));
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

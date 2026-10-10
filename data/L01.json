@@ -283,116 +283,168 @@
     "conversations": [
       {
         "t": "dialog",
-        "title": "A new colleague",
-        "target": "reliable · get along with",
-        "lift": "find it easy to… · surprisingly well",
+        "title": "New friend · at a café",
+        "target": "Do you…? · Are you…?",
+        "lift": "ask → answer → follow the detail",
         "lines": [
           {
-            "speaker": "Nina",
-            "text": "How are things with your new colleague?"
+            "speaker": "A",
+            "text": "Hi, is this seat free?"
           },
           {
-            "speaker": "Tom",
-            "text": "Good. She's very reliable — always on time."
+            "speaker": "B",
+            "text": "Yes, it is. Please have a seat."
           },
           {
-            "speaker": "Nina",
-            "text": "Do you get along with her?"
+            "speaker": "A",
+            "text": "Thanks. Do you come here often?"
           },
           {
-            "speaker": "Tom",
-            "text": "Yes, I do. I find it easy to talk to her."
+            "speaker": "B",
+            "text": "Yes, I do. I usually come here after work."
           },
           {
-            "speaker": "Nina",
-            "text": "That's great. Is she easy-going?"
+            "speaker": "A",
+            "text": "Do you work near here?"
           },
           {
-            "speaker": "Tom",
-            "text": "Yes, she is. She's surprisingly well-organized too."
+            "speaker": "B",
+            "text": "Yes, I do. My office is across the street."
+          },
+          {
+            "speaker": "A",
+            "text": "Are you on your lunch break?"
+          },
+          {
+            "speaker": "B",
+            "text": "No, I'm not. I've finished work for today."
+          },
+          {
+            "speaker": "A",
+            "text": "Lucky you! Are you free this evening?"
+          },
+          {
+            "speaker": "B",
+            "text": "Yes, I am. I'm meeting some friends later."
           }
         ],
         "check": [
-          "What is Tom's new colleague like?",
-          "Does Tom get along with her?",
-          "Is she easy-going?"
+          "Does B work near the café?",
+          "Is B on a lunch break?",
+          "Is B free this evening?"
         ],
-        "answers": "1. She's reliable and well-organized. 2. Yes, he does. 3. Yes, she is.",
-        "note": "Notice: reliable, easy-going, get along with, find it easy to…"
+        "answers": "1. Yes, the office is across the street. 2. No, B has finished work. 3. Yes, meeting friends later.",
+        "note": "Notice: work near here → lunch break → free this evening. Each question follows a detail in the last answer."
       },
       {
         "t": "dialog",
-        "title": "At the coffee machine",
-        "target": "can't stand · put up with",
-        "lift": "I don't mind… · It's not that bad",
+        "title": "Morning together",
+        "target": "Are you…? · Do you want…?",
+        "lift": "tired → coffee → hungry → plan",
         "lines": [
           {
-            "speaker": "Anna",
-            "text": "Do you like the new office coffee?"
+            "speaker": "A",
+            "text": "Good morning. Are you still tired?"
           },
           {
-            "speaker": "Ben",
-            "text": "No, I don't. I can't stand it — it's too bitter."
+            "speaker": "B",
+            "text": "A little. I didn't sleep very well."
           },
           {
-            "speaker": "Anna",
-            "text": "Really? I don't mind it. It's not that bad."
+            "speaker": "A",
+            "text": "Do you want some coffee?"
           },
           {
-            "speaker": "Ben",
-            "text": "I guess I'm just used to the old one."
+            "speaker": "B",
+            "text": "Yes, please. That would be great."
           },
           {
-            "speaker": "Anna",
-            "text": "Are you going to buy your own?"
+            "speaker": "A",
+            "text": "Are you hungry?"
           },
           {
-            "speaker": "Ben",
-            "text": "Yes, I am. I can't put up with this every morning."
+            "speaker": "B",
+            "text": "Yes, I am. I'd love some breakfast."
+          },
+          {
+            "speaker": "A",
+            "text": "Do you want to eat at home?"
+          },
+          {
+            "speaker": "B",
+            "text": "No, I don't. Let's go out."
+          },
+          {
+            "speaker": "A",
+            "text": "Okay. Are you busy this morning?"
+          },
+          {
+            "speaker": "B",
+            "text": "No, I'm not. I'm free until noon."
           }
         ],
         "check": [
-          "Does Ben like the new coffee?",
-          "Does Anna mind it?",
-          "Is Ben going to buy his own?"
+          "Did B sleep well?",
+          "Does B want coffee?",
+          "Is B busy this morning?"
         ],
-        "answers": "1. No, he doesn't. 2. No, she doesn't. 3. Yes, he is.",
-        "note": "Notice: can't stand, don't mind, put up with, used to"
+        "answers": "1. No. 2. Yes. 3. No, free until noon.",
+        "note": "Notice: tired → coffee → hungry → eat at home → busy this morning."
       },
       {
         "t": "dialog",
-        "title": "Weekend plans",
-        "target": "lose touch with · catch up",
-        "lift": "It's been ages · pick up where we left off",
+        "title": "Work update with the boss",
+        "target": "Do you have a minute? · Are you free now?",
+        "lift": "time → deadline → format → next action",
         "lines": [
           {
-            "speaker": "Mia",
-            "text": "Are you free this weekend?"
+            "speaker": "A",
+            "text": "Hi, do you have a minute?"
           },
           {
-            "speaker": "Lan",
-            "text": "Yes, I am. Why?"
+            "speaker": "B",
+            "text": "Sure. What's up?"
           },
           {
-            "speaker": "Mia",
-            "text": "I'm meeting an old friend. We lost touch years ago."
+            "speaker": "A",
+            "text": "I'd like to update you. Are you free now?"
           },
           {
-            "speaker": "Lan",
-            "text": "That's nice! Do you have plans to catch up?"
+            "speaker": "B",
+            "text": "Yes, I am. Go ahead."
           },
           {
-            "speaker": "Mia",
-            "text": "Yes, we're going for coffee. It's been ages!"
+            "speaker": "A",
+            "text": "Do you need the final report today?"
+          },
+          {
+            "speaker": "B",
+            "text": "Yes, I do. I need it before four."
+          },
+          {
+            "speaker": "A",
+            "text": "Are you happy with the current format?"
+          },
+          {
+            "speaker": "B",
+            "text": "Mostly, but the summary needs to be shorter."
+          },
+          {
+            "speaker": "A",
+            "text": "Do you want me to add the latest sales figures?"
+          },
+          {
+            "speaker": "B",
+            "text": "Yes, please. That would be helpful."
           }
         ],
         "check": [
-          "Is Lan free this weekend?",
-          "Did Mia lose touch with her friend?",
-          "Are they going for coffee?"
+          "Does the boss need the report today?",
+          "Is the boss free now?",
+          "What should A add?"
         ],
-        "answers": "1. Yes, she is. 2. Yes, she did. 3. Yes, they are.",
-        "note": "Notice: lose touch with, catch up, It's been ages"
+        "answers": "1. Yes, before four. 2. Yes. 3. The latest sales figures.",
+        "note": "Notice: time → deadline → format → next action."
       }
     ],
     "listening": [
@@ -571,16 +623,41 @@
     "roleplay": [
       {
         "t": "steps",
-        "title": "60-second engine challenge",
-        "context": "Work with a partner. Take turns asking and answering Yes-No questions with DO and ARE.",
+        "title": "Mission 1 · New friend at a café",
+        "context": "Bạn đang ngồi một mình. Một người trông thân thiện ngồi gần đó. Mở cuộc trò chuyện nhẹ.",
         "steps": [
-          "Partner A asks: Do you…? (action)",
-          "Partner B answers: Yes, I do. / No, I don't.",
-          "Partner A asks: Are you…? (BE information)",
-          "Partner B answers: Yes, I am. / No, I'm not.",
-          "Switch roles. Keep it fast — 10 seconds per question."
+          "Hình dung: bạn đang ở đâu, người kia tâm trạng thế nào, bạn muốn biết gì.",
+          "Opener: Hi, is this seat free?",
+          "Hỏi ít nhất 3 Yes–No: một câu Do you…? và một câu Are you…?",
+          "Nghe 1 chi tiết trong câu trả lời rồi hỏi follow-up thật.",
+          "Đường ý (không phải câu mẫu): the café · work/study · drinks · free time"
         ],
-        "useful": "Do you work nearby? · Are you busy today? · Does she work in sales? · Is he your manager?"
+        "useful": "Do you come here often? · Do you work near here? · Are you on your lunch break? · Are you free this evening?"
+      },
+      {
+        "t": "steps",
+        "title": "Mission 2 · Morning together",
+        "context": "Buổi sáng với người yêu nước ngoài. Gần gũi, bình thường, không cần nói chuyện lớn.",
+        "steps": [
+          "Hình dung khoảnh khắc vừa thức dậy.",
+          "Opener: Good morning. Are you still tired?",
+          "Hỏi 3+ Yes–No (Do you…? và Are you…?).",
+          "Bám chi tiết vừa nghe, đừng đọc list.",
+          "Đường ý: sleep · breakfast · today's plan · mood"
+        ],
+        "useful": "Do you want some coffee? · Are you hungry? · Do you want to eat at home? · Are you busy this morning?"
+      },
+      {
+        "t": "steps",
+        "title": "Mission 3 · Work update",
+        "context": "Cập nhật tiến độ với sếp. Kiểm tra thời gian và yêu cầu trước khi trình bày.",
+        "steps": [
+          "Hình dung sếp đang bận hay rảnh.",
+          "Opener: Hi, do you have a minute?",
+          "Hỏi 3+ Yes–No rồi follow-up.",
+          "Đường ý: the report · deadline · meeting · next step"
+        ],
+        "useful": "Are you free now? · Do you need the final report today? · Are you happy with the current format? · Do you want me to add…?"
       }
     ],
     "finalTask": [

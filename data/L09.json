@@ -19,7 +19,7 @@
         "items": [
           {
             "word": "yesterday",
-            "phonetic": "/ˈjestədeɪ/",
+            "phonetic": "/ˈjestərdeɪ/",
             "vi": "hôm qua",
             "def": "the day before today",
             "examples": [
@@ -35,7 +35,7 @@
           },
           {
             "word": "last week",
-            "phonetic": "/lɑːst wiːk/",
+            "phonetic": "/læst wik/",
             "vi": "tuần trước",
             "def": "the week before this week",
             "examples": [
@@ -67,7 +67,7 @@
           },
           {
             "word": "for three years",
-            "phonetic": "/fɔː θriː jɪəz/",
+            "phonetic": "/fɔr θri jɪrz/",
             "vi": "trong ba năm",
             "def": "during a period of three years",
             "examples": [
@@ -99,7 +99,7 @@
           },
           {
             "word": "at the moment",
-            "phonetic": "/æt ðə ˈməʊmənt/",
+            "phonetic": "/æt ðə ˈmoʊmənt/",
             "vi": "hiện tại",
             "def": "at this time",
             "examples": [
@@ -115,7 +115,7 @@
           },
           {
             "word": "tomorrow",
-            "phonetic": "/təˈmɒrəʊ/",
+            "phonetic": "/təˈmɑroʊ/",
             "vi": "ngày mai",
             "def": "the day after today",
             "examples": [
@@ -131,7 +131,7 @@
           },
           {
             "word": "next week",
-            "phonetic": "/nekst wiːk/",
+            "phonetic": "/nekst wik/",
             "vi": "tuần tới",
             "def": "the week after this week",
             "examples": [
@@ -147,7 +147,7 @@
           },
           {
             "word": "going to",
-            "phonetic": "/ˈɡəʊɪŋ tuː/",
+            "phonetic": "/ˈɡoʊɪŋ tu/",
             "vi": "sắp, dự định",
             "def": "future intention or plan",
             "examples": [

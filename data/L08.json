@@ -19,7 +19,7 @@
         "items": [
           {
             "word": "how long",
-            "phonetic": "/haʊ lɒŋ/",
+            "phonetic": "/haʊ lɑŋ/",
             "vi": "bao lâu",
             "def": "asks about duration",
             "examples": [
@@ -35,7 +35,7 @@
           },
           {
             "word": "how far",
-            "phonetic": "/haʊ fɑː/",
+            "phonetic": "/haʊ fɑr/",
             "vi": "bao xa",
             "def": "asks about distance",
             "examples": [
@@ -51,7 +51,7 @@
           },
           {
             "word": "how often",
-            "phonetic": "/haʊ ˈɒfn/",
+            "phonetic": "/haʊ ˈɔfən/",
             "vi": "thường xuyên đến mức nào",
             "def": "asks about frequency",
             "examples": [
@@ -99,7 +99,7 @@
           },
           {
             "word": "what kind of",
-            "phonetic": "/wɒt kaɪnd əv/",
+            "phonetic": "/wʌt kaɪnd əv/",
             "vi": "loại nào",
             "def": "asks about type",
             "examples": [

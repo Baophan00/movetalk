@@ -19,7 +19,7 @@
         "items": [
           {
             "word": "almost",
-            "phonetic": "/ˈɔːlməʊst/",
+            "phonetic": "/ˈɔlmoʊst/",
             "vi": "gần như",
             "def": "nearly, but not completely",
             "examples": [
@@ -35,7 +35,7 @@
           },
           {
             "word": "most",
-            "phonetic": "/məʊst/",
+            "phonetic": "/moʊst/",
             "vi": "hầu hết, đa số",
             "def": "the majority of",
             "examples": [
@@ -51,7 +51,7 @@
           },
           {
             "word": "each",
-            "phonetic": "/iːtʃ/",
+            "phonetic": "/itʃ/",
             "vi": "mỗi (từng cái riêng)",
             "def": "every one individually",
             "examples": [
@@ -83,7 +83,7 @@
           },
           {
             "word": "a few",
-            "phonetic": "/ə fjuː/",
+            "phonetic": "/ə fju/",
             "vi": "một vài (đủ dùng)",
             "def": "a small number, enough",
             "examples": [
@@ -99,7 +99,7 @@
           },
           {
             "word": "few",
-            "phonetic": "/fjuː/",
+            "phonetic": "/fju/",
             "vi": "quá ít",
             "def": "not many, not enough",
             "examples": [
@@ -179,7 +179,7 @@
           },
           {
             "word": "a lot of",
-            "phonetic": "/ə lɒt əv/",
+            "phonetic": "/ə lɑt əv/",
             "vi": "rất nhiều",
             "def": "a large number/amount",
             "examples": [
@@ -227,7 +227,7 @@
           },
           {
             "word": "another",
-            "phonetic": "/əˈnʌðə/",
+            "phonetic": "/əˈnʌðər/",
             "vi": "một cái khác",
             "def": "one more, a different one",
             "examples": [
@@ -243,7 +243,7 @@
           },
           {
             "word": "other",
-            "phonetic": "/ˈʌðə/",
+            "phonetic": "/ˈʌðər/",
             "vi": "khác",
             "def": "different ones",
             "examples": [
@@ -259,7 +259,7 @@
           },
           {
             "word": "fewer",
-            "phonetic": "/ˈfjuːə/",
+            "phonetic": "/ˈfjuər/",
             "vi": "ít hơn (đếm được)",
             "def": "a smaller number of countable noun",
             "examples": [
@@ -291,7 +291,7 @@
           },
           {
             "word": "both",
-            "phonetic": "/bəʊθ/",
+            "phonetic": "/boʊθ/",
             "vi": "cả hai",
             "def": "the two together",
             "examples": [
@@ -307,7 +307,7 @@
           },
           {
             "word": "either",
-            "phonetic": "/ˈaɪðə/",
+            "phonetic": "/ˈiðər/",
             "vi": "một trong hai",
             "def": "one or the other of two",
             "examples": [
@@ -323,7 +323,7 @@
           },
           {
             "word": "neither",
-            "phonetic": "/ˈnaɪðə/",
+            "phonetic": "/ˈniðər/",
             "vi": "không cái nào",
             "def": "not one and not the other",
             "examples": [
@@ -355,7 +355,7 @@
           },
           {
             "word": "too much",
-            "phonetic": "/tuː mʌtʃ/",
+            "phonetic": "/tu mʌtʃ/",
             "vi": "quá nhiều (không đếm được)",
             "def": "more than needed, uncountable",
             "examples": [
@@ -371,7 +371,7 @@
           },
           {
             "word": "too many",
-            "phonetic": "/tuː ˈmeni/",
+            "phonetic": "/tu ˈmeni/",
             "vi": "quá nhiều (đếm được)",
             "def": "more than needed, countable",
             "examples": [
@@ -387,7 +387,7 @@
           },
           {
             "word": "all",
-            "phonetic": "/ɔːl/",
+            "phonetic": "/ɔl/",
             "vi": "tất cả",
             "def": "the whole amount",
             "examples": [
@@ -403,7 +403,7 @@
           },
           {
             "word": "whole",
-            "phonetic": "/həʊl/",
+            "phonetic": "/hoʊl/",
             "vi": "toàn bộ",
             "def": "the complete amount",
             "examples": [
@@ -546,137 +546,152 @@
     "conversations": [
       {
         "t": "dialog",
-        "title": "A busy Monday",
-        "target": "almost everyone · a few people · each team · every manager",
-        "lift": "most of · some other · neither solution",
+        "title": "A project update",
+        "target": "almost / each / a few / enough / another",
+        "lift": "choose the word by meaning",
         "lines": [
           {
-            "speaker": "Mia",
-            "text": "Almost everyone arrived early today."
+            "speaker": "A",
+            "text": "Are we finished?"
           },
           {
-            "speaker": "Lan",
-            "text": "Yes, but a few people were still on the way."
+            "speaker": "B",
+            "text": "We are almost finished with the project."
           },
           {
-            "speaker": "Mia",
-            "text": "Each team had a short meeting."
+            "speaker": "A",
+            "text": "Has every team finished?"
           },
           {
-            "speaker": "Lan",
-            "text": "Every manager shared the same update."
+            "speaker": "B",
+            "text": "Each team has completed its main task, but we still have little time."
           },
           {
-            "speaker": "Mia",
-            "text": "We had little time and too many tasks."
+            "speaker": "A",
+            "text": "Are there many issues?"
           },
           {
-            "speaker": "Lan",
-            "text": "Most of the urgent emails were answered."
+            "speaker": "B",
+            "text": "There are a few small issues, and each of them needs attention."
           },
           {
-            "speaker": "Mia",
-            "text": "But some other messages had to wait."
+            "speaker": "A",
+            "text": "Do we have enough information?"
           },
           {
-            "speaker": "Lan",
-            "text": "Neither solution was perfect, so we asked for another day."
+            "speaker": "B",
+            "text": "We don't have enough information from the client, so we may need another meeting."
+          },
+          {
+            "speaker": "A",
+            "text": "Which option is better?"
+          },
+          {
+            "speaker": "B",
+            "text": "Both options are possible, but neither solution is perfect."
           }
         ],
         "check": [
-          "Did almost everyone arrive early?",
-          "Were a few people still on the way?",
-          "Did each team have a meeting?",
-          "Did every manager share the same update?",
-          "Did they have much time?",
-          "Were most urgent emails answered?",
-          "Were some other messages answered?",
-          "Was either solution perfect?"
+          "Are they finished?",
+          "Do they have much time?",
+          "Do they need another meeting?"
         ],
-        "answers": "1. Yes. 2. Yes. 3. Yes. 4. Yes. 5. No, they had little time. 6. Yes. 7. No, they had to wait. 8, No, neither was perfect.",
-        "note": "Notice: almost everyone, a few people, each team, every manager, little time, too many tasks, most of, some other, neither solution, another day."
+        "answers": "1. Almost. 2. Little time. 3. Yes.",
+        "note": "almost = nearly done. a few = some, enough to mention. neither = not A and not B."
       },
       {
         "t": "dialog",
-        "title": "How much or how many?",
-        "target": "how much time · how many meetings · a lot of work",
-        "lift": "too much · too many",
+        "title": "Workload talk",
+        "target": "most / a few / too much / enough",
+        "lift": "quantity in a real workday",
         "lines": [
           {
-            "speaker": "Mia",
-            "text": "How much time do you have?"
+            "speaker": "A",
+            "text": "How are your mornings?"
           },
           {
-            "speaker": "Lan",
-            "text": "Not much. I have too much work today."
+            "speaker": "B",
+            "text": "Most of my mornings are busy."
           },
           {
-            "speaker": "Mia",
-            "text": "How many meetings do you have?"
+            "speaker": "A",
+            "text": "Do you have many calls?"
           },
           {
-            "speaker": "Lan",
-            "text": "Too many. I have a lot of meetings."
+            "speaker": "B",
+            "text": "I usually have a few calls and a lot of messages."
           },
           {
-            "speaker": "Mia",
-            "text": "Do you have any free time?"
+            "speaker": "A",
+            "text": "Do you have enough time between meetings?"
           },
           {
-            "speaker": "Lan",
-            "text": "No, I don't have any free time."
+            "speaker": "B",
+            "text": "No. Each client needs something different, so I have little time."
+          },
+          {
+            "speaker": "A",
+            "text": "What if you have too much work?"
+          },
+          {
+            "speaker": "B",
+            "text": "I move some tasks to another day. I usually have enough help."
           }
         ],
         "check": [
-          "How much time does Lan have?",
-          "How many meetings does Lan have?",
-          "Does Lan have a lot of work?",
-          "Does Lan have any free time?"
+          "Are most mornings busy?",
+          "Does B have little time?",
+          "Does B have enough help?"
         ],
-        "answers": "1. Not much. 2. Too many. 3. Yes, a lot. 4, No, none.",
-        "note": "Notice: how much + uncountable, how many + countable, too much + uncountable, too many + countable, a lot of + both, any + questions/negatives."
+        "answers": "1. Yes. 2. Yes. 3. Yes.",
+        "note": "most of my mornings · a few calls · little time · another day · enough help."
       },
       {
         "t": "dialog",
-        "title": "Both, either, neither",
-        "target": "both options · either day · neither solution",
-        "lift": "both of us · either one",
+        "title": "Two choices",
+        "target": "both / either / neither / another",
+        "lift": "talk about two options",
         "lines": [
           {
-            "speaker": "Mia",
-            "text": "Both options are fine."
+            "speaker": "A",
+            "text": "Which day is better, Monday or Tuesday?"
           },
           {
-            "speaker": "Lan",
-            "text": "You can choose either day."
+            "speaker": "B",
+            "text": "Either day is fine with me."
           },
           {
-            "speaker": "Mia",
-            "text": "Neither solution works."
+            "speaker": "A",
+            "text": "Can we do both meetings?"
           },
           {
-            "speaker": "Lan",
-            "text": "Both of us work from home."
+            "speaker": "B",
+            "text": "Both meetings are possible, but I need another day for the report."
           },
           {
-            "speaker": "Mia",
-            "text": "I don't like either one."
+            "speaker": "A",
+            "text": "Do you have any other questions?"
           },
           {
-            "speaker": "Lan",
-            "text": "Let's try another way."
+            "speaker": "B",
+            "text": "No, I don't have any other questions."
+          },
+          {
+            "speaker": "A",
+            "text": "So neither plan is a problem?"
+          },
+          {
+            "speaker": "B",
+            "text": "Neither plan is a problem. Let's choose Monday."
           }
         ],
         "check": [
-          "Are both options fine?",
-          "Can Lan choose either day?",
-          "Does either solution work?",
-          "Do both of them work from home?",
-          "Does Mia like either one?",
-          "What should they try?"
+          "Is either day OK?",
+          "Does B need another day?",
+          "Are there other questions?"
         ],
-        "answers": "1. Yes. 2. Yes. 3. No, neither works. 4. Yes. 5. No. 6. Another way.",
-        "note": "Notice: both + plural, either + singular, neither + singular, both of + pronoun, either one, another way."
+        "answers": "1. Yes. 2. Yes, for the report. 3. No.",
+        "note": "either = one of two. both = two. neither = zero of two. another = one more."
       }
     ],
     "listening": [
@@ -876,16 +891,36 @@
     "roleplay": [
       {
         "t": "steps",
-        "title": "60-second engine challenge",
-        "context": "Work with a partner. Take turns asking and answering questions with quantifiers.",
+        "title": "Your week",
+        "context": "Nói 2 phút. Partner hỏi lại.",
         "steps": [
-          "Partner A asks: How much…? / How many…?",
-          "Partner B answers with a lot of, too much, too many, enough, some, any.",
-          "Partner A asks: Do you have any…? / Are there many…?",
-          "Partner B answers with Yes, there are. / No, there aren't.",
-          "Switch roles. Keep it fast — 10 seconds per question."
+          "Dùng: most / every / a few / little",
+          "Không đọc script",
+          "Partner: 3 follow-ups"
         ],
-        "useful": "How much time? · How many meetings? · Do you have any free time? · Are there many people?"
+        "useful": "Most of my… · Every morning… · I have a few… · I have little…"
+      },
+      {
+        "t": "steps",
+        "title": "Workload",
+        "context": "Nói về lượng việc tuần này.",
+        "steps": [
+          "Dùng: much / many / too much / enough",
+          "1 self-correction nếu sai",
+          "Success: 6 target words"
+        ],
+        "useful": "too much work · many meetings · enough time · not much information"
+      },
+      {
+        "t": "steps",
+        "title": "A change",
+        "context": "Hai lựa chọn + một thay đổi.",
+        "steps": [
+          "Dùng: both / either / neither / the other",
+          "Rồi: fewer / less / another / other",
+          "Partner check meaning, not grammar labels"
+        ],
+        "useful": "both options · either day · neither solution · another meeting · fewer mistakes"
       }
     ],
     "finalTask": [

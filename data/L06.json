@@ -35,7 +35,7 @@
           },
           {
             "word": "an elevator",
-            "phonetic": "/ən ˈelɪveɪtə/",
+            "phonetic": "/ən ˈeləveɪtər/",
             "vi": "một thang máy",
             "def": "a machine that takes you up and down",
             "examples": [
@@ -51,7 +51,7 @@
           },
           {
             "word": "a meeting room",
-            "phonetic": "/ə ˈmiːtɪŋ ruːm/",
+            "phonetic": "/ə ˈmitɪŋ rum/",
             "vi": "một phòng họp",
             "def": "a room for meetings",
             "examples": [
@@ -67,7 +67,7 @@
           },
           {
             "word": "a convenience store",
-            "phonetic": "/ə kənˈviːniəns stɔː/",
+            "phonetic": "/ə kənˈvinjəns stɔr/",
             "vi": "một cửa hàng tiện lợi",
             "def": "a small shop for everyday items",
             "examples": [
@@ -83,7 +83,7 @@
           },
           {
             "word": "two bedrooms",
-            "phonetic": "/tuː ˈbedruːmz/",
+            "phonetic": "/tu ˈbedrumz/",
             "vi": "hai phòng ngủ",
             "def": "two rooms for sleeping",
             "examples": [
@@ -99,7 +99,7 @@
           },
           {
             "word": "some small shops",
-            "phonetic": "/sʌm smɔːl ʃɒps/",
+            "phonetic": "/sʌm smɔl ʃɑps/",
             "vi": "một vài cửa hàng nhỏ",
             "def": "a few small stores",
             "examples": [
@@ -115,7 +115,7 @@
           },
           {
             "word": "many trees",
-            "phonetic": "/ˈmeni triːz/",
+            "phonetic": "/ˈmeni triz/",
             "vi": "nhiều cây",
             "def": "a lot of trees",
             "examples": [
@@ -131,7 +131,7 @@
           },
           {
             "word": "several cafés",
-            "phonetic": "/ˈsevrəl ˈkæfeɪz/",
+            "phonetic": "/ˈsevrəl kæˈfeɪz/",
             "vi": "vài quán cà phê",
             "def": "a few coffee shops",
             "examples": [
@@ -147,7 +147,7 @@
           },
           {
             "word": "a supermarket",
-            "phonetic": "/ə ˈsuːpəmɑːkɪt/",
+            "phonetic": "/ə ˈsupərmɑrkɪt/",
             "vi": "một siêu thị",
             "def": "a large food store",
             "examples": [
@@ -163,7 +163,7 @@
           },
           {
             "word": "a park",
-            "phonetic": "/ə pɑːk/",
+            "phonetic": "/ə pɑrk/",
             "vi": "một công viên",
             "def": "a public green space",
             "examples": [
@@ -313,138 +313,152 @@
     "conversations": [
       {
         "t": "dialog",
-        "title": "A new apartment",
-        "target": "there's a… · there are…",
-        "lift": "Is there…? · Are there…?",
+        "title": "A café near home",
+        "target": "Is there…? · Are there…?",
+        "lift": "THERE questions describe the place · IT questions describe the thing",
         "lines": [
           {
-            "speaker": "Mia",
-            "text": "Is your new apartment comfortable?"
+            "speaker": "A",
+            "text": "Is there a café near your house?"
           },
           {
-            "speaker": "Lan",
-            "text": "Yes. There's a bright living room and a small balcony."
-          },
-          {
-            "speaker": "Mia",
-            "text": "Is there a desk in your bedroom?"
-          },
-          {
-            "speaker": "Lan",
-            "text": "Yes, there is. There's a desk next to the window."
-          },
-          {
-            "speaker": "Mia",
-            "text": "Are there any cafés nearby?"
-          },
-          {
-            "speaker": "Lan",
-            "text": "Yes, there are. There are two cafés across from my building."
-          },
-          {
-            "speaker": "Mia",
-            "text": "Is there a supermarket near your place?"
-          },
-          {
-            "speaker": "Lan",
-            "text": "No, there isn't, but there are some small shops downstairs."
-          }
-        ],
-        "check": [
-          "Is Lan's new apartment comfortable?",
-          "Is there a desk in her bedroom?",
-          "Are there any cafés nearby?",
-          "Is there a supermarket near her place?"
-        ],
-        "answers": "1. Yes, it is. 2. Yes, there is. 3. Yes, there are. 4. No, there isn't.",
-        "note": "Notice: there's a…, there are…, Is there…? Are there…? Thing first, place later."
-      },
-      {
-        "t": "dialog",
-        "title": "At the office",
-        "target": "there is… · there are…",
-        "lift": "Is there…? · Are there…?",
-        "lines": [
-          {
-            "speaker": "Mia",
-            "text": "Is there a meeting room in your office?"
-          },
-          {
-            "speaker": "Lan",
-            "text": "Yes, there is. There is a meeting room on the second floor."
-          },
-          {
-            "speaker": "Mia",
-            "text": "Are there any cafés nearby?"
-          },
-          {
-            "speaker": "Lan",
-            "text": "Yes, there are. There are two cafés across the street."
-          },
-          {
-            "speaker": "Mia",
-            "text": "Is there a supermarket near your office?"
-          },
-          {
-            "speaker": "Lan",
-            "text": "No, there isn't, but there are some small shops downstairs."
-          }
-        ],
-        "check": [
-          "Is there a meeting room in Lan's office?",
-          "Are there any cafés nearby?",
-          "Is there a supermarket near her office?"
-        ],
-        "answers": "1. Yes, there is. 2. Yes, there are. 3. No, there isn't.",
-        "note": "Notice: there is…, there are…, Is there…? Are there…? Thing first, place later."
-      },
-      {
-        "t": "dialog",
-        "title": "This is vs There is",
-        "target": "this is… · there is…",
-        "lift": "What is this? · What is in…?",
-        "lines": [
-          {
-            "speaker": "Mia",
-            "text": "What is this?"
-          },
-          {
-            "speaker": "Lan",
-            "text": "This is my office."
-          },
-          {
-            "speaker": "Mia",
-            "text": "What is in your office?"
-          },
-          {
-            "speaker": "Lan",
-            "text": "There is a meeting room."
-          },
-          {
-            "speaker": "Mia",
-            "text": "Is this a café?"
-          },
-          {
-            "speaker": "Lan",
-            "text": "Yes, it is. This is a café."
-          },
-          {
-            "speaker": "Mia",
-            "text": "Is there a café nearby?"
-          },
-          {
-            "speaker": "Lan",
+            "speaker": "B",
             "text": "Yes, there is."
+          },
+          {
+            "speaker": "A",
+            "text": "Is it a quiet café?"
+          },
+          {
+            "speaker": "B",
+            "text": "Yes, it is."
+          },
+          {
+            "speaker": "A",
+            "text": "Is there outdoor seating?"
+          },
+          {
+            "speaker": "B",
+            "text": "Yes, there is."
+          },
+          {
+            "speaker": "A",
+            "text": "Are there many people on weekends?"
+          },
+          {
+            "speaker": "B",
+            "text": "Yes, there are."
+          },
+          {
+            "speaker": "A",
+            "text": "Do you go there often?"
+          },
+          {
+            "speaker": "B",
+            "text": "Yes. I go there twice a week."
           }
         ],
         "check": [
-          "What is this?",
-          "What is in Lan's office?",
-          "Is this a café?",
-          "Is there a café nearby?"
+          "Is there a café near B's house?",
+          "Is it quiet?",
+          "Are there many people on weekends?"
         ],
-        "answers": "1. This is my office. 2. There is a meeting room. 3. Yes, it is. 4. Yes, there is.",
-        "note": "Notice: This is = identify, There is = exist. Different questions, different answers."
+        "answers": "1. Yes. 2. Yes. 3. Yes.",
+        "note": "Existence first (there is), then quality (it is)."
+      },
+      {
+        "t": "dialog",
+        "title": "Home vs office",
+        "target": "There is… · My apartment has…",
+        "lift": "owner first vs thing first",
+        "lines": [
+          {
+            "speaker": "A",
+            "text": "Is there a balcony in your apartment?"
+          },
+          {
+            "speaker": "B",
+            "text": "Yes. My apartment has a small balcony."
+          },
+          {
+            "speaker": "A",
+            "text": "Are there any meeting rooms in your office?"
+          },
+          {
+            "speaker": "B",
+            "text": "Yes. There are two meeting rooms in my office."
+          },
+          {
+            "speaker": "A",
+            "text": "Is there an elevator in your building?"
+          },
+          {
+            "speaker": "B",
+            "text": "Yes, there is."
+          },
+          {
+            "speaker": "A",
+            "text": "Are there any cafés near your house?"
+          },
+          {
+            "speaker": "B",
+            "text": "Yes. This area has many cafés."
+          }
+        ],
+        "check": [
+          "Does B's apartment have a balcony?",
+          "How many meeting rooms?",
+          "Is there an elevator?"
+        ],
+        "answers": "1. Yes. 2. Two. 3. Yes.",
+        "note": "Start with the owner → have/has. Start with the thing → there is/are."
+      },
+      {
+        "t": "dialog",
+        "title": "My neighborhood",
+        "target": "There's a… · There are… · There isn't…",
+        "lift": "thing + place",
+        "lines": [
+          {
+            "speaker": "A",
+            "text": "What's around your building?"
+          },
+          {
+            "speaker": "B",
+            "text": "There's a small café across from my apartment."
+          },
+          {
+            "speaker": "A",
+            "text": "Are there any shops?"
+          },
+          {
+            "speaker": "B",
+            "text": "There are two convenience stores within walking distance."
+          },
+          {
+            "speaker": "A",
+            "text": "Is there a supermarket nearby?"
+          },
+          {
+            "speaker": "B",
+            "text": "No. There isn't a supermarket nearby."
+          },
+          {
+            "speaker": "A",
+            "text": "Is there a park?"
+          },
+          {
+            "speaker": "B",
+            "text": "Yes. There's also a park behind my building."
+          }
+        ],
+        "check": [
+          "Is there a café?",
+          "Is there a supermarket?",
+          "Where is the park?"
+        ],
+        "answers": "1. Yes, across from the apartment. 2. No. 3. Behind the building.",
+        "note": "There's = there is. Stress the THING: café, stores, park."
       }
     ],
     "listening": [
@@ -594,16 +608,36 @@
     "roleplay": [
       {
         "t": "steps",
-        "title": "60-second engine challenge",
-        "context": "Work with a partner. Take turns asking and answering Yes-No questions with Is there…? / Are there…?",
+        "title": "Guided tour · HOME",
+        "context": "Partner không nhìn nơi của bạn. Họ phải hình dung được.",
         "steps": [
-          "Partner A asks: Is there a…?",
-          "Partner B answers: Yes, there is. / No, there isn't.",
-          "Partner A asks: Are there any…?",
-          "Partner B answers: Yes, there are. / No, there aren't.",
-          "Switch roles. Keep it fast — 10 seconds per question."
+          "Opener: Is there a balcony?",
+          "Ask 4 questions · give 5 details · use 2 location chunks",
+          "rooms · furniture · nearby services"
         ],
-        "useful": "Is there a balcony? · Are there any cafés nearby? · Is there a supermarket? · Are there any meeting rooms?"
+        "useful": "right outside my bedroom · next to the window · across from my building"
+      },
+      {
+        "t": "steps",
+        "title": "Guided tour · OFFICE",
+        "context": "Mô tả work areas, facilities, people.",
+        "steps": [
+          "Opener: Are there any meeting rooms?",
+          "Ask 4 · give 5 · 2 location chunks",
+          "Success: partner can sketch the place"
+        ],
+        "useful": "a shared meeting room · plenty of natural light"
+      },
+      {
+        "t": "steps",
+        "title": "Guided tour · NEIGHBORHOOD",
+        "context": "shops · cafés · parks · transport",
+        "steps": [
+          "Opener: Is there a café nearby?",
+          "Ask 4 · give 5 · 2 location chunks",
+          "Use There's… · There are… · My area has…"
+        ],
+        "useful": "within walking distance · a quiet residential area · everything I need nearby"
       }
     ],
     "finalTask": [

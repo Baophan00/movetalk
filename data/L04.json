@@ -19,7 +19,7 @@
         "items": [
           {
             "word": "this new laptop",
-            "phonetic": "/ðɪs njuː ˈlæptɒp/",
+            "phonetic": "/ðɪs nu ˈlæptɑp/",
             "vi": "chiếc laptop mới này",
             "def": "a specific laptop near you",
             "examples": [
@@ -35,7 +35,7 @@
           },
           {
             "word": "my new work laptop",
-            "phonetic": "/maɪ njuː wɜːk ˈlæptɒp/",
+            "phonetic": "/maɪ nu wɜrk ˈlæptɑp/",
             "vi": "chiếc laptop công việc mới của tôi",
             "def": "a laptop for work that belongs to you",
             "examples": [
@@ -51,7 +51,7 @@
           },
           {
             "word": "those client files",
-            "phonetic": "/ðəʊz ˈklaɪənt faɪlz/",
+            "phonetic": "/ðoʊz ˈklaɪənt faɪlz/",
             "vi": "những tập hồ sơ khách hàng kia",
             "def": "files for clients, far from you",
             "examples": [
@@ -67,7 +67,7 @@
           },
           {
             "word": "those blue files",
-            "phonetic": "/ðəʊz bluː faɪlz/",
+            "phonetic": "/ðoʊz blu faɪlz/",
             "vi": "những tập hồ sơ màu xanh kia",
             "def": "blue files, far from you",
             "examples": [
@@ -83,7 +83,7 @@
           },
           {
             "word": "my manager's files",
-            "phonetic": "/maɪ ˈmænɪdʒəz faɪlz/",
+            "phonetic": "/maɪ ˈmænɪdʒərz faɪlz/",
             "vi": "tập hồ sơ của quản lý tôi",
             "def": "files that belong to your manager",
             "examples": [
@@ -99,7 +99,7 @@
           },
           {
             "word": "that woman near the window",
-            "phonetic": "/ðæt ˈwʊmən nɪə ðə ˈwɪndəʊ/",
+            "phonetic": "/ðæt ˈwʊmən nɪr ðə ˈwɪndoʊ/",
             "vi": "người phụ nữ gần cửa sổ kia",
             "def": "a specific woman, far from you",
             "examples": [
@@ -115,7 +115,7 @@
           },
           {
             "word": "our new sales manager",
-            "phonetic": "/ˈaʊə njuː seɪlz ˈmænɪdʒə/",
+            "phonetic": "/ɑr nu seɪlz ˈmænɪdʒər/",
             "vi": "quản lý bán hàng mới của chúng tôi",
             "def": "the new manager of our sales team",
             "examples": [
@@ -131,7 +131,7 @@
           },
           {
             "word": "her office",
-            "phonetic": "/hɜːr ˈɒfɪs/",
+            "phonetic": "/hər ˈɑfɪs/",
             "vi": "văn phòng của cô ấy",
             "def": "the office that belongs to her",
             "examples": [
@@ -147,7 +147,7 @@
           },
           {
             "word": "the second floor",
-            "phonetic": "/ðə ˈsekənd flɔː/",
+            "phonetic": "/ðə ˈsekənd flɔr/",
             "vi": "tầng hai",
             "def": "the floor above the ground floor",
             "examples": [
@@ -293,147 +293,116 @@
     "conversations": [
       {
         "t": "dialog",
-        "title": "A new laptop",
-        "target": "this new laptop · my new work laptop",
-        "lift": "It's… · I just got…",
+        "title": "A first visit to the office",
+        "target": "This is my… · Those are…",
+        "lift": "demonstrative + possessive noun phrases",
         "lines": [
           {
-            "speaker": "Mia",
-            "text": "Is this your new laptop?"
+            "speaker": "A",
+            "text": "This is my new workplace."
           },
           {
-            "speaker": "Lan",
-            "text": "Yes. It's my new work laptop."
+            "speaker": "B",
+            "text": "It's nice. Is this your desk?"
           },
           {
-            "speaker": "Mia",
-            "text": "Are those your client files?"
+            "speaker": "A",
+            "text": "Yes, it is. And that person is our new manager."
           },
           {
-            "speaker": "Lan",
-            "text": "No. Those blue files are my manager's files."
+            "speaker": "B",
+            "text": "Are those files for the monthly report?"
           },
           {
-            "speaker": "Mia",
-            "text": "Who's that woman near the window?"
+            "speaker": "A",
+            "text": "Yes. Those files are the detailed monthly report."
           },
           {
-            "speaker": "Lan",
-            "text": "She's our new sales manager."
+            "speaker": "B",
+            "text": "Is this a small local family business?"
           },
           {
-            "speaker": "Mia",
-            "text": "Does your new manager work here every day?"
-          },
-          {
-            "speaker": "Lan",
-            "text": "Yes. Her office is on the second floor."
+            "speaker": "A",
+            "text": "No. This is a new professional opportunity for me."
           }
         ],
         "check": [
-          "Is this Lan's new laptop?",
-          "Are those Lan's client files?",
-          "Who's that woman near the window?",
-          "Does the new manager work here every day?"
+          "Is it A's desk?",
+          "Who is that person?",
+          "What are those files?"
         ],
-        "answers": "1. Yes, it is. 2. No, they aren't. 3. She's the new sales manager. 4. Yes, she does.",
-        "note": "Notice: this new laptop, my new work laptop, those blue files, my manager's files, that woman near the window, our new sales manager, her office, the second floor."
+        "answers": "1. Yes. 2. The new manager. 3. The detailed monthly report.",
+        "note": "Notice the English order: determiner + description + noun."
       },
       {
         "t": "dialog",
-        "title": "At the coffee machine",
-        "target": "this cup · that chair · these keys · those windows",
-        "lift": "Is this…? · Are these…?",
+        "title": "Around the apartment",
+        "target": "this / that / these / those + noun",
+        "lift": "point then name",
         "lines": [
           {
-            "speaker": "Anna",
-            "text": "Is this your cup?"
+            "speaker": "A",
+            "text": "This is my usual morning coffee."
           },
           {
-            "speaker": "Ben",
-            "text": "Yes, it is. This is my cup."
+            "speaker": "B",
+            "text": "Is that your peaceful little balcony?"
           },
           {
-            "speaker": "Anna",
-            "text": "Is that your chair?"
+            "speaker": "A",
+            "text": "Yes. And these are a few close friends from work."
           },
           {
-            "speaker": "Ben",
-            "text": "No, it isn't. That chair is free."
+            "speaker": "B",
+            "text": "Are those your comfortable travel shoes?"
           },
           {
-            "speaker": "Anna",
-            "text": "Are these your keys?"
-          },
-          {
-            "speaker": "Ben",
-            "text": "Yes, they are. These are my keys."
-          },
-          {
-            "speaker": "Anna",
-            "text": "Are those your windows?"
-          },
-          {
-            "speaker": "Ben",
-            "text": "No, they aren't. Those windows are open."
+            "speaker": "A",
+            "text": "Yes, they are. I need them for the trip."
           }
         ],
         "check": [
-          "Is this Ben's cup?",
-          "Is that Ben's chair?",
-          "Are these Ben's keys?",
-          "Are those Ben's windows?"
+          "What is this?",
+          "Is the balcony A's?",
+          "Are the shoes for travel?"
         ],
-        "answers": "1. Yes, it is. 2. No, it isn't. 3. Yes, they are. 4. No, they aren't.",
-        "note": "Notice: this/that + is, these/those + are. Near vs far, one vs many."
+        "answers": "1. Morning coffee. 2. Yes. 3. Yes.",
+        "note": "Keep the noun phrase together. Don't split the description after the noun."
       },
       {
         "t": "dialog",
-        "title": "Possessives",
-        "target": "my coworker · her boss · our office · their clients",
-        "lift": "I work with… · She works for…",
+        "title": "A current project",
+        "target": "a / the / my + adj + noun",
+        "lift": "subject and object noun phrases",
         "lines": [
           {
-            "speaker": "Mia",
-            "text": "Is this your coworker?"
+            "speaker": "A",
+            "text": "We have a tight deadline this week."
           },
           {
-            "speaker": "Lan",
-            "text": "Yes, she is. She's my coworker."
+            "speaker": "B",
+            "text": "Do you have a detailed proposal?"
           },
           {
-            "speaker": "Mia",
-            "text": "Is that her boss?"
+            "speaker": "A",
+            "text": "Yes. My manager wants honest feedback on it."
           },
           {
-            "speaker": "Lan",
-            "text": "Yes, he is. He's her boss."
+            "speaker": "B",
+            "text": "Is the workload manageable?"
           },
           {
-            "speaker": "Mia",
-            "text": "Is this our office?"
-          },
-          {
-            "speaker": "Lan",
-            "text": "Yes, it is. This is our office."
-          },
-          {
-            "speaker": "Mia",
-            "text": "Are those their clients?"
-          },
-          {
-            "speaker": "Lan",
-            "text": "Yes, they are. Those are their clients."
+            "speaker": "A",
+            "text": "Not really. It's a heavy workload, but a practical solution is coming."
           }
         ],
         "check": [
-          "Is this Lan's coworker?",
-          "Is that her boss?",
-          "Is this their office?",
-          "Are those their clients?"
+          "Is the deadline tight?",
+          "What does the manager want?",
+          "Is the workload light?"
         ],
-        "answers": "1. Yes, she is. 2. Yes, he is. 3. Yes, it is. 4. Yes, they are.",
-        "note": "Notice: my coworker, her boss, our office, their clients. Owner first, then noun."
+        "answers": "1. Yes. 2. Honest feedback. 3. No, heavy.",
+        "note": "Use full noun phrases, not one adjective answers."
       }
     ],
     "listening": [
@@ -593,16 +562,40 @@
     "roleplay": [
       {
         "t": "steps",
-        "title": "60-second engine challenge",
-        "context": "Work with a partner. Take turns pointing to objects and asking Yes-No questions with this/that/these/those.",
+        "title": "Mission · First visit",
+        "context": "Một người nước ngoài ghé nơi làm việc hoặc nhà bạn lần đầu.",
         "steps": [
-          "Partner A points and asks: Is this your…?",
-          "Partner B answers: Yes, it is. / No, it isn't.",
-          "Partner A points and asks: Are these your…?",
-          "Partner B answers: Yes, they are. / No, they aren't.",
-          "Switch roles. Keep it fast — 10 seconds per question."
+          "Dùng 2 demonstrative phrases (this/that/these/those).",
+          "Dùng 2 possessive phrases (my/our/her…).",
+          "Dùng 2 expanded noun phrases.",
+          "Hỏi 3 Yes–No follow-ups.",
+          "Success: listener biết đúng WHO / WHAT bạn chỉ."
         ],
-        "useful": "Is this your phone? · Are these your keys? · Is that your chair? · Are those your files?"
+        "useful": "This is my… · That person is our… · Are those your…?"
+      },
+      {
+        "t": "steps",
+        "title": "30-second · workplace",
+        "context": "Nói liên tục. Dùng mỗi khung noun phrase một lần.",
+        "steps": [
+          "my current ________",
+          "a highly ________",
+          "our long-term ________",
+          "Topic: workload, one difficulty, next step."
+        ],
+        "useful": "my current project · a highly detailed report · our long-term goal"
+      },
+      {
+        "t": "steps",
+        "title": "Final mission · WORK or LIFE",
+        "context": "Chuẩn bị 60 giây, nói 90 giây không nhìn note.",
+        "steps": [
+          "WORK: project, task, client or career decision.",
+          "LIFE: recent experience, relationship, purchase or plan.",
+          "Required: 6 full noun phrases + 2 advanced adjectives.",
+          "Partner check: determiner, description, head noun."
+        ],
+        "useful": "a practical solution · confidential client information · a few close friends"
       }
     ],
     "finalTask": [

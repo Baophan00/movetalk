@@ -19,7 +19,7 @@
         "items": [
           {
             "word": "teammate",
-            "phonetic": "/ˈtiːmmeɪt/",
+            "phonetic": "/ˈtimeɪt/",
             "vi": "đồng đội",
             "def": "someone on your team",
             "examples": [
@@ -35,7 +35,7 @@
           },
           {
             "word": "colleague",
-            "phonetic": "/ˈkɒliːɡ/",
+            "phonetic": "/ˈkɑliɡ/",
             "vi": "đồng nghiệp",
             "def": "someone you work with",
             "examples": [
@@ -51,7 +51,7 @@
           },
           {
             "word": "manager",
-            "phonetic": "/ˈmænɪdʒə/",
+            "phonetic": "/ˈmænɪdʒər/",
             "vi": "quản lý",
             "def": "the person who leads your team",
             "examples": [
@@ -83,7 +83,7 @@
           },
           {
             "word": "report",
-            "phonetic": "/rɪˈpɔːt/",
+            "phonetic": "/rɪˈpɔrt/",
             "vi": "báo cáo",
             "def": "a document with information",
             "examples": [
@@ -115,7 +115,7 @@
           },
           {
             "word": "supportive",
-            "phonetic": "/səˈpɔːtɪv/",
+            "phonetic": "/səˈpɔrtɪv/",
             "vi": "hỗ trợ",
             "def": "giving help and encouragement",
             "examples": [
@@ -247,129 +247,144 @@
     "conversations": [
       {
         "t": "dialog",
-        "title": "A new teammate",
-        "target": "she's · he's · we're · they're",
-        "lift": "find it easy to… · surprisingly well",
+        "title": "New coworker",
+        "target": "Is she…? · Does she…?",
+        "lift": "friendly → department → same team → busy",
         "lines": [
           {
-            "speaker": "Mia",
-            "text": "Is Anna your new teammate?"
+            "speaker": "A",
+            "text": "Is your new coworker friendly?"
           },
           {
-            "speaker": "Lan",
-            "text": "Yes, she is. She works in sales."
+            "speaker": "B",
+            "text": "Yes, she is. She's very easy to talk to."
           },
           {
-            "speaker": "Mia",
+            "speaker": "A",
+            "text": "Does she work in sales?"
+          },
+          {
+            "speaker": "B",
+            "text": "No, she doesn't. She works in marketing."
+          },
+          {
+            "speaker": "A",
             "text": "Does she work with you every day?"
           },
           {
-            "speaker": "Lan",
-            "text": "Yes, she does. We work on the same team."
+            "speaker": "B",
+            "text": "Yes, she does. We're on the same team."
           },
           {
-            "speaker": "Mia",
-            "text": "Are you and Anna busy this week?"
+            "speaker": "A",
+            "text": "Is she busy this week?"
           },
           {
-            "speaker": "Lan",
-            "text": "Yes, we are. We have a new client."
-          },
-          {
-            "speaker": "Mia",
-            "text": "Do they need the report today?"
-          },
-          {
-            "speaker": "Lan",
-            "text": "No, they don't. They need it tomorrow."
+            "speaker": "B",
+            "text": "Yes, she is. We have a new project."
           }
         ],
         "check": [
-          "Is Anna Lan's new teammate?",
-          "Does she work with Lan every day?",
-          "Are they busy this week?",
-          "Do they need the report today?"
+          "Is the new coworker friendly?",
+          "Does she work in sales?",
+          "Are they on the same team?"
         ],
-        "answers": "1. Yes, she is. 2. Yes, she does. 3. Yes, they are. 4. No, they don't.",
-        "note": "Notice: she's, he's, we're, they're — contractions are natural in conversation."
+        "answers": "1. Yes. 2. No, marketing. 3. Yes.",
+        "note": "Notice: friendly → department → same team → busy this week."
       },
       {
         "t": "dialog",
-        "title": "At the coffee machine",
-        "target": "does he…? · is she…? · do they…?",
-        "lift": "I'm not sure · Let me check",
+        "title": "Family photo",
+        "target": "Is she…? · Does she…? · Are they…?",
+        "lift": "relationship → place → work",
         "lines": [
           {
-            "speaker": "Anna",
-            "text": "Does he work in sales?"
+            "speaker": "A",
+            "text": "Is she your sister?"
           },
           {
-            "speaker": "Ben",
-            "text": "Yes, he does. He's the new manager."
+            "speaker": "B",
+            "text": "Yes, she is. Her name is Mai."
           },
           {
-            "speaker": "Anna",
-            "text": "Is she your colleague?"
+            "speaker": "A",
+            "text": "Does she live near you?"
           },
           {
-            "speaker": "Ben",
-            "text": "No, she isn't. She's my sister."
+            "speaker": "B",
+            "text": "No, she doesn't. She lives in Hanoi."
           },
           {
-            "speaker": "Anna",
-            "text": "Do they work together?"
+            "speaker": "A",
+            "text": "Does she work there?"
           },
           {
-            "speaker": "Ben",
-            "text": "Yes, they do. They're on the same team."
+            "speaker": "B",
+            "text": "Yes, she does. She works for a bank."
+          },
+          {
+            "speaker": "A",
+            "text": "Are they your parents?"
+          },
+          {
+            "speaker": "B",
+            "text": "Yes, they are. They live in Quy Nhon."
           }
         ],
         "check": [
-          "Does he work in sales?",
-          "Is she Ben's colleague?",
-          "Do they work together?"
+          "Is Mai A's sister?",
+          "Does she live nearby?",
+          "Where do the parents live?"
         ],
-        "answers": "1. Yes, he does. 2. No, she isn't. 3. Yes, they do.",
-        "note": "Notice: does he…? is she…? do they…? — the engine changes with the subject."
+        "answers": "1. Yes. 2. No, Hanoi. 3. Quy Nhon.",
+        "note": "Notice: relationship → place → work → another person in the photo."
       },
       {
         "t": "dialog",
-        "title": "Weekend plans",
-        "target": "are we…? · do we…? · is it…?",
-        "lift": "I'm not sure · Let me think",
+        "title": "Busy team",
+        "target": "Are they…? · Do they…?",
+        "lift": "busy → meetings → deadline → help",
         "lines": [
           {
-            "speaker": "Mia",
-            "text": "Are we ready for the meeting?"
+            "speaker": "A",
+            "text": "Are they busy this week?"
           },
           {
-            "speaker": "Lan",
-            "text": "Yes, we are. We have everything."
+            "speaker": "B",
+            "text": "Yes, they are. They have a new client."
           },
           {
-            "speaker": "Mia",
-            "text": "Do we need to bring anything?"
+            "speaker": "A",
+            "text": "Do they have many meetings?"
           },
           {
-            "speaker": "Lan",
-            "text": "No, we don't. Just our laptops."
+            "speaker": "B",
+            "text": "Yes, they do. They have one every morning."
           },
           {
-            "speaker": "Mia",
-            "text": "Is it time to start?"
+            "speaker": "A",
+            "text": "Are they ready for the deadline?"
           },
           {
-            "speaker": "Lan",
-            "text": "Yes, it is. Let's go."
+            "speaker": "B",
+            "text": "Not yet. They need one more day."
+          },
+          {
+            "speaker": "A",
+            "text": "Do they need your help?"
+          },
+          {
+            "speaker": "B",
+            "text": "Yes, they do. I'm checking the final report."
           }
         ],
         "check": [
-          "Are we ready?",
-          "Do we need to bring anything?",
-          "Is it time to start?"
+          "Are they busy?",
+          "Do they have many meetings?",
+          "Are they ready for the deadline?"
         ],
-        "answers": "1. Yes, we are. 2. No, we don't. 3. Yes, it is.",
-        "note": "Notice: are we…? do we…? is it…? — the engine changes with the subject."
+        "answers": "1. Yes, new client. 2. Yes, every morning. 3. Not yet.",
+        "note": "Notice: busy → meetings → deadline → offer help."
       }
     ],
     "listening": [
@@ -538,16 +553,38 @@
     "roleplay": [
       {
         "t": "steps",
-        "title": "60-second engine challenge",
-        "context": "Work with a partner. Take turns asking and answering Yes-No questions with DOES/IS/DO/ARE.",
+        "title": "Mission 1 · New coworker",
+        "context": "Partner vừa nói công ty có nhân viên mới. Hỏi để biết người đó.",
         "steps": [
-          "Partner A asks: Does he/she…? (action)",
-          "Partner B answers: Yes, he/she does. / No, he/she doesn't.",
-          "Partner A asks: Is he/she…? (BE information)",
-          "Partner B answers: Yes, he/she is. / No, he/she isn't.",
-          "Switch roles. Keep it fast — 10 seconds per question."
+          "Opener: Is your new coworker friendly?",
+          "Hỏi 4+ Yes–No: Does he/she…? Is he/she…? Do they…? Are they…?",
+          "Nghe 1 chi tiết rồi hỏi thêm.",
+          "Đường ý: job · personality · schedule · team"
         ],
-        "useful": "Does she work in sales? · Is he your manager? · Do they work together? · Are we ready?"
+        "useful": "Does she work in sales? · Is she busy this week? · Do they work together?"
+      },
+      {
+        "t": "steps",
+        "title": "Mission 2 · Family photo",
+        "context": "Partner cho xem ảnh gia đình. Đừng đoán — hãy hỏi.",
+        "steps": [
+          "Opener: Is she your sister?",
+          "Hỏi 4+ Yes–No rồi follow-up.",
+          "Đường ý: relationship · work · place · free time",
+          "Report 30 giây: He's… / She… / They're…"
+        ],
+        "useful": "Does she live near you? · Does she work there? · Are they your parents?"
+      },
+      {
+        "t": "steps",
+        "title": "Mission 3 · Busy team",
+        "context": "Hai người đang nói về một tuần làm việc bận.",
+        "steps": [
+          "Opener: Are they busy this week?",
+          "Hỏi về project, deadline, meetings, support.",
+          "Mission complete: 4+ Yes–No · 1 follow-up · 30-second report"
+        ],
+        "useful": "Do they have many meetings? · Are they ready for the deadline? · Do they need your help?"
       }
     ],
     "finalTask": [

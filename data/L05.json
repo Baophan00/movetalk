@@ -51,7 +51,7 @@
           },
           {
             "word": "these",
-            "phonetic": "/ðiːz/",
+            "phonetic": "/ðiz/",
             "vi": "này (gần, nhiều)",
             "def": "points to many things near you",
             "examples": [
@@ -67,7 +67,7 @@
           },
           {
             "word": "those",
-            "phonetic": "/ðəʊz/",
+            "phonetic": "/ðoʊz/",
             "vi": "kia (xa, nhiều)",
             "def": "points to many things far from you",
             "examples": [
@@ -83,7 +83,7 @@
           },
           {
             "word": "first time",
-            "phonetic": "/fɜːst taɪm/",
+            "phonetic": "/fɜrst taɪm/",
             "vi": "lần đầu tiên",
             "def": "the first occasion you do something",
             "examples": [
@@ -99,7 +99,7 @@
           },
           {
             "word": "across the street",
-            "phonetic": "/əˈkrɒs ðə striːt/",
+            "phonetic": "/əˈkrɔs ðə strit/",
             "vi": "bên kia đường",
             "def": "on the other side of the road",
             "examples": [
@@ -115,7 +115,7 @@
           },
           {
             "word": "over there",
-            "phonetic": "/ˈəʊvə ðeə/",
+            "phonetic": "/ˈoʊvər ðer/",
             "vi": "ở đằng kia",
             "def": "in that place, far from you",
             "examples": [
@@ -131,7 +131,7 @@
           },
           {
             "word": "so far",
-            "phonetic": "/səʊ fɑː/",
+            "phonetic": "/soʊ fɑr/",
             "vi": "cho đến bây giờ",
             "def": "until now",
             "examples": [
@@ -147,7 +147,7 @@
           },
           {
             "word": "follow-up",
-            "phonetic": "/ˈfɒləʊ ʌp/",
+            "phonetic": "/ˈfɑloʊ ʌp/",
             "vi": "câu hỏi tiếp theo",
             "def": "a question that continues the conversation",
             "examples": [
@@ -303,155 +303,140 @@
     "conversations": [
       {
         "t": "dialog",
-        "title": "First time in Da Nang",
-        "target": "this is… · that's… · these are… · those are…",
-        "lift": "Is this your first time…? · How do you like it so far?",
-        "lines": [
-          {
-            "speaker": "Linh",
-            "text": "Is this your first time in Da Nang?"
-          },
-          {
-            "speaker": "Alex",
-            "text": "Yes, it is. This is my first trip here."
-          },
-          {
-            "speaker": "Linh",
-            "text": "Is that your hotel across the street?"
-          },
-          {
-            "speaker": "Alex",
-            "text": "Yes, it is. That's a small hotel near the river."
-          },
-          {
-            "speaker": "Linh",
-            "text": "Are these your bags?"
-          },
-          {
-            "speaker": "Alex",
-            "text": "Yes, they are. These are my work bags."
-          },
-          {
-            "speaker": "Linh",
-            "text": "Are those your coworkers over there?"
-          },
-          {
-            "speaker": "Alex",
-            "text": "No, they aren't. Those are people from another tour group."
-          }
-        ],
-        "check": [
-          "Is this Alex's first time in Da Nang?",
-          "Is that his hotel?",
-          "Are these his bags?",
-          "Are those his coworkers?"
-        ],
-        "answers": "1. Yes, it is. 2. Yes, it is. 3. Yes, they are. 4. No, they aren't.",
-        "note": "Notice: this is…, that's…, these are…, those are…. The demonstrative + BE + information pattern."
-      },
-      {
-        "t": "dialog",
-        "title": "At the office",
-        "target": "this is… · that's… · these are… · those are…",
-        "lift": "Is this your…? · Are these your…?",
-        "lines": [
-          {
-            "speaker": "Mia",
-            "text": "Is this your desk?"
-          },
-          {
-            "speaker": "Lan",
-            "text": "Yes, it is. This is my desk."
-          },
-          {
-            "speaker": "Mia",
-            "text": "Is that your manager?"
-          },
-          {
-            "speaker": "Lan",
-            "text": "No, it isn't. That's our new client."
-          },
-          {
-            "speaker": "Mia",
-            "text": "Are these your files?"
-          },
-          {
-            "speaker": "Lan",
-            "text": "Yes, they are. These are today's reports."
-          },
-          {
-            "speaker": "Mia",
-            "text": "Are those your seats?"
-          },
-          {
-            "speaker": "Lan",
-            "text": "No, they aren't. Those are reserved seats."
-          }
-        ],
-        "check": [
-          "Is this Lan's desk?",
-          "Is that Lan's manager?",
-          "Are these Lan's files?",
-          "Are those Lan's seats?"
-        ],
-        "answers": "1. Yes, it is. 2. No, it isn't. 3. Yes, they are. 4. No, they aren't.",
-        "note": "Notice: this is…, that's…, these are…, those are…. The demonstrative + BE + information pattern."
-      },
-      {
-        "t": "dialog",
-        "title": "Follow-up ladder",
-        "target": "Is this your first time…? · How do you like it so far?",
+        "title": "First time here",
+        "target": "Is this your first time…?",
         "lift": "Yes–No opens the door. Follow-up keeps it open.",
         "lines": [
           {
-            "speaker": "Linh",
+            "speaker": "A",
             "text": "Is this your first time here?"
           },
           {
-            "speaker": "Alex",
+            "speaker": "B",
             "text": "Yes, it is."
           },
           {
-            "speaker": "Linh",
+            "speaker": "A",
             "text": "How do you like it so far?"
           },
           {
-            "speaker": "Alex",
+            "speaker": "B",
             "text": "I really like it."
           },
           {
-            "speaker": "Linh",
+            "speaker": "A",
             "text": "Are you here for work?"
           },
           {
-            "speaker": "Alex",
+            "speaker": "B",
             "text": "No, I'm here on vacation."
           },
           {
-            "speaker": "Linh",
+            "speaker": "A",
             "text": "Is this your first day in the city?"
           },
           {
-            "speaker": "Alex",
+            "speaker": "B",
             "text": "Yes. I arrived this morning."
           },
           {
-            "speaker": "Linh",
+            "speaker": "A",
             "text": "Do you have any plans for today?"
           },
           {
-            "speaker": "Alex",
+            "speaker": "B",
             "text": "Yes. I'm visiting the beach."
           }
         ],
         "check": [
-          "Is this Alex's first time here?",
-          "How does he like it?",
-          "Is he here for work?",
-          "Does he have plans for today?"
+          "Is it B's first time here?",
+          "Is B here for work?",
+          "What are B's plans?"
         ],
-        "answers": "1. Yes, it is. 2. He really likes it. 3. No, he isn't. 4. Yes, he does.",
-        "note": "Notice: Yes–No opens the door. Follow-up keeps it open. Use the answer to ask the next question."
+        "answers": "1. Yes. 2. No, vacation. 3. The beach.",
+        "note": "Follow the last answer. Don't jump to a new topic."
+      },
+      {
+        "t": "dialog",
+        "title": "At the office",
+        "target": "Is this your desk? · Are those…?",
+        "lift": "point → ask → connect",
+        "lines": [
+          {
+            "speaker": "A",
+            "text": "Is this your desk?"
+          },
+          {
+            "speaker": "B",
+            "text": "Yes, it is."
+          },
+          {
+            "speaker": "A",
+            "text": "Is that your laptop bag?"
+          },
+          {
+            "speaker": "B",
+            "text": "Yes. And those are my work files."
+          },
+          {
+            "speaker": "A",
+            "text": "Are those your coworkers over there?"
+          },
+          {
+            "speaker": "B",
+            "text": "No. Those aren't my coworkers."
+          },
+          {
+            "speaker": "A",
+            "text": "Are they from your tour group?"
+          },
+          {
+            "speaker": "B",
+            "text": "No. I think they're from another team."
+          }
+        ],
+        "check": [
+          "Is it B's desk?",
+          "Are those B's coworkers?",
+          "Whose files are they?"
+        ],
+        "answers": "1. Yes. 2. No. 3. B's work files.",
+        "note": "this/that = one. these/those = many. Then BE: is/are."
+      },
+      {
+        "t": "dialog",
+        "title": "Travel morning in Da Nang",
+        "target": "That's a… · This is a…",
+        "lift": "point things, then start talking",
+        "lines": [
+          {
+            "speaker": "A",
+            "text": "That's a small café across from my hotel."
+          },
+          {
+            "speaker": "B",
+            "text": "Is this a good place to start the day?"
+          },
+          {
+            "speaker": "A",
+            "text": "Yes. And that's an amazing view of the river."
+          },
+          {
+            "speaker": "B",
+            "text": "Is this your first time here?"
+          },
+          {
+            "speaker": "A",
+            "text": "Yes, it is. This is my first morning in Da Nang."
+          }
+        ],
+        "check": [
+          "Where is the café?",
+          "Is it A's first morning?",
+          "What is the view of?"
+        ],
+        "answers": "1. Across from the hotel. 2. Yes. 3. The river.",
+        "note": "this is a / that's an — keep it one breath group."
       }
     ],
     "listening": [
@@ -611,16 +596,37 @@
     "roleplay": [
       {
         "t": "steps",
-        "title": "60-second engine challenge",
-        "context": "Work with a partner. Take turns pointing to objects and asking Yes-No questions with this/that/these/those.",
+        "title": "Café · meet someone new",
+        "context": "Bạn gặp một người mới.",
         "steps": [
-          "Partner A points and asks: Is this your…?",
-          "Partner B answers: Yes, it is. / No, it isn't.",
-          "Partner A points and asks: Are these your…?",
-          "Partner B answers: Yes, they are. / No, they aren't.",
-          "Switch roles. Keep it fast — 10 seconds per question."
+          "Opener: Is this your first time here?",
+          "4 Yes–No questions",
+          "2 follow-ups",
+          "1 full introduction"
         ],
-        "useful": "Is this your phone? · Are these your keys? · Is that your chair? · Are those your files?"
+        "useful": "How do you like it so far? · Are you here for work? · Do you have any plans for today?"
+      },
+      {
+        "t": "steps",
+        "title": "Work · show a new colleague around",
+        "context": "Bạn hướng dẫn đồng nghiệp mới.",
+        "steps": [
+          "Opener: Is this your desk?",
+          "4 Yes–No + 2 follow-ups",
+          "Point with this/that/these/those"
+        ],
+        "useful": "Is that your laptop bag? · Are those your coworkers?"
+      },
+      {
+        "t": "steps",
+        "title": "Travel · talk to a visitor",
+        "context": "Bạn bắt chuyện với khách du lịch.",
+        "steps": [
+          "Opener: Is that your hotel?",
+          "4 Yes–No + 2 follow-ups",
+          "Partner answers naturally. You choose the next question."
+        ],
+        "useful": "Is it a good hotel? · Is this your first time in Da Nang?"
       }
     ],
     "finalTask": [

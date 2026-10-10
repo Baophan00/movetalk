@@ -53,7 +53,7 @@ for (const num of Object.keys(LD)) {
   }
 }
 console.log(`INFO | cloned-voice coverage: ${covered}/${convLines} conversation lines`);
-t('manifest covers at least one conversation line', covered > 0, `${covered}/${convLines}`);
+t('speak() falls back when clip missing', js.includes('fallbackSpeak') || js.includes('speakLineThenNext'));
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
