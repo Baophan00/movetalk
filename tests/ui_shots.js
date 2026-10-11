@@ -5,6 +5,9 @@ const CHROME='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const PORT=9911;
 const BASE=(process.argv[2]||'http://127.0.0.1:8080').replace(/\/$/,'');
 const OUT=process.argv[3]||'/tmp/mt-ui';
+const TEACHER_EMAIL=process.env.MT_EMAIL||'demo.teacher@movetalk.test';
+const TEACHER_PASS=process.env.MT_PASS||'MoveTalk123!';
+const STUDENT_EMAIL=process.env.MT_STUDENT||'demo.student@movetalk.test';
 fs.mkdirSync(OUT,{recursive:true});
 const proc=spawn(CHROME,['--headless=new','--remote-debugging-port='+PORT,'--no-first-run',
   '--no-default-browser-check','--user-data-dir=/tmp/chrome-mtui','--disable-gpu','about:blank'],{stdio:'ignore'});
@@ -53,8 +56,8 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   await ev(`localStorage.clear()`);
   await cmd('Page.navigate',{url:BASE}); await sleep(2800);
   await ev('showAuth()'); await sleep(400);
-  await ev(`document.getElementById('auth-email').value='demo.teacher@movetalk.test';`+
-           `document.getElementById('auth-pass').value='MoveTalk123!';doAuth();`);
+  await ev(`document.getElementById('auth-email').value='${TEACHER_EMAIL}';`+
+           `document.getElementById('auth-pass').value='${TEACHER_PASS}';doAuth();`);
   await sleep(6000);
   await ev("go('teacher')"); await sleep(3000);
   await shot('04-teacher-overview-desktop');
@@ -66,7 +69,7 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   await ev("localStorage.clear()");
   await cmd('Page.navigate',{url:BASE}); await sleep(2600);
   await ev('showAuth()'); await sleep(400);
-  await ev(`document.getElementById('auth-email').value='demo.student@movetalk.test';`+
+  await ev(`document.getElementById('auth-email').value='${STUDENT_EMAIL}';`+
            `document.getElementById('auth-pass').value='MoveTalk123!';doAuth();`);
   await sleep(6000);
   await ev("go('dashboard')"); await sleep(3500); await shot('11-student-dashboard-desktop');

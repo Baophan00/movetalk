@@ -558,6 +558,10 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
       max_score: 6, submitted_at: '2026-10-04' }
   ];
   ta.TC.progress = [{ student_id: 'a1', track: 'a1', lesson_no: 3, part: 'vocab' }];
+  ta.TC.recipients = [
+    { assignment_id: 'a1', student_id: 'a1', class_id: null },
+    { assignment_id: 'a1', student_id: 'a3', class_id: null }
+  ];
   ta.TC.loading = false;
   ta.tcRenderOverview();
   const ov = TEACH.els['tc-panel-overview'].innerHTML;
@@ -568,7 +572,14 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   t('the overview shows work that is already marked', /Marked/.test(ov));
   t('the overview names the student behind a submission', ov.includes('Accepted One'));
   t('the overview shows the assignment that was handed in', ov.includes('Homework: Build the Message'));
-  t('the overview flags the accepted student who has opened nothing', /no lesson opened yet/.test(ov));
+  t('the overview flags a student who was given work and handed nothing in',
+    /1 assigned, nothing handed in yet/.test(ov), ov.slice(0, 200));
+  t('a draft is never counted as given work',
+    !/2 assigned/.test(ov));
+  ta.tcRenderStudents();
+  const studs = TEACH.els['tc-panel-students'].innerHTML;
+  t('the student list says what has been handed in and marked',
+    /1 of 1 handed in · 0 marked/.test(studs), studs.slice(0, 240));
   t('the overview keeps a draft out of the published count', /1 still in draft/.test(ov));
 
   const keptStudents = ta.TC.students, keptAssignments = ta.TC.assignments;

@@ -36,7 +36,7 @@ const HW = {
 const TC = {
   ready: false, loading: false, loadSeq: 0, tab: 'overview',
   classes: [], rosters: {}, assignments: [], rosterOf: {},
-  students: [], progress: [], submissions: [], busy: {},
+  students: [], progress: [], submissions: [], recipients: [], busy: {},
   builder: null, openSubs: null, results: []
 };
 
@@ -480,6 +480,8 @@ async function tcLoad() {
       .select('id,assignment_id,student_id,status,score,max_score,submitted_at,graded_at')
       .order('submitted_at', { ascending: false });
     TC.submissions = (sb && !sb.error && sb.data) ? sb.data : [];
+    const rc = await HB.from('assignment_recipients').select('assignment_id,student_id,class_id');
+    TC.recipients = (rc && !rc.error && rc.data) ? rc.data : [];
     TC.ready = true;
   } catch (e) {
     hwErr(e, 'Could not load your students');
@@ -567,7 +569,10 @@ function tcRenderOverview() {
   (TC.progress || []).forEach(function (x) {
     progressOf[x.student_id] = (progressOf[x.student_id] || 0) + 1;
   });
-  const noProgress = accepted.filter(function (s) { return !progressOf[s.id]; });
+  const noProgress = accepted.filter(function (s) {
+    const w = tcStudentWork(s.id);
+    return w.handed === 0;
+  });
   const upcoming = published
     .filter(function (a) { return a.due_at && !hwIsOverdue(a); })
     .sort(function (x, y) { return x.due_at < y.due_at ? -1 : 1; })
@@ -609,9 +614,11 @@ function tcRenderOverview() {
         '<button class="btn-quiet btn-sm" onclick="tcTab(&quot;assignments&quot;)">Open</button></span></div>';
     });
     noProgress.slice(0, 3).forEach(function (s) {
+      const w = tcStudentWork(s.id);
+      const why = w.given ? (w.given + ' assigned, nothing handed in yet') : 'accepted, no work assigned yet';
       html += '<div class="row"><span class="row-ico">' + hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>' +
         '<span class="row-main"><span class="row-title">' + hwEsc(s.full_name || 'Student') + '</span>' +
-        '<span class="row-sub">accepted, no lesson opened yet</span></span>' +
+        '<span class="row-sub">' + hwEsc(why) + '</span></span>' +
         '<span class="row-actions"><span class="badge badge-neutral">Getting started</span></span></div>';
     });
     upcoming.forEach(function (a) {
@@ -652,16 +659,41 @@ function tcRenderOverview() {
     html += '<div class="card card-pad space-y-4"><div class="section-head" style="margin-bottom:0"><h3>Students</h3>' +
       '<button class="btn-ghost btn-sm" onclick="tcTab(&quot;students&quot;)">Manage</button></div><div class="row-list">' +
       accepted.slice(0, 5).map(function (s) {
-        const parts = progressOf[s.id] || 0;
-        const pct = Math.min(100, Math.round(parts / 45 * 100));
+        const w = tcStudentWork(s.id);
         return '<div class="row"><span class="row-ico">' + hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>' +
           '<span class="row-main"><span class="row-title">' + hwEsc(s.full_name || 'Student') + '</span>' +
-          '<span class="row-sub">' + hwEsc(hwEsc(s.email || '')) + '</span></span>' +
-          '<span class="row-actions" style="min-width:150px">' + tcProgressBar(pct, parts) + '</span></div>';
+          '<span class="row-sub">' + hwEsc(s.email || '') + '</span></span>' +
+          '<span class="row-actions"><span class="chip">' + hwEsc(tcWorkLine(w)) + '</span></span></div>';
       }).join('') + '</div></div>';
   }
 
   el.innerHTML = html;
+}
+
+/* What a teacher may read about one student: the work given, the work handed
+   in, the work marked. Lesson-part progress is a class-scoped read, so it is
+   only shown when the database actually returns rows for that student. */
+function tcStudentWork(studentId) {
+  const mine = {};
+  (TC.assignments || []).forEach(function (a) { if (a.status !== 'draft') mine[a.id] = true; });
+  const given = (TC.recipients || []).filter(function (r) {
+    return r.student_id === studentId && mine[r.assignment_id];
+  }).length;
+  const subs = (TC.submissions || []).filter(function (x) { return x.student_id === studentId; });
+  const handed = subs.filter(function (x) { return x.status === 'submitted' || x.status === 'graded'; });
+  const marked = subs.filter(function (x) { return x.status === 'graded'; });
+  let last = null;
+  handed.forEach(function (x) {
+    if (x.submitted_at && (!last || x.submitted_at > last)) last = x.submitted_at;
+  });
+  const parts = (TC.progress || []).filter(function (x) { return x.student_id === studentId; }).length;
+  return { given: given, handed: handed.length, marked: marked.length, last: last, parts: parts };
+}
+
+function tcWorkLine(w) {
+  if (!w.given) return 'no work assigned yet';
+  if (!w.handed) return w.given + ' assigned · nothing handed in';
+  return w.handed + ' of ' + w.given + ' handed in · ' + w.marked + ' marked';
 }
 
 function tcProgressBar(pct, parts) {
@@ -721,11 +753,11 @@ function tcRenderStudents() {
     '</div></div>';
   if (accepted.length) {
     html += '<div class="row-list">' + accepted.map(function (s) {
-      const parts = (TC.progress || []).filter(function (x) { return x.student_id === s.id; }).length;
-      const pct = Math.min(100, Math.round(parts / 45 * 100));
+      const w = tcStudentWork(s.id);
+      const when = w.last ? ' · last ' + hwDate(String(w.last).slice(0, 10)) : '';
       return '<div class="row">' + avatar(s) + who(s) +
         '<span class="row-actions ml-auto">' +
-        tcProgressBar(pct, parts) +
+        '<span class="chip">' + hwEsc(tcWorkLine(w)) + when + '</span>' +
         '<button class="btn-quiet btn-sm" onclick="tcNewAssignmentFor(\'' + s.id + '\')">Assign work</button>' +
         '</span></div>';
     }).join('') + '</div>';

@@ -18,8 +18,8 @@ import urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 REF = "fdqjvbarvjrmjlquarva"
-TEACHER = "demo.teacher@movetalk.test"
-PASSWORD = "MoveTalk123!"
+TEACHER = os.environ.get("MT_TEACHER", "demo.teacher@movetalk.test")
+PASSWORD = os.environ.get("MT_TEACHER_PW", "MoveTalk123!")
 TS = str(int(time.time()))
 TMP_EMAIL = "mt-approve-%s@movetalk.test" % TS
 FAILED = []

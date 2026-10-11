@@ -3,7 +3,9 @@
 // Run with:  node tests/live_double_accept.js
 const {spawn}=require('child_process');const http=require('http');
 const CHROME='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-const PORT=9777, SITE='https://movetalk.surge.sh/?v='+Date.now();
+const PORT=9777, SITE=(process.env.MT_URL||'https://movetalk.surge.sh')+'/?v='+Date.now();
+const T_EMAIL=process.env.MT_EMAIL, T_PASS=process.env.MT_PASS;
+if(!T_EMAIL||!T_PASS){console.log('set MT_EMAIL and MT_PASS to a teacher account');process.exit(2)}
 const proc=spawn(CHROME,['--headless=new','--remote-debugging-port='+PORT,'--no-first-run',
   '--no-default-browser-check','--user-data-dir=/tmp/chrome-mtdbl3','--disable-gpu','about:blank'],{stdio:'ignore'});
 const get=p=>new Promise((res,rej)=>{http.get({host:'127.0.0.1',port:PORT,path:p},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>res(JSON.parse(d)))}).on('error',rej)});
@@ -30,8 +32,8 @@ const t=(n,c,x='')=>{console.log((c?'PASS':'FAIL')+' | '+n+(x?' | '+x:''));c?PAS
   await cmd('Page.enable'); await cmd('Runtime.enable'); await cmd('Network.enable');
   await cmd('Page.navigate',{url:SITE}); await sleep(3500);
   await ev('showAuth()'); await sleep(300);
-  await ev(`document.getElementById('auth-email').value='demo.teacher@movetalk.test';`+
-           `document.getElementById('auth-pass').value='MoveTalk123!';doAuth();`);
+  await ev(`document.getElementById('auth-email').value='${T_EMAIL}';`+
+           `document.getElementById('auth-pass').value='${T_PASS}';doAuth();`);
   await sleep(6000);
   await ev("go('teacher')"); await sleep(1200);
 

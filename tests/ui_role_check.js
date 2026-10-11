@@ -4,6 +4,8 @@
 const {spawn}=require('child_process');const http=require('http');
 const CHROME='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const PORT=9933, BASE=process.argv[2]||'https://movetalk.surge.sh';
+const T_EMAIL=process.env.MT_EMAIL, T_PASS=process.env.MT_PASS;
+if(!T_EMAIL||!T_PASS){console.log('set MT_EMAIL and MT_PASS to the teacher account');process.exit(2)}
 const proc=spawn(CHROME,['--headless=new','--remote-debugging-port='+PORT,'--no-first-run',
   '--no-default-browser-check','--user-data-dir=/tmp/chrome-mtrole','--disable-gpu','about:blank'],{stdio:'ignore'});
 const get=p=>new Promise((res,rej)=>{http.get({host:'127.0.0.1',port:PORT,path:p},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>res(JSON.parse(d)))}).on('error',rej)});
@@ -23,7 +25,8 @@ const t=(n,c,x='')=>{console.log((c?'PASS':'FAIL')+' | '+n+(x?' | '+x:''));c?PAS
     await ev("localStorage.clear()");
     await cmd('Page.navigate',{url:BASE+'/?r='+Date.now()}); await sleep(3000);
     await ev('showAuth()'); await sleep(400);
-    await ev(`document.getElementById('auth-email').value='${email}';document.getElementById('auth-pass').value='MoveTalk123!';doAuth();`);
+    const pw = email === T_EMAIL ? T_PASS : 'MoveTalk123!';
+    await ev(`document.getElementById('auth-email').value='${email}';document.getElementById('auth-pass').value='${pw}';doAuth();`);
     await sleep(6000);
     await ev("go('home')"); await sleep(1200);
   };
@@ -35,7 +38,7 @@ const t=(n,c,x='')=>{console.log((c?'PASS':'FAIL')+' | '+n+(x?' | '+x:''));c?PAS
   t('a student sees no teaching entry in the chrome', asStudent.length===0, JSON.stringify(asStudent));
   t('a student is not sent to the teacher screen', (await ev("document.getElementById('v-teacher')&&document.getElementById('v-teacher').classList.contains('hidden')"))===true);
 
-  await signIn('demo.teacher@movetalk.test');
+  await signIn(T_EMAIL);
   const asTeacher=JSON.parse(await visible());
   t('a teacher sees the teaching entry in the sidebar', asTeacher.includes('nav-teacher-item'), JSON.stringify(asTeacher));
   const sections = asTeacher.filter(x => /Overview$|Students$|Assignments$/.test(x));

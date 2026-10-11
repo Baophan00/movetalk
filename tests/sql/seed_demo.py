@@ -17,8 +17,9 @@ import urllib.error
 import urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-PASSWORD = "MoveTalk123!"
-TEACHER = "demo.teacher@movetalk.test"
+PASSWORD = "MoveTalk123!"                      # the two demo students
+TEACHER = os.environ.get("MT_TEACHER")
+TEACHER_PW = os.environ.get("MT_TEACHER_PW", PASSWORD)
 STUDENT = "demo.student@movetalk.test"
 WAITING = "demo.waiting@movetalk.test"
 A1_TITLE = "Demo · Lesson A1-3: Build the Message"
@@ -31,6 +32,10 @@ def read_config():
     key = re.search(r"SUPABASE_ANON_KEY\s*=\s*'([^']*)'", src)
     return url.group(1), key.group(1)
 
+
+if not TEACHER:
+    sys.exit("Set MT_TEACHER=<the teacher email> (and MT_TEACHER_PW=<its password>) first.\n"
+             "The seeder signs in as that existing teacher; it never creates one.")
 
 URL, KEY = read_config()
 if not URL or not KEY:
@@ -71,17 +76,17 @@ def rpc(name, args, token):
     return req("POST", "/rest/v1/rpc/" + name, args, token)
 
 
-def session_for(email, role, name):
+def session_for(email, role, name, password=PASSWORD):
     """Sign up, or sign in if the account already exists."""
     st, d = req("POST", "/auth/v1/signup",
-                {"email": email, "password": PASSWORD,
+                {"email": email, "password": password,
                  "data": {"role": role, "full_name": name}})
     tok = None
     if isinstance(d, dict):
         tok = d.get("access_token") or (d.get("session") or {}).get("access_token")
     if not tok:
         st, d = req("POST", "/auth/v1/token?grant_type=password",
-                    {"email": email, "password": PASSWORD})
+                    {"email": email, "password": password})
         if isinstance(d, dict):
             tok = d.get("access_token")
     if not tok:
@@ -91,7 +96,7 @@ def session_for(email, role, name):
 
 def main():
     print("== signing in as the demo teacher and student ==")
-    tt = session_for(TEACHER, "teacher", "Demo Teacher")
+    tt = session_for(TEACHER, "teacher", "Demo Teacher", TEACHER_PW)
     s1 = session_for(STUDENT, "student", "Demo Student")
 
     st, rows = rest("profiles?select=id,role,full_name&email=eq." + TEACHER, token=tt)
@@ -211,10 +216,10 @@ def main():
     print("=========================================")
     print(" Demo accounts (live site: https://movetalk.surge.sh)")
     print("=========================================")
-    print(" Teacher  %s" % TEACHER)
+    print(" Teacher  %s   (your own account)" % TEACHER)
     print(" Student  %s   (already accepted)" % STUDENT)
     print(" Waiting  %s   (signed up, not accepted yet)" % WAITING)
-    print(" Password %s   (same for all)" % PASSWORD)
+    print(" Password %s   (the two demo students)" % PASSWORD)
     print()
     print(" Sign in as the student to see the homework list, open the lesson")
     print(" assignment, read the marked answers and the feedback.")

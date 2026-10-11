@@ -2,7 +2,10 @@
 // Signs in as the waiting student, then as the teacher, and accepts.
 const {spawn}=require('child_process');const http=require('http');
 const CHROME='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-const PORT=9555, SITE='https://movetalk.surge.sh/?v='+Date.now();
+const PORT=9555, SITE=(process.env.MT_URL||'https://movetalk.surge.sh')+'/?v='+Date.now();
+const T_EMAIL=process.env.MT_EMAIL, T_PASS=process.env.MT_PASS;
+const S_EMAIL=process.env.MT_STUDENT||'demo.waiting@movetalk.test';
+if(!T_EMAIL||!T_PASS){console.log('set MT_EMAIL and MT_PASS to a teacher account');process.exit(2)}
 const proc=spawn(CHROME,['--headless=new','--remote-debugging-port='+PORT,'--no-first-run',
   '--no-default-browser-check','--user-data-dir=/tmp/chrome-mtlive2','--disable-gpu','about:blank'],{stdio:'ignore'});
 const get=p=>new Promise((res,rej)=>{http.get({host:'127.0.0.1',port:PORT,path:p},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>res(JSON.parse(d)))}).on('error',rej)});
@@ -35,7 +38,7 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
     await sleep(5000);
     await ev("go('homework')"); await sleep(1200);
   };
-  await signIn('demo.waiting@movetalk.test','MoveTalk123!');
+  await signIn(S_EMAIL,'MoveTalk123!');
   const gateShown=await ev("!document.getElementById('hw-gate').classList.contains('hidden')");
   const gateMsg=await ev("document.getElementById('hw-gate-msg').innerText");
   const gateTitle=await ev("document.getElementById('hw-gate-title').innerText");
@@ -48,7 +51,7 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   t('there is a button to re-check', checkBtn===true);
 
   // ---- the teacher sees the request and accepts ----
-  await signIn('demo.teacher@movetalk.test','MoveTalk123!');
+  await signIn(T_EMAIL,T_PASS);
   await ev("go('teacher')"); await sleep(4000);
   const panel=await ev("document.getElementById('tc-panel-students').innerText");
   const badge=await ev("document.getElementById('nav-teacher-count').innerText");
