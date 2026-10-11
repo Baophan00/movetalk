@@ -218,6 +218,16 @@ select t_has('T1 adds a written question',
                'Write three sentences about a colleague.',3)$q$),
   'OK');
 
+-- a fourth question that nobody will ever answer, used to prove that an
+-- unanswered question stays deletable after publishing (0 points, so the
+-- totals elsewhere are unaffected)
+select t_has('T1 adds a spare question',
+  t_do('11111111-1111-1111-1111-111111111111',
+    $q$insert into public.assignment_questions(id,assignment_id,ord,qtype,prompt,points)
+       values ('eeeeeeee-0000-0000-0000-000000000004','dddddddd-0000-0000-0000-000000000001',4,'text',
+               'Spare question, deleted later.',0)$q$),
+  'OK');
+
 select t_has('T1 stores the answer key for the mcq',
   t_do('11111111-1111-1111-1111-111111111111',
     $q$insert into public.question_keys(question_id,correct,explanation)
@@ -251,6 +261,15 @@ select t_has('questions are locked once published',
     $q$insert into public.assignment_questions(assignment_id,ord,qtype,prompt)
        values ('dddddddd-0000-0000-0000-000000000001',9,'text','late edit')$q$),
   'ERROR: questions_locked');
+
+select t_has('an UNANSWERED question can still be deleted after publishing (no dead end)',
+  t_do('11111111-1111-1111-1111-111111111111',
+    $q$delete from public.assignment_questions where id='eeeeeeee-0000-0000-0000-000000000004'$q$),
+  'OK');
+
+select t_eq('... and it is gone',
+  t_val('11111111-1111-1111-1111-111111111111',
+        $q$(select count(*) from public.assignment_questions where assignment_id='dddddddd-0000-0000-0000-000000000001')$q$), '3');
 
 select t_has('T1 creates a second assignment for ONE student only',
   t_do('11111111-1111-1111-1111-111111111111',

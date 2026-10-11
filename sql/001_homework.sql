@@ -276,15 +276,22 @@ create trigger assignments_protect
   for each row execute function public.protect_assignment();
 
 -- Questions are editable only while the assignment is a draft.
+-- Deleting is allowed: an assignment that was published by mistake must
+-- stay cleanable, and a question that a student has answered is already
+-- impossible to delete because submission_answers.question_id is
+-- ON DELETE RESTRICT.
 create or replace function public.questions_draft_only()
 returns trigger language plpgsql security definer set search_path = public as $$
 declare st text;
 begin
-  select status into st from public.assignments where id = coalesce(new.assignment_id, old.assignment_id);
+  if tg_op = 'DELETE' then
+    return old;
+  end if;
+  select status into st from public.assignments where id = new.assignment_id;
   if st is distinct from 'draft' then
     raise exception 'questions_locked: questions can only change while the assignment is a draft';
   end if;
-  return coalesce(new, old);
+  return new;
 end $$;
 
 drop trigger if exists aq_draft_only on public.assignment_questions;

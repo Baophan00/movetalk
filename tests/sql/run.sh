@@ -33,11 +33,13 @@ if [ "$(docker inspect -f '{{.State.Running}}' "$CTR" 2>/dev/null)" != "true" ];
 fi
 
 echo "== waiting for postgres =="
-for i in $(seq 1 60); do
-  if docker exec "$CTR" pg_isready -U "$PGUSER" -d movetalk >/dev/null 2>&1; then break; fi
+# pg_isready answers during the image's temporary init server too, which then
+# shuts down — so poll an actual query against the real database instead.
+for i in $(seq 1 90); do
+  if docker exec "$CTR" psql -U "$PGUSER" -d movetalk -tAc 'select 1' >/dev/null 2>&1; then break; fi
   sleep 1
 done
-docker exec "$CTR" pg_isready -U "$PGUSER" -d movetalk >/dev/null 2>&1 || {
+docker exec "$CTR" psql -U "$PGUSER" -d movetalk -tAc 'select 1' >/dev/null 2>&1 || {
   echo "postgres never came up"; docker logs "$CTR" 2>&1 | tail -20; exit 1; }
 
 run() {  # run() <label> <file>

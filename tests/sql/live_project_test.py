@@ -116,12 +116,19 @@ def main():
     print()
 
     # ---------- 0. the schema exists ----------
-    st, _ = rest("assignments?select=id&limit=1")
-    t("the homework tables exist in the project", st == 200,
-      "GET /assignments -> %s (run sql/001_homework.sql first)" % st)
-    if st != 200:
+    # anon has had its table privileges revoked on purpose, so a 401/403
+    # here is correct; only a 404 would mean the migration has not run.
+    st, body = rest("assignments?select=id&limit=1")
+    blob = json.dumps(body)
+    t("the homework tables exist in the project",
+      st != 404 and "does not exist" not in blob,
+      "GET /assignments -> %s %s (run sql/001_homework.sql first)" % (st, blob[:120]))
+    st2, _ = rest("question_keys?select=question_id&limit=1")
+    if st == 404 or "does not exist" in blob:
         print("\n%d passed, %d failed" % (PASS, FAIL))
         sys.exit(1)
+    t("an anonymous caller cannot even reach the tables (grants revoked)",
+      st in (401, 403) and st2 in (401, 403), (st, st2))
 
     # ---------- 1. signups + server-side roles ----------
     tt, tid, tinfo = signup(teacher_email, pw, "teacher", name + " Teacher")
@@ -178,15 +185,17 @@ def main():
     LEFTOVER.append(("assignments", aid, name + " Homework"))
 
     st, qs = insert("assignment_questions", [
-        {"assignment_id": aid, "ord": 1, "qtype": "mcq",
-         "prompt": "___ you work nearby?", "options": ["Do", "Are", "Is", "Does"], "points": 1},
+        {"assignment_id": aid, "ord": 1, "qtype": "mcq", "prompt": "___ you work nearby?",
+         "options": ["Do", "Are", "Is", "Does"], "points": 1},
         {"assignment_id": aid, "ord": 2, "qtype": "fill",
-         "prompt": "Mai keeps her promises. She is very ______.", "points": 2},
+         "prompt": "Mai keeps her promises. She is very ______.", "options": None, "points": 2},
         {"assignment_id": aid, "ord": 3, "qtype": "text",
-         "prompt": "Write three sentences about a colleague.", "points": 3}], tt)
-    t("teacher can add questions", st in (200, 201) and qs and len(qs) == 3, (st, qs))
-    if not qs:
-        sys.exit("question creation failed")
+         "prompt": "Write three sentences about a colleague.", "options": None, "points": 3}], tt)
+    t("teacher can add questions", st in (200, 201) and isinstance(qs, list) and len(qs) == 3, (st, qs))
+    if st not in (200, 201) or not isinstance(qs, list) or len(qs) != 3:
+        print("\n%d passed, %d failed" % (PASS, FAIL))
+        print("stopping: the questions could not be created")
+        sys.exit(1)
     q1, q2, q3 = [q["id"] for q in sorted(qs, key=lambda x: x["ord"])]
 
     st, d = insert("question_keys", [
@@ -291,9 +300,11 @@ def main():
     st, rows = rest("submissions?select=id", token=s2)
     t("student 2 cannot see student 1's submission", st == 200 and not rows, (st, rows))
 
-    st, rows = rest("profiles?select=id,email", token=s1)
-    t("student 1 cannot read other people's profiles",
-      st == 200 and all(r["id"] == s1id for r in rows), rows)
+    st, rows = rest("profiles?select=id,email&limit=50", token=s1)
+    allowed = {s1id, tid}          # own row + the teacher of a class they joined
+    t("student 1 sees only their own profile and their teacher's",
+      st == 200 and rows and all(r["id"] in allowed for r in rows),
+      [r["id"] for r in rows])
 
     st_anon, _ = req("GET", "/rest/v1/assignments?select=id")
     t("an anonymous caller cannot read assignments", st_anon in (401, 403), st_anon)
@@ -302,8 +313,13 @@ def main():
     t("a published assignment cannot be reverted to draft after submissions",
       st >= 400 and "assignment_locked" in json.dumps(d), (st, d))
 
+    # the teacher's own delete is refused by RLS (a published assignment is
+    # not deletable), so what matters is that the row survives. The trigger
+    # that guards the owner path is checked separately as postgres.
     st, d = req("DELETE", "/rest/v1/assignments?id=eq." + aid, token=tt)
-    t("an assignment with submissions cannot be deleted", st >= 400, (st, d))
+    st2, rows = rest("assignments?select=id&id=eq." + aid, token=tt)
+    t("an assignment with submissions cannot be deleted by its teacher",
+      st2 == 200 and rows and len(rows) == 1, (st, st2, rows))
 
     st, d = req("DELETE", "/rest/v1/assignments?id=eq." + aid, token=s1)
     st2, rows = rest("assignments?select=id&id=eq." + aid, token=tt)
