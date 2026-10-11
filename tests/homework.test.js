@@ -27,8 +27,8 @@ function t(name, cond, extra = '') {
 const RETURNS = 'return {TRACKS,TRACK_PARTS,LESSON_DATA,AUDIO_MAP,go,trackGo,trackBody,trackPart,renderTrack,' +
   'renderDashboard,renderHomework,renderTeacher,hwStatus,hwGate,hwOpenLesson,hwEsc,hwDate,' +
   'HW,TC,HW_ON,HB,tcBlankBuilder,tcRenderAssignments,tcBuilderSet,tcBuilderKind,' +
-  'tcSaveAssignment,tcGrade,hwLoadSession,hwLoad,hwOpen,hwRenderList,hwSubmit,hwJoinClass,' +
-  'tcLoad,tcTab,tcAllStudents,tcProgressOf,tcInviteCard,syncAuthFields,showAuthChange,' +
+  'tcSaveAssignment,tcGrade,hwLoadSession,hwLoad,hwOpen,hwRenderList,hwSubmit,' +
+  'tcLoad,tcTab,tcAllStudents,tcWaitingStudents,tcProgressOf,tcDecideStudent,tcRenderStudents,hwUpdatePendingBadge,syncAuthFields,showAuthChange,hwCheckAgain,' +
   'hwForgotPassword,hwRecordProgress,hwLoadProgress,doAuth,setRole,showAuth,' +
   'setUser:(u)=>{USER=u},getUser:()=>USER,' +
   'setAuthMode:(m)=>{AUTH_MODE=m},getAuthMode:()=>AUTH_MODE,' +
@@ -115,7 +115,8 @@ function fakeSupabase(tables) {
       resetPasswordForEmail(email, opts) { (tables.__calls = tables.__calls || []).push(['reset', email, opts]); return Promise.resolve({ error: null }); }
     },
     from,
-    rpc(name) {
+    rpc(name, args) {
+      (tables.__calls = tables.__calls || []).push(['rpc', name, args]);
       const v = tables.__rpc && (name in tables.__rpc) ? tables.__rpc[name] : null;
       return Promise.resolve({ data: v, error: null });
     }
@@ -177,7 +178,7 @@ t('the auth modal is unchanged', /id="auth-email"/.test(src) && /id="auth-pass"/
    2. homework module is wired in
    ============================================================ */
 ['renderHomework', 'renderTeacher', 'hwStatus', 'hwGate', 'tcBlankBuilder', 'tcRenderAssignments',
-  'tcSaveAssignment', 'tcGrade', 'hwSubmit', 'hwJoinClass', 'hwLoadSession', 'tcLoad']
+  'tcSaveAssignment', 'tcGrade', 'hwSubmit', 'hwLoadSession', 'tcLoad']
   .forEach(n => t('exports ' + n, typeof api[n] === 'function'));
 t('HW_ON is a boolean', typeof api.HW_ON === 'boolean');
 t('no config in this instance => offline, not a crash', api.HW_ON === false);
@@ -204,7 +205,8 @@ t('the answer-key field name never reaches the browser',
 t('submission goes through the server RPC', /rpc\('submit_assignment'/.test(hwSrc));
 t('starting a submission goes through the server RPC', /rpc\('start_submission'/.test(hwSrc));
 t('grading goes through the server RPC', /rpc\('grade_submission'/.test(hwSrc));
-t('joining a class goes through the server RPC', /rpc\('join_class_by_code'/.test(hwSrc));
+t('students no longer join anything by code — the teacher accepts them',
+    !/join_class_by_code/.test(hwSrc) && !/hw-join-code/.test(src));
 t('the roster comes from the server RPC', /rpc\('class_roster'/.test(hwSrc));
 t('the client never writes a score itself',
   !/\.update\(\s*\{[^}]*score/.test(hwSrc) && !/score\s*:\s*[0-9]/.test(hwSrc));
@@ -309,7 +311,6 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   t('the list shows a server-computed score', /6\/6/.test(list));
   t('the list shows overdue for the untouched past-due one', /Overdue/.test(list));
   t('the signed-in student sees the homework body', ONLINE.els['hw-body'].classList.contains('hidden') === false);
-  t('the join-a-class card is offered to a student', ONLINE.els['hw-join'].classList.contains('hidden') === false);
   t('the header names the student', /Stu/.test(ONLINE.els['hw-sub'].textContent));
 
   await sa.hwOpen('a1');
@@ -340,9 +341,9 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   const TEACHER_TABLES = {
     __uid: 't1', __email: 't@x.test',
     profiles: [{ id: 't1', email: 't@x.test', full_name: 'Teach', role: 'teacher' }],
-    classes: [{ id: 'c1', name: 'Class One', join_code: 'MT-1111', created_at: 'x' }],
     assignments: [],
-    __rpc: { class_roster: [{ student_id: 's1', full_name: 'Ann', email: 'a@x.test' }] }
+    lesson_progress: [],
+    __rpc: {}
   };
   const TEACH = makeInstance({ url: 'https://example.supabase.co', key: 'anon-key', supabase: fakeSupabase(TEACHER_TABLES) });
   const ta = TEACH.api;
@@ -350,21 +351,20 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   t('the teacher profile is loaded with the teacher role', ta.getUser().role === 'teacher');
   await ta.tcLoad();
   ta.go('teacher');
-  const tcp = TEACH.els['tc-panel-classes'].innerHTML;
+  const tcp = TEACH.els['tc-panel-students'].innerHTML;
   t('the teacher workspace opens', TEACH.els['tc-body'].classList.contains('hidden') === false);
-  t('the class is listed', tcp.includes('Class One'));
-  t('the join code is shown so students can enrol', tcp.includes('MT-1111'));
-  t('the roster is shown', tcp.includes('Ann'));
-  t('a teacher can create a class', /Create class/.test(tcp));
-  t('a teacher can assign work straight from a class', /Assign work/.test(tcp));
+  t('with nobody signed up the teacher is told what to do',
+    /Tell whoever you are teaching to sign up/.test(tcp), tcp.slice(0, 160));
+  t('the tabs are Students and Assignments',
+    /data-tc-tab="students"/.test(src) && /data-tc-tab="assignments"/.test(src) &&
+    !/data-tc-tab="classes"/.test(src));
 
   ta.tcTab('assignments');
   ta.TC.builder = ta.tcBlankBuilder();
   ta.TC.builder.title = 'Homework: Build the Message';
   ta.TC.builder.track = 'a1';
   ta.TC.builder.no = 3;
-  ta.TC.classes = [{ id: 'c1', name: 'Class One', join_code: 'MT-1111' }];
-  ta.TC.rosters = { c1: [{ student_id: 's1', full_name: 'Ann', email: 'a@x.test' }] };
+  ta.TC.students = [{ id: 's1', full_name: 'Ann', email: 'a@x.test', status: 'active' }];
   ta.TC.assignments = [];
   ta.tcRenderAssignments();
   const b = TEACH.els['tc-panel-assignments'].innerHTML;
@@ -372,8 +372,8 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
     ['f1', 'f2', 'a1', 'a2', 'e1', 'e2'].every(x => b.includes('value="' + x + '"')));
   t('the builder shows the real lesson title from existing content', b.includes('Build the Message'));
   t('the builder says the lesson is only referenced', /stays exactly as it is/.test(b));
-  t('the builder lists the class as a recipient', b.includes('Class One'));
-  t('the builder offers individual students too', b.includes('Ann'));
+  t('the builder lists the accepted student as a recipient', b.includes('Ann'));
+  t('the builder offers to send the work to everyone at once', b.includes('Everyone'));
   t('the builder can publish or keep a draft', /Save draft/.test(b) && /Publish/.test(b));
   t('the builder explains that only published work is visible',
     /Only published work becomes visible/.test(b));
@@ -396,7 +396,7 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   ta.TC.builder = ta.tcBlankBuilder(); ta.TC.builder.title = 'x';
   ta.tcSaveAssignment('published');
   t('publishing with no recipients is refused',
-    TEACH.captured.toasts.some(x => /at least one class or student/.test(x)), TEACH.captured.toasts.join(' | '));
+    TEACH.captured.toasts.some(x => /at least one student/.test(x)), TEACH.captured.toasts.join(' | '));
 
   TEACH.captured.toasts.length = 0;
   ta.TC.builder = ta.tcBlankBuilder();
@@ -406,55 +406,88 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
 
   TEACH.captured.toasts.length = 0;
   ta.TC.builder = ta.tcBlankBuilder(); ta.TC.builder.title = 'Custom';
-  ta.tcBuilderKind('custom'); ta.TC.builder.classIds = ['c1'];
+  ta.tcBuilderKind('custom'); ta.TC.builder.studentIds = ['s1'];
   ta.tcSaveAssignment('published');
   t('publishing a custom assignment with no questions is refused',
     TEACH.captured.toasts.some(x => /at least one question/i.test(x)), TEACH.captured.toasts.join(' | '));
 
   /* ============================================================
-     11. TEACHER ACCESS — nobody can simply claim to be a teacher
+     11. STUDENT APPROVAL — the teacher is the one who lets people in
      ============================================================ */
-  t('the sign-up form asks for a teacher invite code',
-    /id="auth-invite"/.test(src) && /Teacher invite code/.test(src));
-  t('the invite field appears only for a teacher sign-up',
-    (() => {
-      sa.setAuthMode('signup'); sa.setRoleState('student'); sa.syncAuthFields();
-      const hidden = ONLINE.els['auth-invite-field'].classList.contains('hidden');
-      sa.setRoleState('teacher'); sa.syncAuthFields();
-      const shown = !ONLINE.els['auth-invite-field'].classList.contains('hidden');
-      sa.setAuthMode('login'); sa.syncAuthFields();
-      const offOnLogin = ONLINE.els['auth-invite-field'].classList.contains('hidden');
-      return hidden && shown && offOnLogin;
-    })());
-  t('the invite code is handed to the server at sign-up', /meta\.invite_code\s*=\s*invite/.test(src));
-  t('a refused teacher claim is reported back to the user', /Signed up as a student/.test(src));
+  t('a student who has just signed up is told to wait',
+    api.hwGate('student', true, { role: 'student', status: 'pending' }).shot === 'waiting');
+  t('the waiting screen says what is going on',
+    /waiting for your teacher/i.test(api.hwGate('student', true, { role: 'student', status: 'pending' }).msg));
+  t('a turned-down student is told plainly',
+    api.hwGate('student', true, { role: 'student', status: 'rejected' }).shot === 'rejected');
+  t('an accepted student goes straight through',
+    api.hwGate('student', true, { role: 'student', status: 'active' }).shot === 'ok');
+  t('the teacher is never held up by their own status',
+    api.hwGate('teacher', true, { role: 'teacher', status: 'active' }).shot === 'ok');
+  t('only the teacher account can approve or turn people down',
+    /approve_student/.test(hwSrc) && /reject_student/.test(hwSrc) &&
+    /rpc\(which, \{ p_student: studentId \}\)/.test(hwSrc));
+  t('the waiting screen offers a way to re-check', /hwCheckAgain/.test(src));
 
-  STUDENT_TABLES.__calls = [];
-  sa.el('auth-email').value = 'newbie@x.test';
-  sa.el('auth-pass').value = 'secret123';
-  sa.el('auth-name').value = 'Newbie';
-  sa.el('auth-invite').value = 'MT-T-ABCD1234';
-  sa.setUser(null);
-  sa.setAuthMode('signup'); sa.setRoleState('teacher');
-  ONLINE.captured.toasts.length = 0;
-  await sa.doAuth();
-  const signupCall = (STUDENT_TABLES.__calls || []).filter(c => c[0] === 'signUp')[0];
-  t('the sign-up carries the invite code in the account metadata',
-    signupCall && signupCall[1].options.data.invite_code === 'MT-T-ABCD1234' &&
-    signupCall[1].options.data.role === 'teacher',
-    JSON.stringify(signupCall && signupCall[1].options.data));
-  t('being downgraded to a student is announced, not silent',
-    ONLINE.captured.toasts.some(x => /not valid/.test(x)), ONLINE.captured.toasts.join(' | '));
+  const waiting = { id: 'w1', full_name: 'Waiting One', email: 'w1@x.test', status: 'pending' };
+  const accepted = { id: 'a1', full_name: 'Accepted One', email: 'a1@x.test', status: 'active' };
+  const refused = { id: 'r1', full_name: 'Refused One', email: 'r1@x.test', status: 'rejected' };
+  ta.TC.students = [waiting, accepted, refused];
+  ta.TC.progress = [];
+  ta.tcRenderStudents();
+  const sp = TEACH.els['tc-panel-students'].innerHTML;
+  t('the teacher is told how many people are waiting', /1 person is waiting to join/.test(sp), sp.slice(0, 120));
+  t('a request shows who it is', sp.includes('Waiting One') && sp.includes('w1@x.test'));
+  t('a request offers Accept and Decline',
+    /Accept<\/button>/.test(sp) && /Decline<\/button>/.test(sp));
+  t('accepted students are listed as students',
+    /Your students/.test(sp) && sp.includes('Accepted One'));
+  t('a turned-down account is kept aside but recoverable',
+    /Not accepted/.test(sp) && /Accept anyway/.test(sp));
+  t('work can be assigned straight from a student',
+    new RegExp("tcNewAssignmentFor\\('a1'\\)").test(sp));
 
-  t('a teacher can mint an invite from the workspace', /make_teacher_invite/.test(hwSrc));
-  t('a teacher can allowlist an email instead', /teacher_allowlist/.test(hwSrc));
-  ta.TC.invites = [{ code: 'MT-T-OPEN1', note: 'for Anna', used_at: null },
-                   { code: 'MT-T-USED1', note: '', used_at: '2026-10-01' }];
-  const inviteCard = ta.tcInviteCard();
-  t('the invite card shows the codes that are still unused',
-    inviteCard.includes('MT-T-OPEN1') && !inviteCard.includes('MT-T-USED1'));
-  t('the invite card explains why teacher accounts are restricted',
-    /every visitor could register as a teacher/.test(inviteCard));
+  t('only accepted students can be given work',
+    ta.tcAllStudents().length === 1 && ta.tcAllStudents()[0].id === 'a1',
+    JSON.stringify(ta.tcAllStudents()));
+  t('the waiting list is separate from the accepted list',
+    ta.tcWaitingStudents().length === 1 && ta.tcWaitingStudents()[0].id === 'w1');
+
+  TEACHER_TABLES.__calls = [];
+  await ta.tcDecideStudent('w1', 'accept');
+  t('accepting calls the approving function on the server',
+    (TEACHER_TABLES.__calls || []).some(c => c[0] === 'rpc' && c[1] === 'approve_student' &&
+      c[2] && c[2].p_student === 'w1'), JSON.stringify(TEACHER_TABLES.__calls));
+
+  TEACHER_TABLES.__calls = [];
+  await ta.tcDecideStudent('w1', 'decline');
+  t('declining calls the turning-down function on the server',
+    (TEACHER_TABLES.__calls || []).some(c => c[0] === 'rpc' && c[1] === 'reject_student' &&
+      c[2] && c[2].p_student === 'w1'), JSON.stringify(TEACHER_TABLES.__calls));
+
+  ta.setUser({ id: 't1', name: 'Teach', email: 't@x.test', role: 'teacher' });
+  ta.TC.students = [waiting, accepted];
+  ta.hwUpdatePendingBadge();
+  const badge = TEACH.els['nav-teacher-count'];
+  t('the Teaching item carries a count of the requests',
+    badge.textContent === '1' && badge.classList.contains('hidden') === false, badge.textContent);
+  ta.TC.students = [accepted];
+  ta.hwUpdatePendingBadge();
+  t('the count goes away once nobody is waiting', badge.classList.contains('hidden') === true);
+
+  /* the builder targets students now, not classes */
+  ta.TC.students = [accepted, { id: 'a2', full_name: 'Second Student', email: 'a2@x.test', status: 'active' }];
+  ta.TC.builder = ta.tcBlankBuilder();
+  ta.tcRenderAssignments();
+  const bh = TEACH.els['tc-panel-assignments'].innerHTML;
+  t('the builder offers to send work to everyone', /Everyone/.test(bh));
+  t('the builder lists the accepted students',
+    bh.includes('Accepted One') && bh.includes('Second Student'));
+  ta.TC.students = [];
+  ta.TC.builder = ta.tcBlankBuilder();
+  ta.tcRenderAssignments();
+  t('with nobody accepted the builder says so',
+    /no accepted students yet/i.test(TEACH.els['tc-panel-assignments'].innerHTML));
 
   /* ============================================================
      12. LESSON PROGRESS LIVES ON THE SERVER

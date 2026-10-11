@@ -34,9 +34,9 @@ const HW = {
   detailId: null, questions: [], answers: {}, keyErr: false
 };
 const TC = {
-  ready: false, loading: false, tab: 'classes',
+  ready: false, loading: false, tab: 'students',
   classes: [], rosters: {}, assignments: [], rosterOf: {},
-  progress: [], invites: [],
+  students: [], progress: [],
   builder: null, openSubs: null, results: []
 };
 
@@ -70,9 +70,6 @@ function hwIsOverdue(a) {
   if (!a.due_at) return false;
   return new Date(a.due_at + 'T23:59:59').getTime() < Date.now();
 }
-function hwCode() {
-  return 'MT-' + String(Math.floor(1000 + Math.random() * 9000));
-}
 
 /* Status the student sees. "Not started" / "Overdue" are derived, the
    rest come from their own submission row. */
@@ -97,11 +94,21 @@ function hwGate(kind, online, user) {
   }
   if (!user) {
     return { shot: 'auth', msg: isTeacherArea
-      ? 'Sign in with a teacher account to manage classes and assignments.'
+      ? 'Sign in with the teacher account to manage students and assignments.'
       : 'Sign in to see the work your teacher assigned.' };
   }
   if (isTeacherArea && user.role !== 'teacher') {
-    return { shot: 'role', msg: 'This area is for teacher accounts. Your account is a student account — ask an admin to switch it if that is wrong.' };
+    return { shot: 'role', msg: 'This area is for the teacher account. Yours is a student account.' };
+  }
+  if (!isTeacherArea && user.role === 'student') {
+    if (user.status === 'rejected') {
+      return { shot: 'rejected', msg: 'Your teacher did not accept this account.' };
+    }
+    if (user.status && user.status !== 'active') {
+      return { shot: 'waiting',
+               msg: 'Your account is waiting for your teacher to accept it. ' +
+                    'You can look around the lessons in the meantime.' };
+    }
   }
   return { shot: 'ok', msg: '' };
 }
@@ -113,13 +120,14 @@ async function hwLoadSession() {
     const s = await HB.auth.getSession();
     const u = s && s.data && s.data.session ? s.data.session.user : null;
     if (!u) { USER = null; return null; }
-    const p = await HB.from('profiles').select('id,email,full_name,role').eq('id', u.id).maybeSingle();
+    const p = await HB.from('profiles').select('id,email,full_name,role,status').eq('id', u.id).maybeSingle();
     const prof = p && p.data ? p.data : null;
     USER = {
       id: u.id,
       email: u.email,
       name: (prof && prof.full_name) || (u.email || '').split('@')[0],
-      role: (prof && prof.role) || 'student'
+      role: (prof && prof.role) || 'student',
+      status: (prof && prof.status) || 'active'
     };
     return USER;
   } catch (e) { return null; }
@@ -140,19 +148,24 @@ function renderHomework() {
     if (b) {
       if (g.shot === 'setup') { b.textContent = 'How to connect'; b.setAttribute('onclick', 'showV2Setup()'); }
       else if (g.shot === 'role') { b.textContent = 'Back to Homework'; b.setAttribute('onclick', "go('homework')"); }
+      else if (g.shot === 'waiting') { b.textContent = 'Check again'; b.setAttribute('onclick', 'hwCheckAgain()'); }
+      else if (g.shot === 'rejected') { b.textContent = 'Sign out'; b.setAttribute('onclick', 'logout()'); }
       else { b.textContent = 'Sign In'; b.setAttribute('onclick', 'showAuth()'); }
     }
     gate.classList.remove('hidden'); body.classList.add('hidden');
+    if (g.shot === 'waiting' || g.shot === 'rejected') {
+      const t = document.getElementById('hw-gate-title');
+      if (t) t.textContent = g.shot === 'waiting' ? 'Waiting for your teacher' : 'Not accepted';
+    }
     return;
   }
+  const t2 = document.getElementById('hw-gate-title');
+  if (t2) t2.textContent = 'Homework';
 
   gate.classList.add('hidden'); body.classList.remove('hidden');
-  hwShow('hw-join', USER.role === 'student');
   const sub = document.getElementById('hw-sub');
   if (sub) {
-    sub.textContent = USER.role === 'teacher'
-      ? 'You are signed in as a teacher. Homework assigned to you personally appears here.'
-      : 'Signed in as ' + USER.name;
+    sub.textContent = 'Signed in as ' + USER.name;
   }
   hwRenderList();
   hwRenderDetail();
@@ -188,6 +201,17 @@ async function hwLoad() {
     HW.loading = false;
     hwRenderList();
     hwRenderDetail();
+  }
+}
+
+async function hwCheckAgain() {
+  const before = USER && USER.status;
+  await hwLoadSession();
+  renderHomework();
+  if (USER && USER.status && USER.status !== 'active') {
+    toast('Still waiting — your teacher has not accepted you yet', 'ok');
+  } else if (before && before !== 'active') {
+    toast('You are in. Your homework is below.', 'ok');
   }
 }
 
@@ -396,18 +420,6 @@ async function hwSubmit() {
   }
 }
 
-async function hwJoinClass() {
-  if (!HW_ON || !USER) return;
-  const el = document.getElementById('hw-join-code');
-  const code = el && el.value ? el.value.trim() : '';
-  if (!code) { toast('Enter the class code first', 'err'); return; }
-  const r = await HB.rpc('join_class_by_code', { p_code: code });
-  if (r.error) { hwErr(r.error, 'Could not join that class'); return; }
-  if (el) el.value = '';
-  toast('Joined ' + (r.data && r.data.name ? r.data.name : 'class'), 'ok');
-  HW.ready = false; await hwLoad();
-}
-
 /* ============================================================
    TEACHER WORKSPACE
    ============================================================ */
@@ -455,12 +467,14 @@ async function tcLoad() {
     TC.assignments = a.data || [];
     const p = await HB.from('lesson_progress').select('student_id,track,lesson_no,part');
     TC.progress = (p && !p.error && p.data) ? p.data : [];
-    const inv = await HB.from('teacher_invites')
-      .select('code,note,created_at,used_at').order('created_at', { ascending: false }).limit(10);
-    TC.invites = (inv && !inv.error && inv.data) ? inv.data : [];
+    const s = await HB.from('profiles')
+      .select('id,full_name,email,status,created_at')
+      .eq('role', 'student')
+      .order('created_at', { ascending: true });
+    TC.students = (s && !s.error && s.data) ? s.data : [];
     TC.ready = true;
   } catch (e) {
-    hwErr(e, 'Could not load your classes');
+    hwErr(e, 'Could not load your students');
   } finally {
     TC.loading = false;
     tcRender();
@@ -473,98 +487,123 @@ async function tcRefresh() {
 }
 
 function tcTab(name, silent) {
-  TC.tab = name || 'classes';
+  TC.tab = name || 'students';
   document.querySelectorAll('[data-tc-tab]').forEach(function (b) {
     b.classList.toggle('on', b.dataset.tcTab === TC.tab);
   });
-  hwShow('tc-panel-classes', TC.tab === 'classes');
+  hwShow('tc-panel-students', TC.tab === 'students');
   hwShow('tc-panel-assignments', TC.tab === 'assignments');
   if (!silent) tcRender();
 }
 
+/* Everyone the teacher has accepted. Assignments can go to one of them or
+   to all of them; a class is optional and no longer needed for that. */
 function tcAllStudents() {
-  const seen = {}, out = [];
-  TC.classes.forEach(function (c) {
-    (TC.rosters[c.id] || []).forEach(function (s) {
-      if (s && s.student_id && !seen[s.student_id]) {
-        seen[s.student_id] = true;
-        out.push({ id: s.student_id, name: s.full_name || s.email || 'Student' });
-      }
-    });
-  });
-  return out;
+  return (TC.students || [])
+    .filter(function (s) { return s.status === 'active'; })
+    .map(function (s) { return { id: s.id, name: s.full_name || s.email || 'Student' }; });
+}
+
+function tcWaitingStudents() {
+  return (TC.students || []).filter(function (s) { return s.status === 'pending'; });
 }
 
 function tcRender() {
-  tcRenderClasses();
+  tcRenderStudents();
   tcRenderAssignments();
+  hwUpdatePendingBadge();
 }
 
-function tcRenderClasses() {
-  const el = document.getElementById('tc-panel-classes');
+function tcRenderStudents() {
+  const el = document.getElementById('tc-panel-students');
   if (!el) return;
-  if (TC.loading && !TC.classes.length) { el.innerHTML = '<div class="card p-8 faint text-sm">Loading…</div>'; return; }
+  if (TC.loading && !TC.students.length) { el.innerHTML = '<div class="card p-8 faint text-sm">Loading…</div>'; return; }
 
-  let html = '<div class="card p-6 space-y-3">' +
-    '<p class="font-semibold">New class</p>' +
-    '<div class="flex gap-3 flex-wrap">' +
-    '<input class="input flex-1" id="tc-new-class" placeholder="Class name, e.g. Monday 7pm">' +
-    '<button class="btn-primary" onclick="tcCreateClass()">Create class</button></div>' +
-    '<p class="faint text-xs">Students join with the class code shown on each class below.</p></div>';
+  const waiting = tcWaitingStudents();
+  const accepted = (TC.students || []).filter(function (s) { return s.status === 'active'; });
+  const refused = (TC.students || []).filter(function (s) { return s.status === 'rejected'; });
 
-  html += tcInviteCard();
+  let html = '';
 
-  if (!TC.classes.length) {
-    html += '<div class="card p-8 text-center faint text-sm">No classes yet. Create one to start assigning work.</div>';
-  }
-  TC.classes.forEach(function (c) {
-    const roster = TC.rosters[c.id] || [];
-    html += '<div class="card p-6 space-y-4">' +
-      '<div class="flex items-start justify-between gap-4 flex-wrap">' +
-      '<div><p class="font-semibold">' + hwEsc(c.name) + '</p>' +
-      '<p class="faint text-xs mt-1">Class code <b>' + hwEsc(c.join_code) + '</b> · ' +
-      roster.length + ' student(s)</p></div>' +
-      '<button class="btn-secondary" onclick="tcNewAssignmentFor(\'' + c.id + '\')">Assign work</button>' +
-      '</div>';
-    if (roster.length) {
-      html += '<div class="space-y-2">' + roster.map(function (s) {
-        const prog = tcProgressOf(s.student_id);
-        return '<div class="flex items-center gap-3 text-sm p-3 rounded-xl" style="background:var(--surface2)">' +
+  /* requests first — this is what the teacher came here to do */
+  if (waiting.length) {
+    html += '<div class="card p-6 space-y-4" style="border-color:var(--accent2)">' +
+      '<p class="font-semibold">' + waiting.length +
+      (waiting.length === 1 ? ' person is waiting' : ' people are waiting') +
+      ' to join</p>' +
+      '<p class="faint text-xs">They signed up themselves. Accept them and they can see the work you assign.</p>' +
+      '<div class="space-y-2">' + waiting.map(function (s) {
+        return '<div class="flex items-center gap-3 flex-wrap text-sm p-3 rounded-xl" style="background:var(--surface2)">' +
           '<span class="w-7 h-7 rounded-full text-xs flex items-center justify-center" style="background:var(--badge-bg)">' +
           hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>' +
-          '<span>' + hwEsc(s.full_name || 'Student') + '</span>' +
-          '<span class="faint text-xs ml-auto">' + hwEsc(prog) + '</span></div>';
-      }).join('') + '</div>';
-    } else {
-      html += '<p class="faint text-xs">Nobody has joined yet. Share the code ' + hwEsc(c.join_code) + '.</p>';
-    }
-    html += '</div>';
-  });
+          '<span><b>' + hwEsc(s.full_name || 'Student') + '</b>' +
+          '<span class="faint text-xs"> · ' + hwEsc(s.email || '') + '</span></span>' +
+          '<span class="ml-auto flex gap-2">' +
+          '<button class="btn-primary" onclick="tcDecideStudent(\'' + s.id + '\',\'accept\')">Accept</button>' +
+          '<button class="btn-secondary" onclick="tcDecideStudent(\'' + s.id + '\',\'decline\')">Decline</button>' +
+          '</span></div>';
+      }).join('') + '</div></div>';
+  }
+
+  html += '<div class="card p-6 space-y-3"><p class="font-semibold">Your students</p>';
+  if (accepted.length) {
+    html += '<div class="space-y-2">' + accepted.map(function (s) {
+      return '<div class="flex items-center gap-3 flex-wrap text-sm p-3 rounded-xl" style="background:var(--surface2)">' +
+        '<span class="w-7 h-7 rounded-full text-xs flex items-center justify-center" style="background:var(--badge-bg)">' +
+        hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>' +
+        '<span><b>' + hwEsc(s.full_name || 'Student') + '</b>' +
+        '<span class="faint text-xs"> · ' + hwEsc(s.email || '') + '</span></span>' +
+        '<span class="faint text-xs ml-auto">' + hwEsc(tcProgressOf(s.id)) + '</span>' +
+        '<button class="btn-secondary" onclick="tcNewAssignmentFor(\'' + s.id + '\')">Assign work</button>' +
+        '</div>';
+    }).join('') + '</div>';
+  } else {
+    html += '<p class="faint text-sm">Nobody yet. Tell whoever you are teaching to sign up on this site — ' +
+      'their request will appear here for you to accept.</p>';
+  }
+  html += '</div>';
+
+  if (refused.length) {
+    html += '<div class="card p-6 space-y-2"><p class="font-semibold">Not accepted</p>' +
+      '<div class="space-y-1">' + refused.map(function (s) {
+        return '<div class="flex items-center gap-3 text-xs p-2 rounded-lg" style="background:var(--surface2)">' +
+          '<span>' + hwEsc(s.full_name || 'Student') + ' · ' + hwEsc(s.email || '') + '</span>' +
+          '<span class="ml-auto"><button class="btn-secondary" ' +
+          'onclick="tcDecideStudent(\'' + s.id + '\',\'accept\')">Accept anyway</button></span></div>';
+      }).join('') + '</div></div>';
+  }
+
   el.innerHTML = html;
 }
 
-async function tcCreateClass() {
-  const el = document.getElementById('tc-new-class');
-  const name = el && el.value ? el.value.trim() : '';
-  if (!name) { toast('Give the class a name', 'err'); return; }
+async function tcDecideStudent(studentId, action) {
   if (!HW_ON || !USER) return;
-  let r = await HB.from('classes').insert({ teacher_id: USER.id, name: name, join_code: hwCode() }).select().single();
-  if (r.error && String(r.error.message || '').indexOf('duplicate') >= 0) {
-    r = await HB.from('classes').insert({ teacher_id: USER.id, name: name, join_code: hwCode() }).select().single();
-  }
-  if (r.error) { hwErr(r.error, 'Could not create the class'); return; }
-  if (el) el.value = '';
-  toast('Class created', 'ok');
-  TC.ready = false; await tcLoad();
+  const which = action === 'accept' ? 'approve_student' : 'reject_student';
+  const r = await HB.rpc(which, { p_student: studentId });
+  if (r.error) { hwErr(r.error, 'Could not do that'); return; }
+  toast(action === 'accept' ? 'Accepted — they can see their work now' : 'Declined', 'ok');
+  TC.ready = false;
+  await tcLoad();
+}
+
+/* The count beside Teaching, so a request is not missed. */
+function hwUpdatePendingBadge() {
+  const badge = document.getElementById('nav-teacher-count');
+  if (!badge) return;
+  const n = (USER && USER.role === 'teacher') ? tcWaitingStudents().length : 0;
+  badge.textContent = n ? String(n) : '';
+  badge.classList.toggle('hidden', !n);
 }
 
 /* ---------- assignment builder ---------- */
-function tcNewAssignmentFor(classId) {
+function tcNewAssignmentFor(studentId) {
   TC.builder = tcBlankBuilder();
-  TC.builder.classIds = [classId];
+  if (studentId) TC.builder.studentIds = [studentId];
   TC.tab = 'assignments';
-  document.querySelectorAll('[data-tc-tab]').forEach(function (b) { b.classList.toggle('on', b.dataset.tcTab === 'assignments'); });
-  hwShow('tc-panel-classes', false);
+  document.querySelectorAll('[data-tc-tab]').forEach(function (b) {
+    b.classList.toggle('on', b.dataset.tcTab === 'assignments');
+  });
+  hwShow('tc-panel-students', false);
   hwShow('tc-panel-assignments', true);
   tcRenderAssignments();
   const el = document.getElementById('tc-b-title');
@@ -575,7 +614,7 @@ function tcBlankBuilder() {
   return {
     id: null, title: '', instructions: '', kind: 'lesson',
     track: 'a1', no: 1, due: '',
-    classIds: [], studentIds: [],
+    allStudents: false, studentIds: [],
     questions: [], status: 'draft'
   };
 }
@@ -647,24 +686,24 @@ function tcRenderAssignments() {
   }
 
   html += '<div><label class="label">Who gets it?</label>';
-  if (!TC.classes.length) {
-    html += '<p class="faint text-xs">Create a class first, or assign to a student below.</p>';
-  } else {
-    html += '<div class="space-y-2">' + TC.classes.map(function (c) {
-      const on = b.classIds.indexOf(c.id) >= 0;
-      return '<label class="flex items-center gap-3 text-sm p-3 rounded-xl" style="background:var(--surface2)">' +
-        '<input type="checkbox"' + (on ? ' checked' : '') + ' onchange="tcBuilderToggleClass(\'' + c.id + '\')"> ' +
-        hwEsc(c.name) + ' <span class="faint text-xs ml-auto">' + (TC.rosters[c.id] || []).length + ' student(s)</span></label>';
-    }).join('') + '</div>';
-  }
   const students = tcAllStudents();
-  if (students.length) {
-    html += '<p class="text-xs faint mt-3 mb-1">Or individual students</p><div class="space-y-2">' + students.map(function (s) {
-      const on = b.studentIds.indexOf(s.id) >= 0;
-      return '<label class="flex items-center gap-3 text-sm p-3 rounded-xl" style="background:var(--surface2)">' +
-        '<input type="checkbox"' + (on ? ' checked' : '') + ' onchange="tcBuilderToggleStudent(\'' + s.id + '\')"> ' +
-        hwEsc(s.name) + '</label>';
-    }).join('') + '</div>';
+  if (!students.length) {
+    html += '<p class="faint text-xs">You have no accepted students yet. ' +
+      'Accept someone on the Students tab first.</p>';
+  } else {
+    html += '<label class="flex items-center gap-3 text-sm p-3 rounded-xl" style="background:var(--surface2)">' +
+      '<input type="checkbox"' + (b.allStudents ? ' checked' : '') +
+      ' onchange="tcBuilderSet(\'allStudents\', this.checked)"> ' +
+      '<b>Everyone</b><span class="faint text-xs ml-auto">' + students.length +
+      ' student(s)</span></label>';
+    if (!b.allStudents) {
+      html += '<div class="space-y-2 mt-2">' + students.map(function (s) {
+        const on = b.studentIds.indexOf(s.id) >= 0;
+        return '<label class="flex items-center gap-3 text-sm p-3 rounded-xl" style="background:var(--surface2)">' +
+          '<input type="checkbox"' + (on ? ' checked' : '') +
+          ' onchange="tcBuilderToggleStudent(\'' + s.id + '\')"> ' + hwEsc(s.name) + '</label>';
+      }).join('') + '</div>';
+    }
   }
   html += '</div>';
 
@@ -723,11 +762,6 @@ function tcQSet(i, k, v) {
   if (!q) return;
   q[k] = (k === 'points') ? (parseInt(v, 10) || 0) : v;
 }
-function tcBuilderToggleClass(id) {
-  const b = TC.builder;
-  const i = b.classIds.indexOf(id);
-  if (i >= 0) b.classIds.splice(i, 1); else b.classIds.push(id);
-}
 function tcBuilderToggleStudent(id) {
   const b = TC.builder;
   const i = b.studentIds.indexOf(id);
@@ -739,7 +773,10 @@ async function tcSaveAssignment(publish) {
   const b = TC.builder;
   if (!HW_ON || !USER) return;
   if (!b.title.trim()) { toast('Give the assignment a title', 'err'); return; }
-  if (!b.classIds.length && !b.studentIds.length) { toast('Choose at least one class or student', 'err'); return; }
+  const targets = b.allStudents
+    ? tcAllStudents().map(function (s) { return s.id; })
+    : b.studentIds.slice();
+  if (!targets.length) { toast('Choose at least one student', 'err'); return; }
   if (b.kind === 'custom' && !b.questions.length) { toast('Add at least one question', 'err'); return; }
 
   let questions = [];
@@ -800,15 +837,10 @@ async function tcSaveAssignment(publish) {
       }
     }
 
-    for (var k2 = 0; k2 < b.classIds.length; k2++) {
+    for (var k2 = 0; k2 < targets.length; k2++) {
       const r = await HB.from('assignment_recipients')
-        .insert({ assignment_id: id, class_id: b.classIds[k2] });
+        .insert({ assignment_id: id, student_id: targets[k2] });
       if (r.error && String(r.error.message || '').indexOf('duplicate') < 0) throw r.error;
-    }
-    for (var k3 = 0; k3 < b.studentIds.length; k3++) {
-      const r2 = await HB.from('assignment_recipients')
-        .insert({ assignment_id: id, student_id: b.studentIds[k3] });
-      if (r2.error && String(r2.error.message || '').indexOf('duplicate') < 0) throw r2.error;
     }
 
     toast(publish === 'published' ? 'Published' : 'Draft saved', 'ok');
@@ -915,57 +947,6 @@ async function tcGrade(submissionId, status) {
   if (r.error) { hwErr(r.error, 'Could not save the grade'); return; }
   toast(status === 'graded' ? 'Grade saved' : 'Sent back for another try', 'ok');
   if (TC.openSubs) await tcOpenSubmissions(TC.openSubs);
-}
-
-/* ============================================================
-   TEACHER ACCESS — invites and the email allowlist
-   ============================================================ */
-function tcInviteCard() {
-  const invites = TC.invites || [];
-  const open = invites.filter(function (i) { return !i.used_at; });
-  let html = '<div class="card p-6 space-y-3">' +
-    '<p class="font-semibold">Invite another teacher</p>' +
-    '<p class="faint text-xs">A teacher account cannot be created without one of these — ' +
-    'otherwise every visitor could register as a teacher.</p>' +
-    '<div class="flex gap-3 flex-wrap items-end">' +
-    '<input class="input flex-1" id="tc-invite-note" placeholder="Who is it for? (optional)">' +
-    '<button class="btn-primary" onclick="tcMakeInvite()">Create a code</button></div>' +
-    '<div class="flex gap-3 flex-wrap items-end">' +
-    '<input class="input flex-1" id="tc-allow-email" placeholder="or allowlist an email, e.g. head@school.com">' +
-    '<button class="btn-secondary" onclick="tcAllowEmail()">Allow this email</button></div>';
-  if (open.length) {
-    html += '<p class="text-xs faint mt-2">Codes not used yet — share one, it works once:</p>' +
-      '<div class="space-y-1">' + open.map(function (i) {
-        return '<div class="flex items-center gap-3 text-xs p-2 rounded-lg mono" style="background:var(--surface2)">' +
-          '<b>' + hwEsc(i.code) + '</b><span class="faint">' + hwEsc(i.note || '') + '</span></div>';
-      }).join('') + '</div>';
-  }
-  html += '</div>';
-  return html;
-}
-
-async function tcMakeInvite() {
-  if (!HW_ON || !USER) return;
-  const el = document.getElementById('tc-invite-note');
-  const r = await HB.rpc('make_teacher_invite', { p_note: el && el.value ? el.value.trim() : null });
-  if (r.error) { hwErr(r.error, 'Could not create an invite'); return; }
-  if (el) el.value = '';
-  toast('Invite code: ' + r.data, 'ok');
-  TC.ready = false; await tcLoad();
-}
-
-async function tcAllowEmail() {
-  if (!HW_ON || !USER) return;
-  const el = document.getElementById('tc-allow-email');
-  const email = el && el.value ? el.value.trim().toLowerCase() : '';
-  if (!email || email.indexOf('@') < 0) { toast('Enter an email address', 'err'); return; }
-  const r = await HB.from('teacher_allowlist').insert({ email: email, added_by: USER.id });
-  if (r.error && String(r.error.message || '').indexOf('duplicate') < 0) {
-    hwErr(r.error, 'Could not allowlist that email'); return;
-  }
-  if (el) el.value = '';
-  toast('That email can now sign up as a teacher', 'ok');
-  TC.ready = false; await tcLoad();
 }
 
 /* ============================================================

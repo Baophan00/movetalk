@@ -181,10 +181,43 @@ def main():
     st, rows = rest("profiles?select=role&id=eq." + s1id, token=s1)
     t("the database assigned the role 'student'", st == 200 and rows and rows[0]["role"] == "student", rows)
 
+    st, rows = rest("profiles?select=status&id=eq." + s1id, token=s1)
+    t("a student who has just signed up is waiting to be accepted",
+      st == 200 and rows and rows[0]["status"] == "pending", rows)
+    st, rows = rest("profiles?select=status&id=eq." + tid, token=tt)
+    t("the teacher themself is active from the start",
+      st == 200 and rows and rows[0]["status"] == "active", rows)
+
     # ---------- 2. a student cannot promote themselves ----------
     st, d = patch("profiles", "id=eq." + s1id, {"role": "teacher"}, s1)
     t("a student cannot make themselves a teacher",
       st >= 400 and "role_change_not_allowed" in json.dumps(d), (st, d))
+
+    # ---------- 2b. the teacher is the one who lets a student in ----------
+    st, d = rpc("approve_student", {"p_student": s2id}, s1)
+    t("a student cannot accept another student", st >= 400, (st, d))
+
+    st, d = rpc("approve_student", {"p_student": s1id}, s1)
+    t("a student cannot accept themself", st >= 400, (st, d))
+
+    st, rows = rest("assignments?select=id", token=s1)
+    t("a waiting student sees no work at all", st == 200 and not rows, (st, rows))
+
+    st, d = insert("lesson_progress",
+                   [{"student_id": s1id, "track": "a1", "lesson_no": 1, "part": "vocab"}], s1)
+    t("a waiting student cannot record progress", st >= 400, (st, d))
+
+    st, d = rpc("approve_student", {"p_student": "00000000-0000-0000-0000-0000000000ff"}, tt)
+    t("accepting somebody who does not exist is refused", st >= 400, (st, d))
+
+    st, d = rpc("approve_student", {"p_student": s1id}, tt)
+    t("the teacher accepts student 1", st == 200 and d and d.get("status") == "active", (st, d))
+    st, d = rpc("approve_student", {"p_student": s2id}, tt)
+    t("the teacher accepts student 2", st == 200 and d and d.get("status") == "active", (st, d))
+
+    st, rows = rest("profiles?select=status&id=eq." + s1id, token=s1)
+    t("an accepted student is active from then on",
+      st == 200 and rows and rows[0]["status"] == "active", rows)
 
     # ---------- 3. class ----------
     code = "TT-" + ts[-4:]
@@ -372,6 +405,12 @@ def main():
         st2, rows = rest("profiles?select=role&id=eq." + suid, token=stok)
         t("claiming to be a teacher with no proof is refused",
           st2 == 200 and rows and rows[0]["role"] == "student", rows)
+        st2, d2 = rpc("reject_student", {"p_student": suid}, tt)
+        t("the teacher can turn that account down",
+          st2 == 200 and d2 and d2.get("status") == "rejected", (st2, d2))
+        st2, rows = rest("profiles?select=status&id=eq." + suid, token=tt)
+        t("... and it shows as not accepted",
+          st2 == 200 and rows and rows[0]["status"] == "rejected", rows)
     else:
         t("claiming to be a teacher with no proof is refused", False, d)
 

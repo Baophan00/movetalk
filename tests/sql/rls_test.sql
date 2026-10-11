@@ -233,6 +233,69 @@ select t_eq('a student cannot read the invites',
   t_val('aaaaaaaa-0000-0000-0000-000000000001',
         $q$(select count(*) from public.teacher_invites)$q$), '0');
 
+-- ---------- student approval ----------
+select t_eq('a brand new student starts as pending',
+  (select status from public.profiles where id = 'aaaaaaaa-0000-0000-0000-000000000001'), 'pending');
+select t_eq('the teacher is active from the start',
+  (select status from public.profiles where id = '11111111-1111-1111-1111-111111111111'), 'active');
+
+select t_has('a pending student cannot approve themselves',
+  t_val('aaaaaaaa-0000-0000-0000-000000000001',
+        $q$public.approve_student('aaaaaaaa-0000-0000-0000-000000000001')$q$),
+  'ERROR: teacher_only');
+
+select t_has('a pending student cannot approve anyone else either',
+  t_val('aaaaaaaa-0000-0000-0000-000000000002',
+        $q$public.approve_student('aaaaaaaa-0000-0000-0000-000000000001')$q$),
+  'ERROR: teacher_only');
+
+select t_eq('a pending student sees no assignments at all',
+  t_val('aaaaaaaa-0000-0000-0000-000000000001',
+        $q$(select count(*) from public.assignments)$q$), '0');
+
+select t_has('a pending student cannot record lesson progress',
+  t_do('aaaaaaaa-0000-0000-0000-000000000001',
+    $q$insert into public.lesson_progress(student_id,track,lesson_no,part)
+       values ('aaaaaaaa-0000-0000-0000-000000000001','a1',1,'vocab')$q$),
+  'ERROR');
+
+select t_has('the teacher sees the requests waiting',
+  t_val('11111111-1111-1111-1111-111111111111',
+        $q$(public.my_role())$q$), 'teacher');
+select t_eq('the teacher can read every student profile, accepted or not',
+  t_val('11111111-1111-1111-1111-111111111111',
+        $q$(select count(*) from public.profiles where role='student')$q$), '6');
+
+select t_has('the teacher accepts student 1',
+  t_val('11111111-1111-1111-1111-111111111111',
+        $q$public.approve_student('aaaaaaaa-0000-0000-0000-000000000001')->>'status'$q$), 'active');
+select t_eq('... and student 1 is now active',
+  (select status from public.profiles where id = 'aaaaaaaa-0000-0000-0000-000000000001'), 'active');
+
+select t_has('the teacher accepts student 2',
+  t_val('11111111-1111-1111-1111-111111111111',
+        $q$public.approve_student('aaaaaaaa-0000-0000-0000-000000000002')->>'status'$q$), 'active');
+
+select t_has('the teacher accepts student 3',
+  t_val('11111111-1111-1111-1111-111111111111',
+        $q$public.approve_student('aaaaaaaa-0000-0000-0000-000000000003')->>'status'$q$), 'active');
+
+select t_has('the teacher accepts student 4',
+  t_val('11111111-1111-1111-1111-111111111111',
+        $q$public.approve_student('aaaaaaaa-0000-0000-0000-000000000004')->>'status'$q$), 'active');
+
+select t_has('the teacher turns down the account that lied about being a teacher',
+  t_val('11111111-1111-1111-1111-111111111111',
+        $q$public.reject_student('aaaaaaaa-0000-0000-0000-000000000005')->>'status'$q$), 'rejected');
+select t_eq('... and it is marked rejected',
+  (select status from public.profiles where id = 'aaaaaaaa-0000-0000-0000-000000000005'), 'rejected');
+
+select t_has('an accepted student can record progress',
+  t_do('aaaaaaaa-0000-0000-0000-000000000001',
+    $q$insert into public.lesson_progress(student_id,track,lesson_no,part)
+       values ('aaaaaaaa-0000-0000-0000-000000000001','a1',1,'grammar')$q$),
+  'OK');
+
 
 -- ---------- fixture: classes (as teachers, via RLS) ---------
 select t_has('T1 can create a class',
@@ -763,7 +826,7 @@ select t_has('a student CAN write their own progress',
        values ('aaaaaaaa-0000-0000-0000-000000000001','a1',1,'vocab')$q$), 'OK');
 
 select t_eq('the teacher sees their own student''s progress',
-  t_val('11111111-1111-1111-1111-111111111111', $q$(select count(*) from public.lesson_progress)$q$), '1');
+  t_val('11111111-1111-1111-1111-111111111111', $q$(select count(*) from public.lesson_progress)$q$), '2');
 select t_eq('another teacher sees none of it',
   t_val('22222222-2222-2222-2222-222222222222', $q$(select count(*) from public.lesson_progress)$q$), '0');
 

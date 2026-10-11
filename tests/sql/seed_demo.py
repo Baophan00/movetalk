@@ -20,8 +20,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 PASSWORD = "MoveTalk123!"
 TEACHER = "demo.teacher@movetalk.test"
 STUDENT = "demo.student@movetalk.test"
-CLASS_NAME = "Demo Class"
-JOIN_CODE = "MTDEMO"
+WAITING = "demo.waiting@movetalk.test"
 A1_TITLE = "Demo · Lesson A1-3: Build the Message"
 A2_TITLE = "Demo · Custom drill: DO / ARE"
 
@@ -102,22 +101,16 @@ def main():
     print("   teacher %s (%s)" % (tid, TEACHER))
     print("   student %s (%s)" % (sid, STUDENT))
 
-    # ---- class ----
-    st, rows = rest("classes?select=id,name,join_code", token=tt)
-    match = [r for r in (rows or []) if r["name"] == CLASS_NAME]
-    if match:
-        cid = match[0]["id"]
-        print("== class already there: %s (%s) ==" % (match[0]["name"], match[0]["join_code"]))
-    else:
-        st, rows = insert("classes",
-                          [{"teacher_id": tid, "name": CLASS_NAME, "join_code": JOIN_CODE}], tt)
-        if st not in (200, 201) or not rows:
-            sys.exit("could not create the class: %s %s" % (st, rows))
-        cid = rows[0]["id"]
-        print("== created class %s with code %s ==" % (CLASS_NAME, JOIN_CODE))
+    # ---- the teacher accepts the student, the way the site does it ----
+    st, d = rpc("approve_student", {"p_student": sid}, tt)
+    print("   teacher accepted the demo student: %s" % ("ok" if st == 200 else d))
 
-    st, d = rpc("join_class_by_code", {"p_code": JOIN_CODE}, s1)
-    print("   student joined the class: %s" % ("ok" if st == 200 else d))
+    # ---- a second student, deliberately left waiting, so signing in as the
+    #      teacher shows a request to accept ----
+    w1 = session_for(WAITING, "student", "Demo Waiting")
+    st, rows = rest("profiles?select=id,status&email=eq." + WAITING, token=w1)
+    wid, wstatus = (rows[0]["id"], rows[0]["status"]) if rows else (None, "?")
+    print("   waiting student %s -> status %s" % (WAITING, wstatus))
 
     def ensure_assignment(title, payload, questions):
         st, rows = rest("assignments?select=id,title", token=tt)
@@ -149,7 +142,7 @@ def main():
                              "explanation": q.get("_explanation")})
         if keys:
             insert("question_keys", keys, tt)
-        insert("assignment_recipients", [{"assignment_id": aid, "class_id": cid}], tt)
+        insert("assignment_recipients", [{"assignment_id": aid, "student_id": sid}], tt)
         req("PATCH", "/rest/v1/assignments?id=eq." + aid, {"status": "published"}, tt,
             {"Prefer": "return=representation"})
         print("== created and published: %s ==" % title)
@@ -214,29 +207,18 @@ def main():
                 {"Prefer": "return=representation,resolution=merge-duplicates"})
     print("   student lesson progress recorded: %s" % ("ok" if st in (200, 201) else d))
 
-    # ---- an invite code for the owner, so you can sign up as a teacher ----
-    st, code = rpc("make_teacher_invite", {"p_note": "for the owner"}, tt)
-    owner_code = code if st == 200 and isinstance(code, str) else None
-
     print()
     print("=========================================")
     print(" Demo accounts (live site: https://movetalk.surge.sh)")
     print("=========================================")
     print(" Teacher  %s" % TEACHER)
-    print(" Student  %s" % STUDENT)
-    print(" Password %s   (same for both)" % PASSWORD)
-    print(" Class    %s — join code %s" % (CLASS_NAME, JOIN_CODE))
-    if owner_code:
-        print()
-        print(" YOUR OWN TEACHER ACCOUNT")
-        print(" Sign up with your own email and use this invite code:")
-        print("     %s" % owner_code)
-        print(" It works once. Codes are also creatable in the site, under")
-        print(" Teaching > Invite another teacher.")
+    print(" Student  %s   (already accepted)" % STUDENT)
+    print(" Waiting  %s   (signed up, not accepted yet)" % WAITING)
+    print(" Password %s   (same for all)" % PASSWORD)
     print()
     print(" Sign in as the student to see the homework list, open the lesson")
     print(" assignment, read the marked answers and the feedback.")
-    print(" Sign in as the teacher to see the class, its roster, both")
+    print(" Sign in as the teacher to see the students waiting to be accepted,")
     print(" assignments and the submissions with per-question marking.")
     print(" You can switch roles by signing out and back in.")
 
