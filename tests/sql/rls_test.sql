@@ -116,6 +116,19 @@ returns text language sql stable security definer set search_path = public as $$
    order by attempt desc limit 1
 $$;
 
+-- sub_id is called from expressions evaluated as `authenticated`, so the
+-- migration's grants do not cover it — the test grants it itself.
+grant execute on function public.sub_id(text, text) to authenticated;
+
+-- passes when a caller is either denied outright or shown nothing at all
+create or replace function public.t_blocked(name text, got text)
+returns void language plpgsql as $$
+begin
+  perform public.t_rec(name,
+    got = '0' or got like 'ERROR: permission denied%',
+    'got=' || coalesce(got, 'null'));
+end $$;
+
 -- ---------- fixed ids --------------------------------------
 -- T1/T2 teachers, S1..S4 students
 -- C1 = T1's class, C2 = T2's class
@@ -656,12 +669,12 @@ select t_eq('class_roster returns nothing to a different teacher',
   t_val('22222222-2222-2222-2222-222222222222',
         $q$(select jsonb_array_length(public.class_roster('cccccccc-0000-0000-0000-000000000001'))::text)$q$), '0');
 
-select t_eq('anon sees no assignments at all',
-  t_role('anon', $q$(select count(*) from public.assignments)$q$), '0');
-select t_eq('anon sees no profiles at all',
-  t_role('anon', $q$(select count(*) from public.profiles)$q$), '0');
-select t_eq('anon cannot read answer keys',
-  t_role('anon', $q$(select count(*) from public.question_keys)$q$), '0');
+select t_blocked('anon sees no assignments at all',
+  t_role('anon', $q$(select count(*) from public.assignments)$q$));
+select t_blocked('anon sees no profiles at all',
+  t_role('anon', $q$(select count(*) from public.profiles)$q$));
+select t_blocked('anon cannot read answer keys',
+  t_role('anon', $q$(select count(*) from public.question_keys)$q$));
 
 -- ---------- report ------------------------------------------
 \echo ''

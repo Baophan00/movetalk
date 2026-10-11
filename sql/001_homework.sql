@@ -704,9 +704,59 @@ returns jsonb language sql stable security definer set search_path = public as $
   where m.class_id = p_class and public.is_teacher_of_class(p_class)
 $$;
 
-grant execute on function public.join_class_by_code(text)      to authenticated;
-grant execute on function public.start_submission(uuid)        to authenticated;
-grant execute on function public.submit_assignment(uuid)       to authenticated;
-grant execute on function public.grade_submission(uuid,jsonb,text,text) to authenticated;
-grant execute on function public.class_roster(uuid)            to authenticated;
-grant execute on function public.my_role()                     to authenticated, anon;
+-- ------------------------------------------------------------
+-- 9. GRANTS
+--    Deliberately explicit: a project created with "automatically
+--    expose new tables" switched OFF gives new tables no privileges
+--    at all, which would make every request fail with "permission
+--    denied" before RLS even runs. These statements make the
+--    migration self-sufficient either way.
+-- ------------------------------------------------------------
+grant usage on schema public to anon, authenticated;
+
+-- the API roles may talk to the tables; RLS is what actually decides
+grant select, insert, update, delete on
+  public.profiles,
+  public.classes,
+  public.class_members,
+  public.assignments,
+  public.assignment_recipients,
+  public.assignment_questions,
+  public.question_keys,
+  public.submissions,
+  public.submission_answers,
+  public.lesson_progress
+  to authenticated;
+
+-- anonymous visitors get nothing at all: an extra wall in front of RLS
+revoke all on
+  public.profiles,
+  public.classes,
+  public.class_members,
+  public.assignments,
+  public.assignment_recipients,
+  public.assignment_questions,
+  public.question_keys,
+  public.submissions,
+  public.submission_answers,
+  public.lesson_progress
+  from anon;
+
+-- helper functions are called from inside the RLS policies, so the
+-- authenticated role needs EXECUTE on them or policy evaluation fails
+grant execute on function
+  public.my_role(),
+  public.is_teacher_of_class(uuid),
+  public.is_member_of_class(uuid),
+  public.is_teacher_of_assignment(uuid),
+  public.is_assigned(uuid),
+  public.is_open(uuid),
+  public.owns_submission(uuid),
+  public.assignment_of_submission(uuid),
+  public.answer_text(jsonb),
+  public.join_class_by_code(text),
+  public.start_submission(uuid),
+  public.submit_assignment(uuid),
+  public.grade_submission(uuid, jsonb, text, text),
+  public.class_roster(uuid)
+  to authenticated;

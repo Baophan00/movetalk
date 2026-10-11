@@ -21,15 +21,24 @@ trap cleanup EXIT
 
 echo "== starting $IMAGE =="
 cleanup
+# No host port mapping on purpose: every psql call goes through
+# `docker exec`, so a busy host port can never break the run.
 docker run -d --name "$CTR" -e POSTGRES_PASSWORD=test -e POSTGRES_DB=movetalk \
-  -p "$PORT:5432" "$IMAGE" >/dev/null || exit 1
+  "$IMAGE" >/dev/null || exit 1
+
+if [ "$(docker inspect -f '{{.State.Running}}' "$CTR" 2>/dev/null)" != "true" ]; then
+  echo "container did not stay up:"
+  docker logs "$CTR" 2>&1 | tail -20
+  exit 1
+fi
 
 echo "== waiting for postgres =="
 for i in $(seq 1 60); do
   if docker exec "$CTR" pg_isready -U "$PGUSER" -d movetalk >/dev/null 2>&1; then break; fi
   sleep 1
 done
-docker exec "$CTR" pg_isready -U "$PGUSER" -d movetalk >/dev/null 2>&1 || { echo "postgres never came up"; exit 1; }
+docker exec "$CTR" pg_isready -U "$PGUSER" -d movetalk >/dev/null 2>&1 || {
+  echo "postgres never came up"; docker logs "$CTR" 2>&1 | tail -20; exit 1; }
 
 run() {  # run() <label> <file>
   local label="$1" file="$2"
@@ -47,7 +56,8 @@ run "1. migration (first run)"     "$ROOT/sql/001_homework.sql"
 run "2. migration (re-run / idempotency)" "$ROOT/sql/001_homework.sql"
 echo "   -> migration is idempotent"
 
-run "3. api role grants"           "$ROOT/tests/sql/900_grants.sql"
+echo "3. no default grants applied: the bare container already has none,"
+echo "   so the migration has to grant everything it needs itself."
 
 echo
 echo "===== RLS + integrity test suite ====="
