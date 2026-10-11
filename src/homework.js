@@ -34,9 +34,9 @@ const HW = {
   detailId: null, questions: [], answers: {}, keyErr: false
 };
 const TC = {
-  ready: false, loading: false, loadSeq: 0, tab: 'students',
+  ready: false, loading: false, loadSeq: 0, tab: 'overview',
   classes: [], rosters: {}, assignments: [], rosterOf: {},
-  students: [], progress: [], busy: {},
+  students: [], progress: [], submissions: [], busy: {},
   builder: null, openSubs: null, results: []
 };
 
@@ -225,12 +225,15 @@ function hwRenderList() {
   const el = document.getElementById('hw-list');
   if (!el) return;
   if (HW.loading && !HW.assignments.length) {
-    el.innerHTML = '<div class="card p-8 faint text-sm">Loading your homework…</div>';
+    el.innerHTML = '<div class="sk sk-card"></div><div class="sk sk-card"></div>';
     return;
   }
   if (!HW.assignments.length) {
-    el.innerHTML = '<div class="card p-8 text-center"><p class="font-semibold mb-1">Nothing assigned yet</p>' +
-      '<p class="faint text-sm">When a teacher assigns a lesson or an exercise, it shows up here.</p></div>';
+    el.innerHTML = '<div class="empty">' +
+      '<div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg></div>' +
+      '<div class="empty-title">Nothing assigned yet</div>' +
+      '<div class="empty-text">When a teacher assigns a lesson or an exercise, it shows up here. ' +
+      'In the meantime you can open any lesson from the left.</div></div>';
     return;
   }
   el.innerHTML = HW.assignments.map(function (a) {
@@ -238,15 +241,16 @@ function hwRenderList() {
     const ref = a.kind === 'lesson'
       ? 'Lesson · ' + hwEsc(String(a.lesson_track || '').toUpperCase()) + ' ' + hwEsc(a.lesson_no)
       : 'Custom exercise';
-    const score = HW.subs[a.id] && HW.subs[a.id].score != null
-      ? ' · ' + HW.subs[a.id].score + '/' + HW.subs[a.id].max_score
-      : '';
-    return '<button class="card p-6 w-full text-left hw-row" onclick="hwOpen(\'' + a.id + '\')">' +
+    const sub = HW.subs[a.id];
+    const score = sub && sub.score != null ? sub.score + '/' + sub.max_score : '';
+    return '<button class="card card-pad w-full text-left hw-row" onclick="hwOpen(\'' + a.id + '\')">' +
       '<div class="flex items-start justify-between gap-4">' +
-      '<div><p class="font-semibold">' + hwEsc(a.title) + '</p>' +
-      '<p class="faint text-xs mt-1">' + ref + ' · due ' + hwEsc(hwDate(a.due_at)) + hwEsc(score) + '</p></div>' +
+      '<div style="min-width:0"><p class="row-title">' + hwEsc(a.title) + '</p>' +
+      '<p class="row-sub">' + ref + ' · due ' + hwEsc(hwDate(a.due_at)) + '</p></div>' +
       hwPill(st.k, st.label) +
-      '</div></button>';
+      '</div>' +
+      (score ? '<p class="row-sub" style="margin-top:10px">Your mark: <b>' + hwEsc(score) + '</b></p>' : '') +
+      '</button>';
   }).join('');
 }
 
@@ -472,6 +476,10 @@ async function tcLoad() {
       .eq('role', 'student')
       .order('created_at', { ascending: true });
     TC.students = (s && !s.error && s.data) ? s.data : [];
+    const sb = await HB.from('submissions')
+      .select('id,assignment_id,student_id,status,score,max_score,submitted_at,graded_at')
+      .order('submitted_at', { ascending: false });
+    TC.submissions = (sb && !sb.error && sb.data) ? sb.data : [];
     TC.ready = true;
   } catch (e) {
     hwErr(e, 'Could not load your students');
@@ -487,10 +495,14 @@ async function tcRefresh() {
 }
 
 function tcTab(name, silent) {
-  TC.tab = name || 'students';
+  TC.tab = name || 'overview';
   document.querySelectorAll('[data-tc-tab]').forEach(function (b) {
     b.classList.toggle('on', b.dataset.tcTab === TC.tab);
   });
+  document.querySelectorAll('[data-tc-nav]').forEach(function (b) {
+    b.classList.toggle('active', b.dataset.tcNav === TC.tab);
+  });
+  hwShow('tc-panel-overview', TC.tab === 'overview');
   hwShow('tc-panel-students', TC.tab === 'students');
   hwShow('tc-panel-assignments', TC.tab === 'assignments');
   if (!silent) tcRender();
@@ -509,72 +521,229 @@ function tcWaitingStudents() {
 }
 
 function tcRender() {
+  tcRenderOverview();
   tcRenderStudents();
   tcRenderAssignments();
   hwUpdatePendingBadge();
 }
 
+/* ---------- overview: everything real the teacher needs at a glance ---------- */
+function tcStat(label, value, hint, tone, action) {
+  const ico = {
+    pending: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+    mint: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/></svg>',
+    warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg>',
+    lav: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>'
+  };
+  return '<div class="stat"' + (action ? ' style="cursor:pointer" onclick="' + action + '"' : '') + '>' +
+    '<div class="stat-top"><span class="stat-label">' + hwEsc(label) + '</span>' +
+    '<span class="stat-ico ' + hwEsc(tone) + '">' + (ico[tone] || ico.pending) + '</span></div>' +
+    '<span class="stat-value">' + hwEsc(String(value)) + '</span>' +
+    (hint ? '<span class="stat-hint">' + hwEsc(hint) + '</span>' : '') +
+    '</div>';
+}
+
+function tcRenderOverview() {
+  const el = document.getElementById('tc-panel-overview');
+  if (!el) return;
+  if (TC.loading && !TC.students.length && !TC.assignments.length) {
+    el.innerHTML = '<div class="kpi-grid">' +
+      '<div class="sk sk-card"></div><div class="sk sk-card"></div>' +
+      '<div class="sk sk-card"></div><div class="sk sk-card"></div></div>';
+    return;
+  }
+
+  const waiting = tcWaitingStudents();
+  const accepted = (TC.students || []).filter(function (s) { return s.status === 'active'; });
+  const published = (TC.assignments || []).filter(function (a) { return a.status === 'published'; });
+  const drafts = (TC.assignments || []).filter(function (a) { return a.status === 'draft'; });
+  const subs = TC.submissions || [];
+  const toReview = subs.filter(function (x) { return x.status === 'submitted'; });
+  const graded = subs.filter(function (x) { return x.status === 'graded'; });
+
+  const nameOf = {}, titleOf = {}, progressOf = {};
+  (TC.students || []).forEach(function (s) { nameOf[s.id] = s.full_name || s.email || 'Student'; });
+  (TC.assignments || []).forEach(function (a) { titleOf[a.id] = a.title; });
+  (TC.progress || []).forEach(function (x) {
+    progressOf[x.student_id] = (progressOf[x.student_id] || 0) + 1;
+  });
+  const noProgress = accepted.filter(function (s) { return !progressOf[s.id]; });
+  const upcoming = published
+    .filter(function (a) { return a.due_at && !hwIsOverdue(a); })
+    .sort(function (x, y) { return x.due_at < y.due_at ? -1 : 1; })
+    .slice(0, 3);
+
+  let html = '<div class="kpi-grid">' +
+    tcStat('Waiting to join', waiting.length,
+      waiting.length ? 'Signed up, needs your yes' : 'Nobody is waiting',
+      'pending', waiting.length ? "tcTab('students')" : '') +
+    tcStat('Students', accepted.length,
+      accepted.length ? 'Accepted and learning' : 'Accept someone to begin',
+      'mint', "tcTab('students')") +
+    tcStat('To review', toReview.length,
+      toReview.length ? 'Handed in, waiting on you' : 'Nothing waiting on you',
+      'warn', "tcTab('assignments')") +
+    tcStat('Published work', published.length,
+      drafts.length ? drafts.length + ' still in draft' : (published.length ? 'All published' : 'Nothing published yet'),
+      'lav', "tcTab('assignments')") +
+    '</div>';
+
+  if (waiting.length) {
+    html += '<div class="card card-pad">' +
+      '<div class="section-head" style="margin-bottom:10px"><h3>' +
+      waiting.length + (waiting.length === 1 ? ' person is waiting to join' : ' people are waiting to join') +
+      '</h3><button class="btn-primary btn-sm" onclick="tcTab(&quot;students&quot;)">Review requests</button></div>' +
+      '<p class="faint" style="font-size:12.5px">They signed up themselves. Accept them and they can see the work you assign.</p>' +
+      '</div>';
+  }
+
+  /* what to do next, from real rows only */
+  if (toReview.length || noProgress.length || upcoming.length) {
+    html += '<div class="card card-pad space-y-4"><div class="section-head" style="margin-bottom:0">' +
+      '<h3>Needs attention</h3></div><div class="row-list">';
+    toReview.slice(0, 3).forEach(function (x) {
+      html += '<div class="row"><span class="row-ico">' + hwEsc((nameOf[x.student_id] || 'S').charAt(0).toUpperCase()) + '</span>' +
+        '<span class="row-main"><span class="row-title">' + hwEsc(nameOf[x.student_id] || 'Student') + '</span>' +
+        '<span class="row-sub">handed in ' + hwEsc(titleOf[x.assignment_id] || 'an assignment') + '</span></span>' +
+        '<span class="row-actions"><span class="badge badge-warn"><span class="dot dot-warn"></span>To review</span>' +
+        '<button class="btn-quiet btn-sm" onclick="tcTab(&quot;assignments&quot;)">Open</button></span></div>';
+    });
+    noProgress.slice(0, 3).forEach(function (s) {
+      html += '<div class="row"><span class="row-ico">' + hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>' +
+        '<span class="row-main"><span class="row-title">' + hwEsc(s.full_name || 'Student') + '</span>' +
+        '<span class="row-sub">accepted, no lesson opened yet</span></span>' +
+        '<span class="row-actions"><span class="badge badge-neutral">Getting started</span></span></div>';
+    });
+    upcoming.forEach(function (a) {
+      html += '<div class="row"><span class="row-ico">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" style="width:16px;height:16px"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg></span>' +
+        '<span class="row-main"><span class="row-title">' + hwEsc(a.title) + '</span>' +
+        '<span class="row-sub">due ' + hwEsc(hwDate(a.due_at)) + '</span></span>' +
+        '<span class="row-actions"><span class="badge badge-info">Upcoming</span></span></div>';
+    });
+    html += '</div></div>';
+  }
+
+  /* recent activity */
+  html += '<div class="card card-pad space-y-4"><div class="section-head" style="margin-bottom:0">' +
+    '<h3>Recent submissions</h3>' +
+    (subs.length ? '<span class="faint">' + graded.length + ' marked · ' + toReview.length + ' waiting</span>' : '') +
+    '</div>';
+  if (!subs.length) {
+    html += '<div class="empty"><div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg></div>' +
+      '<div class="empty-title">No work handed in yet</div>' +
+      '<div class="empty-text">Once a student submits an assignment it shows up here, with their score and what still needs marking.</div></div>';
+  } else {
+    html += '<div class="row-list">' + subs.slice(0, 5).map(function (x) {
+      const done = x.status === 'graded';
+      const sc = (x.score === null || x.score === undefined) ? '' :
+        (done ? ' · ' + x.score + '/' + (x.max_score || 0) : '');
+      return '<div class="row"><span class="row-ico">' + hwEsc((nameOf[x.student_id] || 'S').charAt(0).toUpperCase()) + '</span>' +
+        '<span class="row-main"><span class="row-title">' + hwEsc(nameOf[x.student_id] || 'Student') + '</span>' +
+        '<span class="row-sub">' + hwEsc(titleOf[x.assignment_id] || 'Assignment') + sc + '</span></span>' +
+        '<span class="row-actions"><span class="badge ' + (done ? 'badge-ok' : 'badge-warn') + '"><span class="dot ' +
+        (done ? 'dot-ok' : 'dot-warn') + '"></span>' + (done ? 'Marked' : 'To review') + '</span></span></div>';
+    }).join('') + '</div>';
+  }
+  html += '</div>';
+
+  /* students snapshot */
+  if (accepted.length) {
+    html += '<div class="card card-pad space-y-4"><div class="section-head" style="margin-bottom:0"><h3>Students</h3>' +
+      '<button class="btn-ghost btn-sm" onclick="tcTab(&quot;students&quot;)">Manage</button></div><div class="row-list">' +
+      accepted.slice(0, 5).map(function (s) {
+        const parts = progressOf[s.id] || 0;
+        const pct = Math.min(100, Math.round(parts / 45 * 100));
+        return '<div class="row"><span class="row-ico">' + hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>' +
+          '<span class="row-main"><span class="row-title">' + hwEsc(s.full_name || 'Student') + '</span>' +
+          '<span class="row-sub">' + hwEsc(hwEsc(s.email || '')) + '</span></span>' +
+          '<span class="row-actions" style="min-width:150px">' + tcProgressBar(pct, parts) + '</span></div>';
+      }).join('') + '</div></div>';
+  }
+
+  el.innerHTML = html;
+}
+
+function tcProgressBar(pct, parts) {
+  return '<span class="progress-row" style="width:100%"><span class="progress-track">' +
+    '<span class="progress-fill-bar" style="width:' + pct + '%"></span></span>' +
+    '<span class="progress-num">' + (parts ? parts + ' opened' : 'none yet') + '</span></span>';
+}
+
 function tcRenderStudents() {
   const el = document.getElementById('tc-panel-students');
   if (!el) return;
-  if (TC.loading && !TC.students.length) { el.innerHTML = '<div class="card p-8 faint text-sm">Loading…</div>'; return; }
+  if (TC.loading && !TC.students.length) {
+    el.innerHTML = '<div class="sk sk-card"></div><div class="sk sk-card"></div>';
+    return;
+  }
 
   const waiting = tcWaitingStudents();
   const accepted = (TC.students || []).filter(function (s) { return s.status === 'active'; });
   const refused = (TC.students || []).filter(function (s) { return s.status === 'rejected'; });
 
+  function avatar(s) {
+    return '<span class="row-ico avatar-sm">' + hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>';
+  }
+  function who(s) {
+    return '<span class="row-main"><span class="row-title">' + hwEsc(s.full_name || 'Student') + '</span>' +
+      '<span class="row-sub">' + hwEsc(s.email || '') + '</span></span>';
+  }
+
   let html = '';
 
   /* requests first — this is what the teacher came here to do */
   if (waiting.length) {
-    html += '<div class="card p-6 space-y-4" style="border-color:var(--accent2)">' +
-      '<p class="font-semibold">' + waiting.length +
-      (waiting.length === 1 ? ' person is waiting' : ' people are waiting') +
-      ' to join</p>' +
-      '<p class="faint text-xs">They signed up themselves. Accept them and they can see the work you assign.</p>' +
-      '<div class="space-y-2">' + waiting.map(function (s) {
+    html += '<div class="card card-pad space-y-4" style="border-color:var(--card-hover-border)">' +
+      '<div><p class="font-semibold">' + waiting.length +
+      (waiting.length === 1 ? ' person is waiting to join' : ' people are waiting to join') + '</p>' +
+      '<p class="faint" style="font-size:12.5px;margin-top:4px">They signed up themselves. ' +
+      'Accept them and they can see the work you assign.</p></div>' +
+      '<div class="row-list">' + waiting.map(function (s) {
         const busy = TC.busy[s.id];
-        return '<div class="flex items-center gap-3 flex-wrap text-sm p-3 rounded-xl" style="background:var(--surface2)">' +
-          '<span class="w-7 h-7 rounded-full text-xs flex items-center justify-center" style="background:var(--badge-bg)">' +
-          hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>' +
-          '<span><b>' + hwEsc(s.full_name || 'Student') + '</b>' +
-          '<span class="faint text-xs"> · ' + hwEsc(s.email || '') + '</span></span>' +
-          '<span class="ml-auto flex gap-2">' +
-          '<button class="btn-primary"' + (busy ? ' disabled' : '') +
+        return '<div class="row">' + avatar(s) + who(s) +
+          '<span class="row-actions ml-auto">' +
+          '<button class="btn-primary btn-sm"' + (busy ? ' disabled' : '') +
           ' onclick="tcDecideStudent(\'' + s.id + '\',\'accept\')">' +
           (busy === 'accept' ? 'Accepting…' : 'Accept') + '</button>' +
-          '<button class="btn-secondary"' + (busy ? ' disabled' : '') +
+          '<button class="btn-secondary btn-sm"' + (busy ? ' disabled' : '') +
           ' onclick="tcDecideStudent(\'' + s.id + '\',\'decline\')">' +
           (busy === 'decline' ? 'Declining…' : 'Decline') + '</button>' +
           '</span></div>';
       }).join('') + '</div></div>';
   }
 
-  html += '<div class="card p-6 space-y-3"><p class="font-semibold">Your students</p>';
+  html += '<div class="card card-pad space-y-4">' +
+    '<div class="section-head" style="margin-bottom:0"><div>' +
+    '<h3>Your students</h3>' +
+    '<p class="faint" style="font-size:12.5px">' +
+    (accepted.length ? accepted.length + ' accepted' : 'Nobody accepted yet') + '</p>' +
+    '</div></div>';
   if (accepted.length) {
-    html += '<div class="space-y-2">' + accepted.map(function (s) {
-      return '<div class="flex items-center gap-3 flex-wrap text-sm p-3 rounded-xl" style="background:var(--surface2)">' +
-        '<span class="w-7 h-7 rounded-full text-xs flex items-center justify-center" style="background:var(--badge-bg)">' +
-        hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>' +
-        '<span><b>' + hwEsc(s.full_name || 'Student') + '</b>' +
-        '<span class="faint text-xs"> · ' + hwEsc(s.email || '') + '</span></span>' +
-        '<span class="faint text-xs ml-auto">' + hwEsc(tcProgressOf(s.id)) + '</span>' +
-        '<button class="btn-secondary" onclick="tcNewAssignmentFor(\'' + s.id + '\')">Assign work</button>' +
-        '</div>';
+    html += '<div class="row-list">' + accepted.map(function (s) {
+      const parts = (TC.progress || []).filter(function (x) { return x.student_id === s.id; }).length;
+      const pct = Math.min(100, Math.round(parts / 45 * 100));
+      return '<div class="row">' + avatar(s) + who(s) +
+        '<span class="row-actions ml-auto">' +
+        tcProgressBar(pct, parts) +
+        '<button class="btn-quiet btn-sm" onclick="tcNewAssignmentFor(\'' + s.id + '\')">Assign work</button>' +
+        '</span></div>';
     }).join('') + '</div>';
   } else {
-    html += '<p class="faint text-sm">Nobody yet. Tell whoever you are teaching to sign up on this site — ' +
-      'their request will appear here for you to accept.</p>';
+    html += '<div class="empty">' +
+      '<div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/></svg></div>' +
+      '<div class="empty-title">No students yet</div>' +
+      '<div class="empty-text">Nobody yet. Tell whoever you are teaching to sign up on this site — ' +
+      'their request will appear here for you to accept.</div></div>';
   }
   html += '</div>';
 
   if (refused.length) {
-    html += '<div class="card p-6 space-y-2"><p class="font-semibold">Not accepted</p>' +
-      '<div class="space-y-1">' + refused.map(function (s) {
+    html += '<div class="card card-pad space-y-3"><p class="font-semibold">Not accepted</p>' +
+      '<div class="row-list">' + refused.map(function (s) {
         const busy = TC.busy[s.id];
-        return '<div class="flex items-center gap-3 text-xs p-2 rounded-lg" style="background:var(--surface2)">' +
-          '<span>' + hwEsc(s.full_name || 'Student') + ' · ' + hwEsc(s.email || '') + '</span>' +
-          '<span class="ml-auto"><button class="btn-secondary"' + (busy ? ' disabled' : '') +
+        return '<div class="row" style="padding:10px 14px">' + avatar(s) + who(s) +
+          '<span class="row-actions ml-auto"><button class="btn-quiet btn-sm"' + (busy ? ' disabled' : '') +
           ' onclick="tcDecideStudent(\'' + s.id + '\',\'accept\')">' +
           (busy === 'accept' ? 'Accepting…' : 'Accept anyway') + '</button></span></div>';
       }).join('') + '</div></div>';
@@ -617,6 +786,11 @@ function hwUpdatePendingBadge() {
 }
 
 /* ---------- assignment builder ---------- */
+function tcNewAssignment() {
+  TC.builder = tcBlankBuilder();
+  tcTab('assignments');
+}
+
 function tcNewAssignmentFor(studentId) {
   TC.builder = tcBlankBuilder();
   if (studentId) TC.builder.studentIds = [studentId];
@@ -649,8 +823,9 @@ function tcRenderAssignments() {
   const lessonTitle = (TRACKS[b.track] && TRACKS[b.track].lessons && TRACKS[b.track].lessons[b.no])
     ? TRACKS[b.track].lessons[b.no].title : null;
 
-  let html = '<div class="card p-6 space-y-5">' +
-    '<p class="font-semibold">' + (b.id ? 'Edit assignment' : 'New assignment') + '</p>' +
+  let html = '<div class="card card-pad space-y-5">' +
+    '<div class="section-head" style="margin-bottom:0"><h3>' + (b.id ? 'Edit assignment' : 'New assignment') + '</h3>' +
+    '<button class="btn-ghost btn-sm" onclick="tcResetBuilder()">Clear</button></div>' +
     '<div><label class="label">Title</label>' +
     '<input class="input" id="tc-b-title" value="' + hwEsc(b.title) + '" placeholder="Homework: Build the Message" oninput="tcBuilderSet(\'title\', this.value)"></div>' +
     '<div><label class="label">Instructions</label>' +
@@ -664,7 +839,7 @@ function tcRenderAssignments() {
     '</div></div>';
 
   if (b.kind === 'lesson') {
-    html += '<div class="p-5 rounded-2xl space-y-3" style="background:var(--surface2)">' +
+    html += '<div class="card-soft card-pad space-y-3">' +
       '<div class="flex gap-3 flex-wrap">' +
       '<div class="flex-1"><label class="label">Track</label><select class="input" onchange="tcBuilderSet(\'track\', this.value)">' +
       tracks.map(function (t) {
@@ -678,10 +853,11 @@ function tcRenderAssignments() {
         ? 'Students will open: <b>' + hwEsc(lessonTitle) + '</b>. The lesson content stays exactly as it is — this is only a reference.'
         : 'No content is loaded for this lesson yet, but you can still assign it.') + '</p></div>';
   } else {
-    html += '<div class="p-5 rounded-2xl space-y-3" style="background:var(--surface2)">';
+    html += '<div class="card-soft card-pad space-y-3">';
     if (!b.questions.length) html += '<p class="faint text-xs">No questions yet.</p>';
     b.questions.forEach(function (q, i) {
-      html += '<div class="p-4 rounded-xl space-y-2" style="background:var(--surface)">' +
+      html += '<div class="card-soft" style="padding:16px 18px;background:var(--surface)">' +
+        '<div class="space-y-2">' +
         '<div class="flex items-center gap-2 flex-wrap">' +
         '<span class="text-xs faint">Q' + (i + 1) + '</span>' +
         '<select class="input" style="width:auto" onchange="tcQSet(' + i + ',\'qtype\', this.value)">' +
@@ -701,9 +877,9 @@ function tcRenderAssignments() {
         html += '<p class="faint text-xs">Written answers are marked by you after the student submits.</p>';
       }
       html += '<input class="input" placeholder="Explanation shown after marking (optional)" value="' + hwEsc(q.explanation) + '" oninput="tcQSet(' + i + ',\'explanation\', this.value)">';
-      html += '</div>';
+      html += '</div></div>';
     });
-    html += '<button class="btn-secondary" onclick="tcQAdd()">+ Add question</button></div>';
+    html += '<button class="btn-quiet" onclick="tcQAdd()">+ Add question</button></div>';
   }
 
   html += '<div><label class="label">Who gets it?</label>';
@@ -712,7 +888,7 @@ function tcRenderAssignments() {
     html += '<p class="faint text-xs">You have no accepted students yet. ' +
       'Accept someone on the Students tab first.</p>';
   } else {
-    html += '<label class="flex items-center gap-3 text-sm p-3 rounded-xl" style="background:var(--surface2)">' +
+    html += '<label class="card-row" style="cursor:pointer">' +
       '<input type="checkbox"' + (b.allStudents ? ' checked' : '') +
       ' onchange="tcBuilderSet(\'allStudents\', this.checked)"> ' +
       '<b>Everyone</b><span class="faint text-xs ml-auto">' + students.length +
@@ -720,7 +896,7 @@ function tcRenderAssignments() {
     if (!b.allStudents) {
       html += '<div class="space-y-2 mt-2">' + students.map(function (s) {
         const on = b.studentIds.indexOf(s.id) >= 0;
-        return '<label class="flex items-center gap-3 text-sm p-3 rounded-xl" style="background:var(--surface2)">' +
+        return '<label class="card-row" style="cursor:pointer">' +
           '<input type="checkbox"' + (on ? ' checked' : '') +
           ' onchange="tcBuilderToggleStudent(\'' + s.id + '\')"> ' + hwEsc(s.name) + '</label>';
       }).join('') + '</div>';
@@ -736,9 +912,12 @@ function tcRenderAssignments() {
   html += '</div>';
 
   /* existing assignments */
-  html += '<p class="font-semibold mt-6">Your assignments</p>';
+  html += '<div class="section-head" style="margin-top:8px"><h3>Your assignments</h3>' +
+    '<span class="faint">' + TC.assignments.length + ' total</span></div>';
   if (!TC.assignments.length) {
-    html += '<div class="card p-8 text-center faint text-sm">Nothing created yet.</div>';
+    html += '<div class="empty"><div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>' +
+      '<div class="empty-title">No assignments yet</div>' +
+      '<div class="empty-text">Create one above, then publish it. Only published work becomes visible to students.</div></div>';
   }
   TC.assignments.forEach(function (a) {
     const ref = a.kind === 'lesson'
@@ -746,15 +925,15 @@ function tcRenderAssignments() {
       : 'Custom questions';
     const st = a.status === 'published' ? hwPill('submitted', 'Published')
       : a.status === 'closed' ? hwPill('not_started', 'Closed') : hwPill('in_progress', 'Draft');
-    html += '<div class="card p-6 space-y-3">' +
+    html += '<div class="card card-pad space-y-3">' +
       '<div class="flex items-start justify-between gap-4 flex-wrap"><div>' +
-      '<p class="font-semibold">' + hwEsc(a.title) + '</p>' +
-      '<p class="faint text-xs mt-1">' + ref + ' · assigned ' + hwEsc(hwDate(a.assigned_at)) + ' · due ' + hwEsc(hwDate(a.due_at)) + '</p>' +
+      '<p class="row-title">' + hwEsc(a.title) + '</p>' +
+      '<p class="row-sub">' + ref + ' · assigned ' + hwEsc(hwDate(a.assigned_at)) + ' · due ' + hwEsc(hwDate(a.due_at)) + '</p>' +
       '</div>' + st + '</div>' +
-      '<div class="flex gap-2 flex-wrap">' +
-      (a.status === 'draft' ? '<button class="btn-primary" onclick="tcSetStatus(\'' + a.id + '\',\'published\')">Publish</button>' : '') +
-      (a.status === 'published' ? '<button class="btn-secondary" onclick="tcSetStatus(\'' + a.id + '\',\'closed\')">Close</button>' : '') +
-      '<button class="btn-secondary" onclick="tcOpenSubmissions(\'' + a.id + '\')">Submissions</button>' +
+      '<div class="row-actions">' +
+      (a.status === 'draft' ? '<button class="btn-primary btn-sm" onclick="tcSetStatus(\'' + a.id + '\',\'published\')">Publish</button>' : '') +
+      (a.status === 'published' ? '<button class="btn-quiet btn-sm" onclick="tcSetStatus(\'' + a.id + '\',\'closed\')">Close</button>' : '') +
+      '<button class="btn-quiet btn-sm" onclick="tcOpenSubmissions(\'' + a.id + '\')">Submissions</button>' +
       '</div></div>';
   });
 

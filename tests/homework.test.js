@@ -28,7 +28,7 @@ const RETURNS = 'return {TRACKS,TRACK_PARTS,LESSON_DATA,AUDIO_MAP,go,trackGo,tra
   'renderDashboard,renderHomework,renderTeacher,hwStatus,hwGate,hwOpenLesson,hwEsc,hwDate,' +
   'HW,TC,HW_ON,HB,tcBlankBuilder,tcRenderAssignments,tcBuilderSet,tcBuilderKind,' +
   'tcSaveAssignment,tcGrade,hwLoadSession,hwLoad,hwOpen,hwRenderList,hwSubmit,' +
-  'tcLoad,tcTab,tcAllStudents,tcWaitingStudents,tcProgressOf,tcDecideStudent,tcRenderStudents,hwUpdatePendingBadge,syncAuthFields,showAuthChange,hwCheckAgain,' +
+  'tcLoad,tcTab,tcAllStudents,tcWaitingStudents,tcProgressOf,tcDecideStudent,tcRenderStudents,tcRenderOverview,tcStat,tcNewAssignment,hwUpdatePendingBadge,syncAuthFields,showAuthChange,hwCheckAgain,' +
   'hwForgotPassword,hwRecordProgress,hwLoadProgress,doAuth,setRole,showAuth,' +
   'setUser:(u)=>{USER=u},getUser:()=>USER,' +
   'setAuthMode:(m)=>{AUTH_MODE=m},getAuthMode:()=>AUTH_MODE,' +
@@ -170,7 +170,15 @@ t('every view still navigates without throwing (incl. the two new ones)', !navEr
 /* markup */
 t('sidebar has a Homework item', /data-view="homework"/.test(src));
 t('sidebar has a Teaching item', /data-view="teacher"/.test(src));
-t('Teaching nav item starts hidden', /id="nav-teacher-item"[^>]*class="nav-item hidden"|class="nav-item hidden"[^>]*id="nav-teacher-item"/.test(src));
+t('Teaching nav item starts hidden', (() => {
+  const m = src.match(/<button[^>]*id="nav-teacher-item"[^>]*>/);
+  return !!m && /nav-item/.test(m[0]) && /\bhidden\b/.test(m[0]);
+})());
+t('every teacher-only nav entry starts hidden',
+  (() => {
+    const items = src.match(/<button[^>]*teacher-only[^>]*>/g) || [];
+    return items.length >= 4 && items.every(x => /\bhidden\b/.test(x));
+  })());
 t('v-homework view exists', /<section id="v-homework"/.test(src));
 t('v-teacher view exists', /<section id="v-teacher"/.test(src));
 t('the 6 empty track shells are untouched',
@@ -527,6 +535,61 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   ta.tcRenderAssignments();
   t('with nobody accepted the builder says so',
     /no accepted students yet/i.test(TEACH.els['tc-panel-assignments'].innerHTML));
+
+  /* ---------- overview: only real rows, never invented numbers ---------- */
+  t('the workspace opens on a first tab that is an overview',
+    /data-tc-tab="overview"/.test(src) && /id="tc-panel-overview"/.test(src));
+  t('the sidebar offers the teacher the three sections',
+    /data-tc-nav="overview"/.test(src) && /data-tc-nav="students"/.test(src) &&
+    /data-tc-nav="assignments"/.test(src));
+
+  const quiet = { id: 'a3', full_name: 'Quiet One', email: 'a3@x.test', status: 'active' };
+  ta.TC.students = [waiting, accepted, refused, quiet];
+  ta.TC.assignments = [
+    { id: 'a1', title: 'Homework: Build the Message', kind: 'lesson', lesson_track: 'a1',
+      lesson_no: 3, assigned_at: '2026-10-01', due_at: '2026-10-20', status: 'published' },
+    { id: 'a2', title: 'Draft drill', kind: 'custom', lesson_track: null, lesson_no: null,
+      assigned_at: '2026-10-02', due_at: null, status: 'draft' }
+  ];
+  ta.TC.submissions = [
+    { id: 'sub1', assignment_id: 'a1', student_id: 'a1', status: 'submitted', score: null,
+      max_score: 6, submitted_at: '2026-10-05' },
+    { id: 'sub2', assignment_id: 'a2', student_id: 'w1', status: 'graded', score: 5,
+      max_score: 6, submitted_at: '2026-10-04' }
+  ];
+  ta.TC.progress = [{ student_id: 'a1', track: 'a1', lesson_no: 3, part: 'vocab' }];
+  ta.TC.loading = false;
+  ta.tcRenderOverview();
+  const ov = TEACH.els['tc-panel-overview'].innerHTML;
+  const tiles = (ov.match(/class="stat-value">\d+</g) || []).map(x => +x.match(/stat-value">(\d+)/)[1]);
+  t('the overlay tiles carry the real counts',
+    JSON.stringify(tiles) === '[1,2,1,1]', JSON.stringify(tiles));
+  t('the overview shows what still needs marking', /To review/.test(ov));
+  t('the overview shows work that is already marked', /Marked/.test(ov));
+  t('the overview names the student behind a submission', ov.includes('Accepted One'));
+  t('the overview shows the assignment that was handed in', ov.includes('Homework: Build the Message'));
+  t('the overview flags the accepted student who has opened nothing', /no lesson opened yet/.test(ov));
+  t('the overview keeps a draft out of the published count', /1 still in draft/.test(ov));
+
+  const keptStudents = ta.TC.students, keptAssignments = ta.TC.assignments;
+  ta.TC.students = [];
+  ta.TC.assignments = [];
+  ta.TC.loading = true;
+  ta.tcRenderOverview();
+  t('while loading the overview shows placeholders, not zeroes',
+    /sk-card/.test(TEACH.els['tc-panel-overview'].innerHTML) &&
+    !/stat-value/.test(TEACH.els['tc-panel-overview'].innerHTML));
+  ta.TC.loading = false;
+  ta.TC.students = keptStudents;
+  ta.TC.assignments = keptAssignments;
+
+  ta.TC.students = [];
+  ta.TC.assignments = [];
+  ta.TC.submissions = [];
+  ta.TC.progress = [];
+  ta.tcRenderOverview();
+  t('with no work handed in the overview says so plainly',
+    /No work handed in yet/.test(TEACH.els['tc-panel-overview'].innerHTML));
 
   /* ============================================================
      12. LESSON PROGRESS LIVES ON THE SERVER

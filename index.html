@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,124 +7,160 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
+/* ============================================================
+   MoveTalk design system — tokens
+   Friendly EdTech: friendly blue primary, mint secondary,
+   soft lavender + coral accents, warm neutral canvas, navy text.
+   Light is the default; dark stays available from the sidebar.
+   These names are the contract every rule below uses, so the
+   palette can change in one place.
+   ============================================================ */
 :root,[data-theme="dark"]{
-  --bg:#0A0A0C;--surface:#111114;--surface2:#17171B;
-  --text:#F5F5F6;--text2:#A3A3AC;
-  --border:rgba(255,255,255,.07);
-  --border-strong:rgba(255,255,255,.14);
-  --accent:#6366F1;--accent2:#818CF8;--lav:#D6D6FF;
-  --accent-hover:#4F46E5;
-  --modal-overlay:rgba(6,6,8,.74);
-  --glow:rgba(99,102,241,.10);
+  --bg:#0F1729;--surface:#161F33;--surface2:#1D2841;--surface3:#243049;
+  --text:#F2F5FA;--text2:#9BAAC4;
+  --border:rgba(255,255,255,.09);
+  --border-strong:rgba(255,255,255,.18);
+  --accent:#6C9BF2;--accent2:#9BBBF8;--lav:#C3B8FB;
+  --accent-hover:#87AEF6;
+  --modal-overlay:rgba(8,12,24,.74);
+  --glow:rgba(108,155,242,.10);
   --grid:rgba(255,255,255,.022);
-  --header-bg:rgba(4,5,21,.8);
-  --nav-bg:rgba(4,5,21,.95);
-  --bottom-bg:rgba(11,13,26,.9);
-  --hero-glow:rgba(99,102,241,.15);
-  --hero-glow2:rgba(141,143,248,.08);
-  --badge-bg:rgba(99,102,241,.14);
-  --badge2-bg:rgba(255,255,255,.04);
-  --fc-back:#4F46E5;
-  --quiz-border:rgba(255,255,255,.06);
+  --header-bg:rgba(15,23,41,.82);
+  --nav-bg:rgba(15,23,41,.95);
+  --bottom-bg:rgba(15,23,41,.92);
+  --hero-glow:rgba(108,155,242,.16);
+  --hero-glow2:rgba(155,187,248,.08);
+  --badge-bg:rgba(108,155,242,.16);
+  --badge2-bg:rgba(255,255,255,.05);
+  --fc-back:#3B6FE0;
+  --quiz-border:rgba(255,255,255,.07);
   --quiz-hover:rgba(255,255,255,.03);
-  --input-border:rgba(255,255,255,.08);
-  --btn2-border:rgba(255,255,255,.12);
-  --pill-border:rgba(255,255,255,.1);
-  --pill-on-bg:rgba(99,102,241,.22);
-  --pill-on-border:rgba(99,102,241,.5);
-  --card-glow:linear-gradient(90deg,transparent,rgba(99,102,241,.4),transparent);
-  --divider:rgba(255,255,255,.06);
-  --hover:rgba(255,255,255,.02);
-  --shadow:rgba(0,0,0,.5);
-  --green:#4ade80;--yellow:#facc15;
+  --input-border:rgba(255,255,255,.12);
+  --btn2-border:rgba(255,255,255,.16);
+  --pill-border:rgba(255,255,255,.12);
+  --pill-on-bg:rgba(108,155,242,.22);
+  --pill-on-border:rgba(108,155,242,.5);
+  --card-glow:linear-gradient(90deg,transparent,rgba(108,155,242,.45),transparent);
+  --divider:rgba(255,255,255,.07);
+  --hover:rgba(255,255,255,.03);
+  --shadow:rgba(0,0,0,.55);
+  --green:#34D399;--yellow:#FBBF24;
   --hero-cta2:rgba(255,255,255,.1);
   --hero-cta2-hover:rgba(255,255,255,.2);
-  --scrollbar:rgba(255,255,255,.1);
-  --sel:rgba(99,102,241,.3);
-  --toast-border:rgba(255,255,255,.08);
-  --toast-ok:rgba(99,102,241,.3);
-  --toast-err:rgba(239,68,68,.3);
-  --avatar:#6366F1;
-  --btn-primary:#6366F1;
-  --btn-primary-shadow:rgba(99,102,241,.35);
-  --progress:#6366F1;
-  --vip-bg:linear-gradient(135deg,#0B0D1A,#10121F);
-  --vip-badge:rgba(99,102,241,.15);
-  --menu-border:rgba(255,255,255,.06);
-  --bottom-active:rgba(99,102,241,.1);
-  --fc-border:rgba(255,255,255,.08);
-  --quiz-correct:rgba(99,102,241,.5);
-  --quiz-wrong:rgba(239,68,68,.5);
-  --card-hover-border:rgba(99,102,241,.3);
-  --input-focus:rgba(99,102,241,.4);
-  --input-focus-shadow:rgba(99,102,241,.1);
-  --btn2-hover-border:rgba(99,102,241,.4);
-  --btn2-hover-bg:rgba(99,102,241,.05);
-  --sidebar-w:260px;
-  --sidebar-bg:rgba(11,11,13,.96);
-  --sidebar-border:rgba(255,255,255,.06);
-  --sidebar-hover:rgba(255,255,255,.04);
-  --sidebar-active:rgba(99,102,241,.18);
-  --sidebar-active-border:rgba(99,102,241,.3);
+  --scrollbar:rgba(255,255,255,.12);
+  --sel:rgba(108,155,242,.3);
+  --toast-border:rgba(255,255,255,.1);
+  --toast-ok:rgba(52,211,153,.42);
+  --toast-err:rgba(248,113,113,.42);
+  --avatar:#3B6FE0;
+  --btn-primary:#3B6FE0;
+  --btn-primary-shadow:rgba(59,111,224,.4);
+  --progress:#6C9BF2;
+  --vip-bg:linear-gradient(135deg,#141D31,#1B2540);
+  --vip-badge:rgba(108,155,242,.16);
+  --menu-border:rgba(255,255,255,.07);
+  --bottom-active:rgba(108,155,242,.12);
+  --fc-border:rgba(255,255,255,.09);
+  --quiz-correct:rgba(52,211,153,.55);
+  --quiz-wrong:rgba(248,113,113,.55);
+  --card-hover-border:rgba(108,155,242,.34);
+  --input-focus:rgba(108,155,242,.45);
+  --input-focus-shadow:rgba(108,155,242,.12);
+  --btn2-hover-border:rgba(108,155,242,.4);
+  --btn2-hover-bg:rgba(108,155,242,.06);
+  --sidebar-w:264px;
+  --sidebar-bg:rgba(20,28,46,.98);
+  --sidebar-border:rgba(255,255,255,.07);
+  --sidebar-hover:rgba(255,255,255,.05);
+  --sidebar-active:rgba(108,155,242,.18);
+  --sidebar-active-border:rgba(108,155,242,.34);
+  /* state colours */
+  --ok-fg:#6EE7B7;--ok-bg:rgba(52,211,153,.14);
+  --warn-fg:#FCD34D;--warn-bg:rgba(251,191,36,.14);
+  --err-fg:#FCA5A5;--err-bg:rgba(248,113,113,.14);
+  --info-fg:#9BBBF8;--info-bg:rgba(108,155,242,.14);
+  --pending-fg:#FCD34D;--pending-bg:rgba(251,191,36,.14);
+  --mint-fg:#6EE7B7;--mint-bg:rgba(52,211,153,.14);
+  --lav-fg:#C3B8FB;--lav-bg:rgba(195,184,251,.14);
+  --coral-fg:#FCA5A5;--coral-bg:rgba(242,107,94,.16);
+  /* shape */
+  --radius-card:16px;--radius-ctl:10px;--radius-sm:8px;--radius-pill:999px;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.28);
+  --shadow-md:0 10px 30px -14px rgba(0,0,0,.6);
+  --shadow-lg:0 24px 60px -22px rgba(0,0,0,.7);
+  --focus-ring:0 0 0 3px var(--input-focus-shadow);
 }
 [data-theme="light"]{
-  --bg:#FAF9F7;--surface:#FFFFFF;--surface2:#F4F2EF;
-  --text:#1A1815;--text2:#57534E;
-  --border:rgba(28,25,23,.09);
-  --border-strong:rgba(28,25,23,.16);
-  --accent:#6366F1;--accent2:#4F46E5;--lav:#3730A3;
-  --accent-hover:#4338CA;
-  --modal-overlay:rgba(28,25,23,.42);
-  --glow:rgba(99,102,241,.06);
-  --grid:rgba(28,25,23,.022);
-  --header-bg:rgba(255,255,255,.85);
+  --bg:#FBFAF7;--surface:#FFFFFF;--surface2:#F5F7FA;--surface3:#EDF1F7;
+  --text:#0F1B2D;--text2:#5B6B7F;
+  --border:rgba(15,27,45,.10);
+  --border-strong:rgba(15,27,45,.18);
+  --accent:#2563EB;--accent2:#1D4ED8;--lav:#6D5BD0;
+  --accent-hover:#1D4ED8;
+  --modal-overlay:rgba(15,27,45,.42);
+  --glow:rgba(37,99,235,.06);
+  --grid:rgba(15,27,45,.022);
+  --header-bg:rgba(255,255,255,.86);
   --nav-bg:rgba(255,255,255,.95);
-  --bottom-bg:rgba(255,255,255,.9);
-  --hero-glow:rgba(99,102,241,.08);
-  --hero-glow2:rgba(141,143,248,.04);
-  --badge-bg:rgba(99,102,241,.15);
-  --badge2-bg:rgba(0,0,0,.03);
-  --fc-back:#4F46E5;
-  --quiz-border:rgba(0,0,0,.08);
-  --quiz-hover:rgba(0,0,0,.02);
-  --input-border:rgba(0,0,0,.1);
-  --btn2-border:rgba(0,0,0,.12);
-  --pill-border:rgba(0,0,0,.1);
-  --pill-on-bg:rgba(99,102,241,.1);
-  --pill-on-border:rgba(99,102,241,.3);
-  --card-glow:linear-gradient(90deg,transparent,rgba(99,102,241,.3),transparent);
-  --divider:rgba(0,0,0,.06);
-  --hover:rgba(0,0,0,.02);
-  --shadow:rgba(0,0,0,.08);
-  --green:#16a34a;--yellow:#ca8a04;
-  --hero-cta2:rgba(0,0,0,.04);
-  --hero-cta2-hover:rgba(0,0,0,.08);
-  --scrollbar:rgba(0,0,0,.15);
-  --sel:rgba(99,102,241,.2);
-  --toast-border:rgba(0,0,0,.08);
-  --toast-ok:rgba(99,102,241,.3);
-  --toast-err:rgba(239,68,68,.3);
-  --avatar:#6366F1;
-  --btn-primary:#6366F1;
-  --btn-primary-shadow:rgba(99,102,241,.3);
-  --progress:#6366F1;
-  --vip-bg:linear-gradient(135deg,#f8f9fc,#eef0f8);
-  --vip-badge:rgba(99,102,241,.1);
-  --menu-border:rgba(0,0,0,.06);
-  --bottom-active:rgba(99,102,241,.08);
-  --fc-border:rgba(0,0,0,.08);
-  --quiz-correct:rgba(99,102,241,.5);
-  --quiz-wrong:rgba(239,68,68,.5);
-  --card-hover-border:rgba(99,102,241,.3);
-  --input-focus:rgba(99,102,241,.4);
-  --input-focus-shadow:rgba(99,102,241,.1);
-  --btn2-hover-border:rgba(99,102,241,.4);
-  --btn2-hover-bg:rgba(99,102,241,.05);
+  --bottom-bg:rgba(255,255,255,.94);
+  --hero-glow:rgba(37,99,235,.10);
+  --hero-glow2:rgba(109,91,208,.06);
+  --badge-bg:rgba(37,99,235,.10);
+  --badge2-bg:rgba(15,27,45,.04);
+  --fc-back:#1D4ED8;
+  --quiz-border:rgba(15,27,45,.10);
+  --quiz-hover:rgba(15,27,45,.02);
+  --input-border:rgba(15,27,45,.14);
+  --btn2-border:rgba(15,27,45,.16);
+  --pill-border:rgba(15,27,45,.12);
+  --pill-on-bg:rgba(37,99,235,.10);
+  --pill-on-border:rgba(37,99,235,.32);
+  --card-glow:linear-gradient(90deg,transparent,rgba(37,99,235,.3),transparent);
+  --divider:rgba(15,27,45,.08);
+  --hover:rgba(15,27,45,.02);
+  --shadow:rgba(15,27,45,.10);
+  --green:#0E9F6E;--yellow:#B45309;
+  --hero-cta2:rgba(15,27,45,.04);
+  --hero-cta2-hover:rgba(15,27,45,.08);
+  --scrollbar:rgba(15,27,45,.18);
+  --sel:rgba(37,99,235,.2);
+  --toast-border:rgba(15,27,45,.10);
+  --toast-ok:rgba(14,159,110,.4);
+  --toast-err:rgba(220,38,38,.4);
+  --avatar:#2563EB;
+  --btn-primary:#2563EB;
+  --btn-primary-shadow:rgba(37,99,235,.28);
+  --progress:#2563EB;
+  --vip-bg:linear-gradient(135deg,#F7F9FE,#EEF3FC);
+  --vip-badge:rgba(37,99,235,.10);
+  --menu-border:rgba(15,27,45,.08);
+  --bottom-active:rgba(37,99,235,.08);
+  --fc-border:rgba(15,27,45,.10);
+  --quiz-correct:rgba(14,159,110,.5);
+  --quiz-wrong:rgba(220,38,38,.5);
+  --card-hover-border:rgba(37,99,235,.3);
+  --input-focus:rgba(37,99,235,.45);
+  --input-focus-shadow:rgba(37,99,235,.12);
+  --btn2-hover-border:rgba(37,99,235,.4);
+  --btn2-hover-bg:rgba(37,99,235,.05);
   --sidebar-bg:rgba(255,255,255,.98);
-  --sidebar-border:rgba(0,0,0,.06);
-  --sidebar-hover:rgba(0,0,0,.03);
-  --sidebar-active:rgba(99,102,241,.08);
-  --sidebar-active-border:rgba(99,102,241,.3);
+  --sidebar-border:rgba(15,27,45,.08);
+  --sidebar-hover:rgba(15,27,45,.035);
+  --sidebar-active:rgba(37,99,235,.09);
+  --sidebar-active-border:rgba(37,99,235,.32);
+  --ok-fg:#0B7A5A;--ok-bg:#E6F7F0;
+  --warn-fg:#9A5B06;--warn-bg:#FDF3DC;
+  --err-fg:#B3261E;--err-bg:#FDECEA;
+  --info-fg:#1D4ED8;--info-bg:#E9F0FE;
+  --pending-fg:#9A5B06;--pending-bg:#FDF3DC;
+  --mint-fg:#0B7A5A;--mint-bg:#E6F7F0;
+  --lav-fg:#5B4BC4;--lav-bg:#EFECFE;
+  --coral-fg:#B33A2C;--coral-bg:#FEEDEA;
+  --radius-card:16px;--radius-ctl:10px;--radius-sm:8px;--radius-pill:999px;
+  --shadow-sm:0 1px 2px rgba(15,27,45,.06);
+  --shadow-md:0 12px 32px -18px rgba(15,27,45,.28);
+  --shadow-lg:0 26px 60px -30px rgba(15,27,45,.34);
+  --focus-ring:0 0 0 3px var(--input-focus-shadow);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -317,7 +353,7 @@ h3{font-family:'Inter Tight','Inter',sans-serif;font-size:clamp(19px,2.2vw,24px)
 .nav-section-toggle svg{width:14px;height:14px;transition:transform .2s;opacity:.8}
 .nav-section-toggle.expanded svg{transform:rotate(90deg)}
 .nav-section-items{overflow:hidden;max-height:0;transition:max-height .3s ease}
-.nav-section-items.expanded{max-height:200px}
+.nav-section-items.expanded{max-height:420px}
 .nav-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 20px 9px 32px;font-size:13px;font-weight:400;color:var(--text2);background:none;border:none;cursor:pointer;transition:.15s;text-align:left;border-left:2px solid transparent}
 .nav-item:hover{color:var(--text);background:var(--sidebar-hover)}
 .nav-item.active{color:var(--text);background:var(--sidebar-active);border-left-color:var(--accent);font-weight:600}
@@ -390,11 +426,13 @@ h3{font-family:'Inter Tight','Inter',sans-serif;font-size:clamp(19px,2.2vw,24px)
 .auth-switch-link{background:none;border:none;padding:0;font:inherit;font-weight:600;color:var(--accent2);cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;transition:color .16s ease}
 .auth-switch-link:hover{color:var(--accent-hover)}
 /* ---- homework & assignments ---- */
-.hw-chip{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.02em;padding:4px 10px;border-radius:999px;border:1px solid var(--border-strong);background:var(--surface2);color:var(--text2);white-space:nowrap}
-.hw-chip-submitted{color:var(--accent2);border-color:var(--accent2)}
-.hw-chip-graded{color:var(--accent);border-color:var(--accent)}
-.hw-chip-overdue,.hw-chip-returned{border-color:#ef4444;color:#ef4444}
-.hw-chip-in_progress{color:var(--text)}
+.hw-chip{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;letter-spacing:.01em;padding:4px 10px;border-radius:var(--radius-pill);border:1px solid var(--border);background:var(--surface2);color:var(--text2);white-space:nowrap}
+.hw-chip-submitted{background:var(--info-bg);color:var(--info-fg);border-color:transparent}
+.hw-chip-graded{background:var(--ok-bg);color:var(--ok-fg);border-color:transparent}
+.hw-chip-overdue,.hw-chip-returned{background:var(--err-bg);color:var(--err-fg);border-color:transparent}
+.hw-chip-in_progress{background:var(--warn-bg);color:var(--warn-fg);border-color:transparent}
+.hw-chip-pending{background:var(--pending-bg);color:var(--pending-fg);border-color:transparent}
+.hw-chip-not_started{background:var(--surface2);color:var(--text2)}
 .hw-row{display:block;cursor:pointer}
 .hw-row:hover{border-color:var(--accent2)}
 .hw-opt{flex-direction:row;cursor:pointer}
@@ -742,6 +780,148 @@ h3{font-family:'Inter Tight','Inter',sans-serif;font-size:clamp(19px,2.2vw,24px)
   .fc-ex{display:flex;align-items:center;gap:6px;font-size:12px;text-align:left}
   .fc-ex-tag{flex-shrink:0}
   .fc-ex-text{flex:1;color:#374151}
+
+/* ============================================================
+   MoveTalk design system — components
+   Built on the tokens above. Class names the app already uses
+   keep working; these are the shared pieces both portals use.
+   ============================================================ */
+
+/* ---- page frame ---- */
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:28px}
+.page-title{font-family:'Inter Tight','Inter',sans-serif;font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1.2}
+.page-sub{font-size:13.5px;color:var(--text2);margin-top:6px;line-height:1.55}
+.page-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:0 0 14px}
+.section-head h3{font-size:17px;font-weight:600;letter-spacing:-.01em}
+.section-head .faint{font-size:12.5px}
+
+/* ---- surfaces ---- */
+.card-soft{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-card)}
+.card-pad{padding:22px 24px}
+.card-tint{background:linear-gradient(180deg,var(--badge-bg),transparent);border:1px solid var(--border);border-radius:var(--radius-card)}
+.card-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:16px 18px;background:var(--surface2);border:1px solid transparent;border-radius:var(--radius-ctl);transition:border-color .16s,background .16s}
+.card-row:hover{border-color:var(--border);background:var(--surface3)}
+
+/* ---- stat cards ---- */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:18px 20px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow-sm);transition:border-color .16s,transform .16s}
+.stat:hover{border-color:var(--card-hover-border);transform:translateY(-1px)}
+.stat-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.stat-ico{width:34px;height:34px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;background:var(--badge-bg);color:var(--accent2);flex-shrink:0}
+.stat-ico svg{width:17px;height:17px}
+.stat-label{font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text2)}
+.stat-value{font-family:'Inter Tight','Inter',sans-serif;font-size:30px;font-weight:600;letter-spacing:-.02em;line-height:1}
+.stat-hint{font-size:12px;color:var(--text2);line-height:1.45}
+.stat-ico.mint{background:var(--mint-bg);color:var(--mint-fg)}
+.stat-ico.lav{background:var(--lav-bg);color:var(--lav-fg)}
+.stat-ico.coral{background:var(--coral-bg);color:var(--coral-fg)}
+.stat-ico.warn{background:var(--warn-bg);color:var(--warn-fg)}
+.stat-ico.ok{background:var(--ok-bg);color:var(--ok-fg)}
+
+/* ---- badges ---- */
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:var(--radius-pill);letter-spacing:.01em;background:var(--badge-bg);color:var(--accent2);white-space:nowrap}
+.badge-ok{background:var(--ok-bg);color:var(--ok-fg)}
+.badge-warn,.badge-pending{background:var(--pending-bg);color:var(--pending-fg)}
+.badge-err{background:var(--err-bg);color:var(--err-fg)}
+.badge-info{background:var(--info-bg);color:var(--info-fg)}
+.badge-lav{background:var(--lav-bg);color:var(--lav-fg)}
+.badge-mint{background:var(--mint-bg);color:var(--mint-fg)}
+.badge-coral{background:var(--coral-bg);color:var(--coral-fg)}
+.badge-neutral{background:var(--surface2);color:var(--text2);border:1px solid var(--border)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--text2);flex-shrink:0}
+.dot-ok{background:var(--ok-fg)}.dot-warn,.dot-pending{background:var(--pending-fg)}
+.dot-err{background:var(--err-fg)}.dot-info{background:var(--accent)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);background:var(--surface2);border:1px solid var(--border);padding:4px 10px;border-radius:var(--radius-pill)}
+
+/* ---- buttons ---- */
+.btn-ghost{background:transparent;color:var(--text2);font-weight:500;padding:9px 14px;border-radius:var(--radius-ctl);border:1px solid transparent;font-size:13px;cursor:pointer;font-family:inherit;transition:.15s}
+.btn-ghost:hover{color:var(--text);background:var(--surface2);border-color:var(--border)}
+.btn-sm{padding:8px 14px;font-size:13px;border-radius:var(--radius-sm)}
+.btn-lg{padding:15px 30px;font-size:15px}
+.btn-quiet{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-weight:500;padding:9px 16px;border-radius:var(--radius-ctl);font-size:13px;cursor:pointer;font-family:inherit;transition:.15s}
+.btn-quiet:hover{border-color:var(--card-hover-border);background:var(--surface3)}
+.icon-btn{width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;transition:.15s}
+.icon-btn:hover{color:var(--text);border-color:var(--card-hover-border)}
+.icon-btn svg{width:16px;height:16px}
+.btn-primary:focus-visible,.btn-secondary:focus-visible,.btn-ghost:focus-visible,.btn-quiet:focus-visible,.pill:focus-visible,.input:focus-visible,.icon-btn:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+
+/* ---- rows and lists ---- */
+.row-list{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--surface2);border:1px solid transparent;border-radius:var(--radius-ctl);transition:border-color .16s}
+.row:hover{border-color:var(--border)}
+.row-ico{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--badge-bg);color:var(--accent2);font-weight:600;font-size:13px;flex-shrink:0}
+.row-main{min-width:0;flex:1;display:flex;flex-direction:column;gap:2px}
+.row-title{font-size:14px;font-weight:600;letter-spacing:-.005em;display:block}
+.row-sub{font-size:12.5px;color:var(--text2);margin-top:0;display:block;line-height:1.45}
+.row-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.row-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.row-actions .progress-track{max-width:150px}
+
+/* ---- empty / loading ---- */
+.empty{text-align:center;padding:38px 24px;border:1px dashed var(--border-strong);border-radius:var(--radius-card);background:var(--surface2)}
+.empty-ico{width:46px;height:46px;margin:0 auto 14px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--badge-bg);color:var(--accent2)}
+.empty-ico svg{width:20px;height:20px}
+.empty-title{font-size:15px;font-weight:600;margin-bottom:6px}
+.empty-text{font-size:13px;color:var(--text2);max-width:420px;margin:0 auto;line-height:1.6}
+.empty-action{margin-top:16px}
+.sk{background:linear-gradient(90deg,var(--surface2) 0%,var(--surface3) 50%,var(--surface2) 100%);background-size:200% 100%;animation:sk 1.3s ease-in-out infinite;border-radius:var(--radius-sm);height:14px}
+@keyframes sk{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.sk-line{height:12px;margin-bottom:10px}
+.sk-card{height:96px;border-radius:var(--radius-card)}
+
+/* ---- tables ---- */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius-card);background:var(--surface)}
+.data-table{width:100%;border-collapse:collapse;min-width:560px;font-size:13.5px}
+.data-table th{text-align:left;font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);padding:12px 16px;border-bottom:1px solid var(--border);white-space:nowrap}
+.data-table td{padding:13px 16px;border-bottom:1px solid var(--border);vertical-align:middle}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tbody tr:hover{background:var(--hover)}
+
+/* ---- forms ---- */
+.field{display:flex;flex-direction:column;gap:6px}
+.field-label{font-size:12.5px;font-weight:600;color:var(--text)}
+.field-help{font-size:12px;color:var(--text2);line-height:1.5}
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+
+/* ---- progress ---- */
+.progress-row{display:flex;align-items:center;gap:12px}
+.progress-track{flex:1;height:6px;background:var(--surface3);border-radius:var(--radius-pill);overflow:hidden;min-width:70px}
+.progress-fill-bar{height:100%;background:var(--progress);border-radius:var(--radius-pill);transition:width .3s}
+.progress-num{font-size:12px;color:var(--text2);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ---- sidebar: grouping ---- */
+.nav-group-label{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text2);padding:16px 20px 6px}
+.nav-sub{padding-left:48px !important;font-size:12.5px !important}
+.nav-sub .nav-code{display:none}
+
+/* ---- avatars ---- */
+.avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:14px;flex-shrink:0}
+.avatar-sm{width:32px;height:32px;font-size:12px}
+.avatar-lg{width:56px;height:56px;font-size:19px}
+
+/* ---- responsive ---- */
+@media(max-width:900px){
+  .kpi-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .stat-value{font-size:25px}
+  .page-title{font-size:22px}
+}
+@media(max-width:640px){
+  .page-head{gap:14px}
+  .page-actions{width:100%}
+  .page-actions .btn-primary,.page-actions .btn-secondary,.page-actions .btn-quiet{flex:1;justify-content:center;text-align:center}
+  .kpi-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .stat{padding:14px 15px;gap:8px}
+  .stat-value{font-size:22px}
+  .stat-ico{width:28px;height:28px}
+  .stat-ico svg{width:15px;height:15px}
+  .stat-hint{display:none}
+  .card-row{flex-direction:column;align-items:flex-start;gap:10px}
+  .card-row .row-actions,.card-row .ml-auto{margin-left:0 !important;width:100%}
+  .card-row .row-actions button{flex:1}
+  .row{padding:12px 13px;gap:11px}
+  .empty{padding:28px 16px}
+}
 </style>
 </head>
 <body>
@@ -791,8 +971,13 @@ h3{font-family:'Inter Tight','Inter',sans-serif;font-size:clamp(19px,2.2vw,24px)
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
       </button>
       <div class="nav-section-items expanded" id="nav-workspace">
-        <button class="nav-item" data-view="homework"><span class="nav-code">HW</span> Homework</button>
-        <button class="nav-item hidden" data-view="teacher" id="nav-teacher-item"><span class="nav-code">TC</span> Teaching <span id="nav-teacher-count" class="nav-badge hidden"></span></button>
+        <button class="nav-item" data-view="home"><span class="nav-code">HM</span> Home</button>
+        <button class="nav-item" data-view="dashboard"><span class="nav-code">LP</span> Learning path</button>
+        <button class="nav-item" data-view="homework"><span class="nav-code">HW</span> My homework</button>
+        <button class="nav-item hidden teacher-only" data-view="teacher" id="nav-teacher-item"><span class="nav-code">TC</span> Teaching <span id="nav-teacher-count" class="nav-badge hidden"></span></button>
+        <button class="nav-item nav-sub hidden teacher-only" data-view="teacher" data-tc-nav="overview" onclick="tcTab('overview')"><span class="nav-code">·</span> Overview</button>
+        <button class="nav-item nav-sub hidden teacher-only" data-view="teacher" data-tc-nav="students" onclick="tcTab('students')"><span class="nav-code">·</span> Students</button>
+        <button class="nav-item nav-sub hidden teacher-only" data-view="teacher" data-tc-nav="assignments" onclick="tcTab('assignments')"><span class="nav-code">·</span> Assignments</button>
       </div>
     </div>
   </nav>
@@ -824,8 +1009,9 @@ h3{font-family:'Inter Tight','Inter',sans-serif;font-size:clamp(19px,2.2vw,24px)
   <button onclick="go('a2');toggleMobileMenu()" class="nav-btn">A2 · Language Repair</button>
   <button onclick="go('e1');toggleMobileMenu()" class="nav-btn">E1 · MOVE Expand 1</button>
   <button onclick="go('e2');toggleMobileMenu()" class="nav-btn">E2 · MOVE Expand 2</button>
-  <button onclick="go('homework');toggleMobileMenu()" class="nav-btn">Homework</button>
-  <button onclick="go('dashboard');toggleMobileMenu()" class="nav-btn">Dashboard</button>
+  <button onclick="go('dashboard');toggleMobileMenu()" class="nav-btn">Learning path</button>
+  <button onclick="go('homework');toggleMobileMenu()" class="nav-btn">My homework</button>
+  <button onclick="go('teacher');toggleMobileMenu()" class="nav-btn teacher-only hidden">Teaching</button>
 </div>
 
 <!-- MAIN CONTENT -->
@@ -1047,31 +1233,79 @@ h3{font-family:'Inter Tight','Inter',sans-serif;font-size:clamp(19px,2.2vw,24px)
 
     <!-- DASHBOARD -->
     <section id="v-dashboard" class="view hidden">
-      <div class="p-8 md:p-12 max-w-4xl mx-auto">
-        <div id="dash-gate" class="card p-16 max-w-lg mx-auto text-center">
+      <div class="p-6 md:p-10 max-w-5xl mx-auto">
+        <div id="dash-gate" class="card p-14 max-w-lg mx-auto text-center">
           <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center mb-6" style="background:var(--badge-bg)">
             <svg class="w-6 h-6" style="color:var(--accent2)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 12v8H4v-8M2 8h20v4H2zM12 3v5"/></svg>
           </div>
-          <h2 class="text-2xl font-semibold mb-2">Your Dashboard</h2>
-          <p class="faint text-sm mb-8">Sign in to see your progress, assignments, and study plan.</p>
+          <h2 class="text-2xl font-semibold mb-2">Your learning</h2>
+          <p class="faint text-sm mb-8">Sign in to see your progress, your homework and what your teacher said.</p>
           <button onclick="showAuth()" class="btn-primary">Sign In</button>
         </div>
-        <div id="dash-body" class="hidden space-y-6">
-          <div class="card p-8">
-            <div class="flex items-center gap-4 mb-8">
-              <div id="dash-avatar" class="w-12 h-12 rounded-full text-white font-semibold flex items-center justify-center text-sm" style="background:var(--avatar)"></div>
-              <div><p id="dash-name" class="font-semibold text-lg">—</p><p id="dash-email" class="faint text-sm">—</p></div>
-              <div class="ml-auto flex items-center gap-3">
-                <button onclick="showAuthChange()" class="text-xs font-medium faint hover:text-[var(--text)]">Change password</button>
-                <button onclick="logout()" class="text-xs font-medium faint hover:text-[var(--text)]">Sign Out</button>
+
+        <div id="dash-body" class="hidden space-y-5">
+          <div class="page-head">
+            <div class="flex items-center gap-4">
+              <div id="dash-avatar" class="avatar avatar-lg" style="background:var(--avatar)"></div>
+              <div>
+                <h1 class="page-title" id="dash-greet">Welcome back</h1>
+                <p class="page-sub"><span id="dash-name">—</span> · <span id="dash-email">—</span></p>
               </div>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div class="p-5 rounded-2xl" style="background:var(--surface2)"><p class="text-xs font-medium faint mb-2">LESSONS DONE</p><p id="dash-lessons" class="font-semibold mono text-2xl">0</p></div>
-              <div class="p-5 rounded-2xl" style="background:var(--surface2)"><p class="text-xs font-medium faint mb-2">WORDS LEARNED</p><p id="dash-words" class="font-semibold mono text-2xl">0</p></div>
-              <div class="p-5 rounded-2xl" style="background:var(--surface2)"><p class="text-xs font-medium faint mb-2">STREAK</p><p id="dash-streak" class="font-semibold mono text-2xl">0</p></div>
-              <div class="p-5 rounded-2xl" style="background:var(--surface2)"><p class="text-xs font-medium faint mb-2">LEVEL</p><p id="dash-level" class="font-semibold mono text-2xl">—</p></div>
+            <div class="page-actions">
+              <button onclick="go('homework')" class="btn-primary btn-sm">My homework</button>
+              <button onclick="showAuthChange()" class="btn-quiet btn-sm">Change password</button>
+              <button onclick="logout()" class="btn-ghost btn-sm">Sign out</button>
             </div>
+          </div>
+
+          <div class="kpi-grid">
+            <div class="stat">
+              <div class="stat-top"><span class="stat-label">Lessons done</span><span class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span></div>
+              <span id="dash-lessons" class="stat-value">0</span>
+              <span class="stat-hint">A lesson counts once you reach its final task.</span>
+            </div>
+            <div class="stat">
+              <div class="stat-top"><span class="stat-label">Words learned</span><span class="stat-ico mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2M4 7h16M4 7v12a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V7"/></svg></span></div>
+              <span id="dash-words" class="stat-value">0</span>
+              <span class="stat-hint">From the flashcards you have marked as learned.</span>
+            </div>
+            <div class="stat">
+              <div class="stat-top"><span class="stat-label">Streak</span><span class="stat-ico lav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3c1.5 3 4 4.5 4 8a4 4 0 0 1-8 0c0-3.5 2.5-5 4-8z"/></svg></span></div>
+              <span id="dash-streak" class="stat-value">0</span>
+              <span class="stat-hint">Days in a row you opened a lesson.</span>
+            </div>
+            <div class="stat">
+              <div class="stat-top"><span class="stat-label">Level</span><span class="stat-ico coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3v18M5 21h14M8 17V9M12 17v-5M16 17v-3"/></svg></span></div>
+              <span id="dash-level" class="stat-value">—</span>
+              <span class="stat-hint">From the placement check.</span>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-5">
+            <div class="card card-pad space-y-4">
+              <div class="section-head" style="margin-bottom:0"><h3>Continue learning</h3></div>
+              <p class="row-title" id="dash-next-title">—</p>
+              <p class="row-sub" id="dash-next-sub">—</p>
+              <button class="btn-primary btn-sm" id="dash-next-btn" onclick="go('a1')">Open the lesson</button>
+            </div>
+            <div class="card card-pad space-y-4">
+              <div class="section-head" style="margin-bottom:0"><h3>Your progress</h3></div>
+              <div class="progress-row"><span class="progress-track"><span class="progress-fill-bar" id="dash-progress-bar" style="width:0%"></span></span><span class="progress-num" id="dash-progress-num">0%</span></div>
+              <p class="row-sub" id="dash-progress-sub">Open a lesson part and your progress appears here.</p>
+            </div>
+          </div>
+
+          <div class="card card-pad space-y-4">
+            <div class="section-head" style="margin-bottom:0"><div><h3>My homework</h3>
+              <p class="faint" style="font-size:12.5px">What is due, and where you left off.</p></div>
+              <button class="btn-ghost btn-sm" onclick="go('homework')">Open all</button></div>
+            <div id="dash-hw" class="row-list"></div>
+          </div>
+
+          <div class="card card-pad space-y-4">
+            <div class="section-head" style="margin-bottom:0"><h3>Latest feedback</h3></div>
+            <div id="dash-feedback"></div>
           </div>
         </div>
       </div>
@@ -1079,8 +1313,8 @@ h3{font-family:'Inter Tight','Inter',sans-serif;font-size:clamp(19px,2.2vw,24px)
 
     <!-- HOMEWORK (student) -->
     <section id="v-homework" class="view hidden">
-      <div class="p-8 md:p-12 max-w-4xl mx-auto">
-        <div id="hw-gate" class="card p-16 max-w-lg mx-auto text-center">
+      <div class="p-6 md:p-10 max-w-4xl mx-auto">
+        <div id="hw-gate" class="card p-14 max-w-lg mx-auto text-center">
           <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center mb-6" style="background:var(--badge-bg)">
             <svg class="w-6 h-6" style="color:var(--accent2)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
           </div>
@@ -1089,13 +1323,15 @@ h3{font-family:'Inter Tight','Inter',sans-serif;font-size:clamp(19px,2.2vw,24px)
           <button id="hw-gate-btn" onclick="showAuth()" class="btn-primary">Sign In</button>
         </div>
 
-        <div id="hw-body" class="hidden space-y-6">
-          <div class="flex items-start justify-between gap-4">
+        <div id="hw-body" class="hidden space-y-5">
+          <div class="page-head">
             <div>
-              <h2 class="text-2xl font-semibold">Homework</h2>
-              <p id="hw-sub" class="faint text-sm mt-1">—</p>
+              <h1 class="page-title">My homework</h1>
+              <p id="hw-sub" class="page-sub">—</p>
             </div>
-            <button onclick="hwRefresh()" class="btn-secondary">Refresh</button>
+            <div class="page-actions">
+              <button onclick="hwRefresh()" class="btn-quiet btn-sm">Refresh</button>
+            </div>
           </div>
 
           <div id="hw-list" class="space-y-4"></div>
@@ -1107,32 +1343,37 @@ h3{font-family:'Inter Tight','Inter',sans-serif;font-size:clamp(19px,2.2vw,24px)
 
     <!-- TEACHING (teacher) -->
     <section id="v-teacher" class="view hidden">
-      <div class="p-8 md:p-12 max-w-5xl mx-auto">
-        <div id="tc-gate" class="card p-16 max-w-lg mx-auto text-center">
+      <div class="p-6 md:p-10 max-w-6xl mx-auto">
+        <div id="tc-gate" class="card p-14 max-w-lg mx-auto text-center">
           <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center mb-6" style="background:var(--badge-bg)">
             <svg class="w-6 h-6" style="color:var(--accent2)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5zm0 0v7m-5-4.5V15l5 3 5-3v-3.5"/></svg>
           </div>
           <h2 class="text-2xl font-semibold mb-2">Teaching</h2>
-          <p id="tc-gate-msg" class="faint text-sm mb-8">Sign in with a teacher account to manage classes and assignments.</p>
+          <p id="tc-gate-msg" class="faint text-sm mb-8">Sign in with a teacher account to manage students and assignments.</p>
           <button id="tc-gate-btn" onclick="showAuth()" class="btn-primary">Sign In</button>
         </div>
 
-        <div id="tc-body" class="hidden space-y-6">
-          <div class="flex items-start justify-between gap-4">
+        <div id="tc-body" class="hidden space-y-5">
+          <div class="page-head">
             <div>
-              <h2 class="text-2xl font-semibold">Teaching</h2>
-              <p id="tc-sub" class="faint text-sm mt-1">—</p>
+              <h1 class="page-title">Teaching</h1>
+              <p id="tc-sub" class="page-sub">—</p>
             </div>
-            <button onclick="tcRefresh()" class="btn-secondary">Refresh</button>
+            <div class="page-actions">
+              <button onclick="tcNewAssignment()" class="btn-primary btn-sm">New assignment</button>
+              <button onclick="tcRefresh()" class="btn-quiet">Refresh</button>
+            </div>
           </div>
 
           <div class="flex gap-2 flex-wrap">
-            <button class="pill on" data-tc-tab="students" onclick="tcTab('students')">Students</button>
+            <button class="pill on" data-tc-tab="overview" onclick="tcTab('overview')">Overview</button>
+            <button class="pill" data-tc-tab="students" onclick="tcTab('students')">Students</button>
             <button class="pill" data-tc-tab="assignments" onclick="tcTab('assignments')">Assignments</button>
           </div>
 
-          <div id="tc-panel-students" class="space-y-4"></div>
-          <div id="tc-panel-assignments" class="space-y-4 hidden"></div>
+          <div id="tc-panel-overview" class="space-y-5"></div>
+          <div id="tc-panel-students" class="space-y-5 hidden"></div>
+          <div id="tc-panel-assignments" class="space-y-5 hidden"></div>
         </div>
       </div>
     </section>
@@ -1146,21 +1387,21 @@ h3{font-family:'Inter Tight','Inter',sans-serif;font-size:clamp(19px,2.2vw,24px)
     <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10"/></svg>
     <span>Home</span>
   </button>
+  <button onclick="go('dashboard')" data-bn="dashboard">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 16V9M12 16v-4M16 16V7"/></svg>
+    <span>My learning</span>
+  </button>
   <button onclick="go('e2')" data-bn="e2">
     <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
     <span>Lessons</span>
-  </button>
-  <button onclick="go('e1')" data-bn="e1">
-    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 16V9M12 16v-4M16 16V7"/></svg>
-    <span>Courses</span>
   </button>
   <button onclick="go('homework')" data-bn="homework">
     <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
     <span>Homework</span>
   </button>
-  <button onclick="go('dashboard')" data-bn="dashboard">
-    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    <span>Me</span>
+  <button onclick="go('teacher')" data-bn="teacher" id="bn-teacher" class="hidden">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5zm0 0v7m-5-4.5V15l5 3 5-3v-3.5"/></svg>
+    <span>Teaching</span>
   </button>
 </nav>
 
@@ -1221,7 +1462,7 @@ function toggleTheme(){
   html.dataset.theme=next;
   save('theme',next);
 }
-(function(){const t=load('theme','dark');document.documentElement.dataset.theme=t})();
+(function(){const t=load('theme','light');document.documentElement.dataset.theme=t})();
 
 // ---- TOAST ----
 function toast(msg,kind=''){
@@ -1257,7 +1498,7 @@ function go(v){
   if(!document.getElementById('v-'+v))v='home';
   document.querySelectorAll('.view').forEach(e=>e.classList.add('hidden'));
   document.getElementById('v-'+v).classList.remove('hidden');
-  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+  document.querySelectorAll('.nav-item:not([data-tc-nav])').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
   document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.toggle('on',b.dataset.bn===v));
   if(v==='dashboard')renderDashboard();
   if(v==='homework')renderHomework();
@@ -1744,25 +1985,97 @@ function logout(){
 function updateAuthUI(){
   const label=document.getElementById('sidebar-auth-label');
   if(USER){label.textContent=USER.name||'Account'}else{label.textContent='Sign In'}
+  const isTeacher=!!(USER&&USER.role==='teacher');
+  document.querySelectorAll('.teacher-only').forEach(e=>e.classList.toggle('hidden',!isTeacher));
   const tc=document.getElementById('nav-teacher-item');
-  if(tc)tc.classList.toggle('hidden',!(USER&&USER.role==='teacher'));
+  if(tc)tc.classList.toggle('hidden',!isTeacher);
+  const bnv=document.getElementById('bn-teacher');
+  if(bnv)bnv.classList.toggle('hidden',!isTeacher);
 }
 
 // ---- DASHBOARD ----
-function renderDashboard(){
-  if(!USER){document.getElementById('dash-gate').classList.remove('hidden');document.getElementById('dash-body').classList.add('hidden');return}
-  document.getElementById('dash-gate').classList.add('hidden');document.getElementById('dash-body').classList.remove('hidden');
-  document.getElementById('dash-avatar').textContent=USER.name?.[0]?.toUpperCase()||'U';
-  document.getElementById('dash-name').textContent=USER.name;document.getElementById('dash-email').textContent=USER.email;
-  const progress=load('progress',{});const lessonsDone=Object.keys(progress).filter(k=>k.includes('_l')).length;
-  document.getElementById('dash-lessons').textContent=lessonsDone;document.getElementById('dash-words').textContent=load('wordsLearned',0);document.getElementById('dash-streak').textContent=load('streak',0);document.getElementById('dash-level').textContent=load('selectedLevel','—');
-  // when the school backend is on, the server's record is the real one
+async function renderDashboard(){
+  const gate=document.getElementById('dash-gate'),body=document.getElementById('dash-body');
+  if(!USER){gate.classList.remove('hidden');body.classList.add('hidden');return}
+  gate.classList.add('hidden');body.classList.remove('hidden');
+
+  const first=(USER.name||'there').split(' ')[0];
+  document.getElementById('dash-greet').textContent='Welcome back, '+first;
+  document.getElementById('dash-avatar').textContent=(USER.name||'U').charAt(0).toUpperCase();
+  document.getElementById('dash-name').textContent=USER.name||'';
+  document.getElementById('dash-email').textContent=USER.email||'';
+  document.getElementById('dash-words').textContent=load('wordsLearned',0);
+  document.getElementById('dash-streak').textContent=load('streak',0);
+  document.getElementById('dash-level').textContent=load('selectedLevel','—')||'—';
+
+  const progress=load('progress',{});
+  let lessonsDone=Object.keys(progress).filter(k=>k.includes('_l')).length;
+  document.getElementById('dash-lessons').textContent=lessonsDone;
+
+  /* the server's record wins when the school backend is on */
+  let serverProg=null;
   if(typeof hwLoadProgress==='function'){
-    hwLoadProgress().then(function(p){
-      if(!p)return;
-      const el=document.getElementById('dash-lessons');
-      if(el)el.textContent=p.lessons;
-    }).catch(function(){});
+    try{serverProg=await hwLoadProgress()}catch(e){}
+    if(serverProg&&typeof serverProg.lessons==='number'){
+      lessonsDone=serverProg.lessons;
+      document.getElementById('dash-lessons').textContent=lessonsDone;
+    }
+  }
+
+  /* where to carry on: the last lesson part recorded, else the first with content */
+  const keys=Object.keys(progress).map(function(k){const m=k.match(/^([a-z0-9]+)_l(\d+)/);return m?{t:m[1],n:parseInt(m[2],10),k:k}:null}).filter(Boolean);
+  keys.sort(function(x,y){return (x.t+x.n)<(y.t+y.n)?-1:1});
+  let target=keys.length?keys[keys.length-1]:null;
+  if(!target&&typeof TRACKS!=='undefined'&&TRACKS.e2&&TRACKS.e2.lessons&&TRACKS.e2.lessons[1])target={t:'e2',n:1};
+  const titleFor=function(t,n){return (typeof TRACKS!=='undefined'&&TRACKS[t]&&TRACKS[t].lessons&&TRACKS[t].lessons[n])?TRACKS[t].lessons[n].title:null};
+  const nextTitle=target?titleFor(target.t,target.n):null;
+  document.getElementById('dash-next-title').textContent=target?(target.t.toUpperCase()+' Lesson '+target.n+(nextTitle?' · '+nextTitle:'')):'Nothing opened yet';
+  document.getElementById('dash-next-sub').textContent=target?'Pick up where you stopped.':'Start with a lesson and it will show up here.';
+  const nb=document.getElementById('dash-next-btn');
+  if(nb){
+    if(target){nb.textContent='Continue';nb.setAttribute('onclick',"go('"+target.t+"');trackGo('"+target.t+"',"+target.n+")")}
+    else{nb.textContent='Browse lessons';nb.setAttribute('onclick',"go('e2')")}
+  }
+
+  const parts=serverProg&&serverProg.parts?serverProg.parts:Object.keys(progress).length;
+  const pct=Math.min(100,Math.round(parts/45*100));
+  const bar=document.getElementById('dash-progress-bar'),num=document.getElementById('dash-progress-num');
+  if(bar)bar.style.width=pct+'%';
+  if(num)num.textContent=pct+'%';
+  document.getElementById('dash-progress-sub').textContent=parts?(parts+' lesson part'+(parts===1?'':'s')+' opened · '+lessonsDone+' lesson'+(lessonsDone===1?'':'s')+' finished'):'Open a lesson part and your progress appears here.';
+
+  /* homework: the same real rows the homework screen shows */
+  const hwBox=document.getElementById('dash-hw');
+  const fbBox=document.getElementById('dash-feedback');
+  if(typeof HW==='undefined'||!HW_ON||!HW.assignments.length){
+    if(hwBox)hwBox.innerHTML='<div class="empty"><div class="empty-title">No homework yet</div>'+
+      '<div class="empty-text">When your teacher assigns a lesson or an exercise, it appears here.</div></div>';
+    if(fbBox)fbBox.innerHTML='<div class="empty"><div class="empty-title">No feedback yet</div>'+
+      '<div class="empty-text">Once your teacher marks your work, their comment shows up here.</div></div>';
+  }else{
+    const rows=HW.assignments.slice(0,3).map(function(a){
+      const st=hwStatus(a,HW.subs[a.id]);
+      const ref=a.kind==='lesson'?('Lesson · '+String(a.lesson_track||'').toUpperCase()+' '+a.lesson_no):'Custom exercise';
+      return '<button class="row" style="cursor:pointer;width:100%;text-align:left" onclick="go(\'homework\');hwOpen(\''+a.id+'\')">'+
+        '<span class="row-main"><span class="row-title">'+hwEsc(a.title)+'</span>'+
+        '<span class="row-sub">'+ref+' · due '+hwEsc(hwDate(a.due_at))+'</span></span>'+
+        '<span class="row-actions">'+hwPill(st.k,st.label)+'</span></button>';
+    }).join('');
+    if(hwBox)hwBox.innerHTML=rows;
+    const titles={};HW.assignments.forEach(function(a){titles[a.id]=a.title});
+    const marked=Object.keys(HW.subs||{}).map(function(k){return HW.subs[k]}).filter(function(x){return x&&x.status==='graded'});
+    marked.sort(function(x,y){return String(y.graded_at||'')<String(x.graded_at||'')?-1:1});
+    const f=marked[0];
+    if(fbBox)fbBox.innerHTML=f?('<div class="card-soft" style="padding:16px 18px">'+
+      '<p class="row-title">'+hwEsc(titles[f.assignment_id]||'Assignment')+' · '+f.score+'/'+f.max_score+'</p>'+
+      '<p class="row-sub">'+hwEsc(f.feedback||'No comment left.')+'</p></div>'):
+      '<div class="empty"><div class="empty-title">No feedback yet</div>'+
+      '<div class="empty-text">Once your teacher marks your work, their comment shows up here.</div></div>';
+  }
+
+  /* keep the dashboard's rows current without opening the homework screen */
+  if(typeof hwLoad==='function'&&HW_ON&&USER&&USER.role==='student'&&USER.status==='active'&&!HW.assignments.length){
+    hwLoad().then(function(){renderDashboard()}).catch(function(){});
   }
 }
 
@@ -1807,9 +2120,9 @@ const HW = {
   detailId: null, questions: [], answers: {}, keyErr: false
 };
 const TC = {
-  ready: false, loading: false, loadSeq: 0, tab: 'students',
+  ready: false, loading: false, loadSeq: 0, tab: 'overview',
   classes: [], rosters: {}, assignments: [], rosterOf: {},
-  students: [], progress: [], busy: {},
+  students: [], progress: [], submissions: [], busy: {},
   builder: null, openSubs: null, results: []
 };
 
@@ -1998,12 +2311,15 @@ function hwRenderList() {
   const el = document.getElementById('hw-list');
   if (!el) return;
   if (HW.loading && !HW.assignments.length) {
-    el.innerHTML = '<div class="card p-8 faint text-sm">Loading your homework…</div>';
+    el.innerHTML = '<div class="sk sk-card"></div><div class="sk sk-card"></div>';
     return;
   }
   if (!HW.assignments.length) {
-    el.innerHTML = '<div class="card p-8 text-center"><p class="font-semibold mb-1">Nothing assigned yet</p>' +
-      '<p class="faint text-sm">When a teacher assigns a lesson or an exercise, it shows up here.</p></div>';
+    el.innerHTML = '<div class="empty">' +
+      '<div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg></div>' +
+      '<div class="empty-title">Nothing assigned yet</div>' +
+      '<div class="empty-text">When a teacher assigns a lesson or an exercise, it shows up here. ' +
+      'In the meantime you can open any lesson from the left.</div></div>';
     return;
   }
   el.innerHTML = HW.assignments.map(function (a) {
@@ -2011,15 +2327,16 @@ function hwRenderList() {
     const ref = a.kind === 'lesson'
       ? 'Lesson · ' + hwEsc(String(a.lesson_track || '').toUpperCase()) + ' ' + hwEsc(a.lesson_no)
       : 'Custom exercise';
-    const score = HW.subs[a.id] && HW.subs[a.id].score != null
-      ? ' · ' + HW.subs[a.id].score + '/' + HW.subs[a.id].max_score
-      : '';
-    return '<button class="card p-6 w-full text-left hw-row" onclick="hwOpen(\'' + a.id + '\')">' +
+    const sub = HW.subs[a.id];
+    const score = sub && sub.score != null ? sub.score + '/' + sub.max_score : '';
+    return '<button class="card card-pad w-full text-left hw-row" onclick="hwOpen(\'' + a.id + '\')">' +
       '<div class="flex items-start justify-between gap-4">' +
-      '<div><p class="font-semibold">' + hwEsc(a.title) + '</p>' +
-      '<p class="faint text-xs mt-1">' + ref + ' · due ' + hwEsc(hwDate(a.due_at)) + hwEsc(score) + '</p></div>' +
+      '<div style="min-width:0"><p class="row-title">' + hwEsc(a.title) + '</p>' +
+      '<p class="row-sub">' + ref + ' · due ' + hwEsc(hwDate(a.due_at)) + '</p></div>' +
       hwPill(st.k, st.label) +
-      '</div></button>';
+      '</div>' +
+      (score ? '<p class="row-sub" style="margin-top:10px">Your mark: <b>' + hwEsc(score) + '</b></p>' : '') +
+      '</button>';
   }).join('');
 }
 
@@ -2245,6 +2562,10 @@ async function tcLoad() {
       .eq('role', 'student')
       .order('created_at', { ascending: true });
     TC.students = (s && !s.error && s.data) ? s.data : [];
+    const sb = await HB.from('submissions')
+      .select('id,assignment_id,student_id,status,score,max_score,submitted_at,graded_at')
+      .order('submitted_at', { ascending: false });
+    TC.submissions = (sb && !sb.error && sb.data) ? sb.data : [];
     TC.ready = true;
   } catch (e) {
     hwErr(e, 'Could not load your students');
@@ -2260,10 +2581,14 @@ async function tcRefresh() {
 }
 
 function tcTab(name, silent) {
-  TC.tab = name || 'students';
+  TC.tab = name || 'overview';
   document.querySelectorAll('[data-tc-tab]').forEach(function (b) {
     b.classList.toggle('on', b.dataset.tcTab === TC.tab);
   });
+  document.querySelectorAll('[data-tc-nav]').forEach(function (b) {
+    b.classList.toggle('active', b.dataset.tcNav === TC.tab);
+  });
+  hwShow('tc-panel-overview', TC.tab === 'overview');
   hwShow('tc-panel-students', TC.tab === 'students');
   hwShow('tc-panel-assignments', TC.tab === 'assignments');
   if (!silent) tcRender();
@@ -2282,72 +2607,229 @@ function tcWaitingStudents() {
 }
 
 function tcRender() {
+  tcRenderOverview();
   tcRenderStudents();
   tcRenderAssignments();
   hwUpdatePendingBadge();
 }
 
+/* ---------- overview: everything real the teacher needs at a glance ---------- */
+function tcStat(label, value, hint, tone, action) {
+  const ico = {
+    pending: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+    mint: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/></svg>',
+    warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg>',
+    lav: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>'
+  };
+  return '<div class="stat"' + (action ? ' style="cursor:pointer" onclick="' + action + '"' : '') + '>' +
+    '<div class="stat-top"><span class="stat-label">' + hwEsc(label) + '</span>' +
+    '<span class="stat-ico ' + hwEsc(tone) + '">' + (ico[tone] || ico.pending) + '</span></div>' +
+    '<span class="stat-value">' + hwEsc(String(value)) + '</span>' +
+    (hint ? '<span class="stat-hint">' + hwEsc(hint) + '</span>' : '') +
+    '</div>';
+}
+
+function tcRenderOverview() {
+  const el = document.getElementById('tc-panel-overview');
+  if (!el) return;
+  if (TC.loading && !TC.students.length && !TC.assignments.length) {
+    el.innerHTML = '<div class="kpi-grid">' +
+      '<div class="sk sk-card"></div><div class="sk sk-card"></div>' +
+      '<div class="sk sk-card"></div><div class="sk sk-card"></div></div>';
+    return;
+  }
+
+  const waiting = tcWaitingStudents();
+  const accepted = (TC.students || []).filter(function (s) { return s.status === 'active'; });
+  const published = (TC.assignments || []).filter(function (a) { return a.status === 'published'; });
+  const drafts = (TC.assignments || []).filter(function (a) { return a.status === 'draft'; });
+  const subs = TC.submissions || [];
+  const toReview = subs.filter(function (x) { return x.status === 'submitted'; });
+  const graded = subs.filter(function (x) { return x.status === 'graded'; });
+
+  const nameOf = {}, titleOf = {}, progressOf = {};
+  (TC.students || []).forEach(function (s) { nameOf[s.id] = s.full_name || s.email || 'Student'; });
+  (TC.assignments || []).forEach(function (a) { titleOf[a.id] = a.title; });
+  (TC.progress || []).forEach(function (x) {
+    progressOf[x.student_id] = (progressOf[x.student_id] || 0) + 1;
+  });
+  const noProgress = accepted.filter(function (s) { return !progressOf[s.id]; });
+  const upcoming = published
+    .filter(function (a) { return a.due_at && !hwIsOverdue(a); })
+    .sort(function (x, y) { return x.due_at < y.due_at ? -1 : 1; })
+    .slice(0, 3);
+
+  let html = '<div class="kpi-grid">' +
+    tcStat('Waiting to join', waiting.length,
+      waiting.length ? 'Signed up, needs your yes' : 'Nobody is waiting',
+      'pending', waiting.length ? "tcTab('students')" : '') +
+    tcStat('Students', accepted.length,
+      accepted.length ? 'Accepted and learning' : 'Accept someone to begin',
+      'mint', "tcTab('students')") +
+    tcStat('To review', toReview.length,
+      toReview.length ? 'Handed in, waiting on you' : 'Nothing waiting on you',
+      'warn', "tcTab('assignments')") +
+    tcStat('Published work', published.length,
+      drafts.length ? drafts.length + ' still in draft' : (published.length ? 'All published' : 'Nothing published yet'),
+      'lav', "tcTab('assignments')") +
+    '</div>';
+
+  if (waiting.length) {
+    html += '<div class="card card-pad">' +
+      '<div class="section-head" style="margin-bottom:10px"><h3>' +
+      waiting.length + (waiting.length === 1 ? ' person is waiting to join' : ' people are waiting to join') +
+      '</h3><button class="btn-primary btn-sm" onclick="tcTab(&quot;students&quot;)">Review requests</button></div>' +
+      '<p class="faint" style="font-size:12.5px">They signed up themselves. Accept them and they can see the work you assign.</p>' +
+      '</div>';
+  }
+
+  /* what to do next, from real rows only */
+  if (toReview.length || noProgress.length || upcoming.length) {
+    html += '<div class="card card-pad space-y-4"><div class="section-head" style="margin-bottom:0">' +
+      '<h3>Needs attention</h3></div><div class="row-list">';
+    toReview.slice(0, 3).forEach(function (x) {
+      html += '<div class="row"><span class="row-ico">' + hwEsc((nameOf[x.student_id] || 'S').charAt(0).toUpperCase()) + '</span>' +
+        '<span class="row-main"><span class="row-title">' + hwEsc(nameOf[x.student_id] || 'Student') + '</span>' +
+        '<span class="row-sub">handed in ' + hwEsc(titleOf[x.assignment_id] || 'an assignment') + '</span></span>' +
+        '<span class="row-actions"><span class="badge badge-warn"><span class="dot dot-warn"></span>To review</span>' +
+        '<button class="btn-quiet btn-sm" onclick="tcTab(&quot;assignments&quot;)">Open</button></span></div>';
+    });
+    noProgress.slice(0, 3).forEach(function (s) {
+      html += '<div class="row"><span class="row-ico">' + hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>' +
+        '<span class="row-main"><span class="row-title">' + hwEsc(s.full_name || 'Student') + '</span>' +
+        '<span class="row-sub">accepted, no lesson opened yet</span></span>' +
+        '<span class="row-actions"><span class="badge badge-neutral">Getting started</span></span></div>';
+    });
+    upcoming.forEach(function (a) {
+      html += '<div class="row"><span class="row-ico">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" style="width:16px;height:16px"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg></span>' +
+        '<span class="row-main"><span class="row-title">' + hwEsc(a.title) + '</span>' +
+        '<span class="row-sub">due ' + hwEsc(hwDate(a.due_at)) + '</span></span>' +
+        '<span class="row-actions"><span class="badge badge-info">Upcoming</span></span></div>';
+    });
+    html += '</div></div>';
+  }
+
+  /* recent activity */
+  html += '<div class="card card-pad space-y-4"><div class="section-head" style="margin-bottom:0">' +
+    '<h3>Recent submissions</h3>' +
+    (subs.length ? '<span class="faint">' + graded.length + ' marked · ' + toReview.length + ' waiting</span>' : '') +
+    '</div>';
+  if (!subs.length) {
+    html += '<div class="empty"><div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg></div>' +
+      '<div class="empty-title">No work handed in yet</div>' +
+      '<div class="empty-text">Once a student submits an assignment it shows up here, with their score and what still needs marking.</div></div>';
+  } else {
+    html += '<div class="row-list">' + subs.slice(0, 5).map(function (x) {
+      const done = x.status === 'graded';
+      const sc = (x.score === null || x.score === undefined) ? '' :
+        (done ? ' · ' + x.score + '/' + (x.max_score || 0) : '');
+      return '<div class="row"><span class="row-ico">' + hwEsc((nameOf[x.student_id] || 'S').charAt(0).toUpperCase()) + '</span>' +
+        '<span class="row-main"><span class="row-title">' + hwEsc(nameOf[x.student_id] || 'Student') + '</span>' +
+        '<span class="row-sub">' + hwEsc(titleOf[x.assignment_id] || 'Assignment') + sc + '</span></span>' +
+        '<span class="row-actions"><span class="badge ' + (done ? 'badge-ok' : 'badge-warn') + '"><span class="dot ' +
+        (done ? 'dot-ok' : 'dot-warn') + '"></span>' + (done ? 'Marked' : 'To review') + '</span></span></div>';
+    }).join('') + '</div>';
+  }
+  html += '</div>';
+
+  /* students snapshot */
+  if (accepted.length) {
+    html += '<div class="card card-pad space-y-4"><div class="section-head" style="margin-bottom:0"><h3>Students</h3>' +
+      '<button class="btn-ghost btn-sm" onclick="tcTab(&quot;students&quot;)">Manage</button></div><div class="row-list">' +
+      accepted.slice(0, 5).map(function (s) {
+        const parts = progressOf[s.id] || 0;
+        const pct = Math.min(100, Math.round(parts / 45 * 100));
+        return '<div class="row"><span class="row-ico">' + hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>' +
+          '<span class="row-main"><span class="row-title">' + hwEsc(s.full_name || 'Student') + '</span>' +
+          '<span class="row-sub">' + hwEsc(hwEsc(s.email || '')) + '</span></span>' +
+          '<span class="row-actions" style="min-width:150px">' + tcProgressBar(pct, parts) + '</span></div>';
+      }).join('') + '</div></div>';
+  }
+
+  el.innerHTML = html;
+}
+
+function tcProgressBar(pct, parts) {
+  return '<span class="progress-row" style="width:100%"><span class="progress-track">' +
+    '<span class="progress-fill-bar" style="width:' + pct + '%"></span></span>' +
+    '<span class="progress-num">' + (parts ? parts + ' opened' : 'none yet') + '</span></span>';
+}
+
 function tcRenderStudents() {
   const el = document.getElementById('tc-panel-students');
   if (!el) return;
-  if (TC.loading && !TC.students.length) { el.innerHTML = '<div class="card p-8 faint text-sm">Loading…</div>'; return; }
+  if (TC.loading && !TC.students.length) {
+    el.innerHTML = '<div class="sk sk-card"></div><div class="sk sk-card"></div>';
+    return;
+  }
 
   const waiting = tcWaitingStudents();
   const accepted = (TC.students || []).filter(function (s) { return s.status === 'active'; });
   const refused = (TC.students || []).filter(function (s) { return s.status === 'rejected'; });
 
+  function avatar(s) {
+    return '<span class="row-ico avatar-sm">' + hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>';
+  }
+  function who(s) {
+    return '<span class="row-main"><span class="row-title">' + hwEsc(s.full_name || 'Student') + '</span>' +
+      '<span class="row-sub">' + hwEsc(s.email || '') + '</span></span>';
+  }
+
   let html = '';
 
   /* requests first — this is what the teacher came here to do */
   if (waiting.length) {
-    html += '<div class="card p-6 space-y-4" style="border-color:var(--accent2)">' +
-      '<p class="font-semibold">' + waiting.length +
-      (waiting.length === 1 ? ' person is waiting' : ' people are waiting') +
-      ' to join</p>' +
-      '<p class="faint text-xs">They signed up themselves. Accept them and they can see the work you assign.</p>' +
-      '<div class="space-y-2">' + waiting.map(function (s) {
+    html += '<div class="card card-pad space-y-4" style="border-color:var(--card-hover-border)">' +
+      '<div><p class="font-semibold">' + waiting.length +
+      (waiting.length === 1 ? ' person is waiting to join' : ' people are waiting to join') + '</p>' +
+      '<p class="faint" style="font-size:12.5px;margin-top:4px">They signed up themselves. ' +
+      'Accept them and they can see the work you assign.</p></div>' +
+      '<div class="row-list">' + waiting.map(function (s) {
         const busy = TC.busy[s.id];
-        return '<div class="flex items-center gap-3 flex-wrap text-sm p-3 rounded-xl" style="background:var(--surface2)">' +
-          '<span class="w-7 h-7 rounded-full text-xs flex items-center justify-center" style="background:var(--badge-bg)">' +
-          hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>' +
-          '<span><b>' + hwEsc(s.full_name || 'Student') + '</b>' +
-          '<span class="faint text-xs"> · ' + hwEsc(s.email || '') + '</span></span>' +
-          '<span class="ml-auto flex gap-2">' +
-          '<button class="btn-primary"' + (busy ? ' disabled' : '') +
+        return '<div class="row">' + avatar(s) + who(s) +
+          '<span class="row-actions ml-auto">' +
+          '<button class="btn-primary btn-sm"' + (busy ? ' disabled' : '') +
           ' onclick="tcDecideStudent(\'' + s.id + '\',\'accept\')">' +
           (busy === 'accept' ? 'Accepting…' : 'Accept') + '</button>' +
-          '<button class="btn-secondary"' + (busy ? ' disabled' : '') +
+          '<button class="btn-secondary btn-sm"' + (busy ? ' disabled' : '') +
           ' onclick="tcDecideStudent(\'' + s.id + '\',\'decline\')">' +
           (busy === 'decline' ? 'Declining…' : 'Decline') + '</button>' +
           '</span></div>';
       }).join('') + '</div></div>';
   }
 
-  html += '<div class="card p-6 space-y-3"><p class="font-semibold">Your students</p>';
+  html += '<div class="card card-pad space-y-4">' +
+    '<div class="section-head" style="margin-bottom:0"><div>' +
+    '<h3>Your students</h3>' +
+    '<p class="faint" style="font-size:12.5px">' +
+    (accepted.length ? accepted.length + ' accepted' : 'Nobody accepted yet') + '</p>' +
+    '</div></div>';
   if (accepted.length) {
-    html += '<div class="space-y-2">' + accepted.map(function (s) {
-      return '<div class="flex items-center gap-3 flex-wrap text-sm p-3 rounded-xl" style="background:var(--surface2)">' +
-        '<span class="w-7 h-7 rounded-full text-xs flex items-center justify-center" style="background:var(--badge-bg)">' +
-        hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>' +
-        '<span><b>' + hwEsc(s.full_name || 'Student') + '</b>' +
-        '<span class="faint text-xs"> · ' + hwEsc(s.email || '') + '</span></span>' +
-        '<span class="faint text-xs ml-auto">' + hwEsc(tcProgressOf(s.id)) + '</span>' +
-        '<button class="btn-secondary" onclick="tcNewAssignmentFor(\'' + s.id + '\')">Assign work</button>' +
-        '</div>';
+    html += '<div class="row-list">' + accepted.map(function (s) {
+      const parts = (TC.progress || []).filter(function (x) { return x.student_id === s.id; }).length;
+      const pct = Math.min(100, Math.round(parts / 45 * 100));
+      return '<div class="row">' + avatar(s) + who(s) +
+        '<span class="row-actions ml-auto">' +
+        tcProgressBar(pct, parts) +
+        '<button class="btn-quiet btn-sm" onclick="tcNewAssignmentFor(\'' + s.id + '\')">Assign work</button>' +
+        '</span></div>';
     }).join('') + '</div>';
   } else {
-    html += '<p class="faint text-sm">Nobody yet. Tell whoever you are teaching to sign up on this site — ' +
-      'their request will appear here for you to accept.</p>';
+    html += '<div class="empty">' +
+      '<div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/></svg></div>' +
+      '<div class="empty-title">No students yet</div>' +
+      '<div class="empty-text">Nobody yet. Tell whoever you are teaching to sign up on this site — ' +
+      'their request will appear here for you to accept.</div></div>';
   }
   html += '</div>';
 
   if (refused.length) {
-    html += '<div class="card p-6 space-y-2"><p class="font-semibold">Not accepted</p>' +
-      '<div class="space-y-1">' + refused.map(function (s) {
+    html += '<div class="card card-pad space-y-3"><p class="font-semibold">Not accepted</p>' +
+      '<div class="row-list">' + refused.map(function (s) {
         const busy = TC.busy[s.id];
-        return '<div class="flex items-center gap-3 text-xs p-2 rounded-lg" style="background:var(--surface2)">' +
-          '<span>' + hwEsc(s.full_name || 'Student') + ' · ' + hwEsc(s.email || '') + '</span>' +
-          '<span class="ml-auto"><button class="btn-secondary"' + (busy ? ' disabled' : '') +
+        return '<div class="row" style="padding:10px 14px">' + avatar(s) + who(s) +
+          '<span class="row-actions ml-auto"><button class="btn-quiet btn-sm"' + (busy ? ' disabled' : '') +
           ' onclick="tcDecideStudent(\'' + s.id + '\',\'accept\')">' +
           (busy === 'accept' ? 'Accepting…' : 'Accept anyway') + '</button></span></div>';
       }).join('') + '</div></div>';
@@ -2390,6 +2872,11 @@ function hwUpdatePendingBadge() {
 }
 
 /* ---------- assignment builder ---------- */
+function tcNewAssignment() {
+  TC.builder = tcBlankBuilder();
+  tcTab('assignments');
+}
+
 function tcNewAssignmentFor(studentId) {
   TC.builder = tcBlankBuilder();
   if (studentId) TC.builder.studentIds = [studentId];
@@ -2422,8 +2909,9 @@ function tcRenderAssignments() {
   const lessonTitle = (TRACKS[b.track] && TRACKS[b.track].lessons && TRACKS[b.track].lessons[b.no])
     ? TRACKS[b.track].lessons[b.no].title : null;
 
-  let html = '<div class="card p-6 space-y-5">' +
-    '<p class="font-semibold">' + (b.id ? 'Edit assignment' : 'New assignment') + '</p>' +
+  let html = '<div class="card card-pad space-y-5">' +
+    '<div class="section-head" style="margin-bottom:0"><h3>' + (b.id ? 'Edit assignment' : 'New assignment') + '</h3>' +
+    '<button class="btn-ghost btn-sm" onclick="tcResetBuilder()">Clear</button></div>' +
     '<div><label class="label">Title</label>' +
     '<input class="input" id="tc-b-title" value="' + hwEsc(b.title) + '" placeholder="Homework: Build the Message" oninput="tcBuilderSet(\'title\', this.value)"></div>' +
     '<div><label class="label">Instructions</label>' +
@@ -2437,7 +2925,7 @@ function tcRenderAssignments() {
     '</div></div>';
 
   if (b.kind === 'lesson') {
-    html += '<div class="p-5 rounded-2xl space-y-3" style="background:var(--surface2)">' +
+    html += '<div class="card-soft card-pad space-y-3">' +
       '<div class="flex gap-3 flex-wrap">' +
       '<div class="flex-1"><label class="label">Track</label><select class="input" onchange="tcBuilderSet(\'track\', this.value)">' +
       tracks.map(function (t) {
@@ -2451,10 +2939,11 @@ function tcRenderAssignments() {
         ? 'Students will open: <b>' + hwEsc(lessonTitle) + '</b>. The lesson content stays exactly as it is — this is only a reference.'
         : 'No content is loaded for this lesson yet, but you can still assign it.') + '</p></div>';
   } else {
-    html += '<div class="p-5 rounded-2xl space-y-3" style="background:var(--surface2)">';
+    html += '<div class="card-soft card-pad space-y-3">';
     if (!b.questions.length) html += '<p class="faint text-xs">No questions yet.</p>';
     b.questions.forEach(function (q, i) {
-      html += '<div class="p-4 rounded-xl space-y-2" style="background:var(--surface)">' +
+      html += '<div class="card-soft" style="padding:16px 18px;background:var(--surface)">' +
+        '<div class="space-y-2">' +
         '<div class="flex items-center gap-2 flex-wrap">' +
         '<span class="text-xs faint">Q' + (i + 1) + '</span>' +
         '<select class="input" style="width:auto" onchange="tcQSet(' + i + ',\'qtype\', this.value)">' +
@@ -2474,9 +2963,9 @@ function tcRenderAssignments() {
         html += '<p class="faint text-xs">Written answers are marked by you after the student submits.</p>';
       }
       html += '<input class="input" placeholder="Explanation shown after marking (optional)" value="' + hwEsc(q.explanation) + '" oninput="tcQSet(' + i + ',\'explanation\', this.value)">';
-      html += '</div>';
+      html += '</div></div>';
     });
-    html += '<button class="btn-secondary" onclick="tcQAdd()">+ Add question</button></div>';
+    html += '<button class="btn-quiet" onclick="tcQAdd()">+ Add question</button></div>';
   }
 
   html += '<div><label class="label">Who gets it?</label>';
@@ -2485,7 +2974,7 @@ function tcRenderAssignments() {
     html += '<p class="faint text-xs">You have no accepted students yet. ' +
       'Accept someone on the Students tab first.</p>';
   } else {
-    html += '<label class="flex items-center gap-3 text-sm p-3 rounded-xl" style="background:var(--surface2)">' +
+    html += '<label class="card-row" style="cursor:pointer">' +
       '<input type="checkbox"' + (b.allStudents ? ' checked' : '') +
       ' onchange="tcBuilderSet(\'allStudents\', this.checked)"> ' +
       '<b>Everyone</b><span class="faint text-xs ml-auto">' + students.length +
@@ -2493,7 +2982,7 @@ function tcRenderAssignments() {
     if (!b.allStudents) {
       html += '<div class="space-y-2 mt-2">' + students.map(function (s) {
         const on = b.studentIds.indexOf(s.id) >= 0;
-        return '<label class="flex items-center gap-3 text-sm p-3 rounded-xl" style="background:var(--surface2)">' +
+        return '<label class="card-row" style="cursor:pointer">' +
           '<input type="checkbox"' + (on ? ' checked' : '') +
           ' onchange="tcBuilderToggleStudent(\'' + s.id + '\')"> ' + hwEsc(s.name) + '</label>';
       }).join('') + '</div>';
@@ -2509,9 +2998,12 @@ function tcRenderAssignments() {
   html += '</div>';
 
   /* existing assignments */
-  html += '<p class="font-semibold mt-6">Your assignments</p>';
+  html += '<div class="section-head" style="margin-top:8px"><h3>Your assignments</h3>' +
+    '<span class="faint">' + TC.assignments.length + ' total</span></div>';
   if (!TC.assignments.length) {
-    html += '<div class="card p-8 text-center faint text-sm">Nothing created yet.</div>';
+    html += '<div class="empty"><div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>' +
+      '<div class="empty-title">No assignments yet</div>' +
+      '<div class="empty-text">Create one above, then publish it. Only published work becomes visible to students.</div></div>';
   }
   TC.assignments.forEach(function (a) {
     const ref = a.kind === 'lesson'
@@ -2519,15 +3011,15 @@ function tcRenderAssignments() {
       : 'Custom questions';
     const st = a.status === 'published' ? hwPill('submitted', 'Published')
       : a.status === 'closed' ? hwPill('not_started', 'Closed') : hwPill('in_progress', 'Draft');
-    html += '<div class="card p-6 space-y-3">' +
+    html += '<div class="card card-pad space-y-3">' +
       '<div class="flex items-start justify-between gap-4 flex-wrap"><div>' +
-      '<p class="font-semibold">' + hwEsc(a.title) + '</p>' +
-      '<p class="faint text-xs mt-1">' + ref + ' · assigned ' + hwEsc(hwDate(a.assigned_at)) + ' · due ' + hwEsc(hwDate(a.due_at)) + '</p>' +
+      '<p class="row-title">' + hwEsc(a.title) + '</p>' +
+      '<p class="row-sub">' + ref + ' · assigned ' + hwEsc(hwDate(a.assigned_at)) + ' · due ' + hwEsc(hwDate(a.due_at)) + '</p>' +
       '</div>' + st + '</div>' +
-      '<div class="flex gap-2 flex-wrap">' +
-      (a.status === 'draft' ? '<button class="btn-primary" onclick="tcSetStatus(\'' + a.id + '\',\'published\')">Publish</button>' : '') +
-      (a.status === 'published' ? '<button class="btn-secondary" onclick="tcSetStatus(\'' + a.id + '\',\'closed\')">Close</button>' : '') +
-      '<button class="btn-secondary" onclick="tcOpenSubmissions(\'' + a.id + '\')">Submissions</button>' +
+      '<div class="row-actions">' +
+      (a.status === 'draft' ? '<button class="btn-primary btn-sm" onclick="tcSetStatus(\'' + a.id + '\',\'published\')">Publish</button>' : '') +
+      (a.status === 'published' ? '<button class="btn-quiet btn-sm" onclick="tcSetStatus(\'' + a.id + '\',\'closed\')">Close</button>' : '') +
+      '<button class="btn-quiet btn-sm" onclick="tcOpenSubmissions(\'' + a.id + '\')">Submissions</button>' +
       '</div></div>';
   });
 
