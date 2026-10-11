@@ -136,17 +136,103 @@ end $$;
 -- A_DRAFT: custom, stays draft     A_OTHER: T2's lesson -> class C2
 
 -- ---------- fixture: sign-ups (fires handle_new_user) -------
+-- The role is now decided from proof, not from the signup claim, so the
+-- signups happen in a deliberate order.
+
+-- 1. the very first account bootstraps the school as the owner
 insert into auth.users (id, email, raw_user_meta_data) values
-  ('11111111-1111-1111-1111-111111111111','t1@mt.test','{"role":"teacher","full_name":"Teacher One"}'),
-  ('22222222-2222-2222-2222-222222222222','t2@mt.test','{"role":"teacher","full_name":"Teacher Two"}'),
+  ('11111111-1111-1111-1111-111111111111','t1@mt.test','{"role":"teacher","full_name":"Teacher One"}')
+on conflict (id) do nothing;
+
+select t_eq('the first account becomes the owner/teacher',
+  (select role from public.profiles where id = '11111111-1111-1111-1111-111111111111'), 'teacher');
+
+-- 2. an allowlisted email may be a teacher
+insert into public.teacher_allowlist (email, note) values ('t2@mt.test', 'colleague')
+on conflict (email) do nothing;
+
+insert into auth.users (id, email, raw_user_meta_data) values
+  ('22222222-2222-2222-2222-222222222222','t2@mt.test','{"role":"teacher","full_name":"Teacher Two"}')
+on conflict (id) do nothing;
+
+select t_eq('an allowlisted email is accepted as a teacher',
+  (select role from public.profiles where id = '22222222-2222-2222-2222-222222222222'), 'teacher');
+
+-- 3. an unknown email claiming to be a teacher is refused
+insert into auth.users (id, email, raw_user_meta_data) values
+  ('aaaaaaaa-0000-0000-0000-000000000005','s5@mt.test','{"role":"teacher","full_name":"Sneaky"}')
+on conflict (id) do nothing;
+
+select t_eq('claiming to be a teacher with no proof is refused',
+  (select role from public.profiles where id = 'aaaaaaaa-0000-0000-0000-000000000005'), 'student');
+
+-- 4. a valid invite makes a teacher, once
+insert into public.teacher_invites (code, note) values ('MT-T-TESTCODE', 'unit test')
+on conflict (code) do nothing;
+
+insert into auth.users (id, email, raw_user_meta_data) values
+  ('33333333-3333-3333-3333-333333333333','t3@mt.test',
+   '{"role":"teacher","full_name":"Teacher Three","invite_code":"MT-T-TESTCODE"}')
+on conflict (id) do nothing;
+
+select t_eq('a valid invite code makes a teacher',
+  (select role from public.profiles where id = '33333333-3333-3333-3333-333333333333'), 'teacher');
+select t_eq('the invite is marked used',
+  (select (used_at is not null)::text from public.teacher_invites where code = 'MT-T-TESTCODE'), 'true');
+select t_eq('the invite records who used it',
+  (select (used_by = '33333333-3333-3333-3333-333333333333')::text
+     from public.teacher_invites where code = 'MT-T-TESTCODE'), 'true');
+
+insert into auth.users (id, email, raw_user_meta_data) values
+  ('44444444-4444-4444-4444-444444444444','t4@mt.test',
+   '{"role":"teacher","full_name":"Too Late","invite_code":"MT-T-TESTCODE"}')
+on conflict (id) do nothing;
+
+select t_eq('a used invite cannot be reused',
+  (select role from public.profiles where id = '44444444-4444-4444-4444-444444444444'), 'student');
+
+-- 5. the ordinary students
+insert into auth.users (id, email, raw_user_meta_data) values
   ('aaaaaaaa-0000-0000-0000-000000000001','s1@mt.test','{"role":"student","full_name":"Student One"}'),
   ('aaaaaaaa-0000-0000-0000-000000000002','s2@mt.test','{"role":"student","full_name":"Student Two"}'),
   ('aaaaaaaa-0000-0000-0000-000000000003','s3@mt.test','{"role":"student","full_name":"Student Three"}'),
   ('aaaaaaaa-0000-0000-0000-000000000004','s4@mt.test','{"role":"student","full_name":"Student Four"}')
 on conflict (id) do nothing;
 
-select t_eq('signup creates profiles with server-side role',
-  (select string_agg(role, ',' order by email) from public.profiles), 'student,student,student,student,teacher,teacher');
+select t_eq('every account ends up with the role its proof deserves',
+  (select string_agg(role, ',' order by email) from public.profiles),
+  'student,student,student,student,student,teacher,teacher,teacher,student');
+
+-- ---------- teacher invites through the API ----------
+select t_has('a teacher can mint an invite',
+  t_val('11111111-1111-1111-1111-111111111111',
+        $q$public.make_teacher_invite('for a colleague')$q$), 'MT-T-');
+
+select t_has('a student cannot mint an invite',
+  t_val('aaaaaaaa-0000-0000-0000-000000000001',
+        $q$public.make_teacher_invite('nope')$q$), 'ERROR: teacher_only');
+
+select t_has('a teacher can add an email to the allowlist',
+  t_do('11111111-1111-1111-1111-111111111111',
+    $q$insert into public.teacher_allowlist(email, note) values ('head@school.test','head teacher')$q$),
+  'OK');
+
+select t_has('a student cannot touch the allowlist',
+  t_do('aaaaaaaa-0000-0000-0000-000000000001',
+    $q$insert into public.teacher_allowlist(email) values ('me@nope.test')$q$), 'ERROR');
+
+select t_eq('a student cannot read the allowlist',
+  t_val('aaaaaaaa-0000-0000-0000-000000000001',
+        $q$(select count(*) from public.teacher_allowlist)$q$), '0');
+
+select t_eq('a teacher can read the allowlist',
+  t_val('11111111-1111-1111-1111-111111111111',
+        $q$(select count(*) from public.teacher_allowlist)$q$), '2');
+
+select t_eq('a student cannot read the invites',
+  t_val('aaaaaaaa-0000-0000-0000-000000000001',
+        $q$(select count(*) from public.teacher_invites)$q$), '0');
+
 
 -- ---------- fixture: classes (as teachers, via RLS) ---------
 select t_has('T1 can create a class',

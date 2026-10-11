@@ -15,6 +15,7 @@ undeletable through the API — that is the point of the integrity triggers).
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 import urllib.error
@@ -103,12 +104,39 @@ def signup(email, password, role, name):
             (d.get("user") or {}).get("id"), d)
 
 
+def mgmt(sql):
+    """Run SQL as postgres through the Management API — the operator path.
+
+    Used only to put the test teacher on the allowlist, exactly as a school
+    admin would. Everything else in this file goes through the public API.
+    """
+    try:
+        tok = subprocess.check_output(
+            ["security", "find-generic-password", "-s", "Supabase CLI", "-w"],
+            stderr=subprocess.DEVNULL).decode().strip()
+    except Exception:
+        return None, "no Supabase access token in the keychain"
+    ref = re.search(r"https://([a-z0-9]+)\.supabase\.co", URL)
+    if not tok or not ref:
+        return None, "no token or no project ref"
+    r = urllib.request.Request(
+        "https://api.supabase.com/v1/projects/%s/database/query" % ref.group(1),
+        data=json.dumps({"query": sql}).encode(),
+        headers={"Authorization": "Bearer " + tok, "Content-Type": "application/json"},
+        method="POST")
+    try:
+        with urllib.request.urlopen(r, timeout=60) as resp:
+            return resp.status, resp.read().decode()
+    except urllib.error.HTTPError as e:
+        return e.code, e.read().decode()
+
+
 def main():
     ts = str(int(time.time()))
     pw = "MtTest!" + ts
-    teacher_email = "mt-e2e-teacher+%s@example.com" % ts
-    s1_email = "mt-e2e-s1+%s@example.com" % ts
-    s2_email = "mt-e2e-s2+%s@example.com" % ts
+    teacher_email = "mt-e2e-teacher+%s@movetalk.test" % ts
+    s1_email = "mt-e2e-s1+%s@movetalk.test" % ts
+    s2_email = "mt-e2e-s2+%s@movetalk.test" % ts
     name = "TEST_" + ts
 
     print("== project: %s ==" % URL)
@@ -131,6 +159,13 @@ def main():
       st in (401, 403) and st2 in (401, 403), (st, st2))
 
     # ---------- 1. signups + server-side roles ----------
+    # A teacher account now needs proof. The operator puts this run's teacher
+    # on the allowlist the same way a school admin would; on a brand new
+    # project the very first account is accepted without it.
+    st, d = mgmt("insert into public.teacher_allowlist(email, note) values ('%s','live test run') "
+                 "on conflict (email) do nothing;" % teacher_email)
+    t("the operator can allowlist an email", st in (200, 201), (st, d))
+
     tt, tid, tinfo = signup(teacher_email, pw, "teacher", name + " Teacher")
     t("teacher can sign up", bool(tt), tinfo)
     s1, s1id, s1info = signup(s1_email, pw, "student", name + " S1")
@@ -141,7 +176,7 @@ def main():
         sys.exit("cannot continue without sessions")
 
     st, rows = rest("profiles?select=id,role,full_name&id=eq." + tid, token=tt)
-    t("the database assigned the role 'teacher' from the signup metadata",
+    t("the allowlisted email was given the teacher role by the database",
       st == 200 and rows and rows[0]["role"] == "teacher", rows)
     st, rows = rest("profiles?select=role&id=eq." + s1id, token=s1)
     t("the database assigned the role 'student'", st == 200 and rows and rows[0]["role"] == "student", rows)
@@ -326,6 +361,94 @@ def main():
     t("a student cannot delete an assignment, and it survives",
       rows and len(rows) == 1, (st, st2, rows))
 
+    # ---------- 9b. teacher access is not self-service ----------
+    sneaky = "mt-e2e-sneaky+%s@movetalk.test" % ts
+    st, d = req("POST", "/auth/v1/signup",
+                {"email": sneaky, "password": pw,
+                 "data": {"role": "teacher", "full_name": name + " Sneaky"}})
+    stok = d.get("access_token") or (d.get("session") or {}).get("access_token") if isinstance(d, dict) else None
+    suid = (d.get("user") or {}).get("id") if isinstance(d, dict) else None
+    if stok and suid:
+        st2, rows = rest("profiles?select=role&id=eq." + suid, token=stok)
+        t("claiming to be a teacher with no proof is refused",
+          st2 == 200 and rows and rows[0]["role"] == "student", rows)
+    else:
+        t("claiming to be a teacher with no proof is refused", False, d)
+
+    st, code = rpc("make_teacher_invite", {"p_note": "live test"}, tt)
+    t("a teacher can mint an invite code",
+      st == 200 and isinstance(code, str) and code.startswith("MT-T-"), (st, code))
+
+    st, d = rpc("make_teacher_invite", {"p_note": "nope"}, s1)
+    t("a student cannot mint an invite code", st >= 400, (st, d))
+
+    invited = "mt-e2e-invited+%s@movetalk.test" % ts
+    st, d = req("POST", "/auth/v1/signup",
+                {"email": invited, "password": pw,
+                 "data": {"role": "teacher", "full_name": name + " Invited",
+                          "invite_code": code}})
+    itok = d.get("access_token") or (d.get("session") or {}).get("access_token") if isinstance(d, dict) else None
+    iuid = (d.get("user") or {}).get("id") if isinstance(d, dict) else None
+    if itok and iuid:
+        st2, rows = rest("profiles?select=role&id=eq." + iuid, token=itok)
+        t("a valid invite code does create a teacher",
+          st2 == 200 and rows and rows[0]["role"] == "teacher", rows)
+    else:
+        t("a valid invite code does create a teacher", False, d)
+
+    st, d = req("POST", "/auth/v1/signup",
+                {"email": "mt-e2e-late+%s@movetalk.test" % ts, "password": pw,
+                 "data": {"role": "teacher", "full_name": name + " Late",
+                          "invite_code": code}})
+    lu = (d.get("user") or {}).get("id") if isinstance(d, dict) else None
+    lt = d.get("access_token") or (d.get("session") or {}).get("access_token") if isinstance(d, dict) else None
+    if lu and lt:
+        st2, rows = rest("profiles?select=role&id=eq." + lu, token=lt)
+        t("an invite code cannot be used twice",
+          st2 == 200 and rows and rows[0]["role"] == "student", rows)
+    else:
+        t("an invite code cannot be used twice", False, d)
+
+    st, d = insert("teacher_allowlist", [{"email": "mt-e2e-head+%s@school.test" % ts,
+                                          "added_by": tid}], tt)
+    t("a teacher can allowlist an email by hand", st in (200, 201), (st, d))
+    st, d = insert("teacher_allowlist", [{"email": "nope@school.test"}], s1)
+    t("a student cannot touch the allowlist", st >= 400, (st, d))
+
+    # ---------- 9c. lesson progress ----------
+    st, d = insert("lesson_progress",
+                   [{"student_id": s1id, "track": "a1", "lesson_no": 3, "part": "vocab"}], s1)
+    t("a student can record their own lesson progress", st in (200, 201), (st, d))
+
+    st, d = req("POST", "/rest/v1/lesson_progress",
+                [{"student_id": s1id, "track": "a1", "lesson_no": 3, "part": "finalTask"}],
+                s1, {"Prefer": "return=representation,resolution=merge-duplicates"})
+    t("recording another part of the same lesson works", st in (200, 201), (st, d))
+
+    st, d = insert("lesson_progress",
+                   [{"student_id": s1id, "track": "a1", "lesson_no": 1, "part": "vocab"}], s2)
+    t("a student cannot record progress for somebody else", st >= 400, (st, d))
+
+    st, rows = rest("lesson_progress?select=student_id,part,track,lesson_no", token=tt)
+    t("the teacher can see their own students' progress", st == 200 and rows, rows)
+
+    st, rows = rest("lesson_progress?select=student_id", token=s2)
+    t("student 2 cannot see student 1's progress",
+      st == 200 and not rows, (st, rows))
+
+    # ---------- 9d. passwords ----------
+    # The reset *endpoint* is reachable and validates the address. Actually
+    # delivering the email needs a real mailbox and custom SMTP: Supabase's
+    # built-in mailer only sends to the project team's own addresses.
+    st, d = req("POST", "/auth/v1/recover", {"email": s1_email})
+    t("the password reset endpoint is reachable and validates the address",
+      st in (200, 400, 429), (st, d))
+
+    st, d = req("PUT", "/auth/v1/user", {"password": pw + "Z"}, token=s2)
+    t("a signed-in user can change their own password", st == 200, (st, d))
+    st, d = req("PUT", "/auth/v1/user", {"password": pw}, token=s2)
+    t("... and change it back", st == 200, (st, d))
+
     # ---------- 10. what is left behind ----------
     print()
     print("== test data created in the project ==")
@@ -351,7 +474,7 @@ def main():
     print("   delete from public.assignments        where id = '%s';" % aid)
     print("   delete from public.class_members      where class_id = '%s';" % cid)
     print("   delete from public.classes            where id = '%s';" % cid)
-    print("   delete from public.profiles           where email like 'mt-e2e-%%@example.com';")
+    print("   delete from public.profiles           where email like 'mt-e2e-%';")
 
     sys.exit(1 if FAIL else 0)
 

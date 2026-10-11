@@ -24,12 +24,16 @@ function t(name, cond, extra = '') {
   else { fail++; console.log('FAIL | ' + name + (extra ? ' | ' + extra : '')); }
 }
 
-const RETURNS = 'return {TRACKS,TRACK_PARTS,LESSON_DATA,AUDIO_MAP,go,trackGo,trackBody,renderTrack,' +
+const RETURNS = 'return {TRACKS,TRACK_PARTS,LESSON_DATA,AUDIO_MAP,go,trackGo,trackBody,trackPart,renderTrack,' +
   'renderDashboard,renderHomework,renderTeacher,hwStatus,hwGate,hwOpenLesson,hwEsc,hwDate,' +
   'HW,TC,HW_ON,HB,tcBlankBuilder,tcRenderAssignments,tcBuilderSet,tcBuilderKind,' +
   'tcSaveAssignment,tcGrade,hwLoadSession,hwLoad,hwOpen,hwRenderList,hwSubmit,hwJoinClass,' +
-  'tcLoad,tcTab,tcAllStudents,' +
-  'setUser:(u)=>{USER=u},getUser:()=>USER};';
+  'tcLoad,tcTab,tcAllStudents,tcProgressOf,tcInviteCard,syncAuthFields,showAuthChange,' +
+  'hwForgotPassword,hwRecordProgress,hwLoadProgress,doAuth,setRole,showAuth,' +
+  'setUser:(u)=>{USER=u},getUser:()=>USER,' +
+  'setAuthMode:(m)=>{AUTH_MODE=m},getAuthMode:()=>AUTH_MODE,' +
+  'setRoleState:(r)=>{USER_ROLE=r},getRoleState:()=>USER_ROLE,' +
+  'el:(id)=>document.getElementById(id)};';
 
 /* ---------- harness ---------- */
 function makeInstance(opts) {
@@ -96,7 +100,7 @@ function fakeSupabase(tables) {
         };
       },
       update() { return { eq() { return Promise.resolve({ data: null, error: null }); } }; },
-      upsert() { return Promise.resolve({ data: null, error: null }); },
+      upsert(arg, opts) { (tables.__calls = tables.__calls || []).push(['upsert', table, arg, opts]); return Promise.resolve({ data: null, error: null }); },
       then(res) { return Promise.resolve({ data: tables[table] || [], error: null }).then(res); }
     };
     return api;
@@ -105,8 +109,10 @@ function fakeSupabase(tables) {
     auth: {
       getSession() { return Promise.resolve({ data: { session: { user: { id: tables.__uid, email: tables.__email } } } }); },
       signOut() { return Promise.resolve({ error: null }); },
-      signUp() { return Promise.resolve({ data: { session: null }, error: null }); },
-      signInWithPassword() { return Promise.resolve({ data: {}, error: null }); }
+      signUp(arg) { (tables.__calls = tables.__calls || []).push(['signUp', arg]); return Promise.resolve({ data: { session: { user: { id: tables.__uid } } }, error: null }); },
+      signInWithPassword(arg) { (tables.__calls = tables.__calls || []).push(['signIn', arg]); return Promise.resolve({ data: {}, error: null }); },
+      updateUser(arg) { (tables.__calls = tables.__calls || []).push(['updateUser', arg]); return Promise.resolve({ error: null }); },
+      resetPasswordForEmail(email, opts) { (tables.__calls = tables.__calls || []).push(['reset', email, opts]); return Promise.resolve({ error: null }); }
     },
     from,
     rpc(name) {
@@ -208,8 +214,13 @@ t('the client never writes is_correct itself', !/is_correct\s*:/.test(hwSrc));
    5. AN ASSIGNMENT REFERENCES A LESSON, IT DOES NOT COPY IT
    ============================================================ */
 t('the payload carries a stable lesson reference', /lesson_track:/.test(hwSrc) && /lesson_no:/.test(hwSrc));
-t('the payload never carries lesson content',
-  !/parts\s*:/.test(hwSrc) && !/LESSON_DATA/.test(hwSrc) && !/flashcard/.test(hwSrc));
+const payloadBlock = (hwSrc.match(/const payload = \{[\s\S]*?\n  \};/) || [''])[0];
+t('the assignment payload carries only a reference and metadata',
+  /teacher_id/.test(payloadBlock) && /lesson_track:/.test(payloadBlock) &&
+  /lesson_no:/.test(payloadBlock) && !/parts|blocks|flashcard|LESSON_DATA/.test(payloadBlock),
+  payloadBlock.slice(0, 140));
+t('the homework module never writes lesson content anywhere',
+  !/LESSON_DATA/.test(hwSrc) && !/flashcard/.test(hwSrc));
 t('opening an assigned lesson reuses the existing lesson viewer',
   /function hwOpenLesson\(track, no\)/.test(hwSrc) && /trackGo\(track, no\)/.test(hwSrc));
 
@@ -399,6 +410,142 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   ta.tcSaveAssignment('published');
   t('publishing a custom assignment with no questions is refused',
     TEACH.captured.toasts.some(x => /at least one question/i.test(x)), TEACH.captured.toasts.join(' | '));
+
+  /* ============================================================
+     11. TEACHER ACCESS — nobody can simply claim to be a teacher
+     ============================================================ */
+  t('the sign-up form asks for a teacher invite code',
+    /id="auth-invite"/.test(src) && /Teacher invite code/.test(src));
+  t('the invite field appears only for a teacher sign-up',
+    (() => {
+      sa.setAuthMode('signup'); sa.setRoleState('student'); sa.syncAuthFields();
+      const hidden = ONLINE.els['auth-invite-field'].classList.contains('hidden');
+      sa.setRoleState('teacher'); sa.syncAuthFields();
+      const shown = !ONLINE.els['auth-invite-field'].classList.contains('hidden');
+      sa.setAuthMode('login'); sa.syncAuthFields();
+      const offOnLogin = ONLINE.els['auth-invite-field'].classList.contains('hidden');
+      return hidden && shown && offOnLogin;
+    })());
+  t('the invite code is handed to the server at sign-up', /meta\.invite_code\s*=\s*invite/.test(src));
+  t('a refused teacher claim is reported back to the user', /Signed up as a student/.test(src));
+
+  STUDENT_TABLES.__calls = [];
+  sa.el('auth-email').value = 'newbie@x.test';
+  sa.el('auth-pass').value = 'secret123';
+  sa.el('auth-name').value = 'Newbie';
+  sa.el('auth-invite').value = 'MT-T-ABCD1234';
+  sa.setUser(null);
+  sa.setAuthMode('signup'); sa.setRoleState('teacher');
+  ONLINE.captured.toasts.length = 0;
+  await sa.doAuth();
+  const signupCall = (STUDENT_TABLES.__calls || []).filter(c => c[0] === 'signUp')[0];
+  t('the sign-up carries the invite code in the account metadata',
+    signupCall && signupCall[1].options.data.invite_code === 'MT-T-ABCD1234' &&
+    signupCall[1].options.data.role === 'teacher',
+    JSON.stringify(signupCall && signupCall[1].options.data));
+  t('being downgraded to a student is announced, not silent',
+    ONLINE.captured.toasts.some(x => /not valid/.test(x)), ONLINE.captured.toasts.join(' | '));
+
+  t('a teacher can mint an invite from the workspace', /make_teacher_invite/.test(hwSrc));
+  t('a teacher can allowlist an email instead', /teacher_allowlist/.test(hwSrc));
+  ta.TC.invites = [{ code: 'MT-T-OPEN1', note: 'for Anna', used_at: null },
+                   { code: 'MT-T-USED1', note: '', used_at: '2026-10-01' }];
+  const inviteCard = ta.tcInviteCard();
+  t('the invite card shows the codes that are still unused',
+    inviteCard.includes('MT-T-OPEN1') && !inviteCard.includes('MT-T-USED1'));
+  t('the invite card explains why teacher accounts are restricted',
+    /every visitor could register as a teacher/.test(inviteCard));
+
+  /* ============================================================
+     12. LESSON PROGRESS LIVES ON THE SERVER
+     ============================================================ */
+  t('opening a lesson part records progress', /hwRecordProgress\(tk,\s*TRACK_NUM\[tk\],\s*p\)/.test(src));
+  t('the dashboard reads the server record', /if\(typeof hwLoadProgress==='function'\)/.test(src));
+  t('progress is written to lesson_progress', /from\('lesson_progress'\)[\s\S]{0,60}\.upsert/.test(hwSrc));
+  t('it merges on the key the table enforces',
+    /onConflict: 'student_id,track,lesson_no,part'/.test(hwSrc));
+  t('a teacher opening a lesson does not write student progress',
+    /USER\.role !== 'student'/.test(hwSrc));
+  t('a part is only recorded once per session', /if \(HW_SEEN\[key\]\) return/.test(hwSrc));
+
+  STUDENT_TABLES.lesson_progress = [
+    { student_id: 'u1', track: 'a1', lesson_no: 3, part: 'vocab' },
+    { student_id: 'u1', track: 'a1', lesson_no: 3, part: 'finalTask' },
+    { student_id: 'u1', track: 'a1', lesson_no: 4, part: 'vocab' }
+  ];
+  const prog = await sa.hwLoadProgress();
+  t('the dashboard counts a lesson once its final task is reached',
+    prog && prog.lessons === 1 && prog.opened === 2 && prog.parts === 3, JSON.stringify(prog));
+
+  STUDENT_TABLES.__calls = [];
+  sa.setUser({ id: 'u1', name: 'Stu', email: 's@x.test', role: 'student' });
+  await sa.hwRecordProgress('a1', 5, 'vocab');
+  const rec = (STUDENT_TABLES.__calls || []).filter(c => c[0] === 'upsert' && c[1] === 'lesson_progress')[0];
+  t('a student records a newly opened part against their own id',
+    rec && rec[2].student_id === 'u1' && rec[2].track === 'a1' &&
+    rec[2].lesson_no === 5 && rec[2].part === 'vocab', JSON.stringify(rec));
+
+  STUDENT_TABLES.__calls = [];
+  sa.setUser({ id: 't1', name: 'Teach', email: 't@x.test', role: 'teacher' });
+  await sa.hwRecordProgress('a1', 5, 'vocab');
+  t('... and a teacher records nothing',
+    !(STUDENT_TABLES.__calls || []).some(c => c[0] === 'upsert'), JSON.stringify(STUDENT_TABLES.__calls));
+
+  ta.TC.progress = [
+    { student_id: 's1', track: 'a1', lesson_no: 1, part: 'vocab' },
+    { student_id: 's1', track: 'a1', lesson_no: 1, part: 'finalTask' },
+    { student_id: 's1', track: 'a1', lesson_no: 2, part: 'vocab' }
+  ];
+  t('the teacher sees a per-student summary',
+    /1 lesson\(s\) finished · 2 opened/.test(ta.tcProgressOf('s1')), ta.tcProgressOf('s1'));
+  t('a student who has opened nothing says so',
+    ta.tcProgressOf('nobody') === 'no lessons opened yet', ta.tcProgressOf('nobody'));
+
+  /* ============================================================
+     13. PASSWORDS
+     ============================================================ */
+  t('there is a forgot-password link', /id="auth-forgot-btn"/.test(src) && /hwForgotPassword\(\)/.test(src));
+  t('the forgot link shows only on the sign-in screen',
+    (() => {
+      sa.setAuthMode('login'); sa.syncAuthFields();
+      const on = !ONLINE.els['auth-forgot-btn'].classList.contains('hidden');
+      sa.setAuthMode('signup'); sa.syncAuthFields();
+      const off = ONLINE.els['auth-forgot-btn'].classList.contains('hidden');
+      sa.setAuthMode('login'); sa.syncAuthFields();
+      return on && off;
+    })());
+  t('the dashboard offers a password change', /onclick="showAuthChange\(\)"/.test(src));
+
+  STUDENT_TABLES.__calls = [];
+  sa.el('auth-email').value = 'someone@x.test';
+  await sa.hwForgotPassword();
+  const reset = (STUDENT_TABLES.__calls || []).filter(c => c[0] === 'reset')[0];
+  t('forgot password asks the server to email a reset link',
+    reset && reset[1] === 'someone@x.test', JSON.stringify(reset));
+
+  sa.el('auth-email').value = '';
+  await sa.hwForgotPassword();
+  t('forgot password with no email explains what to do first',
+    /Type your email above first/.test(sa.el('auth-msg').textContent),
+    sa.el('auth-msg').textContent);
+
+  STUDENT_TABLES.__calls = [];
+  STUDENT_TABLES.__email = 's@x.test';
+  sa.setUser({ id: 'u1', name: 'Stu', email: 's@x.test', role: 'student' });
+  sa.showAuthChange();
+  t('the change screen is its own mode', sa.getAuthMode() === 'change');
+  t('the change screen is titled and labelled for its job',
+    /Change password/.test(sa.el('auth-title').textContent) &&
+    /New password/.test(sa.el('auth-pass-label').textContent) &&
+    /Save password/.test(sa.el('auth-submit').textContent));
+  t('the change screen pre-fills the signed-in email',
+    sa.el('auth-email').value === 's@x.test');
+  sa.el('auth-pass').value = 'brandNew123';
+  await sa.doAuth();
+  const upd = (STUDENT_TABLES.__calls || []).filter(c => c[0] === 'updateUser')[0];
+  t('saving asks the server to set the new password',
+    upd && upd[1].password === 'brandNew123', JSON.stringify(upd));
+  t('after saving it returns to the normal sign-in mode', sa.getAuthMode() === 'login');
 
   /* ============================================================
      10. XSS + NO INTERNAL NAMING IN USER-FACING COPY

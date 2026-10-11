@@ -53,10 +53,15 @@ run() {  # run() <label> <file>
 
 run "0. supabase auth shim"        "$ROOT/tests/sql/000_shim.sql"
 
-# Run the migration twice on purpose: it must be safe to re-run.
-run "1. migration (first run)"     "$ROOT/sql/001_homework.sql"
-run "2. migration (re-run / idempotency)" "$ROOT/sql/001_homework.sql"
-echo "   -> migration is idempotent"
+# Every migration, in filename order, then all of them again: they must be
+# safe to re-run.
+for f in "$ROOT"/sql/0*.sql; do
+  run "migration $(basename "$f")" "$f"
+done
+for f in "$ROOT"/sql/0*.sql; do
+  run "re-run    $(basename "$f")" "$f"
+done
+echo "   -> every migration is idempotent"
 
 echo "3. no default grants applied: the bare container already has none,"
 echo "   so the migration has to grant everything it needs itself."

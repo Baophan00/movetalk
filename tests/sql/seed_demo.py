@@ -205,6 +205,19 @@ def main():
                      "p_status": "graded"}, tt)
         print("   teacher graded the custom drill -> %s" % d)
 
+    # ---- a little lesson progress, so the teacher's roster has something to show ----
+    prog = [{"student_id": sid, "track": "a1", "lesson_no": 3, "part": p}
+            for p in ("vocab", "grammar", "reading", "conversations", "listening",
+                      "exercises", "speaking", "roleplay", "finalTask")]
+    prog.append({"student_id": sid, "track": "e2", "lesson_no": 1, "part": "vocab"})
+    st, d = req("POST", "/rest/v1/lesson_progress", prog, s1,
+                {"Prefer": "return=representation,resolution=merge-duplicates"})
+    print("   student lesson progress recorded: %s" % ("ok" if st in (200, 201) else d))
+
+    # ---- an invite code for the owner, so you can sign up as a teacher ----
+    st, code = rpc("make_teacher_invite", {"p_note": "for the owner"}, tt)
+    owner_code = code if st == 200 and isinstance(code, str) else None
+
     print()
     print("=========================================")
     print(" Demo accounts (live site: https://movetalk.surge.sh)")
@@ -213,6 +226,13 @@ def main():
     print(" Student  %s" % STUDENT)
     print(" Password %s   (same for both)" % PASSWORD)
     print(" Class    %s — join code %s" % (CLASS_NAME, JOIN_CODE))
+    if owner_code:
+        print()
+        print(" YOUR OWN TEACHER ACCOUNT")
+        print(" Sign up with your own email and use this invite code:")
+        print("     %s" % owner_code)
+        print(" It works once. Codes are also creatable in the site, under")
+        print(" Teaching > Invite another teacher.")
     print()
     print(" Sign in as the student to see the homework list, open the lesson")
     print(" assignment, read the marked answers and the feedback.")

@@ -36,6 +36,7 @@ const HW = {
 const TC = {
   ready: false, loading: false, tab: 'classes',
   classes: [], rosters: {}, assignments: [], rosterOf: {},
+  progress: [], invites: [],
   builder: null, openSubs: null, results: []
 };
 
@@ -452,6 +453,11 @@ async function tcLoad() {
       .order('created_at', { ascending: false });
     if (a.error) throw a.error;
     TC.assignments = a.data || [];
+    const p = await HB.from('lesson_progress').select('student_id,track,lesson_no,part');
+    TC.progress = (p && !p.error && p.data) ? p.data : [];
+    const inv = await HB.from('teacher_invites')
+      .select('code,note,created_at,used_at').order('created_at', { ascending: false }).limit(10);
+    TC.invites = (inv && !inv.error && inv.data) ? inv.data : [];
     TC.ready = true;
   } catch (e) {
     hwErr(e, 'Could not load your classes');
@@ -506,6 +512,8 @@ function tcRenderClasses() {
     '<button class="btn-primary" onclick="tcCreateClass()">Create class</button></div>' +
     '<p class="faint text-xs">Students join with the class code shown on each class below.</p></div>';
 
+  html += tcInviteCard();
+
   if (!TC.classes.length) {
     html += '<div class="card p-8 text-center faint text-sm">No classes yet. Create one to start assigning work.</div>';
   }
@@ -520,11 +528,12 @@ function tcRenderClasses() {
       '</div>';
     if (roster.length) {
       html += '<div class="space-y-2">' + roster.map(function (s) {
+        const prog = tcProgressOf(s.student_id);
         return '<div class="flex items-center gap-3 text-sm p-3 rounded-xl" style="background:var(--surface2)">' +
           '<span class="w-7 h-7 rounded-full text-xs flex items-center justify-center" style="background:var(--badge-bg)">' +
           hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>' +
           '<span>' + hwEsc(s.full_name || 'Student') + '</span>' +
-          '<span class="faint text-xs ml-auto">' + hwEsc(s.email || '') + '</span></div>';
+          '<span class="faint text-xs ml-auto">' + hwEsc(prog) + '</span></div>';
       }).join('') + '</div>';
     } else {
       html += '<p class="faint text-xs">Nobody has joined yet. Share the code ' + hwEsc(c.join_code) + '.</p>';
@@ -906,6 +915,127 @@ async function tcGrade(submissionId, status) {
   if (r.error) { hwErr(r.error, 'Could not save the grade'); return; }
   toast(status === 'graded' ? 'Grade saved' : 'Sent back for another try', 'ok');
   if (TC.openSubs) await tcOpenSubmissions(TC.openSubs);
+}
+
+/* ============================================================
+   TEACHER ACCESS — invites and the email allowlist
+   ============================================================ */
+function tcInviteCard() {
+  const invites = TC.invites || [];
+  const open = invites.filter(function (i) { return !i.used_at; });
+  let html = '<div class="card p-6 space-y-3">' +
+    '<p class="font-semibold">Invite another teacher</p>' +
+    '<p class="faint text-xs">A teacher account cannot be created without one of these — ' +
+    'otherwise every visitor could register as a teacher.</p>' +
+    '<div class="flex gap-3 flex-wrap items-end">' +
+    '<input class="input flex-1" id="tc-invite-note" placeholder="Who is it for? (optional)">' +
+    '<button class="btn-primary" onclick="tcMakeInvite()">Create a code</button></div>' +
+    '<div class="flex gap-3 flex-wrap items-end">' +
+    '<input class="input flex-1" id="tc-allow-email" placeholder="or allowlist an email, e.g. head@school.com">' +
+    '<button class="btn-secondary" onclick="tcAllowEmail()">Allow this email</button></div>';
+  if (open.length) {
+    html += '<p class="text-xs faint mt-2">Codes not used yet — share one, it works once:</p>' +
+      '<div class="space-y-1">' + open.map(function (i) {
+        return '<div class="flex items-center gap-3 text-xs p-2 rounded-lg mono" style="background:var(--surface2)">' +
+          '<b>' + hwEsc(i.code) + '</b><span class="faint">' + hwEsc(i.note || '') + '</span></div>';
+      }).join('') + '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+async function tcMakeInvite() {
+  if (!HW_ON || !USER) return;
+  const el = document.getElementById('tc-invite-note');
+  const r = await HB.rpc('make_teacher_invite', { p_note: el && el.value ? el.value.trim() : null });
+  if (r.error) { hwErr(r.error, 'Could not create an invite'); return; }
+  if (el) el.value = '';
+  toast('Invite code: ' + r.data, 'ok');
+  TC.ready = false; await tcLoad();
+}
+
+async function tcAllowEmail() {
+  if (!HW_ON || !USER) return;
+  const el = document.getElementById('tc-allow-email');
+  const email = el && el.value ? el.value.trim().toLowerCase() : '';
+  if (!email || email.indexOf('@') < 0) { toast('Enter an email address', 'err'); return; }
+  const r = await HB.from('teacher_allowlist').insert({ email: email, added_by: USER.id });
+  if (r.error && String(r.error.message || '').indexOf('duplicate') < 0) {
+    hwErr(r.error, 'Could not allowlist that email'); return;
+  }
+  if (el) el.value = '';
+  toast('That email can now sign up as a teacher', 'ok');
+  TC.ready = false; await tcLoad();
+}
+
+/* ============================================================
+   LESSON PROGRESS — recorded on the server, per student
+   ============================================================ */
+const HW_SEEN = {};
+function tcProgressOf(studentId) {
+  const rows = (TC.progress || []).filter(function (r) { return r.student_id === studentId; });
+  if (!rows.length) return 'no lessons opened yet';
+  const lessons = {};
+  rows.forEach(function (r) { lessons[r.track + '-' + r.lesson_no] = true; });
+  const done = {};
+  rows.forEach(function (r) { if (r.part === 'finalTask') done[r.track + '-' + r.lesson_no] = true; });
+  const touched = Object.keys(lessons).length;
+  const finished = Object.keys(done).length;
+  return finished
+    ? finished + ' lesson(s) finished · ' + touched + ' opened'
+    : touched + ' lesson(s) opened';
+}
+
+async function hwRecordProgress(track, no, part) {
+  if (!HW_ON || !USER || USER.role !== 'student' || !track || !no || !part) return;
+  const key = track + '/' + no + '/' + part;
+  if (HW_SEEN[key]) return;
+  HW_SEEN[key] = true;
+  const r = await HB.from('lesson_progress')
+    .upsert({ student_id: USER.id, track: track, lesson_no: Number(no), part: part },
+            { onConflict: 'student_id,track,lesson_no,part' });
+  if (r.error) delete HW_SEEN[key];
+}
+
+/* Reads this student's own record. Returns null when there is nothing to
+   say, so the dashboard keeps its local numbers. */
+async function hwLoadProgress() {
+  if (!HW_ON || !USER) return null;
+  try {
+    const r = await HB.from('lesson_progress').select('track,lesson_no,part');
+    if (r.error || !r.data) return null;
+    const done = {};
+    r.data.forEach(function (x) { if (x.part === 'finalTask') done[x.track + '-' + x.lesson_no] = true; });
+    const touched = {};
+    r.data.forEach(function (x) { touched[x.track + '-' + x.lesson_no] = true; });
+    return { lessons: Object.keys(done).length,
+             opened: Object.keys(touched).length,
+             parts: r.data.length };
+  } catch (e) { return null; }
+}
+
+/* ============================================================
+   PASSWORDS
+   ============================================================ */
+async function hwForgotPassword() {
+  const el = document.getElementById('auth-email');
+  const email = el && el.value ? el.value.trim() : '';
+  if (!email || email.indexOf('@') < 0) {
+    authMsg('Type your email above first, then press "Forgot password?".', 'err');
+    return;
+  }
+  if (!HW_ON) { authMsg('Password reset needs the school backend.', 'err'); return; }
+  try {
+    const r = await HB.auth.resetPasswordForEmail(email, { redirectTo: hwSiteUrl() });
+    if (r.error) throw r.error;
+    authMsg('If that email has an account, a reset link is on its way.', 'ok');
+  } catch (e) {
+    authMsg((e && e.message) || 'Could not send the reset email', 'err');
+  }
+}
+
+function hwSiteUrl() {
+  try { return location.origin + location.pathname; } catch (e) { return undefined; }
 }
 
 /* ---------- setup hint ---------- */

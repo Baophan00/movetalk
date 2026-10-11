@@ -14,11 +14,12 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 REF="${MT_REF:-fdqjvbarvjrmjlquarva}"
-SQL_FILE="${MT_SQL:-$ROOT/sql/001_homework.sql}"
 
-if [ ! -f "$SQL_FILE" ]; then
-  echo "no such SQL file: $SQL_FILE" >&2
-  exit 1
+if [ -n "${MT_SQL:-}" ]; then
+  SQL_FILES=("$MT_SQL")
+else
+  # every migration, in filename order, concatenated into one payload
+  SQL_FILES=("$ROOT"/sql/0*.sql)
 fi
 
 TOKEN="$(security find-generic-password -s 'Supabase CLI' -w 2>/dev/null || true)"
@@ -29,11 +30,17 @@ if [ -z "$TOKEN" ]; then
 fi
 
 echo "== project: $REF =="
-echo "== sql:     $SQL_FILE ($(wc -l < "$SQL_FILE" | tr -d ' ') lines) =="
+for f in "${SQL_FILES[@]}"; do
+  echo "== sql:     $(basename "$f") ($(wc -l < "$f" | tr -d ' ') lines) =="
+done
 
-PAYLOAD="$(python3 - "$SQL_FILE" <<'PY'
+PAYLOAD="$(python3 - "${SQL_FILES[@]}" <<'PY'
 import json, sys
-print(json.dumps({"query": open(sys.argv[1], encoding="utf-8").read()}))
+parts = []
+for path in sys.argv[1:]:
+    with open(path, encoding="utf-8") as f:
+        parts.append(f.read())
+print(json.dumps({"query": "\n\n".join(parts)}))
 PY
 )"
 

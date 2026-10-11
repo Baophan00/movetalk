@@ -1060,7 +1060,10 @@ h3{font-family:'Inter Tight','Inter',sans-serif;font-size:clamp(19px,2.2vw,24px)
             <div class="flex items-center gap-4 mb-8">
               <div id="dash-avatar" class="w-12 h-12 rounded-full text-white font-semibold flex items-center justify-center text-sm" style="background:var(--avatar)"></div>
               <div><p id="dash-name" class="font-semibold text-lg">—</p><p id="dash-email" class="faint text-sm">—</p></div>
-              <button onclick="logout()" class="ml-auto text-xs font-medium faint hover:text-[var(--text)]">Sign Out</button>
+              <div class="ml-auto flex items-center gap-3">
+                <button onclick="showAuthChange()" class="text-xs font-medium faint hover:text-[var(--text)]">Change password</button>
+                <button onclick="logout()" class="text-xs font-medium faint hover:text-[var(--text)]">Sign Out</button>
+              </div>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div class="p-5 rounded-2xl" style="background:var(--surface2)"><p class="text-xs font-medium faint mb-2">LESSONS DONE</p><p id="dash-lessons" class="font-semibold mono text-2xl">0</p></div>
@@ -1178,9 +1181,12 @@ h3{font-family:'Inter Tight','Inter',sans-serif;font-size:clamp(19px,2.2vw,24px)
     </div>
     <div class="space-y-5">
       <div><label class="label">Email</label><input type="email" id="auth-email" class="input" placeholder="you@example.com"></div>
-      <div><label class="label">Password</label><input type="password" id="auth-pass" class="input" placeholder="••••••••"></div>
+      <div><label class="label" id="auth-pass-label">Password</label><input type="password" id="auth-pass" class="input" placeholder="••••••••"></div>
+      <p class="text-right text-xs -mt-2"><button type="button" onclick="hwForgotPassword()" class="auth-switch-link" id="auth-forgot-btn">Forgot password?</button></p>
       <div id="auth-name-field" class="hidden"><label class="label">Full Name</label><input type="text" id="auth-name" class="input" placeholder="Your name"></div>
       <div id="auth-role-field" class="hidden"><label class="label">I am a</label><div class="flex gap-2"><button onclick="setRole('student')" class="pill flex-1 on" data-role="student">Student</button><button onclick="setRole('teacher')" class="pill flex-1" data-role="teacher">Teacher</button></div></div>
+      <div id="auth-invite-field" class="hidden"><label class="label">Teacher invite code</label><input type="text" id="auth-invite" class="input" placeholder="MT-T-XXXXXXXX"><p class="faint text-xs mt-1">Teacher accounts need a code from an existing teacher. Without one you are signed up as a student.</p></div>
+      <div id="auth-msg" class="hidden text-xs"></div>
       <button onclick="doAuth()" class="btn-primary w-full" id="auth-submit">Sign In</button>
       <p class="text-center text-sm faint"><span id="auth-switch-text">Don't have an account?</span> <button onclick="toggleAuthMode()" class="auth-switch-link" id="auth-switch-btn">Sign Up</button></p>
     </div>
@@ -1502,7 +1508,10 @@ function trackGrid(tk){
 }
 
 function trackGo(tk,n){TRACK_NUM[tk]=n;TRACK_PART[tk]=null;renderTrack(tk)}
-function trackPart(tk,p){TRACK_PART[tk]=p;renderTrack(tk)}
+function trackPart(tk,p){
+  TRACK_PART[tk]=p;renderTrack(tk);
+  if(typeof hwRecordProgress==='function')hwRecordProgress(tk,TRACK_NUM[tk],p);
+}
 function trackBack(tk){TRACK_PART[tk]=null;renderTrack(tk)}
 
 function renderTrack(tk){
@@ -1621,10 +1630,73 @@ function trackAnswer(btn,ok){
 }
 
 // ---- AUTH ----
-function showAuth(){document.getElementById('auth-modal').classList.remove('hidden')}
+function authMsg(text, kind){
+  const el=document.getElementById('auth-msg');
+  if(!el)return;
+  if(!text){el.classList.add('hidden');el.textContent='';return}
+  el.classList.remove('hidden');
+  el.textContent=text;
+  el.style.color=kind==='err'?'#ef4444':kind==='ok'?'var(--accent)':'var(--text2)';
+}
+function syncAuthFields(){
+  const signup=AUTH_MODE==='signup';
+  const change=AUTH_MODE==='change';
+  const isTeacher=signup&&USER_ROLE==='teacher';
+  const show=function(id,v){const e=document.getElementById(id);if(e)e.classList.toggle('hidden',!v)};
+  show('auth-name-field',signup);
+  show('auth-role-field',signup);
+  show('auth-invite-field',isTeacher);
+  show('auth-forgot-btn',AUTH_MODE==='login');
+  const email=document.getElementById('auth-email');
+  const pl=document.getElementById('auth-pass-label');
+  const sub=document.getElementById('auth-submit');
+  const title=document.getElementById('auth-title');
+  const sw=document.getElementById('auth-switch-text');
+  const sb=document.getElementById('auth-switch-btn');
+  if(email)email.disabled=change;
+  if(pl)pl.textContent=change?'New password':'Password';
+  if(change){
+    if(title)title.textContent='Change password';
+    if(sub)sub.textContent='Save password';
+    if(sw)sw.textContent='';
+    if(sb)sb.classList.add('hidden');
+  }else{
+    if(title)title.textContent=signup?'Sign Up':'Sign In';
+    if(sub)sub.textContent=signup?'Sign Up':'Sign In';
+    if(sw)sw.textContent=signup?'Already have an account?':"Don't have an account?";
+    if(sb){sb.classList.remove('hidden');sb.textContent=signup?'Sign In':'Sign Up'}
+  }
+}
+function showAuth(){
+  AUTH_MODE='login';USER_ROLE='student';
+  document.querySelectorAll('[data-role]').forEach(b=>b.classList.toggle('on',b.dataset.role==='student'));
+  authMsg('');
+  const e=document.getElementById('auth-email');if(e)e.value='';
+  const n=document.getElementById('auth-name');if(n)n.value='';
+  const i=document.getElementById('auth-invite');if(i)i.value='';
+  const p=document.getElementById('auth-pass');if(p)p.value='';
+  syncAuthFields();
+  document.getElementById('auth-modal').classList.remove('hidden');
+}
+function showAuthChange(){
+  if(!USER){showAuth();return}
+  AUTH_MODE='change';authMsg('');
+  const e=document.getElementById('auth-email');if(e)e.value=USER.email||'';
+  const p=document.getElementById('auth-pass');if(p)p.value='';
+  syncAuthFields();
+  document.getElementById('auth-modal').classList.remove('hidden');
+}
 function hideAuth(){document.getElementById('auth-modal').classList.add('hidden')}
-function toggleAuthMode(){AUTH_MODE=AUTH_MODE==='login'?'signup':'login';document.getElementById('auth-title').textContent=AUTH_MODE==='login'?'Sign In':'Sign Up';document.getElementById('auth-submit').textContent=AUTH_MODE==='login'?'Sign In':'Sign Up';document.getElementById('auth-switch-text').textContent=AUTH_MODE==='login'?"Don't have an account?":'Already have an account?';document.getElementById('auth-switch-btn').textContent=AUTH_MODE==='login'?'Sign Up':'Sign In';document.getElementById('auth-name-field').classList.toggle('hidden',AUTH_MODE==='login');document.getElementById('auth-role-field').classList.toggle('hidden',AUTH_MODE==='login')}
-function setRole(r){USER_ROLE=r;document.querySelectorAll('[data-role]').forEach(b=>b.classList.toggle('on',b.dataset.role===r))}
+function toggleAuthMode(){
+  AUTH_MODE=AUTH_MODE==='login'?'signup':'login';
+  authMsg('');
+  syncAuthFields();
+}
+function setRole(r){
+  USER_ROLE=r;
+  document.querySelectorAll('[data-role]').forEach(b=>b.classList.toggle('on',b.dataset.role===r));
+  syncAuthFields();
+}
 function setAuthBusy(b){
   const el=document.getElementById('auth-submit');if(!el)return;
   el.disabled=!!b;
@@ -1633,22 +1705,46 @@ function setAuthBusy(b){
 
 async function doAuth(){
   const email=document.getElementById('auth-email').value;const pass=document.getElementById('auth-pass').value;const name=document.getElementById('auth-name').value||email.split('@')[0];
+  const inviteEl=document.getElementById('auth-invite');const invite=inviteEl&&inviteEl.value?inviteEl.value.trim():'';
+
+  if(AUTH_MODE==='change'){
+    if(!pass){authMsg('Enter the new password','err');return}
+    if(typeof HW_ON!=='undefined'&&HW_ON){
+      setAuthBusy(true);
+      try{
+        const r=await HB.auth.updateUser({password:pass});
+        if(r.error)throw r.error;
+        setAuthBusy(false);AUTH_MODE='login';hideAuth();toast('Password updated','ok');
+      }catch(e){setAuthBusy(false);authMsg(e&&e.message?e.message:'Could not update the password','err')}
+      return;
+    }
+    authMsg('Changing a password needs the school backend.','err');
+    return;
+  }
+
   if(!email||!pass){toast('Please fill in all fields','err');return}
   if(typeof HW_ON!=='undefined'&&HW_ON){
-    setAuthBusy(true);
+    setAuthBusy(true);authMsg('');
     try{
-      if(AUTH_MODE==='signup'){
-        const r=await HB.auth.signUp({email,password:pass,options:{data:{full_name:name,role:USER_ROLE}}});
+      const signingUp=AUTH_MODE==='signup';
+      const wantedTeacher=signingUp&&USER_ROLE==='teacher';
+      if(signingUp){
+        const meta={full_name:name,role:USER_ROLE};
+        if(wantedTeacher&&invite)meta.invite_code=invite;
+        const r=await HB.auth.signUp({email,password:pass,options:{data:meta}});
         if(r.error)throw r.error;
-        if(!r.data||!r.data.session){setAuthBusy(false);toast('Account created — confirm your email, then sign in','ok');return}
+        if(!r.data||!r.data.session){setAuthBusy(false);authMsg('Account created — confirm your email, then sign in.','ok');return}
       }else{
         const r=await HB.auth.signInWithPassword({email,password:pass});
         if(r.error)throw r.error;
       }
       await hwLoadSession();
       setAuthBusy(false);hideAuth();updateAuthUI();toast('Signed in','ok');
+      if(wantedTeacher&&(!USER||USER.role!=='teacher')){
+        toast('Signed up as a student — that teacher invite code was not valid','err');
+      }
       go(USER&&USER.role==='teacher'?'teacher':'homework');
-    }catch(e){setAuthBusy(false);toast(e&&e.message?e.message:'Sign in failed','err')}
+    }catch(e){setAuthBusy(false);authMsg(e&&e.message?e.message:'Sign in failed','err')}
     return;
   }
   if(AUTH_MODE==='signup'){USER={name,email,role:USER_ROLE,joined:new Date().toLocaleDateString()};save('user',USER);toast('Account created!','ok')}
@@ -1674,6 +1770,14 @@ function renderDashboard(){
   document.getElementById('dash-name').textContent=USER.name;document.getElementById('dash-email').textContent=USER.email;
   const progress=load('progress',{});const lessonsDone=Object.keys(progress).filter(k=>k.includes('_l')).length;
   document.getElementById('dash-lessons').textContent=lessonsDone;document.getElementById('dash-words').textContent=load('wordsLearned',0);document.getElementById('dash-streak').textContent=load('streak',0);document.getElementById('dash-level').textContent=load('selectedLevel','—');
+  // when the school backend is on, the server's record is the real one
+  if(typeof hwLoadProgress==='function'){
+    hwLoadProgress().then(function(p){
+      if(!p)return;
+      const el=document.getElementById('dash-lessons');
+      if(el)el.textContent=p.lessons;
+    }).catch(function(){});
+  }
 }
 
 // ---- VIP ----
@@ -1719,6 +1823,7 @@ const HW = {
 const TC = {
   ready: false, loading: false, tab: 'classes',
   classes: [], rosters: {}, assignments: [], rosterOf: {},
+  progress: [], invites: [],
   builder: null, openSubs: null, results: []
 };
 
@@ -2135,6 +2240,11 @@ async function tcLoad() {
       .order('created_at', { ascending: false });
     if (a.error) throw a.error;
     TC.assignments = a.data || [];
+    const p = await HB.from('lesson_progress').select('student_id,track,lesson_no,part');
+    TC.progress = (p && !p.error && p.data) ? p.data : [];
+    const inv = await HB.from('teacher_invites')
+      .select('code,note,created_at,used_at').order('created_at', { ascending: false }).limit(10);
+    TC.invites = (inv && !inv.error && inv.data) ? inv.data : [];
     TC.ready = true;
   } catch (e) {
     hwErr(e, 'Could not load your classes');
@@ -2189,6 +2299,8 @@ function tcRenderClasses() {
     '<button class="btn-primary" onclick="tcCreateClass()">Create class</button></div>' +
     '<p class="faint text-xs">Students join with the class code shown on each class below.</p></div>';
 
+  html += tcInviteCard();
+
   if (!TC.classes.length) {
     html += '<div class="card p-8 text-center faint text-sm">No classes yet. Create one to start assigning work.</div>';
   }
@@ -2203,11 +2315,12 @@ function tcRenderClasses() {
       '</div>';
     if (roster.length) {
       html += '<div class="space-y-2">' + roster.map(function (s) {
+        const prog = tcProgressOf(s.student_id);
         return '<div class="flex items-center gap-3 text-sm p-3 rounded-xl" style="background:var(--surface2)">' +
           '<span class="w-7 h-7 rounded-full text-xs flex items-center justify-center" style="background:var(--badge-bg)">' +
           hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>' +
           '<span>' + hwEsc(s.full_name || 'Student') + '</span>' +
-          '<span class="faint text-xs ml-auto">' + hwEsc(s.email || '') + '</span></div>';
+          '<span class="faint text-xs ml-auto">' + hwEsc(prog) + '</span></div>';
       }).join('') + '</div>';
     } else {
       html += '<p class="faint text-xs">Nobody has joined yet. Share the code ' + hwEsc(c.join_code) + '.</p>';
@@ -2589,6 +2702,127 @@ async function tcGrade(submissionId, status) {
   if (r.error) { hwErr(r.error, 'Could not save the grade'); return; }
   toast(status === 'graded' ? 'Grade saved' : 'Sent back for another try', 'ok');
   if (TC.openSubs) await tcOpenSubmissions(TC.openSubs);
+}
+
+/* ============================================================
+   TEACHER ACCESS — invites and the email allowlist
+   ============================================================ */
+function tcInviteCard() {
+  const invites = TC.invites || [];
+  const open = invites.filter(function (i) { return !i.used_at; });
+  let html = '<div class="card p-6 space-y-3">' +
+    '<p class="font-semibold">Invite another teacher</p>' +
+    '<p class="faint text-xs">A teacher account cannot be created without one of these — ' +
+    'otherwise every visitor could register as a teacher.</p>' +
+    '<div class="flex gap-3 flex-wrap items-end">' +
+    '<input class="input flex-1" id="tc-invite-note" placeholder="Who is it for? (optional)">' +
+    '<button class="btn-primary" onclick="tcMakeInvite()">Create a code</button></div>' +
+    '<div class="flex gap-3 flex-wrap items-end">' +
+    '<input class="input flex-1" id="tc-allow-email" placeholder="or allowlist an email, e.g. head@school.com">' +
+    '<button class="btn-secondary" onclick="tcAllowEmail()">Allow this email</button></div>';
+  if (open.length) {
+    html += '<p class="text-xs faint mt-2">Codes not used yet — share one, it works once:</p>' +
+      '<div class="space-y-1">' + open.map(function (i) {
+        return '<div class="flex items-center gap-3 text-xs p-2 rounded-lg mono" style="background:var(--surface2)">' +
+          '<b>' + hwEsc(i.code) + '</b><span class="faint">' + hwEsc(i.note || '') + '</span></div>';
+      }).join('') + '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+async function tcMakeInvite() {
+  if (!HW_ON || !USER) return;
+  const el = document.getElementById('tc-invite-note');
+  const r = await HB.rpc('make_teacher_invite', { p_note: el && el.value ? el.value.trim() : null });
+  if (r.error) { hwErr(r.error, 'Could not create an invite'); return; }
+  if (el) el.value = '';
+  toast('Invite code: ' + r.data, 'ok');
+  TC.ready = false; await tcLoad();
+}
+
+async function tcAllowEmail() {
+  if (!HW_ON || !USER) return;
+  const el = document.getElementById('tc-allow-email');
+  const email = el && el.value ? el.value.trim().toLowerCase() : '';
+  if (!email || email.indexOf('@') < 0) { toast('Enter an email address', 'err'); return; }
+  const r = await HB.from('teacher_allowlist').insert({ email: email, added_by: USER.id });
+  if (r.error && String(r.error.message || '').indexOf('duplicate') < 0) {
+    hwErr(r.error, 'Could not allowlist that email'); return;
+  }
+  if (el) el.value = '';
+  toast('That email can now sign up as a teacher', 'ok');
+  TC.ready = false; await tcLoad();
+}
+
+/* ============================================================
+   LESSON PROGRESS — recorded on the server, per student
+   ============================================================ */
+const HW_SEEN = {};
+function tcProgressOf(studentId) {
+  const rows = (TC.progress || []).filter(function (r) { return r.student_id === studentId; });
+  if (!rows.length) return 'no lessons opened yet';
+  const lessons = {};
+  rows.forEach(function (r) { lessons[r.track + '-' + r.lesson_no] = true; });
+  const done = {};
+  rows.forEach(function (r) { if (r.part === 'finalTask') done[r.track + '-' + r.lesson_no] = true; });
+  const touched = Object.keys(lessons).length;
+  const finished = Object.keys(done).length;
+  return finished
+    ? finished + ' lesson(s) finished · ' + touched + ' opened'
+    : touched + ' lesson(s) opened';
+}
+
+async function hwRecordProgress(track, no, part) {
+  if (!HW_ON || !USER || USER.role !== 'student' || !track || !no || !part) return;
+  const key = track + '/' + no + '/' + part;
+  if (HW_SEEN[key]) return;
+  HW_SEEN[key] = true;
+  const r = await HB.from('lesson_progress')
+    .upsert({ student_id: USER.id, track: track, lesson_no: Number(no), part: part },
+            { onConflict: 'student_id,track,lesson_no,part' });
+  if (r.error) delete HW_SEEN[key];
+}
+
+/* Reads this student's own record. Returns null when there is nothing to
+   say, so the dashboard keeps its local numbers. */
+async function hwLoadProgress() {
+  if (!HW_ON || !USER) return null;
+  try {
+    const r = await HB.from('lesson_progress').select('track,lesson_no,part');
+    if (r.error || !r.data) return null;
+    const done = {};
+    r.data.forEach(function (x) { if (x.part === 'finalTask') done[x.track + '-' + x.lesson_no] = true; });
+    const touched = {};
+    r.data.forEach(function (x) { touched[x.track + '-' + x.lesson_no] = true; });
+    return { lessons: Object.keys(done).length,
+             opened: Object.keys(touched).length,
+             parts: r.data.length };
+  } catch (e) { return null; }
+}
+
+/* ============================================================
+   PASSWORDS
+   ============================================================ */
+async function hwForgotPassword() {
+  const el = document.getElementById('auth-email');
+  const email = el && el.value ? el.value.trim() : '';
+  if (!email || email.indexOf('@') < 0) {
+    authMsg('Type your email above first, then press "Forgot password?".', 'err');
+    return;
+  }
+  if (!HW_ON) { authMsg('Password reset needs the school backend.', 'err'); return; }
+  try {
+    const r = await HB.auth.resetPasswordForEmail(email, { redirectTo: hwSiteUrl() });
+    if (r.error) throw r.error;
+    authMsg('If that email has an account, a reset link is on its way.', 'ok');
+  } catch (e) {
+    authMsg((e && e.message) || 'Could not send the reset email', 'err');
+  }
+}
+
+function hwSiteUrl() {
+  try { return location.origin + location.pathname; } catch (e) { return undefined; }
 }
 
 /* ---------- setup hint ---------- */
