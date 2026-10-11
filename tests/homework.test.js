@@ -117,6 +117,14 @@ function fakeSupabase(tables) {
     from,
     rpc(name, args) {
       (tables.__calls = tables.__calls || []).push(['rpc', name, args]);
+      // approving and turning down really do change the row
+      if ((name === 'approve_student' || name === 'reject_student') && tables.profiles) {
+        tables.profiles.forEach(r => {
+          if (r.id === (args && args.p_student)) {
+            r.status = name === 'approve_student' ? 'active' : 'rejected';
+          }
+        });
+      }
       const v = tables.__rpc && (name in tables.__rpc) ? tables.__rpc[name] : null;
       return Promise.resolve({ data: v, error: null });
     }
@@ -434,6 +442,7 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   const refused = { id: 'r1', full_name: 'Refused One', email: 'r1@x.test', status: 'rejected' };
   ta.TC.students = [waiting, accepted, refused];
   ta.TC.progress = [];
+  ta.TC.busy = {};
   ta.tcRenderStudents();
   const sp = TEACH.els['tc-panel-students'].innerHTML;
   t('the teacher is told how many people are waiting', /1 person is waiting to join/.test(sp), sp.slice(0, 120));
@@ -464,6 +473,36 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   t('declining calls the turning-down function on the server',
     (TEACHER_TABLES.__calls || []).some(c => c[0] === 'rpc' && c[1] === 'reject_student' &&
       c[2] && c[2].p_student === 'w1'), JSON.stringify(TEACHER_TABLES.__calls));
+
+  t('deciding somebody moves them on screen straight away, not on the next load',
+    ta.tcWaitingStudents().length === 0, JSON.stringify(ta.tcWaitingStudents()));
+
+  /* two clicks in the same breath must not send two accepts */
+  TEACHER_TABLES.profiles.push({ id: 'w1', email: 'w1@x.test', full_name: 'Waiting One',
+                                 role: 'student', status: 'pending' });
+  ta.TC.students = [waiting, accepted, refused];
+  ta.TC.busy = {};
+  waiting.status = 'pending';      /* the single-click checks above moved the fixture */
+  ta.tcRenderStudents();
+  TEACHER_TABLES.__calls = [];
+  const firstClick = ta.tcDecideStudent('w1', 'accept');
+  const secondClick = ta.tcDecideStudent('w1', 'accept');
+  t('a second click while the first is still out is ignored',
+    (TEACHER_TABLES.__calls || []).filter(c => c[1] === 'approve_student').length === 1,
+    JSON.stringify(TEACHER_TABLES.__calls));
+  t('the button says it is working straight away',
+    /Accepting\u2026/.test(TEACH.els['tc-panel-students'].innerHTML),
+    TEACH.els['tc-panel-students'].innerHTML.slice(0, 220));
+  await firstClick; await secondClick;
+  t('one accept leaves exactly one copy of the student',
+    ta.tcWaitingStudents().length === 0 &&
+    ta.tcAllStudents().filter(x => x.id === 'w1').length === 1,
+    JSON.stringify(ta.tcAllStudents()));
+  t('and the request card is gone from the screen',
+    !/is waiting to join/.test(TEACH.els['tc-panel-students'].innerHTML),
+    TEACH.els['tc-panel-students'].innerHTML.slice(0, 160));
+  waiting.status = 'pending';
+  ta.TC.busy = {};
 
   ta.setUser({ id: 't1', name: 'Teach', email: 't@x.test', role: 'teacher' });
   ta.TC.students = [waiting, accepted];

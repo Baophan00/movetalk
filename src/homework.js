@@ -34,9 +34,9 @@ const HW = {
   detailId: null, questions: [], answers: {}, keyErr: false
 };
 const TC = {
-  ready: false, loading: false, tab: 'students',
+  ready: false, loading: false, loadSeq: 0, tab: 'students',
   classes: [], rosters: {}, assignments: [], rosterOf: {},
-  students: [], progress: [],
+  students: [], progress: [], busy: {},
   builder: null, openSubs: null, results: []
 };
 
@@ -533,14 +533,19 @@ function tcRenderStudents() {
       ' to join</p>' +
       '<p class="faint text-xs">They signed up themselves. Accept them and they can see the work you assign.</p>' +
       '<div class="space-y-2">' + waiting.map(function (s) {
+        const busy = TC.busy[s.id];
         return '<div class="flex items-center gap-3 flex-wrap text-sm p-3 rounded-xl" style="background:var(--surface2)">' +
           '<span class="w-7 h-7 rounded-full text-xs flex items-center justify-center" style="background:var(--badge-bg)">' +
           hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>' +
           '<span><b>' + hwEsc(s.full_name || 'Student') + '</b>' +
           '<span class="faint text-xs"> · ' + hwEsc(s.email || '') + '</span></span>' +
           '<span class="ml-auto flex gap-2">' +
-          '<button class="btn-primary" onclick="tcDecideStudent(\'' + s.id + '\',\'accept\')">Accept</button>' +
-          '<button class="btn-secondary" onclick="tcDecideStudent(\'' + s.id + '\',\'decline\')">Decline</button>' +
+          '<button class="btn-primary"' + (busy ? ' disabled' : '') +
+          ' onclick="tcDecideStudent(\'' + s.id + '\',\'accept\')">' +
+          (busy === 'accept' ? 'Accepting…' : 'Accept') + '</button>' +
+          '<button class="btn-secondary"' + (busy ? ' disabled' : '') +
+          ' onclick="tcDecideStudent(\'' + s.id + '\',\'decline\')">' +
+          (busy === 'decline' ? 'Declining…' : 'Decline') + '</button>' +
           '</span></div>';
       }).join('') + '</div></div>';
   }
@@ -566,10 +571,12 @@ function tcRenderStudents() {
   if (refused.length) {
     html += '<div class="card p-6 space-y-2"><p class="font-semibold">Not accepted</p>' +
       '<div class="space-y-1">' + refused.map(function (s) {
+        const busy = TC.busy[s.id];
         return '<div class="flex items-center gap-3 text-xs p-2 rounded-lg" style="background:var(--surface2)">' +
           '<span>' + hwEsc(s.full_name || 'Student') + ' · ' + hwEsc(s.email || '') + '</span>' +
-          '<span class="ml-auto"><button class="btn-secondary" ' +
-          'onclick="tcDecideStudent(\'' + s.id + '\',\'accept\')">Accept anyway</button></span></div>';
+          '<span class="ml-auto"><button class="btn-secondary"' + (busy ? ' disabled' : '') +
+          ' onclick="tcDecideStudent(\'' + s.id + '\',\'accept\')">' +
+          (busy === 'accept' ? 'Accepting…' : 'Accept anyway') + '</button></span></div>';
       }).join('') + '</div></div>';
   }
 
@@ -578,9 +585,23 @@ function tcRenderStudents() {
 
 async function tcDecideStudent(studentId, action) {
   if (!HW_ON || !USER) return;
+  /* The finger can get to the button before the network answers. Take the
+     click once and ignore the rest until this one is settled, or the same
+     student gets accepted twice over. */
+  if (TC.busy[studentId]) return;
+  TC.busy[studentId] = action;
+  tcRenderStudents();                       /* the button shows it took the click */
   const which = action === 'accept' ? 'approve_student' : 'reject_student';
   const r = await HB.rpc(which, { p_student: studentId });
-  if (r.error) { hwErr(r.error, 'Could not do that'); return; }
+  delete TC.busy[studentId];
+  if (r.error) { hwErr(r.error, 'Could not do that'); tcRenderStudents(); return; }
+  /* Move them on screen right away: the request is gone before a second
+     click could land on it again. tcLoad below is only for the truth. */
+  (TC.students || []).forEach(function (s) {
+    if (s.id === studentId) s.status = (action === 'accept' ? 'active' : 'rejected');
+  });
+  tcRenderStudents();
+  hwUpdatePendingBadge();
   toast(action === 'accept' ? 'Accepted — they can see their work now' : 'Declined', 'ok');
   TC.ready = false;
   await tcLoad();
