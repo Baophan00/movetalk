@@ -192,6 +192,11 @@ async function hwLoad() {
     for (var i = 0; i < HW.assignments.length; i++) {
       if (HW.assignments[i].kind === 'custom') continue;
       if (HW.assignments[i].status === 'closed') continue;
+      /* Only open a submission when there is nothing on the go. Opening the
+         screen again must not spawn a second, empty attempt on top of work
+         the student has already handed in — that would change what they see. */
+      const mine = HW.subs[HW.assignments[i].id];
+      if (mine && mine.status !== 'in_progress') continue;
       try { await HB.rpc('start_submission', { p_assignment: HW.assignments[i].id }); } catch (e) {}
     }
     HW.ready = true;

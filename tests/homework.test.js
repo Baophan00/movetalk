@@ -602,6 +602,28 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   t('with no work handed in the overview says so plainly',
     /No work handed in yet/.test(TEACH.els['tc-panel-overview'].innerHTML));
 
+  /* opening the screen again must not stack an empty attempt on handed-in work */
+  STUDENT_TABLES.assignments = [
+    { id: 'a1', title: 'Handed in', instructions: '', kind: 'lesson', lesson_track: 'a1',
+      lesson_no: 3, assigned_at: '2026-10-01', due_at: '2026-10-20', status: 'published' },
+    { id: 'a9', title: 'Not started', instructions: '', kind: 'lesson', lesson_track: 'a1',
+      lesson_no: 4, assigned_at: '2026-10-01', due_at: null, status: 'published' }
+  ];
+  STUDENT_TABLES.submissions = [
+    { id: 'sub1', assignment_id: 'a1', status: 'graded', attempt: 1, score: 6, max_score: 6 }
+  ];
+  STUDENT_TABLES.__calls = [];
+  sa.HW.ready = false;
+  await sa.hwLoad();
+  const started = (STUDENT_TABLES.__calls || [])
+    .filter(c => c[0] === 'rpc' && c[1] === 'start_submission').map(c => c[2].p_assignment);
+  t('opening the screen does not open a fresh attempt on handed-in work',
+    started.indexOf('a1') < 0, JSON.stringify(started));
+  t('... but it still opens one for a lesson the student has not touched',
+    started.indexOf('a9') >= 0, JSON.stringify(started));
+  t('the handed-in row stays the one the student sees',
+    sa.HW.subs['a1'] && sa.HW.subs['a1'].status === 'graded', JSON.stringify(sa.HW.subs['a1']));
+
   /* ============================================================
      12. LESSON PROGRESS LIVES ON THE SERVER
      ============================================================ */
