@@ -900,6 +900,9 @@ h3{font-family:'Inter Tight','Inter',sans-serif;font-size:clamp(19px,2.2vw,24px)
 .avatar-sm{width:32px;height:32px;font-size:12px}
 .avatar-lg{width:56px;height:56px;font-size:19px}
 
+/* role guards must win over any display rule of their own component */
+.nav-item.hidden,.nav-btn.hidden,.bottom-nav button.hidden,.teacher-only.hidden{display:none !important}
+
 /* ---- responsive ---- */
 @media(max-width:900px){
   .kpi-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}

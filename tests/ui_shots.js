@@ -70,6 +70,8 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
            `document.getElementById('auth-pass').value='MoveTalk123!';doAuth();`);
   await sleep(6000);
   await ev("go('dashboard')"); await sleep(3500); await shot('11-student-dashboard-desktop');
+  const leak = await ev(`JSON.stringify(Array.from(document.querySelectorAll('.teacher-only,#bn-teacher,#nav-teacher-item')).filter(e=>e.offsetParent!==null||getComputedStyle(e).display!=='none').map(e=>e.id||(e.textContent||'').trim().slice(0,18)))`);
+  console.log((String(leak)==='[]'?'ok       ':'AUTH-LEAK ')+'teacher-only entries visible to a student: '+leak);
   await ev("go('homework')"); await sleep(2500); await shot('12-student-homework-desktop');
   await ev("hwOpen(HW.assignments[1].id)"); await sleep(2500); await shot('13-student-assignment-desktop');
 
