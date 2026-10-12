@@ -29,6 +29,7 @@ const RETURNS = 'return {TRACKS,TRACK_PARTS,LESSON_DATA,AUDIO_MAP,go,trackGo,tra
   'HW,TC,HW_ON,HB,tcBlankBuilder,tcRenderAssignments,tcBuilderSet,tcBuilderKind,' +
   'tcSaveAssignment,tcGrade,hwLoadSession,hwLoad,hwOpen,hwRenderList,hwSubmit,' +
   'tcLoad,tcTab,tcAllStudents,tcWaitingStudents,tcProgressOf,tcDecideStudent,tcRenderStudents,tcRenderOverview,tcStat,tcNewAssignment,hwUpdatePendingBadge,syncAuthFields,showAuthChange,hwCheckAgain,' +
+  'tcStudentWork,tcWorkLine,tcPartLine,tcTotalParts,' +
   'hwForgotPassword,hwRecordProgress,hwLoadProgress,doAuth,setRole,showAuth,' +
   'setUser:(u)=>{USER=u},getUser:()=>USER,' +
   'setAuthMode:(m)=>{AUTH_MODE=m},getAuthMode:()=>AUTH_MODE,' +
@@ -581,6 +582,21 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   t('the student list says what has been handed in and marked',
     /1 of 1 handed in · 0 marked/.test(studs), studs.slice(0, 240));
   t('the overview keeps a draft out of the published count', /1 still in draft/.test(ov));
+
+  /* Lesson-part progress: the teacher reads it for an ACTIVE student (004).
+     The count has to come out of the parts that really exist, and a student who
+     opened nothing must not be shown an invented zero. */
+  t('the part denominator is the lesson parts that exist',
+    ta.tcTotalParts() > 0, String(ta.tcTotalParts()));
+  t('the teacher is shown the parts a student opened',
+    /1 opened/.test(studs), studs.slice(0, 300));
+  t('a student who opened nothing says so instead of a fake count',
+    /none yet/.test(studs), studs.slice(0, 300));
+  t('the part line names the total',
+    ta.tcPartLine({ parts: 1 }) === '1 of ' + ta.tcTotalParts() + ' lesson parts opened',
+    ta.tcPartLine({ parts: 1 }));
+  t('a student with no progress at all is described in words',
+    ta.tcPartLine({ parts: 0 }) === 'no lesson opened yet', ta.tcPartLine({ parts: 0 }));
 
   const keptStudents = ta.TC.students, keptAssignments = ta.TC.assignments;
   ta.TC.students = [];

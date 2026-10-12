@@ -827,8 +827,24 @@ select t_has('a student CAN write their own progress',
 
 select t_eq('the teacher sees their own student''s progress',
   t_val('11111111-1111-1111-1111-111111111111', $q$(select count(*) from public.lesson_progress)$q$), '2');
-select t_eq('another teacher sees none of it',
-  t_val('22222222-2222-2222-2222-222222222222', $q$(select count(*) from public.lesson_progress)$q$), '0');
+
+-- What grants the read is the STUDENT PROFILE (accepted = active), not a class:
+-- the product accepts students instead of enrolling them, and profiles_select
+-- already lets a teacher read every student profile. 004 replaced the class arm.
+select t_eq('progress no longer needs a class membership',
+  t_val('22222222-2222-2222-2222-222222222222', $q$(select count(*) from public.lesson_progress)$q$), '2');
+
+-- The other half of the rule still holds: a student who was never accepted (or was
+-- turned down) is invisible to the teacher even if a row exists for them.
+insert into public.lesson_progress(student_id,track,lesson_no,part)
+  values ('aaaaaaaa-0000-0000-0000-000000000005','a1',1,'vocab')
+on conflict (student_id,track,lesson_no,part) do nothing;
+select t_eq('a rejected student''s progress stays invisible to the teacher',
+  t_val('11111111-1111-1111-1111-111111111111',
+        $q$(select count(*) from public.lesson_progress
+             where student_id='aaaaaaaa-0000-0000-0000-000000000005')$q$), '0');
+select t_eq('... and does not show up in the teacher''s total either',
+  t_val('11111111-1111-1111-1111-111111111111', $q$(select count(*) from public.lesson_progress)$q$), '2');
 
 select t_eq('class_roster returns the class members to their teacher',
   t_val('11111111-1111-1111-1111-111111111111',

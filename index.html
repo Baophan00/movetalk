@@ -2709,7 +2709,8 @@ function tcRenderOverview() {
     });
     noProgress.slice(0, 3).forEach(function (s) {
       const w = tcStudentWork(s.id);
-      const why = w.given ? (w.given + ' assigned, nothing handed in yet') : 'accepted, no work assigned yet';
+      const why = w.parts ? (tcPartLine(w) + ', nothing handed in yet')
+        : (w.given ? (w.given + ' assigned, nothing handed in yet') : 'accepted, no work assigned yet');
       html += '<div class="row"><span class="row-ico">' + hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>' +
         '<span class="row-main"><span class="row-title">' + hwEsc(s.full_name || 'Student') + '</span>' +
         '<span class="row-sub">' + hwEsc(why) + '</span></span>' +
@@ -2765,8 +2766,9 @@ function tcRenderOverview() {
 }
 
 /* What a teacher may read about one student: the work given, the work handed
-   in, the work marked. Lesson-part progress is a class-scoped read, so it is
-   only shown when the database actually returns rows for that student. */
+   in, the work marked, and — since 004 — the lesson parts that student has
+   opened. Parts are zero for a student who has not been accepted yet: the
+   rule is the student's profile, not a class. */
 function tcStudentWork(studentId) {
   const mine = {};
   (TC.assignments || []).forEach(function (a) { if (a.status !== 'draft') mine[a.id] = true; });
@@ -2788,6 +2790,23 @@ function tcWorkLine(w) {
   if (!w.given) return 'no work assigned yet';
   if (!w.handed) return w.given + ' assigned · nothing handed in';
   return w.handed + ' of ' + w.given + ' handed in · ' + w.marked + ' marked';
+}
+
+/* Every lesson part that exists today, so "opened" has a real denominator:
+   the lesson parts of the tracks that actually carry lessons. */
+function tcTotalParts() {
+  const tracks = (typeof TRACKS !== 'undefined' && TRACKS) ? TRACKS : {};
+  let lessons = 0;
+  Object.keys(tracks).forEach(function (k) {
+    lessons += Object.keys((tracks[k] || {}).lessons || {}).length;
+  });
+  return lessons * ((typeof TRACK_PARTS !== 'undefined' && TRACK_PARTS.length) || 10);
+}
+
+function tcPartLine(w) {
+  const total = tcTotalParts();
+  if (!w.parts) return 'no lesson opened yet';
+  return w.parts + (total ? ' of ' + total : '') + ' lesson parts opened';
 }
 
 function tcProgressBar(pct, parts) {
@@ -2849,9 +2868,12 @@ function tcRenderStudents() {
     html += '<div class="row-list">' + accepted.map(function (s) {
       const w = tcStudentWork(s.id);
       const when = w.last ? ' · last ' + hwDate(String(w.last).slice(0, 10)) : '';
+      const total = tcTotalParts();
+      const pct = total ? Math.min(100, Math.round(w.parts * 100 / total)) : 0;
       return '<div class="row">' + avatar(s) + who(s) +
         '<span class="row-actions ml-auto">' +
         '<span class="chip">' + hwEsc(tcWorkLine(w)) + when + '</span>' +
+        '<span style="min-width:150px;display:inline-flex">' + tcProgressBar(pct, w.parts) + '</span>' +
         '<button class="btn-quiet btn-sm" onclick="tcNewAssignmentFor(\'' + s.id + '\')">Assign work</button>' +
         '</span></div>';
     }).join('') + '</div>';
