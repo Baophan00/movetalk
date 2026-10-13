@@ -3525,31 +3525,42 @@ async function tcLoad() {
       const r = await HB.rpc('class_roster', { p_class: TC.classes[i].id });
       TC.rosters[TC.classes[i].id] = (r && r.data) ? r.data : [];
     }
+    /* Every source is read on its own account. A table this account may not
+       read leaves that one list empty and is named at the end, instead of
+       blanking the whole workspace behind a red toast. */
+    TC.loadErrors = [];
     const a = await HB.from('assignments')
       .select('id,title,instructions,kind,lesson_track,lesson_no,assigned_at,due_at,status,created_at')
       .order('created_at', { ascending: false });
-    if (a.error) throw a.error;
-    TC.assignments = a.data || [];
+    if (a && a.error) TC.loadErrors.push('assignments');
+    TC.assignments = (a && !a.error && a.data) ? a.data : [];
     const p = await HB.from('lesson_progress').select('student_id,track,lesson_no,part');
+    if (p && p.error) TC.loadErrors.push('lesson progress');
     TC.progress = (p && !p.error && p.data) ? p.data : [];
     const s = await HB.from('profiles')
       .select('id,full_name,email,status,created_at')
       .eq('role', 'student')
       .order('created_at', { ascending: true });
+    if (s && s.error) TC.loadErrors.push('students');
     TC.students = (s && !s.error && s.data) ? s.data : [];
     const sb = await HB.from('submissions')
       .select('id,assignment_id,student_id,status,score,max_score,submitted_at,graded_at')
       .order('submitted_at', { ascending: false });
+    if (sb && sb.error) TC.loadErrors.push('submissions');
     TC.submissions = (sb && !sb.error && sb.data) ? sb.data : [];
     const rc = await HB.from('assignment_recipients').select('assignment_id,student_id,class_id');
+    if (rc && rc.error) TC.loadErrors.push('recipients');
     TC.recipients = (rc && !rc.error && rc.data) ? rc.data : [];
-    /* The timetable. A failure here must not take the whole workspace down:
-       the teacher can still teach, so it is loaded defensively. */
+    /* The timetable is the same story: the teacher can still teach. */
     const ses = await HB.from('class_sessions')
       .select('id,teacher_id,title,starts_at,duration_min,lesson_track,lesson_no,note,status')
       .order('starts_at', { ascending: true });
+    if (ses && ses.error) TC.loadErrors.push('the timetable');
     TC.sessions = (ses && !ses.error && ses.data) ? ses.data : [];
     TC.ready = true;
+    if (TC.loadErrors.length) {
+      hwErr({ message: TC.loadErrors.join(', ') }, 'Part of your workspace could not be read');
+    }
   } catch (e) {
     hwErr(e, 'Could not load your students');
   } finally {
