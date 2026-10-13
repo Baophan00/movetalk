@@ -671,6 +671,9 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   const prog = await sa.hwLoadProgress();
   t('the dashboard counts a lesson once its final task is reached',
     prog && prog.lessons === 1 && prog.opened === 2 && prog.parts === 3, JSON.stringify(prog));
+  t('... and reports the same rows per programme, for the course cards',
+    prog && prog.byTrack && prog.byTrack.a1 && Object.keys(prog.byTrack.a1.opened).length === 2 &&
+    prog.byTrack.a1.done === 1 && prog.byTrack.a1.parts === 3, JSON.stringify(prog && prog.byTrack));
 
   STUDENT_TABLES.__calls = [];
   sa.setUser({ id: 'u1', name: 'Stu', email: 's@x.test', role: 'student' });

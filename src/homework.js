@@ -1591,9 +1591,19 @@ async function hwLoadProgress() {
     r.data.forEach(function (x) { if (x.part === 'finalTask') done[x.track + '-' + x.lesson_no] = true; });
     const touched = {};
     r.data.forEach(function (x) { touched[x.track + '-' + x.lesson_no] = true; });
+    /* Per programme, so a course card can say how far along it is. Same rows,
+       counted once more — no second query and no invented figure. */
+    const byTrack = {};
+    r.data.forEach(function (x) {
+      const b = byTrack[x.track] || (byTrack[x.track] = { opened: {}, parts: 0, done: 0 });
+      b.opened[String(x.lesson_no)] = true;
+      b.parts++;
+      if (x.part === 'finalTask') b.done++;
+    });
     return { lessons: Object.keys(done).length,
              opened: Object.keys(touched).length,
-             parts: r.data.length };
+             parts: r.data.length,
+             byTrack: byTrack };
   } catch (e) { return null; }
 }
 

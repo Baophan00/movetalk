@@ -103,5 +103,17 @@ check('the studio is not a second way to render a lesson',
   (js.match(/function trackBody\(/g)||[]).length===1 &&
   (js.match(/innerHTML=trackBody\(/g)||[]).length===1);
 
+// ---- dashboard blocks ----
+check('the dashboard shows the programmes as course cards',
+  /function dashRenderCourses\(/.test(js) && /function dashCourseGroups\(/.test(js) && /id="dash-courses"/.test(src));
+check('a programme with no content yet says so instead of showing a progress bar',
+  /if\(!total\)\{/.test(js) && /course-card dim/.test(js) && /Nội dung đang được cập nhật/.test(js));
+check('a course card counts lessons the student actually opened',
+  /Object\.keys\(b\.opened\|\|\{\}\)\.length/.test(js) && /byTrack/.test(js));
+check('the dashboard has a Today block over the timetable and homework rows',
+  /function dashRenderToday\(/.test(js) && /id="dash-today"/.test(src) && /HW\.sessions/.test(js));
+check('the dashboard is a grid, not one long column',
+  /md:grid-cols-2 xl:grid-cols-3/.test(src) && /xl:grid-cols-2/.test(src) && /\.course-cards\{display:grid/.test(src));
+
 console.log('\n'+pass+' passed, '+fail+' failed');
 process.exit(fail?1:0);

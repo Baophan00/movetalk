@@ -819,6 +819,31 @@ h3{font-family:'Inter Tight','Inter',sans-serif;font-size:clamp(19px,2.2vw,24px)
 .stat-ico.warn{background:var(--warn-bg);color:var(--warn-fg)}
 .stat-ico.ok{background:var(--ok-bg);color:var(--ok-fg)}
 
+/* ---- course cards and the Today block (dashboard blocks) ---- */
+.course-grid{display:grid;gap:24px}
+.course-group-head{display:flex;align-items:center;gap:10px;font-size:11.5px;font-weight:600;
+  letter-spacing:.07em;text-transform:uppercase;color:var(--text2);margin-bottom:12px}
+.course-group-head .course-rule{flex:1;height:1px;background:var(--border)}
+.course-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:14px}
+.course-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);
+  padding:18px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow-sm);
+  transition:border-color .16s,transform .16s}
+.course-card:hover{border-color:var(--card-hover-border);transform:translateY(-1px)}
+.course-card.dim{background:var(--surface2);box-shadow:none}
+.course-card.dim:hover{transform:none;border-color:var(--border)}
+.course-card-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.course-code{font-family:'Inter Tight','Inter',sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.05em;
+  padding:4px 8px;border-radius:6px;background:var(--badge-bg);color:var(--accent2)}
+.course-name{font-size:15px;font-weight:600;letter-spacing:-.01em;margin-bottom:4px}
+.course-sub{font-size:12.5px;color:var(--text2);line-height:1.5}
+.course-foot{margin-top:auto;display:flex;flex-direction:column;gap:10px}
+.course-counts{display:flex;align-items:baseline;gap:5px;font-size:12px;color:var(--text2)}
+.course-counts b{font-size:15px;color:var(--text);font-weight:600}
+.today-line{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-top:1px solid var(--border)}
+.today-line:first-child{border-top:0;padding-top:0}
+.today-ico{color:var(--accent2);font-size:12px;line-height:1.6;flex-shrink:0}
+.today-line .row-main{flex:1;min-width:0}
+
 /* ---- badges ---- */
 .badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:var(--radius-pill);letter-spacing:.01em;background:var(--badge-bg);color:var(--accent2);white-space:nowrap}
 .badge-ok{background:var(--ok-bg);color:var(--ok-fg)}
@@ -1358,7 +1383,11 @@ body.studio-mode .e2-part{min-height:74px}
             </div>
           </div>
 
-          <div class="grid md:grid-cols-2 gap-5">
+          <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+            <div class="card card-pad space-y-4">
+              <div class="section-head" style="margin-bottom:0"><div><h3>Today</h3><p class="faint" style="font-size:12.5px" id="dash-today-sub">—</p></div></div>
+              <div id="dash-today" class="space-y-3"></div>
+            </div>
             <div class="card card-pad space-y-4">
               <div class="section-head" style="margin-bottom:0"><h3>Continue learning</h3></div>
               <p class="row-title" id="dash-next-title">—</p>
@@ -1372,6 +1401,15 @@ body.studio-mode .e2-part{min-height:74px}
             </div>
           </div>
 
+          <div class="card card-pad space-y-5">
+            <div class="section-head" style="margin-bottom:0">
+              <div><h3>Your courses</h3>
+              <p class="faint" style="font-size:12.5px">Six programmes. A lesson remembers where you stopped.</p></div>
+            </div>
+            <div id="dash-courses" class="course-grid"></div>
+          </div>
+
+          <div class="grid xl:grid-cols-2 gap-5">
           <div class="card card-pad space-y-4">
             <div class="section-head" style="margin-bottom:0"><div><h3>My homework</h3>
               <p class="faint" style="font-size:12.5px">What is due, and where you left off.</p></div>
@@ -1382,6 +1420,7 @@ body.studio-mode .e2-part{min-height:74px}
           <div class="card card-pad space-y-4">
             <div class="section-head" style="margin-bottom:0"><h3>Latest feedback</h3></div>
             <div id="dash-feedback"></div>
+          </div>
           </div>
         </div>
       </div>
@@ -2190,6 +2229,87 @@ function updateAuthUI(){
 }
 
 // ---- DASHBOARD ----
+/* ---------- dashboard blocks: today, and the six programmes ----------
+   Both read data the app already has: the timetable and homework rows the
+   homework module loaded, and this student's own lesson_progress record. No
+   block invents a number, and a block with nothing to show says so. */
+function dashCourseGroups(){
+  return [
+    {name:'Foundation', line:'Build the base', tracks:['f1','f2']},
+    {name:'Activation', line:'Diagnose and repair', tracks:['a1','a2']},
+    {name:'Expand', line:'Speak more, in more places', tracks:['e1','e2']}
+  ];
+}
+function dashCourseCard(tk,stats){
+  const T=TRACKS[tk];if(!T)return '';
+  const total=Object.keys(T.lessons||{}).length;
+  const code=(T.badge||'').split('·').pop().trim();
+  const b=stats||{};
+  const opened=Object.keys(b.opened||{}).length;
+  const done=b.done||0;
+  if(!total){
+    return '<div class="course-card dim"><div class="course-card-top"><span class="course-code">'+code+'</span>'+
+      '<span class="badge">Planning</span></div>'+
+      '<div><div class="course-name">'+T.title+'</div>'+
+      '<div class="course-sub">'+T.sub+'</div></div>'+
+      '<div class="course-foot"><div class="course-counts">Nội dung đang được cập nhật.</div></div></div>';
+  }
+  const pct=Math.round(opened/total*100);
+  const last=Object.keys(b.opened||{}).map(Number).sort((x,y)=>x-y).pop()||1;
+  const next=Object.keys(b.opened||{}).length?Math.min(Math.max(last+1,1),total):1;
+  const status=opened===0?hwPill('not_started','Not started'):(done>=total?hwPill('graded','Completed'):hwPill('in_progress',opened+' of '+total+' opened'));
+  return '<div class="course-card"><div class="course-card-top"><span class="course-code">'+code+'</span>'+status+'</div>'+
+    '<div><div class="course-name">'+T.title+'</div><div class="course-sub">'+T.sub+'</div></div>'+
+    '<div class="course-foot">'+
+    '<div class="progress-row"><span class="progress-track"><span class="progress-fill-bar" style="width:'+pct+'%"></span></span>'+
+    '<span class="progress-num">'+pct+'%</span></div>'+
+    '<div class="course-counts"><b>'+opened+'</b> of '+total+' lessons opened'+(done?' · '+done+' finished':'')+'</div>'+
+    '<button class="btn-'+(opened?'secondary':'primary')+' btn-sm" onclick="dashOpenLesson(\''+tk+'\','+(opened?next:1)+')">'+
+    (opened?('Continue lesson '+next):'Start lesson 1')+'</button>'+
+    '</div></div>';
+}
+function dashOpenLesson(tk,n){go(tk);if(typeof trackGo==='function')trackGo(tk,n)}
+function dashRenderCourses(serverProg){
+  const el=document.getElementById('dash-courses');if(!el)return;
+  const byTrack=(serverProg&&serverProg.byTrack)?serverProg.byTrack:{};
+  el.innerHTML=dashCourseGroups().map(function(g){
+    return '<div class="course-group"><div class="course-group-head">'+g.name+
+      '<span class="course-rule"></span><span style="text-transform:none;letter-spacing:0;font-weight:400">'+g.line+'</span></div>'+
+      '<div class="course-cards">'+g.tracks.map(function(tk){return dashCourseCard(tk,byTrack[tk])}).join('')+'</div></div>';
+  }).join('');
+}
+function dashRenderToday(){
+  const box=document.getElementById('dash-today'),sub=document.getElementById('dash-today-sub');
+  if(!box)return;
+  const online=(typeof HW!=='undefined')&&HW_ON&&USER&&USER.role==='student'&&USER.status==='active';
+  if(!online){
+    if(sub)sub.textContent='Sign in to see your class and your work';
+    box.innerHTML='<div class="empty"><div class="empty-title">Not signed in</div>'+
+      '<div class="empty-text">Your timetable and homework appear here once you sign in.</div></div>';
+    return;
+  }
+  const now=Date.now();
+  const ses=(HW.sessions||[]).filter(function(s){return s.status!=='cancelled'&&new Date(s.starts_at).getTime()+((Number(s.duration_min)||60)*60000)>=now})
+    .sort(function(a,b){return new Date(a.starts_at)-new Date(b.starts_at)});
+  const nextSes=ses[0];
+  const today=ses.filter(function(s){return typeof tcIsToday==='function'&&tcIsToday(s.starts_at)}).length;
+  const open=(HW.assignments||[]).filter(function(a){
+    const s=HW.subs[a.id];return s!==undefined?(s&&s.status==='in_progress'):true;
+  });
+  const due=open.filter(function(a){return a.due_at&&new Date(a.due_at).getTime()<now}).length;
+  if(sub)sub.textContent=today?(today+(today===1?' class today':' classes today')):(nextSes?'Nothing today':'Nothing scheduled');
+  let html='';
+  html+='<div class="today-line"><span class="today-ico">'+(nextSes?'▸':'○')+'</span><span class="row-main">'+
+    '<span class="row-title">'+(nextSes?hwEsc(nextSes.title):'No class scheduled')+'</span>'+
+    '<span class="row-sub">'+(nextSes?(tcWhen(nextSes.starts_at)+' · '+hwEsc(String(nextSes.duration_min||60))+' min'+
+      (nextSes.lesson_track?(' · '+hwEsc(String(nextSes.lesson_track).toUpperCase())+' · Lesson '+hwEsc(String(nextSes.lesson_no||''))):'')):'Your teacher has not set the next session.')+'</span></span></div>';
+  html+='<div class="today-line"><span class="today-ico">'+(open.length?'▸':'○')+'</span><span class="row-main">'+
+    '<span class="row-title">'+(open.length?(open.length+(open.length===1?' thing to do':' things to do')):'Nothing to hand in')+'</span>'+
+    '<span class="row-sub">'+(open.length?(due?(due+' already past the due date'):'Nothing past its due date yet'):'Your teacher has not assigned work yet.')+'</span></span>'+
+    (open.length?'<button class="btn-ghost btn-sm" onclick="go(\'homework\')">Open</button>':'')+'</div>';
+  box.innerHTML=html;
+}
+
 async function renderDashboard(){
   const gate=document.getElementById('dash-gate'),body=document.getElementById('dash-body');
   if(!USER){gate.classList.remove('hidden');body.classList.add('hidden');return}
@@ -2241,6 +2361,8 @@ async function renderDashboard(){
   document.getElementById('dash-progress-sub').textContent=parts?(parts+' lesson part'+(parts===1?'':'s')+' opened · '+lessonsDone+' lesson'+(lessonsDone===1?'':'s')+' finished'):'Open a lesson part and your progress appears here.';
 
   /* homework: the same real rows the homework screen shows */
+  dashRenderToday();
+  dashRenderCourses(serverProg);
   const hwBox=document.getElementById('dash-hw');
   const fbBox=document.getElementById('dash-feedback');
   if(typeof HW==='undefined'||!HW_ON||!HW.assignments.length){
@@ -3873,9 +3995,19 @@ async function hwLoadProgress() {
     r.data.forEach(function (x) { if (x.part === 'finalTask') done[x.track + '-' + x.lesson_no] = true; });
     const touched = {};
     r.data.forEach(function (x) { touched[x.track + '-' + x.lesson_no] = true; });
+    /* Per programme, so a course card can say how far along it is. Same rows,
+       counted once more — no second query and no invented figure. */
+    const byTrack = {};
+    r.data.forEach(function (x) {
+      const b = byTrack[x.track] || (byTrack[x.track] = { opened: {}, parts: 0, done: 0 });
+      b.opened[String(x.lesson_no)] = true;
+      b.parts++;
+      if (x.part === 'finalTask') b.done++;
+    });
     return { lessons: Object.keys(done).length,
              opened: Object.keys(touched).length,
-             parts: r.data.length };
+             parts: r.data.length,
+             byTrack: byTrack };
   } catch (e) { return null; }
 }
 
