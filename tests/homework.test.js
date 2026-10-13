@@ -389,6 +389,14 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   t('a source the account cannot read leaves that list empty and is named',
     /TC\.loadErrors = \[\]/.test(js) && /Part of your workspace could not be read/.test(js) &&
     (js.match(/TC\.loadErrors\.push\(/g) || []).length >= 5);
+  t('the teacher workspace is one account, not a role anyone can be given',
+    /const TEACHER_EMAIL = 'nhutruong0407@gmail.com'/.test(js) && /function teacherAllowed/.test(js) &&
+    /USER\.role !== 'teacher' \|\| !teacherAllowed\(\)/.test(js));
+  t('the sidebar shows the workspace to that account only',
+    /isTeacher=!!\(USER&&USER\.role==='teacher'&&String\(USER\.email\|\|''\)\.toLowerCase\(\)===TEACHER_EMAIL\)/.test(src));
+  t('another teacher account is stopped at the door with a reason',
+    /Khu giáo viên chỉ mở cho tài khoản giáo viên phụ trách/.test(js) &&
+    /Về trang học của tôi/.test(js));
   t('the teacher sidebar has the five sections, in order',
     ['dashboard', 'courses', 'students', 'materials', 'chat'].every(function (k) {
       return src.indexOf('data-tc-nav="' + k + '"') >= 0;

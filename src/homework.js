@@ -549,10 +549,27 @@ async function hwSubmit() {
 /* ============================================================
    TEACHER WORKSPACE
    ============================================================ */
+/* The teacher workspace belongs to one account, not to a role anybody can be
+   handed. The database still decides what a role may read; this decides who is
+   shown the door at all. */
+const TEACHER_EMAIL = 'nhutruong0407@gmail.com';
+function teacherAllowed() {
+  return !!(USER && String(USER.email || '').toLowerCase() === TEACHER_EMAIL);
+}
+
 function renderTeacher() {
   const gate = document.getElementById('tc-gate');
   const body = document.getElementById('tc-body');
   if (!gate || !body) return;
+
+  /* Signed in, but not the teacher: the workspace is not theirs to open. */
+  if (USER && USER.role === 'teacher' && !teacherAllowed()) {
+    hwSet('tc-gate-msg', 'Khu giáo viên chỉ mở cho tài khoản giáo viên phụ trách. Tài khoản đang đăng nhập không nằm trong danh sách.');
+    const b = document.getElementById('tc-gate-btn');
+    if (b) { b.textContent = 'Về trang học của tôi'; b.setAttribute('onclick', "go('dashboard')"); }
+    gate.classList.remove('hidden'); body.classList.add('hidden');
+    return;
+  }
 
   const g = hwGate('teacher', HW_ON, USER);
   if (g.shot !== 'ok') {
@@ -575,7 +592,7 @@ function renderTeacher() {
 }
 
 async function tcLoad() {
-  if (!HW_ON || !USER || USER.role !== 'teacher' || TC.loading) return;
+  if (!HW_ON || !USER || USER.role !== 'teacher' || !teacherAllowed() || TC.loading) return;
   TC.loading = true;
   try {
     /* Classes are optional and no longer needed to give a student work, and this
