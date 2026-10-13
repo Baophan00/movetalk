@@ -387,8 +387,8 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   t('with nobody signed up the teacher is told what to do',
     /Tell whoever you are teaching to sign up/.test(tcp), tcp.slice(0, 160));
   t('a source the account cannot read leaves that list empty and is named',
-    /TC\.loadErrors/.test(js) && !/if \(a\.error\) throw a\.error/.test(js) &&
-    /Part of your workspace could not be read/.test(js));
+    /TC\.loadErrors = \[\]/.test(js) && /Part of your workspace could not be read/.test(js) &&
+    (js.match(/TC\.loadErrors\.push\(/g) || []).length >= 5);
   t('the teacher sidebar has the five sections, in order',
     ['dashboard', 'courses', 'students', 'materials', 'chat'].every(function (k) {
       return src.indexOf('data-tc-nav="' + k + '"') >= 0;
