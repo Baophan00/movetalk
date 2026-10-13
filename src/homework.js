@@ -780,10 +780,6 @@ function tcRenderStudents() {
   function avatar(s) {
     return '<span class="row-ico avatar-sm">' + hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>';
   }
-  function who(s) {
-    return '<span class="row-main"><span class="row-title">' + hwEsc(s.full_name || 'Student') + '</span>' +
-      '<span class="row-sub">' + hwEsc(s.email || '') + '</span></span>';
-  }
 
   let html = '';
 
@@ -794,18 +790,22 @@ function tcRenderStudents() {
       (waiting.length === 1 ? ' person is waiting to join' : ' people are waiting to join') + '</p>' +
       '<p class="faint" style="font-size:12.5px;margin-top:4px">They signed up themselves. ' +
       'Accept them and they can see the work you assign.</p></div>' +
-      '<div class="row-list">' + waiting.map(function (s) {
+      '<div class="table-wrap"><table class="table">' +
+      '<thead><tr><th>Student</th><th>Email</th><th style="text-align:right">Decision</th></tr></thead><tbody>' +
+      waiting.map(function (s) {
         const busy = TC.busy[s.id];
-        return '<div class="row">' + avatar(s) + who(s) +
-          '<span class="row-actions ml-auto">' +
+        return '<tr>' +
+          '<td data-label="Student"><span class="flex items-center gap-2">' + avatar(s) + hwEsc(s.full_name || 'Student') + '</span></td>' +
+          '<td data-label="Email" class="faint">' + hwEsc(s.email || '') + '</td>' +
+          '<td data-label="Decision"><div class="table-actions">' +
           '<button class="btn-primary btn-sm"' + (busy ? ' disabled' : '') +
           ' onclick="tcDecideStudent(\'' + s.id + '\',\'accept\')">' +
           (busy === 'accept' ? 'Accepting…' : 'Accept') + '</button>' +
           '<button class="btn-secondary btn-sm"' + (busy ? ' disabled' : '') +
           ' onclick="tcDecideStudent(\'' + s.id + '\',\'decline\')">' +
           (busy === 'decline' ? 'Declining…' : 'Decline') + '</button>' +
-          '</span></div>';
-      }).join('') + '</div></div>';
+          '</div></td></tr>';
+      }).join('') + '</tbody></table></div></div>';
   }
 
   html += '<div class="card card-pad space-y-4">' +
@@ -815,18 +815,23 @@ function tcRenderStudents() {
     (accepted.length ? accepted.length + ' accepted' : 'Nobody accepted yet') + '</p>' +
     '</div></div>';
   if (accepted.length) {
-    html += '<div class="row-list">' + accepted.map(function (s) {
-      const w = tcStudentWork(s.id);
-      const when = w.last ? ' · last ' + hwDate(String(w.last).slice(0, 10)) : '';
-      const total = tcTotalParts();
-      const pct = total ? Math.min(100, Math.round(w.parts * 100 / total)) : 0;
-      return '<div class="row">' + avatar(s) + who(s) +
-        '<span class="row-actions ml-auto">' +
-        '<span class="chip">' + hwEsc(tcWorkLine(w)) + when + '</span>' +
-        '<span style="min-width:150px;display:inline-flex">' + tcProgressBar(pct, w.parts) + '</span>' +
-        '<button class="btn-quiet btn-sm" onclick="tcNewAssignmentFor(\'' + s.id + '\')">Assign work</button>' +
-        '</span></div>';
-    }).join('') + '</div>';
+    html += '<div class="table-wrap"><table class="table">' +
+      '<thead><tr><th>Student</th><th>Lesson progress</th><th>Work</th><th style="text-align:right">Action</th></tr></thead><tbody>' +
+      accepted.map(function (s) {
+        const w = tcStudentWork(s.id);
+        const when = w.last ? ' · last ' + hwDate(String(w.last).slice(0, 10)) : '';
+        const total = tcTotalParts();
+        const pct = total ? Math.min(100, Math.round(w.parts * 100 / total)) : 0;
+        return '<tr>' +
+          '<td data-label="Student"><span class="flex items-center gap-2">' + avatar(s) +
+          '<span><span class="block" style="font-weight:500">' + hwEsc(s.full_name || 'Student') + '</span>' +
+          '<span class="faint" style="font-size:12px">' + hwEsc(s.email || '') + '</span></span></span></td>' +
+          '<td data-label="Lesson progress" style="min-width:170px">' + tcProgressBar(pct, w.parts) + '</td>' +
+          '<td data-label="Work"><span class="chip">' + hwEsc(tcWorkLine(w)) + when + '</span></td>' +
+          '<td data-label="Action"><div class="table-actions">' +
+          '<button class="btn-quiet btn-sm" onclick="tcNewAssignmentFor(\'' + s.id + '\')">Assign work</button>' +
+          '</div></td></tr>';
+      }).join('') + '</tbody></table></div>';
   } else {
     html += '<div class="empty">' +
       '<div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/></svg></div>' +
@@ -838,13 +843,19 @@ function tcRenderStudents() {
 
   if (refused.length) {
     html += '<div class="card card-pad space-y-3"><p class="font-semibold">Not accepted</p>' +
-      '<div class="row-list">' + refused.map(function (s) {
+      '<div class="table-wrap"><table class="table">' +
+      '<thead><tr><th>Student</th><th>Email</th><th style="text-align:right">Decision</th></tr></thead><tbody>' +
+      refused.map(function (s) {
         const busy = TC.busy[s.id];
-        return '<div class="row" style="padding:10px 14px">' + avatar(s) + who(s) +
-          '<span class="row-actions ml-auto"><button class="btn-quiet btn-sm"' + (busy ? ' disabled' : '') +
+        return '<tr>' +
+          '<td data-label="Student"><span class="flex items-center gap-2">' + avatar(s) + hwEsc(s.full_name || 'Student') + '</span></td>' +
+          '<td data-label="Email" class="faint">' + hwEsc(s.email || '') + '</td>' +
+          '<td data-label="Decision"><div class="table-actions">' +
+          '<button class="btn-quiet btn-sm"' + (busy ? ' disabled' : '') +
           ' onclick="tcDecideStudent(\'' + s.id + '\',\'accept\')">' +
-          (busy === 'accept' ? 'Accepting…' : 'Accept anyway') + '</button></span></div>';
-      }).join('') + '</div></div>';
+          (busy === 'accept' ? 'Accepting…' : 'Accept anyway') + '</button>' +
+          '</div></td></tr>';
+      }).join('') + '</tbody></table></div></div>';
   }
 
   el.innerHTML = html;
@@ -1028,23 +1039,26 @@ function tcRenderAssignments() {
       '<div class="empty-title">No assignments yet</div>' +
       '<div class="empty-text">Create one above, then publish it. Only published work becomes visible to students.</div></div>';
   }
+  if (TC.assignments.length) {
+    html += '<div class="table-wrap"><table class="table">' +
+      '<thead><tr><th>Assignment</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead><tbody>';
+  }
   TC.assignments.forEach(function (a) {
     const ref = a.kind === 'lesson'
       ? 'Lesson · ' + hwEsc(String(a.lesson_track || '').toUpperCase()) + ' ' + hwEsc(a.lesson_no)
       : 'Custom questions';
     const st = a.status === 'published' ? hwPill('submitted', 'Published')
       : a.status === 'closed' ? hwPill('not_started', 'Closed') : hwPill('in_progress', 'Draft');
-    html += '<div class="card card-pad space-y-3">' +
-      '<div class="flex items-start justify-between gap-4 flex-wrap"><div>' +
-      '<p class="row-title">' + hwEsc(a.title) + '</p>' +
-      '<p class="row-sub">' + ref + ' · assigned ' + hwEsc(hwDate(a.assigned_at)) + ' · due ' + hwEsc(hwDate(a.due_at)) + '</p>' +
-      '</div>' + st + '</div>' +
-      '<div class="row-actions">' +
-      (a.status === 'draft' ? '<button class="btn-primary btn-sm" onclick="tcSetStatus(\'' + a.id + '\',\'published\',this)">Publish</button>' : '') +
+    const actions = (a.status === 'draft' ? '<button class="btn-primary btn-sm" onclick="tcSetStatus(\'' + a.id + '\',\'published\',this)">Publish</button>' : '') +
       (a.status === 'published' ? '<button class="btn-quiet btn-sm" onclick="tcSetStatus(\'' + a.id + '\',\'closed\',this)">Close</button>' : '') +
-      '<button class="btn-quiet btn-sm" onclick="tcOpenSubmissions(\'' + a.id + '\')">Submissions</button>' +
-      '</div></div>';
+      '<button class="btn-quiet btn-sm" onclick="tcOpenSubmissions(\'' + a.id + '\')">Submissions</button>';
+    html += '<tr>' +
+      '<td data-label="Assignment"><span class="block row-title">' + hwEsc(a.title) + '</span>' +
+      '<span class="row-sub">' + ref + ' · assigned ' + hwEsc(hwDate(a.assigned_at)) + ' · due ' + hwEsc(hwDate(a.due_at)) + '</span></td>' +
+      '<td data-label="Status">' + st + '</td>' +
+      '<td data-label="Actions"><div class="table-actions">' + actions + '</div></td></tr>';
   });
+  if (TC.assignments.length) html += '</tbody></table></div>';
 
   if (TC.openSubs) {
     html += '<div id="tc-subs" class="card p-6 space-y-4">' +
