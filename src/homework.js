@@ -578,9 +578,11 @@ async function tcLoad() {
   if (!HW_ON || !USER || USER.role !== 'teacher' || TC.loading) return;
   TC.loading = true;
   try {
+    /* Classes are optional and no longer needed to give a student work, and this
+       account is refused the table outright. A failure here must not take the
+       whole workspace down with a permission toast. */
     const c = await HB.from('classes').select('id,name,join_code,created_at').order('created_at', { ascending: true });
-    if (c.error) throw c.error;
-    TC.classes = c.data || [];
+    TC.classes = (c && !c.error && c.data) ? c.data : [];
     TC.rosters = {};
     for (var i = 0; i < TC.classes.length; i++) {
       const r = await HB.rpc('class_roster', { p_class: TC.classes[i].id });
@@ -685,14 +687,14 @@ function tcRenderStats() {
   const ahead = (TC.sessions || []).filter(function (s) {
     return s.status !== 'cancelled' && new Date(s.starts_at).getTime() > now;
   }).length;
-  const card = function (label, value, hint, cls) {
-    return '<div class="card card-pad space-y-2"><span class="stat-label">' + hwEsc(label) + '</span>' +
-      '<span class="stat-value' + (cls || '') + '">' + hwEsc(String(value)) + '</span>' +
+  const card = function (label, value, hint) {
+    return '<div class="stat"><div class="stat-top"><span class="stat-label">' + hwEsc(label) + '</span></div>' +
+      '<span class="stat-value">' + hwEsc(String(value)) + '</span>' +
       '<span class="stat-hint">' + hwEsc(hint) + '</span></div>';
   };
   el.innerHTML = card('Học viên', students, waiting ? waiting + ' đang chờ bạn duyệt' : 'Không ai chờ duyệt') +
     card('Giờ đã dạy', hours + 'h', taught.length + ' buổi đã qua') +
-    card('Bài chờ chấm', toMark, toMark ? 'Mở học viên để chấm' : 'Không còn bài nào', toMark ? ' warn' : '') +
+    card('Bài chờ chấm', toMark, toMark ? 'Mở học viên để chấm' : 'Không còn bài nào') +
     card('Buổi sắp tới', ahead, ahead ? 'Xem lịch bên dưới' : 'Chưa xếp buổi nào');
   const sub = document.getElementById('tc-sub');
   if (sub) sub.textContent = students + ' học viên · ' + taught.length + ' buổi đã dạy · ' + toMark + ' bài chờ chấm';
@@ -892,18 +894,18 @@ function tcRenderSchedule() {
     .filter(function (k) { return TRACKS[k] && TRACKS[k].lessons && Object.keys(TRACKS[k].lessons).length; });
 
   let html = '<div class="card card-pad space-y-4">' +
-    '<div class="section-head" style="margin-bottom:0"><div><h3>Schedule a session</h3>' +
-    '<p class="faint" style="font-size:12.5px">Every accepted student sees it. Nobody has to be enrolled.</p></div></div>' +
+    '<div class="section-head" style="margin-bottom:0"><div><h3>Xếp buổi học</h3>' +
+    '<p class="faint" style="font-size:12.5px">Mọi học viên đã được duyệt đều nhìn thấy buổi này. Không cần xếp lớp.</p></div></div>' +
     '<div class="grid md:grid-cols-2 gap-4">' +
-    '<div class="field"><label class="field-label" for="tc-s-title">Title</label>' +
+    '<div class="field"><label class="field-label" for="tc-s-title">Tiêu đề</label>' +
     '<input class="input" id="tc-s-title" value="' + hwEsc(f.title) + '" placeholder="Session 1: Present simple" oninput="tcSessionSet(\'title\', this.value)"></div>' +
-    '<div class="field"><label class="field-label" for="tc-s-date">Date</label>' +
+    '<div class="field"><label class="field-label" for="tc-s-date">Ngày</label>' +
     '<input class="input" type="date" id="tc-s-date" value="' + hwEsc(f.date) + '" oninput="tcSessionSet(\'date\', this.value)"></div>' +
-    '<div class="field"><label class="field-label" for="tc-s-time">Start</label>' +
+    '<div class="field"><label class="field-label" for="tc-s-time">Bắt đầu</label>' +
     '<input class="input" type="time" id="tc-s-time" value="' + hwEsc(f.time) + '" oninput="tcSessionSet(\'time\', this.value)"></div>' +
-    '<div class="field"><label class="field-label" for="tc-s-dur">Minutes</label>' +
+    '<div class="field"><label class="field-label" for="tc-s-dur">Phút</label>' +
     '<input class="input" type="number" min="10" max="480" step="5" id="tc-s-dur" value="' + hwEsc(f.duration_min) + '" oninput="tcSessionSet(\'duration_min\', this.value)"></div>' +
-    '<div class="field"><label class="field-label" for="tc-s-track">Lesson</label>' +
+    '<div class="field"><label class="field-label" for="tc-s-track">Bài học</label>' +
     '<div class="flex gap-2"><select class="input" id="tc-s-track" onchange="tcSessionSet(\'lesson_track\', this.value); tcRenderSchedule();">' +
     trackOpts.map(function (k) { return '<option value="' + k + '"' + (f.lesson_track === k ? ' selected' : '') + '>' + k.toUpperCase() + '</option>'; }).join('') +
     '</select><input class="input" type="number" min="1" max="50" style="width:96px" id="tc-s-no" value="' + hwEsc(f.lesson_no) + '" placeholder="No." oninput="tcSessionSet(\'lesson_no\', this.value)"></div></div>' +
