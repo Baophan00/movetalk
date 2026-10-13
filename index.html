@@ -2745,6 +2745,29 @@ function dashRenderSelfStudy() {
     });
   });
   el.innerHTML = out.join('') || '<p class="faint">Chưa có chương trình nào.</p>';
+  /* The bar under the rows is the same record, added up. It said 0% while a row
+     above said 40% — one source now, so the two can never disagree. */
+  let tot = 0, op = 0;
+  dashCourseGroups().forEach(function (g) {
+    g.tracks.forEach(function (tk) {
+      const T = TRACKS[tk];
+      if (!T) return;
+      const n = Object.keys(T.lessons || {}).length;
+      if (!n) return;
+      tot += n;
+      const p = (TRACK_PROG && TRACK_PROG.byTrack && TRACK_PROG.byTrack[tk]) || null;
+      op += p ? Object.keys(p.opened || {}).length : 0;
+    });
+  });
+  const pctAll = tot ? Math.round(op * 100 / tot) : 0;
+  const bar = document.getElementById('dash-progress-bar');
+  const num = document.getElementById('dash-progress-num');
+  const sub = document.getElementById('dash-progress-sub');
+  if (bar) bar.style.width = pctAll + '%';
+  if (num) num.textContent = pctAll + '%';
+  if (sub) sub.textContent = tot
+    ? op + ' trong ' + tot + ' bài đã mở, tính trên các khoá đang có nội dung.'
+    : 'Các khoá sẽ mở khi có nội dung.';
 }
 /* Level: the placement check this student actually did, kept in this browser. */
 function dashRenderLevel() {
