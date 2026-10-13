@@ -29,6 +29,7 @@ const RETURNS = 'return {TRACKS,TRACK_PARTS,LESSON_DATA,AUDIO_MAP,go,trackGo,tra
   'HW,TC,HW_ON,HB,tcBlankBuilder,tcRenderAssignments,tcBuilderSet,tcBuilderKind,' +
   'tcSaveAssignment,tcGrade,hwLoadSession,hwLoad,hwOpen,hwRenderList,hwSubmit,' +
   'tcLoad,tcTab,tcAllStudents,tcWaitingStudents,tcProgressOf,tcDecideStudent,tcRenderStudents,tcRenderOverview,tcStat,tcNewAssignment,hwUpdatePendingBadge,syncAuthFields,showAuthChange,hwCheckAgain,' +
+  'tcRenderStats,tcRenderPending,tcRenderCourses,tcCourseCard,tcRenderMaterials,' +
   'tcStudentWork,tcWorkLine,tcWorkBadges,tcStudentByTrack,tcOpenStudent,tcStudentProfileRow,tcPartLine,tcTotalParts,' +
   'tcSaveSession,tcRenderSchedule,tcSessionBuckets,tcWhen,tcCancelSession,tcNextSession,' +
   'hwForgotPassword,hwRecordProgress,hwLoadProgress,doAuth,setRole,showAuth,' +
@@ -571,6 +572,33 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
     }));
   t('the dashboard counts from rows the teacher can open, not from estimates',
     /function tcRenderStats/.test(js) && /duration_min/.test(js) && /status === 'submitted'/.test(js));
+
+  /* The counters and the waiting table must read the same rows. This is the
+     test that would have caught the render that fell over on live because it
+     called a helper that does not exist. */
+  ta.TC.students = [{ id: 's1', full_name: 'Ann', email: 'a@x.test', status: 'active' }];
+  ta.TC.assignments = [{ id: 'a1', title: 'Ôn tập buổi 3', kind: 'lesson', lesson_track: 'a1', lesson_no: 3, status: 'published' }];
+  ta.TC.submissions = [{ id: 'sub1', assignment_id: 'a1', student_id: 's1', status: 'submitted', submitted_at: '2026-10-13T10:00:00Z' }];
+  ta.TC.sessions = [
+    { id: 'x1', title: 'Buổi 1', starts_at: '2020-01-01T09:00:00Z', duration_min: 60, status: 'done' },
+    { id: 'x2', title: 'Buổi sau', starts_at: '2099-01-01T09:00:00Z', duration_min: 90, status: 'planned' }
+  ];
+  ta.tcRenderPending();
+  const pend = TEACH.els['tc-pending'].innerHTML;
+  t('work waiting to be marked is a table of who, what and when',
+    /Ann/.test(pend) && /Ôn tập buổi 3/.test(pend) && /Mở học viên/.test(pend), pend.slice(0, 200));
+  ta.tcRenderStats();
+  const stats = TEACH.els['tc-stats'].innerHTML;
+  t('the dashboard adds up the sessions that already happened, and not the ones ahead',
+    /Giờ đã dạy/.test(stats) && /1h/.test(stats) && /1 buổi đã qua/.test(stats), stats.slice(0, 260));
+  t('... and it says how many submissions are waiting, from the same rows',
+    /Bài chờ chấm/.test(stats) && /Buổi sắp tới/.test(stats));
+  t('a section with no rows left says so instead of showing an empty table',
+    (() => { ta.TC.submissions = []; ta.tcRenderPending(); const e = TEACH.els['tc-pending'].innerHTML; ta.TC.submissions = [{ id: 'sub1', assignment_id: 'a1', student_id: 's1', status: 'submitted', submitted_at: '2026-10-13T10:00:00Z' }]; return /Không có bài nào đang chờ chấm/.test(e); })());
+  t('the teacher courses are the three programmes, with the lessons that exist',
+    (() => { ta.tcRenderCourses(); const c = TEACH.els['tc-courses'].innerHTML; return /Foundation/.test(c) && /Activation/.test(c) && /Expand/.test(c) && /Dạy/.test(c); })());
+  t('a programme with no content offers no teaching that cannot happen',
+    (() => { const c = ta.tcCourseCard('f1'); return /Đang cập nhật/.test(c) && !/Dạy/.test(c); })());
 
   const quiet = { id: 'a3', full_name: 'Quiet One', email: 'a3@x.test', status: 'active' };
   ta.TC.students = [waiting, accepted, refused, quiet];

@@ -715,7 +715,7 @@ function tcRenderPending() {
       const st = sById[s.student_id] || {};
       const a = aById[s.assignment_id] || {};
       const who = st.full_name || st.email || 'Học viên';
-      return '<tr><td data-label="Học viên">' + avatar(who) + '<span class="row-title" style="margin-left:8px">' + hwEsc(who) + '</span></td>' +
+      return '<tr><td data-label="Học viên"><span class="row-title">' + hwEsc(who) + '</span></td>' +
         '<td data-label="Bài">' + hwEsc(a.title || '—') + '</td>' +
         '<td data-label="Nộp lúc">' + hwEsc(s.submitted_at ? hwDate(String(s.submitted_at).slice(0, 10)) : '—') + '</td>' +
         '<td data-label=""><button class="btn-quiet btn-sm" onclick="tcTab(\'students\')">Mở học viên</button></td></tr>';
