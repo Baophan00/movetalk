@@ -106,8 +106,16 @@ check('the studio is not a second way to render a lesson',
   (js.match(/innerHTML=trackBody\(/g)||[]).length===1);
 
 // ---- dashboard blocks ----
-check('the dashboard shows the programmes as course cards',
-  /function dashRenderCourses\(/.test(js) && /function dashCourseGroups\(/.test(js) && /id="dash-courses"/.test(src));
+check('the dashboard shows the programmes as self-study rows, the landing as the same cards',
+  /function dashRenderSelfStudy\(/.test(js) && /id="dash-selfstudy"/.test(src) && /function dashCourseGroups\(/.test(js) && /id="home-courses"/.test(src));
+check('the programmes are a filter that really filters, not decoration',
+  /function dashSetPg\(/.test(js) && /DASH_PG!==g\.name|DASH_PG !== g\.name/.test(js) && /id="dash-pills"/.test(src));
+check('Level shows the placement result the student really has, or says it is not done',
+  /function dashRenderLevel\(/.test(js) && /load\('selectedLevel'/.test(js) && /Chưa làm bài kiểm tra xếp trình độ/.test(js));
+check('Activity is counted from the student record, never estimated',
+  /function dashRenderActivity\(/.test(js) && /phần đã mở/.test(js) && /TRACK_PROG/.test(js));
+check('the timetable on the dashboard reads the same sessions the homework screen shows',
+  /function dashRenderSessions\(/.test(js) && /HW\.sessions/.test(js) && /id="dash-sessions"/.test(src));
 check('a programme with no content yet says so instead of showing a progress bar',
   /if\(!total\)\{/.test(js) && /course-card dim/.test(js) && /Nội dung đang được cập nhật/.test(js));
 check('a course card counts lessons the student actually opened',
@@ -115,7 +123,9 @@ check('a course card counts lessons the student actually opened',
 check('the dashboard has a Today block over the timetable and homework rows',
   /function dashRenderToday\(/.test(js) && /id="dash-today"/.test(src) && /HW\.sessions/.test(js));
 check('the dashboard is a grid, not one long column',
-  /md:grid-cols-2 xl:grid-cols-3/.test(src) && /xl:grid-cols-2/.test(src) && /\.course-cards\{display:grid/.test(src));
+  /xl:grid-cols-3/.test(src) && /xl:grid-cols-2/.test(src) && /\.course-cards\{display:grid/.test(src));
+check('the self-study rows are compact rows with a real bar, not six stacked cards',
+  /\.ss-row\{display:flex/.test(src) && /class="ss-row dim"/.test(js) && /opened \+ '\/' \+ total/.test(js));
 
 // ---- vocabulary hub ----
 const vIx = api.vocabIndex();
@@ -165,6 +175,8 @@ check('a programme with lessons offers exactly one action: open lesson 1',
   (() => { const c = api.homeCourseCard('a1'); return /Mở bài 1/.test(c) && (c.match(/<button/g) || []).length === 1 && /10<\/b>/.test(c); })());
 check('a programme with no lessons is honest on the landing too',
   (() => { const c = api.homeCourseCard('f1'); return /cập nhật/.test(c) && !/Mở bài 1/.test(c) && !/progress-fill-bar/.test(c); })());
+check('a saved word on the dashboard opens the word, it does not just toggle it',
+  /vocabShow/.test(js) && !/go\('vocab'\);vocabOpen/.test(js));
 
 console.log('\n'+pass+' passed, '+fail+' failed');
 process.exit(fail?1:0);

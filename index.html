@@ -895,6 +895,14 @@ tr.profile-row>td{padding:0;background:var(--surface2);border-top:0}
 .hw-task-side{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex-shrink:0}
 .hw-flag{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2)}
 
+/* ---- self-study rows on the student dashboard ---- */
+.ss-row{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius-ctl);background:var(--surface2);cursor:pointer;font-family:inherit;transition:.15s}
+.ss-row:hover{border-color:var(--card-hover-border)}
+.ss-row.dim{cursor:default;opacity:.62;background:transparent}
+.ss-code{width:34px;height:34px;flex-shrink:0;border-radius:9px;background:var(--badge-bg);color:var(--accent2);font-size:11px;font-weight:800;letter-spacing:.04em;display:flex;align-items:center;justify-content:center}
+.ss-main{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1}
+.ss-main b{font-size:14px;font-weight:600;color:var(--text)}
+
 /* ---- vocabulary hub ---- */
 .vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px}
 .vocab-card{display:flex;align-items:flex-start;gap:8px;background:var(--surface);border:1px solid var(--border);
@@ -1461,37 +1469,51 @@ body.studio-mode .e2-part{min-height:74px}
             </div>
           </div>
 
-          <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+          <!-- the programmes, as a filter over the self-study rows -->
+          <div class="chip-row" id="dash-pills"></div>
+
+          <div class="grid xl:grid-cols-3 gap-5">
+            <div class="card card-pad space-y-4" style="grid-column:span 2">
+              <div class="section-head" style="margin-bottom:0"><div><h3>Self-study</h3>
+                <p class="faint" style="font-size:12.5px">Mỗi khoá nhớ chỗ bạn dừng lại.</p></div>
+                <button class="btn-ghost btn-sm" onclick="go('vocab')">Vocabulary</button></div>
+              <div id="dash-selfstudy" class="space-y-2"></div>
+              <div class="progress-row"><span class="progress-track"><span class="progress-fill-bar" id="dash-progress-bar" style="width:0%"></span></span><span class="progress-num" id="dash-progress-num">0%</span></div>
+              <p class="row-sub" id="dash-progress-sub">Mở một phần bài học là tiến độ hiện ở đây.</p>
+            </div>
+
+            <div class="space-y-5">
+              <div class="card card-pad space-y-3">
+                <div class="section-head" style="margin-bottom:0"><h3>Level</h3></div>
+                <p id="dash-level-big" style="font-size:26px;font-weight:700;letter-spacing:-.02em">—</p>
+                <p class="row-sub" id="dash-level-sub">—</p>
+                <button class="btn-secondary btn-sm" onclick="go('home');setTimeout(function(){scrollToId('placement')},120)">Làm bài kiểm tra xếp trình độ</button>
+              </div>
+              <div class="card card-pad space-y-3">
+                <div class="section-head" style="margin-bottom:0"><h3>Activity</h3></div>
+                <div class="chip-row" id="dash-activity"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid xl:grid-cols-3 gap-5">
+            <div class="card card-pad space-y-4" style="grid-column:span 2">
+              <div class="section-head" style="margin-bottom:0"><div><h3>Lịch học với giáo viên</h3>
+                <p class="faint" style="font-size:12.5px">Buổi sắp tới và những buổi đã qua.</p></div>
+                <button class="btn-ghost btn-sm" onclick="go('homework')">Xem bài tập</button></div>
+              <div id="dash-sessions"></div>
+            </div>
+
             <div class="card card-pad space-y-4">
               <div class="section-head" style="margin-bottom:0"><div><h3>Today</h3><p class="faint" style="font-size:12.5px" id="dash-today-sub">—</p></div></div>
               <div id="dash-today" class="space-y-3"></div>
+              <div id="dash-vocab" class="chip-row"></div>
+              <div style="border-top:1px solid var(--border);padding-top:12px">
+                <p class="row-title" id="dash-next-title">—</p>
+                <p class="row-sub" id="dash-next-sub">—</p>
+                <button class="btn-primary btn-sm" id="dash-next-btn" onclick="go('a1')" style="margin-top:10px">Vào bài học</button>
+              </div>
             </div>
-            <div class="card card-pad space-y-4">
-              <div class="section-head" style="margin-bottom:0"><h3>Continue learning</h3></div>
-              <p class="row-title" id="dash-next-title">—</p>
-              <p class="row-sub" id="dash-next-sub">—</p>
-              <button class="btn-primary btn-sm" id="dash-next-btn" onclick="go('a1')">Open the lesson</button>
-            </div>
-            <div class="card card-pad space-y-4">
-              <div class="section-head" style="margin-bottom:0"><h3>Your progress</h3></div>
-              <div class="progress-row"><span class="progress-track"><span class="progress-fill-bar" id="dash-progress-bar" style="width:0%"></span></span><span class="progress-num" id="dash-progress-num">0%</span></div>
-              <p class="row-sub" id="dash-progress-sub">Open a lesson part and your progress appears here.</p>
-            </div>
-          </div>
-
-          <div class="card card-pad space-y-5">
-            <div class="section-head" style="margin-bottom:0">
-              <div><h3>Your courses</h3>
-              <p class="faint" style="font-size:12.5px">Six programmes. A lesson remembers where you stopped.</p></div>
-            </div>
-            <div id="dash-courses" class="course-grid"></div>
-          </div>
-
-          <div class="card card-pad space-y-4">
-            <div class="section-head" style="margin-bottom:0"><div><h3>Words to review</h3>
-              <p class="faint" style="font-size:12.5px">The words you saved from your lessons.</p></div>
-              <button class="btn-ghost btn-sm" onclick="go('vocab')">Open vocabulary</button></div>
-            <div id="dash-vocab" class="chip-row"></div>
           </div>
 
           <div class="grid xl:grid-cols-2 gap-5">
@@ -2667,13 +2689,106 @@ function dashRenderVocab(){
     return;
   }
   el.innerHTML=saved.slice(0,14).map(function(w){
-    return '<button class="pill" onclick="go(\'vocab\');vocabOpen(\''+esc(vocabDisplay(w))+'\')">'+hwEsc(vocabDisplay(w))+'</button>';
+    return '<button class="pill" onclick="go(\'vocab\');vocabShow(\''+esc(vocabDisplay(w))+'\')">'+hwEsc(vocabDisplay(w))+'</button>';
   }).join('')+(saved.length>14?'<span class="faint" style="font-size:12.5px">+'+(saved.length-14)+' more</span>':'');
 }
+/* Opening from a chip always opens: the card in the hub toggles, this does not. */
+function vocabShow(w){VOCAB.open=w;vocabRender()}
 /* Saved words are stored lower case; show the spelling the lesson uses. */
 function vocabDisplay(w){
   const hit=vocabIndex().filter(function(e){return e.w.toLowerCase()===String(w).toLowerCase()})[0];
   return hit?hit.w:String(w);
+}
+
+/* ---------- the student dashboard blocks ---------- */
+let DASH_PG = 'all';
+function dashSetPg(k) { DASH_PG = k; dashRenderPills(); dashRenderSelfStudy(); }
+function dashRenderPills() {
+  const el = document.getElementById('dash-pills');
+  if (!el) return;
+  const opts = [{ k: 'all', label: 'Tất cả' }].concat(dashCourseGroups().map(function (g) {
+    return { k: g.name, label: g.name + ' · ' + (g.tracks || []).map(function (t) { return (TRACKS[t] || {}).title || ''; }).join(', ') };
+  }));
+  el.innerHTML = opts.map(function (o) {
+    return '<button class="pill' + (DASH_PG === o.k ? ' on' : '') + '" onclick="dashSetPg(\'' + esc(o.k) + '\')">' + hwEsc(o.label) + '</button>';
+  }).join('');
+}
+/* The self-study card: every programme, its real lessons opened over the
+   lessons that exist. A programme with nothing to open is shown as it is,
+   not with a 0% bar. */
+function dashRenderSelfStudy() {
+  const el = document.getElementById('dash-selfstudy');
+  if (!el) return;
+  const out = [];
+  dashCourseGroups().forEach(function (g) {
+    if (DASH_PG !== 'all' && DASH_PG !== g.name) return;
+    g.tracks.forEach(function (tk) {
+      const T = TRACKS[tk];
+      if (!T) return;
+      const total = Object.keys(T.lessons || {}).length;
+      const code = (T.badge || '').split('·').pop().trim();
+      if (!total) {
+        out.push('<div class="ss-row dim"><span class="ss-code">' + code + '</span>' +
+          '<span class="ss-main"><b>' + hwEsc(T.title) + '</b><span class="faint" style="font-size:12.5px">Nội dung đang được cập nhật</span></span>' +
+          '<span class="badge">Sắp có</span></div>');
+        return;
+      }
+      const p = (TRACK_PROG && TRACK_PROG.byTrack && TRACK_PROG.byTrack[tk]) || null;
+      const opened = p ? Object.keys(p.opened || {}).length : 0;
+      const pct = Math.round(opened * 100 / total);
+      out.push('<button class="ss-row" onclick="go(\'' + tk + '\')">' +
+        '<span class="ss-code">' + code + '</span>' +
+        '<span class="ss-main"><b>' + hwEsc(T.title) + '</b>' +
+        '<span class="progress-track" style="max-width:200px"><span class="progress-fill-bar" style="width:' + pct + '%"></span></span>' +
+        '<span class="faint" style="font-size:12.5px">' + opened + '/' + total + ' bài đã mở</span></span>' +
+        '<span class="badge' + (pct ? ' badge-ok' : '') + '">' + (pct ? pct + '%' : 'Bắt đầu') + '</span></button>');
+    });
+  });
+  el.innerHTML = out.join('') || '<p class="faint">Chưa có chương trình nào.</p>';
+}
+/* Level: the placement check this student actually did, kept in this browser. */
+function dashRenderLevel() {
+  const big = document.getElementById('dash-level-big'), sub = document.getElementById('dash-level-sub');
+  if (!big) return;
+  const v = load('selectedLevel', '');
+  big.textContent = v || '—';
+  if (sub) sub.textContent = v
+    ? 'Kết quả bài kiểm tra xếp trình độ bạn đã làm trên máy này.'
+    : 'Chưa làm bài kiểm tra xếp trình độ. Làm 5 câu để biết nên bắt đầu ở đâu.';
+}
+/* Activity: counted from the student's own record. Nothing here is an estimate. */
+function dashRenderActivity() {
+  const el = document.getElementById('dash-activity');
+  if (!el) return;
+  const P = TRACK_PROG || {};
+  const parts = P.parts || 0, done = P.lessons || 0, opened = P.opened || 0;
+  const words = load('wordsLearned', 0), saved = (typeof vocabSaved === 'function' ? vocabSaved().length : 0);
+  el.innerHTML = '<span class="chip">' + parts + ' phần đã mở</span>' +
+    '<span class="chip">' + opened + ' bài đã học</span>' +
+    '<span class="chip">' + done + ' bài hoàn thành</span>' +
+    '<span class="chip">' + words + ' từ đã học</span>' +
+    '<span class="chip">' + saved + ' từ đang ôn</span>';
+}
+/* The teacher's timetable, as the student was told it. */
+function dashRenderSessions() {
+  const el = document.getElementById('dash-sessions');
+  if (!el) return;
+  const list = (typeof HW !== 'undefined' && HW.sessions) ? HW.sessions.slice() : [];
+  if (!list.length) {
+    el.innerHTML = '<p class="faint" style="font-size:12.5px">Chưa có buổi học nào được xếp.</p>';
+    return;
+  }
+  list.sort(function (a, b) { return String(a.starts_at) < String(b.starts_at) ? -1 : 1; });
+  const rows = list.slice(0, 6).map(function (s) {
+    const when = hwDate(String(s.starts_at).slice(0, 10));
+    const ref = s.lesson_no ? 'Bài ' + s.lesson_no : '';
+    const cancelled = s.status === 'cancelled';
+    return '<tr' + (cancelled ? ' style="opacity:.55"' : '') + '><td data-label="Buổi"><span class="row-title">' + hwEsc(s.title || 'Buổi học') + '</span></td>' +
+      '<td data-label="Bài">' + hwEsc(ref || '—') + '</td>' +
+      '<td data-label="Khi nào">' + hwEsc(when) + '</td>' +
+      '<td data-label="Trạng thái">' + (cancelled ? '<span class="badge">Đã huỷ</span>' : '<span class="badge badge-ok">' + hwEsc(String(s.minutes || '') + ' phút') + '</span>') + '</td></tr>';
+  }).join('');
+  el.innerHTML = '<div class="table-wrap"><table class="table"><thead><tr><th>Buổi</th><th>Bài</th><th>Khi nào</th><th>Trạng thái</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
 }
 
 async function renderDashboard(){
@@ -2728,9 +2843,9 @@ async function renderDashboard(){
 
   /* homework: the same real rows the homework screen shows */
   dashRenderToday();
-  dashRenderCourses(serverProg);
   dashRenderVocab();
   if(serverProg)TRACK_PROG=serverProg;
+  dashRenderPills();dashRenderSelfStudy();dashRenderLevel();dashRenderActivity();dashRenderSessions();
   const hwBox=document.getElementById('dash-hw');
   const fbBox=document.getElementById('dash-feedback');
   if(typeof HW==='undefined'||!HW_ON||!HW.assignments.length){
