@@ -51,6 +51,45 @@ function hwErr(e, fallback) {
   toast(m || fallback || 'Something went wrong', 'err');
   return m || fallback;
 }
+/* Field-level validation: say which box is wrong, on the box itself, and put the
+   cursor there. A toast alone disappears before you have found the field.
+   Guarded, because the test harness runs this module against a stub DOM. */
+function hwFieldError(id, msg) {
+  const el = document.getElementById(id);
+  const holder = (el && el.parentElement && el.parentElement.querySelector) ? el.parentElement : null;
+  if (!el || !el.classList || !holder || !el.setAttribute) { toast(msg, 'err'); return; }
+  el.classList.add('invalid');
+  el.setAttribute('aria-invalid', 'true');
+  let err = holder.querySelector('.field-error');
+  if (!err) { err = document.createElement('p'); err.className = 'field-error'; holder.appendChild(err); }
+  err.textContent = msg;
+  if (el.focus) el.focus();
+}
+function hwClearFieldError(id) {
+  const el = document.getElementById(id);
+  if (!el || !el.classList) return;
+  el.classList.remove('invalid');
+  if (el.removeAttribute) el.removeAttribute('aria-invalid');
+  const holder = (el.parentElement && el.parentElement.querySelector) ? el.parentElement : null;
+  const err = holder ? holder.querySelector('.field-error') : null;
+  if (err) err.remove();
+}
+/* Busy state for a button that is waiting on the network, so a slow save never
+   looks like a dead click. The label is restored from the element itself. */
+function hwBusy(btn, on) {
+  if (!btn || !btn.classList) return;
+  if (on) {
+    if (btn.dataset) btn.dataset.label = btn.textContent;
+    btn.classList.add('is-loading');
+    btn.disabled = true;
+    if (btn.setAttribute) btn.setAttribute('aria-busy', 'true');
+  } else {
+    btn.classList.remove('is-loading');
+    btn.disabled = false;
+    if (btn.removeAttribute) btn.removeAttribute('aria-busy');
+    if (btn.dataset && btn.dataset.label) btn.textContent = btn.dataset.label;
+  }
+}
 function hwShow(id, on) {
   const el = document.getElementById(id);
   if (el) el.classList.toggle('hidden', !on);
@@ -813,6 +852,17 @@ function tcRenderStudents() {
 
 async function tcDecideStudent(studentId, action) {
   if (!HW_ON || !USER) return;
+  /* Declining hides every assignment from that student, so it asks first.
+     Accepting does not: taking a request back is the safe direction. */
+  if (action !== 'accept' && typeof uiConfirm === 'function') {
+    var st = (TC.students || []).filter(function (x) { return x.id === studentId; })[0] || {};
+    var okDecline = await uiConfirm({
+      title: 'Decline this student?',
+      text: (st.full_name || st.email || 'This student') + ' will not see any assignments, and will not be able to record progress. You can take them back at any time with Accept anyway.',
+      ok: 'Decline', cancel: 'Cancel', danger: true
+    });
+    if (!okDecline) return;
+  }
   /* The finger can get to the button before the network answers. Take the
      click once and ignore the rest until this one is settled, or the same
      student gets accepted twice over. */
@@ -964,8 +1014,8 @@ function tcRenderAssignments() {
   html += '</div>';
 
   html += '<div class="flex items-center gap-3 flex-wrap">' +
-    '<button class="btn-secondary" onclick="tcSaveAssignment(\'draft\')">Save draft</button>' +
-    '<button class="btn-primary" onclick="tcSaveAssignment(\'published\')">Publish</button>' +
+    '<button class="btn-secondary" onclick="tcSaveAssignment(\'draft\',this)">Save draft</button>' +
+    '<button class="btn-primary" onclick="tcSaveAssignment(\'published\',this)">Publish</button>' +
     '<button class="btn-secondary" onclick="tcResetBuilder()">Clear</button>' +
     '<span class="faint text-xs">Only published work becomes visible to students.</span></div>';
   html += '</div>';
@@ -990,8 +1040,8 @@ function tcRenderAssignments() {
       '<p class="row-sub">' + ref + ' · assigned ' + hwEsc(hwDate(a.assigned_at)) + ' · due ' + hwEsc(hwDate(a.due_at)) + '</p>' +
       '</div>' + st + '</div>' +
       '<div class="row-actions">' +
-      (a.status === 'draft' ? '<button class="btn-primary btn-sm" onclick="tcSetStatus(\'' + a.id + '\',\'published\')">Publish</button>' : '') +
-      (a.status === 'published' ? '<button class="btn-quiet btn-sm" onclick="tcSetStatus(\'' + a.id + '\',\'closed\')">Close</button>' : '') +
+      (a.status === 'draft' ? '<button class="btn-primary btn-sm" onclick="tcSetStatus(\'' + a.id + '\',\'published\',this)">Publish</button>' : '') +
+      (a.status === 'published' ? '<button class="btn-quiet btn-sm" onclick="tcSetStatus(\'' + a.id + '\',\'closed\',this)">Close</button>' : '') +
       '<button class="btn-quiet btn-sm" onclick="tcOpenSubmissions(\'' + a.id + '\')">Submissions</button>' +
       '</div></div>';
   });
@@ -1008,6 +1058,7 @@ function tcRenderAssignments() {
 
 function tcBuilderSet(k, v) {
   TC.builder[k] = (k === 'no') ? (parseInt(v, 10) || 1) : v;
+  if (k === 'title') hwClearFieldError('tc-b-title');   /* the error goes as soon as it is fixed */
   if (k === 'track' || k === 'no') tcRenderAssignments();
 }
 function tcBuilderKind(k) { TC.builder.kind = k; tcRenderAssignments(); }
@@ -1026,12 +1077,24 @@ function tcBuilderToggleStudent(id) {
   const i = b.studentIds.indexOf(id);
   if (i >= 0) b.studentIds.splice(i, 1); else b.studentIds.push(id);
 }
-function tcResetBuilder() { TC.builder = tcBlankBuilder(); tcRenderAssignments(); }
+async function tcResetBuilder() {
+  const b = TC.builder;
+  const dirty = (b.title && b.title.trim()) || (b.questions && b.questions.length) || (b.studentIds && b.studentIds.length);
+  if (dirty && typeof uiConfirm === 'function') {
+    const okReset = await uiConfirm({
+      title: 'Discard this draft?',
+      text: 'The title, the questions and the students chosen in this draft will be lost. Assignments already saved are not affected.',
+      ok: 'Discard', cancel: 'Keep editing', danger: true
+    });
+    if (!okReset) return;
+  }
+  TC.builder = tcBlankBuilder(); tcRenderAssignments();
+}
 
-async function tcSaveAssignment(publish) {
+async function tcSaveAssignment(publish, btn) {
   const b = TC.builder;
   if (!HW_ON || !USER) return;
-  if (!b.title.trim()) { toast('Give the assignment a title', 'err'); return; }
+  if (!b.title.trim()) { hwFieldError('tc-b-title', 'Give the assignment a title before saving it.'); return; }
   const targets = b.allStudents
     ? tcAllStudents().map(function (s) { return s.id; })
     : b.studentIds.slice();
@@ -1071,6 +1134,7 @@ async function tcSaveAssignment(publish) {
   };
 
   try {
+    hwBusy(btn, true);
     let id = b.id;
     if (id) {
       const u = await HB.from('assignments').update(payload).eq('id', id);
@@ -1108,11 +1172,23 @@ async function tcSaveAssignment(publish) {
     await tcLoad();
   } catch (e) {
     hwErr(e, 'Could not save the assignment');
+  } finally {
+    hwBusy(btn, false);
   }
 }
 
-async function tcSetStatus(id, status) {
+async function tcSetStatus(id, status, btn) {
+  if (status === 'closed' && typeof uiConfirm === 'function') {
+    const okClose = await uiConfirm({
+      title: 'Close this assignment?',
+      text: 'Students can no longer submit. Work already handed in stays as it is, and you can still grade it.',
+      ok: 'Close it', cancel: 'Cancel', danger: true
+    });
+    if (!okClose) return;
+  }
+  hwBusy(btn, true);
   const r = await HB.from('assignments').update({ status: status }).eq('id', id);
+  hwBusy(btn, false);
   if (r.error) { hwErr(r.error, 'Could not update'); return; }
   toast(status === 'published' ? 'Published' : 'Closed', 'ok');
   TC.ready = false; await tcLoad();
@@ -1169,8 +1245,8 @@ async function tcOpenSubmissions(assignmentId) {
 
       html += '<textarea class="input" rows="2" placeholder="Feedback for this student" id="fb_' + s.id + '">' + hwEsc(s.feedback || '') + '</textarea>';
       html += '<div class="flex gap-2 flex-wrap">' +
-        '<button class="btn-primary" onclick="tcGrade(\'' + s.id + '\',\'graded\')">Save grade</button>' +
-        '<button class="btn-secondary" onclick="tcGrade(\'' + s.id + '\',\'returned\')">Ask for another try</button>' +
+        '<button class="btn-primary" onclick="tcGrade(\'' + s.id + '\',\'graded\',this)">Save grade</button>' +
+        '<button class="btn-secondary" onclick="tcGrade(\'' + s.id + '\',\'returned\',this)">Ask for another try</button>' +
         '</div></div>';
     }
     TC.resultsHtml = html;
@@ -1189,7 +1265,7 @@ function tcStudentName(id) {
 
 function tcCloseSubmissions() { TC.openSubs = null; TC.resultsHtml = ''; tcRenderAssignments(); }
 
-async function tcGrade(submissionId, status) {
+async function tcGrade(submissionId, status, btn) {
   const qs = document.querySelectorAll('[id^="g_' + submissionId + '_"]');
   const answers = {};
   qs.forEach(function (el) {
@@ -1197,12 +1273,14 @@ async function tcGrade(submissionId, status) {
     if (el.value !== '' && el.value != null) answers[qid] = Number(el.value);
   });
   const fb = document.getElementById('fb_' + submissionId);
+  hwBusy(btn, true);
   const r = await HB.rpc('grade_submission', {
     p_submission: submissionId,
     p_answers: answers,
     p_feedback: fb && fb.value ? fb.value : null,
     p_status: status
   });
+  hwBusy(btn, false);
   if (r.error) { hwErr(r.error, 'Could not save the grade'); return; }
   toast(status === 'graded' ? 'Grade saved' : 'Sent back for another try', 'ok');
   if (TC.openSubs) await tcOpenSubmissions(TC.openSubs);

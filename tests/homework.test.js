@@ -32,6 +32,7 @@ const RETURNS = 'return {TRACKS,TRACK_PARTS,LESSON_DATA,AUDIO_MAP,go,trackGo,tra
   'tcStudentWork,tcWorkLine,tcPartLine,tcTotalParts,' +
   'hwForgotPassword,hwRecordProgress,hwLoadProgress,doAuth,setRole,showAuth,' +
   'setUser:(u)=>{USER=u},getUser:()=>USER,' +
+  'uiConfirm,uiConfirmClose,' +
   'setAuthMode:(m)=>{AUTH_MODE=m},getAuthMode:()=>AUTH_MODE,' +
   'setRoleState:(r)=>{USER_ROLE=r},getRoleState:()=>USER_ROLE,' +
   'el:(id)=>document.getElementById(id)};';
@@ -478,7 +479,12 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
       c[2] && c[2].p_student === 'w1'), JSON.stringify(TEACHER_TABLES.__calls));
 
   TEACHER_TABLES.__calls = [];
-  await ta.tcDecideStudent('w1', 'decline');
+  const declinePending = ta.tcDecideStudent('w1', 'decline');
+  t('declining asks first: nothing is sent to the server while the dialog is open',
+    (TEACHER_TABLES.__calls || []).filter(c => c[1] === 'reject_student').length === 0,
+    JSON.stringify(TEACHER_TABLES.__calls));
+  ta.uiConfirmClose(true);
+  await declinePending;
   t('declining calls the turning-down function on the server',
     (TEACHER_TABLES.__calls || []).some(c => c[0] === 'rpc' && c[1] === 'reject_student' &&
       c[2] && c[2].p_student === 'w1'), JSON.stringify(TEACHER_TABLES.__calls));
