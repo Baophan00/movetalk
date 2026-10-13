@@ -385,11 +385,18 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   t('the teacher workspace opens', TEACH.els['tc-body'].classList.contains('hidden') === false);
   t('with nobody signed up the teacher is told what to do',
     /Tell whoever you are teaching to sign up/.test(tcp), tcp.slice(0, 160));
-  t('the tabs are Students and Assignments',
-    /data-tc-tab="students"/.test(src) && /data-tc-tab="assignments"/.test(src) &&
-    !/data-tc-tab="classes"/.test(src));
+  t('the teacher sidebar has the five sections, in order',
+    ['dashboard', 'courses', 'students', 'materials', 'chat'].every(function (k) {
+      return src.indexOf('data-tc-nav="' + k + '"') >= 0;
+    }));
+  t('the four old tabs are gone',
+    !/data-tc-tab="overview"/.test(src) && !/data-tc-tab="schedule"/.test(src) && !/data-tc-tab="assignments"/.test(src));
+  t('the chat section says coming soon instead of pretending',
+    /id="tc-panel-chat"/.test(src) && /Coming soon/.test(src));
+  t('materials tells the truth about storage instead of offering a dead upload',
+    /function tcRenderMaterials/.test(js) && !/type="file"/.test(src));
 
-  ta.tcTab('assignments');
+  ta.tcNewAssignment();
   ta.TC.builder = ta.tcBlankBuilder();
   ta.TC.builder.title = 'Homework: Build the Message';
   ta.TC.builder.track = 'a1';
@@ -556,11 +563,14 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
     /no accepted students yet/i.test(TEACH.els['tc-panel-assignments'].innerHTML));
 
   /* ---------- overview: only real rows, never invented numbers ---------- */
-  t('the workspace opens on a first tab that is an overview',
-    /data-tc-tab="overview"/.test(src) && /id="tc-panel-overview"/.test(src));
-  t('the sidebar offers the teacher the three sections',
-    /data-tc-nav="overview"/.test(src) && /data-tc-nav="students"/.test(src) &&
-    /data-tc-nav="assignments"/.test(src));
+  t('the workspace opens on the dashboard, with the counters at the top',
+    /data-tc-nav="dashboard"/.test(src) && /id="tc-panel-dashboard"/.test(src) && /id="tc-stats"/.test(src));
+  t('the sidebar offers the teacher the five sections',
+    ['dashboard', 'courses', 'students', 'materials', 'chat'].every(function (k) {
+      return src.indexOf('data-tc-nav="' + k + '"') >= 0;
+    }));
+  t('the dashboard counts from rows the teacher can open, not from estimates',
+    /function tcRenderStats/.test(js) && /duration_min/.test(js) && /status === 'submitted'/.test(js));
 
   const quiet = { id: 'a3', full_name: 'Quiet One', email: 'a3@x.test', status: 'active' };
   ta.TC.students = [waiting, accepted, refused, quiet];
@@ -725,8 +735,10 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   /* ============================================================
      12b. SCHEDULE — the teacher plans a class, the student sees it
      ============================================================ */
-  t('the timetable is its own tab, not buried inside another one',
-    /data-tc-tab="schedule"/.test(src) && /id="tc-panel-schedule"/.test(src));
+  t('the timetable sits on the dashboard, where the teacher looks first',
+    /id="tc-panel-schedule"/.test(src) &&
+    src.indexOf('id="tc-panel-schedule"') > src.indexOf('id="tc-panel-dashboard"') &&
+    src.indexOf('id="tc-panel-schedule"') < src.indexOf('id="tc-panel-courses"'));
 
   TEACHER_TABLES.__calls = [];
   ta.TC.sessionForm = { title: '', date: '', time: '19:00', duration_min: 60, lesson_track: 'a1', lesson_no: '', note: '' };

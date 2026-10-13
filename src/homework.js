@@ -625,17 +625,22 @@ async function tcRefresh() {
 }
 
 function tcTab(name, silent) {
-  TC.tab = name || 'overview';
+  TC.tab = name || 'dashboard';
   document.querySelectorAll('[data-tc-tab]').forEach(function (b) {
     b.classList.toggle('on', b.dataset.tcTab === TC.tab);
   });
   document.querySelectorAll('[data-tc-nav]').forEach(function (b) {
     b.classList.toggle('active', b.dataset.tcNav === TC.tab);
   });
-  hwShow('tc-panel-overview', TC.tab === 'overview');
-  hwShow('tc-panel-students', TC.tab === 'students');
-  hwShow('tc-panel-assignments', TC.tab === 'assignments');
-  hwShow('tc-panel-schedule', TC.tab === 'schedule');
+  ['dashboard', 'courses', 'students', 'materials', 'chat'].forEach(function (k) {
+    hwShow('tc-panel-' + k, TC.tab === k);
+  });
+  /* The builder belongs to the student you are giving work to, so it is only
+     on screen while a draft is open. */
+  hwShow('tc-panel-assignments', TC.tab === 'students' && !!TC.builder);
+  const titles = { dashboard: 'Dashboard', courses: 'Courses', students: 'Students', materials: 'Materials', chat: 'Chat' };
+  const t = document.getElementById('tc-title');
+  if (t) t.textContent = titles[TC.tab] || 'Dashboard';
   if (!silent) tcRender();
 }
 
@@ -652,11 +657,112 @@ function tcWaitingStudents() {
 }
 
 function tcRender() {
-  tcRenderOverview();
+  tcRenderStats();
+  tcRenderPending();
   tcRenderStudents();
+  tcRenderCourses();
   tcRenderAssignments();
   tcRenderSchedule();
+  tcRenderMaterials();
   hwUpdatePendingBadge();
+}
+
+/* ---------- 1. dashboard: what is happening, and what waits for you ----------
+   Every figure is counted from rows the teacher can open: no estimate, no
+   minutes per student, nothing the product does not know. */
+function tcRenderStats() {
+  const el = document.getElementById('tc-stats');
+  if (!el) return;
+  const students = tcAllStudents().length;
+  const waiting = tcWaitingStudents().length;
+  const now = Date.now();
+  const taught = (TC.sessions || []).filter(function (s) {
+    return s.status !== 'cancelled' && new Date(s.starts_at).getTime() <= now;
+  });
+  const mins = taught.reduce(function (a, s) { return a + (Number(s.duration_min) || 60); }, 0);
+  const hours = Math.round(mins / 6) / 10;
+  const toMark = (TC.submissions || []).filter(function (s) { return s.status === 'submitted'; }).length;
+  const ahead = (TC.sessions || []).filter(function (s) {
+    return s.status !== 'cancelled' && new Date(s.starts_at).getTime() > now;
+  }).length;
+  const card = function (label, value, hint, cls) {
+    return '<div class="card card-pad space-y-2"><span class="stat-label">' + hwEsc(label) + '</span>' +
+      '<span class="stat-value' + (cls || '') + '">' + hwEsc(String(value)) + '</span>' +
+      '<span class="stat-hint">' + hwEsc(hint) + '</span></div>';
+  };
+  el.innerHTML = card('Học viên', students, waiting ? waiting + ' đang chờ bạn duyệt' : 'Không ai chờ duyệt') +
+    card('Giờ đã dạy', hours + 'h', taught.length + ' buổi đã qua') +
+    card('Bài chờ chấm', toMark, toMark ? 'Mở học viên để chấm' : 'Không còn bài nào', toMark ? ' warn' : '') +
+    card('Buổi sắp tới', ahead, ahead ? 'Xem lịch bên dưới' : 'Chưa xếp buổi nào');
+  const sub = document.getElementById('tc-sub');
+  if (sub) sub.textContent = students + ' học viên · ' + taught.length + ' buổi đã dạy · ' + toMark + ' bài chờ chấm';
+}
+
+function tcRenderPending() {
+  const el = document.getElementById('tc-pending');
+  if (!el) return;
+  const rows = (TC.submissions || []).filter(function (s) { return s.status === 'submitted'; });
+  if (!rows.length) {
+    el.innerHTML = '<p class="faint" style="font-size:12.5px">Không có bài nào đang chờ chấm.</p>';
+    return;
+  }
+  const sById = {}, aById = {};
+  (TC.students || []).forEach(function (s) { sById[s.id] = s; });
+  (TC.assignments || []).forEach(function (a) { aById[a.id] = a; });
+  el.innerHTML = '<div class="table-wrap"><table class="table"><thead><tr>' +
+    '<th>Học viên</th><th>Bài</th><th>Nộp lúc</th><th></th></tr></thead><tbody>' +
+    rows.map(function (s) {
+      const st = sById[s.student_id] || {};
+      const a = aById[s.assignment_id] || {};
+      const who = st.full_name || st.email || 'Học viên';
+      return '<tr><td data-label="Học viên">' + avatar(who) + '<span class="row-title" style="margin-left:8px">' + hwEsc(who) + '</span></td>' +
+        '<td data-label="Bài">' + hwEsc(a.title || '—') + '</td>' +
+        '<td data-label="Nộp lúc">' + hwEsc(s.submitted_at ? hwDate(String(s.submitted_at).slice(0, 10)) : '—') + '</td>' +
+        '<td data-label=""><button class="btn-quiet btn-sm" onclick="tcTab(\'students\')">Mở học viên</button></td></tr>';
+    }).join('') + '</tbody></table></div>';
+}
+
+/* ---------- 2. courses: the three programmes, as they exist ---------- */
+function tcRenderCourses() {
+  const el = document.getElementById('tc-courses');
+  if (!el) return;
+  if (typeof dashCourseGroups !== 'function') return;
+  el.innerHTML = dashCourseGroups().map(function (g) {
+    return '<div class="course-group"><div class="course-group-head">' + g.name +
+      '<span class="course-rule"></span><span style="text-transform:none;letter-spacing:0;font-weight:400">' + g.line + '</span></div>' +
+      '<div class="course-cards">' + g.tracks.map(tcCourseCard).join('') + '</div></div>';
+  }).join('');
+}
+function tcCourseCard(tk) {
+  const T = TRACKS[tk];
+  if (!T) return '';
+  const total = Object.keys(T.lessons || {}).length;
+  const code = (T.badge || '').split('·').pop().trim();
+  if (!total) {
+    return '<div class="course-card dim"><div class="course-card-top"><span class="course-code">' + code + '</span>' +
+      '<span class="badge">Đang cập nhật</span></div>' +
+      '<div><div class="course-name">' + T.title + '</div><div class="course-sub">' + T.sub + '</div></div>' +
+      '<div class="course-foot"><div class="course-counts">Nội dung đang được cập nhật.</div></div></div>';
+  }
+  return '<div class="course-card"><div class="course-card-top"><span class="course-code">' + code + '</span>' +
+    '<span class="badge badge-ok">' + total + ' bài</span></div>' +
+    '<div><div class="course-name">' + T.title + '</div><div class="course-sub">' + T.sub + '</div></div>' +
+    '<div class="course-foot"><div class="course-counts"><b>' + total + '</b> bài sẵn sàng</div>' +
+    '<span class="table-actions">' +
+    '<button class="btn-quiet btn-sm" onclick="go(\'' + tk + '\')">Xem bài</button>' +
+    '<button class="btn-primary btn-sm" onclick="tcTeach(\'' + tk + '\')">Dạy</button></span></div></div>';
+}
+/* Teaching is the studio: the lesson on the whole screen. */
+function tcTeach(tk) { go(tk); setTimeout(function () { if (typeof studioEnter === 'function') studioEnter(tk); }, 60); }
+
+/* ---------- 4. materials ---------- */
+function tcRenderMaterials() {
+  const el = document.getElementById('tc-material-list');
+  const sub = document.getElementById('tc-mat-sub');
+  if (sub) sub.textContent = 'Nơi lưu tài liệu chưa được bật cho dự án này.';
+  if (!el) return;
+  el.innerHTML = '<div class="empty"><div class="empty-title">Chưa có tài liệu</div>' +
+    '<div class="empty-text">Tải tài liệu lên cần một kho lưu trữ của dự án. Khi kho đó được bật, tài liệu bạn tải lên sẽ nằm ở đây và học viên mở được.</div></div>';
 }
 
 /* ---------- schedule: the teacher plans a class, the student sees it ----------
@@ -1273,17 +1379,15 @@ function hwUpdatePendingBadge() {
 /* ---------- assignment builder ---------- */
 function tcNewAssignment() {
   TC.builder = tcBlankBuilder();
-  tcTab('assignments');
+  tcTab('students', true);
+  hwShow('tc-panel-assignments', true);
+  tcRenderAssignments();
 }
 
 function tcNewAssignmentFor(studentId) {
   TC.builder = tcBlankBuilder();
   if (studentId) TC.builder.studentIds = [studentId];
-  TC.tab = 'assignments';
-  document.querySelectorAll('[data-tc-tab]').forEach(function (b) {
-    b.classList.toggle('on', b.dataset.tcTab === 'assignments');
-  });
-  hwShow('tc-panel-students', false);
+  tcTab('students', true);
   hwShow('tc-panel-assignments', true);
   tcRenderAssignments();
   const el = document.getElementById('tc-b-title');

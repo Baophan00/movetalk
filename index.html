@@ -1153,10 +1153,11 @@ body.studio-mode .e2-part{min-height:74px}
         <button class="nav-item" data-view="dashboard"><span class="nav-code">LP</span> Learning path</button>
         <button class="nav-item" data-view="homework"><span class="nav-code">HW</span> My homework</button>
         <button class="nav-item" data-view="vocab"><span class="nav-code">VB</span> Vocabulary</button>
-        <button class="nav-item hidden teacher-only" data-view="teacher" id="nav-teacher-item"><span class="nav-code">TC</span> Teaching <span id="nav-teacher-count" class="nav-badge hidden"></span></button>
-        <button class="nav-item nav-sub hidden teacher-only" data-view="teacher" data-tc-nav="overview" onclick="tcTab('overview')"><span class="nav-code">·</span> Overview</button>
+        <button class="nav-item hidden teacher-only" data-view="teacher" id="nav-teacher-item" data-tc-nav="dashboard" onclick="tcTab('dashboard')"><span class="nav-code">DB</span> Dashboard <span id="nav-teacher-count" class="nav-badge hidden"></span></button>
+        <button class="nav-item nav-sub hidden teacher-only" data-view="teacher" data-tc-nav="courses" onclick="tcTab('courses')"><span class="nav-code">·</span> Courses</button>
         <button class="nav-item nav-sub hidden teacher-only" data-view="teacher" data-tc-nav="students" onclick="tcTab('students')"><span class="nav-code">·</span> Students</button>
-        <button class="nav-item nav-sub hidden teacher-only" data-view="teacher" data-tc-nav="assignments" onclick="tcTab('assignments')"><span class="nav-code">·</span> Assignments</button>
+        <button class="nav-item nav-sub hidden teacher-only" data-view="teacher" data-tc-nav="materials" onclick="tcTab('materials')"><span class="nav-code">·</span> Materials</button>
+        <button class="nav-item nav-sub hidden teacher-only" data-view="teacher" data-tc-nav="chat" onclick="tcTab('chat')"><span class="nav-code">·</span> Chat</button>
       </div>
     </div>
   </nav>
@@ -1609,26 +1610,52 @@ body.studio-mode .e2-part{min-height:74px}
         <div id="tc-body" class="hidden space-y-5">
           <div class="page-head">
             <div>
-              <h1 class="page-title">Teaching</h1>
+              <h1 class="page-title" id="tc-title">Dashboard</h1>
               <p id="tc-sub" class="page-sub">—</p>
             </div>
             <div class="page-actions">
-              <button onclick="tcNewAssignment()" class="btn-primary btn-sm">New assignment</button>
-              <button onclick="tcRefresh()" class="btn-quiet">Refresh</button>
+              <button onclick="tcNewAssignment()" class="btn-primary btn-sm">Giao bài</button>
+              <button onclick="tcRefresh()" class="btn-quiet">Làm mới</button>
             </div>
           </div>
 
-          <div class="flex gap-2 flex-wrap">
-            <button class="pill on" data-tc-tab="overview" onclick="tcTab('overview')">Overview</button>
-            <button class="pill" data-tc-tab="students" onclick="tcTab('students')">Students</button>
-            <button class="pill" data-tc-tab="assignments" onclick="tcTab('assignments')">Assignments</button>
-            <button class="pill" data-tc-tab="schedule" onclick="tcTab('schedule')">Schedule</button>
+          <!-- 1. DASHBOARD -->
+          <div id="tc-panel-dashboard" class="space-y-5">
+            <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-4" id="tc-stats"></div>
+            <div class="card card-pad space-y-4">
+              <div class="section-head" style="margin-bottom:0"><div><h3>Bài chờ chấm</h3>
+                <p class="faint" style="font-size:12.5px">Ai đã nộp và đang chờ bạn.</p></div>
+                <button class="btn-ghost btn-sm" onclick="tcTab('students')">Xem học viên</button></div>
+              <div id="tc-pending"></div>
+            </div>
+            <div id="tc-panel-schedule" class="space-y-5"></div>
           </div>
 
-          <div id="tc-panel-overview" class="space-y-5"></div>
+          <!-- 2. COURSES -->
+          <div id="tc-panel-courses" class="space-y-5 hidden">
+            <div id="tc-courses" class="course-grid"></div>
+          </div>
+
+          <!-- 3. STUDENTS -->
           <div id="tc-panel-students" class="space-y-5 hidden"></div>
           <div id="tc-panel-assignments" class="space-y-5 hidden"></div>
-          <div id="tc-panel-schedule" class="space-y-5 hidden"></div>
+
+          <!-- 4. MATERIALS -->
+          <div id="tc-panel-materials" class="space-y-5 hidden">
+            <div class="card card-pad space-y-4">
+              <div class="section-head" style="margin-bottom:0"><div><h3>Tài liệu</h3>
+                <p class="faint" style="font-size:12.5px" id="tc-mat-sub">—</p></div></div>
+              <div id="tc-material-list"></div>
+            </div>
+          </div>
+
+          <!-- 5. CHAT -->
+          <div id="tc-panel-chat" class="space-y-5 hidden">
+            <div class="card card-pad text-center" style="padding:56px 24px">
+              <h3 style="font-size:20px;margin-bottom:6px">Chat</h3>
+              <p class="row-sub">Coming soon.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -2809,7 +2836,7 @@ function dashRenderSessions() {
     return '<tr' + (cancelled ? ' style="opacity:.55"' : '') + '><td data-label="Buổi"><span class="row-title">' + hwEsc(s.title || 'Buổi học') + '</span></td>' +
       '<td data-label="Bài">' + hwEsc(ref || '—') + '</td>' +
       '<td data-label="Khi nào">' + hwEsc(when) + '</td>' +
-      '<td data-label="Trạng thái">' + (cancelled ? '<span class="badge">Đã huỷ</span>' : '<span class="badge badge-ok">' + hwEsc(String(s.minutes || '') + ' phút') + '</span>') + '</td></tr>';
+      '<td data-label="Trạng thái">' + (cancelled ? '<span class="badge">Đã huỷ</span>' : '<span class="badge badge-ok">' + hwEsc(String(s.duration_min || 60)) + ' phút</span>') + '</td></tr>';
   }).join('');
   el.innerHTML = '<div class="table-wrap"><table class="table"><thead><tr><th>Buổi</th><th>Bài</th><th>Khi nào</th><th>Trạng thái</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
 }
@@ -3535,17 +3562,22 @@ async function tcRefresh() {
 }
 
 function tcTab(name, silent) {
-  TC.tab = name || 'overview';
+  TC.tab = name || 'dashboard';
   document.querySelectorAll('[data-tc-tab]').forEach(function (b) {
     b.classList.toggle('on', b.dataset.tcTab === TC.tab);
   });
   document.querySelectorAll('[data-tc-nav]').forEach(function (b) {
     b.classList.toggle('active', b.dataset.tcNav === TC.tab);
   });
-  hwShow('tc-panel-overview', TC.tab === 'overview');
-  hwShow('tc-panel-students', TC.tab === 'students');
-  hwShow('tc-panel-assignments', TC.tab === 'assignments');
-  hwShow('tc-panel-schedule', TC.tab === 'schedule');
+  ['dashboard', 'courses', 'students', 'materials', 'chat'].forEach(function (k) {
+    hwShow('tc-panel-' + k, TC.tab === k);
+  });
+  /* The builder belongs to the student you are giving work to, so it is only
+     on screen while a draft is open. */
+  hwShow('tc-panel-assignments', TC.tab === 'students' && !!TC.builder);
+  const titles = { dashboard: 'Dashboard', courses: 'Courses', students: 'Students', materials: 'Materials', chat: 'Chat' };
+  const t = document.getElementById('tc-title');
+  if (t) t.textContent = titles[TC.tab] || 'Dashboard';
   if (!silent) tcRender();
 }
 
@@ -3562,11 +3594,112 @@ function tcWaitingStudents() {
 }
 
 function tcRender() {
-  tcRenderOverview();
+  tcRenderStats();
+  tcRenderPending();
   tcRenderStudents();
+  tcRenderCourses();
   tcRenderAssignments();
   tcRenderSchedule();
+  tcRenderMaterials();
   hwUpdatePendingBadge();
+}
+
+/* ---------- 1. dashboard: what is happening, and what waits for you ----------
+   Every figure is counted from rows the teacher can open: no estimate, no
+   minutes per student, nothing the product does not know. */
+function tcRenderStats() {
+  const el = document.getElementById('tc-stats');
+  if (!el) return;
+  const students = tcAllStudents().length;
+  const waiting = tcWaitingStudents().length;
+  const now = Date.now();
+  const taught = (TC.sessions || []).filter(function (s) {
+    return s.status !== 'cancelled' && new Date(s.starts_at).getTime() <= now;
+  });
+  const mins = taught.reduce(function (a, s) { return a + (Number(s.duration_min) || 60); }, 0);
+  const hours = Math.round(mins / 6) / 10;
+  const toMark = (TC.submissions || []).filter(function (s) { return s.status === 'submitted'; }).length;
+  const ahead = (TC.sessions || []).filter(function (s) {
+    return s.status !== 'cancelled' && new Date(s.starts_at).getTime() > now;
+  }).length;
+  const card = function (label, value, hint, cls) {
+    return '<div class="card card-pad space-y-2"><span class="stat-label">' + hwEsc(label) + '</span>' +
+      '<span class="stat-value' + (cls || '') + '">' + hwEsc(String(value)) + '</span>' +
+      '<span class="stat-hint">' + hwEsc(hint) + '</span></div>';
+  };
+  el.innerHTML = card('Học viên', students, waiting ? waiting + ' đang chờ bạn duyệt' : 'Không ai chờ duyệt') +
+    card('Giờ đã dạy', hours + 'h', taught.length + ' buổi đã qua') +
+    card('Bài chờ chấm', toMark, toMark ? 'Mở học viên để chấm' : 'Không còn bài nào', toMark ? ' warn' : '') +
+    card('Buổi sắp tới', ahead, ahead ? 'Xem lịch bên dưới' : 'Chưa xếp buổi nào');
+  const sub = document.getElementById('tc-sub');
+  if (sub) sub.textContent = students + ' học viên · ' + taught.length + ' buổi đã dạy · ' + toMark + ' bài chờ chấm';
+}
+
+function tcRenderPending() {
+  const el = document.getElementById('tc-pending');
+  if (!el) return;
+  const rows = (TC.submissions || []).filter(function (s) { return s.status === 'submitted'; });
+  if (!rows.length) {
+    el.innerHTML = '<p class="faint" style="font-size:12.5px">Không có bài nào đang chờ chấm.</p>';
+    return;
+  }
+  const sById = {}, aById = {};
+  (TC.students || []).forEach(function (s) { sById[s.id] = s; });
+  (TC.assignments || []).forEach(function (a) { aById[a.id] = a; });
+  el.innerHTML = '<div class="table-wrap"><table class="table"><thead><tr>' +
+    '<th>Học viên</th><th>Bài</th><th>Nộp lúc</th><th></th></tr></thead><tbody>' +
+    rows.map(function (s) {
+      const st = sById[s.student_id] || {};
+      const a = aById[s.assignment_id] || {};
+      const who = st.full_name || st.email || 'Học viên';
+      return '<tr><td data-label="Học viên">' + avatar(who) + '<span class="row-title" style="margin-left:8px">' + hwEsc(who) + '</span></td>' +
+        '<td data-label="Bài">' + hwEsc(a.title || '—') + '</td>' +
+        '<td data-label="Nộp lúc">' + hwEsc(s.submitted_at ? hwDate(String(s.submitted_at).slice(0, 10)) : '—') + '</td>' +
+        '<td data-label=""><button class="btn-quiet btn-sm" onclick="tcTab(\'students\')">Mở học viên</button></td></tr>';
+    }).join('') + '</tbody></table></div>';
+}
+
+/* ---------- 2. courses: the three programmes, as they exist ---------- */
+function tcRenderCourses() {
+  const el = document.getElementById('tc-courses');
+  if (!el) return;
+  if (typeof dashCourseGroups !== 'function') return;
+  el.innerHTML = dashCourseGroups().map(function (g) {
+    return '<div class="course-group"><div class="course-group-head">' + g.name +
+      '<span class="course-rule"></span><span style="text-transform:none;letter-spacing:0;font-weight:400">' + g.line + '</span></div>' +
+      '<div class="course-cards">' + g.tracks.map(tcCourseCard).join('') + '</div></div>';
+  }).join('');
+}
+function tcCourseCard(tk) {
+  const T = TRACKS[tk];
+  if (!T) return '';
+  const total = Object.keys(T.lessons || {}).length;
+  const code = (T.badge || '').split('·').pop().trim();
+  if (!total) {
+    return '<div class="course-card dim"><div class="course-card-top"><span class="course-code">' + code + '</span>' +
+      '<span class="badge">Đang cập nhật</span></div>' +
+      '<div><div class="course-name">' + T.title + '</div><div class="course-sub">' + T.sub + '</div></div>' +
+      '<div class="course-foot"><div class="course-counts">Nội dung đang được cập nhật.</div></div></div>';
+  }
+  return '<div class="course-card"><div class="course-card-top"><span class="course-code">' + code + '</span>' +
+    '<span class="badge badge-ok">' + total + ' bài</span></div>' +
+    '<div><div class="course-name">' + T.title + '</div><div class="course-sub">' + T.sub + '</div></div>' +
+    '<div class="course-foot"><div class="course-counts"><b>' + total + '</b> bài sẵn sàng</div>' +
+    '<span class="table-actions">' +
+    '<button class="btn-quiet btn-sm" onclick="go(\'' + tk + '\')">Xem bài</button>' +
+    '<button class="btn-primary btn-sm" onclick="tcTeach(\'' + tk + '\')">Dạy</button></span></div></div>';
+}
+/* Teaching is the studio: the lesson on the whole screen. */
+function tcTeach(tk) { go(tk); setTimeout(function () { if (typeof studioEnter === 'function') studioEnter(tk); }, 60); }
+
+/* ---------- 4. materials ---------- */
+function tcRenderMaterials() {
+  const el = document.getElementById('tc-material-list');
+  const sub = document.getElementById('tc-mat-sub');
+  if (sub) sub.textContent = 'Nơi lưu tài liệu chưa được bật cho dự án này.';
+  if (!el) return;
+  el.innerHTML = '<div class="empty"><div class="empty-title">Chưa có tài liệu</div>' +
+    '<div class="empty-text">Tải tài liệu lên cần một kho lưu trữ của dự án. Khi kho đó được bật, tài liệu bạn tải lên sẽ nằm ở đây và học viên mở được.</div></div>';
 }
 
 /* ---------- schedule: the teacher plans a class, the student sees it ----------
@@ -4183,17 +4316,15 @@ function hwUpdatePendingBadge() {
 /* ---------- assignment builder ---------- */
 function tcNewAssignment() {
   TC.builder = tcBlankBuilder();
-  tcTab('assignments');
+  tcTab('students', true);
+  hwShow('tc-panel-assignments', true);
+  tcRenderAssignments();
 }
 
 function tcNewAssignmentFor(studentId) {
   TC.builder = tcBlankBuilder();
   if (studentId) TC.builder.studentIds = [studentId];
-  TC.tab = 'assignments';
-  document.querySelectorAll('[data-tc-tab]').forEach(function (b) {
-    b.classList.toggle('on', b.dataset.tcTab === 'assignments');
-  });
-  hwShow('tc-panel-students', false);
+  tcTab('students', true);
   hwShow('tc-panel-assignments', true);
   tcRenderAssignments();
   const el = document.getElementById('tc-b-title');
