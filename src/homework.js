@@ -30,14 +30,15 @@ const HW_ON = !!HB;
 /* ---------- state ---------- */
 const HW = {
   ready: false, loading: false,
-  assignments: [], subs: {}, classes: [], rosters: {},
+  assignments: [], subs: {}, classes: [], rosters: {}, sessions: [],
   detailId: null, questions: [], answers: {}, keyErr: false
 };
 const TC = {
   ready: false, loading: false, loadSeq: 0, tab: 'overview',
   classes: [], rosters: {}, assignments: [], rosterOf: {},
   students: [], progress: [], submissions: [], recipients: [], busy: {},
-  builder: null, openSubs: null, results: []
+  builder: null, openSubs: null, results: [],
+  sessions: [], sessionForm: null
 };
 
 /* ---------- small helpers ---------- */
@@ -208,7 +209,36 @@ function renderHomework() {
   }
   hwRenderList();
   hwRenderDetail();
+  hwRenderSessions();
   if (!HW.ready && !HW.loading) hwLoad();
+}
+
+/* The student's own timetable: what is next, and when. Cancelled sessions stay
+   visible, struck out, because the student planned around them. */
+function hwRenderSessions() {
+  const el = document.getElementById('hw-sessions');
+  if (!el) return;
+  const now = Date.now();
+  const upcoming = (HW.sessions || []).filter(function (s) {
+    const t = new Date(s.starts_at).getTime();
+    return !isNaN(t) && (t + (Number(s.duration_min) || 60) * 60000 >= now || s.status === 'cancelled');
+  });
+  if (!upcoming.length) { el.innerHTML = ''; return; }
+  const next = upcoming[0];
+  const rest = upcoming.slice(1, 6);
+  el.innerHTML = '<div class="card card-pad space-y-3">' +
+    '<div class="flex items-center gap-2 flex-wrap"><span class="content-kicker">Next class</span>' +
+    (next.status === 'cancelled' ? hwPill('not_started', 'Cancelled') : '') + '</div>' +
+    '<p class="row-title" style="font-size:15px">' + hwEsc(next.title) + '</p>' +
+    '<p class="row-sub">' + tcWhen(next.starts_at) + ' · ' + hwEsc(String(next.duration_min || 60)) + ' min' +
+    (next.lesson_track ? ' · Lesson ' + hwEsc(String(next.lesson_track).toUpperCase()) + ' ' + hwEsc(String(next.lesson_no || '')) : '') + '</p>' +
+    (next.note ? '<p class="faint" style="font-size:12.5px">' + hwEsc(next.note) + '</p>' : '') +
+    (rest.length ? '<div class="table-wrap"><table class="table"><thead><tr><th>Later</th><th>Class</th></tr></thead><tbody>' +
+      rest.map(function (s) {
+        return '<tr><td data-label="Later">' + tcWhen(s.starts_at) + '</td>' +
+          '<td data-label="Class">' + hwEsc(s.title) + (s.status === 'cancelled' ? ' <span class="badge badge-err">cancelled</span>' : '') + '</td></tr>';
+      }).join('') + '</tbody></table></div>' : '') +
+    '</div>';
 }
 
 async function hwLoad() {
@@ -238,6 +268,14 @@ async function hwLoad() {
       if (mine && mine.status !== 'in_progress') continue;
       try { await HB.rpc('start_submission', { p_assignment: HW.assignments[i].id }); } catch (e) {}
     }
+
+    /* The timetable the teacher planned. Readable by this student under 005;
+       a failure here must not cost them their homework screen. */
+    const ses = await HB.from('class_sessions')
+      .select('id,title,starts_at,duration_min,lesson_track,lesson_no,note,status')
+      .order('starts_at', { ascending: true });
+    HW.sessions = (ses && !ses.error && ses.data) ? ses.data : [];
+
     HW.ready = true;
   } catch (e) {
     hwErr(e, 'Could not load your homework');
@@ -526,6 +564,12 @@ async function tcLoad() {
     TC.submissions = (sb && !sb.error && sb.data) ? sb.data : [];
     const rc = await HB.from('assignment_recipients').select('assignment_id,student_id,class_id');
     TC.recipients = (rc && !rc.error && rc.data) ? rc.data : [];
+    /* The timetable. A failure here must not take the whole workspace down:
+       the teacher can still teach, so it is loaded defensively. */
+    const ses = await HB.from('class_sessions')
+      .select('id,teacher_id,title,starts_at,duration_min,lesson_track,lesson_no,note,status')
+      .order('starts_at', { ascending: true });
+    TC.sessions = (ses && !ses.error && ses.data) ? ses.data : [];
     TC.ready = true;
   } catch (e) {
     hwErr(e, 'Could not load your students');
@@ -551,6 +595,7 @@ function tcTab(name, silent) {
   hwShow('tc-panel-overview', TC.tab === 'overview');
   hwShow('tc-panel-students', TC.tab === 'students');
   hwShow('tc-panel-assignments', TC.tab === 'assignments');
+  hwShow('tc-panel-schedule', TC.tab === 'schedule');
   if (!silent) tcRender();
 }
 
@@ -570,7 +615,200 @@ function tcRender() {
   tcRenderOverview();
   tcRenderStudents();
   tcRenderAssignments();
+  tcRenderSchedule();
   hwUpdatePendingBadge();
+}
+
+/* ---------- schedule: the teacher plans a class, the student sees it ----------
+   One teacher, accepted students, no enrolment: a session is the teacher's own
+   record and every active student reads it (005). It never claims who attends,
+   because the product does not know that. */
+
+function tcPad2(n) { return String(n).padStart(2, '0'); }
+
+function tcWhen(iso) {
+  const d = new Date(iso);
+  if (isNaN(d)) return '—';
+  return tcPad2(d.getDate()) + '/' + tcPad2(d.getMonth() + 1) + ' ' + tcPad2(d.getHours()) + ':' + tcPad2(d.getMinutes());
+}
+
+function tcDayKey(d) { return d.getFullYear() + '-' + tcPad2(d.getMonth() + 1) + '-' + tcPad2(d.getDate()); }
+
+function tcIsToday(iso) {
+  const d = new Date(iso);
+  return !isNaN(d) && tcDayKey(d) === tcDayKey(new Date());
+}
+
+/* Sessions are kept in three buckets so the teacher reads them in the order
+   they act on them: what is coming, then what already happened. */
+function tcSessionBuckets() {
+  const now = Date.now();
+  const out = { today: [], next: [], past: [] };
+  (TC.sessions || []).forEach(function (s) {
+    const t = new Date(s.starts_at).getTime();
+    if (isNaN(t)) return;
+    if (s.status === 'cancelled' || t + (Number(s.duration_min) || 60) * 60000 < now) out.past.push(s);
+    else if (tcIsToday(s.starts_at)) out.today.push(s);
+    else out.next.push(s);
+  });
+  out.past.reverse();
+  return out;
+}
+
+function tcNextSession() {
+  const b = tcSessionBuckets();
+  return b.today[0] || b.next[0] || null;
+}
+
+function tcSessionForm() {
+  if (!TC.sessionForm) TC.sessionForm = { title: '', date: '', time: '19:00', duration_min: 60, lesson_track: 'a1', lesson_no: '', note: '' };
+  return TC.sessionForm;
+}
+
+function tcSessionSet(k, v) {
+  tcSessionForm()[k] = v;
+  if (k === 'title') hwClearFieldError('tc-s-title');
+  if (k === 'date') hwClearFieldError('tc-s-date');
+}
+
+function tcSessionRef(s) {
+  return s.lesson_track ? 'Lesson · ' + hwEsc(String(s.lesson_track).toUpperCase()) + ' ' + hwEsc(String(s.lesson_no || '')) : '';
+}
+
+async function tcSaveSession(btn) {
+  const f = tcSessionForm();
+  if (!HW_ON || !USER) return;
+  if (!String(f.title || '').trim()) { hwFieldError('tc-s-title', 'Give the session a title before saving it.'); return; }
+  if (!f.date) { hwFieldError('tc-s-date', 'Pick the day of the session.'); return; }
+  const parts = String(f.date).split('-').map(Number);
+  const hm = String(f.time || '19:00').split(':').map(Number);
+  const when = new Date(parts[0], (parts[1] || 1) - 1, parts[2] || 1, hm[0] || 0, hm[1] || 0, 0, 0);
+  if (isNaN(when.getTime())) { hwFieldError('tc-s-date', 'That date could not be read.'); return; }
+  if (when.getTime() < Date.now() - 60000) { hwFieldError('tc-s-date', 'Pick a time that has not passed yet.'); return; }
+
+  const dur = parseInt(f.duration_min, 10) || 60;
+  const payload = {
+    teacher_id: USER.id,
+    title: String(f.title).trim(),
+    starts_at: when.toISOString(),
+    duration_min: dur,
+    lesson_track: f.lesson_track || null,
+    lesson_no: f.lesson_no ? (parseInt(f.lesson_no, 10) || null) : null,
+    note: f.note || null
+  };
+  try {
+    hwBusy(btn, true);
+    const r = await HB.from('class_sessions').insert(payload).select().single();
+    if (r.error) throw r.error;
+    TC.sessionForm = null;
+    toast('Session added to the timetable', 'ok');
+    TC.ready = false;
+    await tcLoad();
+  } catch (e) {
+    hwErr(e, 'Could not save the session');
+  } finally {
+    hwBusy(btn, false);
+  }
+}
+
+async function tcCancelSession(id, btn) {
+  const s = (TC.sessions || []).filter(function (x) { return x.id === id; })[0] || {};
+  if (typeof uiConfirm === 'function') {
+    const ok = await uiConfirm({
+      title: 'Cancel this session?',
+      text: (s.title ? s.title + ' on ' + tcWhen(s.starts_at) : 'This session') + ' stays on the timetable marked as cancelled, so students who planned around it are told.',
+      ok: 'Cancel it', cancel: 'Keep it', danger: true
+    });
+    if (!ok) return;
+  }
+  try {
+    hwBusy(btn, true);
+    const r = await HB.from('class_sessions').update({ status: 'cancelled' }).eq('id', id);
+    if (r.error) throw r.error;
+    toast('Session cancelled', 'ok');
+    TC.ready = false;
+    await tcLoad();
+  } catch (e) {
+    hwErr(e, 'Could not cancel the session');
+  } finally {
+    hwBusy(btn, false);
+  }
+}
+
+function tcRenderSchedule() {
+  const el = document.getElementById('tc-panel-schedule');
+  if (!el) return;
+  if (TC.loading && !(TC.sessions || []).length) { el.innerHTML = '<div class="sk sk-card"></div><div class="sk sk-card"></div>'; return; }
+
+  const f = tcSessionForm();
+  const b = tcSessionBuckets();
+  const trackOpts = (typeof TRACKS !== 'undefined' ? Object.keys(TRACKS) : ['a1'])
+    .filter(function (k) { return TRACKS[k] && TRACKS[k].lessons && Object.keys(TRACKS[k].lessons).length; });
+
+  let html = '<div class="card card-pad space-y-4">' +
+    '<div class="section-head" style="margin-bottom:0"><div><h3>Schedule a session</h3>' +
+    '<p class="faint" style="font-size:12.5px">Every accepted student sees it. Nobody has to be enrolled.</p></div></div>' +
+    '<div class="grid md:grid-cols-2 gap-4">' +
+    '<div class="field"><label class="field-label" for="tc-s-title">Title</label>' +
+    '<input class="input" id="tc-s-title" value="' + hwEsc(f.title) + '" placeholder="Session 1: Present simple" oninput="tcSessionSet(\'title\', this.value)"></div>' +
+    '<div class="field"><label class="field-label" for="tc-s-date">Date</label>' +
+    '<input class="input" type="date" id="tc-s-date" value="' + hwEsc(f.date) + '" oninput="tcSessionSet(\'date\', this.value)"></div>' +
+    '<div class="field"><label class="field-label" for="tc-s-time">Start</label>' +
+    '<input class="input" type="time" id="tc-s-time" value="' + hwEsc(f.time) + '" oninput="tcSessionSet(\'time\', this.value)"></div>' +
+    '<div class="field"><label class="field-label" for="tc-s-dur">Minutes</label>' +
+    '<input class="input" type="number" min="10" max="480" step="5" id="tc-s-dur" value="' + hwEsc(f.duration_min) + '" oninput="tcSessionSet(\'duration_min\', this.value)"></div>' +
+    '<div class="field"><label class="field-label" for="tc-s-track">Lesson</label>' +
+    '<div class="flex gap-2"><select class="input" id="tc-s-track" onchange="tcSessionSet(\'lesson_track\', this.value); tcRenderSchedule();">' +
+    trackOpts.map(function (k) { return '<option value="' + k + '"' + (f.lesson_track === k ? ' selected' : '') + '>' + k.toUpperCase() + '</option>'; }).join('') +
+    '</select><input class="input" type="number" min="1" max="50" style="width:96px" id="tc-s-no" value="' + hwEsc(f.lesson_no) + '" placeholder="No." oninput="tcSessionSet(\'lesson_no\', this.value)"></div></div>' +
+    '<div class="field"><label class="field-label" for="tc-s-note">Note for students</label>' +
+    '<input class="input" id="tc-s-note" value="' + hwEsc(f.note) + '" placeholder="Bring the workbook, page 12" oninput="tcSessionSet(\'note\', this.value)"></div>' +
+    '</div>' +
+    '<div class="flex items-center gap-3 flex-wrap">' +
+    '<button class="btn-primary" onclick="tcSaveSession(this)">Add to timetable</button>' +
+    '<span class="form-note">The student side shows the next session and the whole upcoming list.</span></div>' +
+    '</div>';
+
+  function table(rows, withCancel) {
+    if (!rows.length) return '';
+    return '<div class="table-wrap"><table class="table">' +
+      '<thead><tr><th>When</th><th>Session</th><th>Status</th>' + (withCancel ? '<th style="text-align:right">Action</th>' : '') + '</tr></thead><tbody>' +
+      rows.map(function (s) {
+        const pill = s.status === 'cancelled' ? hwPill('not_started', 'Cancelled') : ' ' + hwPill('submitted', 'Scheduled');
+        return '<tr>' +
+          '<td data-label="When"><span class="num" style="font-variant-numeric:tabular-nums">' + tcWhen(s.starts_at) + '</span>' +
+          (tcIsToday(s.starts_at) ? ' <span class="badge badge-ok">Today</span>' : '') + '</td>' +
+          '<td data-label="Session"><span class="block row-title">' + hwEsc(s.title) + '</span>' +
+          '<span class="row-sub">' + (tcSessionRef(s) ? tcSessionRef(s) + ' · ' : '') + hwEsc(String(s.duration_min || 60)) + ' min' +
+          (s.note ? ' · ' + hwEsc(s.note) : '') + '</span></td>' +
+          '<td data-label="Status">' + pill + '</td>' +
+          (withCancel ? '<td data-label="Action"><div class="table-actions">' +
+            (s.status === 'cancelled' ? '' : '<button class="btn-quiet btn-sm" onclick="tcCancelSession(\'' + s.id + '\',this)">Cancel</button>') +
+            '</div></td>' : '') +
+          '</tr>';
+      }).join('') + '</tbody></table></div>';
+  }
+
+  html += '<div class="card card-pad space-y-4"><div class="section-head" style="margin-bottom:0"><div>' +
+    '<h3>Today and next up</h3><p class="faint" style="font-size:12.5px">' +
+    ((b.today.length + b.next.length) ? (b.today.length + b.next.length) + ' still ahead' : 'Nothing scheduled yet') +
+    '</p></div></div>';
+  if (b.today.length || b.next.length) {
+    html += table(b.today.concat(b.next), true);
+  } else {
+    html += '<div class="empty"><div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>' +
+      '<div class="empty-title">No session scheduled</div>' +
+      '<div class="empty-text">Pick a day and a time above. It goes straight to every student you have accepted, and they can see it before class.</div></div>';
+  }
+  html += '</div>';
+
+  if (b.past.length) {
+    html += '<div class="card card-pad space-y-4"><div class="section-head" style="margin-bottom:0"><div>' +
+      '<h3>Finished and cancelled</h3><p class="faint" style="font-size:12.5px">' + b.past.length + ' kept, so the record is not lost</p></div></div>' +
+      table(b.past.slice(0, 12), false) + '</div>';
+  }
+
+  el.innerHTML = html;
 }
 
 /* ---------- overview: everything real the teacher needs at a glance ---------- */
@@ -635,6 +873,19 @@ function tcRenderOverview() {
     tcStat('Published work', published.length,
       drafts.length ? drafts.length + ' still in draft' : (published.length ? 'All published' : 'Nothing published yet'),
       'lav', "tcTab('assignments')") +
+    '</div>';
+
+  /* The timetable is what the teacher looks at before opening anything else,
+     so it sits above the lists, and it says the truth when nothing is set. */
+  const nxt = tcNextSession();
+  const todayCount = tcSessionBuckets().today.length;
+  html += '<div class="card card-pad space-y-3"><div class="section-head" style="margin-bottom:0"><div>' +
+    '<h3>Today</h3><p class="faint" style="font-size:12.5px">' +
+    (todayCount ? todayCount + (todayCount === 1 ? ' session today' : ' sessions today') : 'No session today') +
+    '</p></div><button class="btn-quiet btn-sm" onclick="tcTab(\'schedule\')">Schedule</button></div>' +
+    (nxt ? '<p class="text-sm"><b>' + hwEsc(nxt.title) + '</b> · ' + tcWhen(nxt.starts_at) +
+      (nxt.lesson_track ? ' · Lesson ' + hwEsc(String(nxt.lesson_track).toUpperCase()) + ' ' + hwEsc(String(nxt.lesson_no || '')) : '') + '</p>'
+      : '<p class="faint text-sm">Nothing scheduled. Set the next session and every accepted student sees it.</p>') +
     '</div>';
 
   if (waiting.length) {

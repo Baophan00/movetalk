@@ -30,6 +30,7 @@ const RETURNS = 'return {TRACKS,TRACK_PARTS,LESSON_DATA,AUDIO_MAP,go,trackGo,tra
   'tcSaveAssignment,tcGrade,hwLoadSession,hwLoad,hwOpen,hwRenderList,hwSubmit,' +
   'tcLoad,tcTab,tcAllStudents,tcWaitingStudents,tcProgressOf,tcDecideStudent,tcRenderStudents,tcRenderOverview,tcStat,tcNewAssignment,hwUpdatePendingBadge,syncAuthFields,showAuthChange,hwCheckAgain,' +
   'tcStudentWork,tcWorkLine,tcPartLine,tcTotalParts,' +
+  'tcSaveSession,tcRenderSchedule,tcSessionBuckets,tcWhen,tcCancelSession,tcNextSession,' +
   'hwForgotPassword,hwRecordProgress,hwLoadProgress,doAuth,setRole,showAuth,' +
   'setUser:(u)=>{USER=u},getUser:()=>USER,' +
   'uiConfirm,uiConfirmClose,' +
@@ -95,13 +96,17 @@ function fakeSupabase(tables) {
       in() { return api; },
       maybeSingle() { return Promise.resolve({ data: (tables[table] || [])[0] || null, error: null }); },
       single() { return Promise.resolve({ data: (tables[table] || [])[0] || null, error: null }); },
-      insert() {
+      insert(arg) {
+        (tables.__calls = tables.__calls || []).push(['insert', table, arg]);
         return {
           select() { return { single() { return Promise.resolve({ data: { id: 'new-' + table }, error: null }); } }; },
           then(res) { return Promise.resolve({ data: null, error: null }).then(res); }
         };
       },
-      update() { return { eq() { return Promise.resolve({ data: null, error: null }); } }; },
+      update(arg) {
+        (tables.__calls = tables.__calls || []).push(['update', table, arg]);
+        return { eq() { return Promise.resolve({ data: null, error: null }); } };
+      },
       upsert(arg, opts) { (tables.__calls = tables.__calls || []).push(['upsert', table, arg, opts]); return Promise.resolve({ data: null, error: null }); },
       then(res) { return Promise.resolve({ data: tables[table] || [], error: null }).then(res); }
     };
@@ -690,6 +695,77 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
     /1 lesson\(s\) finished · 2 opened/.test(ta.tcProgressOf('s1')), ta.tcProgressOf('s1'));
   t('a student who has opened nothing says so',
     ta.tcProgressOf('nobody') === 'no lessons opened yet', ta.tcProgressOf('nobody'));
+
+  /* ============================================================
+     12b. SCHEDULE — the teacher plans a class, the student sees it
+     ============================================================ */
+  t('the timetable is its own tab, not buried inside another one',
+    /data-tc-tab="schedule"/.test(src) && /id="tc-panel-schedule"/.test(src));
+
+  TEACHER_TABLES.__calls = [];
+  ta.TC.sessionForm = { title: '', date: '', time: '19:00', duration_min: 60, lesson_track: 'a1', lesson_no: '', note: '' };
+  await ta.tcSaveSession(null);
+  t('a session with no title is refused before it reaches the server',
+    !(TEACHER_TABLES.__calls || []).some(c => c[0] === 'insert' && c[1] === 'class_sessions'),
+    JSON.stringify(TEACHER_TABLES.__calls));
+
+  TEACHER_TABLES.__calls = [];
+  ta.TC.sessionForm = { title: 'Buổi 1: Present simple', date: '2020-01-01', time: '19:00', duration_min: 60, lesson_track: 'a1', lesson_no: 1, note: '' };
+  await ta.tcSaveSession(null);
+  t('a session in the past is refused, not written',
+    !(TEACHER_TABLES.__calls || []).some(c => c[0] === 'insert' && c[1] === 'class_sessions'),
+    JSON.stringify(TEACHER_TABLES.__calls));
+
+  const future = new Date(Date.now() + 5 * 86400000);
+  const futureDay = future.getFullYear() + '-' + String(future.getMonth() + 1).padStart(2, '0') + '-' + String(future.getDate()).padStart(2, '0');
+  TEACHER_TABLES.__calls = [];
+  ta.TC.sessionForm = { title: 'Buổi 1: Present simple', date: futureDay, time: '19:00', duration_min: 60, lesson_track: 'a1', lesson_no: 1, note: 'Bring the workbook' };
+  await ta.tcSaveSession(null);
+  const sIns = (TEACHER_TABLES.__calls || []).filter(c => c[0] === 'insert' && c[1] === 'class_sessions')[0];
+  t('a session is written against the teacher who planned it',
+    !!sIns && sIns[2].teacher_id === ta.getUser().id, JSON.stringify(sIns));
+  t('... carrying the title, the minutes and the note',
+    !!sIns && sIns[2].title === 'Buổi 1: Present simple' && sIns[2].duration_min === 60 &&
+    sIns[2].note === 'Bring the workbook', JSON.stringify(sIns && sIns[2]));
+  t('... and the time the teacher picked, to the minute',
+    !!sIns && (() => { const d = new Date(sIns[2].starts_at); return d.getHours() === 19 && d.getMinutes() === 0; })(),
+    sIns && sIns[2].starts_at);
+  t('the form is empty again once the session is saved',
+    !ta.TC.sessionForm || ta.TC.sessionForm.title === '', JSON.stringify(ta.TC.sessionForm));
+
+  /* the timetable reads in the order the teacher acts on it */
+  const iso = h => new Date(Date.now() + h * 3600000).toISOString();
+  ta.TC.sessions = [
+    { id: 'x1', title: 'Later', starts_at: iso(72), duration_min: 60, status: 'scheduled' },
+    { id: 'x2', title: 'Today', starts_at: iso(2), duration_min: 60, status: 'scheduled' },
+    { id: 'x3', title: 'Done', starts_at: iso(-96), duration_min: 60, status: 'scheduled' },
+    { id: 'x4', title: 'Called off', starts_at: iso(-48), duration_min: 60, status: 'cancelled' }
+  ];
+  const buckets = ta.tcSessionBuckets();
+  t('a session later today is bucketed as today', buckets.today.length === 1 && buckets.today[0].title === 'Today',
+    JSON.stringify(buckets.today));
+  t('a session in a few days is bucketed as next', buckets.next.length === 1 && buckets.next[0].title === 'Later',
+    JSON.stringify(buckets.next));
+  t('what has passed and what was called off go to the record', buckets.past.length === 2, JSON.stringify(buckets.past));
+  t('the next session is the soonest one still ahead', ta.tcNextSession().title === 'Today', JSON.stringify(ta.tcNextSession()));
+
+  ta.TC.loading = false;
+  ta.tcRenderSchedule();
+  const sch = TEACH.els['tc-panel-schedule'].innerHTML;
+  t('the timetable is a table, not a wall of cards', sch.includes('class="table"'), sch.slice(0, 200));
+  t('the session still ahead is the first thing the teacher reads', sch.indexOf('Today') < sch.indexOf('Later'), sch.slice(0, 400));
+  t('a cancelled session keeps its place and says so', /Cancelled/.test(sch));
+
+  /* cancelling asks first */
+  TEACHER_TABLES.__calls = [];
+  const pendingCancel = ta.tcCancelSession('x2', null);
+  t('cancelling a session asks before it touches the server',
+    !(TEACHER_TABLES.__calls || []).some(c => c[0] === 'update' && c[1] === 'class_sessions'),
+    JSON.stringify(TEACHER_TABLES.__calls));
+  ta.uiConfirmClose(true);
+  await pendingCancel;
+  const sUpd = (TEACHER_TABLES.__calls || []).filter(c => c[0] === 'update' && c[1] === 'class_sessions')[0];
+  t('... and then marks it cancelled rather than deleting it', !!sUpd && sUpd[2].status === 'cancelled', JSON.stringify(sUpd));
 
   /* ============================================================
      13. PASSWORDS

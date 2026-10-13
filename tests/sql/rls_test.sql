@@ -860,6 +860,71 @@ select t_blocked('anon sees no profiles at all',
 select t_blocked('anon cannot read answer keys',
   t_role('anon', $q$(select count(*) from public.question_keys)$q$));
 
+-- ---------- class sessions (005) -----------------------------
+-- A session belongs to the teacher who made it. Active students read the
+-- timetable; a request that has not been accepted yet learns nothing.
+insert into auth.users (id, email, raw_user_meta_data) values
+  ('bbbbbbbb-0000-0000-0000-000000000001','p1@mt.test','{"role":"student","full_name":"Pending One"}')
+on conflict (id) do nothing;
+update public.profiles set status = 'pending'
+  where id = 'bbbbbbbb-0000-0000-0000-000000000001';
+
+select t_eq('the teacher can schedule a session',
+  t_do('11111111-1111-1111-1111-111111111111',
+    $q$insert into public.class_sessions (teacher_id, title, starts_at, duration_min)
+       values ('11111111-1111-1111-1111-111111111111','Buổi 1: Present simple','2026-10-20 19:00+07',60)$q$),
+  'OK');
+
+select t_eq('the teacher sees their own timetable',
+  t_val('11111111-1111-1111-1111-111111111111',
+        $q$(select count(*) from public.class_sessions)$q$), '1');
+
+select t_eq('another teacher does not see it',
+  t_val('22222222-2222-2222-2222-222222222222',
+        $q$(select count(*) from public.class_sessions)$q$), '0');
+
+select t_eq('an accepted student sees the timetable',
+  t_val('aaaaaaaa-0000-0000-0000-000000000001',
+        $q$(select count(*) from public.class_sessions)$q$), '1');
+
+select t_eq('a student who is still waiting sees nothing',
+  t_val('bbbbbbbb-0000-0000-0000-000000000001',
+        $q$(select count(*) from public.class_sessions)$q$), '0');
+
+select t_eq('a rejected student sees nothing',
+  t_val('aaaaaaaa-0000-0000-0000-000000000005',
+        $q$(select count(*) from public.class_sessions)$q$), '0');
+
+select t_eq('a student cannot schedule a session',
+  t_do('aaaaaaaa-0000-0000-0000-000000000001',
+    $q$insert into public.class_sessions (teacher_id, title, starts_at)
+       values ('aaaaaaaa-0000-0000-0000-000000000001','Free lesson','2026-10-21 19:00+07')$q$)
+  like 'ERROR: %', 'true');
+
+select t_eq('a teacher cannot schedule a session in somebody else''s name',
+  t_do('22222222-2222-2222-2222-222222222222',
+    $q$insert into public.class_sessions (teacher_id, title, starts_at)
+       values ('11111111-1111-1111-1111-111111111111','Not mine','2026-10-22 19:00+07')$q$)
+  like 'ERROR: %', 'true');
+
+select t_eq('a teacher cannot move a session of their own onto another teacher',
+  t_do('11111111-1111-1111-1111-111111111111',
+    $q$update public.class_sessions set teacher_id = '22222222-2222-2222-2222-222222222222'
+       where teacher_id = '11111111-1111-1111-1111-111111111111'$q$)
+  like 'ERROR: %', 'true');
+
+select t_eq('cancelling keeps the row for the student to see',
+  t_do('11111111-1111-1111-1111-111111111111',
+    $q$update public.class_sessions set status = 'cancelled'
+       where teacher_id = '11111111-1111-1111-1111-111111111111'$q$), 'OK');
+
+select t_eq('the cancelled session is still on the student''s timetable, marked cancelled',
+  t_val('aaaaaaaa-0000-0000-0000-000000000001',
+        $q$(select count(*) from public.class_sessions where status = 'cancelled')$q$), '1');
+
+select t_blocked('anon sees no timetable at all',
+  t_role('anon', $q$(select count(*) from public.class_sessions)$q$));
+
 -- ---------- report ------------------------------------------
 \echo ''
 \echo '=== FAILURES ==='
