@@ -267,7 +267,7 @@ t('status: a submitted row beats overdue',
    7. THE UX GATE (pure decision, so it is testable)
    ============================================================ */
 const STUDENT = { id: 'u1', name: 'Stu', email: 's@x.test', role: 'student' };
-const TEACHER = { id: 't1', name: 'Teach', email: 't@x.test', role: 'teacher' };
+const TEACHER = { id: 't1', name: 'Như Trương', email: 'nhutruong0407@gmail.com', role: 'teacher' };
 
 t('no backend => setup screen (student area)', api.hwGate('student', false, null).shot === 'setup');
 t('no backend => setup screen (teacher area)', api.hwGate('teacher', false, null).shot === 'setup');
@@ -370,8 +370,8 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
      9. SIGNED-IN TEACHER — classes, roster, builder
      ============================================================ */
   const TEACHER_TABLES = {
-    __uid: 't1', __email: 't@x.test',
-    profiles: [{ id: 't1', email: 't@x.test', full_name: 'Teach', role: 'teacher' }],
+    __uid: 't1', __email: 'nhutruong0407@gmail.com',
+    profiles: [{ id: 't1', email: 'nhutruong0407@gmail.com', full_name: 'Như Trương', role: 'teacher' }],
     assignments: [],
     lesson_progress: [],
     __rpc: {}
