@@ -36,7 +36,7 @@ const HW = {
 const TC = {
   ready: false, loading: false, loadSeq: 0, tab: 'overview',
   classes: [], rosters: {}, assignments: [], rosterOf: {},
-  students: [], progress: [], submissions: [], recipients: [], busy: {},
+  students: [], progress: [], submissions: [], recipients: [], busy: {}, openStudent: null,
   builder: null, openSubs: null, results: [],
   sessions: [], sessionForm: null
 };
@@ -318,22 +318,62 @@ function hwRenderList() {
       'In the meantime you can open any lesson from the left.</div></div>';
     return;
   }
-  el.innerHTML = HW.assignments.map(function (a) {
-    const st = hwStatus(a, HW.subs[a.id]);
-    const ref = a.kind === 'lesson'
-      ? 'Lesson · ' + hwEsc(String(a.lesson_track || '').toUpperCase()) + ' ' + hwEsc(a.lesson_no)
-      : 'Custom exercise';
+  const nextMove = {
+    not_started: 'Start this now',
+    in_progress: 'Continue where you stopped',
+    overdue: 'Past the due date. Hand it in when you can.',
+    submitted: 'Waiting for your teacher',
+    returned: 'Read the comment and try again',
+    graded: 'Read your mark and comment'
+  };
+  function card(a, isNext) {
     const sub = HW.subs[a.id];
+    const st = hwStatus(a, sub);
+    const ref = a.kind === 'lesson'
+      ? hwEsc(String(a.lesson_track || '').toUpperCase()) + ' lesson ' + hwEsc(a.lesson_no)
+      : 'Custom exercise';
     const score = sub && sub.score != null ? sub.score + '/' + sub.max_score : '';
-    return '<button class="card card-pad w-full text-left hw-row" onclick="hwOpen(\'' + a.id + '\')">' +
-      '<div class="flex items-start justify-between gap-4">' +
-      '<div style="min-width:0"><p class="row-title">' + hwEsc(a.title) + '</p>' +
-      '<p class="row-sub">' + ref + ' · due ' + hwEsc(hwDate(a.due_at)) + '</p></div>' +
-      hwPill(st.k, st.label) +
-      '</div>' +
-      (score ? '<p class="row-sub" style="margin-top:10px">Your mark: <b>' + hwEsc(score) + '</b></p>' : '') +
+    const late = st.k === 'overdue';
+    return '<button class="hw-task' + (isNext ? ' next' : '') + '" onclick="hwOpen(\'' + a.id + '\')">' +
+      '<span class="hw-task-main">' +
+      '<span class="row-title">' + hwEsc(a.title) + '</span>' +
+      '<span class="chip-row" style="margin-top:8px">' +
+      '<span class="badge">' + ref + '</span>' +
+      '<span class="badge' + (late ? ' badge-err' : '') + '">due ' + hwEsc(hwDate(a.due_at)) + '</span>' +
+      (score ? '<span class="badge badge-ok">' + hwEsc(score) + '</span>' : '') +
+      '</span>' +
+      '<span class="cell-meta">' + hwEsc(nextMove[st.k] || 'Open it') + '</span>' +
+      '</span>' +
+      '<span class="hw-task-side">' + hwPill(st.k, st.label) +
+      (isNext ? '<span class="hw-flag">Next</span>' : '') + '</span>' +
       '</button>';
-  }).join('');
+  }
+  const open = [], done = [];
+  HW.assignments.forEach(function (a) {
+    const st = hwStatus(a, HW.subs[a.id]);
+    (['graded', 'submitted', 'returned'].indexOf(st.k) >= 0 ? done : open).push(a);
+  });
+  open.sort(function (x, y) {
+    const xo = hwIsOverdue(x) ? 0 : 1, yo = hwIsOverdue(y) ? 0 : 1;
+    if (xo !== yo) return xo - yo;
+    return String(x.due_at || '9999') < String(y.due_at || '9999') ? -1 : 1;
+  });
+  done.sort(function (x, y) {
+    const xs = (HW.subs[x.id] || {}).submitted_at || '', ys = (HW.subs[y.id] || {}).submitted_at || '';
+    return xs < ys ? 1 : -1;
+  });
+  let html = '';
+  if (open.length) {
+    html += '<div class="hw-group"><div class="hw-group-head"><span>To do</span>' +
+      '<span class="faint">' + open.length + (open.length === 1 ? ' assignment' : ' assignments') + '</span></div>' +
+      open.map(function (a, i) { return card(a, i === 0); }).join('') + '</div>';
+  }
+  if (done.length) {
+    html += '<div class="hw-group"><div class="hw-group-head"><span>Handed in</span>' +
+      '<span class="faint">' + done.length + '</span></div>' +
+      done.map(function (a) { return card(a, false); }).join('') + '</div>';
+  }
+  el.innerHTML = html;
 }
 
 async function hwOpen(id) {
@@ -959,7 +999,7 @@ function tcRenderOverview() {
         return '<div class="row"><span class="row-ico">' + hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>' +
           '<span class="row-main"><span class="row-title">' + hwEsc(s.full_name || 'Student') + '</span>' +
           '<span class="row-sub">' + hwEsc(s.email || '') + '</span></span>' +
-          '<span class="row-actions"><span class="chip">' + hwEsc(tcWorkLine(w)) + '</span></span></div>';
+          '<span class="row-actions"><span class="chip-row">' + tcWorkBadges(w) + '</span></span></div>';
       }).join('') + '</div></div>';
   }
 
@@ -991,6 +1031,75 @@ function tcWorkLine(w) {
   if (!w.given) return 'no work assigned yet';
   if (!w.handed) return w.given + ' assigned · nothing handed in';
   return w.handed + ' of ' + w.given + ' handed in · ' + w.marked + ' marked';
+}
+
+/* Work as badges instead of a sentence: what was given, what came back, what
+   is marked, what is still on the teacher's desk. Every figure is a real count
+   from tcStudentWork, and a zero is never printed. */
+function tcWorkBadges(w) {
+  if (!w.given) return '<span class="badge">Nothing assigned</span>';
+  let h = '<span class="badge badge-info">' + w.given + ' assigned</span>';
+  if (w.handed) h += '<span class="badge">' + w.handed + ' handed in</span>';
+  else h += '<span class="badge badge-warn">nothing handed in</span>';
+  const toMark = w.handed - w.marked;
+  if (w.marked) h += '<span class="badge badge-ok">' + w.marked + ' graded</span>';
+  if (toMark > 0) h += '<span class="badge badge-pending">' + toMark + ' to mark</span>';
+  return h;
+}
+
+/* Which programme one student is working through. Same shape as the student's
+   own record, so the teacher's view and the dashboard cannot disagree. */
+function tcStudentByTrack(studentId) {
+  const out = {};
+  (TC.progress || []).forEach(function (x) {
+    if (x.student_id !== studentId) return;
+    const b = out[x.track] || (out[x.track] = { opened: {}, parts: 0, done: 0 });
+    b.opened[String(x.lesson_no)] = true;
+    b.parts++;
+    if (x.part === 'finalTask') b.done++;
+  });
+  return out;
+}
+
+function tcOpenStudent(id) {
+  TC.openStudent = (TC.openStudent === id) ? null : id;
+  tcRenderStudents();
+}
+
+/* The profile block: name, status, one card per programme with the lessons that
+   student actually opened, and their work as badges. It opens as a full-width
+   row inside the table so the list stays in view. */
+function tcStudentProfileRow(s) {
+  const by = tcStudentByTrack(s.id), w = tcStudentWork(s.id);
+  const tracks = (typeof TRACKS !== 'undefined' && TRACKS) ? TRACKS : {};
+  const cards = Object.keys(tracks).map(function (tk) {
+    const T = tracks[tk], total = Object.keys(T.lessons || {}).length;
+    const code = (T.badge || '').split('·').pop().trim();
+    const b = by[tk] || { opened: {}, parts: 0, done: 0 };
+    const opened = Object.keys(b.opened).length;
+    if (!total) {
+      return '<div class="sp-card dim"><div class="sp-card-top"><span class="course-code">' + hwEsc(code) +
+        '</span><span class="badge">No content yet</span></div>' +
+        '<span class="sp-name">' + hwEsc(T.title) + '</span></div>';
+    }
+    const pct = Math.round(opened / total * 100);
+    const badge = !opened ? hwPill('not_started', 'Not started')
+      : (b.done >= total ? hwPill('graded', 'Finished') : hwPill('in_progress', opened + ' of ' + total));
+    return '<div class="sp-card"><div class="sp-card-top"><span class="course-code">' + hwEsc(code) + '</span>' +
+      badge + '</div><span class="sp-name">' + hwEsc(T.title) + '</span>' +
+      '<div class="progress-row"><span class="progress-track"><span class="progress-fill-bar" style="width:' + pct + '%"></span></span>' +
+      '<span class="progress-num">' + pct + '%</span></div>' +
+      '<span class="cell-meta">' + (b.parts ? (b.parts + (b.parts === 1 ? ' part opened' : ' parts opened')) : 'nothing opened yet') + '</span></div>';
+  }).join('');
+  return '<tr class="profile-row"><td colspan="4"><div class="student-profile">' +
+    '<div class="sp-top"><div><span class="sp-title">' + hwEsc(s.full_name || 'Student') + '</span>' +
+    '<span class="cell-meta">' + hwEsc(s.email || '') + ' · ' +
+    (s.status === 'active' ? 'accepted' : hwEsc(s.status || '')) + '</span></div>' +
+    '<span class="chip-row">' + tcWorkBadges(w) + '</span></div>' +
+    '<div class="sp-cards">' + cards + '</div>' +
+    '<div class="sp-actions"><button class="btn-quiet btn-sm" onclick="tcNewAssignmentFor(\'' + s.id + '\')">Assign work</button>' +
+    '<button class="btn-ghost btn-sm" onclick="tcOpenStudent(\'' + s.id + '\')">Hide details</button></div>' +
+    '</div></td></tr>';
 }
 
 /* Every lesson part that exists today, so "opened" has a real denominator:
@@ -1070,18 +1179,23 @@ function tcRenderStudents() {
       '<thead><tr><th>Student</th><th>Lesson progress</th><th>Work</th><th style="text-align:right">Action</th></tr></thead><tbody>' +
       accepted.map(function (s) {
         const w = tcStudentWork(s.id);
-        const when = w.last ? ' · last ' + hwDate(String(w.last).slice(0, 10)) : '';
+        const when = w.last ? 'last handed in ' + hwDate(String(w.last).slice(0, 10)) : '';
         const total = tcTotalParts();
         const pct = total ? Math.min(100, Math.round(w.parts * 100 / total)) : 0;
-        return '<tr>' +
+        const open = TC.openStudent === s.id;
+        return '<tr' + (open ? ' class="row-open"' : '') + '>' +
           '<td data-label="Student"><span class="flex items-center gap-2">' + avatar(s) +
           '<span><span class="block" style="font-weight:500">' + hwEsc(s.full_name || 'Student') + '</span>' +
           '<span class="faint" style="font-size:12px">' + hwEsc(s.email || '') + '</span></span></span></td>' +
-          '<td data-label="Lesson progress" style="min-width:170px">' + tcProgressBar(pct, w.parts) + '</td>' +
-          '<td data-label="Work"><span class="chip">' + hwEsc(tcWorkLine(w)) + when + '</span></td>' +
+          '<td data-label="Lesson progress" style="min-width:190px">' + tcProgressBar(pct, w.parts) +
+          '<span class="cell-meta">' + hwEsc(tcPartLine(w)) + '</span></td>' +
+          '<td data-label="Work"><span class="chip-row">' + tcWorkBadges(w) + '</span>' +
+          (when ? '<span class="cell-meta">' + hwEsc(when) + '</span>' : '') + '</td>' +
           '<td data-label="Action"><div class="table-actions">' +
+          '<button class="btn-quiet btn-sm" onclick="tcOpenStudent(\'' + s.id + '\')">' +
+          (open ? 'Hide' : 'Details') + '</button>' +
           '<button class="btn-quiet btn-sm" onclick="tcNewAssignmentFor(\'' + s.id + '\')">Assign work</button>' +
-          '</div></td></tr>';
+          '</div></td></tr>' + (open ? tcStudentProfileRow(s) : '');
       }).join('') + '</tbody></table></div>';
   } else {
     html += '<div class="empty">' +
@@ -1595,10 +1709,10 @@ async function hwLoadProgress() {
        counted once more — no second query and no invented figure. */
     const byTrack = {};
     r.data.forEach(function (x) {
-      const b = byTrack[x.track] || (byTrack[x.track] = { opened: {}, parts: 0, done: 0 });
+      const b = byTrack[x.track] || (byTrack[x.track] = { opened: {}, parts: 0, done: 0, doneLessons: {} });
       b.opened[String(x.lesson_no)] = true;
       b.parts++;
-      if (x.part === 'finalTask') b.done++;
+      if (x.part === 'finalTask') { b.done++; b.doneLessons[String(x.lesson_no)] = true; }
     });
     return { lessons: Object.keys(done).length,
              opened: Object.keys(touched).length,

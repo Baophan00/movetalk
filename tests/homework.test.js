@@ -29,7 +29,7 @@ const RETURNS = 'return {TRACKS,TRACK_PARTS,LESSON_DATA,AUDIO_MAP,go,trackGo,tra
   'HW,TC,HW_ON,HB,tcBlankBuilder,tcRenderAssignments,tcBuilderSet,tcBuilderKind,' +
   'tcSaveAssignment,tcGrade,hwLoadSession,hwLoad,hwOpen,hwRenderList,hwSubmit,' +
   'tcLoad,tcTab,tcAllStudents,tcWaitingStudents,tcProgressOf,tcDecideStudent,tcRenderStudents,tcRenderOverview,tcStat,tcNewAssignment,hwUpdatePendingBadge,syncAuthFields,showAuthChange,hwCheckAgain,' +
-  'tcStudentWork,tcWorkLine,tcPartLine,tcTotalParts,' +
+  'tcStudentWork,tcWorkLine,tcWorkBadges,tcStudentByTrack,tcOpenStudent,tcStudentProfileRow,tcPartLine,tcTotalParts,' +
   'tcSaveSession,tcRenderSchedule,tcSessionBuckets,tcWhen,tcCancelSession,tcNextSession,' +
   'hwForgotPassword,hwRecordProgress,hwLoadProgress,doAuth,setRole,showAuth,' +
   'setUser:(u)=>{USER=u},getUser:()=>USER,' +
@@ -328,11 +328,18 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
 
   const list = ONLINE.els['hw-list'].innerHTML;
   t('the homework list renders the assigned lesson', list.includes('Homework: Build the Message'));
-  t('the list shows it is an existing-lesson reference', /Lesson · A1 3/.test(list));
+  t('the list shows it is an existing-lesson reference', /A1 lesson 3/.test(list));
   t('the list shows a custom exercise', list.includes('Custom drill'));
   t('the list shows the submitted status', /Graded/.test(list));
   t('the list shows a server-computed score', /6\/6/.test(list));
   t('the list shows overdue for the untouched past-due one', /Overdue/.test(list));
+  t('the list is task cards, not one stack of rows', /class="hw-task/.test(list));
+  t('the work is grouped by what to do and what is handed in',
+    /hw-group-head[^>]*><span>To do<\/span>/.test(list) && /hw-group-head[^>]*><span>Handed in<\/span>/.test(list));
+  t('the first thing to do is flagged as next', /hw-task next/.test(list) && /hw-flag">Next/.test(list));
+  t('each card names the next action', /Start this now|Continue where you stopped|Past the due date/.test(list));
+  t('a card that has been marked tells the student to read it', /Read your mark and comment/.test(list));
+  t('an overdue card is marked in the due badge', /badge-err">due /.test(list));
   t('the signed-in student sees the homework body', ONLINE.els['hw-body'].classList.contains('hidden') === false);
   t('the header names the student', /Stu/.test(ONLINE.els['hw-sub'].textContent));
 
@@ -590,8 +597,12 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
     !/2 assigned/.test(ov));
   ta.tcRenderStudents();
   const studs = TEACH.els['tc-panel-students'].innerHTML;
-  t('the student list says what has been handed in and marked',
-    /1 of 1 handed in · 0 marked/.test(studs), studs.slice(0, 240));
+  t('the student list says what has been handed in and marked, as badges',
+    /1 assigned/.test(studs) && /nothing handed in/.test(studs), studs.slice(0, 400));
+  t('... and never prints a zero as if it were work',
+    !/0 handed in/.test(studs) && !/0 graded/.test(studs) && !/0 to mark/.test(studs), studs.slice(0, 400));
+  t('the work cell is badges, not one run-on line of text',
+    !/<span class="chip">\d+ assigned/.test(studs), studs.slice(0, 400));
   t('the overview keeps a draft out of the published count', /1 still in draft/.test(ov));
 
   /* Lesson-part progress: the teacher reads it for an ACTIVE student (004).
@@ -608,6 +619,18 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
     ta.tcPartLine({ parts: 1 }));
   t('a student with no progress at all is described in words',
     ta.tcPartLine({ parts: 0 }) === 'no lesson opened yet', ta.tcPartLine({ parts: 0 }));
+
+  /* The details row: one student, their work and their progress per programme,
+     as blocks instead of a line of text. */
+  ta.TC.openStudent = 'a1';
+  ta.tcRenderStudents();
+  const openedRow = TEACH.els['tc-panel-students'].innerHTML;
+  t('opening a student shows a profile block with their name and status',
+    /student-profile/.test(openedRow) && /Accepted One/.test(openedRow) && /accepted/.test(openedRow));
+  t('... and one block per programme', (openedRow.match(/sp-card/g) || []).length >= 6, String((openedRow.match(/sp-card/g) || []).length));
+  t('a programme still empty says so instead of drawing a 0% bar', /No content yet/.test(openedRow));
+  t('the closed row is what the teacher sees by default',
+    (() => { ta.TC.openStudent = null; ta.tcRenderStudents(); return !/student-profile/.test(TEACH.els['tc-panel-students'].innerHTML); })());
 
   const keptStudents = ta.TC.students, keptAssignments = ta.TC.assignments;
   ta.TC.students = [];

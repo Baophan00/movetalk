@@ -717,12 +717,33 @@ h3{font-family:'Inter Tight','Inter',sans-serif;font-size:clamp(19px,2.2vw,24px)
 .e2-side{position:sticky;top:20px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px}
 .e2-side-head{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;margin-bottom:12px}
 .e2-side-head .dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
-.e2-num-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:14px}
+.e2-num-grid{display:block;margin-bottom:14px}
+.e2-module{margin-bottom:11px}
+.e2-module.off .e2-module-head{opacity:.6}
+.e2-module-head{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:10px;
+  font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text2);margin-bottom:5px}
+.e2-module-nums{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
 .e2-num{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:600;border-radius:7px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:.15s}
 .e2-num:hover{border-color:var(--card-hover-border);color:var(--text)}
 .e2-num.live{background:var(--badge-bg);color:var(--accent2);border-color:var(--pill-on-border)}
+.e2-num.opened{background:var(--pending-bg);color:var(--pending-fg);border-color:var(--pending-border,var(--border))}
+.e2-num.done{background:var(--ok-bg);color:var(--ok-fg);border-color:var(--ok-border,var(--border))}
 .e2-num.active{background:var(--btn-primary);color:#fff;border-color:transparent}
 .e2-num.locked{opacity:.35;cursor:not-allowed}
+.e2-side-sum{border-bottom:1px solid var(--divider);padding-bottom:11px;margin-bottom:11px;display:flex;flex-direction:column;gap:9px}
+.e2-side-counts{font-size:11.5px;color:var(--text2)}
+.e2-side-counts b{font-size:14px;color:var(--text);font-weight:600}
+.e2-side-cta{width:100%;background:var(--btn-primary);color:#fff;border:0;border-radius:var(--radius-sm);
+  padding:9px 10px;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .15s}
+.e2-side-cta:hover{opacity:.9}
+.e2-legend{display:flex;flex-wrap:wrap;gap:4px 10px;border-top:1px solid var(--divider);padding-top:10px;
+  font-size:10px;color:var(--text2);line-height:1.5}
+.e2-legend span{display:inline-flex;align-items:center;gap:5px}
+.e2-dot{width:7px;height:7px;border-radius:2px;background:var(--surface2);border:1px solid var(--border);display:inline-block}
+.e2-dot.active{background:var(--btn-primary);border-color:transparent}
+.e2-dot.done{background:var(--ok-fg);border-color:transparent}
+.e2-dot.opened{background:var(--pending-fg);border-color:transparent}
+.e2-dot.live{background:var(--badge-bg);border-color:var(--pill-on-border)}
 .e2-side-note{font-size:10.5px;color:var(--text2);line-height:1.6;border-top:1px solid var(--divider);padding-top:10px}
 
 /* ===== MOBILE TOPBAR ===== */
@@ -755,7 +776,7 @@ h3{font-family:'Inter Tight','Inter',sans-serif;font-size:clamp(19px,2.2vw,24px)
   .e2-side{position:static;order:-1}
   .e2-part-grid{grid-template-columns:repeat(2,1fr)}
   .e2-vocab-grid{grid-template-columns:1fr}
-  .e2-num-grid{grid-template-columns:repeat(10,1fr)}
+  .e2-module-nums{grid-template-columns:repeat(10,1fr)}
   .e2-lesson-title{font-size:21px}
   .e2-gram-item{flex-direction:column;gap:4px}
   .e2-gram-key{min-width:0}
@@ -843,6 +864,54 @@ h3{font-family:'Inter Tight','Inter',sans-serif;font-size:clamp(19px,2.2vw,24px)
 .today-line:first-child{border-top:0;padding-top:0}
 .today-ico{color:var(--accent2);font-size:12px;line-height:1.6;flex-shrink:0}
 .today-line .row-main{flex:1;min-width:0}
+
+/* ---- teacher records: badges, profile rows ---- */
+.chip-row{display:inline-flex;flex-wrap:wrap;gap:6px;align-items:center}
+.cell-meta{display:block;font-size:11.5px;color:var(--text2);margin-top:6px;line-height:1.5}
+tr.row-open>td{background:var(--surface2)}
+tr.profile-row>td{padding:0;background:var(--surface2);border-top:0}
+.student-profile{padding:18px 20px;display:flex;flex-direction:column;gap:16px}
+.sp-top{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px}
+.sp-title{display:block;font-size:16px;font-weight:600;letter-spacing:-.01em}
+.sp-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.sp-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);
+  padding:14px;display:flex;flex-direction:column;gap:9px}
+.sp-card.dim{background:transparent;border-style:dashed}
+.sp-card-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sp-name{font-size:13px;font-weight:500}
+.sp-actions{display:flex;flex-wrap:wrap;gap:8px}
+
+/* ---- student homework: task cards grouped by state ---- */
+.hw-group{display:flex;flex-direction:column;gap:10px}
+.hw-group+.hw-group{margin-top:22px}
+.hw-group-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text2)}
+.hw-task{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;width:100%;
+  text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);
+  padding:16px 18px;cursor:pointer;box-shadow:var(--shadow-sm);transition:border-color .16s,transform .16s}
+.hw-task:hover{border-color:var(--card-hover-border);transform:translateY(-1px)}
+.hw-task.next{border-color:var(--pill-on-border);background:var(--badge-bg)}
+.hw-task-main{display:flex;flex-direction:column;min-width:0}
+.hw-task-side{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex-shrink:0}
+.hw-flag{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2)}
+
+/* ---- vocabulary hub ---- */
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px}
+.vocab-card{display:flex;align-items:flex-start;gap:8px;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-card);padding:13px 14px;box-shadow:var(--shadow-sm);transition:border-color .16s,transform .16s}
+.vocab-card:hover{border-color:var(--card-hover-border);transform:translateY(-1px)}
+.vocab-card.open{border-color:var(--pill-on-border);background:var(--badge-bg)}
+.vocab-open{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;text-align:left;background:none;border:0;cursor:pointer;padding:0}
+.vocab-word{font-size:14.5px;font-weight:600;letter-spacing:-.01em;color:var(--text)}
+.vocab-ipa{font-size:11.5px;color:var(--text2);font-family:var(--mono,monospace)}
+.vocab-vi{font-size:12.5px;color:var(--text2)}
+.vocab-star{background:none;border:0;cursor:pointer;font-size:16px;line-height:1;color:var(--text2);padding:2px 4px;border-radius:6px}
+.vocab-star:hover{background:var(--surface2)}
+.vocab-star.on{color:var(--pending-fg)}
+.vocab-ex{display:flex;flex-direction:column;gap:8px}
+.vocab-ex-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--surface2);
+  border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px}
+.vocab-ex-text{flex:1;min-width:180px;font-size:13.5px;line-height:1.5}
 
 /* ---- badges ---- */
 .badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:var(--radius-pill);letter-spacing:.01em;background:var(--badge-bg);color:var(--accent2);white-space:nowrap}
@@ -1075,6 +1144,7 @@ body.studio-mode .e2-part{min-height:74px}
         <button class="nav-item" data-view="home"><span class="nav-code">HM</span> Home</button>
         <button class="nav-item" data-view="dashboard"><span class="nav-code">LP</span> Learning path</button>
         <button class="nav-item" data-view="homework"><span class="nav-code">HW</span> My homework</button>
+        <button class="nav-item" data-view="vocab"><span class="nav-code">VB</span> Vocabulary</button>
         <button class="nav-item hidden teacher-only" data-view="teacher" id="nav-teacher-item"><span class="nav-code">TC</span> Teaching <span id="nav-teacher-count" class="nav-badge hidden"></span></button>
         <button class="nav-item nav-sub hidden teacher-only" data-view="teacher" data-tc-nav="overview" onclick="tcTab('overview')"><span class="nav-code">·</span> Overview</button>
         <button class="nav-item nav-sub hidden teacher-only" data-view="teacher" data-tc-nav="students" onclick="tcTab('students')"><span class="nav-code">·</span> Students</button>
@@ -1142,6 +1212,14 @@ body.studio-mode .e2-part{min-height:74px}
             <span class="hero-flow-step">REAL-LIFE USE</span>
           </div>
         </div>
+      </div></div>
+
+      <!-- THE PROGRAMMES -->
+      <div class="home-programs scroll-section tint-block" id="programmes"><div class="page">
+        <p class="section-label">The Programmes</p>
+        <h2>Foundation, Activation, Expand</h2>
+        <p class="section-sub">Ba chương trình, một đường đi. Mỗi bài có từ vựng, ngữ pháp, hội thoại, luyện nghe và bài tập — mở là học được ngay.</p>
+        <div id="home-courses" class="course-grid"></div>
       </div></div>
 
       <!-- MOVE Method -->
@@ -1409,6 +1487,13 @@ body.studio-mode .e2-part{min-height:74px}
             <div id="dash-courses" class="course-grid"></div>
           </div>
 
+          <div class="card card-pad space-y-4">
+            <div class="section-head" style="margin-bottom:0"><div><h3>Words to review</h3>
+              <p class="faint" style="font-size:12.5px">The words you saved from your lessons.</p></div>
+              <button class="btn-ghost btn-sm" onclick="go('vocab')">Open vocabulary</button></div>
+            <div id="dash-vocab" class="chip-row"></div>
+          </div>
+
           <div class="grid xl:grid-cols-2 gap-5">
           <div class="card card-pad space-y-4">
             <div class="section-head" style="margin-bottom:0"><div><h3>My homework</h3>
@@ -1455,6 +1540,35 @@ body.studio-mode .e2-part{min-height:74px}
 
           <div id="hw-detail" class="hidden space-y-4"></div>
         </div>
+      </div>
+    </section>
+
+    <!-- VOCABULARY (every word the lessons already carry) -->
+    <section id="v-vocab" class="view hidden">
+      <div class="p-6 md:p-10 max-w-5xl mx-auto">
+        <div class="page-head">
+          <div>
+            <h1 class="page-title">Vocabulary</h1>
+            <p class="page-sub" id="vocab-sub">Every word the lessons carry, with the meaning and the example that come with it.</p>
+          </div>
+          <div class="page-actions">
+            <button class="btn-quiet btn-sm" id="vocab-saved-btn" onclick="vocabSetFilter('saved')">Saved words</button>
+          </div>
+        </div>
+
+        <div class="card card-pad space-y-4">
+          <div class="field">
+            <label class="field-label" for="vocab-q">Search</label>
+            <input class="input" id="vocab-q" type="search" autocomplete="off"
+              placeholder="A word, an English meaning, or a Vietnamese meaning"
+              oninput="vocabSearch(this.value)">
+          </div>
+          <div class="chip-row" id="vocab-filters"></div>
+        </div>
+
+        <div id="vocab-detail" class="space-y-4"></div>
+        <div id="vocab-count" class="faint" style="font-size:12.5px;margin:16px 0 12px"></div>
+        <div id="vocab-list" class="vocab-grid"></div>
       </div>
     </section>
 
@@ -1656,6 +1770,7 @@ function go(v){
   document.querySelectorAll('.nav-item:not([data-tc-nav])').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
   document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.toggle('on',b.dataset.bn===v));
   if(v==='dashboard')renderDashboard();
+  if(v==='vocab')vocabRender();
   if(v==='homework')renderHomework();
   if(v==='teacher')renderTeacher();
   if(TRACKS[v])renderTrack(v);
@@ -1666,7 +1781,32 @@ addEventListener('hashchange',()=>go(location.hash.slice(1)||'home'));
 
 // ---- HOME ----
 function renderHome(){
-  // Home is now fully static — no stats bar to animate.
+  /* The programmes, as the same course cards the dashboard uses. On the public
+     page there is no personal progress to show, so the card carries what the
+     lesson data really has: the code, the name and the lessons that exist. */
+  const el=document.getElementById('home-courses');
+  if(!el)return;
+  el.innerHTML=dashCourseGroups().map(function(g){
+    return '<div class="course-group"><div class="course-group-head">'+g.name+
+      '<span class="course-rule"></span><span style="text-transform:none;letter-spacing:0;font-weight:400">'+g.line+'</span></div>'+
+      '<div class="course-cards">'+g.tracks.map(homeCourseCard).join('')+'</div></div>';
+  }).join('');
+}
+function homeCourseCard(tk){
+  const T=TRACKS[tk];if(!T)return '';
+  const total=Object.keys(T.lessons||{}).length;
+  const code=(T.badge||'').split('·').pop().trim();
+  if(!total){
+    return '<div class="course-card dim"><div class="course-card-top"><span class="course-code">'+code+'</span>'+
+      '<span class="badge">Đang cập nhật</span></div>'+
+      '<div><div class="course-name">'+T.title+'</div><div class="course-sub">'+T.sub+'</div></div>'+
+      '<div class="course-foot"><div class="course-counts">Nội dung đang được cập nhật.</div></div></div>';
+  }
+  return '<div class="course-card"><div class="course-card-top"><span class="course-code">'+code+'</span>'+
+    '<span class="badge badge-ok">'+total+' bài</span></div>'+
+    '<div><div class="course-name">'+T.title+'</div><div class="course-sub">'+T.sub+'</div></div>'+
+    '<div class="course-foot"><div class="course-counts"><b>'+total+'</b> lesson'+(total===1?'':'s')+' ready to open</div>'+
+    '<button class="btn-primary btn-sm" onclick="go(\''+tk+'\');trackGo(\''+tk+'\',1)">Mở bài 1</button></div></div>';
 }
 
 // ---- SCROLL ANIMATIONS ----
@@ -1784,6 +1924,9 @@ TRACKS.e2.lessons=E2_LESSONS;
 
 // state
 const TRACK_NUM={},TRACK_PART={};
+/* This student's own lesson_progress rows, fetched once per session and reused
+   by the lesson rail and the course cards. Null until it is known. */
+let TRACK_PROG=null;
 
 function esc(s){return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;')}
 let AUDIO_EL=null;
@@ -1877,21 +2020,60 @@ function trackSkeleton(tk){
     <aside class="e2-side">
       <div class="e2-side-head"><span class="dot"></span> ${T.gridTitle}</div>
       <div class="e2-num-grid" id="${tk}-grid"></div>
-      <div class="e2-side-note">Ô sáng = bài đã có nội dung. Các ô còn lại sẽ được cập nhật sau.</div>
     </aside>
   </div>`;
 }
 
+function trackProgress(tk){
+  const b=(typeof TRACK_PROG!=='undefined'&&TRACK_PROG&&TRACK_PROG.byTrack)?TRACK_PROG.byTrack[tk]:null;
+  return b||{opened:{},done:0,doneLessons:{},parts:0};
+}
+function trackNextLesson(tk){
+  const T=TRACKS[tk],b=trackProgress(tk);
+  const nums=Object.keys(T.lessons||{}).map(Number).sort((a,c)=>a-c);
+  const undone=nums.filter(n=>!b.doneLessons[String(n)]);
+  return undone.length?undone[0]:(nums[0]||1);
+}
 function trackGrid(tk){
-  const T=TRACKS[tk],cur=TRACK_NUM[tk]||1;
+  const T=TRACKS[tk],cur=TRACK_NUM[tk]||1,b=trackProgress(tk);
+  const withContent=Object.keys(T.lessons||{}).length;
+  const opened=Object.keys(b.opened||{}).length;
+  const done=b.done||0;
+  const PER=5,mods=Math.ceil(T.gridTotal/PER);
   let h='';
-  for(let i=1;i<=T.gridTotal;i++){
-    const live=!!T.lessons[i];
-    const cls='e2-num'+(i===cur?' active':(live?' live':' locked'));
-    h+=`<button class="${cls}" ${live?`onclick="trackGo('${tk}',${i})"`:'disabled'} title="${live?('Bài '+i):'Chưa cập nhật'}">${i}</button>`;
+  if(withContent){
+    h+='<div class="e2-side-sum"><div class="e2-side-counts"><b>'+opened+'</b> of '+withContent+' lessons opened'+
+      (done?' · '+(done===1?'1 finished':done+' finished'):'')+'</div>'+
+      '<button class="e2-side-cta" onclick="trackGo(\''+tk+'\','+trackNextLesson(tk)+')">'+
+      (opened?('Continue lesson '+trackNextLesson(tk)):'Start lesson 1')+'</button></div>';
   }
+  for(let m=0;m<mods;m++){
+    const from=m*PER+1,to=Math.min(from+PER-1,T.gridTotal);
+    const liveIn=[];for(let i=from;i<=to;i++)if(T.lessons[i])liveIn.push(i);
+    let cells='';
+    for(let i=from;i<=to;i++){
+      const live=!!T.lessons[i];
+      const isDone=!!b.doneLessons[String(i)];
+      const isOpen=!!b.opened[String(i)];
+      let cls='e2-num';
+      if(i===cur)cls+=' active';else if(isDone)cls+=' done';else if(isOpen)cls+=' opened';else if(live)cls+=' live';else cls+=' locked';
+      const state=!live?'Chưa cập nhật':(isDone?'Đã học xong':(isOpen?'Đang học':'Có nội dung'));
+      cells+='<button class="'+cls+'" '+(live?'onclick="trackGo(\''+tk+'\','+i+')"':'disabled')+
+        ' title="Bài '+i+' · '+state+'" aria-label="Bài '+i+' · '+state+'">'+i+'</button>';
+    }
+    h+='<div class="e2-module'+(liveIn.length?'':' off')+'">'+
+      '<div class="e2-module-head"><span>Module '+(m+1)+'</span>'+
+      '<span>'+from+'–'+to+(liveIn.length?'':' · đang cập nhật')+'</span></div>'+
+      '<div class="e2-module-nums">'+cells+'</div></div>';
+  }
+  const legend='<div class="e2-legend">'+
+    '<span><i class="e2-dot active"></i>Đang mở</span>'+
+    '<span><i class="e2-dot done"></i>Đã học xong</span>'+
+    '<span><i class="e2-dot opened"></i>Đang học</span>'+
+    '<span><i class="e2-dot live"></i>Có nội dung</span>'+
+    '<span><i class="e2-dot locked"></i>Đang cập nhật</span></div>';
   const g=document.getElementById(tk+'-grid');
-  if(g)g.innerHTML=h;
+  if(g)g.innerHTML=h+legend;
 }
 
 function trackGo(tk,n){TRACK_NUM[tk]=n;TRACK_PART[tk]=null;renderTrack(tk)}
@@ -1978,6 +2160,13 @@ if(document.addEventListener)document.addEventListener('keydown',function(e){
 function renderTrack(tk){
   renderTrackInner(tk);
   studioBar();
+  /* The rail shows what THIS student has done, so it needs their own record.
+     Fetched once per session and cached; without a backend nothing is claimed. */
+  if(TRACK_PROG===null&&typeof hwLoadProgress==='function'&&typeof HW_ON!=='undefined'&&HW_ON&&
+     typeof USER!=='undefined'&&USER&&USER.role==='student'&&USER.status==='active'){
+    TRACK_PROG={};
+    hwLoadProgress().then(function(p){if(p){TRACK_PROG=p;trackGrid(tk)}}).catch(function(){});
+  }
 }
 
 function renderTrackInner(tk){
@@ -2228,6 +2417,166 @@ function updateAuthUI(){
   if(bnv)bnv.classList.toggle('hidden',!isTeacher);
 }
 
+// ---- VOCABULARY HUB ----
+/* Every entry is read out of the lesson data itself: the flashcards carry the
+   word, the IPA, the Vietnamese meaning, the English definition and real
+   examples. A field the data does not have is simply not shown, so nothing
+   here can be invented. */
+const VOCAB = { built: null, q: '', filter: 'all', open: null };
+
+function vocabIndex() {
+  if (VOCAB.built) return VOCAB.built;
+  const byWord = {};
+  const add = function (o) {
+    const key = String(o.w || '').trim().toLowerCase();
+    if (!key) return;
+    const e = byWord[key] || (byWord[key] = { w: String(o.w).trim(), ipa: '', vi: '', def: '', ex: [], src: [] });
+    if (!e.ipa && o.ipa) e.ipa = o.ipa;
+    if (!e.vi && o.vi) e.vi = o.vi;
+    if (!e.def && o.def) e.def = o.def;
+    (o.ex || []).forEach(function (x) {
+      if (x && x.text && e.ex.length < 3 && !e.ex.some(function (y) { return y.text === x.text; })) e.ex.push(x);
+    });
+    if (o.tk && !e.src.some(function (s) { return s.tk === o.tk && s.n === o.n; })) e.src.push({ tk: o.tk, n: o.n });
+  };
+  const tracks = (typeof TRACKS !== 'undefined' && TRACKS) ? TRACKS : {};
+  Object.keys(tracks).forEach(function (tk) {
+    const T = tracks[tk] || {};
+    Object.keys(T.lessons || {}).forEach(function (n) {
+      const parts = (T.lessons[n] || {}).parts || {};
+      Object.keys(parts).forEach(function (p) {
+        (parts[p] || []).forEach(function (b) {
+          if (!b || !b.t) return;
+          const items = b.items || [];
+          if (b.t === 'flashcard') items.forEach(function (c) {
+            add({ w: c.word, ipa: c.phonetic, vi: c.vi, def: c.def, ex: c.examples, tk: tk, n: Number(n) });
+          });
+          if (b.t === 'words') items.forEach(function (c) {
+            add({ w: c.en, ipa: c.phonetic, vi: c.vi, def: c.def, tk: tk, n: Number(n) });
+          });
+          if (b.t === 'retrieval') items.forEach(function (c) {
+            add({ w: c.en, vi: c.vi, tk: tk, n: Number(n) });
+          });
+        });
+      });
+    });
+  });
+  VOCAB.built = Object.keys(byWord).map(function (k) { return byWord[k]; })
+    .sort(function (a, b) { return a.w.toLowerCase() < b.w.toLowerCase() ? -1 : 1; });
+  return VOCAB.built;
+}
+
+function vocabSaved() { const v = load('savedVocab', []); return Array.isArray(v) ? v : []; }
+function vocabIsSaved(w) { return vocabSaved().indexOf(String(w).toLowerCase()) >= 0; }
+function vocabToggleSave(w) {
+  const k = String(w).toLowerCase();
+  const list = vocabSaved();
+  const i = list.indexOf(k);
+  if (i >= 0) list.splice(i, 1); else list.push(k);
+  save('savedVocab', list);
+  vocabRender();
+  toast(i >= 0 ? 'Removed from your words' : 'Saved to your words', 'ok');
+}
+function vocabSource(e) {
+  const s = e.src[0];
+  if (!s) return 'From your lessons';
+  const T = (typeof TRACKS !== 'undefined' && TRACKS[s.tk]) || {};
+  const L = (T.lessons || {})[s.n] || {};
+  return (T.badge ? T.badge + ' · ' : '') + 'Lesson ' + s.n + (L.title ? ' · ' + L.title : '');
+}
+function vocabSearch(v) { VOCAB.q = String(v || '').trim().toLowerCase(); vocabRender(); }
+function vocabSetFilter(f) {
+  VOCAB.filter = f;
+  const q = document.getElementById('vocab-q');
+  if (q) q.value = '';
+  VOCAB.q = '';
+  vocabRender();
+}
+function vocabOpen(w) { VOCAB.open = (VOCAB.open === w) ? null : w; vocabRender(); }
+function vocabGoLesson(tk, n) { go(tk); if (typeof trackGo === 'function') trackGo(tk, n); }
+function vocabFiltered() {
+  const saved = vocabSaved();
+  return vocabIndex().filter(function (e) {
+    if (VOCAB.filter === 'saved' && saved.indexOf(e.w.toLowerCase()) < 0) return false;
+    if (VOCAB.filter !== 'all' && VOCAB.filter !== 'saved' &&
+        !e.src.some(function (s) { return s.tk === VOCAB.filter; })) return false;
+    if (!VOCAB.q) return true;
+    return (e.w + ' ' + e.vi + ' ' + e.def).toLowerCase().indexOf(VOCAB.q) >= 0;
+  });
+}
+function vocabCard(e) {
+  const saved = vocabIsSaved(e.w);
+  return '<div class="vocab-card' + (VOCAB.open === e.w ? ' open' : '') + '">' +
+    '<button class="vocab-open" onclick="vocabOpen(\'' + esc(e.w) + '\')">' +
+    '<span class="vocab-word">' + hwEsc(e.w) + '</span>' +
+    (e.ipa ? '<span class="vocab-ipa">' + hwEsc(e.ipa) + '</span>' : '') +
+    (e.vi ? '<span class="vocab-vi">' + hwEsc(e.vi) + '</span>' : '') +
+    '</button>' +
+    '<button class="vocab-star' + (saved ? ' on' : '') + '" onclick="vocabToggleSave(\'' + esc(e.w) + '\')" ' +
+    'aria-label="' + (saved ? 'Remove from your words' : 'Save this word') + '">' + (saved ? '★' : '☆') + '</button>' +
+    '</div>';
+}
+function vocabDetailRender() {
+  const box = document.getElementById('vocab-detail');
+  if (!box) return;
+  const e = vocabIndex().filter(function (x) { return x.w === VOCAB.open; })[0];
+  if (!e) { box.innerHTML = ''; return; }
+  const saved = vocabIsSaved(e.w);
+  const s = e.src[0];
+  box.innerHTML = '<div class="card card-pad space-y-4">' +
+    '<div class="section-head" style="margin-bottom:0"><div>' +
+    '<h3 style="font-size:24px">' + hwEsc(e.w) +
+    (e.ipa ? ' <span class="vocab-ipa" style="font-size:14px">' + hwEsc(e.ipa) + '</span>' : '') + '</h3>' +
+    '<p class="faint" style="font-size:12.5px">' + hwEsc(vocabSource(e)) + '</p></div>' +
+    '<div class="table-actions">' +
+    '<button class="btn-secondary btn-sm" onclick="speak(\'' + esc(e.w) + '\')">🔊 Nghe</button>' +
+    '<button class="btn-' + (saved ? 'quiet' : 'primary') + ' btn-sm" onclick="vocabToggleSave(\'' + esc(e.w) + '\')">' +
+    (saved ? '★ Đã lưu' : '☆ Lưu từ này') + '</button>' +
+    '<button class="btn-ghost btn-sm" onclick="vocabOpen(\'\')">Đóng</button>' +
+    '</div></div>' +
+    (e.vi ? '<p class="row-title">' + hwEsc(e.vi) + '</p>' : '') +
+    (e.def ? '<p class="row-sub">' + hwEsc(e.def) + '</p>' : '') +
+    (e.ex.length ? '<div class="vocab-ex"><div class="blk-label">Examples</div>' +
+      e.ex.map(function (x) {
+        return '<div class="vocab-ex-row"><span class="vocab-ex-text">' + hwEsc(x.text) + '</span>' +
+          (x.context ? '<span class="badge">' + hwEsc(x.context) + '</span>' : '') +
+          '<button class="e2-say" onclick="speak(\'' + esc(x.text) + '\')" aria-label="Nghe câu ví dụ">🔊</button></div>';
+      }).join('') + '</div>' : '') +
+    (s ? '<div><button class="btn-secondary btn-sm" onclick="vocabGoLesson(\'' + s.tk + '\',' + s.n + ')">Mở bài học này</button></div>' : '') +
+    '</div>';
+}
+function vocabRender() {
+  const list = document.getElementById('vocab-list');
+  if (!list) return;
+  vocabDetailRender();
+  const all = vocabIndex(), rows = vocabFiltered(), savedCount = vocabSaved().length;
+  const sub = document.getElementById('vocab-sub');
+  if (sub) sub.textContent = all.length + ' words from the lessons you can open' +
+    (savedCount ? ' · ' + savedCount + ' saved' : '');
+  const f = document.getElementById('vocab-filters');
+  if (f) {
+    const tracks = (typeof TRACKS !== 'undefined' && TRACKS) ? TRACKS : {};
+    const opts = [{ k: 'all', label: 'All words' }, { k: 'saved', label: 'Saved (' + savedCount + ')' }]
+      .concat(Object.keys(tracks).filter(function (tk) {
+        return Object.keys((tracks[tk] || {}).lessons || {}).length;
+      }).map(function (tk) { return { k: tk, label: tk.toUpperCase() + ' · ' + tracks[tk].title }; }));
+    f.innerHTML = opts.map(function (o) {
+      return '<button class="pill' + (VOCAB.filter === o.k ? ' on' : '') + '" onclick="vocabSetFilter(\'' + o.k + '\')">' +
+        hwEsc(o.label) + '</button>';
+    }).join('');
+  }
+  const btn = document.getElementById('vocab-saved-btn');
+  if (btn) btn.textContent = 'Saved words' + (savedCount ? ' (' + savedCount + ')' : '');
+  const count = document.getElementById('vocab-count');
+  if (count) {
+    if (VOCAB.filter === 'saved' && !rows.length) count.textContent = 'No saved words yet. Tap the star on any word.';
+    else count.textContent = rows.length + (rows.length === 1 ? ' word' : ' words') +
+      (VOCAB.q ? ' for "' + VOCAB.q + '"' : '') + (rows.length > 120 ? ' · showing the first 120' : '');
+  }
+  list.innerHTML = rows.slice(0, 120).map(vocabCard).join('') ||
+    '<div class="empty"><div class="empty-title">Nothing here</div><div class="empty-text">Try another word, or clear the search.</div></div>';
+}
+
 // ---- DASHBOARD ----
 /* ---------- dashboard blocks: today, and the six programmes ----------
    Both read data the app already has: the timetable and homework rows the
@@ -2310,6 +2659,23 @@ function dashRenderToday(){
   box.innerHTML=html;
 }
 
+function dashRenderVocab(){
+  const el=document.getElementById('dash-vocab');if(!el)return;
+  const saved=(typeof vocabSaved==='function')?vocabSaved():[];
+  if(!saved.length){
+    el.innerHTML='<span class="faint" style="font-size:12.5px">No saved words yet. In Vocabulary, tap the star on a word to keep it here.</span>';
+    return;
+  }
+  el.innerHTML=saved.slice(0,14).map(function(w){
+    return '<button class="pill" onclick="go(\'vocab\');vocabOpen(\''+esc(vocabDisplay(w))+'\')">'+hwEsc(vocabDisplay(w))+'</button>';
+  }).join('')+(saved.length>14?'<span class="faint" style="font-size:12.5px">+'+(saved.length-14)+' more</span>':'');
+}
+/* Saved words are stored lower case; show the spelling the lesson uses. */
+function vocabDisplay(w){
+  const hit=vocabIndex().filter(function(e){return e.w.toLowerCase()===String(w).toLowerCase()})[0];
+  return hit?hit.w:String(w);
+}
+
 async function renderDashboard(){
   const gate=document.getElementById('dash-gate'),body=document.getElementById('dash-body');
   if(!USER){gate.classList.remove('hidden');body.classList.add('hidden');return}
@@ -2363,6 +2729,8 @@ async function renderDashboard(){
   /* homework: the same real rows the homework screen shows */
   dashRenderToday();
   dashRenderCourses(serverProg);
+  dashRenderVocab();
+  if(serverProg)TRACK_PROG=serverProg;
   const hwBox=document.getElementById('dash-hw');
   const fbBox=document.getElementById('dash-feedback');
   if(typeof HW==='undefined'||!HW_ON||!HW.assignments.length){
@@ -2440,7 +2808,7 @@ const HW = {
 const TC = {
   ready: false, loading: false, loadSeq: 0, tab: 'overview',
   classes: [], rosters: {}, assignments: [], rosterOf: {},
-  students: [], progress: [], submissions: [], recipients: [], busy: {},
+  students: [], progress: [], submissions: [], recipients: [], busy: {}, openStudent: null,
   builder: null, openSubs: null, results: [],
   sessions: [], sessionForm: null
 };
@@ -2722,22 +3090,62 @@ function hwRenderList() {
       'In the meantime you can open any lesson from the left.</div></div>';
     return;
   }
-  el.innerHTML = HW.assignments.map(function (a) {
-    const st = hwStatus(a, HW.subs[a.id]);
-    const ref = a.kind === 'lesson'
-      ? 'Lesson · ' + hwEsc(String(a.lesson_track || '').toUpperCase()) + ' ' + hwEsc(a.lesson_no)
-      : 'Custom exercise';
+  const nextMove = {
+    not_started: 'Start this now',
+    in_progress: 'Continue where you stopped',
+    overdue: 'Past the due date. Hand it in when you can.',
+    submitted: 'Waiting for your teacher',
+    returned: 'Read the comment and try again',
+    graded: 'Read your mark and comment'
+  };
+  function card(a, isNext) {
     const sub = HW.subs[a.id];
+    const st = hwStatus(a, sub);
+    const ref = a.kind === 'lesson'
+      ? hwEsc(String(a.lesson_track || '').toUpperCase()) + ' lesson ' + hwEsc(a.lesson_no)
+      : 'Custom exercise';
     const score = sub && sub.score != null ? sub.score + '/' + sub.max_score : '';
-    return '<button class="card card-pad w-full text-left hw-row" onclick="hwOpen(\'' + a.id + '\')">' +
-      '<div class="flex items-start justify-between gap-4">' +
-      '<div style="min-width:0"><p class="row-title">' + hwEsc(a.title) + '</p>' +
-      '<p class="row-sub">' + ref + ' · due ' + hwEsc(hwDate(a.due_at)) + '</p></div>' +
-      hwPill(st.k, st.label) +
-      '</div>' +
-      (score ? '<p class="row-sub" style="margin-top:10px">Your mark: <b>' + hwEsc(score) + '</b></p>' : '') +
+    const late = st.k === 'overdue';
+    return '<button class="hw-task' + (isNext ? ' next' : '') + '" onclick="hwOpen(\'' + a.id + '\')">' +
+      '<span class="hw-task-main">' +
+      '<span class="row-title">' + hwEsc(a.title) + '</span>' +
+      '<span class="chip-row" style="margin-top:8px">' +
+      '<span class="badge">' + ref + '</span>' +
+      '<span class="badge' + (late ? ' badge-err' : '') + '">due ' + hwEsc(hwDate(a.due_at)) + '</span>' +
+      (score ? '<span class="badge badge-ok">' + hwEsc(score) + '</span>' : '') +
+      '</span>' +
+      '<span class="cell-meta">' + hwEsc(nextMove[st.k] || 'Open it') + '</span>' +
+      '</span>' +
+      '<span class="hw-task-side">' + hwPill(st.k, st.label) +
+      (isNext ? '<span class="hw-flag">Next</span>' : '') + '</span>' +
       '</button>';
-  }).join('');
+  }
+  const open = [], done = [];
+  HW.assignments.forEach(function (a) {
+    const st = hwStatus(a, HW.subs[a.id]);
+    (['graded', 'submitted', 'returned'].indexOf(st.k) >= 0 ? done : open).push(a);
+  });
+  open.sort(function (x, y) {
+    const xo = hwIsOverdue(x) ? 0 : 1, yo = hwIsOverdue(y) ? 0 : 1;
+    if (xo !== yo) return xo - yo;
+    return String(x.due_at || '9999') < String(y.due_at || '9999') ? -1 : 1;
+  });
+  done.sort(function (x, y) {
+    const xs = (HW.subs[x.id] || {}).submitted_at || '', ys = (HW.subs[y.id] || {}).submitted_at || '';
+    return xs < ys ? 1 : -1;
+  });
+  let html = '';
+  if (open.length) {
+    html += '<div class="hw-group"><div class="hw-group-head"><span>To do</span>' +
+      '<span class="faint">' + open.length + (open.length === 1 ? ' assignment' : ' assignments') + '</span></div>' +
+      open.map(function (a, i) { return card(a, i === 0); }).join('') + '</div>';
+  }
+  if (done.length) {
+    html += '<div class="hw-group"><div class="hw-group-head"><span>Handed in</span>' +
+      '<span class="faint">' + done.length + '</span></div>' +
+      done.map(function (a) { return card(a, false); }).join('') + '</div>';
+  }
+  el.innerHTML = html;
 }
 
 async function hwOpen(id) {
@@ -3363,7 +3771,7 @@ function tcRenderOverview() {
         return '<div class="row"><span class="row-ico">' + hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>' +
           '<span class="row-main"><span class="row-title">' + hwEsc(s.full_name || 'Student') + '</span>' +
           '<span class="row-sub">' + hwEsc(s.email || '') + '</span></span>' +
-          '<span class="row-actions"><span class="chip">' + hwEsc(tcWorkLine(w)) + '</span></span></div>';
+          '<span class="row-actions"><span class="chip-row">' + tcWorkBadges(w) + '</span></span></div>';
       }).join('') + '</div></div>';
   }
 
@@ -3395,6 +3803,75 @@ function tcWorkLine(w) {
   if (!w.given) return 'no work assigned yet';
   if (!w.handed) return w.given + ' assigned · nothing handed in';
   return w.handed + ' of ' + w.given + ' handed in · ' + w.marked + ' marked';
+}
+
+/* Work as badges instead of a sentence: what was given, what came back, what
+   is marked, what is still on the teacher's desk. Every figure is a real count
+   from tcStudentWork, and a zero is never printed. */
+function tcWorkBadges(w) {
+  if (!w.given) return '<span class="badge">Nothing assigned</span>';
+  let h = '<span class="badge badge-info">' + w.given + ' assigned</span>';
+  if (w.handed) h += '<span class="badge">' + w.handed + ' handed in</span>';
+  else h += '<span class="badge badge-warn">nothing handed in</span>';
+  const toMark = w.handed - w.marked;
+  if (w.marked) h += '<span class="badge badge-ok">' + w.marked + ' graded</span>';
+  if (toMark > 0) h += '<span class="badge badge-pending">' + toMark + ' to mark</span>';
+  return h;
+}
+
+/* Which programme one student is working through. Same shape as the student's
+   own record, so the teacher's view and the dashboard cannot disagree. */
+function tcStudentByTrack(studentId) {
+  const out = {};
+  (TC.progress || []).forEach(function (x) {
+    if (x.student_id !== studentId) return;
+    const b = out[x.track] || (out[x.track] = { opened: {}, parts: 0, done: 0 });
+    b.opened[String(x.lesson_no)] = true;
+    b.parts++;
+    if (x.part === 'finalTask') b.done++;
+  });
+  return out;
+}
+
+function tcOpenStudent(id) {
+  TC.openStudent = (TC.openStudent === id) ? null : id;
+  tcRenderStudents();
+}
+
+/* The profile block: name, status, one card per programme with the lessons that
+   student actually opened, and their work as badges. It opens as a full-width
+   row inside the table so the list stays in view. */
+function tcStudentProfileRow(s) {
+  const by = tcStudentByTrack(s.id), w = tcStudentWork(s.id);
+  const tracks = (typeof TRACKS !== 'undefined' && TRACKS) ? TRACKS : {};
+  const cards = Object.keys(tracks).map(function (tk) {
+    const T = tracks[tk], total = Object.keys(T.lessons || {}).length;
+    const code = (T.badge || '').split('·').pop().trim();
+    const b = by[tk] || { opened: {}, parts: 0, done: 0 };
+    const opened = Object.keys(b.opened).length;
+    if (!total) {
+      return '<div class="sp-card dim"><div class="sp-card-top"><span class="course-code">' + hwEsc(code) +
+        '</span><span class="badge">No content yet</span></div>' +
+        '<span class="sp-name">' + hwEsc(T.title) + '</span></div>';
+    }
+    const pct = Math.round(opened / total * 100);
+    const badge = !opened ? hwPill('not_started', 'Not started')
+      : (b.done >= total ? hwPill('graded', 'Finished') : hwPill('in_progress', opened + ' of ' + total));
+    return '<div class="sp-card"><div class="sp-card-top"><span class="course-code">' + hwEsc(code) + '</span>' +
+      badge + '</div><span class="sp-name">' + hwEsc(T.title) + '</span>' +
+      '<div class="progress-row"><span class="progress-track"><span class="progress-fill-bar" style="width:' + pct + '%"></span></span>' +
+      '<span class="progress-num">' + pct + '%</span></div>' +
+      '<span class="cell-meta">' + (b.parts ? (b.parts + (b.parts === 1 ? ' part opened' : ' parts opened')) : 'nothing opened yet') + '</span></div>';
+  }).join('');
+  return '<tr class="profile-row"><td colspan="4"><div class="student-profile">' +
+    '<div class="sp-top"><div><span class="sp-title">' + hwEsc(s.full_name || 'Student') + '</span>' +
+    '<span class="cell-meta">' + hwEsc(s.email || '') + ' · ' +
+    (s.status === 'active' ? 'accepted' : hwEsc(s.status || '')) + '</span></div>' +
+    '<span class="chip-row">' + tcWorkBadges(w) + '</span></div>' +
+    '<div class="sp-cards">' + cards + '</div>' +
+    '<div class="sp-actions"><button class="btn-quiet btn-sm" onclick="tcNewAssignmentFor(\'' + s.id + '\')">Assign work</button>' +
+    '<button class="btn-ghost btn-sm" onclick="tcOpenStudent(\'' + s.id + '\')">Hide details</button></div>' +
+    '</div></td></tr>';
 }
 
 /* Every lesson part that exists today, so "opened" has a real denominator:
@@ -3474,18 +3951,23 @@ function tcRenderStudents() {
       '<thead><tr><th>Student</th><th>Lesson progress</th><th>Work</th><th style="text-align:right">Action</th></tr></thead><tbody>' +
       accepted.map(function (s) {
         const w = tcStudentWork(s.id);
-        const when = w.last ? ' · last ' + hwDate(String(w.last).slice(0, 10)) : '';
+        const when = w.last ? 'last handed in ' + hwDate(String(w.last).slice(0, 10)) : '';
         const total = tcTotalParts();
         const pct = total ? Math.min(100, Math.round(w.parts * 100 / total)) : 0;
-        return '<tr>' +
+        const open = TC.openStudent === s.id;
+        return '<tr' + (open ? ' class="row-open"' : '') + '>' +
           '<td data-label="Student"><span class="flex items-center gap-2">' + avatar(s) +
           '<span><span class="block" style="font-weight:500">' + hwEsc(s.full_name || 'Student') + '</span>' +
           '<span class="faint" style="font-size:12px">' + hwEsc(s.email || '') + '</span></span></span></td>' +
-          '<td data-label="Lesson progress" style="min-width:170px">' + tcProgressBar(pct, w.parts) + '</td>' +
-          '<td data-label="Work"><span class="chip">' + hwEsc(tcWorkLine(w)) + when + '</span></td>' +
+          '<td data-label="Lesson progress" style="min-width:190px">' + tcProgressBar(pct, w.parts) +
+          '<span class="cell-meta">' + hwEsc(tcPartLine(w)) + '</span></td>' +
+          '<td data-label="Work"><span class="chip-row">' + tcWorkBadges(w) + '</span>' +
+          (when ? '<span class="cell-meta">' + hwEsc(when) + '</span>' : '') + '</td>' +
           '<td data-label="Action"><div class="table-actions">' +
+          '<button class="btn-quiet btn-sm" onclick="tcOpenStudent(\'' + s.id + '\')">' +
+          (open ? 'Hide' : 'Details') + '</button>' +
           '<button class="btn-quiet btn-sm" onclick="tcNewAssignmentFor(\'' + s.id + '\')">Assign work</button>' +
-          '</div></td></tr>';
+          '</div></td></tr>' + (open ? tcStudentProfileRow(s) : '');
       }).join('') + '</tbody></table></div>';
   } else {
     html += '<div class="empty">' +
@@ -3999,10 +4481,10 @@ async function hwLoadProgress() {
        counted once more — no second query and no invented figure. */
     const byTrack = {};
     r.data.forEach(function (x) {
-      const b = byTrack[x.track] || (byTrack[x.track] = { opened: {}, parts: 0, done: 0 });
+      const b = byTrack[x.track] || (byTrack[x.track] = { opened: {}, parts: 0, done: 0, doneLessons: {} });
       b.opened[String(x.lesson_no)] = true;
       b.parts++;
-      if (x.part === 'finalTask') b.done++;
+      if (x.part === 'finalTask') { b.done++; b.doneLessons[String(x.lesson_no)] = true; }
     });
     return { lessons: Object.keys(done).length,
              opened: Object.keys(touched).length,

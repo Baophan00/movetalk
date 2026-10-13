@@ -24,7 +24,9 @@ global.setInterval=()=>0; global.clearInterval=()=>{};
 global.setTimeout=()=>{};
 
 const fn=new Function('document','window','addEventListener','IntersectionObserver','localStorage','location','setInterval','clearInterval','setTimeout','speechSynthesis',
-  js+'\nreturn {TRACKS,TRACK_PARTS,renderTrack,trackGo,trackPart,trackBody,trackBack,go,speak,renderDashboard};');
+  js+'\nreturn {TRACKS,TRACK_PARTS,renderTrack,trackGo,trackPart,trackBody,trackBack,go,speak,renderDashboard,' +
+     'VOCAB,vocabIndex,vocabSaved,vocabToggleSave,vocabFiltered,vocabDisplay,vocabCard,vocabSearch,trackGrid,trackProgress,trackNextLesson,' +
+     'dashCourseGroups,dashCourseCard,homeCourseCard,renderHome};');
 const api=fn(global.document,global.window,global.addEventListener,global.IntersectionObserver,global.localStorage,global.location,global.setInterval,global.clearInterval,global.setTimeout,null);
 
 let fail=0,pass=0;
@@ -114,6 +116,55 @@ check('the dashboard has a Today block over the timetable and homework rows',
   /function dashRenderToday\(/.test(js) && /id="dash-today"/.test(src) && /HW\.sessions/.test(js));
 check('the dashboard is a grid, not one long column',
   /md:grid-cols-2 xl:grid-cols-3/.test(src) && /xl:grid-cols-2/.test(src) && /\.course-cards\{display:grid/.test(src));
+
+// ---- vocabulary hub ----
+const vIx = api.vocabIndex();
+check('the hub indexes the words the lessons already carry', vIx.length > 50, 'got ' + vIx.length);
+const coll = vIx.filter(e => e.w === 'colleague')[0];
+check('a word carries the IPA, the meaning and the definition the lesson has',
+  !!coll && coll.ipa === '/ˈkɒliːɡ/' && coll.vi === 'đồng nghiệp' && !!coll.def, JSON.stringify(coll));
+check('... and its real examples, with the lesson it came from',
+  !!coll && coll.ex.length > 0 && coll.src.length > 0 && coll.src[0].tk === 'a1', JSON.stringify(coll && coll.src));
+check('an entry only holds what the lessons had: no IPA is filled in from nowhere',
+  vIx.every(e => typeof e.ipa === 'string' && typeof e.vi === 'string' && typeof e.def === 'string' && Array.isArray(e.ex)),
+  'entry shape');
+check('saving a word keeps it, and shows the spelling the lesson uses',
+  (() => { api.vocabToggleSave('colleague'); return api.vocabSaved().indexOf('colleague') >= 0 && api.vocabDisplay('colleague') === 'colleague'; })());
+check('saving again takes it back out',
+  (() => { api.vocabToggleSave('colleague'); return api.vocabSaved().indexOf('colleague') < 0; })());
+check('the saved filter shows only saved words',
+  (() => {
+    api.vocabToggleSave('colleague');
+    api.VOCAB.filter = 'saved';
+    const r = api.vocabFiltered();
+    api.VOCAB.filter = 'all';
+    api.vocabToggleSave('colleague');
+    return r.length === 1 && r[0].w === 'colleague';
+  })());
+check('search finds a word by its Vietnamese meaning',
+  (() => { api.vocabSearch('đồng nghiệp'); const r = api.vocabFiltered(); api.vocabSearch(''); return r.some(e => e.w === 'colleague'); })());
+check('a card shows the star state and never invents a meaning',
+  /vocab-star/.test(api.vocabCard({ w: 'x', ipa: '', vi: '', def: '', ex: [], src: [] })) &&
+  !/vocab-vi/.test(api.vocabCard({ w: 'x', ipa: '', vi: '', def: '', ex: [], src: [] })));
+
+// ---- lesson rail: modules and states ----
+const rail = (() => { api.trackGo('a1', 1); return els['a1-grid'].innerHTML; })();
+check('the lesson list is grouped into modules, not one wall of numbers',
+  (rail.match(/e2-module-head/g) || []).length === 10, String((rail.match(/e2-module-head/g) || []).length));
+check('... and each lesson cell says what it is', /e2-num (live|locked|active|done|opened)/.test(rail));
+check('the rail explains its own colours', /e2-legend/.test(rail) && /Đã học xong/.test(rail));
+check('the rail offers a continue action for the lesson that is next',
+  /e2-side-cta/.test(rail) && /Continue lesson 1|Start lesson 1/.test(rail));
+check('a track with no content does not claim progress',
+  (() => { api.trackGo('f1', 1); const r = els['f1-grid'].innerHTML; return !/e2-side-cta/.test(r) && /đang cập nhật/.test(r); })());
+
+// ---- landing: the same course cards ----
+check('the landing shows the programmes with the same course cards as the dashboard',
+  /function homeCourseCard/.test(js) && /id="home-courses"/.test(src) && /dashCourseGroups\(\)/.test(js));
+check('a programme with lessons offers exactly one action: open lesson 1',
+  (() => { const c = api.homeCourseCard('a1'); return /Mở bài 1/.test(c) && (c.match(/<button/g) || []).length === 1 && /10<\/b>/.test(c); })());
+check('a programme with no lessons is honest on the landing too',
+  (() => { const c = api.homeCourseCard('f1'); return /cập nhật/.test(c) && !/Mở bài 1/.test(c) && !/progress-fill-bar/.test(c); })());
 
 console.log('\n'+pass+' passed, '+fail+' failed');
 process.exit(fail?1:0);
