@@ -930,6 +930,33 @@ h3{font-family:'Inter Tight','Inter',sans-serif;font-size:clamp(19px,2.2vw,24px)
 .nav-item:focus-visible,.nav-btn:focus-visible,.table a:focus-visible,.chip:focus-visible,.home-footer-link:focus-visible{outline:none;box-shadow:var(--focus-ring)}
 .toast-item a:focus-visible,.modal-box a:focus-visible{outline:none;box-shadow:var(--focus-ring)}
 
+/* ---- teaching studio: the lesson, and nothing else on the screen ---- */
+body.studio-mode .sidebar,
+body.studio-mode .bottom-nav,
+body.studio-mode .mobile-topbar{display:none !important}
+body.studio-mode .main-content{padding:0}
+body.studio-mode .view{padding:0}
+/* the lesson rail and the sidebar both step aside: the content is the room */
+body.studio-mode .e2-side{display:none}
+body.studio-mode .e2-wrap{display:block;max-width:none;padding:0}
+body.studio-mode .studio-stage{max-width:1190px;margin:0 auto;padding:0 20px 90px}
+.studio-bar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:10px 14px;margin:0 auto 20px;max-width:1150px;border:1px solid var(--border);
+  border-radius:var(--radius-card);background:var(--nav-bg);backdrop-filter:blur(10px)}
+.studio-bar .studio-title{font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.studio-bar .studio-part{font-size:12.5px;color:var(--text2);white-space:nowrap}
+.studio-bar .studio-spacer{flex:1}
+.studio-bar kbd,#studio-keys kbd{font-family:var(--mono,monospace);font-size:10.5px;line-height:1;
+  border:1px solid var(--border-strong);border-radius:4px;padding:3px 6px;color:var(--text2);background:var(--surface2)}
+.studio-stage{max-width:1150px;margin:0 auto;padding:0 20px 90px}
+body.studio-mode .e2-lesson-title{font-size:30px}
+body.studio-mode .blk-p,body.studio-mode .blk-ex,body.studio-mode .blk-layer-text,body.studio-mode .blk-fill-text{font-size:17.5px;line-height:1.75}
+body.studio-mode .blk-h{font-size:21px}
+body.studio-mode .blk-list{font-size:17px}
+body.studio-mode .fc-card{height:290px}
+body.studio-mode .fc-word{font-size:30px}
+body.studio-mode .e2-part{min-height:74px}
+
 /* ---- responsive ---- */
 @media(max-width:900px){
   .kpi-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
@@ -1835,7 +1862,86 @@ function trackPart(tk,p){
 }
 function trackBack(tk){TRACK_PART[tk]=null;renderTrack(tk)}
 
+// ---- TEACHING STUDIO ----
+// The lesson, the whole screen. It reuses renderTrack so there is still exactly
+// one render path for lesson content: the studio only hides the chrome, adds a
+// control bar, and puts the keyboard on the parts.
+const STUDIO={on:false,tk:null};
+function studioCanTeach(){return typeof USER!=='undefined'&&USER&&USER.role==='teacher'}
+function studioParts(){const tk=STUDIO.tk;const L=(TRACKS[tk]&&TRACKS[tk].lessons[TRACK_NUM[tk]])||null;
+  return TRACK_PARTS.filter(p=>L&&L.parts&&L.parts[p.id]&&L.parts[p.id].length)}
+function studioEnter(tk){STUDIO.on=true;STUDIO.tk=tk;document.body.classList.add('studio-mode');
+  if(typeof toggleSidebar==='function'&&document.body.classList.contains('sidebar-open'))toggleSidebar();
+  go(tk);renderTrack(tk);
+  const m=document.getElementById(tk+'-main');if(m)m.scrollIntoView({block:'start'})}
+function studioExit(){const tk=STUDIO.tk;STUDIO.on=false;document.body.classList.remove('studio-mode');if(tk)renderTrack(tk)}
+function studioIdx(){const tk=STUDIO.tk;const list=studioParts();return list.findIndex(p=>p.id===TRACK_PART[tk])}
+function studioMove(d){const tk=STUDIO.tk;const list=studioParts();if(!list.length)return;
+  let i=studioIdx();i=(i<0?(d>0?0:list.length-1):i+d);i=Math.max(0,Math.min(list.length-1,i));
+  trackPart(tk,list[i].id);
+  const m=document.getElementById(tk+'-main');if(m)m.scrollIntoView({block:'start'})}
+function studioLesson(d){const tk=STUDIO.tk;const T=TRACKS[tk];if(!T)return;
+  const nums=Object.keys(T.lessons).map(Number).sort((a,b)=>a-b);if(!nums.length)return;
+  let i=nums.indexOf(TRACK_NUM[tk]);i=(i<0?0:i+d);i=Math.max(0,Math.min(nums.length-1,i));
+  trackGo(tk,nums[i]);
+  const m=document.getElementById(tk+'-main');if(m)m.scrollIntoView({block:'start'})}
+function studioPlay(){const tk=STUDIO.tk;
+  const b=document.querySelector('#v-'+tk+' .e2-conv-actions .e2-say')||document.querySelector('#v-'+tk+' .e2-say.primary');
+  if(b)b.click()}
+function studioBar(){
+  const tk=STUDIO.tk;
+  const main=tk?document.getElementById(tk+'-main'):null;
+  const stale=document.getElementById('studio-bar-holder');
+  if(!STUDIO.on||!tk||!main){
+    /* leaving the studio must leave nothing of it behind */
+    if(stale&&stale.remove)stale.remove();
+    if(main&&main.classList&&main.classList.remove)main.classList.remove('studio-stage');
+    return;
+  }
+  const T=TRACKS[tk],n=TRACK_NUM[tk],L=T&&T.lessons[n];
+  const list=studioParts(),i=studioIdx(),P=i>=0?list[i]:null;
+  const bar='<div class="studio-bar" id="studio-keys">'+
+    '<button class="btn-quiet btn-sm" onclick="studioExit()" aria-label="Exit the teaching studio">✕ Exit</button>'+
+    '<button class="btn-secondary btn-sm" onclick="studioLesson(-1)" '+(n<=1?'disabled':'')+' aria-label="Previous lesson">← Lesson</button>'+
+    '<button class="btn-secondary btn-sm" onclick="studioLesson(1)" aria-label="Next lesson">Lesson →</button>'+
+    '<button class="btn-secondary btn-sm" onclick="studioMove(-1)" '+(i<=0?'disabled':'')+' aria-label="Previous part">← Part</button>'+
+    '<button class="btn-secondary btn-sm" onclick="studioMove(1)" '+(i>=list.length-1?'disabled':'')+' aria-label="Next part">Part →</button>'+
+    '<button class="btn-primary btn-sm" onclick="studioPlay()">▶ Play audio</button>'+
+    '<span class="studio-spacer"></span>'+
+    '<span class="studio-title">'+(L?(n+'. '+L.title):('Lesson '+n))+'</span>'+
+    '<span class="studio-part">'+(P?P.name:'chọn một phần')+' · '+(i>=0?i+1:0)+'/'+list.length+'</span>'+
+    '</div>'+
+    '<div id="studio-help" class="form-note" style="max-width:1150px;margin:0 auto 14px;padding:0 20px">'+
+    '<kbd>←</kbd> <kbd>→</kbd> chuyển phần · <kbd>↑</kbd> <kbd>↓</kbd> chuyển bài · <kbd>Space</kbd> phát audio · <kbd>Esc</kbd> thoát'+
+    '</div>';
+  const old=document.getElementById('studio-bar-holder');
+  if(old)old.remove();
+  const holder=document.createElement('div');
+  holder.id='studio-bar-holder';
+  holder.innerHTML=bar;
+  main.parentNode.insertBefore(holder,main);
+  const stage=main;stage.classList.add('studio-stage');
+}
+if(document.addEventListener)document.addEventListener('keydown',function(e){
+  if(!STUDIO.on)return;
+  const t=e.target,tag=t&&t.tagName;
+  if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT')return;
+  if(e.key==='Escape'){studioExit();return}
+  if(e.key==='ArrowRight'){e.preventDefault();studioMove(1);return}
+  if(e.key==='ArrowLeft'){e.preventDefault();studioMove(-1);return}
+  if(e.key==='ArrowDown'){e.preventDefault();studioLesson(1);return}
+  if(e.key==='ArrowUp'){e.preventDefault();studioLesson(-1);return}
+  if(e.key===' '||e.key==='Spacebar'){e.preventDefault();studioPlay();return}
+  if(/^[1-9]$/.test(e.key)||e.key==='0'){const list=studioParts();const idx=(e.key==='0'?9:Number(e.key)-1);
+    if(list[idx]){e.preventDefault();trackPart(STUDIO.tk,list[idx].id)}}
+});
+
 function renderTrack(tk){
+  renderTrackInner(tk);
+  studioBar();
+}
+
+function renderTrackInner(tk){
   const T=TRACKS[tk];
   if(!T)return;
   const sec=document.getElementById('v-'+tk);
@@ -1848,7 +1954,8 @@ function renderTrack(tk){
   const head=`<div class="e2-crumb">${T.badge} / <b>Bài ${n}</b>${L?(' / '+L.title):''}</div>
     <div class="e2-lesson-title">${L?(n+': '+L.title):('Bài '+n)}</div>
     <div class="e2-lesson-goal">${L?(L.vi?L.vi+' · ':'')+(L.goal||''):(T.sub+' — nội dung bài này sẽ được cập nhật sau.')}</div>
-    ${L&&L.today?`<div class="e2-today">${L.today.map(t=>`<span class="e2-today-chip">${t}</span>`).join('')}</div>`:''}`;
+    ${L&&L.today?`<div class="e2-today">${L.today.map(t=>`<span class="e2-today-chip">${t}</span>`).join('')}</div>`:''}
+    ${(studioCanTeach()&&!STUDIO.on&&L)?`<div style="margin-top:14px"><button class="btn-primary btn-sm" onclick="studioEnter('${tk}')">Teach in studio</button> <span class="faint" style="font-size:12.5px">Màn hình lớp học: ẩn thanh bên, chữ lớn, điều khiển bằng bàn phím.</span></div>`:''}`;
   if(!L){
     main.innerHTML=head+`<div class="e2-task-card"><div class="e2-task-label">Đang cập nhật</div><div class="e2-task-text">Nội dung bài ${n} của <b>${T.title}</b> sẽ được bổ sung sau. Các phần sẽ gồm: ${TRACK_PARTS.map(p=>p.name.replace('Phần ','')).join(' · ')}.</div></div>`;
     return;

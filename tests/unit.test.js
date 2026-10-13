@@ -90,5 +90,18 @@ check('no dead data (LEVELS/FLASHCARDS/TESTS)', !js.includes('const LEVELS=') &&
 check('v-lesson removed', !src.includes('id="v-lesson"'));
 check('no renderCourses leftovers', !js.includes('renderCourses'));
 
+// ---- teaching studio ----
+check('the teaching studio exists', /function studioEnter\(/.test(js) && /studio-mode/.test(js));
+check('the studio reuses the one lesson render path',
+  /function renderTrack\(tk\)\{\s*renderTrackInner\(tk\);/.test(js) && /function renderTrackInner\(/.test(js));
+check('the studio is for the teacher account only',
+  /function studioCanTeach\(\)\{return typeof USER!=='undefined'&&USER&&USER\.role==='teacher'\}/.test(js));
+check('the studio keyboard map covers parts, lessons, audio and exit',
+  /ArrowRight/.test(js) && /ArrowLeft/.test(js) && /ArrowUp/.test(js) && /Escape/.test(js) && /studioPlay\(\)/.test(js));
+check('the studio is not a second way to render a lesson',
+  (js.match(/function renderTrackInner\(/g)||[]).length===1 &&
+  (js.match(/function trackBody\(/g)||[]).length===1 &&
+  (js.match(/innerHTML=trackBody\(/g)||[]).length===1);
+
 console.log('\n'+pass+' passed, '+fail+' failed');
 process.exit(fail?1:0);
