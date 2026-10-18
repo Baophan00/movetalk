@@ -429,7 +429,7 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
       ta.MAT.list = [{ id: 'm1', title: 'Bảng động từ', track: 'a1', lesson_no: 3, storage_path: 'x/y.pdf', size_bytes: 2097152, created_at: '2026-10-18T10:00:00Z' }];
       ta.renderMaterials();
       const list = TEACH.els['materials-body'].innerHTML;
-      return /type="file"/.test(form) && /Tải lên/.test(form) &&
+      return /type="file"/.test(form) && /Tải lên/.test(form) && /<option value="a1" selected>/.test(form) &&
         /Bảng động từ/.test(list) && /2\.0 MB/.test(list) && /Tải về/.test(list);
     })());
 
