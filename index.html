@@ -3372,11 +3372,14 @@ function dashSetPg(k) { DASH_PG = k; dashRenderPills(); dashRenderSelfStudy(); }
 function dashRenderPills() {
   const el = document.getElementById('dash-pills');
   if (!el) return;
-  const opts = [{ k: 'all', label: 'Tất cả' }].concat(dashCourseGroups().map(function (g) {
-    return { k: g.name, label: g.name + ' · ' + (g.tracks || []).map(function (t) { return (TRACKS[t] || {}).title || ''; }).join(', ') };
+  const opts = [{ k: 'all', label: 'Tất cả', full: 'Tất cả chương trình' }].concat(dashCourseGroups().map(function (g) {
+    const names = (g.tracks || []).map(function (t) { return (TRACKS[t] || {}).title || ''; }).filter(Boolean);
+    /* the pill is a filter, not a table of contents: the programme's name and how
+       many courses it holds, with the course list kept in the tooltip */
+    return { k: g.name, label: g.name + ' · ' + names.length, full: g.name + ' · ' + names.join(', ') };
   }));
   el.innerHTML = opts.map(function (o) {
-    return '<button class="pill' + (DASH_PG === o.k ? ' on' : '') + '" onclick="dashSetPg(\'' + esc(o.k) + '\')">' + hwEsc(o.label) + '</button>';
+    return '<button class="pill' + (DASH_PG === o.k ? ' on' : '') + '" title="' + hwEsc(o.full) + '" onclick="dashSetPg(\'' + esc(o.k) + '\')">' + hwEsc(o.label) + '</button>';
   }).join('');
 }
 /* The self-study card: every programme, its real lessons opened over the
