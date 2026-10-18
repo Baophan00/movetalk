@@ -26,7 +26,8 @@ global.setTimeout=()=>{};
 const fn=new Function('document','window','addEventListener','IntersectionObserver','localStorage','location','setInterval','clearInterval','setTimeout','speechSynthesis',
   js+'\nreturn {TRACKS,TRACK_PARTS,renderTrack,trackGo,trackPart,trackBody,trackBack,go,speak,renderDashboard,' +
      'VOCAB,vocabIndex,vocabSaved,vocabToggleSave,vocabFiltered,vocabDisplay,vocabCard,vocabSearch,trackGrid,trackProgress,trackNextLesson,' +
-     'dashCourseGroups,dashCourseCard,homeCourseCard,renderHome};');
+     'dashCourseGroups,dashCourseCard,homeCourseCard,renderHome,' +
+     'openCourse,renderCourse,courseTab,courseInfo,courseDM,COURSE};');
 const api=fn(global.document,global.window,global.addEventListener,global.IntersectionObserver,global.localStorage,global.location,global.setInterval,global.clearInterval,global.setTimeout,null);
 
 let fail=0,pass=0;
@@ -76,10 +77,27 @@ api.trackBack('a1');
 main=global.document.getElementById('a1-main').innerHTML;
 check('A1 back to part list', (main.match(/class="e2-part"/g)||[]).length===10);
 // all views navigate without throwing
-for(const v of ['home','f1','f2','a1','a2','e1','e2','dashboard']){
+for(const v of ['home','f1','f2','a1','a2','e1','e2','dashboard','course']){
   let err=null; try{ api.go(v); }catch(e){ err=e.message; }
   check("go('"+v+"')", !err, err||'');
 }
+// ---- course page: a programme as a page, modelled on the Kiaalap layout ----
+api.openCourse('a1');
+let ch=global.document.getElementById('course-body').innerHTML;
+check('course page opens on the programme', ch.includes('Map &amp; Diagnose')||ch.includes('Map & Diagnose'));
+check('course page has four tabs', (ch.match(/class="course-tab[" ]/g)||[]).length===4, 'tabs='+(ch.match(/class="course-tab[" ]/g)||[]).length);
+check('the hero counts the lessons and the parts that ship', ch.includes('10 bài') && ch.includes('100 phần'));
+check('opening a course writes its own route', /#?course\/a1$/.test(global.location.hash), global.location.hash);
+api.courseTab('lessons');
+ch=global.document.getElementById('course-body').innerHTML;
+check('the lessons tab lists every lesson', (ch.match(/class="lesson-item[" ]/g)||[]).length===10, 'items='+(ch.match(/class="lesson-item[" ]/g)||[]).length);
+api.courseTab('sessions');
+ch=global.document.getElementById('course-body').innerHTML;
+check('a programme with no session says so in words', ch.includes('chưa xếp buổi nào'));
+api.courseTab('work');
+ch=global.document.getElementById('course-body').innerHTML;
+check('a programme with no assignment says so in words', ch.includes('Chưa có bài tập nào'));
+check('a deadline is written dd/mm', api.courseDM('2026-10-12')==='12/10', api.courseDM('2026-10-12'));
 // sections in DOM are empty containers (skeleton injected at runtime)
 const secCount=(src.match(/<section id="v-(f1|f2|a1|a2|e1|e2)" class="view hidden"><\/section>/g)||[]).length;
 check('6 empty section containers in HTML', secCount===6, 'got '+secCount);

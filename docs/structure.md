@@ -72,6 +72,10 @@ Các khối theo thứ tự:
 - Khoá: Foundation (F1, F2) · Activation (A1, A2) · Expand (E1, E2)
 - Nhóm Học: **Việc tiếp theo** (dashboard) · **Bài tập** (homework) ·
   **Từ vựng** (vocab) · **Trang giới thiệu** (landing)
+- **Trang chương trình** (`#course/<mã>`, mở từ dòng chương trình ở dashboard):
+  hero + 4 tab Tổng quan · Bài học · Buổi học · Bài tập, cột phải là tiến độ,
+  buổi kế tiếp và bài gần hạn. Số liệu đọc từ `lesson_progress`,
+  `class_sessions` và `assignments`; tab không có dòng nào thì nói rõ.
 - Thanh dưới trên điện thoại: Home · My learning · Lessons · Homework
 
 ## CẤP 4 — Trong từng khu
