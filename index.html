@@ -1480,6 +1480,15 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
 .course-chip-row .hw-chip b{font-weight:700;color:var(--accent2);font-size:10.5px}
 .course-hero-meta span{align-items:center}
 .course-hero-meta .ico{opacity:.75}
+/* ---------- materials library ---------- */
+.mat-form{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.mat-list{display:flex;flex-direction:column}
+.mat-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.mat-row:last-child{border-bottom:0}
+.mat-ico{width:38px;height:38px;border-radius:10px;background:var(--badge-bg);color:var(--accent2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mat-main{flex:1;min-width:0}
+.mat-main b{display:block;font-size:13.5px;font-weight:600;color:var(--text);letter-spacing:-.005em}
+.mat-main span{display:block;font-size:12px;color:var(--text2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -1877,6 +1886,7 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
         <button class="nav-item" data-view="dashboard"><span class="nav-code">LP</span> Việc tiếp theo</button>
         <button class="nav-item" data-view="homework"><span class="nav-code">HW</span> Bài tập</button>
         <button class="nav-item" data-view="vocab"><span class="nav-code">VB</span> Từ vựng</button>
+        <button class="nav-item" data-view="materials"><span class="nav-code">TL</span> Tài liệu</button>
         <button class="nav-item" data-view="home"><span class="nav-code">HM</span> Trang giới thiệu</button>
       </div>
     </div>
@@ -1888,6 +1898,7 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
       <div class="nav-section-items expanded" id="nav-teaching">
         <button class="nav-item hidden teacher-only" data-view="teacher" id="nav-teacher-item" data-tc-nav="teach" onclick="tcTab('teach')"><span class="nav-code">D</span> Dạy <span id="nav-teacher-count" class="nav-badge hidden"></span></button>
         <button class="nav-item hidden teacher-only" data-view="teacher" id="nav-teacher-students" data-tc-nav="students" onclick="tcTab('students')"><span class="nav-code">HV</span> Quản lý học viên</button>
+        <button class="nav-item hidden teacher-only" data-view="materials" id="nav-teacher-materials"><span class="nav-code">TL</span> Tài liệu</button>
       </div>
     </div>
   </nav>
@@ -2341,6 +2352,19 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
       </div>
     </section>
 
+    <!-- MATERIALS: the teacher uploads, accepted students download -->
+    <section id="v-materials" class="view hidden">
+      <div class="p-6 md:p-10 max-w-5xl mx-auto">
+        <div class="page-head">
+          <div>
+            <h1 class="page-title">Tài liệu</h1>
+            <p class="page-sub" id="mat-sub">Giáo viên tải lên, học viên đã được duyệt tải về.</p>
+          </div>
+        </div>
+        <div id="materials-body"></div>
+      </div>
+    </section>
+
     <!-- TEACHING (teacher) -->
     <section id="v-teacher" class="view hidden">
       <div class="p-6 md:p-10 max-w-7xl mx-auto">
@@ -2605,6 +2629,7 @@ function go(v){
   document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.toggle('on',b.dataset.bn===v));
   if(v==='dashboard')renderDashboard();
   if(v==='vocab')vocabRender();
+  if(v==='materials')renderMaterials();
   if(v==='homework')renderHomework();
   if(v==='teacher')renderTeacher();
   if(TRACKS[v])renderTrack(v);
@@ -3379,6 +3404,125 @@ function renderCourse() {
     : courseOverview(d, tk);
   el.innerHTML = hero + tabs + '<div class="course-split"><div class="course-main">' + panel +
     '</div><aside class="course-rail">' + courseRail(d, tk) + '</aside></div>';
+}
+
+/* ---------- materials: the teacher uploads, students download ----------
+   One page for both roles. The form is only rendered for the teacher, and the
+   server decides anyway: the bucket is private and only a teacher may write. */
+function matSize(n) {
+  n = Number(n) || 0;
+  if (!n) return '';
+  if (n < 1024) return n + ' B';
+  if (n < 1048576) return Math.round(n / 1024) + ' KB';
+  return (n / 1048576).toFixed(1) + ' MB';
+}
+function matWhen(iso) {
+  const d = new Date(iso || '');
+  if (isNaN(d.getTime())) return '';
+  return ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + '/' + d.getFullYear();
+}
+function matTrackLabel(tk, no) {
+  const T = (typeof TRACKS !== 'undefined' && TRACKS[tk]) || null;
+  const code = T ? (T.badge || '').split('·').pop().trim() : (tk || '');
+  return [code, no ? 'Bài ' + no : ''].filter(Boolean).join(', ');
+}
+function matById(id) { return (MAT.list || []).filter(function (m) { return m.id === id; })[0]; }
+function renderMaterials() {
+  const el = document.getElementById('materials-body');
+  if (!el) return;
+  const signed = typeof USER !== 'undefined' && USER;
+  const teacher = signed && USER.role === 'teacher';
+  if (!signed) {
+    el.innerHTML = '<div class="card card-pad" style="text-align:center;padding:44px 24px">' +
+      '<span class="kpi-ico" style="margin:0 auto 14px">' + ico('book') + '</span>' +
+      '<h3 style="font-size:17px;margin-bottom:6px">Tài liệu của lớp</h3>' +
+      '<p class="faint" style="font-size:13px;max-width:46ch;margin:0 auto 16px">Giáo viên tải bảng từ, phiếu bài tập và file nghe lên đây. Đăng nhập để xem.</p>' +
+      '<button class="btn-primary btn-sm" onclick="showAuth()">Đăng nhập</button></div>';
+    return;
+  }
+  if (!MAT.loaded && !MAT.loading && typeof matLoad === 'function') matLoad();
+  let out = '';
+  if (teacher) {
+    const opts = Object.keys(TRACKS || {}).map(function (tk) {
+      const T = TRACKS[tk], code = ((T.badge || '').split('·').pop() || tk).trim();
+      return '<option value="' + tk + '">' + code + ' · ' + hwEsc(T.title || '') + '</option>';
+    }).join('');
+    out += '<div class="card card-pad space-y-4" style="margin-bottom:16px">' +
+      '<div class="section-head" style="margin-bottom:0"><div><h3>Tải tài liệu lên</h3>' +
+      '<p class="faint" style="font-size:12.5px">PDF, ảnh, slide, file nghe. Tối đa 10 MB mỗi tệp.</p></div></div>' +
+      '<div class="mat-form">' +
+      '<div class="field"><label class="field-label" for="mat-title">Tên tài liệu</label>' +
+      '<input class="input" id="mat-title" placeholder="Bảng động từ bất quy tắc"></div>' +
+      '<div class="field"><label class="field-label" for="mat-track">Chương trình</label>' +
+      '<select class="input" id="mat-track">' + opts + '</select></div>' +
+      '<div class="field"><label class="field-label" for="mat-no">Bài số</label>' +
+      '<input class="input" id="mat-no" type="number" min="1" max="50" placeholder="Không bắt buộc"></div>' +
+      '<div class="field"><label class="field-label" for="mat-file">Tệp</label>' +
+      '<input class="input" id="mat-file" type="file"></div></div>' +
+      '<div class="flex items-center gap-3 flex-wrap"><button class="btn-primary" id="mat-upload-btn" onclick="matUploadClick(this)">Tải lên</button>' +
+      '<span class="form-note">Học viên đã được duyệt tải về được ngay.</span></div>' +
+      '<div class="form-note" id="mat-status"></div></div>';
+  }
+  if (MAT.loading && !MAT.list.length) {
+    out += '<div class="sk sk-card"></div><div class="sk sk-card"></div>';
+  } else if (MAT.error) {
+    out += '<div class="card card-pad"><p style="font-size:13px;color:var(--err-fg)">Không đọc được danh sách tài liệu: ' + hwEsc(MAT.error) + '</p></div>';
+  } else if (!MAT.list.length) {
+    out += '<div class="card card-pad" style="text-align:center;padding:36px 24px">' +
+      '<h3 style="font-size:15px;margin-bottom:6px">Chưa có tài liệu nào</h3>' +
+      '<p class="faint" style="font-size:13px">' + (teacher ? 'Tải tệp đầu tiên lên bằng ô phía trên.' : 'Giáo viên chưa tải tài liệu lên. Khi có, tệp sẽ hiện ở đây.') + '</p></div>';
+  } else {
+    out += '<div class="card card-pad"><div class="section-head"><div><h3>Tài liệu đã tải lên</h3>' +
+      '<p class="faint" style="font-size:12.5px">' + MAT.list.length + ' tệp</p></div></div><div class="mat-list">' +
+      MAT.list.map(function (m) {
+        const meta = [matTrackLabel(m.track, m.lesson_no), matSize(m.size_bytes), matWhen(m.created_at)].filter(Boolean).join(', ');
+        return '<div class="mat-row"><span class="mat-ico">' + ico('book') + '</span>' +
+          '<span class="mat-main"><b>' + hwEsc(m.title) + '</b><span>' + hwEsc(meta) + '</span></span>' +
+          '<button class="btn-quiet btn-sm" onclick="matOpen(\'' + m.id + '\')">Tải về</button>' +
+          (teacher ? '<button class="btn-quiet btn-sm" onclick="matDeleteClick(\'' + m.id + '\')">Xoá</button>' : '') +
+          '</div>';
+      }).join('') + '</div></div>';
+  }
+  el.innerHTML = out;
+}
+async function matOpen(id) {
+  const m = matById(id);
+  if (!m) return;
+  const url = await matUrl(m.storage_path);
+  if (!url) { toast('Không lấy được link tải.', 'err'); return; }
+  const a = document.createElement('a');
+  a.href = url; a.target = '_blank'; a.rel = 'noopener';
+  if (document.body && document.body.appendChild) document.body.appendChild(a);
+  a.click();
+  if (document.body && document.body.removeChild) document.body.removeChild(a);
+}
+async function matUploadClick(btn) {
+  const fileEl = document.getElementById('mat-file');
+  const file = fileEl && fileEl.files && fileEl.files[0];
+  const titleEl = document.getElementById('mat-title');
+  const trackEl = document.getElementById('mat-track');
+  const noEl = document.getElementById('mat-no');
+  const status = document.getElementById('mat-status');
+  if (!file) { if (status) status.textContent = 'Chọn một tệp trước.'; return; }
+  const old = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'Đang tải...'; }
+  const r = await matUpload(file, titleEl ? titleEl.value : '', trackEl ? trackEl.value : '', noEl ? noEl.value : '');
+  if (btn) { btn.disabled = false; btn.textContent = old; }
+  if (r.error) { if (status) status.textContent = 'Không tải được: ' + r.error; return; }
+  if (status) status.textContent = 'Đã tải lên.';
+  if (titleEl) titleEl.value = '';
+  if (noEl) noEl.value = '';
+  if (fileEl) fileEl.value = '';
+  toast('Đã tải tài liệu lên.', 'ok');
+}
+async function matDeleteClick(id) {
+  const m = matById(id);
+  if (!m) return;
+  const ok = await uiConfirm({ title: 'Xoá tài liệu?', text: 'Xoá "' + m.title + '" khỏi thư viện? Tệp cũng bị xoá khỏi kho.', ok: 'Xoá', danger: true });
+  if (!ok) return;
+  const r = await matDelete(id);
+  if (r.error) toast('Không xoá được: ' + r.error, 'err');
+  else toast('Đã xoá tài liệu.', 'ok');
 }
 
 function renderTrack(tk){
@@ -6297,6 +6441,77 @@ function hwSiteUrl() {
 /* ---------- setup hint ---------- */
 function showV2Setup() {
   toast('Add SUPABASE_URL and SUPABASE_ANON_KEY to config.js, then reload.', 'ok');
+}
+
+/* ---------- materials: a private bucket, described by rows ----------
+   The file lives in storage; the row says what it is and which lesson it
+   belongs to. Nothing here is public: the browser asks for a signed URL that
+   expires in an hour, and Postgres decides who may read the row. */
+const MAT = { list: [], loading: false, loaded: false, error: '', signed: {} };
+
+async function matLoad() {
+  if (!HB || typeof USER === 'undefined' || !USER) {
+    MAT.list = []; MAT.loading = false; MAT.loaded = true; MAT.error = '';
+    if (typeof renderMaterials === 'function') renderMaterials();
+    return;
+  }
+  MAT.loading = true;
+  if (typeof renderMaterials === 'function') renderMaterials();
+  const r = await HB.from('materials')
+    .select('id,title,track,lesson_no,storage_path,mime,size_bytes,created_at')
+    .order('created_at', { ascending: false });
+  MAT.loading = false; MAT.loaded = true;
+  if (r.error) { MAT.error = r.error.message; MAT.list = []; }
+  else { MAT.error = ''; MAT.list = r.data || []; }
+  if (typeof renderMaterials === 'function') renderMaterials();
+}
+
+function matSafeName(name) {
+  return String(name || 'file').toLowerCase().replace(/[^a-z0-9._-]+/g, '-').slice(-80) || 'file';
+}
+
+async function matUpload(file, title, track, no) {
+  if (!HB || typeof USER === 'undefined' || !USER) return { error: 'not-signed-in' };
+  if (!file) return { error: 'no-file' };
+  if (file.size > 10485760) return { error: 'too-large' };
+  const path = new Date().toISOString().slice(0, 10) + '/' + Date.now() + '-' + matSafeName(file.name);
+  const up = await HB.storage.from('materials').upload(path, file, {
+    upsert: false, contentType: file.type || 'application/octet-stream'
+  });
+  if (up.error) return { error: up.error.message };
+  const ins = await HB.from('materials').insert({
+    title: title || file.name, track: track || null,
+    lesson_no: no ? Number(no) : null, storage_path: path,
+    mime: file.type || null, size_bytes: file.size || null
+  }).select().single();
+  if (ins.error) {
+    /* the row is the index; without it the object is unreachable, so undo */
+    try { await HB.storage.from('materials').remove([path]); } catch (e) {}
+    return { error: ins.error.message };
+  }
+  MAT.loaded = false;
+  await matLoad();
+  return { data: ins.data };
+}
+
+async function matDelete(id) {
+  const row = (MAT.list || []).filter(function (x) { return x.id === id; })[0];
+  if (!row) return { error: 'not-found' };
+  const d = await HB.from('materials').delete().eq('id', id);
+  if (d.error) return { error: d.error.message };
+  try { await HB.storage.from('materials').remove([row.storage_path]); } catch (e) {}
+  MAT.loaded = false;
+  await matLoad();
+  return { ok: true };
+}
+
+async function matUrl(path) {
+  if (!HB || !path) return null;
+  if (MAT.signed[path]) return MAT.signed[path];
+  const r = await HB.storage.from('materials').createSignedUrl(path, 3600);
+  if (r.error || !r.data) return null;
+  MAT.signed[path] = r.data.signedUrl;
+  return r.data.signedUrl;
 }
 /* HOMEWORK:END */
 

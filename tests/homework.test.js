@@ -30,6 +30,7 @@ const RETURNS = 'return {TRACKS,TRACK_PARTS,LESSON_DATA,AUDIO_MAP,go,trackGo,tra
   'tcSaveAssignment,tcGrade,hwLoadSession,hwLoad,hwOpen,hwRenderList,hwSubmit,' +
   'tcLoad,tcTab,tcAllStudents,tcWaitingStudents,tcProgressOf,tcDecideStudent,tcRenderStudents,tcRenderOverview,tcStat,tcNewAssignment,hwUpdatePendingBadge,syncAuthFields,showAuthChange,hwCheckAgain,' +
   'tcRenderStats,tcRenderPending,tcRenderCourses,tcCourseCard,tcRenderMaterials,' +
+  'MAT,renderMaterials,matSize,matWhen,matTrackLabel,matUpload,matDelete,matUrl,' +
   'tcRenderRail,tcRenderRailNext,tcRenderTodo,tcShortDate,tcSessCard,tcRailDay,tcScrollToSchedule,' +
   'tcStudentWork,tcWorkLine,tcWorkBadges,tcStudentByTrack,tcOpenStudent,tcStudentProfileRow,tcPartLine,tcTotalParts,' +
   'tcSaveSession,tcRenderSchedule,tcSessionBuckets,tcWhen,tcCancelSession,tcNextSession,' +
@@ -408,8 +409,29 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
     !/data-tc-tab="overview"/.test(src) && !/data-tc-tab="schedule"/.test(src) && !/data-tc-tab="assignments"/.test(src));
   t('the chat section says coming soon instead of pretending',
     /id="tc-panel-chat"/.test(src) && /Coming soon/.test(src));
-  t('materials tells the truth about storage instead of offering a dead upload',
-    /function tcRenderMaterials/.test(js) && !/type="file"/.test(src));
+  t('the materials library is served by a real bucket, not a dead upload box',
+    /function renderMaterials/.test(js) && /id="mat-file"/.test(js) &&
+    /storage\.from\('materials'\)/.test(js) && /async function matUpload/.test(js));
+  t('a guest sees a sign-in prompt, never an upload form',
+    (() => {
+      ta.setUser(null);
+      ta.renderMaterials();
+      const h = TEACH.els['materials-body'].innerHTML;
+      return /Đăng nhập/.test(h) && !/type="file"/.test(h);
+    })());
+  t('the teacher gets the upload form and a row per file',
+    (() => {
+      ta.setUser({ id: 't', role: 'teacher', email: 'teacher@x.test', status: 'active' });
+      ta.MAT.loaded = true; ta.MAT.loading = false; ta.MAT.error = '';
+      ta.MAT.list = [];
+      ta.renderMaterials();
+      const form = TEACH.els['materials-body'].innerHTML;
+      ta.MAT.list = [{ id: 'm1', title: 'Bảng động từ', track: 'a1', lesson_no: 3, storage_path: 'x/y.pdf', size_bytes: 2097152, created_at: '2026-10-18T10:00:00Z' }];
+      ta.renderMaterials();
+      const list = TEACH.els['materials-body'].innerHTML;
+      return /type="file"/.test(form) && /Tải lên/.test(form) &&
+        /Bảng động từ/.test(list) && /2\.0 MB/.test(list) && /Tải về/.test(list);
+    })());
 
   ta.tcNewAssignment();
   ta.TC.builder = ta.tcBlankBuilder();

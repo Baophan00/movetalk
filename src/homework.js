@@ -2170,3 +2170,74 @@ function hwSiteUrl() {
 function showV2Setup() {
   toast('Add SUPABASE_URL and SUPABASE_ANON_KEY to config.js, then reload.', 'ok');
 }
+
+/* ---------- materials: a private bucket, described by rows ----------
+   The file lives in storage; the row says what it is and which lesson it
+   belongs to. Nothing here is public: the browser asks for a signed URL that
+   expires in an hour, and Postgres decides who may read the row. */
+const MAT = { list: [], loading: false, loaded: false, error: '', signed: {} };
+
+async function matLoad() {
+  if (!HB || typeof USER === 'undefined' || !USER) {
+    MAT.list = []; MAT.loading = false; MAT.loaded = true; MAT.error = '';
+    if (typeof renderMaterials === 'function') renderMaterials();
+    return;
+  }
+  MAT.loading = true;
+  if (typeof renderMaterials === 'function') renderMaterials();
+  const r = await HB.from('materials')
+    .select('id,title,track,lesson_no,storage_path,mime,size_bytes,created_at')
+    .order('created_at', { ascending: false });
+  MAT.loading = false; MAT.loaded = true;
+  if (r.error) { MAT.error = r.error.message; MAT.list = []; }
+  else { MAT.error = ''; MAT.list = r.data || []; }
+  if (typeof renderMaterials === 'function') renderMaterials();
+}
+
+function matSafeName(name) {
+  return String(name || 'file').toLowerCase().replace(/[^a-z0-9._-]+/g, '-').slice(-80) || 'file';
+}
+
+async function matUpload(file, title, track, no) {
+  if (!HB || typeof USER === 'undefined' || !USER) return { error: 'not-signed-in' };
+  if (!file) return { error: 'no-file' };
+  if (file.size > 10485760) return { error: 'too-large' };
+  const path = new Date().toISOString().slice(0, 10) + '/' + Date.now() + '-' + matSafeName(file.name);
+  const up = await HB.storage.from('materials').upload(path, file, {
+    upsert: false, contentType: file.type || 'application/octet-stream'
+  });
+  if (up.error) return { error: up.error.message };
+  const ins = await HB.from('materials').insert({
+    title: title || file.name, track: track || null,
+    lesson_no: no ? Number(no) : null, storage_path: path,
+    mime: file.type || null, size_bytes: file.size || null
+  }).select().single();
+  if (ins.error) {
+    /* the row is the index; without it the object is unreachable, so undo */
+    try { await HB.storage.from('materials').remove([path]); } catch (e) {}
+    return { error: ins.error.message };
+  }
+  MAT.loaded = false;
+  await matLoad();
+  return { data: ins.data };
+}
+
+async function matDelete(id) {
+  const row = (MAT.list || []).filter(function (x) { return x.id === id; })[0];
+  if (!row) return { error: 'not-found' };
+  const d = await HB.from('materials').delete().eq('id', id);
+  if (d.error) return { error: d.error.message };
+  try { await HB.storage.from('materials').remove([row.storage_path]); } catch (e) {}
+  MAT.loaded = false;
+  await matLoad();
+  return { ok: true };
+}
+
+async function matUrl(path) {
+  if (!HB || !path) return null;
+  if (MAT.signed[path]) return MAT.signed[path];
+  const r = await HB.storage.from('materials').createSignedUrl(path, 3600);
+  if (r.error || !r.data) return null;
+  MAT.signed[path] = r.data.signedUrl;
+  return r.data.signedUrl;
+}
