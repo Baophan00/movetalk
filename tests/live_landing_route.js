@@ -26,10 +26,15 @@ const t=(n,c,x='')=>{console.log((c?'PASS':'FAIL')+' | '+n+(x?' | '+x:''));c?PAS
   await cmd('Page.enable');await cmd('Runtime.enable');
   await cmd('Emulation.setDeviceMetricsOverride',{width:1440,height:900,deviceScaleFactor:1,mobile:false});
 
-  await ev('localStorage.clear()');
-  await cmd('Page.navigate',{url:BASE+'/?r='+Date.now()});await sleep(3200);
-  t('a visitor at "/" gets the landing', (await lp())===true);
-  t('the landing counts lessons from the shipped data', Number(await ev("Number((document.getElementById('lp-stat-lessons')||{}).textContent)"))>0,
+  /* Clearing on about:blank does nothing for the origin: the previous run's
+     session survived and the "visitor" checks read a signed-in account. Clear
+     the origin itself, then wait for the landing instead of guessing a delay. */
+  await cmd('Storage.clearDataForOrigin',{origin:BASE,storageTypes:'local_storage,cookies'});
+  await cmd('Page.navigate',{url:BASE+'/?r='+Date.now()});
+  const waitLanding=async(ms=15000)=>{const end=Date.now()+ms;while(Date.now()<end){if(await lp()===true)return true;await sleep(400)}return false};
+  t('a visitor at "/" gets the landing', await waitLanding());
+  const waitStat=async(ms=8000)=>{const end=Date.now()+ms;while(Date.now()<end){if(Number(await ev("Number((document.getElementById('lp-stat-lessons')||{}).textContent)"))>0)return true;await sleep(300)}return false};
+  t('the landing counts lessons from the shipped data', await waitStat(),
     'lessons='+await ev("(document.getElementById('lp-stat-lessons')||{}).textContent"));
   const btnText=await ev("(document.getElementById('lp-auth-btn')||{}).textContent");
   t('the sign-in button says Đăng nhập for a visitor', btnText==='Đăng nhập',
