@@ -1559,6 +1559,7 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
     <span class="sidebar-title">MoveTalk</span>
   </div>
   <nav class="sidebar-nav">
+    <div id="nav-tracks">
     <div class="nav-section">
       <button class="nav-section-toggle expanded" data-section="foundation">
         <span>Foundation</span>
@@ -1589,6 +1590,7 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
         <button class="nav-item" data-view="e2"><span class="nav-code">E2</span> MOVE Expand 2</button>
       </div>
     </div>
+    </div><!-- /nav-tracks -->
     <div class="nav-section" id="nav-student-group">
       <button class="nav-section-toggle expanded" data-section="workspace">
         <span>Học</span>
@@ -1634,12 +1636,14 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
 <!-- MOBILE MENU -->
 <div id="mobile-menu" class="mobile-menu hidden">
   <button onclick="go('home');toggleMobileMenu()" class="nav-btn">Home</button>
+  <div id="mm-tracks">
   <button onclick="go('f1');toggleMobileMenu()" class="nav-btn">F1 · Build the Sentence</button>
   <button onclick="go('f2');toggleMobileMenu()" class="nav-btn">F2 · Control Time</button>
   <button onclick="go('a1');toggleMobileMenu()" class="nav-btn">A1 · Map & Diagnose</button>
   <button onclick="go('a2');toggleMobileMenu()" class="nav-btn">A2 · Language Repair</button>
   <button onclick="go('e1');toggleMobileMenu()" class="nav-btn">E1 · MOVE Expand 1</button>
   <button onclick="go('e2');toggleMobileMenu()" class="nav-btn">E2 · MOVE Expand 2</button>
+  </div>
   <button onclick="go('dashboard');toggleMobileMenu()" class="nav-btn">Learning path</button>
   <button onclick="go('homework');toggleMobileMenu()" class="nav-btn">My homework</button>
   <button onclick="go('teacher');toggleMobileMenu()" class="nav-btn teacher-only hidden">Teaching</button>
@@ -2146,7 +2150,11 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
   </button>
   <button onclick="go('teacher')" data-bn="teacher" id="bn-teacher" class="hidden">
     <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5zm0 0v7m-5-4.5V15l5 3 5-3v-3.5"/></svg>
-    <span>Teaching</span>
+    <span>Dạy</span>
+  </button>
+  <button onclick="go('teacher');tcTab('students')" data-bn="teacher-students" id="bn-teacher-students" class="hidden">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+    <span>Học viên</span>
   </button>
 </nav>
 
@@ -2438,8 +2446,14 @@ function syncChrome(v){
   if(stu)stu.classList.toggle('hidden',teach);
   const t=document.getElementById('bn-teacher');
   if(t)t.classList.toggle('hidden',!teach);
-  const bnHome=document.querySelector('.bottom-nav button[data-bn="home"]');
-  if(bnHome)bnHome.classList.toggle('hidden',teach);
+  const tracks=document.getElementById('nav-tracks');
+  if(tracks)tracks.classList.toggle('hidden',teach);
+  const mmTracks=document.getElementById('mm-tracks');
+  if(mmTracks)mmTracks.classList.toggle('hidden',teach);
+  document.querySelectorAll('.bottom-nav button[data-bn="home"],.bottom-nav button[data-bn="dashboard"],.bottom-nav button[data-bn="e2"],.bottom-nav button[data-bn="homework"]')
+    .forEach(function(b){ b.classList.toggle('hidden',teach); });
+  const btns=document.getElementById('bn-teacher-students');
+  if(btns)btns.classList.toggle('hidden',!teach);
 }
 addEventListener('hashchange',routeFromHash);
 
