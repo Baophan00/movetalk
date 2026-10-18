@@ -3448,9 +3448,10 @@ function renderMaterials() {
   if (!MAT.loaded && !MAT.loading && typeof matLoad === 'function') matLoad();
   let out = '';
   if (teacher) {
+    const firstLive = Object.keys(TRACKS || {}).filter(function (k) { return Object.keys(TRACKS[k].lessons || {}).length; })[0];
     const opts = Object.keys(TRACKS || {}).map(function (tk) {
       const T = TRACKS[tk], code = ((T.badge || '').split('·').pop() || tk).trim();
-      const sel = Object.keys(T.lessons || {}).length ? ' selected' : '';
+      const sel = tk === firstLive ? ' selected' : '';
       return '<option value="' + tk + '"' + sel + '>' + code + ' · ' + hwEsc(T.title || '') + '</option>';
     }).join('');
     out += '<div class="card card-pad space-y-4" style="margin-bottom:16px">' +
