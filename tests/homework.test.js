@@ -600,11 +600,17 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
     /no accepted students yet/i.test(TEACH.els['tc-panel-assignments'].innerHTML));
 
   /* ---------- overview: only real rows, never invented numbers ---------- */
-  t('the workspace opens on Dạy, with the counters at the top',
-    /data-tc-nav="teach"/.test(src) && /id="tc-panel-dashboard"/.test(src) && /id="tc-stats"/.test(src));
-  t('the sidebar offers the teacher exactly two areas',
-    (src.match(/data-tc-nav="/g) || []).length === 2 &&
-    ['teach', 'students'].every(function (k) { return src.indexOf('data-tc-nav="' + k + '"') >= 0; }));
+  t('the workspace opens on Dashboard, with the counters at the top',
+    /data-tc-nav="dashboard"/.test(src) && /id="tc-panel-dashboard"/.test(src) && /id="tc-stats"/.test(src));
+  t('the teacher sidebar offers exactly four areas, in order',
+    (src.match(/data-tc-nav="/g) || []).length === 3 &&
+    ['dashboard', 'teach', 'students'].every(function (k) { return src.indexOf('data-tc-nav="' + k + '"') >= 0; }) &&
+    src.indexOf('data-tc-nav="dashboard"') < src.indexOf('data-tc-nav="teach"') &&
+    src.indexOf('data-tc-nav="teach"') < src.indexOf('data-tc-nav="students"') &&
+    /data-view="materials"[^>]*><span class="nav-code">TL<\/span> Tài liệu/.test(src));
+  t('Dạy is the programme list, and the dashboard is its own panel',
+    /id="tc-panel-teach"/.test(src) && /function tcRenderDashboard|function tcRenderDash/.test(js) &&
+    /tc-panel-teach', area === 'teach'/.test(src));
   t('the dashboard counts from rows the teacher can open, not from estimates',
     /function tcRenderStats/.test(js) && /duration_min/.test(js) && /status === 'submitted'/.test(js));
 
