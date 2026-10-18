@@ -1571,6 +1571,30 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
 .tc-work .section-head{--sh-bg:#FFF7EA;--sh-bd:#F7E7C8;--sh-fg:#8A5A12}
 .tc-courses-card .section-head{--sh-bg:#EEF4FF;--sh-bd:#DEE8FA;--sh-fg:#2B4F92}
 .tc-rail .section-head{--sh-bg:#ECF8F1;--sh-bd:#D8EEE3;--sh-fg:#1C6B4B}
+/* contrast pass: the teacher surface reads at a glance */
+#v-teacher{--text:#14203A;--text2:#4F6079;--border:#D9E2F0}
+#v-teacher .card{border-color:#DCE5F2;box-shadow:0 1px 2px rgba(24,39,64,.05),0 14px 30px -26px rgba(24,39,64,.4)}
+#v-teacher .card .section-head{background:var(--sh-bg);border:1px solid var(--sh-bd)}
+#v-teacher .card .section-head h3{color:#16233C;font-weight:650;letter-spacing:-.01em}
+#v-teacher .card .section-head .faint{color:#4B5C78}
+.sh-ico{width:24px;height:24px;border-radius:8px;border:0;background:var(--sh-solid,#316BFF);color:#fff;box-shadow:0 6px 12px -8px rgba(20,32,58,.55)}
+.sh-ico .ico{width:13.5px;height:13.5px;stroke-width:2}
+.tc-work .section-head{--sh-bg:#FFF3E0;--sh-bd:#F2DDBA;--sh-solid:#DE9420}
+.tc-courses-card .section-head{--sh-bg:#EAF1FF;--sh-bd:#D3E0FB;--sh-solid:#2E6BFF}
+.tc-rail .section-head{--sh-bg:#E7F7EF;--sh-bd:#CDE9DC;--sh-solid:#129A6C}
+.tc-stats-grid .stat-value{font-size:26px;font-weight:700;color:#101B30}
+.tc-stats-grid .stat-label{color:#42536F;font-weight:600}
+.tc-stats-grid .stat-hint{color:#54657F}
+.tc-stats-grid .stat-ico{filter:saturate(1.2)}
+.tc-subhead{color:#3D4E6B}
+.cc-cover.a1{background:linear-gradient(135deg,#2E6BFF,#5E8DFF);color:#fff}
+.cc-cover.e2{background:linear-gradient(135deg,#0D9B6B,#36C68F);color:#fff}
+.cc-cover.f1,.cc-cover.f2{background:linear-gradient(135deg,#5A49EF,#8B7BFF);color:#fff}
+.cc-cover.e1,.cc-cover.a2{background:linear-gradient(135deg,#E0653A,#F2915F);color:#fff}
+.cc-cover .cc-tag{opacity:.95;font-weight:600}
+.course-card .course-name{color:#16233C;font-weight:650}
+.course-card .course-sub{color:#50617C}
+.nav-item.active{color:#12203A;background:rgba(37,99,235,.1);box-shadow:inset 3px 0 0 var(--accent)}
 @media(max-width:1179px){.tc-rail{order:0}}
 @keyframes tcIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
 @keyframes tcPulse{0%,100%{opacity:1}50%{opacity:.35}}
