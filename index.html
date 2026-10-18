@@ -1452,9 +1452,49 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
 .course-work-main span{display:block;font-size:12px;color:var(--text2);margin-top:2px}
 .course-prog-row{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--text2)}
 .course-prog-row b{color:var(--text);font-weight:600}
+/* ---------- component pass: one type scale, one icon language ----------
+   The framework is not what makes a screen look finished; these four things
+   are: a five-step type scale, a 4/8 spacing rhythm, one stroke width on every
+   icon, and a soft two-layer shadow instead of a flat border. */
+:root{--s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;
+  --fs-caption:11px;--fs-small:12.5px;--fs-body:14.5px;--fs-h3:15.5px;--fs-h2:20px;--fs-h1:26px}
+.ico{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;vertical-align:-2px}
+.ico-sm{width:14px;height:14px;vertical-align:-1px}
+.card{box-shadow:0 1px 2px rgba(24,39,64,.04),0 12px 30px -26px rgba(24,39,64,.30)}
+.btn-primary{box-shadow:0 8px 18px -12px var(--btn-primary-shadow)}
+.btn-primary:active{transform:translateY(1px)}
+.btn-primary:focus-visible,.btn-secondary:focus-visible,.btn-quiet:focus-visible,
+.lesson-item:focus-visible,.ss-row:focus-visible,.course-tab:focus-visible,
+.tc-day:focus-visible,.tc-pend-row:focus-visible,.course-work:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.section-head h3{font-size:var(--fs-h3);letter-spacing:-.012em}
+.section-head h3::before{content:'';display:inline-block;width:3px;height:13px;border-radius:2px;background:var(--accent);margin-right:9px;vertical-align:-2px}
+.course-kpi{display:flex;flex-direction:column;gap:2px;box-shadow:0 1px 2px rgba(24,39,64,.04),0 12px 26px -24px rgba(24,39,64,.28)}
+.kpi-ico{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;background:var(--badge-bg);color:var(--accent2)}
+.kpi-ico.green{background:var(--ok-bg);color:var(--ok-fg)}
+.kpi-ico.amber{background:var(--warn-bg);color:var(--warn-fg)}
+.kpi-ico.violet{background:var(--lav-bg);color:var(--lav-fg)}
+.lesson-item-go{display:inline-flex;align-items:center;color:var(--text2);transition:transform .15s,color .15s}
+.lesson-item:hover .lesson-item-go{color:var(--accent2);transform:translateX(2px)}
+.ss-row:hover{background:var(--surface);box-shadow:0 10px 24px -20px rgba(24,39,64,.35)}
+.course-chip-row .hw-chip{gap:5px}
+.course-chip-row .hw-chip b{font-weight:700;color:var(--accent2);font-size:10.5px}
+.course-hero-meta span{align-items:center}
+.course-hero-meta .ico{opacity:.75}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v18H6.5A2.5 2.5 0 0 1 4 18.5z"/><path d="M20 17H6.5"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 5.2a3.5 3.5 0 0 1 0 5.6M18 20a6.4 6.4 0 0 0-1.6-4.3"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></symbol>
+</svg>
 <div class="bg-grid"></div>
 <div id="confirm" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-text" onclick="if(event.target===this)uiConfirmClose(false)">
   <div class="modal-box" style="max-width:420px">
@@ -3187,6 +3227,8 @@ function courseDM(s) {
   if (!/^\d{4}-\d{2}-\d{2}/.test(v)) return v || 'chưa rõ';
   return v.slice(8, 10) + '/' + v.slice(5, 7);
 }
+/* One sprite, one stroke width: every icon on the screen comes from here. */
+function ico(name, cls) { return '<svg class="ico' + (cls ? ' ' + cls : '') + '" aria-hidden="true"><use href="#i-' + name + '"></use></svg>'; }
 function courseWorkChip(a) {
   const sub = (typeof HW !== 'undefined' && HW.subs) ? HW.subs[a.id] : null;
   if (!sub) return '<span class="hw-chip hw-chip-not">Chưa làm</span>';
@@ -3197,15 +3239,15 @@ function courseWorkChip(a) {
 }
 function courseOverview(d, tk) {
   const T = d.T, next = courseNextLesson(d);
-  const chips = (typeof TRACK_PARTS !== 'undefined' ? TRACK_PARTS : []).map(function (p) {
-    return '<span class="hw-chip">' + hwEsc(p.name) + '</span>';
+  const chips = (typeof TRACK_PARTS !== 'undefined' ? TRACK_PARTS : []).map(function (p, i) {
+    return '<span class="hw-chip"><b>' + (i + 1) + '</b>' + hwEsc(p.name) + '</span>';
   }).join('');
   let out = '<div class="course-kpis">' +
-    '<div class="course-kpi"><b>' + d.nums.length + '</b><span>Bài học</span></div>' +
-    '<div class="course-kpi"><b>' + d.parts + '</b><span>Phần học</span></div>';
+    '<div class="course-kpi"><span class="kpi-ico">' + ico('book') + '</span><b>' + d.nums.length + '</b><span>Bài học</span></div>' +
+    '<div class="course-kpi"><span class="kpi-ico violet">' + ico('layers') + '</span><b>' + d.parts + '</b><span>Phần học</span></div>';
   if (typeof USER !== 'undefined' && USER && USER.role === 'student') {
-    out += '<div class="course-kpi"><b>' + d.opened.length + '</b><span>Bài đã mở</span></div>' +
-      '<div class="course-kpi"><b>' + d.done.length + '</b><span>Bài đã xong</span></div>';
+    out += '<div class="course-kpi"><span class="kpi-ico">' + ico('eye') + '</span><b>' + d.opened.length + '</b><span>Bài đã mở</span></div>' +
+      '<div class="course-kpi"><span class="kpi-ico green">' + ico('check') + '</span><b>' + d.done.length + '</b><span>Bài đã xong</span></div>';
   }
   out += '</div>';
   if (next) {
@@ -3232,7 +3274,7 @@ function courseLessons(d, tk) {
       '<span class="lesson-item-main"><b>' + hwEsc(L.title || ('Bài ' + n)) + '</b>' +
       '<span>' + hwEsc(L.goal || (opened ? 'Đang học' : 'Mở bài để bắt đầu')) + '</span></span>' +
       (done ? '<span class="hw-chip hw-chip-graded">Đã xong</span>' : opened ? '<span class="hw-chip hw-chip-in">Đang học</span>' : '') +
-      '<span class="lesson-item-go">→</span></button>';
+      '<span class="lesson-item-go">' + ico('chevron', 'ico-sm') + '</span></button>';
   }).join('');
 }
 function courseSessions(d) {
@@ -3322,9 +3364,9 @@ function renderCourse() {
   const hero = '<div class="course-hero ' + tk + '"><div>' +
     '<span class="course-hero-code">' + hwEsc(code) + '</span>' +
     '<h1>' + hwEsc(T.title || '') + '</h1><p>' + hwEsc(T.sub || '') + '</p>' +
-    '<div class="course-hero-meta"><span><i></i>' + d.nums.length + ' bài</span>' +
-    '<span><i></i>' + d.parts + ' phần</span>' +
-    (typeof USER !== 'undefined' && USER ? '<span><i></i>' + d.opened.length + ' bài đã mở</span>' : '<span><i></i>xem được không cần tài khoản</span>') +
+    '<div class="course-hero-meta"><span>' + ico('book', 'ico-sm') + d.nums.length + ' bài</span>' +
+    '<span>' + ico('layers', 'ico-sm') + d.parts + ' phần</span>' +
+    (typeof USER !== 'undefined' && USER ? '<span>' + ico('eye', 'ico-sm') + d.opened.length + ' bài đã mở</span>' : '<span>' + ico('eye', 'ico-sm') + 'xem được không cần tài khoản</span>') +
     '</div></div><div class="course-hero-actions">' +
     (next ? '<button class="btn-primary" onclick="courseOpenLesson(\'' + tk + '\',' + next + ')">' + (d.opened.length ? 'Học tiếp bài ' + next : 'Bắt đầu bài ' + next) + '</button>' : '') +
     '<button class="btn-secondary" onclick="go(\'' + tk + '\')">Xem toàn bộ bài</button></div></div>';
