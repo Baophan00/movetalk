@@ -1194,6 +1194,34 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
 .lp-foot-col h4{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);margin:0 0 12px;font-weight:600}
 .lp-foot-col a,.lp-foot-col button{display:block;font-size:13.5px;color:var(--text);text-decoration:none;margin-bottom:9px;background:none;border:0;padding:0;cursor:pointer;text-align:left}
 .lp-foot-col a:hover,.lp-foot-col button:hover{color:var(--accent2)}
+
+/* --- the level check, the questions, and a way to reach a human --- */
+.lp-note{margin:14px 0 0;font-size:13px;line-height:1.6;color:var(--text2);max-width:48ch}
+.lp-note b{color:var(--text);font-weight:600}
+.lp-band{background:var(--surface2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.lp-band .lp-sec{border-top:0;padding:56px 0}
+.lp-level{display:grid;grid-template-columns:.8fr 1.2fr;gap:44px;align-items:start}
+.lp-level > div:first-child{position:sticky;top:84px}
+.lp-quiz{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.lp-quiz .quiz-q{margin-bottom:0}
+.lp-quiz .quiz-result{grid-column:1/-1}
+.lp-quiz-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:20px}
+.lp-quiz-wrap .quiz-q{background:var(--surface2)}
+.lp-faq{display:grid;grid-template-columns:.8fr 1.2fr;gap:44px;align-items:start}
+.lp-faq-list{display:grid;gap:10px}
+.lp-q{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:16px 18px}
+.lp-q summary{font-size:15px;font-weight:600;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.lp-q summary::-webkit-details-marker{display:none}
+.lp-q summary::after{content:"+";font-family:var(--mono,ui-monospace,monospace);font-size:17px;color:var(--text2);line-height:1}
+.lp-q[open] summary::after{content:"–"}
+.lp-q p{margin:10px 0 0;font-size:14px;line-height:1.65;color:var(--text2)}
+.lp-q p a{color:var(--accent2);text-decoration:none}
+.lp-q p a:hover{text-decoration:underline}
+.lp-support{margin-top:22px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:18px}
+.lp-support b{display:block;font-size:14px;margin-bottom:5px}
+.lp-support a{font-size:14px;color:var(--accent2);text-decoration:none;word-break:break-word}
+.lp-support a:hover{text-decoration:underline}
+.lp-support span{display:block;font-size:12.5px;line-height:1.55;color:var(--text2);margin-top:7px}
 .lp-legal{max-width:var(--lp-max);margin:0 auto;padding:0 24px 40px;font-size:12px;color:var(--text2);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .lp-mob{display:none}
 
@@ -1262,6 +1290,10 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
   .lp-object{max-width:440px}
   .lp-steps{grid-template-columns:1fr}
   .lp-two{grid-template-columns:1fr}
+  .lp-level{grid-template-columns:1fr;gap:28px}
+  .lp-level > div:first-child{position:static}
+  .lp-quiz{grid-template-columns:1fr}
+  .lp-faq{grid-template-columns:1fr;gap:28px}
   .teach-hero{grid-template-columns:1fr}
   .stu-row{grid-template-columns:30px 1fr auto;row-gap:4px}
   .stu-row .stu-stat{grid-column:2}
@@ -1276,6 +1308,7 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
   .lp-lede{font-size:15.5px}
   .lp-proof{gap:22px;flex-wrap:wrap}
   .lp-sec{padding:44px 0}
+  .lp-band .lp-sec{padding:36px 0}
   .lp-h2{font-size:24px}
   .lp-final-box{padding:28px 22px;flex-direction:column;align-items:flex-start}
   .lp-final-box h2{font-size:24px}
@@ -1316,6 +1349,8 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
         <a href="#lp-how" onclick="lpJump('lp-how',event)">Cách học</a>
         <a href="#lp-lessons" onclick="lpJump('lp-lessons',event)">Bài học</a>
         <a href="#lp-classroom" onclick="lpJump('lp-classroom',event)">Lớp có giáo viên</a>
+        <a href="#lp-level" onclick="lpJump('lp-level',event)">Trình độ</a>
+        <a href="#lp-faq" onclick="lpJump('lp-faq',event)">Hỏi đáp</a>
       </nav>
       <div class="lp-head-actions">
         <button class="btn-quiet btn-sm" onclick="toggleTheme()">Giao diện</button>
@@ -1327,6 +1362,8 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
     <a href="#lp-how" onclick="lpJump('lp-how',event)">Cách học</a>
     <a href="#lp-lessons" onclick="lpJump('lp-lessons',event)">Bài học</a>
     <a href="#lp-classroom" onclick="lpJump('lp-classroom',event)">Lớp có giáo viên</a>
+        <a href="#lp-level" onclick="lpJump('lp-level',event)">Trình độ</a>
+        <a href="#lp-faq" onclick="lpJump('lp-faq',event)">Hỏi đáp</a>
   </nav>
 
   <main>
@@ -1343,6 +1380,7 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
             <button class="btn-primary" onclick="lpAuth()">Bắt đầu học</button>
             <button class="btn-secondary" onclick="lpJump('lp-how',event)">Xem cách học</button>
           </div>
+          <p class="lp-note"><b>Tài khoản mới cần giáo viên duyệt.</b> Trong lúc chờ bạn vẫn mở được toàn bộ bài học; bài tập của lớp chỉ hiện sau khi được duyệt.</p>
           <div class="lp-proof" id="lp-proof">
             <div><b id="lp-stat-lessons">—</b><span>bài học đã mở</span></div>
             <div><b id="lp-stat-parts">—</b><span>phần trong mỗi bài</span></div>
@@ -1407,6 +1445,31 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
         </div>
       </div>
     </section>
+
+    <!-- LEVEL CHECK -->
+    <div class="lp-band">
+      <section class="lp-sec" id="lp-level">
+        <div class="lp-wrap">
+          <div class="lp-level">
+            <div>
+              <div class="lp-kicker">Kiểm tra trình độ</div>
+              <h2 class="lp-h2">Không chắc nên bắt đầu ở đâu?</h2>
+              <p class="lp-sub">Năm câu, khoảng một phút. Kết quả chỉ để chọn khoá bắt đầu, không phải điểm số và không ai khác nhìn thấy.</p>
+              <p class="lp-bignote">Gợi ý Foundation nếu bạn còn phải dịch từng từ, Activation nếu bạn nói được nhưng hay vướng và lặp lỗi cũ.</p>
+              <ul class="lp-list" style="margin-top:18px">
+                <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg><span>Chỉ để chọn khoá bắt đầu, không phải bài kiểm tra tính điểm.</span></li>
+                <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg><span>Không tính giờ, làm lại lúc nào cũng được.</span></li>
+                <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg><span>Làm xong thì kết quả nằm ở mục Trình độ trong dashboard của bạn.</span></li>
+              </ul>
+            </div>
+            <div class="lp-quiz-wrap">
+              <div id="lp-quiz" class="lp-quiz"></div>
+              <p class="lp-bignote">Chọn xong câu cuối là có kết quả. Muốn lưu tiến độ thì cần tài khoản.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
 
     <!-- THE LESSONS -->
     <section class="lp-sec" id="lp-lessons">
@@ -1502,13 +1565,49 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
       </div>
     </section>
 
+    <!-- FAQ -->
+    <section class="lp-sec" id="lp-faq">
+      <div class="lp-wrap">
+        <div class="lp-faq">
+          <div>
+            <div class="lp-kicker">Hỏi đáp</div>
+            <h2 class="lp-h2">Bốn câu hay được hỏi trước khi đăng ký.</h2>
+            <p class="lp-sub">Không câu nào ở đây là lời hứa: đây là cách hệ thống đang chạy hôm nay.</p>
+            <div class="lp-support">
+              <b>Chưa đăng nhập được?</b>
+              <a href="mailto:nhutruong0407@gmail.com">nhutruong0407@gmail.com</a>
+              <span>Gửi email cho giáo viên phụ trách. Đây là kênh hỗ trợ duy nhất, không có chat trực tuyến.</span>
+            </div>
+          </div>
+          <div class="lp-faq-list">
+            <details class="lp-q" open>
+              <summary>Tài khoản mới có dùng được ngay không?</summary>
+              <p>Đăng ký xong là vào học được ngay, mở đủ mười phần của mọi bài. Riêng bài tập giáo viên giao thì phải chờ giáo viên duyệt tài khoản.</p>
+            </details>
+            <details class="lp-q">
+              <summary>Học phí thế nào?</summary>
+              <p>Chưa có bảng phí và chưa bán gói nào. Trang này đang chạy cho một lớp: giáo viên phụ trách cấp tài khoản, bạn không bị trừ tiền khi học.</p>
+            </details>
+            <details class="lp-q">
+              <summary>Đang ở trình độ nào thì nên bắt đầu?</summary>
+              <p>Làm <a href="#lp-level" onclick="lpJump('lp-level',event)">năm câu kiểm tra</a> ở trên. Nếu phải dịch từng từ khi nói thì bắt đầu F1; nếu nói được nhưng hay vướng thì vào A1.</p>
+            </details>
+            <details class="lp-q">
+              <summary>Học trên điện thoại được không?</summary>
+              <p>Được. Bài học, bài tập và từ vựng chạy trên trình duyệt điện thoại, âm thanh phát bằng loa máy. Studio toàn màn hình dành cho giáo viên thì cần màn hình lớn.</p>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- FINAL CTA -->
     <section class="lp-final">
       <div class="lp-wrap">
         <div class="lp-final-box">
           <div>
             <h2>Bắt đầu từ bài đầu tiên.</h2>
-            <p>Đăng nhập để mở bài học, làm bài tập giáo viên giao và xem tiến độ của mình.</p>
+            <p>Đăng nhập để mở bài học, làm bài tập giáo viên giao và xem tiến độ của mình. Tài khoản mới được giáo viên duyệt trước khi nhận bài tập.</p>
           </div>
           <div class="lp-cta-row">
             <button class="btn-primary" onclick="lpAuth()">Đăng nhập</button>
@@ -1541,7 +1640,11 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
       </div>
       <div class="lp-foot-col">
         <h4>Liên hệ</h4>
+        <a href="#lp-faq" onclick="lpJump('lp-faq',event)">Câu hỏi thường gặp</a>
+        <a href="mailto:nhutruong0407@gmail.com">nhutruong0407@gmail.com</a>
         <a href="#lp-classroom" onclick="lpJump('lp-classroom',event)">Lớp có giáo viên</a>
+        <a href="#lp-level" onclick="lpJump('lp-level',event)">Trình độ</a>
+        <a href="#lp-faq" onclick="lpJump('lp-faq',event)">Hỏi đáp</a>
         <button onclick="showAuth()">Yêu cầu tham gia</button>
       </div>
     </div>
@@ -2171,6 +2274,7 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
       <p class="text-right text-xs -mt-2"><button type="button" onclick="hwForgotPassword()" class="auth-switch-link" id="auth-forgot-btn">Forgot password?</button></p>
       <div id="auth-name-field" class="hidden"><label class="label">Full Name</label><input type="text" id="auth-name" class="input" placeholder="Your name"></div>
       <div id="auth-role-field" class="hidden"><label class="label">I am a</label><div class="flex gap-2"><button onclick="setRole('student')" class="pill flex-1 on" data-role="student">Student</button><button onclick="setRole('teacher')" class="pill flex-1" data-role="teacher">Teacher</button></div><p class="faint text-xs mt-1">Only the site owner's account can be the teacher.</p></div>
+      <p id="auth-pending-note" class="hidden faint text-xs">A new student account waits for the teacher's approval. You can open every lesson meanwhile; homework appears once you are accepted.</p>
       <div id="auth-msg" class="hidden text-xs"></div>
       <button onclick="doAuth()" class="btn-primary w-full" id="auth-submit">Sign In</button>
       <p class="text-center text-sm faint"><span id="auth-switch-text">Don't have an account?</span> <button onclick="toggleAuthMode()" class="auth-switch-link" id="auth-switch-btn">Sign Up</button></p>
@@ -2388,6 +2492,8 @@ function lpRender(){
     /* a signed-in visitor is not asked to sign in again */
     const ab=document.getElementById('lp-auth-btn');
     if(ab)ab.textContent=USER?'Vào học':'Đăng nhập';
+    /* the level check is the app's own five questions, not a copy */
+    if(document.getElementById('lp-quiz')) renderPlacementQuiz();
     const sl=document.getElementById('lp-stat-lessons'), sp=document.getElementById('lp-stat-parts'), sw=document.getElementById('lp-stat-words');
     if(sl)sl.textContent=lessons||'—';
     if(sp)sp.textContent=parts||10;
@@ -2536,8 +2642,23 @@ const PLACEMENT_QUIZ = [
   ]}
 ];
 let PLACEMENT_ANSWERS = new Array(PLACEMENT_QUIZ.length).fill(null);
+/* The result button: a signed-in student opens the track, a visitor is asked to
+   sign in first instead of being dropped into a lesson they cannot save. */
+function placementStart(view){
+  if(!USER){ showAuth(); quickToast('Đăng nhập để mở bài học'); return; }
+  go(view);
+}
+/* The same five questions appear in the app (Home) and on the public page; the
+   answers live in one array, so a visitor who starts on the landing keeps them
+   after signing in. */
 function renderPlacementQuiz(){
-  const wrap = document.getElementById('placement-quiz');
+  /* both mounts, so an answer typed on the public page is visible in the app */
+  ['placement-quiz','lp-quiz'].forEach(function(id){
+    const el=document.getElementById(id);
+    if(el) quizInto(el);
+  });
+}
+function quizInto(wrap){
   if(!wrap) return;
   const done = PLACEMENT_ANSWERS.filter(a=>a!==null).length;
   if(done === PLACEMENT_QUIZ.length){
@@ -2547,15 +2668,17 @@ function renderPlacementQuiz(){
       if(opt.f) f+=opt.f;
       if(opt.a) a+=opt.a;
     });
-    let path, desc, view;
-    if(f > a){ path='PATH 01 · FOUNDATION'; desc='Bạn đang ở giai đoạn xây hệ thống từ gốc. Bắt đầu từ F1 sẽ giúp bạn có nền tảng vững chắc nhất.'; view='f1'; }
-    else if(a > f){ path='PATH 02 · ACTIVATION'; desc='Bạn đã có nền tảng. Activation sẽ giúp bạn kích hoạt lại, sửa lỗi và giao tiếp tự tin hơn.'; view='a1'; }
-    else { path='RANH GIỚI'; desc='Bạn ở giữa hai path. Khuyến nghị bắt đầu từ Foundation để chắc nền, hoặc Activation nếu bạn cảm thấy đã quá quen với cơ bản.'; view='f1'; }
+    let path, desc, view, level;
+    if(f > a){ path='PATH 01 · FOUNDATION'; desc='Bạn đang ở giai đoạn xây hệ thống từ gốc. Bắt đầu từ F1 sẽ giúp bạn có nền tảng vững chắc nhất.'; view='f1'; level='Foundation'; }
+    else if(a > f){ path='PATH 02 · ACTIVATION'; desc='Bạn đã có nền tảng. Activation sẽ giúp bạn kích hoạt lại, sửa lỗi và giao tiếp tự tin hơn.'; view='a1'; level='Activation'; }
+    else { path='RANH GIỚI'; desc='Bạn ở giữa hai path. Khuyến nghị bắt đầu từ Foundation để chắc nền, hoặc Activation nếu bạn cảm thấy đã quá quen với cơ bản.'; view='f1'; level='Cân bằng'; }
+    /* the dashboard's Level block reads this key; without it the block stayed at "chưa làm" */
+    if(typeof save==='function' && typeof load==='function' && load('selectedLevel','')!==level) save('selectedLevel',level);
     wrap.innerHTML = `<div class="quiz-result">
       <div class="quiz-result-path">${path}</div>
       <div class="quiz-result-name">${f>a?'Foundation':a>f?'Activation':'Cân bằng'}</div>
       <div class="quiz-result-desc">${desc}</div>
-      <button class="quiz-result-btn" onclick="go('${view}')">Bắt đầu học →</button>
+      <button class="quiz-result-btn" onclick="placementStart('${view}')">Bắt đầu học →</button>
       <br><button class="quiz-reset" onclick="PLACEMENT_ANSWERS=new Array(PLACEMENT_QUIZ.length).fill(null);renderPlacementQuiz()">Làm lại</button>
     </div>`;
     return;
@@ -2991,6 +3114,7 @@ function syncAuthFields(){
   show('auth-name-field',signup);
   show('auth-role-field',signup);
   show('auth-forgot-btn',AUTH_MODE==='login');
+  show('auth-pending-note',signup);
   const email=document.getElementById('auth-email');
   const pl=document.getElementById('auth-pass-label');
   const sub=document.getElementById('auth-submit');

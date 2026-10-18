@@ -20,21 +20,30 @@ Các khối theo thứ tự:
 | 4 | `#lp-lessons` Ba chương trình | 6 khoá trong 3 nhóm, mỗi khoá ghi số bài thật, khoá chưa có nội dung ghi "sắp có" | `TRACKS` |
 | 5 | Nội dung mẫu | một flashcard thật + một nhiệm vụ thật, có nút nghe | bài A1 · 1 |
 | 6 | `#lp-classroom` Hai workspace | 2 thẻ: giáo viên làm gì, học viên làm gì | tĩnh |
-| 7 | CTA cuối | "Bắt đầu từ bài đầu tiên" | tĩnh |
-| 8 | Footer | 2 cột liên kết + năm hiện tại | tĩnh |
+| 7 | `#lp-level` Kiểm tra trình độ | dải nền khác màu, 5 câu hỏi thật của app (2 cột ở màn rộng), gợi ý khoá bắt đầu, kết quả lưu vào `mt_selectedLevel` | `PLACEMENT_QUIZ` |
+| 8 | `#lp-faq` Hỏi đáp | 4 câu thật + thẻ hỗ trợ có email | tĩnh |
+| 9 | CTA cuối | "Bắt đầu từ bài đầu tiên", nhắc duyệt tài khoản | tĩnh |
+| 10 | Footer | 3 cột: Học · Tài khoản · Liên hệ (có FAQ + email) + năm hiện tại | tĩnh |
 
-### Landing còn thiếu (để thành trang hoàn chỉnh)
+### Landing: những gì đã bổ sung (2026-10-18)
 
-1. **Không nói tài khoản mới phải chờ giáo viên duyệt.** Người ta đăng ký xong
-   mới biết mình đang chờ. Phải nói trước, ngay trong hero hoặc sát nút đăng ký.
-2. **Không có mục kiểm tra trình độ.** Cấu trúc cũ ghi có; app có bài kiểm tra
-   trong dashboard nhưng landing không nhắc và không dẫn tới.
-3. **Không có FAQ.** Bốn câu đang bị hỏi thật: giáo viên là ai, có mất phí
-   không, cần tài khoản không, học trên điện thoại được không.
-4. **Không có liên hệ/hỗ trợ.** Footer chỉ có 2 cột liên kết, không có địa chỉ
-   để hỏi khi không đăng nhập được.
-5. **Toàn trang chỉ một cột chữ 1160px.** Ở 1440 phần lớn khung là giấy trắng;
-   sáu khối đều cùng một nhịp thẻ trắng nên không có khối nào làm điểm nhấn.
+1. **Nói trước là tài khoản mới phải chờ giáo viên duyệt** — ngay dưới nút Bắt đầu
+   học, trong CTA cuối, và trong modal khi chọn chế độ đăng ký.
+2. **Mục kiểm tra trình độ** — dùng đúng 5 câu của app, chung một mảng đáp án, làm
+   xong thì kết quả hiện luôn trong dashboard (trước đây khối Trình độ không bao
+   giờ có số vì chưa ai ghi `mt_selectedLevel`).
+3. **FAQ 4 câu** trả lời theo đúng cách hệ thống đang chạy.
+4. **Kênh hỗ trợ** — email giáo viên phụ trách, ở cả khối FAQ và chân trang.
+5. **Nhịp trang** — dải kiểm tra trình độ có nền khác, FAQ hai cột, cột trái dính
+   khi cuộn, nên trang không còn là một cột thẻ trắng liên tục.
+
+### Vẫn còn mở (chưa làm, cần anh quyết)
+
+- Không có ảnh chụp/đoạn hình thật của app; mọi hình minh hoạ hiện là HTML dựng
+  bằng dữ liệu thật.
+- Không có bảng phí, không có đăng ký nhận tin, không có trang điều khoản.
+- Kênh hỗ trợ là email cá nhân của giáo viên; nếu sau này cần hộp thư riêng thì
+  phải đổi ở cả FAQ lẫn chân trang.
 
 ## CẤP 2 — Đăng nhập và phân vai
 
