@@ -1489,6 +1489,11 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
 .mat-main{flex:1;min-width:0}
 .mat-main b{display:block;font-size:13.5px;font-weight:600;color:var(--text);letter-spacing:-.005em}
 .mat-main span{display:block;font-size:12px;color:var(--text2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mat-file{display:flex;align-items:center;justify-content:space-between;gap:10px;height:50px;padding:0 16px;border:1px dashed var(--border-strong);border-radius:12px;background:var(--surface2);cursor:pointer;font-size:13px;color:var(--text2);transition:.15s}
+.mat-file:hover{border-color:var(--accent);color:var(--text);background:var(--surface)}
+.mat-file span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mat-file::after{content:'Chọn';font-size:12px;font-weight:600;color:var(--accent2);flex-shrink:0}
+.mat-file input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 </style>
 </head>
 <body>
@@ -3445,7 +3450,8 @@ function renderMaterials() {
   if (teacher) {
     const opts = Object.keys(TRACKS || {}).map(function (tk) {
       const T = TRACKS[tk], code = ((T.badge || '').split('·').pop() || tk).trim();
-      return '<option value="' + tk + '">' + code + ' · ' + hwEsc(T.title || '') + '</option>';
+      const sel = Object.keys(T.lessons || {}).length ? ' selected' : '';
+      return '<option value="' + tk + '"' + sel + '>' + code + ' · ' + hwEsc(T.title || '') + '</option>';
     }).join('');
     out += '<div class="card card-pad space-y-4" style="margin-bottom:16px">' +
       '<div class="section-head" style="margin-bottom:0"><div><h3>Tải tài liệu lên</h3>' +
@@ -3458,7 +3464,8 @@ function renderMaterials() {
       '<div class="field"><label class="field-label" for="mat-no">Bài số</label>' +
       '<input class="input" id="mat-no" type="number" min="1" max="50" placeholder="Không bắt buộc"></div>' +
       '<div class="field"><label class="field-label" for="mat-file">Tệp</label>' +
-      '<input class="input" id="mat-file" type="file"></div></div>' +
+      '<label class="mat-file" for="mat-file"><span id="mat-file-name">Chọn tệp, tối đa 10 MB</span>' +
+      '<input id="mat-file" type="file" onchange="matFilePicked(this)"></label></div></div>' +
       '<div class="flex items-center gap-3 flex-wrap"><button class="btn-primary" id="mat-upload-btn" onclick="matUploadClick(this)">Tải lên</button>' +
       '<span class="form-note">Học viên đã được duyệt tải về được ngay.</span></div>' +
       '<div class="form-note" id="mat-status"></div></div>';
@@ -3495,6 +3502,14 @@ async function matOpen(id) {
   if (document.body && document.body.appendChild) document.body.appendChild(a);
   a.click();
   if (document.body && document.body.removeChild) document.body.removeChild(a);
+}
+function matFilePicked(input) {
+  const name = document.getElementById('mat-file-name');
+  if (!name) return;
+  const f = input && input.files && input.files[0];
+  name.textContent = f ? f.name : 'Chọn tệp, tối đa 10 MB';
+  const t = document.getElementById('mat-title');
+  if (f && t && !t.value) t.value = f.name.replace(/\.[a-z0-9]+$/i, '');
 }
 async function matUploadClick(btn) {
   const fileEl = document.getElementById('mat-file');
