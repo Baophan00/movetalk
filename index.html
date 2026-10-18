@@ -1542,6 +1542,34 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
 .course-counts{font-size:11.5px}
 .course-card .btn-sm{height:28px;padding:0 10px;font-size:11.5px}
 .tc-rail-sep{height:1px;background:var(--border);margin:2px 0}
+/* a card around the page title, and a tinted band around each section title */
+.tc-pagehead{align-items:center;gap:16px;padding:18px 20px;border:1px solid #E6EBF6;border-radius:18px;position:relative;overflow:hidden;
+  background:
+    radial-gradient(130% 200% at 0% 0%,#E9F1FF 0%,rgba(233,241,255,0) 58%),
+    radial-gradient(120% 180% at 100% 0%,#F2ECFF 0%,rgba(242,236,255,0) 54%),
+    #FBFCFE;
+  box-shadow:0 1px 2px rgba(24,39,64,.04),0 20px 44px -40px rgba(24,39,64,.55);margin-bottom:14px}
+.tc-pagehead::after{content:'';position:absolute;right:-30px;top:-70px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,#DDE8FF 0%,rgba(221,232,255,0) 66%);pointer-events:none}
+.tc-ph-main{display:flex;align-items:center;gap:14px;position:relative;z-index:1;min-width:0}
+.tc-ph-ico{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;
+  background:linear-gradient(140deg,#2E6BFF,#7B5CFF);box-shadow:0 12px 22px -14px rgba(46,107,255,.75)}
+.tc-ph-ico .ico{width:21px;height:21px;stroke-width:1.6}
+.tc-pagehead .page-title{font-size:27px;margin:0;letter-spacing:-.03em}
+.tc-pagehead .page-sub{margin-top:2px;font-size:13px}
+.tc-pagehead .btn-quiet{background:var(--surface);border:1px solid var(--border);color:var(--text);box-shadow:0 1px 2px rgba(24,39,64,.05)}
+.tc-pagehead .btn-quiet:hover{background:var(--surface2);border-color:var(--border-strong)}
+@media(max-width:640px){.tc-pagehead{padding:14px 16px}.tc-pagehead .page-title{font-size:23px}.tc-ph-ico{width:38px;height:38px;border-radius:12px}}
+#v-teacher .card .section-head{--sh-bg:#F2F6FE;--sh-bd:#E3EAF8;--sh-fg:#264A8C;
+  background:linear-gradient(90deg,var(--sh-bg) 0%,rgba(255,255,255,0) 96%);
+  border:1px solid var(--sh-bd);border-radius:12px;padding:9px 12px 10px}
+#v-teacher .card .section-head h3{color:var(--sh-fg)}
+#v-teacher .card .section-head h3::before{display:none}
+.sh-ico{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:7px;margin-right:8px;vertical-align:-5px;
+  background:var(--surface);border:1px solid var(--sh-bd,#E3EAF8);color:var(--sh-fg,#264A8C)}
+.sh-ico .ico{width:13px;height:13px}
+.tc-work .section-head{--sh-bg:#FFF7EA;--sh-bd:#F7E7C8;--sh-fg:#8A5A12}
+.tc-courses-card .section-head{--sh-bg:#EEF4FF;--sh-bd:#DEE8FA;--sh-fg:#2B4F92}
+.tc-rail .section-head{--sh-bg:#ECF8F1;--sh-bd:#D8EEE3;--sh-fg:#1C6B4B}
 @media(max-width:1179px){.tc-rail{order:0}}
 @keyframes tcIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
 @keyframes tcPulse{0%,100%{opacity:1}50%{opacity:.35}}
@@ -2451,10 +2479,13 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
         </div>
 
         <div id="tc-body" class="hidden space-y-5">
-          <div class="page-head">
-            <div>
-              <h1 class="page-title" id="tc-title">Dạy</h1>
-              <p id="tc-sub" class="page-sub">—</p>
+          <div class="page-head tc-pagehead">
+            <div class="tc-ph-main">
+              <span class="tc-ph-ico"><svg class="ico" aria-hidden="true"><use href="#i-spark"></use></svg></span>
+              <div>
+                <h1 class="page-title" id="tc-title">Dạy</h1>
+                <p id="tc-sub" class="page-sub">—</p>
+              </div>
             </div>
             <div class="page-actions">
               <button onclick="tcNewAssignment()" class="btn-primary btn-sm">Giao bài</button>
@@ -2469,7 +2500,7 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
                 <div class="tc-stats-grid" id="tc-stats"></div>
                 <div class="card card-pad tc-work">
                   <div class="section-head" style="margin-bottom:0">
-                    <div><h3>Cần bạn xử lý</h3>
+                    <div><h3><span class="sh-ico"><svg class="ico" aria-hidden="true"><use href="#i-clock"></use></svg></span>Cần bạn xử lý</h3>
                       <p class="faint" style="font-size:12.5px">Bài đã nộp và việc còn treo, đếm từ dữ liệu thật.</p></div>
                     <button class="btn-ghost btn-sm" onclick="tcTab('students')">Xem học viên</button>
                   </div>
@@ -2478,8 +2509,8 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
                     <div class="tc-work-col"><div class="tc-subhead">Việc cần làm</div><div id="tc-todo"></div></div>
                   </div>
                 </div>
-                <div class="card card-pad space-y-4">
-                  <div class="section-head" style="margin-bottom:0"><div><h3>Chương trình đang dạy</h3>
+                <div class="card card-pad space-y-4 tc-courses-card">
+                  <div class="section-head" style="margin-bottom:0"><div><h3><span class="sh-ico"><svg class="ico" aria-hidden="true"><use href="#i-layers"></use></svg></span>Chương trình đang dạy</h3>
                     <p class="faint" style="font-size:12.5px">Mở bài để dạy trong studio, hoặc xem bài học viên đang ở.</p></div></div>
                   <div id="tc-courses" class="course-grid"></div>
                 </div>
@@ -2488,14 +2519,14 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
               <aside class="tc-rail">
                 <div class="card card-pad tc-rail-card">
                   <div class="section-head" style="margin-bottom:0">
-                    <div><h3>Lịch</h3><p class="faint" id="tc-week-label" style="font-size:12.5px">&nbsp;</p></div>
+                    <div><h3><span class="sh-ico"><svg class="ico" aria-hidden="true"><use href="#i-calendar"></use></svg></span>Lịch</h3><p class="faint" id="tc-week-label" style="font-size:12.5px">&nbsp;</p></div>
                     <button class="btn-quiet btn-sm" onclick="tcScrollToSchedule()">Xếp buổi</button>
                   </div>
                   <div id="tc-week" class="tc-week"></div>
                   <div id="tc-rail-list" class="tc-rail-list"></div>
                   <div class="tc-rail-sep"></div>
                   <div class="section-head" style="margin-bottom:0">
-                    <div><h3>Sắp tới</h3><p class="faint" style="font-size:12.5px">Ba buổi gần nhất sau hôm nay</p></div>
+                    <div><h3><span class="sh-ico"><svg class="ico" aria-hidden="true"><use href="#i-arrow"></use></svg></span>Sắp tới</h3><p class="faint" style="font-size:12.5px">Ba buổi gần nhất sau hôm nay</p></div>
                   </div>
                   <div id="tc-rail-next" class="tc-rail-list"></div>
                 </div>
