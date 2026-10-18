@@ -588,6 +588,9 @@ function renderTeacher() {
   const sub = document.getElementById('tc-sub');
   if (sub) sub.textContent = 'Signed in as ' + USER.name;
   tcTab(TC.tab, true);
+  /* Paint the skeletons now, not when the last query returns: an empty
+     workspace with no loading state reads as "broken", not "loading". */
+  if (TC.loading || !TC.ready) tcRender();
   if (!TC.ready && !TC.loading) tcLoad();
 }
 
@@ -655,22 +658,34 @@ async function tcRefresh() {
 }
 
 function tcTab(name, silent) {
-  TC.tab = name || 'dashboard';
+  /* Two areas only: Dạy (the teaching workspace) and Quản lý học viên.
+     The old five tabs map onto these, so every existing caller keeps working. */
+  const AREA = { dashboard: 'teach', courses: 'teach', materials: 'teach', chat: 'teach',
+                 overview: 'teach', teach: 'teach', students: 'students' };
+  const area = AREA[name] || 'teach';
+  const sub = AREA[name] ? name : 'teach';
+  TC.tab = area;
   document.querySelectorAll('[data-tc-tab]').forEach(function (b) {
-    b.classList.toggle('on', b.dataset.tcTab === TC.tab);
+    b.classList.toggle('on', b.dataset.tcTab === sub);
   });
   document.querySelectorAll('[data-tc-nav]').forEach(function (b) {
-    b.classList.toggle('active', b.dataset.tcNav === TC.tab);
+    b.classList.toggle('active', b.dataset.tcNav === area);
   });
-  ['dashboard', 'courses', 'students', 'materials', 'chat'].forEach(function (k) {
-    hwShow('tc-panel-' + k, TC.tab === k);
-  });
+  hwShow('tc-panel-dashboard', area === 'teach');
+  hwShow('tc-panel-students', area === 'students');
+  ['courses', 'materials', 'chat'].forEach(function (k) { hwShow('tc-panel-' + k, false); });
   /* The builder belongs to the student you are giving work to, so it is only
      on screen while a draft is open. */
-  hwShow('tc-panel-assignments', TC.tab === 'students' && !!TC.builder);
-  const titles = { dashboard: 'Dashboard', courses: 'Courses', students: 'Students', materials: 'Materials', chat: 'Chat' };
+  hwShow('tc-panel-assignments', area === 'students' && !!TC.builderOpen);
+  const titles = { teach: 'Dạy', students: 'Quản lý học viên' };
+  const subs = { teach: 'Buổi học, thời khoá biểu và bài chờ chấm.',
+                 students: 'Danh sách, hồ sơ và tiến độ từng học viên.' };
   const t = document.getElementById('tc-title');
-  if (t) t.textContent = titles[TC.tab] || 'Dashboard';
+  if (t) t.textContent = titles[area];
+  const s = document.getElementById('tc-sub');
+  if (s) s.textContent = subs[area];
+  const want = '#teacher/' + area;
+  if (location.hash !== want) { try { history.replaceState(null, '', want); } catch (e) { location.hash = 'teacher/' + area; } }
   if (!silent) tcRender();
 }
 
@@ -688,6 +703,7 @@ function tcWaitingStudents() {
 
 function tcRender() {
   tcRenderStats();
+  tcRenderTeachHero();
   tcRenderPending();
   tcRenderStudents();
   tcRenderCourses();
@@ -695,6 +711,100 @@ function tcRender() {
   tcRenderSchedule();
   tcRenderMaterials();
   hwUpdatePendingBadge();
+}
+
+/* ---------- 0. the one card a teacher needs before class ----------
+   "What do I do next, and is anyone stuck" answered from real rows:
+   the next session on the timetable and the work waiting on the desk. */
+function tcRenderTeachHero() {
+  const el = document.getElementById('tc-teach-hero');
+  if (!el) return;
+  if (TC.loading && !(TC.sessions || []).length) { el.innerHTML = '<div class="sk sk-card"></div>'; return; }
+  const now = Date.now();
+  const live = (TC.sessions || []).filter(function (s) { return s.status !== 'cancelled'; })
+    .slice().sort(function (a, b) { return new Date(a.starts_at) - new Date(b.starts_at); });
+  const next = live.filter(function (s) {
+    return new Date(s.starts_at).getTime() + (Number(s.duration_min) || 60) * 60000 > now;
+  })[0] || null;
+  const toMark = (TC.submissions || []).filter(function (s) { return s.status === 'submitted'; }).length;
+  const waiting = tcWaitingStudents().length;
+  const students = tcAllStudents().length;
+
+  if (!next) {
+    el.innerHTML = '<div class="teach-hero"><div class="session-card">' +
+      '<div class="sc-when">Chưa có buổi nào trên lịch</div>' +
+      '<div class="sc-title">Đặt buổi dạy tiếp theo</div>' +
+      '<p class="sc-meta">Thời khoá biểu đang trống. Học viên chỉ thấy buổi khi bạn xếp.</p>' +
+      '<div class="sc-actions"><button class="btn-secondary btn-sm" onclick="document.getElementById(\'tc-panel-schedule\').scrollIntoView({behavior:\'smooth\'})">Xếp buổi học</button></div>' +
+      '</div>' + tcHeroDesk(toMark, waiting, students) + '</div>';
+    return;
+  }
+  const startsIn = new Date(next.starts_at).getTime() - now;
+  const isLive = startsIn < 15 * 60000 && startsIn > -90 * 60000;
+  el.innerHTML = '<div class="teach-hero">' +
+    '<div class="session-card' + (isLive ? ' live' : '') + '">' +
+      '<div class="sc-when">' + (isLive ? 'Đang diễn ra · ' : 'Buổi tiếp theo · ') + hwEsc(tcWhen(next.starts_at)) + '</div>' +
+      '<div class="sc-title">' + hwEsc(next.title) + '</div>' +
+      '<div class="sc-meta">' +
+        (tcSessionRef(next) ? hwEsc(tcSessionRef(next)) + ' · ' : '') +
+        hwEsc(String(next.duration_min || 60)) + ' phút' +
+        (next.note ? ' · ' + hwEsc(next.note) : '') +
+      '</div>' +
+      '<div class="sc-actions">' +
+        (next.lesson_track ? '<button class="btn-primary btn-sm" onclick="tcOpenSessionLesson(\'' + next.id + '\')">Mở bài học</button>' : '') +
+        '<button class="btn-secondary btn-sm" onclick="tcAssignFromSession(\'' + next.id + '\')">Giao bài ôn</button>' +
+        '<button class="btn-quiet btn-sm" onclick="document.getElementById(\'tc-panel-schedule\').scrollIntoView({behavior:\'smooth\'})">Thời khoá biểu</button>' +
+      '</div>' +
+    '</div>' + tcHeroDesk(toMark, waiting, students) + '</div>';
+}
+
+function tcHeroDesk(toMark, waiting, students) {
+  return '<div class="session-card">' +
+    '<div class="sc-when">Cần bạn hôm nay</div>' +
+    '<div class="sc-title" style="font-size:19px">' + toMark + ' bài chờ chấm</div>' +
+    '<div class="sc-meta">' + waiting + ' học viên chờ duyệt · ' + students + ' học viên đang học</div>' +
+    '<div class="sc-actions">' +
+      '<button class="btn-secondary btn-sm" onclick="tcTab(\'students\')">Mở học viên</button>' +
+      '<button class="btn-quiet btn-sm" onclick="tcTab(\'students\');setTimeout(function(){var q=document.getElementById(\'tc-stu-q\');if(q)q.focus()},120)">Tìm học viên</button>' +
+    '</div></div>';
+}
+
+/* Open the lesson a session refers to. */
+function tcOpenSessionLesson(id) {
+  const s = (TC.sessions || []).filter(function (x) { return String(x.id) === String(id); })[0];
+  if (!s || !s.lesson_track) return;
+  const n = Number(s.lesson_no) || 1;
+  go(s.lesson_track);
+  if (typeof trackGo === 'function') trackGo(s.lesson_track, n);
+}
+
+/* Assign the review work of a session: prefilled from the row that exists,
+   saved through the same builder the students area uses. */
+function tcAssignFromSession(id) {
+  const s = (TC.sessions || []).filter(function (x) { return String(x.id) === String(id); })[0];
+  if (!s) return;
+  const b = tcBlankBuilder();
+  if (s.lesson_track) { b.track = s.lesson_track; b.no = Number(s.lesson_no) || 1; }
+  b.title = 'Ôn tập: ' + s.title;
+  if (s.note) b.instructions = s.note;
+  const d = new Date(); d.setDate(d.getDate() + 3);
+  b.due = d.toISOString().slice(0, 10);
+  b.allStudents = true;
+  TC.builder = b;
+  TC.builderOpen = true;
+  tcTab('students', true);
+  hwShow('tc-panel-assignments', true);
+  tcRenderAssignments();
+  const el = document.getElementById('tc-b-title');
+  if (el && el.focus) el.focus();
+  if (typeof toast === 'function') toast('Đã điền sẵn bài ôn cho buổi "' + s.title + '"');
+}
+
+function tcStuSearch(v) {
+  TC.stuQ = String(v || '');
+  tcRenderStudents();
+  const el = document.getElementById('tc-stu-q');
+  if (el) { try { el.focus(); el.setSelectionRange(TC.stuQ.length, TC.stuQ.length); } catch (e) {} }
 }
 
 /* ---------- 1. dashboard: what is happening, and what waits for you ----------
@@ -724,8 +834,7 @@ function tcRenderStats() {
     card('Giờ đã dạy', hours + 'h', taught.length + ' buổi đã qua') +
     card('Bài chờ chấm', toMark, toMark ? 'Mở học viên để chấm' : 'Không còn bài nào') +
     card('Buổi sắp tới', ahead, ahead ? 'Xem lịch bên dưới' : 'Chưa xếp buổi nào');
-  const sub = document.getElementById('tc-sub');
-  if (sub) sub.textContent = students + ' học viên · ' + taught.length + ' buổi đã dạy · ' + toMark + ' bài chờ chấm';
+  /* the page subtitle belongs to the area (tcTab), not to the counters */
 }
 
 function tcRenderPending() {
@@ -959,6 +1068,7 @@ function tcRenderSchedule() {
           (s.note ? ' · ' + hwEsc(s.note) : '') + '</span></td>' +
           '<td data-label="Status">' + pill + '</td>' +
           (withCancel ? '<td data-label="Action"><div class="table-actions">' +
+            '<button class="btn-quiet btn-sm" onclick="tcAssignFromSession(\'' + s.id + '\')">Giao bài ôn</button>' +
             (s.status === 'cancelled' ? '' : '<button class="btn-quiet btn-sm" onclick="tcCancelSession(\'' + s.id + '\',this)">Cancel</button>') +
             '</div></td>' : '') +
           '</tr>';
@@ -967,7 +1077,7 @@ function tcRenderSchedule() {
 
   html += '<div class="card card-pad space-y-4"><div class="section-head" style="margin-bottom:0"><div>' +
     '<h3>Today and next up</h3><p class="faint" style="font-size:12.5px">' +
-    ((b.today.length + b.next.length) ? (b.today.length + b.next.length) + ' still ahead' : 'Nothing scheduled yet') +
+    ((b.today.length || b.next.length) ? (b.today.length + b.next.length) + ' still ahead' : 'Nothing scheduled yet') +
     '</p></div></div>';
   if (b.today.length || b.next.length) {
     html += table(b.today.concat(b.next), true);
@@ -1269,15 +1379,30 @@ function tcRenderStudents() {
     return;
   }
 
-  const waiting = tcWaitingStudents();
-  const accepted = (TC.students || []).filter(function (s) { return s.status === 'active'; });
+  const allWaiting = tcWaitingStudents();
+  const allAccepted = (TC.students || []).filter(function (s) { return s.status === 'active'; });
   const refused = (TC.students || []).filter(function (s) { return s.status === 'rejected'; });
+  const q = String(TC.stuQ || '').trim().toLowerCase();
+  const match = function (s) {
+    return !q || ((s.full_name || '') + ' ' + (s.email || '')).toLowerCase().indexOf(q) >= 0;
+  };
+  const waiting = allWaiting.filter(match);
+  const accepted = allAccepted.filter(match);
 
   function avatar(s) {
     return '<span class="row-ico avatar-sm">' + hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>';
   }
 
   let html = '';
+
+  /* the toolbar is the only filter: a search box, and the real counts */
+  html += '<div class="card card-pad"><div class="stu-toolbar">' +
+    '<div class="stu-search"><input class="input" id="tc-stu-q" type="search" autocomplete="off" ' +
+    'placeholder="Tìm học viên theo tên hoặc email" value="' + hwEsc(TC.stuQ || '') + '" ' +
+    'oninput="tcStuSearch(this.value)"></div>' +
+    '<span class="row-sub">' + allAccepted.length + ' đang học · ' + allWaiting.length + ' chờ duyệt' +
+    (q ? ' · ' + (waiting.length + accepted.length) + ' khớp' : '') +
+    '</span></div></div>';
 
   /* requests first — this is what the teacher came here to do */
   if (waiting.length) {
@@ -1308,7 +1433,7 @@ function tcRenderStudents() {
     '<div class="section-head" style="margin-bottom:0"><div>' +
     '<h3>Your students</h3>' +
     '<p class="faint" style="font-size:12.5px">' +
-    (accepted.length ? accepted.length + ' accepted' : 'Nobody accepted yet') + '</p>' +
+    (allAccepted.length ? allAccepted.length + ' accepted' : 'Nobody accepted yet') + '</p>' +
     '</div></div>';
   if (accepted.length) {
     html += '<div class="table-wrap"><table class="table">' +
@@ -1409,6 +1534,7 @@ function hwUpdatePendingBadge() {
 /* ---------- assignment builder ---------- */
 function tcNewAssignment() {
   TC.builder = tcBlankBuilder();
+  TC.builderOpen = true;
   tcTab('students', true);
   hwShow('tc-panel-assignments', true);
   tcRenderAssignments();
@@ -1416,12 +1542,18 @@ function tcNewAssignment() {
 
 function tcNewAssignmentFor(studentId) {
   TC.builder = tcBlankBuilder();
+  TC.builderOpen = true;
   if (studentId) TC.builder.studentIds = [studentId];
   tcTab('students', true);
   hwShow('tc-panel-assignments', true);
   tcRenderAssignments();
   const el = document.getElementById('tc-b-title');
   if (el && el.focus) el.focus();
+}
+
+function tcCloseBuilder() {
+  TC.builderOpen = false;
+  hwShow('tc-panel-assignments', false);
 }
 
 function tcBlankBuilder() {
@@ -1436,7 +1568,9 @@ function tcBlankBuilder() {
 function tcRenderAssignments() {
   const el = document.getElementById('tc-panel-assignments');
   if (!el) return;
-  if (!TC.builder) TC.builder = tcBlankBuilder();
+  /* the builder is closed until the teacher opens it: an always-open form at
+     the bottom of the students list reads as a page, not as an action */
+  if (!TC.builderOpen || !TC.builder) { el.innerHTML = ''; return; }
   const b = TC.builder;
   const tracks = Object.keys(TRACKS || {});
   const lessonTitle = (TRACKS[b.track] && TRACKS[b.track].lessons && TRACKS[b.track].lessons[b.no])
@@ -1444,7 +1578,9 @@ function tcRenderAssignments() {
 
   let html = '<div class="card card-pad space-y-5">' +
     '<div class="section-head" style="margin-bottom:0"><h3>' + (b.id ? 'Edit assignment' : 'New assignment') + '</h3>' +
-    '<button class="btn-ghost btn-sm" onclick="tcResetBuilder()">Clear</button></div>' +
+    '<div style="display:flex;gap:8px">' +
+    '<button class="btn-ghost btn-sm" onclick="tcCloseBuilder()">Close</button>' +
+    '<button class="btn-ghost btn-sm" onclick="tcResetBuilder()">Clear</button></div></div>' +
     '<div><label class="label">Title</label>' +
     '<input class="input" id="tc-b-title" value="' + hwEsc(b.title) + '" placeholder="Homework: Build the Message" oninput="tcBuilderSet(\'title\', this.value)"></div>' +
     '<div><label class="label">Instructions</label>' +

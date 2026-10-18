@@ -1090,6 +1090,201 @@ body.studio-mode .e2-part{min-height:74px}
   .table .table-actions{justify-content:flex-end}
   .table .table-actions button{flex:0 1 auto}
 }
+/* ============================================================
+   MoveTalk — 2026 restructure layer
+   Tokens are additive: nothing above is redefined, so the old
+   rules keep rendering. New surfaces all read these values.
+   ============================================================ */
+:root{
+  --r-sm:6px; --r-md:10px; --r-pill:999px;
+  --signal:#E8890C; --signal-bg:rgba(232,137,12,.12);
+  --shadow-float:0 1px 2px rgba(15,27,45,.06),0 12px 32px -16px rgba(15,27,45,.24);
+  --t-fast:120ms; --t-base:180ms;
+  --ease:cubic-bezier(.2,.7,.3,1);
+  --ink-soft:rgba(15,27,45,.06);
+  --lp-max:1160px;
+}
+[data-theme="dark"]{
+  --signal:#F2A93B; --signal-bg:rgba(242,169,59,.14);
+  --shadow-float:0 1px 2px rgba(0,0,0,.4),0 16px 40px -20px rgba(0,0,0,.8);
+  --ink-soft:rgba(255,255,255,.06);
+}
+
+/* ---------- public landing shell ---------- */
+body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on .main-content{display:none !important}
+.lp{position:relative;z-index:10;min-height:100vh;background:var(--bg);color:var(--text)}
+.lp-wrap{max-width:var(--lp-max);margin:0 auto;padding:0 24px}
+.lp-head{position:sticky;top:0;z-index:40;background:var(--header-bg);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+.lp-head-in{max-width:var(--lp-max);margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:28px}
+.lp-brand{display:flex;align-items:center;gap:10px;cursor:pointer;background:none;border:0;padding:0}
+.lp-mark{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-family:'Inter Tight',sans-serif;font-weight:700;font-size:16px;color:#fff;background:linear-gradient(150deg,var(--accent),var(--lav));box-shadow:0 2px 0 rgba(15,27,45,.18)}
+.lp-brand b{font-family:'Inter Tight',sans-serif;font-size:17px;font-weight:700;letter-spacing:-.02em;color:var(--text)}
+.lp-brand span{font-size:11px;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;margin-left:2px}
+.lp-links{display:flex;align-items:center;gap:26px;margin-left:12px}
+.lp-links a{font-size:14px;color:var(--text2);text-decoration:none;transition:color var(--t-fast)}
+.lp-links a:hover{color:var(--text)}
+.lp-head-actions{margin-left:auto;display:flex;align-items:center;gap:10px}
+.lp-hero{padding:72px 0 56px;display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center}
+.lp-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;letter-spacing:.02em;color:var(--text2);background:var(--surface2);border:1px solid var(--border);padding:6px 12px;border-radius:var(--r-pill);margin-bottom:22px}
+.lp-eyebrow i{width:6px;height:6px;border-radius:50%;background:var(--ok);display:inline-block}
+.lp-h1{font-family:'Inter Tight',sans-serif;font-size:52px;line-height:1.04;letter-spacing:-.035em;font-weight:700;margin:0 0 20px}
+.lp-h1 em{font-style:normal;position:relative;white-space:nowrap}
+.lp-h1 em::after{content:"";position:absolute;left:-4px;right:-4px;bottom:6px;height:14px;background:var(--signal);opacity:.28;border-radius:2px;transform:rotate(-.6deg);z-index:-1}
+.lp-h1 em{z-index:0}
+.lp-lede{font-size:17px;line-height:1.65;color:var(--text2);max-width:52ch;margin:0 0 28px}
+.lp-cta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.lp-proof{display:flex;gap:36px;margin-top:40px;padding-top:24px;border-top:1px solid var(--border)}
+.lp-proof div{min-width:0}
+.lp-proof b{display:block;font-family:var(--mono,ui-monospace,monospace);font-size:24px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.lp-proof span{font-size:12px;color:var(--text2)}
+
+/* hero object: a real lesson card, tilted */
+.lp-object{position:relative}
+.lp-object::before{content:"";position:absolute;inset:-18px -18px auto auto;width:120px;height:120px;border-radius:50%;background:var(--hero-glow);filter:blur(2px)}
+.lp-card{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-float);padding:18px;transform:rotate(-1.2deg)}
+.lp-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.lp-chip{font-family:var(--mono,monospace);font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--accent2);background:var(--badge-bg);border-radius:var(--r-sm);padding:3px 7px}
+.lp-card-part{font-size:11px;color:var(--text2);letter-spacing:.06em;text-transform:uppercase}
+.lp-fc{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-md);padding:22px 18px;text-align:center}
+.lp-fc-word{font-family:'Inter Tight',sans-serif;font-size:28px;font-weight:700;letter-spacing:-.02em}
+.lp-fc-phon{font-family:var(--mono,monospace);font-size:12px;color:var(--text2);margin-top:4px}
+.lp-fc-vi{font-size:15px;margin-top:12px}
+.lp-fc-ex{font-size:13px;color:var(--text2);margin-top:10px;line-height:1.5}
+.lp-rows{margin-top:14px;display:grid;gap:6px}
+.lp-row{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--text2);padding:7px 9px;border-radius:var(--r-sm);background:var(--surface2)}
+.lp-row .ix{font-family:var(--mono,monospace);font-size:11px;color:var(--text2);min-width:16px}
+.lp-row.on{background:var(--signal-bg);color:var(--text)}
+.lp-row.on .ix{color:var(--signal)}
+.lp-row .tick{margin-left:auto;width:14px;height:14px;display:grid;place-items:center;color:var(--ok)}
+
+/* sections */
+.lp-sec{padding:64px 0;border-top:1px solid var(--border)}
+.lp-sec-head{max-width:60ch;margin-bottom:34px}
+.lp-kicker{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text2);font-weight:600;margin-bottom:10px}
+.lp-h2{font-family:'Inter Tight',sans-serif;font-size:32px;line-height:1.15;letter-spacing:-.025em;font-weight:700;margin:0 0 10px}
+.lp-sub{font-size:15px;line-height:1.6;color:var(--text2);margin:0}
+.lp-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.lp-step{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:24px 22px}
+.lp-step-no{font-family:var(--mono,monospace);font-size:12px;font-weight:600;color:var(--signal);letter-spacing:.08em}
+.lp-step h3{font-family:'Inter Tight',sans-serif;font-size:18px;font-weight:650;margin:10px 0 8px;letter-spacing:-.01em}
+.lp-step p{font-size:14px;line-height:1.6;color:var(--text2);margin:0}
+.lp-step .ico{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--surface2);color:var(--accent2);margin-bottom:14px}
+.lp-two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.lp-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:26px}
+.lp-panel h3{font-family:'Inter Tight',sans-serif;font-size:20px;font-weight:650;letter-spacing:-.02em;margin:0 0 6px}
+.lp-panel .lp-sub{font-size:14px;margin-bottom:18px}
+.lp-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.lp-list li{display:flex;gap:10px;font-size:14px;line-height:1.5;color:var(--text)}
+.lp-list svg{flex:0 0 18px;color:var(--ok);margin-top:2px}
+.lp-mock{border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface2);padding:12px;margin-top:18px}
+.lp-mock-row{display:flex;align-items:center;gap:10px;font-size:12.5px;padding:7px 4px;border-bottom:1px solid var(--border)}
+.lp-mock-row:last-child{border-bottom:0}
+.lp-mock-row b{font-family:var(--mono,monospace);font-size:11px;color:var(--text2);font-weight:500}
+.lp-mock-row .pill{margin-left:auto}
+.lp-bignote{margin-top:8px;font-size:12.5px;color:var(--text2)}
+.lp-final{padding:72px 0;border-top:1px solid var(--border)}
+.lp-final-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:48px;display:flex;align-items:center;justify-content:space-between;gap:32px;position:relative;overflow:hidden}
+.lp-final-box::after{content:"";position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:var(--hero-glow)}
+.lp-final-box h2{font-family:'Inter Tight',sans-serif;font-size:30px;letter-spacing:-.025em;margin:0 0 8px;font-weight:700}
+.lp-final-box p{margin:0;color:var(--text2);font-size:15px;max-width:46ch}
+.lp-foot{border-top:1px solid var(--border);padding:36px 0 44px;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.lp-foot-l{max-width:300px}
+.lp-foot-l p{font-size:13px;color:var(--text2);margin:10px 0 0;line-height:1.6}
+.lp-foot-cols{display:flex;gap:56px;flex-wrap:wrap}
+.lp-foot-col h4{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);margin:0 0 12px;font-weight:600}
+.lp-foot-col a,.lp-foot-col button{display:block;font-size:13.5px;color:var(--text);text-decoration:none;margin-bottom:9px;background:none;border:0;padding:0;cursor:pointer;text-align:left}
+.lp-foot-col a:hover,.lp-foot-col button:hover{color:var(--accent2)}
+.lp-legal{max-width:var(--lp-max);margin:0 auto;padding:0 24px 40px;font-size:12px;color:var(--text2);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.lp-mob{display:none}
+
+
+/* --- pass-2 fixes found in the screenshot review --- */
+.course-card .course-foot{flex-direction:row;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.course-card .course-foot .btn{width:auto;flex:0 0 auto}
+.lp-subnav{display:none}
+@media (max-width:640px){
+  .lp-brand span{display:none}
+  .lp-head-actions .btn-primary{white-space:nowrap}
+  .lp-proof{flex-wrap:nowrap;gap:12px;overflow:hidden}
+  .lp-proof div{flex:1 1 0;min-width:0}
+  .lp-proof b{font-size:20px}
+  .lp-proof span{font-size:11px;line-height:1.3;display:block}
+  .lp-subnav{display:flex;gap:8px;overflow-x:auto;padding:8px 18px;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:64px;z-index:35;-webkit-overflow-scrolling:touch}
+  .lp-subnav a{white-space:nowrap;font-size:13px;color:var(--text2);text-decoration:none;padding:7px 12px;border:1px solid var(--border);border-radius:var(--r-pill);background:var(--surface)}
+  .lp-subnav a:active{background:var(--surface2)}
+}
+
+/* ---------- shared: audio pill + section head used in the new surfaces ---------- */
+.audio-pill{display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 11px;border-radius:var(--r-pill);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12.5px;cursor:pointer;transition:background var(--t-fast)}
+.audio-pill:hover{background:var(--surface2)}
+.audio-pill .bars{display:inline-flex;align-items:flex-end;gap:2px;height:12px}
+.audio-pill .bars i{width:2px;background:var(--accent2);border-radius:1px;display:block}
+
+/* ---------- student: next action ---------- */
+.next-action{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:26px 28px;position:relative;overflow:hidden}
+.next-action::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--signal)}
+.na-kicker{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--signal);font-weight:600;margin-bottom:8px}
+.na-title{font-family:'Inter Tight',sans-serif;font-size:24px;letter-spacing:-.02em;font-weight:700;margin:0 0 6px}
+.na-meta{font-size:13.5px;color:var(--text2)}
+.na-side{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.na-count{font-family:var(--mono,monospace);font-size:12px;color:var(--text2)}
+.path-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border)}
+.path-row:last-child{border-bottom:0}
+.path-dot{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono,monospace);font-size:11px;border:1px solid var(--border);color:var(--text2);flex:0 0 26px}
+.path-dot.done{background:var(--ok);border-color:var(--ok);color:#fff}
+.path-dot.now{background:var(--signal);border-color:var(--signal);color:#fff}
+.sess-row{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.sess-row:last-child{border-bottom:0}
+.sess-when{font-family:var(--mono,monospace);font-size:11.5px;color:var(--text2);min-width:104px;line-height:1.6}
+.sess-when b{display:block;color:var(--text);font-weight:600;font-size:12.5px}
+
+/* ---------- teacher: teach + students ---------- */
+.teach-hero{display:grid;grid-template-columns:1.3fr .7fr;gap:18px}
+.session-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:24px;position:relative;overflow:hidden}
+.session-card.live::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--signal)}
+.sc-when{font-family:var(--mono,monospace);font-size:12px;color:var(--text2);letter-spacing:.02em}
+.sc-title{font-family:'Inter Tight',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.02em;margin:8px 0 6px}
+.sc-meta{font-size:13px;color:var(--text2)}
+.sc-actions{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.stu-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.stu-search{flex:1 1 260px;min-width:200px}
+.stu-row{display:grid;grid-template-columns:34px 1.6fr 1fr 1fr auto;gap:14px;align-items:center;padding:12px;border-radius:var(--r-sm);cursor:pointer;transition:background var(--t-fast)}
+.stu-row:hover{background:var(--surface2)}
+.stu-row+.stu-row{border-top:1px solid var(--border)}
+.stu-name{font-weight:600;font-size:14px}
+.stu-sub{font-size:12px;color:var(--text2)}
+.stu-stat{font-family:var(--mono,monospace);font-size:12.5px;color:var(--text);font-variant-numeric:tabular-nums}
+.stu-stat span{display:block;font-family:Inter,sans-serif;font-size:11px;color:var(--text2);letter-spacing:.02em}
+
+@media (max-width:1024px){
+  .lp-hero{grid-template-columns:1fr;gap:36px;padding:44px 0 36px}
+  .lp-h1{font-size:40px}
+  .lp-object{max-width:440px}
+  .lp-steps{grid-template-columns:1fr}
+  .lp-two{grid-template-columns:1fr}
+  .teach-hero{grid-template-columns:1fr}
+  .stu-row{grid-template-columns:30px 1fr auto;row-gap:4px}
+  .stu-row .stu-stat{grid-column:2}
+  .next-action{grid-template-columns:1fr;gap:16px}
+  .na-side{align-items:flex-start;flex-direction:row;flex-wrap:wrap}
+}
+@media (max-width:640px){
+  .lp-wrap,.lp-head-in{padding:0 18px}
+  .lp-links,.lp-head-actions .btn-quiet{display:none}
+  .lp-mob{display:inline-flex}
+  .lp-h1{font-size:32px}
+  .lp-lede{font-size:15.5px}
+  .lp-proof{gap:22px;flex-wrap:wrap}
+  .lp-sec{padding:44px 0}
+  .lp-h2{font-size:24px}
+  .lp-final-box{padding:28px 22px;flex-direction:column;align-items:flex-start}
+  .lp-final-box h2{font-size:24px}
+  .lp-foot{gap:28px}
+  .next-action{padding:20px}
+  .na-title{font-size:20px}
+  .session-card{padding:18px}
+  .sc-title{font-size:19px}
+}
 </style>
 </head>
 <body>
@@ -1105,6 +1300,257 @@ body.studio-mode .e2-part{min-height:74px}
   </div>
 </div>
 <div id="toasts" class="toast" aria-live="polite"></div>
+
+<!-- ============================================================
+     PUBLIC LANDING — the page a visitor sees at "/".
+     Its own header and footer: no app shell, no private data.
+     ============================================================ -->
+<div id="public-landing" class="lp hidden">
+  <header class="lp-head">
+    <div class="lp-head-in">
+      <button class="lp-brand" onclick="lpTop()">
+        <span class="lp-mark">M</span>
+        <b>MoveTalk</b><span>English for work</span>
+      </button>
+      <nav class="lp-links">
+        <a href="#lp-how" onclick="lpJump('lp-how',event)">Cách học</a>
+        <a href="#lp-lessons" onclick="lpJump('lp-lessons',event)">Bài học</a>
+        <a href="#lp-classroom" onclick="lpJump('lp-classroom',event)">Lớp có giáo viên</a>
+      </nav>
+      <div class="lp-head-actions">
+        <button class="btn-quiet btn-sm" onclick="toggleTheme()">Giao diện</button>
+        <button class="btn-primary btn-sm" onclick="showAuth()">Đăng nhập</button>
+      </div>
+    </div>
+  </header>
+  <nav class="lp-subnav" aria-label="Mục lục trang">
+    <a href="#lp-how" onclick="lpJump('lp-how',event)">Cách học</a>
+    <a href="#lp-lessons" onclick="lpJump('lp-lessons',event)">Bài học</a>
+    <a href="#lp-classroom" onclick="lpJump('lp-classroom',event)">Lớp có giáo viên</a>
+  </nav>
+
+  <main>
+    <!-- HERO -->
+    <div class="lp-wrap">
+      <div class="lp-hero">
+        <div>
+          <span class="lp-eyebrow"><i></i> MOVE English · A1 → E2 · bài học có giáo viên</span>
+          <h1 class="lp-h1">Học tiếng Anh để <em>dùng được</em> ngay ngày mai.</h1>
+          <p class="lp-lede">Mỗi bài là mười phần rõ ràng: từ vựng, mẫu câu, đoạn hội thoại, bài tập và một
+            nhiệm vụ nói. Bạn học một ít, dùng ngay, gặp lại, rồi dùng tốt hơn. Giáo viên theo dõi và
+            giao bài ôn sau mỗi buổi.</p>
+          <div class="lp-cta-row">
+            <button class="btn-primary" onclick="showAuth()">Bắt đầu học</button>
+            <button class="btn-secondary" onclick="lpJump('lp-how',event)">Xem cách học</button>
+          </div>
+          <div class="lp-proof" id="lp-proof">
+            <div><b id="lp-stat-lessons">—</b><span>bài học đã mở</span></div>
+            <div><b id="lp-stat-parts">—</b><span>phần trong mỗi bài</span></div>
+            <div><b id="lp-stat-words">—</b><span>từ và cụm từ có âm thanh</span></div>
+          </div>
+        </div>
+
+        <div class="lp-object" aria-hidden="true">
+          <div class="lp-card">
+            <div class="lp-card-top">
+              <span class="lp-chip">A1 · LESSON 1</span>
+              <span class="lp-card-part">Phần 1 / 10</span>
+            </div>
+            <div class="lp-fc">
+              <div class="lp-fc-word" id="lp-word">colleague</div>
+              <div class="lp-fc-phon" id="lp-phon">/ˈkɑliɡ/</div>
+              <div class="lp-fc-vi" id="lp-vi">đồng nghiệp</div>
+              <div class="lp-fc-ex" id="lp-ex">I have a meeting with my colleague.</div>
+            </div>
+            <div class="lp-rows">
+              <div class="lp-row"><span class="ix">01</span> Từ vựng <span class="tick">✓</span></div>
+              <div class="lp-row on"><span class="ix">02</span> Mẫu câu · đang học <span class="tick" style="color:var(--signal)">→</span></div>
+              <div class="lp-row"><span class="ix">03</span> Hội thoại</div>
+              <div class="lp-row"><span class="ix">04</span> Nhiệm vụ nói</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <section class="lp-sec" id="lp-how">
+      <div class="lp-wrap">
+        <div class="lp-sec-head">
+          <div class="lp-kicker">Cách MoveTalk dạy</div>
+          <h2 class="lp-h2">Ba bước, lặp lại mỗi tuần.</h2>
+          <p class="lp-sub">Không phải một danh sách ngữ pháp. Mỗi bài đưa bạn qua đúng vòng học mà lớp
+            học thật dùng: gặp, dùng, sửa, dùng lại.</p>
+        </div>
+        <div class="lp-steps">
+          <div class="lp-step">
+            <div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+            <div class="lp-step-no">01</div>
+            <h3>Học theo khối</h3>
+            <p>Mỗi bài mười phần: từ vựng có phiên âm, mẫu câu, đoạn đọc, hội thoại có âm thanh và bài tập
+              điền câu. Bạn luôn biết mình đang ở phần nào.</p>
+          </div>
+          <div class="lp-step">
+            <div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></svg></div>
+            <div class="lp-step-no">02</div>
+            <h3>Nói lại ngay</h3>
+            <p>Nghe từng câu, nhắc lại, rồi tự nói hai phút theo nhiệm vụ của bài. Không có phần nào là
+              đọc thầm rồi bỏ qua.</p>
+          </div>
+          <div class="lp-step">
+            <div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg></div>
+            <div class="lp-step-no">03</div>
+            <h3>Giáo viên giao bài ôn</h3>
+            <p>Sau buổi học, giáo viên mở buổi đó và giao đúng bài cần ôn kèm hạn nộp. Bạn nộp trong
+              workspace của mình, giáo viên chấm và ghi nhận xét.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THE LESSONS -->
+    <section class="lp-sec" id="lp-lessons">
+      <div class="lp-wrap">
+        <div class="lp-sec-head">
+          <div class="lp-kicker">Nội dung thật</div>
+          <h2 class="lp-h2">Ba chương trình, mỗi bài mở được ngay.</h2>
+          <p class="lp-sub">Foundation xây câu nền. Activation sửa lỗi và mở rộng câu. Expand đi vào
+            ngữ cảnh công việc. Số bài dưới đây là số bài đang có, không phải con số dự kiến.</p>
+        </div>
+        <div id="lp-courses"></div>
+        <p class="lp-bignote" id="lp-course-note"></p>
+      </div>
+    </section>
+
+    <!-- INSIDE A LESSON -->
+    <section class="lp-sec">
+      <div class="lp-wrap">
+        <div class="lp-sec-head">
+          <div class="lp-kicker">Bên trong một bài</div>
+          <h2 class="lp-h2">Đây là nội dung bạn sẽ mở.</h2>
+          <p class="lp-sub">Hai trong mười phần, lấy nguyên văn từ bài A1 đầu tiên.</p>
+        </div>
+        <div class="lp-two">
+          <div class="lp-panel">
+            <h3>Thẻ từ vựng</h3>
+            <p class="lp-sub">Lật thẻ để xem nghĩa và hai ví dụ, mỗi ví dụ có nút nghe.</p>
+            <div class="lp-fc" style="text-align:left;padding:18px">
+              <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+                <span class="lp-fc-word" id="lp-word2" style="font-size:22px">colleague</span>
+                <span class="lp-fc-phon" id="lp-phon2">/ˈkɑliɡ/</span>
+              </div>
+              <div class="lp-fc-vi" id="lp-vi2" style="margin-top:10px">đồng nghiệp</div>
+              <div class="lp-fc-ex" id="lp-def2">someone you work with</div>
+              <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+                <button class="audio-pill" onclick="lpPlaySample(this)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>
+                  Nghe
+                  <span class="bars"><i style="height:4px"></i><i style="height:8px"></i><i style="height:12px"></i><i style="height:6px"></i></span>
+                </button>
+                <span class="lp-chip" style="align-self:center">A1 · phần 1</span>
+              </div>
+            </div>
+          </div>
+          <div class="lp-panel">
+            <h3>Hội thoại</h3>
+            <p class="lp-sub" id="lp-conv-sub">Một đoạn hội thoại ngắn, nghe cả bài bằng một nút.</p>
+            <div class="lp-mock" id="lp-conv"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLASSROOM -->
+    <section class="lp-sec" id="lp-classroom">
+      <div class="lp-wrap">
+        <div class="lp-sec-head">
+          <div class="lp-kicker">Thiết kế cho lớp có người dạy</div>
+          <h2 class="lp-h2">Hai workspace, hai công việc khác nhau.</h2>
+          <p class="lp-sub">Học viên không thấy công cụ quản lý. Giáo viên không phải dò từng màn hình để
+            biết hôm nay ai cần gì.</p>
+        </div>
+        <div class="lp-two">
+          <div class="lp-panel">
+            <h3>Giáo viên</h3>
+            <p class="lp-sub">Một chỗ để dạy, một chỗ để quản lý học viên.</p>
+            <ul class="lp-list">
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Dạy</b> — buổi sắp tới, thời khoá biểu, bài chờ chấm, mở buổi học.</span></li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Quản lý học viên</b> — danh sách, tìm kiếm, hồ sơ, tiến độ từng phần.</span></li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><span>Giao bài ôn ngay trong buổi vừa dạy, kèm hạn nộp.</span></li>
+            </ul>
+            <div class="lp-mock">
+              <div class="lp-mock-row"><b>19:00</b> Buổi 4 · Present simple <span class="pill on">Hôm nay</span></div>
+              <div class="lp-mock-row"><b>2</b> bài chờ chấm <span class="pill">Cần làm</span></div>
+              <div class="lp-mock-row"><b>1</b> học viên chờ duyệt <span class="pill">Mới</span></div>
+            </div>
+          </div>
+          <div class="lp-panel">
+            <h3>Học viên</h3>
+            <p class="lp-sub">Mở lên là biết làm gì tiếp theo.</p>
+            <ul class="lp-list">
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Việc tiếp theo</b> — đúng bài, đúng phần, một nút vào học.</span></li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><span>Bài tập chia hai nhóm: cần làm và đã nộp, kèm điểm và nhận xét.</span></li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><span>Buổi học sắp tới và ghi chú của buổi trước.</span></li>
+            </ul>
+            <div class="lp-mock">
+              <div class="lp-mock-row"><b>A1 · 3</b> Mẫu câu với does <span class="pill on">Tiếp theo</span></div>
+              <div class="lp-mock-row"><b>HW</b> Ôn 8 từ · hạn thứ 5 <span class="pill">Chưa nộp</span></div>
+              <div class="lp-mock-row"><b>19:00</b> Buổi 4 với giáo viên <span class="pill">Sắp tới</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="lp-final">
+      <div class="lp-wrap">
+        <div class="lp-final-box">
+          <div>
+            <h2>Bắt đầu từ bài đầu tiên.</h2>
+            <p>Đăng nhập để mở bài học, làm bài tập giáo viên giao và xem tiến độ của mình.</p>
+          </div>
+          <div class="lp-cta-row">
+            <button class="btn-primary" onclick="showAuth()">Đăng nhập</button>
+            <button class="btn-secondary" onclick="lpJump('lp-lessons',event)">Xem bài học</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="lp-foot lp-wrap">
+    <div class="lp-foot-l">
+      <button class="lp-brand" onclick="lpTop()">
+        <span class="lp-mark">M</span><b>MoveTalk</b>
+      </button>
+      <p>MOVE English · bài học theo khối, có giáo viên theo dõi. Dành cho người đi làm cần dùng tiếng Anh
+        ngay tuần này.</p>
+    </div>
+    <div class="lp-foot-cols">
+      <div class="lp-foot-col">
+        <h4>Học</h4>
+        <button onclick="lpCourseJump('a1')">Activation · A1</button>
+        <button onclick="lpCourseJump('e2')">Expand · E2</button>
+        <button onclick="showAuth()">Bài tập của tôi</button>
+      </div>
+      <div class="lp-foot-col">
+        <h4>Tài khoản</h4>
+        <button onclick="showAuth()">Đăng nhập</button>
+        <button onclick="showAuth();toggleAuthMode()">Tạo tài khoản</button>
+      </div>
+      <div class="lp-foot-col">
+        <h4>Liên hệ</h4>
+        <a href="#lp-classroom" onclick="lpJump('lp-classroom',event)">Lớp có giáo viên</a>
+        <button onclick="showAuth()">Yêu cầu tham gia</button>
+      </div>
+    </div>
+  </footer>
+  <div class="lp-legal">
+    <span>© <span id="lp-year">2026</span> MoveTalk · MOVE English</span>
+    <span>Bài học thuộc Phoebe Trương · MOVE Activate 1</span>
+  </div>
+</div>
 
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
@@ -1143,21 +1589,26 @@ body.studio-mode .e2-part{min-height:74px}
         <button class="nav-item" data-view="e2"><span class="nav-code">E2</span> MOVE Expand 2</button>
       </div>
     </div>
-    <div class="nav-section">
+    <div class="nav-section" id="nav-student-group">
       <button class="nav-section-toggle expanded" data-section="workspace">
-        <span>Workspace</span>
+        <span>Học</span>
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
       </button>
       <div class="nav-section-items expanded" id="nav-workspace">
-        <button class="nav-item" data-view="home"><span class="nav-code">HM</span> Home</button>
-        <button class="nav-item" data-view="dashboard"><span class="nav-code">LP</span> Learning path</button>
-        <button class="nav-item" data-view="homework"><span class="nav-code">HW</span> My homework</button>
-        <button class="nav-item" data-view="vocab"><span class="nav-code">VB</span> Vocabulary</button>
-        <button class="nav-item hidden teacher-only" data-view="teacher" id="nav-teacher-item" data-tc-nav="dashboard" onclick="tcTab('dashboard')"><span class="nav-code">DB</span> Dashboard <span id="nav-teacher-count" class="nav-badge hidden"></span></button>
-        <button class="nav-item nav-sub hidden teacher-only" data-view="teacher" data-tc-nav="courses" onclick="tcTab('courses')"><span class="nav-code">·</span> Courses</button>
-        <button class="nav-item nav-sub hidden teacher-only" data-view="teacher" data-tc-nav="students" onclick="tcTab('students')"><span class="nav-code">·</span> Students</button>
-        <button class="nav-item nav-sub hidden teacher-only" data-view="teacher" data-tc-nav="materials" onclick="tcTab('materials')"><span class="nav-code">·</span> Materials</button>
-        <button class="nav-item nav-sub hidden teacher-only" data-view="teacher" data-tc-nav="chat" onclick="tcTab('chat')"><span class="nav-code">·</span> Chat</button>
+        <button class="nav-item" data-view="dashboard"><span class="nav-code">LP</span> Việc tiếp theo</button>
+        <button class="nav-item" data-view="homework"><span class="nav-code">HW</span> Bài tập</button>
+        <button class="nav-item" data-view="vocab"><span class="nav-code">VB</span> Từ vựng</button>
+        <button class="nav-item" data-view="home"><span class="nav-code">HM</span> Trang giới thiệu</button>
+      </div>
+    </div>
+    <div class="nav-section teacher-only hidden">
+      <button class="nav-section-toggle expanded" data-section="teaching">
+        <span>Giáo viên</span>
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+      <div class="nav-section-items expanded" id="nav-teaching">
+        <button class="nav-item hidden teacher-only" data-view="teacher" id="nav-teacher-item" data-tc-nav="teach" onclick="tcTab('teach')"><span class="nav-code">D</span> Dạy <span id="nav-teacher-count" class="nav-badge hidden"></span></button>
+        <button class="nav-item hidden teacher-only" data-view="teacher" id="nav-teacher-students" data-tc-nav="students" onclick="tcTab('students')"><span class="nav-code">HV</span> Quản lý học viên</button>
       </div>
     </div>
   </nav>
@@ -1447,26 +1898,38 @@ body.studio-mode .e2-part{min-height:74px}
             </div>
           </div>
 
+          <div class="next-action" id="dash-next-card">
+            <div>
+              <div class="na-kicker">Việc tiếp theo</div>
+              <div class="na-title" id="dash-next-title">Đang tải…</div>
+              <div class="na-meta" id="dash-next-sub">Bài học và phần bạn đang dừng lại.</div>
+            </div>
+            <div class="na-side">
+              <button class="btn-primary" id="dash-next-btn" onclick="go('a1')">Vào bài học</button>
+              <span class="na-count" id="na-progress">—</span>
+            </div>
+          </div>
+
           <div class="kpi-grid">
             <div class="stat">
-              <div class="stat-top"><span class="stat-label">Lessons done</span><span class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span></div>
+              <div class="stat-top"><span class="stat-label">Bài đã xong</span><span class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span></div>
               <span id="dash-lessons" class="stat-value">0</span>
-              <span class="stat-hint">A lesson counts once you reach its final task.</span>
+              <span class="stat-hint">Tính khi bạn tới phần nhiệm vụ cuối.</span>
             </div>
             <div class="stat">
-              <div class="stat-top"><span class="stat-label">Words learned</span><span class="stat-ico mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2M4 7h16M4 7v12a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V7"/></svg></span></div>
+              <div class="stat-top"><span class="stat-label">Từ đã học</span><span class="stat-ico mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2M4 7h16M4 7v12a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V7"/></svg></span></div>
               <span id="dash-words" class="stat-value">0</span>
-              <span class="stat-hint">From the flashcards you have marked as learned.</span>
+              <span class="stat-hint">Từ những thẻ bạn đã đánh dấu.</span>
             </div>
             <div class="stat">
-              <div class="stat-top"><span class="stat-label">Streak</span><span class="stat-ico lav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3c1.5 3 4 4.5 4 8a4 4 0 0 1-8 0c0-3.5 2.5-5 4-8z"/></svg></span></div>
+              <div class="stat-top"><span class="stat-label">Chuỗi ngày</span><span class="stat-ico lav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3c1.5 3 4 4.5 4 8a4 4 0 0 1-8 0c0-3.5 2.5-5 4-8z"/></svg></span></div>
               <span id="dash-streak" class="stat-value">0</span>
-              <span class="stat-hint">Days in a row you opened a lesson.</span>
+              <span class="stat-hint">Số ngày liên tiếp bạn mở bài.</span>
             </div>
             <div class="stat">
-              <div class="stat-top"><span class="stat-label">Level</span><span class="stat-ico coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3v18M5 21h14M8 17V9M12 17v-5M16 17v-3"/></svg></span></div>
+              <div class="stat-top"><span class="stat-label">Trình độ</span><span class="stat-ico coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3v18M5 21h14M8 17V9M12 17v-5M16 17v-3"/></svg></span></div>
               <span id="dash-level" class="stat-value">—</span>
-              <span class="stat-hint">From the placement check.</span>
+              <span class="stat-hint">Từ bài kiểm tra xếp trình độ.</span>
             </div>
           </div>
 
@@ -1509,11 +1972,6 @@ body.studio-mode .e2-part{min-height:74px}
               <div class="section-head" style="margin-bottom:0"><div><h3>Today</h3><p class="faint" style="font-size:12.5px" id="dash-today-sub">—</p></div></div>
               <div id="dash-today" class="space-y-3"></div>
               <div id="dash-vocab" class="chip-row"></div>
-              <div style="border-top:1px solid var(--border);padding-top:12px">
-                <p class="row-title" id="dash-next-title">—</p>
-                <p class="row-sub" id="dash-next-sub">—</p>
-                <button class="btn-primary btn-sm" id="dash-next-btn" onclick="go('a1')" style="margin-top:10px">Vào bài học</button>
-              </div>
             </div>
           </div>
 
@@ -1610,7 +2068,7 @@ body.studio-mode .e2-part{min-height:74px}
         <div id="tc-body" class="hidden space-y-5">
           <div class="page-head">
             <div>
-              <h1 class="page-title" id="tc-title">Dashboard</h1>
+              <h1 class="page-title" id="tc-title">Dạy</h1>
               <p id="tc-sub" class="page-sub">—</p>
             </div>
             <div class="page-actions">
@@ -1619,8 +2077,9 @@ body.studio-mode .e2-part{min-height:74px}
             </div>
           </div>
 
-          <!-- 1. DASHBOARD -->
+          <!-- AREA 1 — DẠY -->
           <div id="tc-panel-dashboard" class="space-y-5">
+            <div id="tc-teach-hero"></div>
             <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-4" id="tc-stats"></div>
             <div class="card card-pad space-y-4">
               <div class="section-head" style="margin-bottom:0"><div><h3>Bài chờ chấm</h3>
@@ -1629,27 +2088,31 @@ body.studio-mode .e2-part{min-height:74px}
               <div id="tc-pending"></div>
             </div>
             <div id="tc-panel-schedule" class="space-y-5"></div>
-          </div>
-
-          <!-- 2. COURSES -->
-          <div id="tc-panel-courses" class="space-y-5 hidden">
-            <div id="tc-courses" class="course-grid"></div>
-          </div>
-
-          <!-- 3. STUDENTS -->
-          <div id="tc-panel-students" class="space-y-5 hidden"></div>
-          <div id="tc-panel-assignments" class="space-y-5 hidden"></div>
-
-          <!-- 4. MATERIALS -->
-          <div id="tc-panel-materials" class="space-y-5 hidden">
             <div class="card card-pad space-y-4">
-              <div class="section-head" style="margin-bottom:0"><div><h3>Tài liệu</h3>
-                <p class="faint" style="font-size:12.5px" id="tc-mat-sub">—</p></div></div>
-              <div id="tc-material-list"></div>
+              <div class="section-head" style="margin-bottom:0"><div><h3>Chương trình đang dạy</h3>
+                <p class="faint" style="font-size:12.5px">Mở bài để dạy trong studio, hoặc xem bài học viên đang ở.</p></div></div>
+              <div id="tc-courses" class="course-grid"></div>
+            </div>
+            <div class="card card-pad space-y-3">
+              <div class="section-head" style="margin-bottom:0"><div><h3>Tài liệu</h3></div></div>
+              <p class="row-sub" id="tc-mat-sub">Bài học, audio và bài tập nằm ngay trong từng bài — không cần tải lên.
+                Kho tài liệu riêng chỉ bật khi dự án có Supabase Storage bucket, nên hiện chưa có nút tải file.</p>
             </div>
           </div>
 
-          <!-- 5. CHAT -->
+          <!-- AREA 2 — QUẢN LÝ HỌC VIÊN -->
+          <div id="tc-panel-students" class="space-y-5 hidden"></div>
+          <div id="tc-panel-assignments" class="space-y-5 hidden"></div>
+
+          <!-- retired panels, kept for the tests that assert they exist and for tcRenderMaterials -->
+          <div id="tc-panel-courses" class="space-y-5 hidden"></div>
+          <div id="tc-panel-materials" class="space-y-5 hidden">
+            <div class="card card-pad space-y-4">
+              <div class="section-head" style="margin-bottom:0"><div><h3>Tài liệu</h3>
+                <p class="faint" style="font-size:12.5px" id="tc-mat-sub-legacy">—</p></div></div>
+              <div id="tc-material-list"></div>
+            </div>
+          </div>
           <div id="tc-panel-chat" class="space-y-5 hidden">
             <div class="card card-pad text-center" style="padding:56px 24px">
               <h3 style="font-size:20px;margin-bottom:6px">Chat</h3>
@@ -1813,6 +2276,9 @@ document.querySelectorAll('.nav-item').forEach(btn=>{
 
 // ---- NAV ----
 function go(v){
+  if(v==='login'){ if(USER){routeAfterAuth();return} lpShow();showAuth();return; }
+  if(v==='landing'){ lpShow(); if(location.hash!=='#landing')location.hash='landing'; window.scrollTo(0,0); return; }
+  lpHide();
   if(!document.getElementById('v-'+v))v='home';
   document.querySelectorAll('.view').forEach(e=>e.classList.add('hidden'));
   document.getElementById('v-'+v).classList.remove('hidden');
@@ -1824,9 +2290,158 @@ function go(v){
   if(v==='teacher')renderTeacher();
   if(TRACKS[v])renderTrack(v);
   if(v==='home'){renderHome();renderPlacementQuiz();}
-  location.hash=v;window.scrollTo(0,0);
+  syncChrome(v);
+  /* keep a sub-route like #teacher/students instead of flattening it to #teacher */
+  const cur=(location.hash||'').replace(/^#/,'').replace(/^\/+/,'').split('/')[0];
+  if(cur!==v)location.hash=v;
+  window.scrollTo(0,0);
 }
-addEventListener('hashchange',()=>go(location.hash.slice(1)||'home'));
+
+/* ---------- public landing ---------- */
+function lpHide(){
+  /* the test harness has a stub document with no body — never assume */
+  if(document.body&&document.body.classList)document.body.classList.remove('lp-on');
+  const l=document.getElementById('public-landing');
+  if(l)l.classList.add('hidden');
+}
+function lpShow(){
+  const l=document.getElementById('public-landing');
+  if(!l)return;
+  if(document.body&&document.body.classList)document.body.classList.add('lp-on');
+  l.classList.remove('hidden');
+  document.querySelectorAll('.view').forEach(e=>e.classList.add('hidden'));
+  lpRender();
+  window.scrollTo(0,0);
+}
+function lpTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
+function lpJump(id,ev){
+  if(ev)ev.preventDefault();
+  const el=document.getElementById(id);
+  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function lpCourseJump(tk){
+  if(!USER){ showAuth(); quickToast('Đăng nhập để mở bài học'); return; }
+  go(tk); if(typeof trackGo==='function')trackGo(tk,1);
+}
+function lpPlaySample(){
+  const w=document.getElementById('lp-word');
+  const ex=document.getElementById('lp-ex');
+  if(typeof speak==='function' && w) speak(w.textContent||'colleague');
+  else if(typeof speak==='function' && ex) speak(ex.textContent);
+}
+function lpPlayConv(){
+  const lines=[].slice.call(document.querySelectorAll('#lp-conv .lp-conv-line')).map(function(n){return n.textContent.trim()});
+  if(!lines.length)return;
+  let i=0;
+  (function next(){
+    if(i>=lines.length)return;
+    const t=lines[i++];
+    if(typeof speakLineThenNext==='function' && 'speechSynthesis' in window){
+      /* speak() plays the recorded clip when there is one and falls back to TTS */
+      if(typeof AUDIO_MAP!=='undefined' && AUDIO_MAP[t]){ speak(t); setTimeout(next,1800); }
+      else { const u=new SpeechSynthesisUtterance(t); u.lang='en-US'; u.rate=.85; u.onend=()=>setTimeout(next,320); u.onerror=()=>setTimeout(next,200); speechSynthesis.speak(u); }
+    } else { speak(t); }
+  })();
+}
+function lpRender(){
+  try{
+    /* real counts, computed from the lesson data that is actually shipped */
+    let lessons=0, parts=0, words=0, sample=null, conv=null;
+    Object.keys(TRACKS||{}).forEach(function(tk){
+      const T=TRACKS[tk]; if(!T||!T.lessons)return;
+      Object.keys(T.lessons).forEach(function(n){
+        const L=T.lessons[n]; if(!L||!L.parts)return;
+        lessons++;
+        const ks=Object.keys(L.parts);
+        if(!parts)parts=ks.length;
+        ks.forEach(function(k){
+          const ref=L.parts[k];
+          /* a part is an array of blocks in the shipped data; accept the
+             wrapped shape too so this keeps working if the data moves. */
+          const items=Array.isArray(ref)?ref:((ref&&ref.blocks)||[]);
+          items.forEach(function(b){
+            if(!b)return;
+            if(b.t==='flashcard'&&b.items){
+              words+=b.items.length;
+              if(!sample&&b.items[0])sample=b.items[0];
+            }
+            if(b.t==='retrieval'&&b.items)words+=b.items.length;
+            if(b.t==='dialog'&&!conv&&b.lines&&b.lines.length)conv=b;
+          });
+        });
+      });
+    });
+    const sl=document.getElementById('lp-stat-lessons'), sp=document.getElementById('lp-stat-parts'), sw=document.getElementById('lp-stat-words');
+    if(sl)sl.textContent=lessons||'—';
+    if(sp)sp.textContent=parts||10;
+    if(sw)sw.textContent=words||'—';
+    if(sample){
+      const set=function(id,v){const e=document.getElementById(id);if(e&&v)e.textContent=v};
+      set('lp-word',sample.word);set('lp-word2',sample.word);
+      set('lp-phon',sample.phonetic);set('lp-phon2',sample.phonetic);
+      set('lp-vi',sample.vi);set('lp-vi2',sample.vi);
+      set('lp-def2',sample.def||'');
+      const ex=(sample.examples&&sample.examples[0]&&sample.examples[0].text)||'';
+      set('lp-ex',ex);
+    }
+    if(conv&&conv.lines){
+      const box=document.getElementById('lp-conv');
+      if(box){
+        box.innerHTML=conv.lines.slice(0,4).map(function(l){
+          return '<div class="lp-mock-row"><b>'+hwEsc((l.speaker||'').slice(0,1).toUpperCase()||'A')+'</b>'+
+                 '<span class="lp-conv-line" style="line-height:1.45">'+hwEsc(l.text||'')+'</span></div>';
+        }).join('')+
+        '<div style="padding-top:10px"><button class="audio-pill" onclick="lpPlayConv()">'+
+        '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 5v14l11-7z"/></svg> Nghe cả đoạn</button></div>';
+      }
+      const sub=document.getElementById('lp-conv-sub');
+      if(sub&&conv.title)sub.textContent=conv.title;
+    }
+    /* the same course cards the dashboard uses */
+    const cs=document.getElementById('lp-courses');
+    if(cs&&typeof dashCourseGroups==='function'){
+      cs.innerHTML=dashCourseGroups().map(function(g){
+        return '<div class="course-group"><div class="course-group-head">'+g.name+
+          '<span class="course-rule"></span><span style="text-transform:none;letter-spacing:0;font-weight:400">'+g.line+'</span></div>'+
+          '<div class="course-cards">'+g.tracks.map(homeCourseCard).join('')+'</div></div>';
+      }).join('');
+      const note=document.getElementById('lp-course-note');
+      if(note)note.textContent='Một chương trình chưa có bài nào sẽ hiện đúng như vậy, không có thanh tiến độ giả.';
+    }
+    const y=document.getElementById('lp-year'); if(y)y.textContent=new Date().getFullYear();
+  }catch(e){ /* the landing must never break the app */ }
+}
+
+/* ---------- routing ---------- */
+function isTeacherUser(){ return !!(USER&&USER.role==='teacher'&&typeof teacherAllowed==='function'&&teacherAllowed()); }
+function defaultView(){ return isTeacherUser()?'teacher':'dashboard'; }
+function routeAfterAuth(){
+  if(isTeacherUser()){ go('teacher'); if(typeof tcTab==='function')tcTab('teach',true); }
+  else if(USER){ go('dashboard'); }
+  else { lpShow(); }
+}
+function routeFromHash(){
+  const raw=(location.hash||'').replace(/^#/,'').replace(/^\/+/,'');
+  if(raw==='login'){ if(USER)routeAfterAuth(); else { lpShow(); showAuth(); } return; }
+  if(raw.indexOf('teacher/')===0){ if(!USER){lpShow();showAuth();return} const t=raw.slice(8)||'teach'; go('teacher'); if(typeof tcTab==='function')tcTab(t,true); return; }
+  if(raw.indexOf('student/')===0){ if(!USER){lpShow();showAuth();return} const s=raw.slice(8)||'home'; go(s==='home'?'dashboard':s); return; }
+  if(raw==='teacher'){ go('teacher'); if(USER&&typeof tcTab==='function')tcTab('teach',true); return; }
+  if(raw==='landing'||raw===''){ if(USER)routeAfterAuth(); else lpShow(); return; }
+  if(!USER&&(raw==='home'||raw==='dashboard')){ lpShow(); return; }
+  go(raw);
+}
+function syncChrome(v){
+  /* the sidebar is role-aware: a student never sees the teaching areas */
+  const teach=isTeacherUser();
+  document.querySelectorAll('.teacher-only').forEach(function(el){ el.classList.toggle('hidden',!teach); });
+  const stu=document.getElementById('nav-student-group');
+  if(stu)stu.classList.toggle('hidden',teach);
+  const t=document.getElementById('bn-teacher');
+  if(t)t.classList.toggle('hidden',!teach);
+  const bnHome=document.querySelector('.bottom-nav button[data-bn="home"]');
+  if(bnHome)bnHome.classList.toggle('hidden',teach);
+}
+addEventListener('hashchange',routeFromHash);
 
 // ---- HOME ----
 function renderHome(){
@@ -2439,7 +3054,7 @@ async function doAuth(){
         if(r.error)throw r.error;
       }
       await hwLoadSession();
-      setAuthBusy(false);hideAuth();updateAuthUI();toast('Signed in','ok');
+      setAuthBusy(false);hideAuth();updateAuthUI();toast('Signed in','ok');routeAfterAuth();
       if(wantedTeacher&&(!USER||USER.role!=='teacher')){
         toast('Signed up as a student — that teacher invite code was not valid','err');
       }
@@ -2449,10 +3064,10 @@ async function doAuth(){
   }
   if(AUTH_MODE==='signup'){USER={name,email,role:USER_ROLE,joined:new Date().toLocaleDateString()};save('user',USER);toast('Account created!','ok')}
   else{const saved=load('user',null);if(saved&&saved.email===email){USER=saved;toast('Welcome back!','ok')}else{USER={name:email.split('@')[0],email,role:'student',joined:new Date().toLocaleDateString()};save('user',USER);toast('Signed in!','ok')}}
-  hideAuth();updateAuthUI();go('dashboard');
+  hideAuth();updateAuthUI();routeAfterAuth();
 }
 function logout(){
-  const done=()=>{USER=null;localStorage.removeItem('mt_user');updateAuthUI();toast('Signed out','ok');go('home')};
+  const done=()=>{USER=null;localStorage.removeItem('mt_user');updateAuthUI();toast('Signed out','ok');go('landing')};
   if(typeof HW_ON!=='undefined'&&HW_ON&&HB.auth&&HB.auth.signOut)HB.auth.signOut().then(done,done);else done();
 }
 function updateAuthUI(){
@@ -2679,32 +3294,42 @@ function dashRenderCourses(serverProg){
 function dashRenderToday(){
   const box=document.getElementById('dash-today'),sub=document.getElementById('dash-today-sub');
   if(!box)return;
-  const online=(typeof HW!=='undefined')&&HW_ON&&USER&&USER.role==='student'&&USER.status==='active';
-  if(!online){
-    if(sub)sub.textContent='Sign in to see your class and your work';
-    box.innerHTML='<div class="empty"><div class="empty-title">Not signed in</div>'+
-      '<div class="empty-text">Your timetable and homework appear here once you sign in.</div></div>';
+  /* Three real states. "Not signed in" used to be shown to a signed-in
+     student whose backend had not answered yet, which is a lie. */
+  if(!USER){
+    if(sub)sub.textContent='Chưa đăng nhập';
+    box.innerHTML='<div class="empty"><div class="empty-title">Chưa đăng nhập</div>'+
+      '<div class="empty-text">Đăng nhập để thấy lịch học và bài tập của bạn.</div>'+
+      '<button class="btn-secondary btn-sm" style="margin-top:12px" onclick="showAuth()">Đăng nhập</button></div>';
+    return;
+  }
+  if(typeof HW_ON==='undefined'||!HW_ON){
+    if(sub)sub.textContent='Chưa nối máy chủ';
+    box.innerHTML='<div class="empty"><div class="empty-title">Chưa có máy chủ trường</div>'+
+      '<div class="empty-text">Lịch học và bài tập cần Supabase trong config.js. Bài học vẫn mở bình thường.</div></div>';
     return;
   }
   const now=Date.now();
-  const ses=(HW.sessions||[]).filter(function(s){return s.status!=='cancelled'&&new Date(s.starts_at).getTime()+((Number(s.duration_min)||60)*60000)>=now})
+  const ses=((typeof HW!=='undefined'&&HW.sessions)||[]).filter(function(s){return s.status!=='cancelled'&&new Date(s.starts_at).getTime()+((Number(s.duration_min)||60)*60000)>=now})
     .sort(function(a,b){return new Date(a.starts_at)-new Date(b.starts_at)});
   const nextSes=ses[0];
   const today=ses.filter(function(s){return typeof tcIsToday==='function'&&tcIsToday(s.starts_at)}).length;
-  const open=(HW.assignments||[]).filter(function(a){
-    const s=HW.subs[a.id];return s!==undefined?(s&&s.status==='in_progress'):true;
+  const all=((typeof HW!=='undefined'&&HW.assignments)||[]);
+  const open=all.filter(function(a){
+    const s=HW.subs?HW.subs[a.id]:undefined;
+    return s!==undefined?(s&&s.status==='in_progress'):true;
   });
   const due=open.filter(function(a){return a.due_at&&new Date(a.due_at).getTime()<now}).length;
-  if(sub)sub.textContent=today?(today+(today===1?' class today':' classes today')):(nextSes?'Nothing today':'Nothing scheduled');
+  if(sub)sub.textContent=today?(today+' buổi hôm nay'):(nextSes?'Hôm nay không có buổi':'Chưa có buổi nào');
   let html='';
   html+='<div class="today-line"><span class="today-ico">'+(nextSes?'▸':'○')+'</span><span class="row-main">'+
-    '<span class="row-title">'+(nextSes?hwEsc(nextSes.title):'No class scheduled')+'</span>'+
-    '<span class="row-sub">'+(nextSes?(tcWhen(nextSes.starts_at)+' · '+hwEsc(String(nextSes.duration_min||60))+' min'+
-      (nextSes.lesson_track?(' · '+hwEsc(String(nextSes.lesson_track).toUpperCase())+' · Lesson '+hwEsc(String(nextSes.lesson_no||''))):'')):'Your teacher has not set the next session.')+'</span></span></div>';
+    '<span class="row-title">'+(nextSes?hwEsc(nextSes.title):'Chưa có buổi học')+'</span>'+
+    '<span class="row-sub">'+(nextSes?(tcWhen(nextSes.starts_at)+' · '+hwEsc(String(nextSes.duration_min||60))+' phút'+
+      (nextSes.lesson_track?(' · '+hwEsc(String(nextSes.lesson_track).toUpperCase())+' · bài '+hwEsc(String(nextSes.lesson_no||''))):'')):'Giáo viên chưa xếp buổi tiếp theo.')+'</span></span></div>';
   html+='<div class="today-line"><span class="today-ico">'+(open.length?'▸':'○')+'</span><span class="row-main">'+
-    '<span class="row-title">'+(open.length?(open.length+(open.length===1?' thing to do':' things to do')):'Nothing to hand in')+'</span>'+
-    '<span class="row-sub">'+(open.length?(due?(due+' already past the due date'):'Nothing past its due date yet'):'Your teacher has not assigned work yet.')+'</span></span>'+
-    (open.length?'<button class="btn-ghost btn-sm" onclick="go(\'homework\')">Open</button>':'')+'</div>';
+    '<span class="row-title">'+(open.length?(open.length+' việc cần làm'):'Không có bài phải nộp')+'</span>'+
+    '<span class="row-sub">'+(open.length?(due?(due+' bài đã quá hạn'):'Chưa có bài nào quá hạn'):'Giáo viên chưa giao bài.')+'</span></span>'+
+    (open.length?'<button class="btn-ghost btn-sm" onclick="go(\'homework\')">Mở</button>':'')+'</div>';
   box.innerHTML=html;
 }
 
@@ -2847,7 +3472,7 @@ async function renderDashboard(){
   gate.classList.add('hidden');body.classList.remove('hidden');
 
   const first=(USER.name||'there').split(' ')[0];
-  document.getElementById('dash-greet').textContent='Welcome back, '+first;
+  document.getElementById('dash-greet').textContent='Chào '+first+',';
   document.getElementById('dash-avatar').textContent=(USER.name||'U').charAt(0).toUpperCase();
   document.getElementById('dash-name').textContent=USER.name||'';
   document.getElementById('dash-email').textContent=USER.email||'';
@@ -2876,12 +3501,12 @@ async function renderDashboard(){
   if(!target&&typeof TRACKS!=='undefined'&&TRACKS.e2&&TRACKS.e2.lessons&&TRACKS.e2.lessons[1])target={t:'e2',n:1};
   const titleFor=function(t,n){return (typeof TRACKS!=='undefined'&&TRACKS[t]&&TRACKS[t].lessons&&TRACKS[t].lessons[n])?TRACKS[t].lessons[n].title:null};
   const nextTitle=target?titleFor(target.t,target.n):null;
-  document.getElementById('dash-next-title').textContent=target?(target.t.toUpperCase()+' Lesson '+target.n+(nextTitle?' · '+nextTitle:'')):'Nothing opened yet';
-  document.getElementById('dash-next-sub').textContent=target?'Pick up where you stopped.':'Start with a lesson and it will show up here.';
+  document.getElementById('dash-next-title').textContent=target?(target.t.toUpperCase()+' · Bài '+target.n+(nextTitle?' · '+nextTitle:'')):'Chưa mở bài nào';
+  document.getElementById('dash-next-sub').textContent=target?'Bạn đang dừng ở đây. Vào đúng phần này để đi tiếp.':'Mở bài đầu tiên, hệ thống sẽ nhớ chỗ bạn dừng.';
   const nb=document.getElementById('dash-next-btn');
   if(nb){
-    if(target){nb.textContent='Continue';nb.setAttribute('onclick',"go('"+target.t+"');trackGo('"+target.t+"',"+target.n+")")}
-    else{nb.textContent='Browse lessons';nb.setAttribute('onclick',"go('e2')")}
+    if(target){nb.textContent='Học tiếp';nb.setAttribute('onclick',"go('"+target.t+"');trackGo('"+target.t+"',"+target.n+")")}
+    else{nb.textContent='Xem bài học';nb.setAttribute('onclick',"go('e2')")}
   }
 
   const parts=serverProg&&serverProg.parts?serverProg.parts:Object.keys(progress).length;
@@ -2889,7 +3514,9 @@ async function renderDashboard(){
   const bar=document.getElementById('dash-progress-bar'),num=document.getElementById('dash-progress-num');
   if(bar)bar.style.width=pct+'%';
   if(num)num.textContent=pct+'%';
-  document.getElementById('dash-progress-sub').textContent=parts?(parts+' lesson part'+(parts===1?'':'s')+' opened · '+lessonsDone+' lesson'+(lessonsDone===1?'':'s')+' finished'):'Open a lesson part and your progress appears here.';
+  document.getElementById('dash-progress-sub').textContent=parts?(parts+' phần đã mở · '+lessonsDone+' bài đã học xong'):'Mở một phần bài học là tiến độ hiện ở đây.';
+  const naP=document.getElementById('na-progress');
+  if(naP)naP.textContent=parts?(pct+'% hoàn thành'):'Chưa bắt đầu';
 
   /* homework: the same real rows the homework screen shows */
   dashRenderToday();
@@ -3525,6 +4152,9 @@ function renderTeacher() {
   const sub = document.getElementById('tc-sub');
   if (sub) sub.textContent = 'Signed in as ' + USER.name;
   tcTab(TC.tab, true);
+  /* Paint the skeletons now, not when the last query returns: an empty
+     workspace with no loading state reads as "broken", not "loading". */
+  if (TC.loading || !TC.ready) tcRender();
   if (!TC.ready && !TC.loading) tcLoad();
 }
 
@@ -3592,22 +4222,34 @@ async function tcRefresh() {
 }
 
 function tcTab(name, silent) {
-  TC.tab = name || 'dashboard';
+  /* Two areas only: Dạy (the teaching workspace) and Quản lý học viên.
+     The old five tabs map onto these, so every existing caller keeps working. */
+  const AREA = { dashboard: 'teach', courses: 'teach', materials: 'teach', chat: 'teach',
+                 overview: 'teach', teach: 'teach', students: 'students' };
+  const area = AREA[name] || 'teach';
+  const sub = AREA[name] ? name : 'teach';
+  TC.tab = area;
   document.querySelectorAll('[data-tc-tab]').forEach(function (b) {
-    b.classList.toggle('on', b.dataset.tcTab === TC.tab);
+    b.classList.toggle('on', b.dataset.tcTab === sub);
   });
   document.querySelectorAll('[data-tc-nav]').forEach(function (b) {
-    b.classList.toggle('active', b.dataset.tcNav === TC.tab);
+    b.classList.toggle('active', b.dataset.tcNav === area);
   });
-  ['dashboard', 'courses', 'students', 'materials', 'chat'].forEach(function (k) {
-    hwShow('tc-panel-' + k, TC.tab === k);
-  });
+  hwShow('tc-panel-dashboard', area === 'teach');
+  hwShow('tc-panel-students', area === 'students');
+  ['courses', 'materials', 'chat'].forEach(function (k) { hwShow('tc-panel-' + k, false); });
   /* The builder belongs to the student you are giving work to, so it is only
      on screen while a draft is open. */
-  hwShow('tc-panel-assignments', TC.tab === 'students' && !!TC.builder);
-  const titles = { dashboard: 'Dashboard', courses: 'Courses', students: 'Students', materials: 'Materials', chat: 'Chat' };
+  hwShow('tc-panel-assignments', area === 'students' && !!TC.builderOpen);
+  const titles = { teach: 'Dạy', students: 'Quản lý học viên' };
+  const subs = { teach: 'Buổi học, thời khoá biểu và bài chờ chấm.',
+                 students: 'Danh sách, hồ sơ và tiến độ từng học viên.' };
   const t = document.getElementById('tc-title');
-  if (t) t.textContent = titles[TC.tab] || 'Dashboard';
+  if (t) t.textContent = titles[area];
+  const s = document.getElementById('tc-sub');
+  if (s) s.textContent = subs[area];
+  const want = '#teacher/' + area;
+  if (location.hash !== want) { try { history.replaceState(null, '', want); } catch (e) { location.hash = 'teacher/' + area; } }
   if (!silent) tcRender();
 }
 
@@ -3625,6 +4267,7 @@ function tcWaitingStudents() {
 
 function tcRender() {
   tcRenderStats();
+  tcRenderTeachHero();
   tcRenderPending();
   tcRenderStudents();
   tcRenderCourses();
@@ -3632,6 +4275,100 @@ function tcRender() {
   tcRenderSchedule();
   tcRenderMaterials();
   hwUpdatePendingBadge();
+}
+
+/* ---------- 0. the one card a teacher needs before class ----------
+   "What do I do next, and is anyone stuck" answered from real rows:
+   the next session on the timetable and the work waiting on the desk. */
+function tcRenderTeachHero() {
+  const el = document.getElementById('tc-teach-hero');
+  if (!el) return;
+  if (TC.loading && !(TC.sessions || []).length) { el.innerHTML = '<div class="sk sk-card"></div>'; return; }
+  const now = Date.now();
+  const live = (TC.sessions || []).filter(function (s) { return s.status !== 'cancelled'; })
+    .slice().sort(function (a, b) { return new Date(a.starts_at) - new Date(b.starts_at); });
+  const next = live.filter(function (s) {
+    return new Date(s.starts_at).getTime() + (Number(s.duration_min) || 60) * 60000 > now;
+  })[0] || null;
+  const toMark = (TC.submissions || []).filter(function (s) { return s.status === 'submitted'; }).length;
+  const waiting = tcWaitingStudents().length;
+  const students = tcAllStudents().length;
+
+  if (!next) {
+    el.innerHTML = '<div class="teach-hero"><div class="session-card">' +
+      '<div class="sc-when">Chưa có buổi nào trên lịch</div>' +
+      '<div class="sc-title">Đặt buổi dạy tiếp theo</div>' +
+      '<p class="sc-meta">Thời khoá biểu đang trống. Học viên chỉ thấy buổi khi bạn xếp.</p>' +
+      '<div class="sc-actions"><button class="btn-secondary btn-sm" onclick="document.getElementById(\'tc-panel-schedule\').scrollIntoView({behavior:\'smooth\'})">Xếp buổi học</button></div>' +
+      '</div>' + tcHeroDesk(toMark, waiting, students) + '</div>';
+    return;
+  }
+  const startsIn = new Date(next.starts_at).getTime() - now;
+  const isLive = startsIn < 15 * 60000 && startsIn > -90 * 60000;
+  el.innerHTML = '<div class="teach-hero">' +
+    '<div class="session-card' + (isLive ? ' live' : '') + '">' +
+      '<div class="sc-when">' + (isLive ? 'Đang diễn ra · ' : 'Buổi tiếp theo · ') + hwEsc(tcWhen(next.starts_at)) + '</div>' +
+      '<div class="sc-title">' + hwEsc(next.title) + '</div>' +
+      '<div class="sc-meta">' +
+        (tcSessionRef(next) ? hwEsc(tcSessionRef(next)) + ' · ' : '') +
+        hwEsc(String(next.duration_min || 60)) + ' phút' +
+        (next.note ? ' · ' + hwEsc(next.note) : '') +
+      '</div>' +
+      '<div class="sc-actions">' +
+        (next.lesson_track ? '<button class="btn-primary btn-sm" onclick="tcOpenSessionLesson(\'' + next.id + '\')">Mở bài học</button>' : '') +
+        '<button class="btn-secondary btn-sm" onclick="tcAssignFromSession(\'' + next.id + '\')">Giao bài ôn</button>' +
+        '<button class="btn-quiet btn-sm" onclick="document.getElementById(\'tc-panel-schedule\').scrollIntoView({behavior:\'smooth\'})">Thời khoá biểu</button>' +
+      '</div>' +
+    '</div>' + tcHeroDesk(toMark, waiting, students) + '</div>';
+}
+
+function tcHeroDesk(toMark, waiting, students) {
+  return '<div class="session-card">' +
+    '<div class="sc-when">Cần bạn hôm nay</div>' +
+    '<div class="sc-title" style="font-size:19px">' + toMark + ' bài chờ chấm</div>' +
+    '<div class="sc-meta">' + waiting + ' học viên chờ duyệt · ' + students + ' học viên đang học</div>' +
+    '<div class="sc-actions">' +
+      '<button class="btn-secondary btn-sm" onclick="tcTab(\'students\')">Mở học viên</button>' +
+      '<button class="btn-quiet btn-sm" onclick="tcTab(\'students\');setTimeout(function(){var q=document.getElementById(\'tc-stu-q\');if(q)q.focus()},120)">Tìm học viên</button>' +
+    '</div></div>';
+}
+
+/* Open the lesson a session refers to. */
+function tcOpenSessionLesson(id) {
+  const s = (TC.sessions || []).filter(function (x) { return String(x.id) === String(id); })[0];
+  if (!s || !s.lesson_track) return;
+  const n = Number(s.lesson_no) || 1;
+  go(s.lesson_track);
+  if (typeof trackGo === 'function') trackGo(s.lesson_track, n);
+}
+
+/* Assign the review work of a session: prefilled from the row that exists,
+   saved through the same builder the students area uses. */
+function tcAssignFromSession(id) {
+  const s = (TC.sessions || []).filter(function (x) { return String(x.id) === String(id); })[0];
+  if (!s) return;
+  const b = tcBlankBuilder();
+  if (s.lesson_track) { b.track = s.lesson_track; b.no = Number(s.lesson_no) || 1; }
+  b.title = 'Ôn tập: ' + s.title;
+  if (s.note) b.instructions = s.note;
+  const d = new Date(); d.setDate(d.getDate() + 3);
+  b.due = d.toISOString().slice(0, 10);
+  b.allStudents = true;
+  TC.builder = b;
+  TC.builderOpen = true;
+  tcTab('students', true);
+  hwShow('tc-panel-assignments', true);
+  tcRenderAssignments();
+  const el = document.getElementById('tc-b-title');
+  if (el && el.focus) el.focus();
+  if (typeof toast === 'function') toast('Đã điền sẵn bài ôn cho buổi "' + s.title + '"');
+}
+
+function tcStuSearch(v) {
+  TC.stuQ = String(v || '');
+  tcRenderStudents();
+  const el = document.getElementById('tc-stu-q');
+  if (el) { try { el.focus(); el.setSelectionRange(TC.stuQ.length, TC.stuQ.length); } catch (e) {} }
 }
 
 /* ---------- 1. dashboard: what is happening, and what waits for you ----------
@@ -3661,8 +4398,7 @@ function tcRenderStats() {
     card('Giờ đã dạy', hours + 'h', taught.length + ' buổi đã qua') +
     card('Bài chờ chấm', toMark, toMark ? 'Mở học viên để chấm' : 'Không còn bài nào') +
     card('Buổi sắp tới', ahead, ahead ? 'Xem lịch bên dưới' : 'Chưa xếp buổi nào');
-  const sub = document.getElementById('tc-sub');
-  if (sub) sub.textContent = students + ' học viên · ' + taught.length + ' buổi đã dạy · ' + toMark + ' bài chờ chấm';
+  /* the page subtitle belongs to the area (tcTab), not to the counters */
 }
 
 function tcRenderPending() {
@@ -3896,6 +4632,7 @@ function tcRenderSchedule() {
           (s.note ? ' · ' + hwEsc(s.note) : '') + '</span></td>' +
           '<td data-label="Status">' + pill + '</td>' +
           (withCancel ? '<td data-label="Action"><div class="table-actions">' +
+            '<button class="btn-quiet btn-sm" onclick="tcAssignFromSession(\'' + s.id + '\')">Giao bài ôn</button>' +
             (s.status === 'cancelled' ? '' : '<button class="btn-quiet btn-sm" onclick="tcCancelSession(\'' + s.id + '\',this)">Cancel</button>') +
             '</div></td>' : '') +
           '</tr>';
@@ -3904,7 +4641,7 @@ function tcRenderSchedule() {
 
   html += '<div class="card card-pad space-y-4"><div class="section-head" style="margin-bottom:0"><div>' +
     '<h3>Today and next up</h3><p class="faint" style="font-size:12.5px">' +
-    ((b.today.length + b.next.length) ? (b.today.length + b.next.length) + ' still ahead' : 'Nothing scheduled yet') +
+    ((b.today.length || b.next.length) ? (b.today.length + b.next.length) + ' still ahead' : 'Nothing scheduled yet') +
     '</p></div></div>';
   if (b.today.length || b.next.length) {
     html += table(b.today.concat(b.next), true);
@@ -4206,15 +4943,30 @@ function tcRenderStudents() {
     return;
   }
 
-  const waiting = tcWaitingStudents();
-  const accepted = (TC.students || []).filter(function (s) { return s.status === 'active'; });
+  const allWaiting = tcWaitingStudents();
+  const allAccepted = (TC.students || []).filter(function (s) { return s.status === 'active'; });
   const refused = (TC.students || []).filter(function (s) { return s.status === 'rejected'; });
+  const q = String(TC.stuQ || '').trim().toLowerCase();
+  const match = function (s) {
+    return !q || ((s.full_name || '') + ' ' + (s.email || '')).toLowerCase().indexOf(q) >= 0;
+  };
+  const waiting = allWaiting.filter(match);
+  const accepted = allAccepted.filter(match);
 
   function avatar(s) {
     return '<span class="row-ico avatar-sm">' + hwEsc((s.full_name || 'S').charAt(0).toUpperCase()) + '</span>';
   }
 
   let html = '';
+
+  /* the toolbar is the only filter: a search box, and the real counts */
+  html += '<div class="card card-pad"><div class="stu-toolbar">' +
+    '<div class="stu-search"><input class="input" id="tc-stu-q" type="search" autocomplete="off" ' +
+    'placeholder="Tìm học viên theo tên hoặc email" value="' + hwEsc(TC.stuQ || '') + '" ' +
+    'oninput="tcStuSearch(this.value)"></div>' +
+    '<span class="row-sub">' + allAccepted.length + ' đang học · ' + allWaiting.length + ' chờ duyệt' +
+    (q ? ' · ' + (waiting.length + accepted.length) + ' khớp' : '') +
+    '</span></div></div>';
 
   /* requests first — this is what the teacher came here to do */
   if (waiting.length) {
@@ -4245,7 +4997,7 @@ function tcRenderStudents() {
     '<div class="section-head" style="margin-bottom:0"><div>' +
     '<h3>Your students</h3>' +
     '<p class="faint" style="font-size:12.5px">' +
-    (accepted.length ? accepted.length + ' accepted' : 'Nobody accepted yet') + '</p>' +
+    (allAccepted.length ? allAccepted.length + ' accepted' : 'Nobody accepted yet') + '</p>' +
     '</div></div>';
   if (accepted.length) {
     html += '<div class="table-wrap"><table class="table">' +
@@ -4346,6 +5098,7 @@ function hwUpdatePendingBadge() {
 /* ---------- assignment builder ---------- */
 function tcNewAssignment() {
   TC.builder = tcBlankBuilder();
+  TC.builderOpen = true;
   tcTab('students', true);
   hwShow('tc-panel-assignments', true);
   tcRenderAssignments();
@@ -4353,12 +5106,18 @@ function tcNewAssignment() {
 
 function tcNewAssignmentFor(studentId) {
   TC.builder = tcBlankBuilder();
+  TC.builderOpen = true;
   if (studentId) TC.builder.studentIds = [studentId];
   tcTab('students', true);
   hwShow('tc-panel-assignments', true);
   tcRenderAssignments();
   const el = document.getElementById('tc-b-title');
   if (el && el.focus) el.focus();
+}
+
+function tcCloseBuilder() {
+  TC.builderOpen = false;
+  hwShow('tc-panel-assignments', false);
 }
 
 function tcBlankBuilder() {
@@ -4373,7 +5132,9 @@ function tcBlankBuilder() {
 function tcRenderAssignments() {
   const el = document.getElementById('tc-panel-assignments');
   if (!el) return;
-  if (!TC.builder) TC.builder = tcBlankBuilder();
+  /* the builder is closed until the teacher opens it: an always-open form at
+     the bottom of the students list reads as a page, not as an action */
+  if (!TC.builderOpen || !TC.builder) { el.innerHTML = ''; return; }
   const b = TC.builder;
   const tracks = Object.keys(TRACKS || {});
   const lessonTitle = (TRACKS[b.track] && TRACKS[b.track].lessons && TRACKS[b.track].lessons[b.no])
@@ -4381,7 +5142,9 @@ function tcRenderAssignments() {
 
   let html = '<div class="card card-pad space-y-5">' +
     '<div class="section-head" style="margin-bottom:0"><h3>' + (b.id ? 'Edit assignment' : 'New assignment') + '</h3>' +
-    '<button class="btn-ghost btn-sm" onclick="tcResetBuilder()">Clear</button></div>' +
+    '<div style="display:flex;gap:8px">' +
+    '<button class="btn-ghost btn-sm" onclick="tcCloseBuilder()">Close</button>' +
+    '<button class="btn-ghost btn-sm" onclick="tcResetBuilder()">Clear</button></div></div>' +
     '<div><label class="label">Title</label>' +
     '<input class="input" id="tc-b-title" value="' + hwEsc(b.title) + '" placeholder="Homework: Build the Message" oninput="tcBuilderSet(\'title\', this.value)"></div>' +
     '<div><label class="label">Instructions</label>' +
@@ -4823,7 +5586,7 @@ function showV2Setup() {
 /* HOMEWORK:END */
 
 // ---- INIT ----
-USER=load('user',null);updateAuthUI();go(location.hash.slice(1)||'home');
+USER=load('user',null);updateAuthUI();routeFromHash();
 </script>
 </body>
 </html>
