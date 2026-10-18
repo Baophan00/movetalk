@@ -598,8 +598,8 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   ];
   ta.tcRenderPending();
   const pend = TEACH.els['tc-pending'].innerHTML;
-  t('work waiting to be marked is a table of who, what and when',
-    /Ann/.test(pend) && /Ôn tập buổi 3/.test(pend) && /Mở học viên/.test(pend), pend.slice(0, 200));
+  t('work waiting to be marked is a row of who, what and when, and it opens the student',
+    /Ann/.test(pend) && /Ôn tập buổi 3/.test(pend) && /tcTab\('students'\)/.test(pend), pend.slice(0, 200));
   ta.tcRenderStats();
   const stats = TEACH.els['tc-stats'].innerHTML;
   t('the dashboard adds up the sessions that already happened, and not the ones ahead',

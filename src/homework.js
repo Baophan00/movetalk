@@ -855,12 +855,12 @@ function tcRenderPending() {
     const a = aById[s.assignment_id] || {};
     const who = st.full_name || st.email || 'Học viên';
     const when = s.submitted_at ? tcShortDate(s.submitted_at) : 'chưa rõ';
-    return '<div class="tc-pend-row">' +
+    return '<button class="tc-pend-row" onclick="tcTab(\'students\')">' +
       '<span class="row-ico avatar-sm">' + hwEsc(who.charAt(0).toUpperCase()) + '</span>' +
-      '<div class="tc-pend-main"><span class="tc-pend-line"><span class="row-title">' + hwEsc(who) + '</span>' +
+      '<span class="tc-pend-main"><span class="tc-pend-line"><span class="row-title">' + hwEsc(who) + '</span>' +
       '<span class="hw-chip hw-chip-submitted">Chờ chấm</span></span>' +
-      '<span class="row-sub">' + hwEsc(a.title || 'Bài tập') + ', nộp ' + hwEsc(when) + '</span></div>' +
-      '<button class="btn-quiet btn-sm" onclick="tcTab(\'students\')">Mở học viên</button></div>';
+      '<span class="row-sub">' + hwEsc(a.title || 'Bài tập') + ', nộp ' + hwEsc(when) + '</span></span>' +
+      '<span class="tc-pend-go">→</span></button>';
   }).join('') + '</div>';
 }
 

@@ -1326,7 +1326,8 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
 .tc-main{display:flex;flex-direction:column;gap:16px;min-width:0}
 .tc-rail{min-width:0}
 .tc-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
-.tc-row2{display:grid;gap:16px}
+.tc-stats-grid .stat-label{font-size:11px;letter-spacing:.04em;white-space:nowrap}
+.tc-row2{display:grid;gap:16px;align-items:start}
 @media(min-width:1024px){.tc-row2{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}}
 @media(min-width:1180px){
   .tc-split{grid-template-columns:minmax(0,1fr) 330px}
@@ -1365,15 +1366,15 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
 .tc-next-title{flex:1;font-size:12.5px;font-weight:500;color:var(--text);line-height:1.35;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .tc-next:hover .tc-next-title{color:var(--accent2)}
 .tc-pend{display:flex;flex-direction:column}
-.tc-pend-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
+.tc-pend-row{display:flex;align-items:center;gap:12px;width:100%;padding:11px 0;border:0;border-bottom:1px solid var(--border);background:none;font-family:inherit;text-align:left;cursor:pointer}
 .tc-pend-row:last-child{border-bottom:0}
 .tc-pend-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .tc-pend-line{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .tc-pend-line .hw-chip{flex-shrink:0}
 .tc-pend-main .row-sub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tc-pend-row .btn-quiet{opacity:0;transition:opacity .15s}
-.tc-pend-row:hover .btn-quiet,.tc-pend-row:focus-within .btn-quiet{opacity:1}
-@media(hover:none){.tc-pend-row .btn-quiet{opacity:1}}
+.tc-pend-go{color:var(--text2);font-size:13px;flex-shrink:0}
+.tc-pend-row:hover .tc-pend-go{color:var(--accent2)}
+.tc-pend-row:hover .row-title{color:var(--accent2)}
 .tc-todo{display:flex;flex-direction:column}
 .tc-todo-row{display:flex;align-items:center;gap:10px;width:100%;padding:10px 0;border:0;border-bottom:1px solid var(--border);background:none;cursor:pointer;font-family:inherit;text-align:left}
 .tc-todo-row:last-child{border-bottom:0}
@@ -4670,12 +4671,12 @@ function tcRenderPending() {
     const a = aById[s.assignment_id] || {};
     const who = st.full_name || st.email || 'Học viên';
     const when = s.submitted_at ? tcShortDate(s.submitted_at) : 'chưa rõ';
-    return '<div class="tc-pend-row">' +
+    return '<button class="tc-pend-row" onclick="tcTab(\'students\')">' +
       '<span class="row-ico avatar-sm">' + hwEsc(who.charAt(0).toUpperCase()) + '</span>' +
-      '<div class="tc-pend-main"><span class="tc-pend-line"><span class="row-title">' + hwEsc(who) + '</span>' +
+      '<span class="tc-pend-main"><span class="tc-pend-line"><span class="row-title">' + hwEsc(who) + '</span>' +
       '<span class="hw-chip hw-chip-submitted">Chờ chấm</span></span>' +
-      '<span class="row-sub">' + hwEsc(a.title || 'Bài tập') + ', nộp ' + hwEsc(when) + '</span></div>' +
-      '<button class="btn-quiet btn-sm" onclick="tcTab(\'students\')">Mở học viên</button></div>';
+      '<span class="row-sub">' + hwEsc(a.title || 'Bài tập') + ', nộp ' + hwEsc(when) + '</span></span>' +
+      '<span class="tc-pend-go">→</span></button>';
   }).join('') + '</div>';
 }
 
