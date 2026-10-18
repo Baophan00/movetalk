@@ -1318,6 +1318,78 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
   .session-card{padding:18px}
   .sc-title{font-size:19px}
 }
+/* ---------- Teacher dashboard: the shell of the reference ----------
+   A main column with the counters and the work, and a schedule rail that
+   answers "what is on this week". Every block reads rows the teacher can
+   open; nothing here is decoration. */
+.tc-split{display:grid;gap:18px;align-items:start}
+.tc-main{display:flex;flex-direction:column;gap:16px;min-width:0}
+.tc-rail{min-width:0}
+.tc-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+.tc-row2{display:grid;gap:16px}
+@media(min-width:1024px){.tc-row2{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}}
+@media(min-width:1180px){
+  .tc-split{grid-template-columns:minmax(0,1fr) 330px}
+  .tc-rail{position:sticky;top:84px}
+}
+@media(max-width:1179px){.tc-rail{order:-1}}
+.tc-rail-card{display:flex;flex-direction:column;gap:14px}
+.tc-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.tc-day{display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 0 4px;border:0;background:none;border-radius:12px;cursor:pointer;font-family:inherit;color:var(--text2);transition:background .15s}
+.tc-day:hover{background:var(--surface2)}
+.tc-day b{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--surface2);font-size:13px;font-weight:600;color:var(--text);font-variant-numeric:tabular-nums}
+.tc-day small{font-size:9.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.tc-day .dot{width:4px;height:4px;border-radius:50%;background:var(--accent2);opacity:0}
+.tc-day.has .dot{opacity:1}
+.tc-day.on b{background:var(--btn-primary);color:#fff}
+.tc-day.on .dot{background:var(--btn-primary)}
+.tc-rail-list{display:flex;flex-direction:column;border-top:1px solid var(--border)}
+.tc-sess{display:flex;gap:10px;width:100%;padding:11px 0;border:0;background:none;border-bottom:1px solid var(--border);text-align:left;cursor:pointer;font-family:inherit}
+.tc-sess:last-child{border-bottom:0}
+.tc-sess:hover .tc-sess-title{color:var(--accent2)}
+.tc-sess-bar{width:3px;border-radius:2px;background:var(--accent2);flex-shrink:0}
+.tc-sess-bar.mint{background:var(--mint-fg)}
+.tc-sess-bar.lav{background:var(--lav-fg)}
+.tc-sess-bar.off{background:var(--border-strong)}
+.tc-sess-body{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tc-sess-top{display:flex;align-items:center;gap:8px}
+.tc-sess-time{font-size:11.5px;font-weight:600;color:var(--text2);font-variant-numeric:tabular-nums}
+.tc-sess-title{font-size:13.5px;font-weight:600;letter-spacing:-.005em;color:var(--text);line-height:1.35;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.tc-sess-sub{font-size:11.5px;color:var(--text2)}
+.tc-sess.is-off{opacity:.55}
+.tc-next{display:flex;gap:10px;width:100%;padding:10px 0;border:0;background:none;border-bottom:1px solid var(--border);text-align:left;cursor:pointer;font-family:inherit;align-items:center}
+.tc-next:last-child{border-bottom:0}
+.tc-next-when{display:flex;flex-direction:column;gap:1px;min-width:66px}
+.tc-next-when b{font-size:12px;font-weight:600;color:var(--text);font-variant-numeric:tabular-nums}
+.tc-next-when small{font-size:10.5px;color:var(--text2)}
+.tc-next-title{flex:1;font-size:12.5px;font-weight:500;color:var(--text);line-height:1.35;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.tc-next:hover .tc-next-title{color:var(--accent2)}
+.tc-pend{display:flex;flex-direction:column}
+.tc-pend-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
+.tc-pend-row:last-child{border-bottom:0}
+.tc-pend-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.tc-pend-line{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tc-pend-line .hw-chip{flex-shrink:0}
+.tc-pend-main .row-sub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tc-pend-row .btn-quiet{opacity:0;transition:opacity .15s}
+.tc-pend-row:hover .btn-quiet,.tc-pend-row:focus-within .btn-quiet{opacity:1}
+@media(hover:none){.tc-pend-row .btn-quiet{opacity:1}}
+.tc-todo{display:flex;flex-direction:column}
+.tc-todo-row{display:flex;align-items:center;gap:10px;width:100%;padding:10px 0;border:0;border-bottom:1px solid var(--border);background:none;cursor:pointer;font-family:inherit;text-align:left}
+.tc-todo-row:last-child{border-bottom:0}
+.tc-todo-n{min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:var(--badge-bg);color:var(--accent2);font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tc-todo-label{flex:1;font-size:13px;color:var(--text);line-height:1.4}
+.tc-todo-row:hover .tc-todo-label{color:var(--accent2)}
+.tc-todo-arrow{color:var(--text2);font-size:13px}
+/* a programme cover drawn from the programme itself, no stock photo exists */
+.cc-cover{height:92px;border-radius:12px;display:flex;align-items:flex-end;justify-content:space-between;padding:12px 14px;margin-bottom:14px;background:linear-gradient(135deg,#E9F0FF,#D3E2FF);color:#24417C}
+.cc-cover .cc-code{font-family:'Inter Tight','Inter',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1}
+.cc-cover .cc-tag{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.75}
+.cc-cover.a1{background:linear-gradient(135deg,#E9F0FF,#D3E2FF);color:#24417C}
+.cc-cover.e2{background:linear-gradient(135deg,#E6F6EF,#CDEEDF);color:#175C43}
+.cc-cover.f1,.cc-cover.f2{background:linear-gradient(135deg,#F1EEFF,#E0D9FF);color:#3D2E8C}
+.cc-cover.e1,.cc-cover.a2{background:linear-gradient(135deg,#FBEFEA,#F7DED3);color:#8A3B22}
+.hw-chip-submitted{background:var(--warn-bg);color:var(--warn-fg);border-color:transparent}
 </style>
 </head>
 <body>
@@ -2162,7 +2234,7 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
 
     <!-- TEACHING (teacher) -->
     <section id="v-teacher" class="view hidden">
-      <div class="p-6 md:p-10 max-w-6xl mx-auto">
+      <div class="p-6 md:p-10 max-w-7xl mx-auto">
         <div id="tc-gate" class="card p-14 max-w-lg mx-auto text-center">
           <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center mb-6" style="background:var(--badge-bg)">
             <svg class="w-6 h-6" style="color:var(--accent2)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5zm0 0v7m-5-4.5V15l5 3 5-3v-3.5"/></svg>
@@ -2185,25 +2257,51 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
           </div>
 
           <!-- AREA 1 — DẠY -->
-          <div id="tc-panel-dashboard" class="space-y-5">
-            <div id="tc-teach-hero"></div>
-            <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-4" id="tc-stats"></div>
-            <div class="card card-pad space-y-4">
-              <div class="section-head" style="margin-bottom:0"><div><h3>Bài chờ chấm</h3>
-                <p class="faint" style="font-size:12.5px">Ai đã nộp và đang chờ bạn.</p></div>
-                <button class="btn-ghost btn-sm" onclick="tcTab('students')">Xem học viên</button></div>
-              <div id="tc-pending"></div>
-            </div>
-            <div id="tc-panel-schedule" class="space-y-5"></div>
-            <div class="card card-pad space-y-4">
-              <div class="section-head" style="margin-bottom:0"><div><h3>Chương trình đang dạy</h3>
-                <p class="faint" style="font-size:12.5px">Mở bài để dạy trong studio, hoặc xem bài học viên đang ở.</p></div></div>
-              <div id="tc-courses" class="course-grid"></div>
-            </div>
-            <div class="card card-pad space-y-3">
-              <div class="section-head" style="margin-bottom:0"><div><h3>Tài liệu</h3></div></div>
-              <p class="row-sub" id="tc-mat-sub">Bài học, audio và bài tập nằm ngay trong từng bài — không cần tải lên.
-                Kho tài liệu riêng chỉ bật khi dự án có Supabase Storage bucket, nên hiện chưa có nút tải file.</p>
+          <div id="tc-panel-dashboard">
+            <div class="tc-split">
+              <div class="tc-main">
+                <div class="tc-stats-grid" id="tc-stats"></div>
+                <div class="tc-row2">
+                  <div class="card card-pad space-y-4">
+                    <div class="section-head" style="margin-bottom:0"><div><h3>Bài chờ chấm</h3>
+                      <p class="faint" style="font-size:12.5px">Ai đã nộp và đang chờ bạn.</p></div>
+                      <button class="btn-ghost btn-sm" onclick="tcTab('students')">Xem học viên</button></div>
+                    <div id="tc-pending"></div>
+                  </div>
+                  <div class="card card-pad space-y-3">
+                    <div class="section-head" style="margin-bottom:0"><div><h3>Việc cần làm</h3>
+                      <p class="faint" style="font-size:12.5px">Đếm từ dữ liệu thật, bấm để mở đúng chỗ.</p></div></div>
+                    <div id="tc-todo"></div>
+                  </div>
+                </div>
+                <div class="card card-pad space-y-4">
+                  <div class="section-head" style="margin-bottom:0"><div><h3>Chương trình đang dạy</h3>
+                    <p class="faint" style="font-size:12.5px">Mở bài để dạy trong studio, hoặc xem bài học viên đang ở.</p></div></div>
+                  <div id="tc-courses" class="course-grid"></div>
+                </div>
+                <div id="tc-panel-schedule" class="space-y-5"></div>
+                <div class="card card-pad space-y-3">
+                  <div class="section-head" style="margin-bottom:0"><div><h3>Tài liệu</h3></div></div>
+                  <p class="row-sub" id="tc-mat-sub">Bài học, audio và bài tập nằm ngay trong từng bài, không cần tải lên.
+                    Kho tài liệu riêng chỉ bật khi dự án có Supabase Storage bucket, nên hiện chưa có nút tải file.</p>
+                </div>
+              </div>
+              <aside class="tc-rail">
+                <div class="card card-pad tc-rail-card">
+                  <div class="section-head" style="margin-bottom:0">
+                    <div><h3>Lịch</h3><p class="faint" id="tc-week-label" style="font-size:12.5px">&nbsp;</p></div>
+                    <button class="btn-quiet btn-sm" onclick="tcScrollToSchedule()">Xếp buổi</button>
+                  </div>
+                  <div id="tc-week" class="tc-week"></div>
+                  <div id="tc-rail-list" class="tc-rail-list"></div>
+                </div>
+                <div class="card card-pad tc-rail-card">
+                  <div class="section-head" style="margin-bottom:0">
+                    <div><h3>Sắp tới</h3><p class="faint" style="font-size:12.5px">Ba buổi gần nhất sau hôm nay</p></div>
+                  </div>
+                  <div id="tc-rail-next" class="tc-rail-list"></div>
+                </div>
+              </aside>
             </div>
           </div>
 
@@ -4422,6 +4520,8 @@ function tcRender() {
   tcRenderStats();
   tcRenderTeachHero();
   tcRenderPending();
+  tcRenderTodo();
+  tcRenderRail();
   tcRenderStudents();
   tcRenderCourses();
   tcRenderAssignments();
@@ -4542,15 +4642,13 @@ function tcRenderStats() {
   const ahead = (TC.sessions || []).filter(function (s) {
     return s.status !== 'cancelled' && new Date(s.starts_at).getTime() > now;
   }).length;
-  const card = function (label, value, hint) {
-    return '<div class="stat"><div class="stat-top"><span class="stat-label">' + hwEsc(label) + '</span></div>' +
-      '<span class="stat-value">' + hwEsc(String(value)) + '</span>' +
-      '<span class="stat-hint">' + hwEsc(hint) + '</span></div>';
-  };
-  el.innerHTML = card('Học viên', students, waiting ? waiting + ' đang chờ bạn duyệt' : 'Không ai chờ duyệt') +
-    card('Giờ đã dạy', hours + 'h', taught.length + ' buổi đã qua') +
-    card('Bài chờ chấm', toMark, toMark ? 'Mở học viên để chấm' : 'Không còn bài nào') +
-    card('Buổi sắp tới', ahead, ahead ? 'Xem lịch bên dưới' : 'Chưa xếp buổi nào');
+  /* The same four figures as before, in the shape of the reference: an icon
+     tile, the number, then the sentence that says where it came from. */
+  el.innerHTML =
+    tcStat('Học viên', students, waiting ? waiting + ' đang chờ bạn duyệt' : 'Không ai chờ duyệt', 'mint', "tcTab('students')") +
+    tcStat('Giờ đã dạy', hours + 'h', taught.length + ' buổi đã qua', 'lav', '') +
+    tcStat('Bài chờ chấm', toMark, toMark ? 'Mở học viên để chấm' : 'Không còn bài nào', 'warn', "tcTab('students')") +
+    tcStat('Buổi sắp tới', ahead, ahead ? 'Xem lịch bên cạnh' : 'Chưa xếp buổi nào', 'pending', 'tcScrollToSchedule()');
   /* the page subtitle belongs to the area (tcTab), not to the counters */
 }
 
@@ -4565,17 +4663,162 @@ function tcRenderPending() {
   const sById = {}, aById = {};
   (TC.students || []).forEach(function (s) { sById[s.id] = s; });
   (TC.assignments || []).forEach(function (a) { aById[a.id] = a; });
-  el.innerHTML = '<div class="table-wrap"><table class="table"><thead><tr>' +
-    '<th>Học viên</th><th>Bài</th><th>Nộp lúc</th><th></th></tr></thead><tbody>' +
-    rows.map(function (s) {
-      const st = sById[s.student_id] || {};
-      const a = aById[s.assignment_id] || {};
-      const who = st.full_name || st.email || 'Học viên';
-      return '<tr><td data-label="Học viên"><span class="row-title">' + hwEsc(who) + '</span></td>' +
-        '<td data-label="Bài">' + hwEsc(a.title || '—') + '</td>' +
-        '<td data-label="Nộp lúc">' + hwEsc(s.submitted_at ? hwDate(String(s.submitted_at).slice(0, 10)) : '—') + '</td>' +
-        '<td data-label=""><button class="btn-quiet btn-sm" onclick="tcTab(\'students\')">Mở học viên</button></td></tr>';
-    }).join('') + '</tbody></table></div>';
+  /* Compact rows, no header: who, what, when, and the one action that opens
+     the student. The reference's class/subject/% columns have no source. */
+  el.innerHTML = '<div class="tc-pend">' + rows.map(function (s) {
+    const st = sById[s.student_id] || {};
+    const a = aById[s.assignment_id] || {};
+    const who = st.full_name || st.email || 'Học viên';
+    const when = s.submitted_at ? tcShortDate(s.submitted_at) : 'chưa rõ';
+    return '<div class="tc-pend-row">' +
+      '<span class="row-ico avatar-sm">' + hwEsc(who.charAt(0).toUpperCase()) + '</span>' +
+      '<div class="tc-pend-main"><span class="tc-pend-line"><span class="row-title">' + hwEsc(who) + '</span>' +
+      '<span class="hw-chip hw-chip-submitted">Chờ chấm</span></span>' +
+      '<span class="row-sub">' + hwEsc(a.title || 'Bài tập') + ', nộp ' + hwEsc(when) + '</span></div>' +
+      '<button class="btn-quiet btn-sm" onclick="tcTab(\'students\')">Mở học viên</button></div>';
+  }).join('') + '</div>';
+}
+
+/* What actually waits on the teacher, and where a click goes. Every row is a
+   count of rows that exist; nothing is a made-up task. */
+function tcRenderTodo() {
+  const el = document.getElementById('tc-todo');
+  if (!el) return;
+  const waiting = tcWaitingStudents().length;
+  const toMark = (TC.submissions || []).filter(function (s) { return s.status === 'submitted'; }).length;
+  const now = Date.now();
+  const noLesson = (TC.sessions || []).filter(function (s) {
+    return s.status !== 'cancelled' && new Date(s.starts_at).getTime() > now && !s.lesson_track;
+  }).length;
+  const items = [];
+  if (waiting) items.push({ n: waiting, label: 'học viên đang chờ bạn duyệt', act: "tcTab('students')" });
+  if (toMark) items.push({ n: toMark, label: 'bài đã nộp, chưa chấm', act: "tcTab('students')" });
+  if (noLesson) items.push({ n: noLesson, label: 'buổi sắp tới chưa gắn bài học', act: 'tcScrollToSchedule()' });
+  if (!items.length) {
+    el.innerHTML = '<p class="faint" style="font-size:12.5px">Không có việc nào đang chờ.</p>';
+    return;
+  }
+  el.innerHTML = '<div class="tc-todo">' + items.map(function (i) {
+    return '<button class="tc-todo-row" onclick="' + i.act + '">' +
+      '<span class="tc-todo-n">' + i.n + '</span>' +
+      '<span class="tc-todo-label">' + hwEsc(i.label) + '</span>' +
+      '<span class="tc-todo-arrow">→</span></button>';
+  }).join('') + '</div>';
+}
+
+/* ---------- the schedule rail: this week, and the day you picked ----------
+   The strip is the real week around today; a day with sessions carries a dot
+   and filters the list under it. Clicking a session opens the lesson it
+   refers to, which is the only thing a session can open honestly. */
+function tcDayKey(d) {
+  const m = ('0' + (d.getMonth() + 1)).slice(-2), day = ('0' + d.getDate()).slice(-2);
+  return d.getFullYear() + '-' + m + '-' + day;
+}
+/* dd/mm, because the Vietnamese reader of this screen does not read 10/17/2026 */
+function tcShortDate(iso) {
+  const s = String(iso || '');
+  const d = new Date(s.length <= 10 ? s + 'T00:00:00' : s);
+  if (isNaN(d.getTime())) return 'chưa rõ';
+  return ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2);
+}
+function tcScrollToSchedule() {
+  const el = document.getElementById('tc-panel-schedule');
+  if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function tcRailDay(key) { TC.railDay = key; tcRenderRail(); }
+function tcTrackTone(tk) {
+  if (tk === 'e2') return 'mint';
+  if (tk === 'f1' || tk === 'f2') return 'lav';
+  return '';
+}
+function tcSessOpen(id) {
+  const s = (TC.sessions || []).filter(function (x) { return String(x.id) === String(id); })[0];
+  if (!s) return;
+  if (s.status !== 'cancelled' && s.lesson_track) tcOpenSessionLesson(id);
+  else tcScrollToSchedule();
+}
+function tcSessCard(s) {
+  const off = s.status === 'cancelled';
+  const d = new Date(s.starts_at);
+  const hm = isNaN(d.getTime()) ? '' : ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+  const ref = tcSessionRef(s);
+  return '<button class="tc-sess' + (off ? ' is-off' : '') + '" onclick="tcSessOpen(\'' + s.id + '\')">' +
+    '<span class="tc-sess-bar ' + tcTrackTone(s.lesson_track) + (off ? ' off' : '') + '"></span>' +
+    '<span class="tc-sess-body"><span class="tc-sess-top"><span class="tc-sess-time">' + hwEsc(hm) + '</span>' +
+    (off ? '<span class="hw-chip">Đã huỷ</span>' : '') + '</span>' +
+    '<span class="tc-sess-title">' + hwEsc(s.title || 'Buổi học') + '</span>' +
+    '<span class="tc-sess-sub">' + hwEsc((ref ? ref + ', ' : '') + (Number(s.duration_min) || 60) + ' phút') + '</span>' +
+    '</span></button>';
+}
+function tcRenderRail() {
+  const week = document.getElementById('tc-week');
+  const list = document.getElementById('tc-rail-list');
+  const label = document.getElementById('tc-week-label');
+  if (!week || !list) return;
+  const today = new Date();
+  const dow = (today.getDay() + 6) % 7;                 /* Monday first */
+  const monday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - dow);
+  const names = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+  const byDay = {};
+  (TC.sessions || []).forEach(function (s) {
+    const t = new Date(s.starts_at);
+    if (isNaN(t.getTime())) return;
+    const k = tcDayKey(t);
+    (byDay[k] || (byDay[k] = [])).push(s);
+  });
+  Object.keys(byDay).forEach(function (k) {
+    byDay[k].sort(function (a, b) { return new Date(a.starts_at) - new Date(b.starts_at); });
+  });
+  const sel = TC.railDay || tcDayKey(today);
+  const cells = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + i);
+    const k = tcDayKey(d);
+    cells.push('<button class="tc-day' + (k === sel ? ' on' : '') + ((byDay[k] || []).filter(function (s) { return s.status !== 'cancelled'; }).length ? ' has' : '') +
+      '" onclick="tcRailDay(\'' + k + '\')" aria-label="' + names[i] + ' ' + d.getDate() + '">' +
+      '<small>' + names[i] + '</small><b>' + d.getDate() + '</b><span class="dot"></span></button>');
+  }
+  week.innerHTML = cells.join('');
+  if (label) {
+    const last = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + 6);
+    label.textContent = 'Tháng ' + (monday.getMonth() + 1) + ', ngày ' + monday.getDate() + ' đến ' + last.getDate();
+  }
+  const rows = byDay[sel] || [];
+  if (!rows.length) {
+    const next = (TC.sessions || []).filter(function (s) {
+      return s.status !== 'cancelled' && new Date(s.starts_at).getTime() >= Date.now();
+    }).sort(function (a, b) { return new Date(a.starts_at) - new Date(b.starts_at); })[0];
+    list.innerHTML = next
+      ? '<p class="faint" style="font-size:11.5px;margin:6px 0 0">Ngày này không có buổi. Buổi kế tiếp:</p>' + tcSessCard(next)
+      : '<p class="faint" style="font-size:12px;margin:6px 0 0">Chưa có buổi nào trên lịch.</p>';
+  } else {
+    list.innerHTML = rows.map(tcSessCard).join('');
+  }
+  tcRenderRailNext(rows);
+}
+/* The next three sessions after the day on screen, so the rail is not a card
+   with a void under it. Same rows, one place to click. */
+function tcRenderRailNext(selRows) {
+  const el = document.getElementById('tc-rail-next');
+  if (!el) return;
+  const shown = {};
+  (selRows || []).forEach(function (s) { shown[String(s.id)] = 1; });
+  const rows = (TC.sessions || []).filter(function (s) {
+    return s.status !== 'cancelled' && new Date(s.starts_at).getTime() >= Date.now() && !shown[String(s.id)];
+  }).sort(function (a, b) { return new Date(a.starts_at) - new Date(b.starts_at); }).slice(0, 3);
+  if (!rows.length) {
+    el.innerHTML = '<p class="faint" style="font-size:12px;margin:6px 0 0">Không còn buổi nào khác.</p>';
+    return;
+  }
+  const wd = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+  el.innerHTML = rows.map(function (s) {
+    const d = new Date(s.starts_at);
+    const hm = ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+    const day = wd[d.getDay()] + ' ' + d.getDate() + '/' + (d.getMonth() + 1);
+    return '<button class="tc-next" onclick="tcSessOpen(\'' + s.id + '\')">' +
+      '<span class="tc-next-when"><b>' + hm + '</b><small>' + day + '</small></span>' +
+      '<span class="tc-next-title">' + hwEsc(s.title || 'Buổi học') + '</span></button>';
+  }).join('');
 }
 
 /* ---------- 2. courses: the three programmes, as they exist ---------- */
@@ -4594,13 +4837,19 @@ function tcCourseCard(tk) {
   if (!T) return '';
   const total = Object.keys(T.lessons || {}).length;
   const code = (T.badge || '').split('·').pop().trim();
+  /* No stock photo exists for a programme, so the cover is drawn from the
+     programme's own code and colour. It is a block, not a fake screenshot. */
+  const cover = '<div class="cc-cover ' + tk + '"><span class="cc-code">' + code + '</span>' +
+    (total ? '<span class="cc-tag">' + total + ' bài</span>' : '') + '</div>';
   if (!total) {
-    return '<div class="course-card dim"><div class="course-card-top"><span class="course-code">' + code + '</span>' +
+    return '<div class="course-card dim">' + cover +
+      '<div class="course-card-top"><span class="course-code">' + code + '</span>' +
       '<span class="badge">Đang cập nhật</span></div>' +
       '<div><div class="course-name">' + T.title + '</div><div class="course-sub">' + T.sub + '</div></div>' +
       '<div class="course-foot"><div class="course-counts">Nội dung đang được cập nhật.</div></div></div>';
   }
-  return '<div class="course-card"><div class="course-card-top"><span class="course-code">' + code + '</span>' +
+  return '<div class="course-card">' + cover +
+    '<div class="course-card-top"><span class="course-code">' + code + '</span>' +
     '<span class="badge badge-ok">' + total + ' bài</span></div>' +
     '<div><div class="course-name">' + T.title + '</div><div class="course-sub">' + T.sub + '</div></div>' +
     '<div class="course-foot"><div class="course-counts"><b>' + total + '</b> bài sẵn sàng</div>' +

@@ -30,6 +30,7 @@ const RETURNS = 'return {TRACKS,TRACK_PARTS,LESSON_DATA,AUDIO_MAP,go,trackGo,tra
   'tcSaveAssignment,tcGrade,hwLoadSession,hwLoad,hwOpen,hwRenderList,hwSubmit,' +
   'tcLoad,tcTab,tcAllStudents,tcWaitingStudents,tcProgressOf,tcDecideStudent,tcRenderStudents,tcRenderOverview,tcStat,tcNewAssignment,hwUpdatePendingBadge,syncAuthFields,showAuthChange,hwCheckAgain,' +
   'tcRenderStats,tcRenderPending,tcRenderCourses,tcCourseCard,tcRenderMaterials,' +
+  'tcRenderRail,tcRenderRailNext,tcRenderTodo,tcShortDate,tcSessCard,tcRailDay,tcScrollToSchedule,' +
   'tcStudentWork,tcWorkLine,tcWorkBadges,tcStudentByTrack,tcOpenStudent,tcStudentProfileRow,tcPartLine,tcTotalParts,' +
   'tcSaveSession,tcRenderSchedule,tcSessionBuckets,tcWhen,tcCancelSession,tcNextSession,' +
   'hwForgotPassword,hwRecordProgress,hwLoadProgress,doAuth,setRole,showAuth,' +
@@ -611,6 +612,40 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
     (() => { ta.tcRenderCourses(); const c = TEACH.els['tc-courses'].innerHTML; return /Foundation/.test(c) && /Activation/.test(c) && /Expand/.test(c) && /Dạy/.test(c); })());
   t('a programme with no content offers no teaching that cannot happen',
     (() => { const c = ta.tcCourseCard('f1'); return /Đang cập nhật/.test(c) && !/Dạy/.test(c); })());
+
+  /* ---------- the schedule rail: the real week, the day you picked ---------- */
+  t('a date on the rail is written dd/mm, not the browser locale',
+    ta.tcShortDate('2026-10-17') === '17/10', ta.tcShortDate('2026-10-17'));
+  t('the rail is seven day cells of the real week, with the days that carry a session marked',
+    (() => {
+      const today = new Date();
+      ta.TC.sessions = [{ id: 'r1', title: 'Buổi hôm nay', starts_at: today.toISOString(),
+        duration_min: 60, lesson_track: 'a1', lesson_no: 1, status: 'scheduled' }];
+      ta.TC.railDay = null;
+      ta.tcRenderRail();
+      const w = TEACH.els['tc-week'].innerHTML;
+      return (w.match(/class="tc-day/g) || []).length === 7 && /tc-day on has/.test(w) &&
+        /Buổi hôm nay/.test(TEACH.els['tc-rail-list'].innerHTML);
+    })(), TEACH.els['tc-week'].innerHTML.slice(0, 200));
+  t('an empty week says so instead of drawing a blank card',
+    (() => {
+      ta.TC.sessions = [];
+      ta.TC.railDay = null;
+      ta.tcRenderRail();
+      return /Chưa có buổi nào trên lịch/.test(TEACH.els['tc-rail-list'].innerHTML);
+    })());
+  t('the todo card is a count of rows, never a made-up task',
+    (() => {
+      ta.TC.students = [
+        { id: 's1', full_name: 'Ann', email: 'a@x.test', status: 'active' },
+        { id: 'p9', full_name: 'Waiting', email: 'w@x.test', status: 'pending' }
+      ];
+      ta.TC.submissions = [];
+      ta.TC.sessions = [];
+      ta.tcRenderTodo();
+      const h = TEACH.els['tc-todo'].innerHTML;
+      return /tc-todo-row/.test(h) && /1<\/span>/.test(h) && /chờ bạn duyệt/.test(h) && !/bài đã nộp/.test(h);
+    })(), TEACH.els['tc-todo'].innerHTML.slice(0, 200));
 
   const quiet = { id: 'a3', full_name: 'Quiet One', email: 'a3@x.test', status: 'active' };
   ta.TC.students = [waiting, accepted, refused, quiet];

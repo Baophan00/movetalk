@@ -705,6 +705,8 @@ function tcRender() {
   tcRenderStats();
   tcRenderTeachHero();
   tcRenderPending();
+  tcRenderTodo();
+  tcRenderRail();
   tcRenderStudents();
   tcRenderCourses();
   tcRenderAssignments();
@@ -825,15 +827,13 @@ function tcRenderStats() {
   const ahead = (TC.sessions || []).filter(function (s) {
     return s.status !== 'cancelled' && new Date(s.starts_at).getTime() > now;
   }).length;
-  const card = function (label, value, hint) {
-    return '<div class="stat"><div class="stat-top"><span class="stat-label">' + hwEsc(label) + '</span></div>' +
-      '<span class="stat-value">' + hwEsc(String(value)) + '</span>' +
-      '<span class="stat-hint">' + hwEsc(hint) + '</span></div>';
-  };
-  el.innerHTML = card('Học viên', students, waiting ? waiting + ' đang chờ bạn duyệt' : 'Không ai chờ duyệt') +
-    card('Giờ đã dạy', hours + 'h', taught.length + ' buổi đã qua') +
-    card('Bài chờ chấm', toMark, toMark ? 'Mở học viên để chấm' : 'Không còn bài nào') +
-    card('Buổi sắp tới', ahead, ahead ? 'Xem lịch bên dưới' : 'Chưa xếp buổi nào');
+  /* The same four figures as before, in the shape of the reference: an icon
+     tile, the number, then the sentence that says where it came from. */
+  el.innerHTML =
+    tcStat('Học viên', students, waiting ? waiting + ' đang chờ bạn duyệt' : 'Không ai chờ duyệt', 'mint', "tcTab('students')") +
+    tcStat('Giờ đã dạy', hours + 'h', taught.length + ' buổi đã qua', 'lav', '') +
+    tcStat('Bài chờ chấm', toMark, toMark ? 'Mở học viên để chấm' : 'Không còn bài nào', 'warn', "tcTab('students')") +
+    tcStat('Buổi sắp tới', ahead, ahead ? 'Xem lịch bên cạnh' : 'Chưa xếp buổi nào', 'pending', 'tcScrollToSchedule()');
   /* the page subtitle belongs to the area (tcTab), not to the counters */
 }
 
@@ -848,17 +848,162 @@ function tcRenderPending() {
   const sById = {}, aById = {};
   (TC.students || []).forEach(function (s) { sById[s.id] = s; });
   (TC.assignments || []).forEach(function (a) { aById[a.id] = a; });
-  el.innerHTML = '<div class="table-wrap"><table class="table"><thead><tr>' +
-    '<th>Học viên</th><th>Bài</th><th>Nộp lúc</th><th></th></tr></thead><tbody>' +
-    rows.map(function (s) {
-      const st = sById[s.student_id] || {};
-      const a = aById[s.assignment_id] || {};
-      const who = st.full_name || st.email || 'Học viên';
-      return '<tr><td data-label="Học viên"><span class="row-title">' + hwEsc(who) + '</span></td>' +
-        '<td data-label="Bài">' + hwEsc(a.title || '—') + '</td>' +
-        '<td data-label="Nộp lúc">' + hwEsc(s.submitted_at ? hwDate(String(s.submitted_at).slice(0, 10)) : '—') + '</td>' +
-        '<td data-label=""><button class="btn-quiet btn-sm" onclick="tcTab(\'students\')">Mở học viên</button></td></tr>';
-    }).join('') + '</tbody></table></div>';
+  /* Compact rows, no header: who, what, when, and the one action that opens
+     the student. The reference's class/subject/% columns have no source. */
+  el.innerHTML = '<div class="tc-pend">' + rows.map(function (s) {
+    const st = sById[s.student_id] || {};
+    const a = aById[s.assignment_id] || {};
+    const who = st.full_name || st.email || 'Học viên';
+    const when = s.submitted_at ? tcShortDate(s.submitted_at) : 'chưa rõ';
+    return '<div class="tc-pend-row">' +
+      '<span class="row-ico avatar-sm">' + hwEsc(who.charAt(0).toUpperCase()) + '</span>' +
+      '<div class="tc-pend-main"><span class="tc-pend-line"><span class="row-title">' + hwEsc(who) + '</span>' +
+      '<span class="hw-chip hw-chip-submitted">Chờ chấm</span></span>' +
+      '<span class="row-sub">' + hwEsc(a.title || 'Bài tập') + ', nộp ' + hwEsc(when) + '</span></div>' +
+      '<button class="btn-quiet btn-sm" onclick="tcTab(\'students\')">Mở học viên</button></div>';
+  }).join('') + '</div>';
+}
+
+/* What actually waits on the teacher, and where a click goes. Every row is a
+   count of rows that exist; nothing is a made-up task. */
+function tcRenderTodo() {
+  const el = document.getElementById('tc-todo');
+  if (!el) return;
+  const waiting = tcWaitingStudents().length;
+  const toMark = (TC.submissions || []).filter(function (s) { return s.status === 'submitted'; }).length;
+  const now = Date.now();
+  const noLesson = (TC.sessions || []).filter(function (s) {
+    return s.status !== 'cancelled' && new Date(s.starts_at).getTime() > now && !s.lesson_track;
+  }).length;
+  const items = [];
+  if (waiting) items.push({ n: waiting, label: 'học viên đang chờ bạn duyệt', act: "tcTab('students')" });
+  if (toMark) items.push({ n: toMark, label: 'bài đã nộp, chưa chấm', act: "tcTab('students')" });
+  if (noLesson) items.push({ n: noLesson, label: 'buổi sắp tới chưa gắn bài học', act: 'tcScrollToSchedule()' });
+  if (!items.length) {
+    el.innerHTML = '<p class="faint" style="font-size:12.5px">Không có việc nào đang chờ.</p>';
+    return;
+  }
+  el.innerHTML = '<div class="tc-todo">' + items.map(function (i) {
+    return '<button class="tc-todo-row" onclick="' + i.act + '">' +
+      '<span class="tc-todo-n">' + i.n + '</span>' +
+      '<span class="tc-todo-label">' + hwEsc(i.label) + '</span>' +
+      '<span class="tc-todo-arrow">→</span></button>';
+  }).join('') + '</div>';
+}
+
+/* ---------- the schedule rail: this week, and the day you picked ----------
+   The strip is the real week around today; a day with sessions carries a dot
+   and filters the list under it. Clicking a session opens the lesson it
+   refers to, which is the only thing a session can open honestly. */
+function tcDayKey(d) {
+  const m = ('0' + (d.getMonth() + 1)).slice(-2), day = ('0' + d.getDate()).slice(-2);
+  return d.getFullYear() + '-' + m + '-' + day;
+}
+/* dd/mm, because the Vietnamese reader of this screen does not read 10/17/2026 */
+function tcShortDate(iso) {
+  const s = String(iso || '');
+  const d = new Date(s.length <= 10 ? s + 'T00:00:00' : s);
+  if (isNaN(d.getTime())) return 'chưa rõ';
+  return ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2);
+}
+function tcScrollToSchedule() {
+  const el = document.getElementById('tc-panel-schedule');
+  if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function tcRailDay(key) { TC.railDay = key; tcRenderRail(); }
+function tcTrackTone(tk) {
+  if (tk === 'e2') return 'mint';
+  if (tk === 'f1' || tk === 'f2') return 'lav';
+  return '';
+}
+function tcSessOpen(id) {
+  const s = (TC.sessions || []).filter(function (x) { return String(x.id) === String(id); })[0];
+  if (!s) return;
+  if (s.status !== 'cancelled' && s.lesson_track) tcOpenSessionLesson(id);
+  else tcScrollToSchedule();
+}
+function tcSessCard(s) {
+  const off = s.status === 'cancelled';
+  const d = new Date(s.starts_at);
+  const hm = isNaN(d.getTime()) ? '' : ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+  const ref = tcSessionRef(s);
+  return '<button class="tc-sess' + (off ? ' is-off' : '') + '" onclick="tcSessOpen(\'' + s.id + '\')">' +
+    '<span class="tc-sess-bar ' + tcTrackTone(s.lesson_track) + (off ? ' off' : '') + '"></span>' +
+    '<span class="tc-sess-body"><span class="tc-sess-top"><span class="tc-sess-time">' + hwEsc(hm) + '</span>' +
+    (off ? '<span class="hw-chip">Đã huỷ</span>' : '') + '</span>' +
+    '<span class="tc-sess-title">' + hwEsc(s.title || 'Buổi học') + '</span>' +
+    '<span class="tc-sess-sub">' + hwEsc((ref ? ref + ', ' : '') + (Number(s.duration_min) || 60) + ' phút') + '</span>' +
+    '</span></button>';
+}
+function tcRenderRail() {
+  const week = document.getElementById('tc-week');
+  const list = document.getElementById('tc-rail-list');
+  const label = document.getElementById('tc-week-label');
+  if (!week || !list) return;
+  const today = new Date();
+  const dow = (today.getDay() + 6) % 7;                 /* Monday first */
+  const monday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - dow);
+  const names = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+  const byDay = {};
+  (TC.sessions || []).forEach(function (s) {
+    const t = new Date(s.starts_at);
+    if (isNaN(t.getTime())) return;
+    const k = tcDayKey(t);
+    (byDay[k] || (byDay[k] = [])).push(s);
+  });
+  Object.keys(byDay).forEach(function (k) {
+    byDay[k].sort(function (a, b) { return new Date(a.starts_at) - new Date(b.starts_at); });
+  });
+  const sel = TC.railDay || tcDayKey(today);
+  const cells = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + i);
+    const k = tcDayKey(d);
+    cells.push('<button class="tc-day' + (k === sel ? ' on' : '') + ((byDay[k] || []).filter(function (s) { return s.status !== 'cancelled'; }).length ? ' has' : '') +
+      '" onclick="tcRailDay(\'' + k + '\')" aria-label="' + names[i] + ' ' + d.getDate() + '">' +
+      '<small>' + names[i] + '</small><b>' + d.getDate() + '</b><span class="dot"></span></button>');
+  }
+  week.innerHTML = cells.join('');
+  if (label) {
+    const last = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + 6);
+    label.textContent = 'Tháng ' + (monday.getMonth() + 1) + ', ngày ' + monday.getDate() + ' đến ' + last.getDate();
+  }
+  const rows = byDay[sel] || [];
+  if (!rows.length) {
+    const next = (TC.sessions || []).filter(function (s) {
+      return s.status !== 'cancelled' && new Date(s.starts_at).getTime() >= Date.now();
+    }).sort(function (a, b) { return new Date(a.starts_at) - new Date(b.starts_at); })[0];
+    list.innerHTML = next
+      ? '<p class="faint" style="font-size:11.5px;margin:6px 0 0">Ngày này không có buổi. Buổi kế tiếp:</p>' + tcSessCard(next)
+      : '<p class="faint" style="font-size:12px;margin:6px 0 0">Chưa có buổi nào trên lịch.</p>';
+  } else {
+    list.innerHTML = rows.map(tcSessCard).join('');
+  }
+  tcRenderRailNext(rows);
+}
+/* The next three sessions after the day on screen, so the rail is not a card
+   with a void under it. Same rows, one place to click. */
+function tcRenderRailNext(selRows) {
+  const el = document.getElementById('tc-rail-next');
+  if (!el) return;
+  const shown = {};
+  (selRows || []).forEach(function (s) { shown[String(s.id)] = 1; });
+  const rows = (TC.sessions || []).filter(function (s) {
+    return s.status !== 'cancelled' && new Date(s.starts_at).getTime() >= Date.now() && !shown[String(s.id)];
+  }).sort(function (a, b) { return new Date(a.starts_at) - new Date(b.starts_at); }).slice(0, 3);
+  if (!rows.length) {
+    el.innerHTML = '<p class="faint" style="font-size:12px;margin:6px 0 0">Không còn buổi nào khác.</p>';
+    return;
+  }
+  const wd = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+  el.innerHTML = rows.map(function (s) {
+    const d = new Date(s.starts_at);
+    const hm = ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+    const day = wd[d.getDay()] + ' ' + d.getDate() + '/' + (d.getMonth() + 1);
+    return '<button class="tc-next" onclick="tcSessOpen(\'' + s.id + '\')">' +
+      '<span class="tc-next-when"><b>' + hm + '</b><small>' + day + '</small></span>' +
+      '<span class="tc-next-title">' + hwEsc(s.title || 'Buổi học') + '</span></button>';
+  }).join('');
 }
 
 /* ---------- 2. courses: the three programmes, as they exist ---------- */
@@ -877,13 +1022,19 @@ function tcCourseCard(tk) {
   if (!T) return '';
   const total = Object.keys(T.lessons || {}).length;
   const code = (T.badge || '').split('·').pop().trim();
+  /* No stock photo exists for a programme, so the cover is drawn from the
+     programme's own code and colour. It is a block, not a fake screenshot. */
+  const cover = '<div class="cc-cover ' + tk + '"><span class="cc-code">' + code + '</span>' +
+    (total ? '<span class="cc-tag">' + total + ' bài</span>' : '') + '</div>';
   if (!total) {
-    return '<div class="course-card dim"><div class="course-card-top"><span class="course-code">' + code + '</span>' +
+    return '<div class="course-card dim">' + cover +
+      '<div class="course-card-top"><span class="course-code">' + code + '</span>' +
       '<span class="badge">Đang cập nhật</span></div>' +
       '<div><div class="course-name">' + T.title + '</div><div class="course-sub">' + T.sub + '</div></div>' +
       '<div class="course-foot"><div class="course-counts">Nội dung đang được cập nhật.</div></div></div>';
   }
-  return '<div class="course-card"><div class="course-card-top"><span class="course-code">' + code + '</span>' +
+  return '<div class="course-card">' + cover +
+    '<div class="course-card-top"><span class="course-code">' + code + '</span>' +
     '<span class="badge badge-ok">' + total + ' bài</span></div>' +
     '<div><div class="course-name">' + T.title + '</div><div class="course-sub">' + T.sub + '</div></div>' +
     '<div class="course-foot"><div class="course-counts"><b>' + total + '</b> bài sẵn sàng</div>' +

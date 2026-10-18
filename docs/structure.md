@@ -59,9 +59,11 @@ Các khối theo thứ tự:
 
 ### Giáo viên — chỉ `nhutruong0407@gmail.com` — sidebar 2 khu
 
-1. **Dạy** (`#teacher` / `#teacher/teach`) — thẻ số (học viên · giờ đã dạy · bài
-   chờ chấm · buổi sắp tới), bài chờ chấm, lịch dạy (xếp buổi + bảng buổi), và
-   3 chương trình với nút **Xem bài** / **Dạy** (studio toàn màn hình).
+1. **Dạy** (`#teacher` / `#teacher/teach`) — hai cột. Cột chính: thẻ số (học viên · giờ đã dạy ·
+   bài chờ chấm · buổi sắp tới), bài chờ chấm dạng dòng có avatar và chip, **Việc cần làm** đếm từ
+   dữ liệu thật, 3 chương trình có bìa màu + nút **Xem bài** / **Dạy**, rồi lịch dạy (xếp buổi +
+   bảng buổi). Cột phải là rail lịch: dải 7 ngày của tuần hiện tại (ngày có buổi có chấm, bấm để
+   lọc), danh sách buổi của ngày đang chọn, và **Sắp tới** ba buổi gần nhất.
 2. **Quản lý học viên** (`#teacher/students`) — danh sách, duyệt người chờ, chi
    tiết từng học viên, và **giao bài**.
 
