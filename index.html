@@ -1319,7 +1319,7 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
       </nav>
       <div class="lp-head-actions">
         <button class="btn-quiet btn-sm" onclick="toggleTheme()">Giao diện</button>
-        <button class="btn-primary btn-sm" onclick="showAuth()">Đăng nhập</button>
+        <button class="btn-primary btn-sm" id="lp-auth-btn" onclick="lpAuth()">Đăng nhập</button>
       </div>
     </div>
   </header>
@@ -1340,7 +1340,7 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
             nhiệm vụ nói. Bạn học một ít, dùng ngay, gặp lại, rồi dùng tốt hơn. Giáo viên theo dõi và
             giao bài ôn sau mỗi buổi.</p>
           <div class="lp-cta-row">
-            <button class="btn-primary" onclick="showAuth()">Bắt đầu học</button>
+            <button class="btn-primary" onclick="lpAuth()">Bắt đầu học</button>
             <button class="btn-secondary" onclick="lpJump('lp-how',event)">Xem cách học</button>
           </div>
           <div class="lp-proof" id="lp-proof">
@@ -1511,7 +1511,7 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
             <p>Đăng nhập để mở bài học, làm bài tập giáo viên giao và xem tiến độ của mình.</p>
           </div>
           <div class="lp-cta-row">
-            <button class="btn-primary" onclick="showAuth()">Đăng nhập</button>
+            <button class="btn-primary" onclick="lpAuth()">Đăng nhập</button>
             <button class="btn-secondary" onclick="lpJump('lp-lessons',event)">Xem bài học</button>
           </div>
         </div>
@@ -1554,7 +1554,7 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
 
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
-  <div class="sidebar-header">
+  <div class="sidebar-header" role="button" tabindex="0" title="Về trang giới thiệu" onclick="go('landing')" style="cursor:pointer">
     <div class="sidebar-logo">M</div>
     <span class="sidebar-title">MoveTalk</span>
   </div>
@@ -2322,6 +2322,12 @@ function lpShow(){
   window.scrollTo(0,0);
 }
 function lpTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
+/* One button, two meanings: a visitor signs in, a signed-in visitor goes back to
+   the workspace the account belongs to. */
+function lpAuth(){
+  if(USER){ routeAfterAuth(); return; }
+  showAuth();
+}
 function lpJump(id,ev){
   if(ev)ev.preventDefault();
   const el=document.getElementById(id);
@@ -2379,6 +2385,9 @@ function lpRender(){
         });
       });
     });
+    /* a signed-in visitor is not asked to sign in again */
+    const ab=document.getElementById('lp-auth-btn');
+    if(ab)ab.textContent=USER?'Vào học':'Đăng nhập';
     const sl=document.getElementById('lp-stat-lessons'), sp=document.getElementById('lp-stat-parts'), sw=document.getElementById('lp-stat-words');
     if(sl)sl.textContent=lessons||'—';
     if(sp)sp.textContent=parts||10;
@@ -2434,7 +2443,10 @@ function routeFromHash(){
   if(raw.indexOf('teacher/')===0){ if(!USER){lpShow();showAuth();return} const t=raw.slice(8)||'teach'; go('teacher'); if(typeof tcTab==='function')tcTab(t,true); return; }
   if(raw.indexOf('student/')===0){ if(!USER){lpShow();showAuth();return} const s=raw.slice(8)||'home'; go(s==='home'?'dashboard':s); return; }
   if(raw==='teacher'){ go('teacher'); if(USER&&typeof tcTab==='function')tcTab('teach',true); return; }
-  if(raw==='landing'||raw===''){ if(USER)routeAfterAuth(); else lpShow(); return; }
+  /* "/" is the public page for everybody. A signed-in visitor gets the same
+     landing with "Vào học" instead of "Đăng nhập"; the app lives on #dashboard,
+     #homework, #teacher… so a reload never jumps straight into a workspace. */
+  if(raw==='landing'||raw===''){ lpShow(); return; }
   if(!USER&&(raw==='home'||raw==='dashboard')){ lpShow(); return; }
   go(raw);
 }
@@ -5604,6 +5616,16 @@ function showV2Setup() {
 
 // ---- INIT ----
 USER=load('user',null);updateAuthUI();routeFromHash();
+/* The Supabase session outlives a reload; the copy in localStorage only exists in
+   guest mode. Restore it once, then re-route — but never drag a visitor off the
+   public page they asked for. */
+if(typeof HW_ON!=='undefined'&&HW_ON&&typeof hwLoadSession==='function'){
+  hwLoadSession().then(function(){
+    updateAuthUI();
+    /* the hash decides: "" is the public page, "#dashboard" is the dashboard */
+    routeFromHash();
+  }).catch(function(){});
+}
 </script>
 </body>
 </html>
