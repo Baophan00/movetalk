@@ -1494,6 +1494,74 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
 .mat-file span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mat-file::after{content:'Chọn';font-size:12px;font-weight:600;color:var(--accent2);flex-shrink:0}
 .mat-file input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+/* ---------- teacher dashboard: compact, coloured, alive ----------
+   One stat strip instead of four cards, one card for what waits on you,
+   shorter programme cards, one rail. The colour comes from the programme
+   itself (F violet, A blue, E green) instead of a second accent. */
+.tc-main{gap:14px}
+.tc-stats-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding:6px;background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:0 1px 2px rgba(24,39,64,.04),0 16px 34px -32px rgba(24,39,64,.45)}
+.tc-stats-grid .stat{padding:14px 16px;border:0;background:none;border-radius:0;min-height:0;gap:3px;transition:background .18s ease}
+.tc-stats-grid .stat + .stat{border-left:1px solid var(--border)}
+.tc-stats-grid .stat[style]{cursor:pointer}
+.tc-stats-grid .stat:hover{background:var(--surface2)}
+.tc-stats-grid .stat-top{flex-direction:row-reverse;justify-content:flex-end;align-items:center;gap:9px}
+.tc-stats-grid .stat-ico{width:28px;height:28px;border-radius:9px}
+.tc-stats-grid .stat-ico svg{width:14px;height:14px}
+.tc-stats-grid .stat-label{font-size:11.5px;font-weight:600;color:var(--text2);letter-spacing:.005em;white-space:normal}
+.tc-stats-grid .stat-value{font-size:23px;line-height:1.1;letter-spacing:-.03em;margin-top:7px}
+.tc-stats-grid .stat-hint{font-size:11px;line-height:1.32;color:var(--text2)}
+@media(max-width:760px){
+  .tc-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tc-stats-grid .stat:nth-child(3){border-left:0}
+  .tc-stats-grid .stat:nth-child(n+3){border-top:1px solid var(--border)}
+}
+.tc-work{display:flex;flex-direction:column;gap:10px}
+.tc-work-2{display:grid;grid-template-columns:1fr;gap:6px}
+@media(min-width:900px){.tc-work-2{grid-template-columns:1fr 1fr;gap:26px}}
+.tc-subhead{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);margin:2px 0 4px}
+.tc-work-col + .tc-work-col{border-top:1px solid var(--border);padding-top:6px}
+@media(min-width:900px){.tc-work-col + .tc-work-col{border-top:0;border-left:1px solid var(--border);padding:0 0 0 24px}}
+.course-grid{display:grid;gap:0}
+.course-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(208px,1fr));gap:12px}
+.course-card .course-foot{margin-top:auto}
+.cg-head{grid-column:1/-1;display:flex;align-items:center;gap:9px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);margin:2px 0 -2px}
+.cg-head:not(:first-child){margin-top:6px}
+.cg-head span{font-weight:400;letter-spacing:0;text-transform:none;font-size:11.5px;color:var(--text2);opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cg-head::after{content:'';flex:1;height:1px;background:var(--border);min-width:12px}
+.course-card{padding:12px;border-radius:14px;gap:7px;transition:transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .18s ease,border-color .18s ease}
+.course-card:hover{transform:translateY(-2px);box-shadow:0 18px 34px -26px rgba(24,39,64,.5);border-color:var(--border-strong)}
+.cc-cover{height:56px;margin-bottom:7px;border-radius:10px;padding:8px 10px;align-items:center;position:relative;overflow:hidden}
+.cc-cover .cc-code{font-size:19px}
+.cc-cover .cc-tag{font-size:9.5px;letter-spacing:.06em}
+.cc-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 34%,rgba(255,255,255,.62) 50%,transparent 66%);transform:translateX(-130%);transition:transform .65s ease}
+.course-card:hover .cc-cover::after{transform:translateX(130%)}
+.course-card-top{display:none}
+.course-name{font-size:14px}
+.course-sub{font-size:11.5px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.course-foot{margin-top:3px;padding-top:8px}
+.course-counts{font-size:11.5px}
+.course-card .btn-sm{height:28px;padding:0 10px;font-size:11.5px}
+.tc-rail-sep{height:1px;background:var(--border);margin:2px 0}
+@media(max-width:1179px){.tc-rail{order:0}}
+@keyframes tcIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@keyframes tcPulse{0%,100%{opacity:1}50%{opacity:.35}}
+.tc-stats-grid .stat{animation:tcIn .34s cubic-bezier(.2,.8,.2,1) both}
+.tc-stats-grid .stat:nth-child(2){animation-delay:.05s}
+.tc-stats-grid .stat:nth-child(3){animation-delay:.1s}
+.tc-stats-grid .stat:nth-child(4){animation-delay:.15s}
+#tc-courses .course-card{animation:tcIn .4s cubic-bezier(.2,.8,.2,1) both}
+#tc-courses .course-card:nth-child(2){animation-delay:.04s}
+#tc-courses .course-card:nth-child(3){animation-delay:.08s}
+#tc-courses .course-card:nth-child(4){animation-delay:.12s}
+#tc-courses .course-card:nth-child(5){animation-delay:.16s}
+#tc-courses .course-card:nth-child(6){animation-delay:.2s}
+.tc-rail-card{animation:tcIn .42s .06s cubic-bezier(.2,.8,.2,1) both}
+.hw-chip-submitted::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:currentColor;margin-right:5px;vertical-align:1px;animation:tcPulse 2.2s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){
+  .tc-stats-grid .stat,#tc-courses .course-card,.tc-rail-card{animation:none!important}
+  .course-card,.cc-cover::after,.tc-stats-grid .stat{transition:none!important}
+  .hw-chip-submitted::before{animation:none}
+}
 </style>
 </head>
 <body>
@@ -2399,17 +2467,15 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
             <div class="tc-split">
               <div class="tc-main">
                 <div class="tc-stats-grid" id="tc-stats"></div>
-                <div class="tc-row2">
-                  <div class="card card-pad space-y-4">
-                    <div class="section-head" style="margin-bottom:0"><div><h3>Bài chờ chấm</h3>
-                      <p class="faint" style="font-size:12.5px">Ai đã nộp và đang chờ bạn.</p></div>
-                      <button class="btn-ghost btn-sm" onclick="tcTab('students')">Xem học viên</button></div>
-                    <div id="tc-pending"></div>
+                <div class="card card-pad tc-work">
+                  <div class="section-head" style="margin-bottom:0">
+                    <div><h3>Cần bạn xử lý</h3>
+                      <p class="faint" style="font-size:12.5px">Bài đã nộp và việc còn treo, đếm từ dữ liệu thật.</p></div>
+                    <button class="btn-ghost btn-sm" onclick="tcTab('students')">Xem học viên</button>
                   </div>
-                  <div class="card card-pad space-y-3">
-                    <div class="section-head" style="margin-bottom:0"><div><h3>Việc cần làm</h3>
-                      <p class="faint" style="font-size:12.5px">Đếm từ dữ liệu thật, bấm để mở đúng chỗ.</p></div></div>
-                    <div id="tc-todo"></div>
+                  <div class="tc-work-2">
+                    <div class="tc-work-col"><div class="tc-subhead">Bài chờ chấm</div><div id="tc-pending"></div></div>
+                    <div class="tc-work-col"><div class="tc-subhead">Việc cần làm</div><div id="tc-todo"></div></div>
                   </div>
                 </div>
                 <div class="card card-pad space-y-4">
@@ -2418,11 +2484,6 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
                   <div id="tc-courses" class="course-grid"></div>
                 </div>
                 <div id="tc-panel-schedule" class="space-y-5"></div>
-                <div class="card card-pad space-y-3">
-                  <div class="section-head" style="margin-bottom:0"><div><h3>Tài liệu</h3></div></div>
-                  <p class="row-sub" id="tc-mat-sub">Bài học, audio và bài tập nằm ngay trong từng bài, không cần tải lên.
-                    Kho tài liệu riêng chỉ bật khi dự án có Supabase Storage bucket, nên hiện chưa có nút tải file.</p>
-                </div>
               </div>
               <aside class="tc-rail">
                 <div class="card card-pad tc-rail-card">
@@ -2432,8 +2493,7 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
                   </div>
                   <div id="tc-week" class="tc-week"></div>
                   <div id="tc-rail-list" class="tc-rail-list"></div>
-                </div>
-                <div class="card card-pad tc-rail-card">
+                  <div class="tc-rail-sep"></div>
                   <div class="section-head" style="margin-bottom:0">
                     <div><h3>Sắp tới</h3><p class="faint" style="font-size:12.5px">Ba buổi gần nhất sau hôm nay</p></div>
                   </div>
@@ -5299,11 +5359,13 @@ function tcRenderCourses() {
   const el = document.getElementById('tc-courses');
   if (!el) return;
   if (typeof dashCourseGroups !== 'function') return;
-  el.innerHTML = dashCourseGroups().map(function (g) {
-    return '<div class="course-group"><div class="course-group-head">' + g.name +
-      '<span class="course-rule"></span><span style="text-transform:none;letter-spacing:0;font-weight:400">' + g.line + '</span></div>' +
-      '<div class="course-cards">' + g.tracks.map(tcCourseCard).join('') + '</div></div>';
-  }).join('');
+  /* One flat grid, ordered F1 F2 · A1 A2 · E1 E2. The programme colour on the
+     cover already says which block a card belongs to, so a heading per block
+     would only repeat it and break the rows into uneven columns. */
+  el.innerHTML = '<div class="course-cards">' + dashCourseGroups().map(function (g) {
+    return '<div class="cg-head">' + g.name + '<span>' + g.line + '</span></div>' +
+      g.tracks.map(tcCourseCard).join('');
+  }).join('') + '</div>';
 }
 function tcCourseCard(tk) {
   const T = TRACKS[tk];
@@ -5313,17 +5375,13 @@ function tcCourseCard(tk) {
   /* No stock photo exists for a programme, so the cover is drawn from the
      programme's own code and colour. It is a block, not a fake screenshot. */
   const cover = '<div class="cc-cover ' + tk + '"><span class="cc-code">' + code + '</span>' +
-    (total ? '<span class="cc-tag">' + total + ' bài</span>' : '') + '</div>';
+    '<span class="cc-tag">' + (total ? total + ' bài' : 'Đang cập nhật') + '</span></div>';
   if (!total) {
     return '<div class="course-card dim">' + cover +
-      '<div class="course-card-top"><span class="course-code">' + code + '</span>' +
-      '<span class="badge">Đang cập nhật</span></div>' +
       '<div><div class="course-name">' + T.title + '</div><div class="course-sub">' + T.sub + '</div></div>' +
       '<div class="course-foot"><div class="course-counts">Nội dung đang được cập nhật.</div></div></div>';
   }
   return '<div class="course-card">' + cover +
-    '<div class="course-card-top"><span class="course-code">' + code + '</span>' +
-    '<span class="badge badge-ok">' + total + ' bài</span></div>' +
     '<div><div class="course-name">' + T.title + '</div><div class="course-sub">' + T.sub + '</div></div>' +
     '<div class="course-foot"><div class="course-counts"><b>' + total + '</b> bài sẵn sàng</div>' +
     '<span class="table-actions">' +

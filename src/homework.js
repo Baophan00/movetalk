@@ -1011,11 +1011,13 @@ function tcRenderCourses() {
   const el = document.getElementById('tc-courses');
   if (!el) return;
   if (typeof dashCourseGroups !== 'function') return;
-  el.innerHTML = dashCourseGroups().map(function (g) {
-    return '<div class="course-group"><div class="course-group-head">' + g.name +
-      '<span class="course-rule"></span><span style="text-transform:none;letter-spacing:0;font-weight:400">' + g.line + '</span></div>' +
-      '<div class="course-cards">' + g.tracks.map(tcCourseCard).join('') + '</div></div>';
-  }).join('');
+  /* One flat grid, ordered F1 F2 · A1 A2 · E1 E2. The programme colour on the
+     cover already says which block a card belongs to, so a heading per block
+     would only repeat it and break the rows into uneven columns. */
+  el.innerHTML = '<div class="course-cards">' + dashCourseGroups().map(function (g) {
+    return '<div class="cg-head">' + g.name + '<span>' + g.line + '</span></div>' +
+      g.tracks.map(tcCourseCard).join('');
+  }).join('') + '</div>';
 }
 function tcCourseCard(tk) {
   const T = TRACKS[tk];
@@ -1025,17 +1027,13 @@ function tcCourseCard(tk) {
   /* No stock photo exists for a programme, so the cover is drawn from the
      programme's own code and colour. It is a block, not a fake screenshot. */
   const cover = '<div class="cc-cover ' + tk + '"><span class="cc-code">' + code + '</span>' +
-    (total ? '<span class="cc-tag">' + total + ' bài</span>' : '') + '</div>';
+    '<span class="cc-tag">' + (total ? total + ' bài' : 'Đang cập nhật') + '</span></div>';
   if (!total) {
     return '<div class="course-card dim">' + cover +
-      '<div class="course-card-top"><span class="course-code">' + code + '</span>' +
-      '<span class="badge">Đang cập nhật</span></div>' +
       '<div><div class="course-name">' + T.title + '</div><div class="course-sub">' + T.sub + '</div></div>' +
       '<div class="course-foot"><div class="course-counts">Nội dung đang được cập nhật.</div></div></div>';
   }
   return '<div class="course-card">' + cover +
-    '<div class="course-card-top"><span class="course-code">' + code + '</span>' +
-    '<span class="badge badge-ok">' + total + ' bài</span></div>' +
     '<div><div class="course-name">' + T.title + '</div><div class="course-sub">' + T.sub + '</div></div>' +
     '<div class="course-foot"><div class="course-counts"><b>' + total + '</b> bài sẵn sàng</div>' +
     '<span class="table-actions">' +
