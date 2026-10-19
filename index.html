@@ -1624,6 +1624,12 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
 .tc-quick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:auto;padding-top:10px;border-top:1px solid var(--border)}
 .tc-quick-btn{height:36px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);font-family:inherit;font-size:12px;font-weight:600;color:#22304A;cursor:pointer;transition:.15s}
 .tc-quick-btn:hover{background:var(--surface);border-color:var(--border-strong);box-shadow:0 8px 16px -14px rgba(24,39,64,.55);transform:translateY(-1px)}
+.tc-urgent-wide{margin-top:14px}
+.tc-quick-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+#tc-dash-todo .tc-todo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 22px}
+#tc-dash-todo .tc-todo-row{border-bottom:1px solid var(--border)}
+@media(max-width:900px){#tc-dash-todo .tc-todo{grid-template-columns:1fr}}
+@media(max-width:700px){.tc-quick-4{grid-template-columns:1fr 1fr}}
 .tc-empty{padding:26px 0;text-align:center;color:var(--text2);font-size:13px;line-height:1.6}
 @media(max-width:767px){
   .mobile-menu.hidden{display:none!important}
@@ -2561,31 +2567,19 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
           <!-- AREA 1 — DASHBOARD: today first, then what waits on you -->
           <div id="tc-panel-dashboard">
             <div class="tc-stats-grid tc-stats-5" id="tc-stats"></div>
-            <div class="tc-dash-cols">
-              <div class="card card-pad tc-today">
-                <div class="section-head" style="margin-bottom:0">
-                  <div><h3><span class="sh-ico"><svg class="ico" aria-hidden="true"><use href="#i-calendar"></use></svg></span>Lịch dạy</h3>
-                    <p class="faint" id="tc-dash-range-label">Hôm nay</p></div>
-                  <div class="tc-seg" role="tablist" aria-label="Khoảng thời gian">
-                    <button type="button" class="tc-seg-btn on" data-range="today" onclick="tcDashRange('today')">Hôm nay</button>
-                    <button type="button" class="tc-seg-btn" data-range="week" onclick="tcDashRange('week')">7 ngày</button>
-                  </div>
-                </div>
-                <div id="tc-dash-list"></div>
+            <!-- Lịch dạy tạm ẩn: nguồn lịch đang ở ngoài MoveTalk. Bật lại khối tc-today khi có đồng bộ. -->
+            <div class="card card-pad tc-urgent tc-urgent-wide">
+              <div class="section-head" style="margin-bottom:0">
+                <div><h3><span class="sh-ico"><svg class="ico" aria-hidden="true"><use href="#i-clock"></use></svg></span>Cần xử lý</h3>
+                  <p class="faint">Việc còn treo, đếm từ dữ liệu thật.</p></div>
               </div>
-              <aside class="card card-pad tc-urgent">
-                <div class="section-head" style="margin-bottom:0">
-                  <div><h3><span class="sh-ico"><svg class="ico" aria-hidden="true"><use href="#i-clock"></use></svg></span>Cần xử lý</h3>
-                    <p class="faint">Đếm từ dữ liệu thật.</p></div>
-                </div>
-                <div id="tc-dash-todo"></div>
-                <div class="tc-quick">
-                  <button type="button" class="tc-quick-btn" onclick="tcDashAddSession()">+ Thêm lịch dạy</button>
-                  <button type="button" class="tc-quick-btn" onclick="tcTab('teach')">Mở khóa học</button>
-                  <button type="button" class="tc-quick-btn" onclick="tcTab('students')">Học viên</button>
-                  <button type="button" class="tc-quick-btn" onclick="tcNewAssignment()">Giao bài</button>
-                </div>
-              </aside>
+              <div id="tc-dash-todo"></div>
+              <div class="tc-quick tc-quick-4">
+                <button type="button" class="tc-quick-btn" onclick="tcNewAssignment()">Giao bài</button>
+                <button type="button" class="tc-quick-btn" onclick="tcTab('teach')">Mở khóa học</button>
+                <button type="button" class="tc-quick-btn" onclick="tcTab('students')">Học viên</button>
+                <button type="button" class="tc-quick-btn" onclick="go('materials')">Tài liệu</button>
+              </div>
             </div>
           </div>
 
@@ -5198,15 +5192,14 @@ function tcRenderDash() {
 
   const stats = document.getElementById('tc-stats');
   if (stats) {
+    const published = (TC.assignments || []).filter(function (a) { return a.status === 'published'; }).length;
+    const waitingStudents = (TC.students || []).filter(function (s) { return s.status === 'pending'; }).length;
     stats.innerHTML =
-      tcDashStat('Ca dạy hôm nay', today.filter(function (s) { return s.status !== 'cancelled'; }).length,
-        live ? live + ' đang diễn ra' : 'theo giờ máy bạn', 'calendar', 'pending') +
-      tcDashStat('Buổi đã qua', week.filter(function (s) {
-        return s.status !== 'cancelled' && new Date(s.starts_at) < now;
-      }).length, '7 ngày, không tính đã huỷ', 'check', 'mint') +
       tcDashStat('Học viên', activeStudents, 'đang học với bạn', 'users', 'lav') +
-      tcDashStat('Bài chờ chấm', toMark, toMark ? 'mở học viên để chấm' : 'không còn bài nào', 'book', 'warn') +
-      tcDashStat('Bài quá hạn', overdueN, overdueN ? 'học viên chưa nộp' : 'không có bài quá hạn', 'clock', 'pending');
+      tcDashStat('Bài đã giao', published, published ? 'đang mở cho học viên' : 'chưa giao bài nào', 'book', 'pending') +
+      tcDashStat('Bài chờ chấm', toMark, toMark ? 'mở học viên để chấm' : 'không còn bài nào', 'check', 'mint') +
+      tcDashStat('Bài quá hạn', overdueN, overdueN ? 'học viên chưa nộp' : 'không có bài quá hạn', 'clock', 'warn') +
+      tcDashStat('Chờ duyệt', waitingStudents, waitingStudents ? 'học viên mới đăng ký' : 'không có ai chờ', 'users', 'pending');
   }
 
   const label = document.getElementById('tc-dash-range-label');
@@ -5286,7 +5279,7 @@ function tcTab(name, silent) {
      on screen while a draft is open. */
   hwShow('tc-panel-assignments', area === 'students' && !!TC.builderOpen);
   const titles = { dashboard: 'Dashboard', teach: 'Dạy', students: 'Học viên' };
-  const subs = { dashboard: 'Lịch dạy hôm nay và những việc cần bạn xử lý.',
+  const subs = { dashboard: 'Bài tập, học viên và những việc đang chờ bạn.',
                  teach: 'Các khóa học và bài học có sẵn để mở và dạy.',
                  students: 'Danh sách, hồ sơ và tiến độ từng học viên.' };
   const t = document.getElementById('tc-title');

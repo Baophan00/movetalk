@@ -40,28 +40,15 @@ Hệ quả quan trọng:
 | Bài chờ chấm | `submissions.status = submitted` |
 | Bài quá hạn | `assignments.status = published`, hạn đã qua, và còn học viên trong `assignment_recipients` chưa có submission `submitted`/`graded` |
 
-## 4. Notion — thiết kế đề xuất, CHƯA triển khai
+## 4. Notion / lịch — TẠM HOÃN
 
-Không thể bắt đầu khi chưa biết cấu trúc database thật. Cần người dùng cung cấp:
+Quyết định 2026-10-18: lịch dạy đang nằm ngoài MoveTalk (Notion Calendar đăng nhập bằng Google),
+nên tạm bỏ khối lịch khỏi Dashboard. Dữ liệu `class_sessions` và rail lịch ở mục Dạy vẫn giữ nguyên,
+không mất gì; bật lại khối lịch chỉ là thêm lại một thẻ trong `#tc-panel-dashboard`.
 
-1. `NOTION_TOKEN` của internal integration (quyền Read content).
-2. Link/ID database lịch dạy.
-3. Database đã được **share** cho integration đó.
-4. Tên thuộc tính thật: ngày, giờ bắt đầu, giờ kết thúc (hoặc thời lượng), học viên, khoá, bài, trạng thái.
-
-Thiết kế dự kiến (một chiều Notion → MoveTalk trước):
-
-- Supabase Edge Function `notion-sync`, token nằm trong function secrets, **không** xuống trình duyệt.
-- Migration thêm (không phá dữ liệu):
-  - `class_sessions.notion_page_id text unique`
-  - `class_sessions.notion_last_edited timestamptz`
-  - `class_sessions.completed_at timestamptz` (để có "đã hoàn thành" thật)
-  - bảng `notion_sync_runs(id, started_at, finished_at, ok, imported, updated, skipped, error)`
-- Upsert theo `notion_page_id`; chạy lại cùng một trang không tạo buổi trùng.
-- Trang bị xoá/archived → set `status = cancelled`, không xoá row.
-- Học viên không khớp → lưu buổi với `note` ghi lý do, không gán bừa.
-- Cron 5–10 phút (pg_cron gọi function, hoặc cron ngoài). Webhook chỉ khi đã có endpoint công khai và verify chữ ký.
-- Hai chiều: chỉ sau khi có quy tắc trường nào thuộc bên nào; mặc định **một chiều**.
+Khi làm lại, thứ tự kiểm tra: nguồn thật là Google Calendar hay database Notion (Notion Calendar
+chỉ là lớp hiển thị, không có API riêng). Nếu Google: OAuth client + refresh token (calendar.readonly),
+đồng bộ bằng Edge Function, map theo `google_event_id`.
 
 ## 5. Việc còn lại
 
