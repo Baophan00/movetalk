@@ -70,9 +70,11 @@ Các khối theo thứ tự:
 ### Học viên — sidebar: 3 nhóm khoá + nhóm Học
 
 - Khoá: Foundation (F1, F2) · Activation (A1, A2) · Expand (E1, E2)
-- Giáo viên: **Dashboard** (`#teacher/dashboard`, lịch hôm nay + 5 chỉ số + việc cần xử lý) ·
+- Giáo viên: **Dashboard** (`#teacher/dashboard`, 5 chỉ số + việc cần xử lý) ·
   **Dạy** (`#teacher/teach`, chương trình/bài học + rail lịch) ·
-  **Học viên** (`#teacher/students`) · **Tài liệu** (trang `#materials`)
+  **Học viên** (`#teacher/students`) ·
+  **Bài tập** (`#teacher/homework`, thư viện bài đã giao, lọc/tìm, mở từng bài xem ai nộp) ·
+  **Tài liệu** (trang `#materials`)
 - Nhóm Học: **Việc tiếp theo** (dashboard) · **Bài tập** (homework) ·
   **Từ vựng** (vocab) · **Tài liệu** (materials) · **Trang giới thiệu** (landing)
 - **Trang chương trình** (`#course/<mã>`, mở từ dòng chương trình ở dashboard):

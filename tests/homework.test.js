@@ -602,12 +602,16 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   /* ---------- overview: only real rows, never invented numbers ---------- */
   t('the workspace opens on Dashboard, with the counters at the top',
     /data-tc-nav="dashboard"/.test(src) && /id="tc-panel-dashboard"/.test(src) && /id="tc-stats"/.test(src));
-  t('the teacher sidebar offers exactly four areas, in order',
-    (src.match(/data-tc-nav="/g) || []).length === 3 &&
-    ['dashboard', 'teach', 'students'].every(function (k) { return src.indexOf('data-tc-nav="' + k + '"') >= 0; }) &&
+  t('the teacher sidebar offers exactly five areas, in order',
+    (src.match(/data-tc-nav="/g) || []).length === 4 &&
+    ['dashboard', 'teach', 'students', 'homework'].every(function (k) { return src.indexOf('data-tc-nav="' + k + '"') >= 0; }) &&
     src.indexOf('data-tc-nav="dashboard"') < src.indexOf('data-tc-nav="teach"') &&
     src.indexOf('data-tc-nav="teach"') < src.indexOf('data-tc-nav="students"') &&
+    src.indexOf('data-tc-nav="students"') < src.indexOf('data-tc-nav="homework"') &&
     /data-view="materials"[^>]*><span class="nav-code">TL<\/span> Tài liệu/.test(src));
+  t('the assignment library lists the same rows the builder writes',
+    /id="tc-panel-homework"/.test(src) && /function tcWorkRows/.test(src) &&
+    /TC\.recipients/.test(src) && /tcWorkPeople/.test(src));
   t('Dạy is the programme list, and the dashboard is its own panel',
     /id="tc-panel-teach"/.test(src) && /function tcRenderDashboard|function tcRenderDash/.test(js) &&
     /tc-panel-teach', area === 'teach'/.test(src));
