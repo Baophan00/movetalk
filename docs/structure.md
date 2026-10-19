@@ -67,6 +67,14 @@ Các khối theo thứ tự:
 2. **Quản lý học viên** (`#teacher/students`) — danh sách, duyệt người chờ, chi
    tiết từng học viên, và **giao bài**.
 
+### Không gian học của học viên (`#study/<mã>/<bài>`)
+
+- Ba cột trên máy tính: 20% từ vựng của bài (nghe thử, lưu vào sổ từ) · 50% tóm tắt bài,
+  checklist "Hôm nay cần nhớ" lưu trên máy, các điểm ngữ pháp, mẫu câu bấm để nghe ·
+  30% bài giáo viên đã giao kèm hạn và trạng thái.
+- Mở từ thẻ "Học tiếp" ở trang Việc học; đổi bài bằng nút Bài trước/Bài sau.
+- Dưới 1180px: từ vựng thành dải ngang; dưới 820px xếp dọc theo thứ tự bài học → từ vựng → bài tập.
+
 ### Học viên — sidebar: 3 nhóm khoá + nhóm Học
 
 - Khoá: Foundation (F1, F2) · Activation (A1, A2) · Expand (E1, E2)

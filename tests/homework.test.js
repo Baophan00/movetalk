@@ -609,6 +609,12 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
     src.indexOf('data-tc-nav="teach"') < src.indexOf('data-tc-nav="students"') &&
     src.indexOf('data-tc-nav="students"') < src.indexOf('data-tc-nav="homework"') &&
     /data-view="materials"[^>]*><span class="nav-code">TL<\/span> Tài liệu/.test(src));
+  t('the student study workspace has three columns: words, lesson, assigned work',
+    /id="v-study"/.test(src) && /class="st-cols"/.test(src) &&
+    /st-vocab-list/.test(src) && /id="st-today"/.test(src) && /id="st-work-list"/.test(src) &&
+    /grid-template-columns:20% minmax\(0,1fr\) 30%/.test(src));
+  t('the study workspace marks today from the lesson data and saves it on the device',
+    /function studyTick/.test(src) && /mt_study_today_/.test(src) && /parts\.grammar/.test(src));
   t('the assignment library lists the same rows the builder writes',
     /id="tc-panel-homework"/.test(src) && /function tcWorkRows/.test(src) &&
     /TC\.recipients/.test(src) && /tcWorkPeople/.test(src));
