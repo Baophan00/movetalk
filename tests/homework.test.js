@@ -331,18 +331,18 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
 
   const list = ONLINE.els['hw-list'].innerHTML;
   t('the homework list renders the assigned lesson', list.includes('Homework: Build the Message'));
-  t('the list shows it is an existing-lesson reference', /A1 lesson 3/.test(list));
+  t('the list shows it is an existing-lesson reference', /Bài A1 3/.test(list));
   t('the list shows a custom exercise', list.includes('Custom drill'));
-  t('the list shows the submitted status', /Graded/.test(list));
+  t('the list shows the submitted status', /Đã chấm/.test(list));
   t('the list shows a server-computed score', /6\/6/.test(list));
-  t('the list shows overdue for the untouched past-due one', /Overdue/.test(list));
+  t('the list shows overdue for the untouched past-due one', /Quá hạn/.test(list));
   t('the list is task cards, not one stack of rows', /class="hw-task/.test(list));
   t('the work is grouped by what to do and what is handed in',
-    /hw-group-head[^>]*><span>To do<\/span>/.test(list) && /hw-group-head[^>]*><span>Handed in<\/span>/.test(list));
-  t('the first thing to do is flagged as next', /hw-task next/.test(list) && /hw-flag">Next/.test(list));
-  t('each card names the next action', /Start this now|Continue where you stopped|Past the due date/.test(list));
-  t('a card that has been marked tells the student to read it', /Read your mark and comment/.test(list));
-  t('an overdue card is marked in the due badge', /badge-err">due /.test(list));
+    /hw-group-head[^>]*><span>Cần làm<\/span>/.test(list) && /hw-group-head[^>]*><span>Đã nộp<\/span>/.test(list));
+  t('the first thing to do is flagged as next', /hw-task next/.test(list) && /hw-flag">Tiếp/.test(list));
+  t('each card names the next action', /Bắt đầu bài này|Làm tiếp chỗ đang dở|Đã quá hạn/.test(list));
+  t('a card that has been marked tells the student to read it', /Xem điểm và nhận xét/.test(list));
+  t('an overdue card is marked in the due badge', /badge-err">hạn /.test(list));
   t('the signed-in student sees the homework body', ONLINE.els['hw-body'].classList.contains('hidden') === false);
   t('the header names the student', /Stu/.test(ONLINE.els['hw-sub'].textContent));
 

@@ -1,0 +1,44 @@
+
+const {spawn}=require('child_process');const http=require('http');const fs=require('fs');
+const CHROME='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const PORT=9956, URL_=process.argv[2], OUT='/tmp/ev-fix';
+const proc=spawn(CHROME,['--headless=new','--remote-debugging-port='+PORT,'--window-size=1440,1000','--no-first-run','--no-default-browser-check','--user-data-dir=/tmp/chrome-evfix','--disable-gpu','about:blank'],{stdio:'ignore'});
+const get=p=>new Promise((res,rej)=>{http.get({host:'127.0.0.1',port:PORT,path:p},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>res(JSON.parse(d)))}).on('error',rej)});
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+(async()=>{
+  fs.mkdirSync(OUT,{recursive:true});
+  let tabs=null;for(let i=0;i<80;i++){try{tabs=await get('/json/list');if(tabs.length)break}catch(e){}await sleep(250)}
+  const ws=tabs.find(t=>t.type==='page').webSocketDebuggerUrl;
+  const WebSocket=require('ws');const w=new WebSocket(ws);await new Promise(r=>w.on('open',r));
+  let id=0;const pend={};const bad=[];
+  w.on('message',m=>{const o=JSON.parse(m);if(o.id&&pend[o.id])pend[o.id](o);
+    if(o.method==='Runtime.exceptionThrown')bad.push('EXC '+(((o.params.exceptionDetails.exception||{}).description)||'').split('\n')[0].slice(0,150));});
+  const cmd=(m,p={})=>new Promise(r=>{const i=++id;pend[i]=r;w.send(JSON.stringify({id:i,method:m,params:p}))});
+  const ev=async e=>{const r=await cmd('Runtime.evaluate',{expression:e,returnByValue:true,awaitPromise:true});
+    if(r.result&&r.result.exceptionDetails)return 'THROW '+(((r.result.exceptionDetails.exception||{}).description)||'').split('\n')[0];
+    return r.result&&r.result.result?r.result.result.value:undefined};
+  const shot=async n=>{const r=await cmd('Page.captureScreenshot',{format:'png'});fs.writeFileSync(OUT+'/'+n+'.png',Buffer.from(r.result.data,'base64'))};
+  await cmd('Page.enable');await cmd('Runtime.enable');
+  await cmd('Page.navigate',{url:URL_+'?r='+Date.now()});await sleep(5000);
+  console.log('title:', await ev('document.title'));
+  console.log('brand:', await ev(`(document.querySelector('.brand')||{}).textContent`));
+  console.log('progress text:', await ev(`(document.getElementById('ptxt')||{}).textContent`));
+  await ev(`go("vocab")`);await sleep(1500);
+  console.log('vocab header:', await ev(`(document.querySelector('.vmain .sub')||{}).textContent`));
+  console.log('row overlap check:', await ev(`(()=>{const r=document.querySelector('.wrow');if(!r)return 'no row';
+    const a=r.querySelector('.wm').getBoundingClientRect(), b=r.querySelector('.wdef');
+    if(!b) return 'def hidden';
+    const bb=b.getBoundingClientRect();
+    return JSON.stringify({wmRight:Math.round(a.right),defLeft:Math.round(bb.left),overlap:a.right>bb.left})})()`));
+  await shot('vocab-1440');
+  await ev(`lSub="learn";go("learn")`);await sleep(1200);
+  console.log('flashcard audio buttons:', await ev(`[].slice.call(document.querySelectorAll('.btn-audio')).map(b=>b.textContent.trim()).join(' | ')`));
+  await shot('learn-1440');
+  await cmd('Emulation.setDeviceMetricsOverride',{width:390,height:900,deviceScaleFactor:1,mobile:true});await sleep(1500);
+  await ev(`go("vocab")`);await sleep(1200);
+  console.log('mobile row:', await ev(`(()=>{const r=document.querySelector('.wrow');if(!r)return 'none';const cs=getComputedStyle(r);
+    return JSON.stringify({cols:cs.gridTemplateColumns,docW:document.documentElement.scrollWidth,winW:window.innerWidth})})()`));
+  await shot('vocab-390');
+  console.log('errors:', bad.length?[...new Set(bad)].slice(0,3):'none');
+  proc.kill();process.exit(0);
+})();

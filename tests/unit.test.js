@@ -133,14 +133,14 @@ check('Level shows the placement result the student really has, or says it is no
   /function dashRenderLevel\(/.test(js) && /load\('selectedLevel'/.test(js) && /Chưa làm bài kiểm tra xếp trình độ/.test(js));
 check('Activity is counted from the student record, never estimated',
   /function dashRenderActivity\(/.test(js) && /phần đã mở/.test(js) && /TRACK_PROG/.test(js));
-check('the timetable on the dashboard reads the same sessions the homework screen shows',
-  /function dashRenderSessions\(/.test(js) && /HW\.sessions/.test(js) && /id="dash-sessions"/.test(src));
+check('the student dashboard does not promise a timetable the product no longer syncs',
+  !/id="dash-sessions"/.test(src) && !/id="dash-today"/.test(src) && /id="dash-next-card"/.test(src));
+check('the dashboard keeps saved words and real homework rows side by side',
+  /id="dash-vocab"/.test(src) && /id="dash-hw"/.test(src) && /HW\.assignments\.slice/.test(js));
 check('a programme with no content yet says so instead of showing a progress bar',
   /if\(!total\)\{/.test(js) && /course-card dim/.test(js) && /Nội dung đang được cập nhật/.test(js));
 check('a course card counts lessons the student actually opened',
   /Object\.keys\(b\.opened\|\|\{\}\)\.length/.test(js) && /byTrack/.test(js));
-check('the dashboard has a Today block over the timetable and homework rows',
-  /function dashRenderToday\(/.test(js) && /id="dash-today"/.test(src) && /HW\.sessions/.test(js));
 check('the dashboard is a grid, not one long column',
   /xl:grid-cols-3/.test(src) && /xl:grid-cols-2/.test(src) && /\.course-cards\{display:grid/.test(src));
 check('the self-study rows are compact rows with a real bar, not six stacked cards',
