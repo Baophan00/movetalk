@@ -1804,26 +1804,11 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
         <span class="lp-mark">M</span>
         <b>MoveTalk</b><span>English for work</span>
       </button>
-      <nav class="lp-links">
-        <a href="#lp-how" onclick="lpJump('lp-how',event)">Cách học</a>
-        <a href="#lp-lessons" onclick="lpJump('lp-lessons',event)">Bài học</a>
-        <a href="#lp-classroom" onclick="lpJump('lp-classroom',event)">Lớp có giáo viên</a>
-        <a href="#lp-level" onclick="lpJump('lp-level',event)">Trình độ</a>
-        <a href="#lp-faq" onclick="lpJump('lp-faq',event)">Hỏi đáp</a>
-      </nav>
       <div class="lp-head-actions">
-        <button class="btn-quiet btn-sm" onclick="toggleTheme()">Giao diện</button>
         <button class="btn-primary btn-sm" id="lp-auth-btn" onclick="lpAuth()">Đăng nhập</button>
       </div>
     </div>
   </header>
-  <nav class="lp-subnav" aria-label="Mục lục trang">
-    <a href="#lp-how" onclick="lpJump('lp-how',event)">Cách học</a>
-    <a href="#lp-lessons" onclick="lpJump('lp-lessons',event)">Bài học</a>
-    <a href="#lp-classroom" onclick="lpJump('lp-classroom',event)">Lớp có giáo viên</a>
-        <a href="#lp-level" onclick="lpJump('lp-level',event)">Trình độ</a>
-        <a href="#lp-faq" onclick="lpJump('lp-faq',event)">Hỏi đáp</a>
-  </nav>
 
   <main>
     <!-- HERO -->
@@ -2803,19 +2788,19 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
 <nav class="bottom-nav">
   <button onclick="go('home')" data-bn="home" class="on">
     <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10"/></svg>
-    <span>Home</span>
+    <span>Trang chủ</span>
   </button>
   <button onclick="go('dashboard')" data-bn="dashboard">
     <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 16V9M12 16v-4M16 16V7"/></svg>
-    <span>My learning</span>
+    <span>Việc học</span>
   </button>
   <button onclick="go('e2')" data-bn="e2">
     <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-    <span>Lessons</span>
+    <span>Bài học</span>
   </button>
   <button onclick="go('homework')" data-bn="homework">
     <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-    <span>Homework</span>
+    <span>Bài tập</span>
   </button>
   <button onclick="go('teacher')" data-bn="teacher" id="bn-teacher" class="hidden">
     <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5zm0 0v7m-5-4.5V15l5 3 5-3v-3.5"/></svg>
@@ -2835,19 +2820,19 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
 <div id="auth-modal" class="modal-overlay hidden" onclick="if(event.target===this)hideAuth()">
   <div class="modal-box">
     <div class="flex items-center justify-between mb-8">
-      <h2 class="font-semibold text-xl" id="auth-title">Sign In</h2>
+      <h2 class="font-semibold text-xl" id="auth-title">Đăng nhập</h2>
       <button onclick="hideAuth()" class="text-2xl faint hover:text-[var(--text)]">&times;</button>
     </div>
     <div class="space-y-5">
-      <div><label class="label">Email</label><input type="email" id="auth-email" class="input" placeholder="you@example.com"></div>
-      <div><label class="label" id="auth-pass-label">Password</label><input type="password" id="auth-pass" class="input" placeholder="••••••••"></div>
-      <p class="text-right text-xs -mt-2"><button type="button" onclick="hwForgotPassword()" class="auth-switch-link" id="auth-forgot-btn">Forgot password?</button></p>
-      <div id="auth-name-field" class="hidden"><label class="label">Full Name</label><input type="text" id="auth-name" class="input" placeholder="Your name"></div>
-      <div id="auth-role-field" class="hidden"><label class="label">I am a</label><div class="flex gap-2"><button onclick="setRole('student')" class="pill flex-1 on" data-role="student">Student</button><button onclick="setRole('teacher')" class="pill flex-1" data-role="teacher">Teacher</button></div><p class="faint text-xs mt-1">Only the site owner's account can be the teacher.</p></div>
-      <p id="auth-pending-note" class="hidden faint text-xs">A new student account waits for the teacher's approval. You can open every lesson meanwhile; homework appears once you are accepted.</p>
+      <div><label class="label">Email</label><input type="email" id="auth-email" class="input" placeholder="ban@example.com"></div>
+      <div><label class="label" id="auth-pass-label">Mật khẩu</label><input type="password" id="auth-pass" class="input" placeholder="••••••••"></div>
+      <p class="text-right text-xs -mt-2"><button type="button" onclick="hwForgotPassword()" class="auth-switch-link" id="auth-forgot-btn">Quên mật khẩu?</button></p>
+      <div id="auth-name-field" class="hidden"><label class="label">Họ tên</label><input type="text" id="auth-name" class="input" placeholder="Tên của bạn"></div>
+      <div id="auth-role-field" class="hidden"><label class="label">Bạn là</label><div class="flex gap-2"><button onclick="setRole('student')" class="pill flex-1 on" data-role="student">Học viên</button><button onclick="setRole('teacher')" class="pill flex-1" data-role="teacher">Giáo viên</button></div><p class="faint text-xs mt-1">Chỉ tài khoản của chủ site mới đăng ký được vai giáo viên.</p></div>
+      <p id="auth-pending-note" class="hidden faint text-xs">Tài khoản học viên mới cần giáo viên duyệt. Trong lúc chờ bạn mở được mọi bài học; bài tập chỉ hiện sau khi được duyệt.</p>
       <div id="auth-msg" class="hidden text-xs"></div>
-      <button onclick="doAuth()" class="btn-primary w-full" id="auth-submit">Sign In</button>
-      <p class="text-center text-sm faint"><span id="auth-switch-text">Don't have an account?</span> <button onclick="toggleAuthMode()" class="auth-switch-link" id="auth-switch-btn">Sign Up</button></p>
+      <button onclick="doAuth()" class="btn-primary w-full" id="auth-submit">Đăng nhập</button>
+      <p class="text-center text-sm faint"><span id="auth-switch-text">Chưa có tài khoản?</span> <button onclick="toggleAuthMode()" class="auth-switch-link" id="auth-switch-btn">Đăng ký</button></p>
     </div>
   </div>
 </div>
@@ -4033,17 +4018,17 @@ function syncAuthFields(){
   const sw=document.getElementById('auth-switch-text');
   const sb=document.getElementById('auth-switch-btn');
   if(email)email.disabled=change;
-  if(pl)pl.textContent=change?'New password':'Password';
+  if(pl)pl.textContent=change?'Mật khẩu mới':'Mật khẩu';
   if(change){
-    if(title)title.textContent='Change password';
-    if(sub)sub.textContent='Save password';
+    if(title)title.textContent='Đổi mật khẩu';
+    if(sub)sub.textContent='Lưu mật khẩu';
     if(sw)sw.textContent='';
     if(sb)sb.classList.add('hidden');
   }else{
-    if(title)title.textContent=signup?'Sign Up':'Sign In';
-    if(sub)sub.textContent=signup?'Sign Up':'Sign In';
-    if(sw)sw.textContent=signup?'Already have an account?':"Don't have an account?";
-    if(sb){sb.classList.remove('hidden');sb.textContent=signup?'Sign In':'Sign Up'}
+    if(title)title.textContent=signup?'Đăng ký':'Đăng nhập';
+    if(sub)sub.textContent=signup?'Đăng ký':'Đăng nhập';
+    if(sw)sw.textContent=signup?'Đã có tài khoản?':'Chưa có tài khoản?';
+    if(sb){sb.classList.remove('hidden');sb.textContent=signup?'Đăng nhập':'Đăng ký'}
   }
 }
 function showAuth(){
@@ -4078,9 +4063,20 @@ function setRole(r){
 function setAuthBusy(b){
   const el=document.getElementById('auth-submit');if(!el)return;
   el.disabled=!!b;
-  el.textContent=b?'Please wait…':(AUTH_MODE==='login'?'Sign In':'Sign Up');
+  el.textContent=b?'Đang xử lý…':(AUTH_MODE==='login'?'Đăng nhập':'Đăng ký');
 }
 
+/* Supabase answers in English; the form answers in Vietnamese. */
+function authErrMsg(e){
+  const m=String(e&&e.message?e.message:'').toLowerCase();
+  if(m.indexOf('invalid login')>=0)return 'Email hoặc mật khẩu không đúng';
+  if(m.indexOf('email not confirmed')>=0)return 'Email chưa xác nhận. Mở hộp thư và bấm liên kết xác nhận.';
+  if(m.indexOf('already registered')>=0)return 'Email này đã có tài khoản. Chuyển sang Đăng nhập.';
+  if(m.indexOf('at least 6')>=0)return 'Mật khẩu cần ít nhất 6 ký tự.';
+  if(m.indexOf('rate limit')>=0||m.indexOf('too many')>=0)return 'Thử quá nhiều lần. Đợi một phút rồi thử lại.';
+  if(m.indexOf('fetch')>=0||m.indexOf('network')>=0)return 'Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại.';
+  return e&&e.message?e.message:'Đăng nhập không thành công';
+}
 async function doAuth(){
   const email=document.getElementById('auth-email').value;const pass=document.getElementById('auth-pass').value;const name=document.getElementById('auth-name').value||email.split('@')[0];
 
@@ -4091,15 +4087,15 @@ async function doAuth(){
       try{
         const r=await HB.auth.updateUser({password:pass});
         if(r.error)throw r.error;
-        setAuthBusy(false);AUTH_MODE='login';hideAuth();toast('Password updated','ok');
-      }catch(e){setAuthBusy(false);authMsg(e&&e.message?e.message:'Could not update the password','err')}
+        setAuthBusy(false);AUTH_MODE='login';hideAuth();toast('Đã đổi mật khẩu','ok');
+      }catch(e){setAuthBusy(false);authMsg(authErrMsg(e),'err')}
       return;
     }
-    authMsg('Changing a password needs the school backend.','err');
+    authMsg('Đổi mật khẩu cần máy chủ của trường.','err');
     return;
   }
 
-  if(!email||!pass){toast('Please fill in all fields','err');return}
+  if(!email||!pass){toast('Điền đủ email và mật khẩu','err');return}
   if(typeof HW_ON!=='undefined'&&HW_ON){
     setAuthBusy(true);authMsg('');
     try{
@@ -4109,26 +4105,25 @@ async function doAuth(){
         const meta={full_name:name,role:USER_ROLE};
         const r=await HB.auth.signUp({email,password:pass,options:{data:meta}});
         if(r.error)throw r.error;
-        if(!r.data||!r.data.session){setAuthBusy(false);authMsg('Account created — confirm your email, then sign in.','ok');return}
+        if(!r.data||!r.data.session){setAuthBusy(false);authMsg('Đã tạo tài khoản. Kiểm tra email để xác nhận rồi đăng nhập.','ok');return}
       }else{
         const r=await HB.auth.signInWithPassword({email,password:pass});
         if(r.error)throw r.error;
       }
       await hwLoadSession();
-      setAuthBusy(false);hideAuth();updateAuthUI();toast('Signed in','ok');routeAfterAuth();
+      setAuthBusy(false);hideAuth();updateAuthUI();toast('Đã đăng nhập','ok');routeAfterAuth();
       if(wantedTeacher&&(!USER||USER.role!=='teacher')){
-        toast('Signed up as a student — that teacher invite code was not valid','err');
+        toast('Đã tạo tài khoản học viên — mã giáo viên không đúng','err');
       }
-      go(USER&&USER.role==='teacher'?'teacher':'homework');
-    }catch(e){setAuthBusy(false);authMsg(e&&e.message?e.message:'Sign in failed','err')}
+    }catch(e){setAuthBusy(false);authMsg(authErrMsg(e),'err')}
     return;
   }
-  if(AUTH_MODE==='signup'){USER={name,email,role:USER_ROLE,joined:new Date().toLocaleDateString()};save('user',USER);toast('Account created!','ok')}
-  else{const saved=load('user',null);if(saved&&saved.email===email){USER=saved;toast('Welcome back!','ok')}else{USER={name:email.split('@')[0],email,role:'student',joined:new Date().toLocaleDateString()};save('user',USER);toast('Signed in!','ok')}}
+  if(AUTH_MODE==='signup'){USER={name,email,role:USER_ROLE,joined:new Date().toLocaleDateString()};save('user',USER);toast('Đã tạo tài khoản','ok')}
+  else{const saved=load('user',null);if(saved&&saved.email===email){USER=saved;toast('Chào mừng trở lại!','ok')}else{USER={name:email.split('@')[0],email,role:'student',joined:new Date().toLocaleDateString()};save('user',USER);toast('Đã đăng nhập','ok')}}
   hideAuth();updateAuthUI();routeAfterAuth();
 }
 function logout(){
-  const done=()=>{USER=null;localStorage.removeItem('mt_user');updateAuthUI();toast('Signed out','ok');go('landing')};
+  const done=()=>{USER=null;localStorage.removeItem('mt_user');updateAuthUI();toast('Đã đăng xuất','ok');go('landing')};
   if(typeof HW_ON!=='undefined'&&HW_ON&&HB.auth&&HB.auth.signOut)HB.auth.signOut().then(done,done);else done();
 }
 function updateAuthUI(){
@@ -4619,7 +4614,7 @@ async function renderDashboard(){
   if(num)num.textContent=pct+'%';
   document.getElementById('dash-progress-sub').textContent=parts?(parts+' phần đã mở · '+lessonsDone+' bài đã học xong'):'Mở một phần bài học là tiến độ hiện ở đây.';
   const naP=document.getElementById('na-progress');
-  if(naP)naP.textContent=parts?(pct+'% hoàn thành'):'Chưa bắt đầu';
+  if(naP)naP.textContent=parts?(pct+'% · '+lessonsDone+'/'+totalLessons+' bài'):'Chưa bắt đầu';
 
   /* homework: the same real rows the homework screen shows */
   dashRenderToday();

@@ -609,6 +609,10 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
     src.indexOf('data-tc-nav="teach"') < src.indexOf('data-tc-nav="students"') &&
     src.indexOf('data-tc-nav="students"') < src.indexOf('data-tc-nav="homework"') &&
     /data-view="materials"[^>]*><span class="nav-code">TL<\/span> Tài liệu/.test(src));
+  t('the public landing offers sign-in and nothing else in its header',
+    !/class="lp-links"/.test(src) && !/class="lp-subnav"/.test(src) && /id="lp-auth-btn"/.test(src));
+  t('signing in keeps the route the app picked instead of forcing homework',
+    !/go\(USER&&USER\.role==='teacher'\?'teacher':'homework'\)/.test(src));
   t('the student study workspace has three columns: words, lesson, assigned work',
     /id="v-study"/.test(src) && /class="st-cols"/.test(src) &&
     /st-vocab-list/.test(src) && /id="st-today"/.test(src) && /id="st-work-list"/.test(src) &&
@@ -952,9 +956,9 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   sa.showAuthChange();
   t('the change screen is its own mode', sa.getAuthMode() === 'change');
   t('the change screen is titled and labelled for its job',
-    /Change password/.test(sa.el('auth-title').textContent) &&
-    /New password/.test(sa.el('auth-pass-label').textContent) &&
-    /Save password/.test(sa.el('auth-submit').textContent));
+    /Đổi mật khẩu/.test(sa.el('auth-title').textContent) &&
+    /Mật khẩu mới/.test(sa.el('auth-pass-label').textContent) &&
+    /Lưu mật khẩu/.test(sa.el('auth-submit').textContent));
   t('the change screen pre-fills the signed-in email',
     sa.el('auth-email').value === 's@x.test');
   sa.el('auth-pass').value = 'brandNew123';
