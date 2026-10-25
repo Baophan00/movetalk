@@ -13,7 +13,7 @@ import { TeacherAssignments } from './screens/TeacherAssignments'
 import { Button } from './components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from './components/ui/dialog'
 import { Input } from './components/ui/input'
-import { A1, lessonA1, titleOf } from './lib/curriculum'
+import { A1 } from './lib/curriculum'
 import { partsSeen } from './lib/progress'
 import { pullProgress } from './lib/sync'
 import { supabase } from './lib/supabase'
@@ -141,7 +141,7 @@ export default function App() {
     landing: '',
     dashboard: 'Overview',
     lessons: 'Lessons',
-    lesson: titleOf(lessonA1(lessonN) ?? A1[0]) || `Lesson ${lessonN}`,
+    lesson: `Lesson ${lessonN}`,
     homework: 'Homework',
     library: 'Review',
     't-overview': 'Overview',

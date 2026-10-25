@@ -187,6 +187,54 @@ function Checks({ items }: { items: LessonFile['parts']['listenCheck'] }) {
   )
 }
 
+/** The deck opens on a title slide; show it as a cover, not as a wall of slide lines. */
+function Overview({ lesson, partCount, onStart }: { lesson: LessonFile; partCount: number; onStart: () => void }) {
+  const g = lesson.parts.flow.find((x) => x.group === 'Overview')
+  const lines = g?.slides?.[0]?.lines ?? []
+  const vi = lines.find((l) => VI_CHARS.test(l) && l.length > 8)
+
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-[#ded4fb] bg-[#f8f5ff] px-5 py-6 sm:px-7 sm:py-8">
+      <span aria-hidden className="pointer-events-none absolute -right-3 -top-6 select-none text-[118px] font-bold leading-none text-primary/[.07]">
+        {String(lesson.n).padStart(2, '0')}
+      </span>
+      <p className="text-[10.5px] font-bold uppercase tracking-[.16em] text-primary">
+        A1 · Lesson {lesson.n}
+      </p>
+      <h3 className="mt-1.5 max-w-[22ch] text-[26px] font-semibold leading-[1.15] tracking-tight sm:text-[30px]">
+        {titleOf(lesson) || `Lesson ${lesson.n}`}
+      </h3>
+      {vi && <p className="mt-2 max-w-[46ch] text-[13.5px] leading-relaxed text-ink/70">{vi}</p>}
+
+      <div className="mt-4 flex flex-wrap gap-1.5">
+        <span className="rounded-full border border-[#ded4fb] bg-surface px-2.5 py-1 text-[11px] font-medium text-ink/75">
+          {lesson.parts.vocab.length} words
+        </span>
+        <span className="rounded-full border border-[#ded4fb] bg-surface px-2.5 py-1 text-[11px] font-medium text-ink/75">
+          {partCount} parts
+        </span>
+        {lesson.parts.dialogue.length > 0 && (
+          <span className="rounded-full border border-[#ded4fb] bg-surface px-2.5 py-1 text-[11px] font-medium text-ink/75">
+            {lesson.parts.dialogue.length} dialogue lines
+          </span>
+        )}
+        {lesson.parts.listenCheck.length > 0 && (
+          <span className="rounded-full border border-[#ded4fb] bg-surface px-2.5 py-1 text-[11px] font-medium text-ink/75">
+            {lesson.parts.listenCheck.length} listening checks
+          </span>
+        )}
+      </div>
+
+      <div className="mt-5 flex items-center gap-3">
+        <Button size="sm" onClick={onStart}>
+          Start the lesson <ArrowRight className="h-3.5 w-3.5" />
+        </Button>
+        <p className="hidden text-[11.5px] text-muted sm:block">Title slide of the handout. Next part opens Vocabulary.</p>
+      </div>
+    </div>
+  )
+}
+
 type PracticeItem = { prompt: string; vi?: string; options: string[]; answer: string }
 
 /** The handout's choose exercises, with the deck's own answer key. One tap, immediate answer. */
@@ -333,8 +381,13 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
         fallback={lesson.parts.grammarChoose}
       />,
     }
-    for (const g of lesson.parts.flow) nodes[`flow-${g.group}`] = <Flow groups={[g]} />
-    return partPlan(lesson).map((p) => ({ ...p, node: nodes[p.key] }))
+    for (const g of lesson.parts.flow) {
+      if (g.group === 'Overview') continue
+      nodes[`flow-${g.group}`] = <Flow groups={[g]} />
+    }
+    const plan = partPlan(lesson)
+    nodes['flow-Overview'] = <Overview lesson={lesson} partCount={plan.length} onStart={() => setActive(1)} />
+    return plan.map((p) => ({ ...p, node: nodes[p.key] }))
   }, [lesson])
 
   useEffect(() => {
@@ -373,7 +426,7 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
           <select
             value={lesson.n}
             onChange={(e) => onPickLesson(Number(e.target.value))}
-            className="focus-ring h-8 rounded-xl border border-line bg-surface px-2 text-[12px] font-semibold tabular-nums"
+            className="focus-ring h-8 w-[calc(100vw-200px)] max-w-[260px] truncate rounded-xl border border-line bg-surface px-2 text-[12px] font-semibold tabular-nums sm:w-auto"
             aria-label="Choose a lesson"
           >
             {A1.map((l) => (
@@ -450,7 +503,7 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
 
             {parts[active]?.node}
 
-            <div className="mt-5 flex items-center justify-between gap-2 border-t border-line/60 pt-3.5">
+            <div className={cn('mt-5 flex items-center justify-between gap-2 border-t border-line/60 pt-3.5', active === 0 && 'hidden')}>
               <Button variant="ghost" size="sm" onClick={() => setActive((v) => Math.max(0, v - 1))} disabled={active === 0}>
                 <ArrowLeft className="h-3.5 w-3.5" /> Back
               </Button>

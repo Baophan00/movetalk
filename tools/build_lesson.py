@@ -122,9 +122,9 @@ GRAMMAR_TAGS = ("GRAMMAR IN USE",)
 
 # Everything the deck is made of, in teaching order. Structured parts (vocabulary, grammar,
 # dialogue, check) are built above; the rest is kept slide by slide so nothing on the deck is lost.
-FLOW_ORDER = ["Warm-up", "Before you listen", "Pronunciation", "Activate", "Real talk", "Reflect", "Mission", "Point & say", "Overview"]
+FLOW_ORDER = ["Overview", "Before you listen", "Pronunciation", "Activate", "Real talk", "Reflect", "Mission", "Point & say"]
 FLOW_OF = [
-    ("MOVE.", "Warm-up"),
+    ("MOVE.", "Overview"),
     ("RECALL & CONNECT", "Warm-up"),
     ("BEFORE LISTENING", "Before you listen"),
     ("PRONUNCIATION", "Pronunciation"),
@@ -136,7 +136,7 @@ FLOW_OF = [
 ]
 FLOW_SKIP = ("LANGUAGE BANK", "GRAMMAR IN USE", "DIALOGUE", "· CHECK")
 FLOW_EXTRA = {"EVERYDAY SCENES": "Everyday scenes", "SPEAKING": "Speaking", "REVIEW MISSION": "Mission",
-              "POINT & SAY": "Point & say", "RECONNECT": "Warm-up", "NOUN PHRASES": "Grammar"}
+              "POINT & SAY": "Point & say", "RECONNECT": "Overview", "NOUN PHRASES": "Grammar"}
 VI_MARK = re.compile(r"[àáảãạăâêôơưđ]|\?\s*$")
 GLUED = re.compile(r"(?<=[?.!])(?=[A-Z])")
 

@@ -101,7 +101,7 @@ export function titleOf(lesson: LessonFile): string {
 
 /** Teaching order of the parts; also the identity used when progress is stored. */
 export const PART_ORDER: Record<string, number> = {
-  'Warm-up': 10,
+  Overview: 5,
   Vocabulary: 20,
   'Before you listen': 30,
   Grammar: 40,
