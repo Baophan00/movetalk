@@ -42,19 +42,19 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
       <button onClick={onBack} className="mb-4 inline-flex items-center gap-1.5 text-[12.5px] text-muted transition-colors hover:text-ink">
-        <ArrowLeft className="h-3.5 w-3.5" /> Tổng quan
+        <ArrowLeft className="h-3.5 w-3.5" /> Overview
       </button>
 
       <div className="rounded-3xl border border-line bg-surface p-5 shadow-card sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0">
-            <p className="text-[11px] font-bold uppercase tracking-[.14em] text-primary">Bài {lesson.n} · A1</p>
+            <p className="text-[11px] font-bold uppercase tracking-[.14em] text-primary">Lesson {lesson.n} · A1</p>
             <h2 className="mt-1 text-[24px] font-semibold leading-tight tracking-tight sm:text-[28px]">{lesson.title}</h2>
             <p className="mt-1 text-[13px] text-muted">{lesson.vi}</p>
           </div>
           <div className="w-full sm:w-[220px]">
             <div className="flex items-center justify-between text-[11.5px] text-muted">
-              <span>Tiến độ bài</span>
+              <span>Lesson progress</span>
               <span className="font-semibold text-ink">
                 {seen.length}/{parts.length}
               </span>
@@ -65,7 +65,7 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
 
         <div className="mt-4 flex flex-wrap gap-1.5">
           <span className="rounded-full bg-primary-soft px-2.5 py-1 text-[11.5px] font-medium text-primary">
-            {parts.length} phần
+            {parts.length} parts
           </span>
           {lesson.today.map((t) => (
             <span key={t} className="rounded-full bg-bg px-2.5 py-1 text-[11.5px] text-muted">
@@ -121,13 +121,13 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
               <div className="mb-4 flex items-center justify-between gap-3 border-b border-line/70 pb-3">
                 <div>
                   <p className="text-[10.5px] font-bold uppercase tracking-[.14em] text-muted">
-                    Phần {active + 1} / {parts.length}
+                    Part {active + 1} of {parts.length}
                   </p>
                   <p className="text-[15px] font-semibold">{PART_META[current?.key]?.label ?? 'Nội dung'}</p>
                 </div>
                 {seen.includes(active) && (
                   <span className="inline-flex items-center gap-1 text-[11.5px] font-semibold text-ok">
-                    <CircleCheck className="h-3.5 w-3.5" /> đã mở
+                    <CircleCheck className="h-3.5 w-3.5" /> opened
                   </span>
                 )}
               </div>
@@ -136,15 +136,15 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
 
               <div className="mt-6 flex items-center justify-between gap-3 border-t border-line/70 pt-4">
                 <Button variant="ghost" size="sm" onClick={() => setActive((v) => Math.max(0, v - 1))} disabled={active === 0}>
-                  <ArrowLeft className="h-3.5 w-3.5" /> Phần trước
+                  <ArrowLeft className="h-3.5 w-3.5" /> Previous part
                 </Button>
                 {active < parts.length - 1 ? (
                   <Button size="sm" onClick={() => setActive((v) => v + 1)}>
-                    Phần tiếp theo <ArrowRight className="h-3.5 w-3.5" />
+                    Next part <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
                 ) : (
                   <Button size="sm" onClick={() => nextLesson && onPickLesson(nextLesson.n)} disabled={!nextLesson}>
-                    Sang bài {nextLesson ? nextLesson.n : ''} <ArrowRight className="h-3.5 w-3.5" />
+                    Go to lesson {nextLesson ? nextLesson.n : ''} <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
                 )}
               </div>
@@ -153,11 +153,11 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
 
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-surface/70 px-4 py-3">
             <Button variant="outline" size="sm" onClick={() => prevLesson && onPickLesson(prevLesson.n)} disabled={!prevLesson}>
-              <ArrowLeft className="h-3.5 w-3.5" /> Bài {prevLesson ? prevLesson.n : ''}
+              <ArrowLeft className="h-3.5 w-3.5" /> Lesson {prevLesson ? prevLesson.n : ''}
             </Button>
-            <p className="text-[11.5px] text-muted">Bài {lesson.n} / {LESSONS.length} đang mở</p>
+            <p className="text-[11.5px] text-muted">Lesson {lesson.n} of {LESSONS.length} open</p>
             <Button variant="outline" size="sm" onClick={() => nextLesson && onPickLesson(nextLesson.n)} disabled={!nextLesson}>
-              Bài {nextLesson ? nextLesson.n : ''} <ArrowRight className="h-3.5 w-3.5" />
+              Lesson {nextLesson ? nextLesson.n : ''} <ArrowRight className="h-3.5 w-3.5" />
             </Button>
           </div>
         </div>

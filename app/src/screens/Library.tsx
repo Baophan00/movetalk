@@ -8,9 +8,9 @@ export function Library({ onBack }: Props) {
   return (
     <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
       <div className="mb-5">
-        <p className="text-[12px] font-semibold uppercase tracking-[.14em] text-muted">Tài liệu</p>
-        <h2 className="mt-1 text-[24px] font-semibold tracking-tight">Tra nhanh khi đang nói</h2>
-        <p className="mt-1 text-[13px] text-muted">Mẫu câu, bảng ngữ pháp và bản đọc của từng bài, gom một chỗ.</p>
+        <p className="text-[12px] font-semibold uppercase tracking-[.14em] text-muted">Review</p>
+        <h2 className="mt-1 text-[24px] font-semibold tracking-tight">Look it up while you talk</h2>
+        <p className="mt-1 text-[13px] text-muted">Sentence patterns, grammar tables and the audio for every lesson, in one place.</p>
       </div>
 
       <Card>
@@ -18,17 +18,17 @@ export function Library({ onBack }: Props) {
           <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary-soft text-primary">
             <Search className="h-[18px] w-[18px]" />
           </span>
-          <p className="min-w-0 flex-1 text-[13px] text-muted">Tìm theo câu tiếng Anh hoặc nghĩa tiếng Việt. Sẽ mở cùng bản tra của từng bài.</p>
+          <p className="min-w-0 flex-1 text-[13px] text-muted">Search by English sentence or Vietnamese meaning. Opens with each lesson lookup.</p>
           <Button variant="outline" size="sm" disabled>
-            Đang hoàn thiện
+            In progress
           </Button>
         </CardBody>
       </Card>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         {[
-          { icon: FileText, title: 'Bảng ngữ pháp', body: 'Các bảng đang dùng trong 10 bài A1.' },
-          { icon: Headphones, title: 'Bản đọc', body: '548 câu có giọng đọc, nghe lại bất cứ lúc nào.' },
+          { icon: FileText, title: 'Grammar tables', body: 'The tables used across the 10 A1 lessons.' },
+          { icon: Headphones, title: 'Audio', body: '548 sentences with audio, replay any time.' },
         ].map(({ icon: Icon, title, body }) => (
           <Card key={title} className="card-hover">
             <CardBody>
@@ -43,7 +43,7 @@ export function Library({ onBack }: Props) {
       </div>
 
       <button onClick={onBack} className="mt-6 text-[12.5px] text-muted hover:text-ink">
-        ← về tổng quan
+        ← back to overview
       </button>
     </div>
   )

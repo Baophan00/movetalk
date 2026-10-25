@@ -15,12 +15,8 @@ type Props = {
 }
 
 const TRACKS = [
-  { key: 'F1', name: 'Dựng câu', count: 50, live: false },
-  { key: 'F2', name: 'Kiểm soát thì', count: 50, live: false },
-  { key: 'A1', name: 'Bản đồ và chẩn đoán', count: 10, live: true, open: 10 },
-  { key: 'A2', name: 'Sửa lỗi ngôn ngữ', count: 50, live: false },
-  { key: 'E1', name: 'Mở rộng 1', count: 50, live: false },
-  { key: 'E2', name: 'Mở rộng 2', count: 3, live: true, open: 3 },
+  { key: 'A1', name: 'Activate 1', count: 10, live: true, open: 10 },
+  { key: 'A2', name: 'Activate 2', count: 50, live: false, open: 0 },
 ]
 
 export function Dashboard({ name, onOpenLesson, onHomework }: Props) {
@@ -33,17 +29,17 @@ export function Dashboard({ name, onOpenLesson, onHomework }: Props) {
   const partsRead = LESSONS.reduce((n, l) => n + partsSeen(l.n).length, 0)
 
   const stats = [
-    { icon: Flame, label: 'Chuỗi ngày', value: opened ? `${Math.min(opened, 7)}` : '0', hint: 'ngày liên tiếp' },
-    { icon: BookOpen, label: 'Phần đã học', value: String(partsRead), hint: `trên ${LESSONS.reduce((n, l) => n + partsOf(l).length, 0)} phần` },
-    { icon: Target, label: 'Bài xong', value: String(doneAll), hint: `${LESSONS.length} bài đang mở` },
+    { icon: Flame, label: 'Streak', value: opened ? `${Math.min(opened, 7)}` : '0', hint: 'days in a row' },
+    { icon: BookOpen, label: 'Parts read', value: String(partsRead), hint: `of ${LESSONS.reduce((n, l) => n + partsOf(l).length, 0)} parts` },
+    { icon: Target, label: 'Lessons done', value: String(doneAll), hint: `${LESSONS.length} lessons open` },
   ]
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
-        <p className="text-[12px] font-semibold uppercase tracking-[.14em] text-muted">Hôm nay</p>
-        <h2 className="mt-1 text-[26px] font-semibold tracking-tight sm:text-[30px]">Chào {name.split(' ')[0]},</h2>
-        <p className="mt-1 text-[13.5px] text-muted">Một phần mỗi ngày là đủ. Bạn đang ở bài {next.n}.</p>
+        <p className="text-[12px] font-semibold uppercase tracking-[.14em] text-muted">Today</p>
+        <h2 className="mt-1 text-[26px] font-semibold tracking-tight sm:text-[30px]">Hi {name.split(' ')[0]},</h2>
+        <p className="mt-1 text-[13.5px] text-muted">One part a day is enough. You are on lesson {next.n}.</p>
       </motion.div>
 
       <div className="grid gap-4 lg:grid-cols-[1.6fr_1fr]">
@@ -51,9 +47,9 @@ export function Dashboard({ name, onOpenLesson, onHomework }: Props) {
           <span className="absolute inset-x-0 top-0 h-1 bg-primary" />
           <CardHeader className="pt-6">
             <div>
-              <Badge tone="primary">Việc tiếp theo</Badge>
+              <Badge tone="primary">Next up</Badge>
               <CardTitle className="mt-2 text-[17px]">
-                Bài {next.n}: {next.title}
+                Lesson {next.n}: {next.title}
               </CardTitle>
               <p className="mt-0.5 text-[12.5px] text-muted">{next.vi}</p>
             </div>
@@ -73,15 +69,15 @@ export function Dashboard({ name, onOpenLesson, onHomework }: Props) {
             <div className="mt-3">
               <Progress value={percent} />
               <p className="mt-1.5 text-[11.5px] text-muted">
-                {read}/{totalParts} phần đã mở
+                {read}/{totalParts} parts opened
               </p>
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
               <Button onClick={() => onOpenLesson(next.n)}>
-                <Play className="h-4 w-4" /> {read ? 'Học tiếp' : 'Bắt đầu bài này'}
+                <Play className="h-4 w-4" /> {read ? 'Continue' : 'Start this lesson'}
               </Button>
               <Button variant="outline" onClick={onHomework}>
-                <BookOpen className="h-4 w-4" /> Bài tập
+                <BookOpen className="h-4 w-4" /> Homework
               </Button>
             </div>
           </CardBody>
@@ -108,11 +104,11 @@ export function Dashboard({ name, onOpenLesson, onHomework }: Props) {
       <section>
         <div className="mb-3 flex items-end justify-between">
           <div>
-            <h3 className="text-[15px] font-semibold tracking-tight">Lộ trình</h3>
-            <p className="text-[12px] text-muted">Sáu chặng, mở dần từng chặng. Không có bài giả.</p>
+            <h3 className="text-[15px] font-semibold tracking-tight">Path</h3>
+            <p className="text-[12px] text-muted">Two levels for now: A1 open, A2 in preparation.</p>
           </div>
           <span className="hidden items-center gap-1.5 text-[11.5px] text-muted sm:flex">
-            <Sparkles className="h-3.5 w-3.5 text-accent" /> A1 và E2 đang mở
+            <Sparkles className="h-3.5 w-3.5 text-accent" /> A1 is open
           </span>
         </div>
 
@@ -135,15 +131,15 @@ export function Dashboard({ name, onOpenLesson, onHomework }: Props) {
                       {t.key}
                     </span>
                     {t.live ? (
-                      <Badge tone="ok">đang mở</Badge>
+                      <Badge tone="ok">open</Badge>
                     ) : (
                       <span className="inline-flex items-center gap-1 text-[10.5px] font-semibold uppercase tracking-wide text-muted">
-                        <Lock className="h-3 w-3" /> sắp mở
+                        <Lock className="h-3 w-3" /> soon
                       </span>
                     )}
                   </div>
                   <p className="mt-3 text-[13.5px] font-semibold text-ink/90">{t.name}</p>
-                  <p className="text-[11.5px] text-muted">{t.live ? `${t.open} bài đang mở` : `${t.count} bài đang soạn`}</p>
+                  <p className="text-[11.5px] text-muted">{t.live ? `${t.open} lessons open` : `${t.count} lessons in progress`}</p>
                   {t.live && (
                     <div className="mt-3">
                       <Progress value={(openedHere / Math.max(1, lessons.length)) * 100} />
@@ -162,11 +158,11 @@ export function Dashboard({ name, onOpenLesson, onHomework }: Props) {
             <CalendarCheck className="h-[19px] w-[19px]" />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-[13.5px] font-semibold">Bài tập của giáo viên</p>
-            <p className="text-[12px] text-muted">Chưa có bài nào được giao. Khi có, bài sẽ hiện ở đây kèm hạn nộp.</p>
+            <p className="text-[13.5px] font-semibold">Homework from your teacher</p>
+            <p className="text-[12px] text-muted">Nothing assigned yet. When there is, it shows up here with a due date.</p>
           </div>
           <Button variant="outline" size="sm" onClick={onHomework}>
-            Xem trang bài tập <ArrowRight className="h-3.5 w-3.5" />
+            Open homework <ArrowRight className="h-3.5 w-3.5" />
           </Button>
         </CardBody>
       </Card>

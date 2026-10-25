@@ -21,7 +21,7 @@ function SpeakButton({ text, size = 'md' }: { text: string; size?: 'sm' | 'md' }
         'inline-grid shrink-0 place-items-center rounded-full border border-line bg-surface text-primary transition-colors hover:border-primary/40 hover:bg-primary-soft focus-ring',
         size === 'sm' ? 'h-7 w-7' : 'h-9 w-9',
       )}
-      aria-label="Nghe"
+      aria-label="Play"
     >
       {playing ? <Pause className={size === 'sm' ? 'h-3 w-3' : 'h-3.5 w-3.5'} /> : <Volume2 className={size === 'sm' ? 'h-3.5 w-3.5' : 'h-4 w-4'} />}
     </button>
@@ -46,10 +46,10 @@ function Deck({ items }: { items: Flashcard[] }) {
     <div>
       <div className="mb-3 flex items-center justify-between text-[12px] text-muted">
         <span>
-          Thẻ {i + 1}/{items.length}
+          Card {i + 1} of {items.length}
         </span>
         <span className="flex items-center gap-1.5">
-          <Check className="h-3.5 w-3.5 text-ok" /> {known.length} thẻ đã thuộc
+          <Check className="h-3.5 w-3.5 text-ok" /> {known.length} known
         </span>
       </div>
 
@@ -66,7 +66,7 @@ function Deck({ items }: { items: Flashcard[] }) {
           {/* front */}
           <div className="backface-hidden absolute inset-0 flex flex-col justify-between rounded-3xl border border-line bg-surface p-6 shadow-card">
             <div className="flex items-start justify-between">
-              <span className="rounded-full bg-primary-soft px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-wide text-primary">từ mới</span>
+              <span className="rounded-full bg-primary-soft px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-wide text-primary">new word</span>
               <SpeakButton text={card.word} />
             </div>
             <div>
@@ -74,7 +74,7 @@ function Deck({ items }: { items: Flashcard[] }) {
               {card.phonetic && <p className="mt-1 text-[13px] text-muted">{card.phonetic}</p>}
             </div>
             <p className="text-[12px] text-muted">
-              Chạm để xem nghĩa <ChevronRight className="inline h-3 w-3" />
+              Tap to see the meaning <ChevronRight className="inline h-3 w-3" />
             </p>
           </div>
 
@@ -100,7 +100,7 @@ function Deck({ items }: { items: Flashcard[] }) {
       </div>
 
       <div className="mt-4 flex items-center gap-2">
-        <Button variant="outline" size="icon" onClick={() => go(-1)} aria-label="Thẻ trước">
+        <Button variant="outline" size="icon" onClick={() => go(-1)} aria-label="Previous card">
           <ChevronLeft className="h-4 w-4" />
         </Button>
         <Button
@@ -111,9 +111,9 @@ function Deck({ items }: { items: Flashcard[] }) {
             go(1)
           }}
         >
-          <Check className="h-4 w-4" /> {known.includes(i) ? 'Đã thuộc' : 'Thuộc thẻ này'}
+          <Check className="h-4 w-4" /> {known.includes(i) ? 'Known' : 'I know this'}
         </Button>
-        <Button variant="outline" size="icon" onClick={() => go(1)} aria-label="Thẻ sau">
+        <Button variant="outline" size="icon" onClick={() => go(1)} aria-label="Next card">
           <ChevronRight className="h-4 w-4" />
         </Button>
       </div>
@@ -135,10 +135,10 @@ function Quiz({ items }: { items: QuizItem[] }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between rounded-xl bg-ink/[.03] px-3.5 py-2 text-[12px]">
         <span className="text-muted">
-          Đúng {score}/{items.length}
+          {score} of {items.length} correct
         </span>
         <button onClick={() => setPicked({})} className="inline-flex items-center gap-1 text-muted hover:text-ink">
-          <RotateCcw className="h-3 w-3" /> làm lại
+          <RotateCcw className="h-3 w-3" /> reset
         </button>
       </div>
 
@@ -188,7 +188,7 @@ function Quiz({ items }: { items: QuizItem[] }) {
           animate={{ opacity: 1, y: 0 }}
           className="rounded-xl bg-primary-soft px-4 py-3 text-[13px] text-primary"
         >
-          {score === items.length ? 'Đúng hết. Sang phần tiếp theo thôi.' : `Đúng ${score}/${items.length}. Xem lại các câu đỏ rồi làm lại.`}
+          {score === items.length ? 'All correct. Move on to the next part.' : `${score}/${items.length} correct. Check the red ones and try again.`}
         </motion.p>
       )}
     </div>
@@ -217,7 +217,7 @@ function Dialog({ block }: { block: Extract<Block, { t: 'dialog' }> }) {
         </div>
         <Button variant="soft" size="sm" className="ml-auto" onClick={playAll}>
           {playingAll ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
-          {playingAll ? 'Đang phát' : 'Nghe cả đoạn'}
+          {playingAll ? 'Playing' : 'Play the whole thing'}
         </Button>
       </div>
       <ul className="divide-y divide-line/70">
@@ -384,7 +384,7 @@ export function Blocks({ blocks }: { blocks: Block[] }) {
                 </ol>
                 {b.useful && (
                   <p className="mt-3 rounded-xl bg-bg/70 px-3 py-2 text-[12px] text-muted">
-                    <span className="font-semibold text-ink/70">Câu dùng được: </span>
+                    <span className="font-semibold text-ink/70">Useful phrases: </span>
                     {b.useful}
                   </p>
                 )}
