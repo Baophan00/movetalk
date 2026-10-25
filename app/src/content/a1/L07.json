@@ -1,0 +1,449 @@
+{
+ "n": 7,
+ "level": "A1",
+ "deck": "doc_f7a72a1c9a89_MOVE_ACTIVATE_1_L07_REVISION FROM L01-L06_VIP  -  Repaired.pptx",
+ "parts": {
+  "vocab": [
+   {
+    "word": "appointment",
+    "pos": "n",
+    "ipa": "/əˈpɔɪntmənt/",
+    "def": "",
+    "example": "What time is your appointment?",
+    "vi": "cuộc hẹn",
+    "cloze": "What time is your ____?"
+   },
+   {
+    "word": "available",
+    "pos": "adj",
+    "ipa": "/əˈveɪləbəl/",
+    "def": "",
+    "example": "Is this table available?",
+    "vi": "còn trống / rảnh",
+    "cloze": "Is this table ____?"
+   },
+   {
+    "word": "crowded",
+    "pos": "adj",
+    "ipa": "/ˈkraʊdɪd/",
+    "def": "",
+    "example": "Is the café crowded?",
+    "vi": "đông người",
+    "cloze": "Is the café ____?"
+   },
+   {
+    "word": "recommend",
+    "pos": "v",
+    "ipa": "/ˌrekəˈmend/",
+    "def": "",
+    "example": "Which café do you recommend?",
+    "vi": "gợi ý / đề xuất",
+    "cloze": "Which café do you ____?"
+   },
+   {
+    "word": "reserve a table",
+    "pos": "v",
+    "ipa": "/rɪˈzɜːrv ə ˈteɪbəl/",
+    "def": "",
+    "example": "Can I reserve a table?",
+    "vi": "đặt trước bàn",
+    "cloze": "Can I ____ a ____?"
+   },
+   {
+    "word": "entrance",
+    "pos": "n",
+    "ipa": "/ˈentrəns/",
+    "def": "",
+    "example": "Where is the entrance?",
+    "vi": "lối vào",
+    "cloze": "Where is the ____?"
+   },
+   {
+    "word": "a quiet corner",
+    "pos": "n",
+    "ipa": "/ə ˈkwaɪət ˈkɔːrnɚ/",
+    "def": "",
+    "example": "We need a quiet corner.",
+    "vi": "góc yên tĩnh",
+    "cloze": "We need a ____ ____."
+   },
+   {
+    "word": "pick up a friend",
+    "pos": "v",
+    "ipa": "/pɪk ʌp ə frend/",
+    "def": "",
+    "example": "I pick up a friend after work.",
+    "vi": "đón một người bạn",
+    "cloze": "I ____ ____ a friend after work."
+   },
+   {
+    "word": "get to work",
+    "pos": "v",
+    "ipa": "/ɡet tə wɝːk/",
+    "def": "",
+    "example": "How do you get to work?",
+    "vi": "đến nơi làm việc",
+    "cloze": "How do you ____ ____ ____?"
+   },
+   {
+    "word": "spend time with",
+    "pos": "v",
+    "ipa": "/spend taɪm wɪð/",
+    "def": "",
+    "example": "She spends time with her family.",
+    "vi": "dành thời gian với",
+    "cloze": "She ____ ____ ____ her family."
+   },
+   {
+    "word": "wash the dishes",
+    "pos": "v",
+    "ipa": "/wɑːʃ ðə ˈdɪʃɪz/",
+    "def": "",
+    "example": "He washes the dishes.",
+    "vi": "rửa chén",
+    "cloze": "He washes the ____."
+   },
+   {
+    "word": "once a week",
+    "pos": "phrase",
+    "ipa": "/wʌns ə wiːk/",
+    "def": "",
+    "example": "We eat out once a week.",
+    "vi": "mỗi tuần một lần",
+    "cloze": "We eat out ____ a week."
+   },
+   {
+    "word": "another place",
+    "pos": "n",
+    "ipa": "/əˈnʌðɚ pleɪs/",
+    "def": "",
+    "example": "Do you know another place?",
+    "vi": "một nơi khác",
+    "cloze": "Do you know ____ ____?"
+   },
+   {
+    "word": "our current plan",
+    "pos": "n",
+    "ipa": "/aʊɚ ˈkɜːrənt plæn/",
+    "def": "",
+    "example": "Is this our current plan?",
+    "vi": "kế hoạch hiện tại",
+    "cloze": "Is this our ____ ____?"
+   },
+   {
+    "word": "local food",
+    "pos": "n",
+    "ipa": "/ˈloʊkəl fuːd/",
+    "def": "",
+    "example": "Does it serve local food?",
+    "vi": "đồ ăn địa phương",
+    "cloze": "Does it serve ____ ____?"
+   },
+   {
+    "word": "across the street",
+    "pos": "prep",
+    "ipa": "/əˈkrɔːs ðə striːt/",
+    "def": "",
+    "example": "The entrance is across the street.",
+    "vi": "bên kia đường",
+    "cloze": "The entrance is ____ the ____."
+   },
+   {
+    "word": "How’s it going?",
+    "pos": "",
+    "ipa": "/haʊz ɪt ˈɡoʊɪŋ/",
+    "def": "",
+    "example": "How’s it going? — Pretty good.",
+    "vi": "Dạo này thế nào?",
+    "cloze": "How’s it ____?"
+   },
+   {
+    "word": "Pretty good.",
+    "pos": "",
+    "ipa": "/ˈprɪti ɡʊd/",
+    "def": "",
+    "example": "Pretty good. How about you?",
+    "vi": "Khá ổn.",
+    "cloze": "____ good. How about you?"
+   },
+   {
+    "word": "Not really.",
+    "pos": "",
+    "ipa": "/nɑːt ˈrɪəli/",
+    "def": "",
+    "example": "Are you busy? — Not really.",
+    "vi": "Không hẳn.",
+    "cloze": "Are you busy? — Not ____."
+   },
+   {
+    "word": "That sounds good.",
+    "pos": "",
+    "ipa": "/ðæt saʊndz ɡʊd/",
+    "def": "",
+    "example": "Coffee at three? — That sounds good.",
+    "vi": "Nghe hay đấy.",
+    "cloze": "Coffee at three? — That ____ ____."
+   },
+   {
+    "word": "Are you serious?",
+    "pos": "",
+    "ipa": "/ɑr ju ˈsɪriəs/",
+    "def": "",
+    "example": "The tickets are free. — Are you serious?",
+    "vi": "Thật hả?",
+    "cloze": "Free tickets? — Are you ____?"
+   },
+   {
+    "word": "No worries.",
+    "pos": "",
+    "ipa": "/noʊ ˈwɜːriz/",
+    "def": "",
+    "example": "Sorry I’m late. — No worries.",
+    "vi": "Không sao đâu.",
+    "cloze": "Sorry I’m late. — No ____."
+   },
+   {
+    "word": "Do you need a hand?",
+    "pos": "",
+    "ipa": "/də ju niːd ə hænd/",
+    "def": "",
+    "example": "Do you need a hand with the report?",
+    "vi": "Cần giúp không?",
+    "cloze": "Do you need a ____?"
+   },
+   {
+    "word": "Sounds like a plan.",
+    "pos": "",
+    "ipa": "/saʊndz laɪk ə plæn/",
+    "def": "",
+    "example": "Let’s meet at six. — Sounds like a plan.",
+    "vi": "Vậy chốt nhé.",
+    "cloze": "Six o’clock? — Sounds like a ____."
+   },
+   {
+    "word": "What are you up to?",
+    "pos": "",
+    "ipa": "/wʌt ɑr ju ʌp tə/",
+    "def": "",
+    "example": "What are you up to? — Just cooking.",
+    "vi": "Đang làm gì đấy?",
+    "cloze": "What are you ____ ____?"
+   },
+   {
+    "word": "I’m on my way.",
+    "pos": "",
+    "ipa": "/aɪm ɑːn maɪ weɪ/",
+    "def": "",
+    "example": "I’m on my way to your place.",
+    "vi": "Đang trên đường.",
+    "cloze": "I’m on my ____."
+   },
+   {
+    "word": "Give me a minute.",
+    "pos": "",
+    "ipa": "/ɡɪv mi ə ˈmɪnɪt/",
+    "def": "",
+    "example": "Give me a minute. I’m almost ready.",
+    "vi": "Chờ tôi một chút.",
+    "cloze": "Give me a ____."
+   },
+   {
+    "word": "I’ll let you know.",
+    "pos": "",
+    "ipa": "/aɪl let ju noʊ/",
+    "def": "",
+    "example": "I’ll let you know if I need help.",
+    "vi": "Tôi sẽ báo bạn.",
+    "cloze": "I’ll ____ you ____."
+   },
+   {
+    "word": "Fair enough.",
+    "pos": "",
+    "ipa": "/fer ɪˈnʌf/",
+    "def": "",
+    "example": "I’m too tired to go out. — Fair enough.",
+    "vi": "Ừ, cũng hợp lý.",
+    "cloze": "I’m tired. — ____ enough."
+   },
+   {
+    "word": "Thanks anyway.",
+    "pos": "",
+    "ipa": "/θæŋks ˈeniweɪ/",
+    "def": "",
+    "example": "No tables left? Thanks anyway.",
+    "vi": "Dù sao cũng cảm ơn.",
+    "cloze": "No tables? — Thanks ____."
+   },
+   {
+    "word": "I’m just looking.",
+    "pos": "",
+    "ipa": "/aɪm dʒʌst ˈlʊkɪŋ/",
+    "def": "",
+    "example": "Can I help you? — I’m just looking.",
+    "vi": "Tôi chỉ xem thôi.",
+    "cloze": "Can I help? — I’m just ____."
+   },
+   {
+    "word": "See you in a bit.",
+    "pos": "",
+    "ipa": "/siː ju ɪn ə bɪt/",
+    "def": "",
+    "example": "I’m on my way. See you in a bit.",
+    "vi": "Lát nữa gặp nhé.",
+    "cloze": "See you in a ____."
+   }
+  ],
+  "grammarChoose": [],
+  "grammar": [
+   {
+    "section": "PRONUNCIATION · ENDINGS",
+    "sub": "Đọc đuôi trong câu có ý nghĩa",
+    "lines": [
+     "Đọc câu, xác định /s/ /z/ /ɪz/, rồi đổi chủ ngữ theo cue.",
+     "She cooks dinner.",
+     "COOKS → THEY",
+     "He lives nearby.",
+     "LIVES → WE",
+     "She washes the dishes.",
+     "WASHES → I",
+     "Those shops sell gifts.",
+     "SHOPS: đọc rõ số nhiều.",
+     "These buildings are tall.",
+     "BUILDINGS: nối sang ARE.",
+     "Do you know other places?",
+     "PLACES: giữ đủ âm tiết.",
+     "Đừng thêm âm “ờ” sau mọi phụ âm cuối."
+    ]
+   },
+   {
+    "section": "PRONUNCIATION · QUESTION CHUNKS",
+    "sub": "Nói rõ, rồi nói liền cụm",
+    "lines": [
+     "Nghe mẫu của giáo viên. Nhấn thông tin chính, không ép rút gọn.",
+     "WHAT do you LIKE?",
+     "I like LOCAL FOOD.",
+     "WHAT’S your favorite PLACE?",
+     "The café near the PARK.",
+     "WHAT are you GOOD at?",
+     "I’m good at COOKING.",
+     "HOW LONG does it TAKE?",
+     "About FIFTEEN MINUTES.",
+     "Vòng 2: thay câu trả lời và hỏi lại bằng nhịp tự nhiên."
+    ]
+   },
+   {
+    "section": "PRONUNCIATION · LISTEN & IDENTIFY",
+    "sub": "Nghe rõ số lượng và hệ câu",
+    "lines": [
+     "Nghe giáo viên. Nói A hoặc B, rồi đọc lại nguyên câu đã nghe.",
+     "A this shop / B these shops",
+     "Giáo viên đọc cụm số 1.",
+     "A fifteen / B fifty",
+     "Giáo viên đọc cụm số 2.",
+     "A Does she work? / B Is she at work?",
+     "Giáo viên đọc câu số 3.",
+     "A once a month / B twice a month",
+     "Giáo viên đọc cụm số 4.",
+     "A he works / B he work",
+     "Giáo viên đọc cụm số 5.",
+     "A How far? / B How long?",
+     "Giáo viên đọc câu số 6.",
+     "Nói lại giúp xác nhận bạn nghe gì, không chỉ chọn chữ cái."
+    ]
+   },
+   {
+    "section": "PRONUNCIATION · READ WITH INTENTION",
+    "sub": "Đọc để người nghe hiểu mục đích",
+    "lines": [
+     "Lượt 1 đọc rõ. Lượt 2 đổi vai và nói tự nhiên, không nhìn xuống từng từ.",
+     "A",
+     "Is this table available?",
+     "B",
+     "Yes, it is. Is it just for you?",
+     "A",
+     "No, it’s for my new coworker and me.",
+     "B",
+     "What time do you need it?",
+     "A",
+     "At twelve thirty. Is there a quiet corner?",
+     "B",
+     "Yes. The table near the window is quiet.",
+     "YES/NO: ngữ điệu có thể đi lên. WH trung tính: thường đi xuống. Nhấn TABLE / TIME / QUIET."
+    ]
+   },
+   {
+    "section": "PRONUNCIATION · READ & RETELL",
+    "sub": "Một lịch trình, nhiều cụm quen thuộc",
+    "lines": [
+     "Đọc cả đoạn. Sau đó đóng mẫu và kể lại ba thông tin.",
+     "My new coworker lives across the street from a small café.",
+     "She usually gets to work by motorbike. It takes about twenty minutes.",
+     "She likes her job, but she doesn’t work on Sundays.",
+     "After work, she picks up her son and cooks dinner.",
+     "On Fridays, we sometimes have lunch together.",
+     "We like local food, so we usually choose a quiet restaurant.",
+     "Before we go, I ask, “Is a table available? How much does lunch cost?”",
+     "Partner hỏi 2 câu WH. Người kể trả lời bằng trí nhớ, không đọc lại."
+    ]
+   },
+   {
+    "section": "PRONUNCIATION · CHANGE THE FOCUS",
+    "sub": "Cùng một câu, đổi thông tin cần nhấn",
+    "lines": [
+     "Đọc câu sao cho người nghe nhận ra bạn đang sửa thông tin nào.",
+     "MY new coworker works in sales.",
+     "Đồng nghiệp của TÔI, không phải của bạn.",
+     "My NEW coworker works in sales.",
+     "Đồng nghiệp MỚI, không phải người cũ.",
+     "My new coworker works in SALES.",
+     "Bộ phận SALES, không phải marketing.",
+     "Partner nghe rồi nói lại bằng tiếng Việt: bạn vừa nhấn điều gì?"
+    ]
+   }
+  ],
+  "dialogue": [
+   {
+    "who": "Linh",
+    "line": "Hey, how’s it going?"
+   },
+   {
+    "who": "Tom",
+    "line": "Pretty good, thanks. What are you buying?"
+   },
+   {
+    "who": "Linh",
+    "line": "Just some vegetables and fruit. Do you shop here often?"
+   },
+   {
+    "who": "Tom",
+    "line": "Once a week. I usually come here on Saturdays."
+   },
+   {
+    "who": "Linh",
+    "line": "Are you cooking dinner tonight?"
+   },
+   {
+    "who": "Tom",
+    "line": "Not really. My sister is cooking, so I just need some milk."
+   },
+   {
+    "who": "Linh",
+    "line": "The café next door has free coffee today."
+   },
+   {
+    "who": "Tom",
+    "line": "Are you serious? Let’s go after we pay."
+   },
+   {
+    "who": "Linh",
+    "line": "That sounds good. Give me a minute to finish shopping."
+   },
+   {
+    "who": "Tom",
+    "line": "No worries. I’ll meet you by the entrance."
+   }
+  ],
+  "listenCheck": []
+ },
+ "slides": 80
+}

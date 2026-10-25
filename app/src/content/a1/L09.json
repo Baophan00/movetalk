@@ -1,0 +1,640 @@
+{
+ "n": 9,
+ "level": "A1",
+ "deck": "doc_d0bee2688ec8_MOVE_ACTIVATE_1_L09_BASIC TENSES _VIP'.pptx",
+ "parts": {
+  "vocab": [
+   {
+    "word": "Are you sure?",
+    "pos": "q",
+    "ipa": "/ər jə ʃʊr/",
+    "def": "",
+    "example": "Are you sure this is the right entrance?",
+    "vi": "Bạn chắc chứ?",
+    "cloze": "Are you ____? Is this the right entrance?"
+   },
+   {
+    "word": "Are you serious?",
+    "pos": "q",
+    "ipa": "/ər jə ˈsɪriəs/",
+    "def": "",
+    "example": "Are you serious? The tickets are only five dollars?",
+    "vi": "Bạn nói thật à?",
+    "cloze": "Are you ____? The tickets are only $5?"
+   },
+   {
+    "word": "Does it work?",
+    "pos": "q",
+    "ipa": "/dʌz ɪt wɜːrk/",
+    "def": "",
+    "example": "Does it work with my phone?",
+    "vi": "Có hoạt động không?",
+    "cloze": "Does it ____ with my phone?"
+   },
+   {
+    "word": "Does it make sense?",
+    "pos": "q",
+    "ipa": "/dʌz ɪt meɪk sens/",
+    "def": "",
+    "example": "Does it make sense to book the tickets now?",
+    "vi": "Có hợp lý không?",
+    "cloze": "Does it ____ ____ to book now?"
+   },
+   {
+    "word": "excited about",
+    "pos": "adj+prep",
+    "ipa": "/ɪkˈsaɪtɪd əˈbaʊt/",
+    "def": "",
+    "example": "I’m excited about the concert this weekend.",
+    "vi": "háo hức về",
+    "cloze": "I’m ____ ____ the concert."
+   },
+   {
+    "word": "interested in",
+    "pos": "adj+prep",
+    "ipa": "/ˈɪntrəstɪd ɪn/",
+    "def": "",
+    "example": "Are you interested in photography?",
+    "vi": "hứng thú với",
+    "cloze": "Are you ____ ____ photography?"
+   },
+   {
+    "word": "good at",
+    "pos": "adj+prep",
+    "ipa": "/ɡʊd æt/",
+    "def": "",
+    "example": "My cousin is good at taking photos.",
+    "vi": "giỏi về",
+    "cloze": "My cousin is ____ ____ taking photos."
+   },
+   {
+    "word": "afraid of",
+    "pos": "adj+prep",
+    "ipa": "/əˈfreɪd əv/",
+    "def": "",
+    "example": "I’m afraid of heights, but I enjoy cycling.",
+    "vi": "sợ",
+    "cloze": "I’m ____ ____ heights."
+   },
+   {
+    "word": "ready for",
+    "pos": "adj+prep",
+    "ipa": "/ˈredi fər/",
+    "def": "",
+    "example": "Are you ready for the trip?",
+    "vi": "sẵn sàng cho",
+    "cloze": "Are you ____ ____ the trip?"
+   },
+   {
+    "word": "happy with",
+    "pos": "adj+prep",
+    "ipa": "/ˈhæpi wɪð/",
+    "def": "",
+    "example": "Are you happy with your new headphones?",
+    "vi": "hài lòng với",
+    "cloze": "Are you ____ ____ your headphones?"
+   },
+   {
+    "word": "worried about",
+    "pos": "adj+prep",
+    "ipa": "/ˈwɜːrid əˈbaʊt/",
+    "def": "",
+    "example": "I’m worried about the weather tomorrow.",
+    "vi": "lo lắng về",
+    "cloze": "I’m ____ ____ the weather."
+   },
+   {
+    "word": "different from",
+    "pos": "adj+prep",
+    "ipa": "/ˈdɪfrənt frəm/",
+    "def": "",
+    "example": "This map is different from the one online.",
+    "vi": "khác với",
+    "cloze": "This map is ____ ____ the one online."
+   },
+   {
+    "word": "wait for",
+    "pos": "v+prep",
+    "ipa": "/weɪt fər/",
+    "def": "",
+    "example": "I’m waiting for my friend at the entrance.",
+    "vi": "đợi",
+    "cloze": "I’m ____ ____ my friend."
+   },
+   {
+    "word": "look for",
+    "pos": "v+prep",
+    "ipa": "/lʊk fər/",
+    "def": "",
+    "example": "Are you looking for a gift?",
+    "vi": "tìm kiếm",
+    "cloze": "Are you ____ ____ a gift?"
+   },
+   {
+    "word": "listen to",
+    "pos": "v+prep",
+    "ipa": "/ˈlɪsən tə/",
+    "def": "nghe",
+    "example": "I usually listen to music on the bus.",
+    "vi": "nghe",
+    "cloze": "I usually ____ ____ music on the bus."
+   },
+   {
+    "word": "talk to",
+    "pos": "v+prep",
+    "ipa": "/tɔːk tə/",
+    "def": "",
+    "example": "I talked to the receptionist yesterday.",
+    "vi": "nói với",
+    "cloze": "I ____ ____ the receptionist yesterday."
+   },
+   {
+    "word": "talk about",
+    "pos": "v+prep",
+    "ipa": "/tɔːk əˈbaʊt/",
+    "def": "",
+    "example": "We’re talking about our weekend plans.",
+    "vi": "nói về",
+    "cloze": "We’re ____ ____ our weekend plans."
+   },
+   {
+    "word": "ask for",
+    "pos": "v+prep",
+    "ipa": "/æsk fər/",
+    "def": "",
+    "example": "I’m going to ask for a receipt.",
+    "vi": "yêu cầu, xin",
+    "cloze": "I’m going to ____ ____ a receipt."
+   },
+   {
+    "word": "pay for",
+    "pos": "v+prep",
+    "ipa": "/peɪ fər/",
+    "def": "",
+    "example": "Do we need to pay for the parking?",
+    "vi": "trả tiền cho",
+    "cloze": "Do we need to ____ ____ parking?"
+   },
+   {
+    "word": "depend on",
+    "pos": "v+prep",
+    "ipa": "/dɪˈpend ɑːn/",
+    "def": "",
+    "example": "The price depends on the ticket type.",
+    "vi": "phụ thuộc vào",
+    "cloze": "The price ____ ____ the ticket type."
+   },
+   {
+    "word": "explain … to …",
+    "pos": "v pattern",
+    "ipa": "/ɪkˈspleɪn … tə …/",
+    "def": "",
+    "example": "Can you explain this map to me?",
+    "vi": "giải thích cho ai",
+    "cloze": "Can you ____ this map ____ me?"
+   },
+   {
+    "word": "agree with",
+    "pos": "v+prep",
+    "ipa": "/əˈɡriː wɪð/",
+    "def": "",
+    "example": "I agree with you about the meeting time.",
+    "vi": "đồng ý với",
+    "cloze": "I ____ ____ you."
+   },
+   {
+    "word": "belong to",
+    "pos": "v+prep",
+    "ipa": "/bɪˈlɔːŋ tə/",
+    "def": "",
+    "example": "Do these bags belong to the volunteers?",
+    "vi": "thuộc về",
+    "cloze": "These bags ____ ____ the volunteers."
+   },
+   {
+    "word": "think about",
+    "pos": "v+prep",
+    "ipa": "/θɪŋk əˈbaʊt/",
+    "def": "",
+    "example": "I’m thinking about a weekend trip.",
+    "vi": "cân nhắc",
+    "cloze": "I’m ____ ____ a weekend trip."
+   }
+  ],
+  "grammarChoose": [],
+  "grammar": [
+   {
+    "section": "GRAMMAR IN USE · TIME SIGNALS",
+    "sub": "Mốc thời gian: nhận ra ý trước khi chia",
+    "lines": [
+     "Nhìn cả câu và tình huống. Những cụm này thường gợi ý cách dùng.",
+     "PRESENT SIMPLE · lặp lại",
+     "usually / often / sometimes / rarely",
+     "every day / twice a week / on Sundays",
+     "PRESENT CONTINUOUS · đang / tạm thời",
+     "now / right now / at the moment",
+     "currently / these days",
+     "PAST SIMPLE · thời gian đã kết thúc",
+     "yesterday / last night / last weekend",
+     "two days ago / in 2024",
+     "TODAY / THIS WEEK có thể đi với nhiều thì. Mốc thời gian không phải nút bấm tự động."
+    ]
+   },
+   {
+    "section": "GRAMMAR IN USE · TWO SYSTEMS",
+    "sub": "Tương lai: cùng mốc, khác ý muốn nói",
+    "lines": [
+     "TOMORROW / TONIGHT / NEXT WEEK / THIS WEEKEND dùng được với cả hai.",
+     "BE GOING TO",
+     "Đã có dự định",
+     "I’m going to book a room tonight.",
+     "Tôi đã có ý định đặt phòng.",
+     "Are you going to book it online?",
+     "WILL",
+     "Quyết định lúc nói / dự đoán",
+     "That room looks good. I’ll book it.",
+     "I think the tickets will cost more.",
+     "Will the hotel be quiet at night?",
+     "Không chọn WILL hay GOING TO chỉ vì có TOMORROW. Hỏi: dự định, quyết định hay dự đoán?"
+    ]
+   },
+   {
+    "section": "GRAMMAR IN USE · REACTIVATE",
+    "sub": "Hai hệ vẫn chạy xuyên thời gian",
+    "lines": [
+     "Đọc câu hỏi rồi nói một câu trả lời khẳng định và một câu phủ định.",
+     "Ý MUỐN NÓI",
+     "ĐỘNG TỪ THƯỜNG",
+     "BE · TRẠNG THÁI / NƠI CHỐN",
+     "Thường / hiện tại",
+     "Does it work?",
+     "It works. / It doesn’t work.",
+     "Is she ready?",
+     "She is. / She isn’t.",
+     "Đang diễn ra",
+     "Are you looking for a gift?",
+     "I am. / I’m not.",
+     "Are you at the entrance?",
+     "I am. / I’m not.",
+     "Đã qua",
+     "Did you pay for it?",
+     "I paid. / I didn’t pay.",
+     "Were you happy with it?",
+     "I was. / I wasn’t.",
+     "Đã có dự định",
+     "Are you going to buy it?",
+     "I am. / I’m not.",
+     "Are you going to be there?",
+     "I am. / I’m not.",
+     "Quyết định / dự đoán",
+     "Will you call them?",
+     "I will. / I won’t.",
+     "Will it be expensive?",
+     "It will. / It won’t.",
+     "Sau DOES / DID / WILL: V nguyên mẫu. BE riêng không thêm DO / DID."
+    ]
+   },
+   {
+    "section": "GRAMMAR IN USE · REACTIVATE",
+    "sub": "V1 → V2 · Động từ có quy tắc",
+    "lines": [
+     "Đọc theo cụm đời sống, rồi kể một việc bạn đã làm gần đây.",
+     "V1 · CỤM ĐỜI SỐNG",
+     "V2",
+     "V1 · CỤM ĐỜI SỐNG",
+     "V2",
+     "book a room · đặt phòng",
+     "booked",
+     "check the price · kiểm tra giá",
+     "checked",
+     "call a friend · gọi cho bạn",
+     "called",
+     "return an item · trả lại hàng",
+     "returned",
+     "ask for help · nhờ giúp đỡ",
+     "asked",
+     "change a booking · đổi lịch đặt",
+     "changed",
+     "try on a jacket · thử áo",
+     "tried",
+     "order a drink · gọi đồ uống",
+     "ordered",
+     "arrive at the station · đến ga",
+     "arrived",
+     "miss the bus · lỡ xe buýt",
+     "missed",
+     "wait for a reply · đợi trả lời",
+     "waited",
+     "decide to stay · quyết định ở lại",
+     "decided",
+     "BOOKED / CALLED / WAITED: cùng viết -ED nhưng không đọc giống nhau."
+    ]
+   },
+   {
+    "section": "GRAMMAR IN USE · REACTIVATE",
+    "sub": "V1 → V2 · Động từ bất quy tắc 1",
+    "lines": [
+     "Không thêm -ED. Nhớ V2 cùng vật, người hoặc nơi đi kèm.",
+     "V1 · CỤM ĐỜI SỐNG",
+     "V2",
+     "V1 · CỤM ĐỜI SỐNG",
+     "V2",
+     "go to the bank · đến ngân hàng",
+     "went",
+     "come home · về nhà",
+     "came",
+     "buy a ticket · mua vé",
+     "bought",
+     "pay by card · trả bằng thẻ",
+     "paid",
+     "take a taxi · đi taxi",
+     "took",
+     "get a refund · được hoàn tiền",
+     "got",
+     "meet a neighbor · gặp hàng xóm",
+     "met",
+     "see a doctor · đi khám",
+     "saw",
+     "find my wallet · tìm thấy ví",
+     "found",
+     "leave my keys at home · quên chìa khóa",
+     "left",
+     "Kể việc hôm qua: I went… / I bought… Hỏi lại: Did you go…? / Did you buy…?"
+    ]
+   },
+   {
+    "section": "GRAMMAR IN USE · REACTIVATE",
+    "sub": "V1 → V2 · Động từ bất quy tắc 2",
+    "lines": [
+     "Nói một câu quá khứ, sau đó chuyển sang câu hỏi cho người đối diện.",
+     "V1 · CỤM ĐỜI SỐNG",
+     "V2",
+     "V1 · CỤM ĐỜI SỐNG",
+     "V2",
+     "have an appointment · có lịch hẹn",
+     "had",
+     "do the shopping · đi mua sắm",
+     "did",
+     "make a choice · lựa chọn",
+     "made",
+     "give directions · chỉ đường",
+     "gave",
+     "tell someone the address · nói địa chỉ",
+     "told",
+     "send a message · gửi tin nhắn",
+     "sent",
+     "lose my phone · mất điện thoại",
+     "lost",
+     "feel excited · cảm thấy háo hức",
+     "felt",
+     "think about the price · cân nhắc giá",
+     "thought",
+     "be interested in · hứng thú với",
+     "was / were",
+     "Không nói DID YOU WENT hoặc DID YOU WAS. Dùng DID YOU GO…? / WERE YOU…?"
+    ]
+   },
+   {
+    "section": "GRAMMAR IN USE · REGULAR V2",
+    "sub": "Viết V2: bốn mẫu cần gọi lại",
+    "lines": [
+     "Nhìn từ gốc trước khi thêm đuôi. Đọc cả cụm sau khi đổi.",
+     "Thông thường: + ED",
+     "book → booked / ask → asked",
+     "Có E cuối: + D",
+     "change → changed / arrive → arrived",
+     "Phụ âm + Y: Y → IED",
+     "try → tried / reply → replied",
+     "Gấp đôi phụ âm cuối khi phù hợp",
+     "stop → stopped / plan → planned",
+     "Nguyên âm + Y: play → played. Không đổi Y thành I."
+    ]
+   },
+   {
+    "section": "GRAMMAR IN USE · RETRIEVE",
+    "sub": "Đừng nhìn V2: kể việc thật trong 5 giây",
+    "lines": [
+     "Đổi từ gợi ý thành câu. Thêm nơi, người hoặc lý do.",
+     "YESTERDAY · buy / pay",
+     "Mua vé rồi trả bằng thẻ.",
+     "LAST NIGHT · lose / find",
+     "Mất ví rồi tìm thấy trong xe.",
+     "TWO DAYS AGO · call / change",
+     "Gọi khách sạn để đổi lịch đặt.",
+     "NOW · wait for / at the station",
+     "Một hành động đang diễn ra + một vị trí.",
+     "THIS WEEKEND · đã có dự định",
+     "Một chuyến đi + hai việc định làm.",
+     "“I can’t carry this bag.” · quyết định ngay",
+     "Đề nghị giúp bằng WILL.",
+     "Lượt 2: partner hỏi DID / WERE / ARE / WILL. Không đọc lại câu mẫu."
+    ]
+   },
+   {
+    "section": "GRAMMAR IN USE · MIXED RESPONSE",
+    "sub": "Mốc giống nhau chưa chắc cấu trúc giống nhau",
+    "lines": [
+     "Chọn đầu câu, nói cả câu hỏi rồi trả lời bằng thông tin thật.",
+     "YESTERDAY · happy with the service",
+     "___ you happy with the service?",
+     "YESTERDAY · return the item",
+     "___ you return the item?",
+     "RIGHT NOW · at the entrance",
+     "___ she at the entrance?",
+     "RIGHT NOW · look for a gift",
+     "___ she looking for a gift?",
+     "TOMORROW · dự định có mặt lúc 9",
+     "___ you going to ___ there at nine?",
+     "TOMORROW · dự đoán giá vé",
+     "Do you think the tickets ___ ___ expensive?",
+     "Một mốc thời gian, hai hệ. Đừng chỉ nhìn từ YESTERDAY hoặc NOW."
+    ]
+   },
+   {
+    "section": "GRAMMAR IN USE · TWO SYSTEMS",
+    "sub": "Tính từ + giới từ: dùng cùng BE",
+    "lines": [
+     "Giữ giới từ trong cả câu hỏi, câu trả lời và khi đổi thời gian.",
+     "BE + ADJ + PREP",
+     "Are you excited about the trip?",
+     "She’s interested in photography.",
+     "I was happy with the room.",
+     "good AT · afraid OF · ready FOR",
+     "worried ABOUT · different FROM",
+     "SAU GIỚI TỪ",
+     "N / đại từ / V-ing",
+     "I’m interested in learning photography.",
+     "Are you good at taking photos?",
+     "Không dùng interested in learn.",
+     "Đây là cụm cần học cùng nhau.",
+     "BE thay theo chủ ngữ và thời gian; giới từ đi với tính từ vẫn được giữ."
+    ]
+   },
+   {
+    "section": "GRAMMAR IN USE · TWO SYSTEMS",
+    "sub": "Động từ + giới từ: nghe và giữ cả cụm",
+    "lines": [
+     "Đừng bỏ FOR / TO / ABOUT chỉ vì tiếng Việt không có từ tương đương.",
+     "WAIT / LOOK / PAY",
+     "Who are you waiting for?",
+     "I looked for my wallet yesterday.",
+     "Did you pay for the tickets?",
+     "WAIT FOR + người/vật",
+     "LOOK FOR + thứ cần tìm",
+     "EXPLAIN + ĐIỀU + TO + NGƯỜI",
+     "Can you explain this to me?",
+     "She explained the map to us.",
+     "What does this sign mean?",
+     "Không dùng explain me this.",
+     "Mẫu chính: explain something to someone.",
+     "TALK TO someone = nói với ai. TALK ABOUT something = nói về điều gì."
+    ]
+   },
+   {
+    "section": "PRONUNCIATION · -ED SYSTEM",
+    "sub": "-ED: chọn theo ÂM cuối của từ gốc",
+    "lines": [
+     "Giống cách đọc S/ES: nghe âm cuối, không nhìn chữ cuối.",
+     "/t/",
+     "Sau /p k f s ʃ tʃ θ/",
+     "booked /bʊkt/",
+     "missed /mɪst/",
+     "asked /æskt/",
+     "Không thêm âm tiết",
+     "/d/",
+     "Sau nguyên âm và phụ âm",
+     "hữu thanh, trừ /d/",
+     "called /kɔːld/",
+     "changed /tʃeɪndʒd/",
+     "tried /traɪd/",
+     "Không thêm âm tiết",
+     "/ɪd/",
+     "Sau /t/ hoặc /d/",
+     "waited /ˈweɪtɪd/",
+     "decided /dɪˈsaɪdɪd/",
+     "needed /ˈniːdɪd/",
+     "Thêm một âm tiết",
+     "Hỏi: âm cuối là /t/ hoặc /d/? Nếu không, âm vô thanh hay hữu thanh?"
+    ]
+   },
+   {
+    "section": "PRONUNCIATION · SORT & SAY",
+    "sub": "Đọc đuôi trước, rồi nói cả cụm",
+    "lines": [
+     "Chọn /t/ /d/ /ɪd/. Giáo viên mở đáp án từ Notes sau khi học viên thử.",
+     "booked a room / checked the price",
+     "Có thêm âm tiết không?",
+     "called a friend / returned an item",
+     "Đuôi có rung giọng không?",
+     "waited for a reply / decided to stay",
+     "Âm cuối từ gốc là gì?",
+     "missed a bus / asked for help",
+     "Đừng chèn âm “ịt” sau mọi từ.",
+     "tried on a jacket / changed a booking",
+     "Giữ cụm động từ và giới từ.",
+     "wanted a refund / needed a receipt",
+     "Đếm số âm tiết trước và sau -ED.",
+     "Lượt 2: nói câu thật với YESTERDAY / LAST WEEK. Không đọc từ rời."
+    ]
+   },
+   {
+    "section": "PRONUNCIATION · HEAR & REBUILD",
+    "sub": "Nghe quá khứ, kể lại rồi hỏi tiếp",
+    "lines": [
+     "Nghe 2 lượt từ Notes. Ghi động từ V2 và chi tiết quan trọng, chưa xem lời đọc.",
+     "1 · BOOKING",
+     "Đã đặt gì? Khi nào?",
+     "2 · CUSTOMER SERVICE",
+     "Gọi cho ai? Đổi điều gì?",
+     "3 · A SMALL PROBLEM",
+     "Mất gì? Tìm thấy ở đâu?",
+     "4 · AN APPOINTMENT",
+     "Đã đợi bao lâu? Ai đã đến?",
+     "5 · A PURCHASE",
+     "Giá thế nào? Đã quyết định gì?",
+     "6 · YOUR TURN",
+     "Kể một việc tương tự, partner hỏi tiếp.",
+     "Không nghe được đuôi? Dùng cả mốc thời gian và ngữ cảnh để hiểu, rồi nghe lại."
+    ]
+   },
+   {
+    "section": "PRONUNCIATION · EVERYDAY QUESTIONS",
+    "sub": "Câu hỏi ngắn, khác ý định nói",
+    "lines": [
+     "Đọc theo tình huống. Giọng tò mò, ngạc nhiên hay kiểm tra thông tin khác nhau.",
+     "Are_you sure?",
+     "Kiểm tra lại thông tin.",
+     "Are_you serious?",
+     "Ngạc nhiên; tránh giọng chế giễu.",
+     "Does_it work?",
+     "Kiểm tra thiết bị / phương án.",
+     "Does_it make sense?",
+     "Kiểm tra tính hợp lý / sự rõ ràng.",
+     "ARE YOU có thể đọc nhẹ /ər jə/. DOES IT: nối /z/ với /ɪ/, không bỏ IT."
+    ]
+   },
+   {
+    "section": "PRONUNCIATION · ADJECTIVE & PREPOSITION",
+    "sub": "Đọc liền cụm, giữ giới từ nhẹ",
+    "lines": [
+     "Nối âm khi có phụ âm cuối + nguyên âm đầu. Đọc FOR / TO nhẹ khi không nhấn.",
+     "excited_about",
+     "/ɪkˈsaɪtɪd əˈbaʊt/",
+     "interested_in",
+     "/ˈɪntrəstɪd ɪn/",
+     "good_at",
+     "/ɡʊd æt/",
+     "ready_for",
+     "/ˈredi fər/",
+     "listen_to / wait_for",
+     "/ˈlɪsən tə/ /weɪt fər/",
+     "Đọc cả câu: I’m excited about the trip. / Who are you waiting for?"
+    ]
+   },
+   {
+    "section": "PRONUNCIATION · LISTEN & SORT",
+    "sub": "Nghe câu, chọn một trong bốn ý",
+    "lines": [
+     "Giáo viên đọc từ Notes. Ghi THƯỜNG / ĐANG / ĐÃ / DỰ ĐỊNH, rồi nhắc lại.",
+     "1 · __________________",
+     "Nghe ý và cụm động từ.",
+     "2 · __________________",
+     "Nghe ý và cụm động từ.",
+     "3 · __________________",
+     "Nghe ý và cụm động từ.",
+     "4 · __________________",
+     "Nghe ý và cụm động từ.",
+     "5 · __________________",
+     "Nghe ý và cụm động từ.",
+     "6 · __________________",
+     "Nghe ý và cụm động từ.",
+     "Không dùng riêng một âm cuối để đoán toàn bộ câu."
+    ]
+   }
+  ],
+  "dialogue": [
+   {
+    "who": "Customer",
+    "line": "Excuse me. Does this model work with my phone? I’m looking for wireless headphones, but I’m not good at choosing electronics."
+   },
+   {
+    "who": "Assistant",
+    "line": "Yes, it does. Are you happy with your current pair, or are you looking for something different?"
+   },
+   {
+    "who": "Customer",
+    "line": "Not really. I bought them last week, and they worked at first. Yesterday, the sound stopped on one side."
+   },
+   {
+    "who": "Assistant",
+    "line": "I see. Are you interested in a replacement, or do you want a refund? We can check the receipt first."
+   },
+   {
+    "who": "Customer",
+    "line": "A replacement, please. Are you sure this model works with older phones? Mine isn’t very new."
+   }
+  ],
+  "listenCheck": []
+ },
+ "slides": 65
+}

@@ -5,7 +5,7 @@ import { Landing } from './screens/Landing'
 import { Dashboard } from './screens/Dashboard'
 import { Lesson } from './screens/Lesson'
 import { Homework } from './screens/Homework'
-import { Library } from './screens/Library'
+import { Review } from './screens/Review'
 import { TeacherOverview, TeacherSchedule, TeacherStudents } from './screens/Teacher'
 import { TeacherAssignments } from './screens/TeacherAssignments'
 import { Button } from './components/ui/button'
@@ -152,7 +152,7 @@ export default function App() {
           )}
           {route === 'lesson' && <Lesson lessonN={lessonN} onPickLesson={setLessonN} onBack={() => go('dashboard')} />}
           {route === 'homework' && <Homework onBack={() => openLesson(lessonN)} hasBackend={false} />}
-          {route === 'library' && <Library onBack={() => go('dashboard')} />}
+          {route === 'library' && <Review />}
           {route === 't-overview' && <TeacherOverview />}
           {route === 't-schedule' && <TeacherSchedule />}
           {route === 't-students' && <TeacherStudents />}

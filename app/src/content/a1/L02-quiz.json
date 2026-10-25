@@ -1,0 +1,162 @@
+{
+ "n": 2,
+ "level": "A1",
+ "items": [
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ your sister work in sales?",
+   "answer": "Does",
+   "options": [
+    "Does",
+    "Are",
+    "Do",
+    "Is"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ your parents at home?",
+   "answer": "Are",
+   "options": [
+    "Are",
+    "Do",
+    "Does",
+    "Is"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ he have a car?",
+   "answer": "Does",
+   "options": [
+    "Does",
+    "Are",
+    "Do",
+    "Is"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ the café open?",
+   "answer": "Is",
+   "options": [
+    "Is",
+    "Are",
+    "Do",
+    "Does"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ they eat breakfast together?",
+   "answer": "Do",
+   "options": [
+    "Do",
+    "Are",
+    "Does",
+    "Is"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ we late?",
+   "answer": "Are",
+   "options": [
+    "Are",
+    "Do",
+    "Does",
+    "Is"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ she thirsty?",
+   "answer": "Is",
+   "options": [
+    "Is",
+    "Are",
+    "Do",
+    "Does"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ your coworkers live nearby?",
+   "answer": "Do",
+   "options": [
+    "Do",
+    "Are",
+    "Does",
+    "Is"
+   ]
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Chị bạn có phải là giáo viên không?",
+   "answer": "Is your sister a teacher?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Bố mẹ bạn có sống gần đây không?",
+   "answer": "Do your parents live near here?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Anh ấy có xe ô tô không?",
+   "answer": "Does he have a car?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Họ có đói không?",
+   "answer": "Are they hungry?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Quán cà phê đó có mở cửa không?",
+   "answer": "Is the café open?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Chúng ta có ăn trưa cùng nhau không?",
+   "answer": "Do we eat lunch together?"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "đồng nghiệp",
+   "answer": "coworker"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "cùng nhau",
+   "answer": "together"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "khát",
+   "answer": "thirsty"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "ăn sáng",
+   "answer": "breakfast"
+  }
+ ]
+}

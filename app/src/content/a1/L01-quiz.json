@@ -1,0 +1,162 @@
+{
+ "n": 1,
+ "level": "A1",
+ "items": [
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ you like coffee?",
+   "answer": "Do",
+   "options": [
+    "Do",
+    "Are",
+    "Does",
+    "Is"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ you tired today?",
+   "answer": "Are",
+   "options": [
+    "Are",
+    "Do",
+    "Does",
+    "Is"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ you wake up early?",
+   "answer": "Do",
+   "options": [
+    "Do",
+    "Are",
+    "Does",
+    "Is"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ you free tonight?",
+   "answer": "Are",
+   "options": [
+    "Are",
+    "Do",
+    "Does",
+    "Is"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ you cook at home?",
+   "answer": "Do",
+   "options": [
+    "Do",
+    "Are",
+    "Does",
+    "Is"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ you hungry now?",
+   "answer": "Are",
+   "options": [
+    "Are",
+    "Do",
+    "Does",
+    "Is"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ you eat out on weekends?",
+   "answer": "Do",
+   "options": [
+    "Do",
+    "Are",
+    "Does",
+    "Is"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ you new here?",
+   "answer": "Are",
+   "options": [
+    "Are",
+    "Do",
+    "Does",
+    "Is"
+   ]
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Bạn có sống gần đây không?",
+   "answer": "Do you live near here?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Hôm nay bạn bận không?",
+   "answer": "Are you busy today?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Bạn có nấu ăn ở nhà không?",
+   "answer": "Do you cook at home?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Bạn có sẵn sàng không?",
+   "answer": "Are you ready?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Bạn có đi ngủ muộn không?",
+   "answer": "Do you go to bed late?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Tối nay bạn có ở nhà không?",
+   "answer": "Are you at home tonight?"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "ăn ngoài",
+   "answer": "eat out"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "thức dậy sớm",
+   "answer": "wake up early"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "đi ngủ muộn",
+   "answer": "go to bed late"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "ở nhà",
+   "answer": "at home"
+  }
+ ]
+}

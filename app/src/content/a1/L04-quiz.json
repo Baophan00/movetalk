@@ -1,0 +1,162 @@
+{
+ "n": 4,
+ "level": "A1",
+ "items": [
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ do you work? — At a hotel.",
+   "answer": "Where",
+   "options": [
+    "Where",
+    "How far",
+    "How long",
+    "How much"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ are you tired? — Because I work long hours.",
+   "answer": "Why",
+   "options": [
+    "Why",
+    "How far",
+    "How long",
+    "How much"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ does it take to get there? — Twenty minutes.",
+   "answer": "How long",
+   "options": [
+    "How long",
+    "How far",
+    "How much",
+    "How often"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ is it from here? — Two kilometers.",
+   "answer": "How far",
+   "options": [
+    "How far",
+    "How long",
+    "How much",
+    "How often"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ do you eat out? — Twice a week.",
+   "answer": "How often",
+   "options": [
+    "How often",
+    "How far",
+    "How long",
+    "How much"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ does it cost? — Ten dollars.",
+   "answer": "How much",
+   "options": [
+    "How much",
+    "How far",
+    "How long",
+    "How often"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "Where ___ your new coworker live?",
+   "answer": "does",
+   "options": [
+    "does",
+    "How far",
+    "How long",
+    "How much"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "What kind of food ___ you like?",
+   "answer": "do",
+   "options": [
+    "do",
+    "How far",
+    "How long",
+    "How much"
+   ]
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Bạn làm nghề gì?",
+   "answer": "What do you do?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Chuyến đi tiếp theo của bạn là khi nào?",
+   "answer": "When is your next trip?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Nhà hàng này cách đây bao xa?",
+   "answer": "How far is this restaurant from here?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Đi đến đó mất bao lâu?",
+   "answer": "How long does it take to get there?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Vé này giá bao nhiêu?",
+   "answer": "How much does this ticket cost? / How much is this ticket?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Bạn thích loại phim nào?",
+   "answer": "What kind of movies do you like?"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "mất khoảng 20 phút",
+   "answer": "takes"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "mỗi tháng hai lần",
+   "answer": "twice / month"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "bằng xe buýt",
+   "answer": "by bus"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "đặt bàn",
+   "answer": "book / table"
+  }
+ ]
+}

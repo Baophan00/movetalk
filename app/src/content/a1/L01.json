@@ -1,0 +1,252 @@
+{
+ "n": 1,
+ "level": "A1",
+ "deck": "doc_34485ab48bb6_MOVE_ACTIVATE_1_L01_BUILD YES-NO QUESTION _VIP.pptx",
+ "parts": {
+  "vocab": [
+   {
+    "word": "work",
+    "pos": "v",
+    "ipa": "/wɝːk/",
+    "def": "to do a job",
+    "example": "I work near here.",
+    "vi": "làm việc",
+    "cloze": "Do you ____ on weekends?"
+   },
+   {
+    "word": "live",
+    "pos": "v",
+    "ipa": "/lɪv/",
+    "def": "to have a home in a place",
+    "example": "I live in Da Nang.",
+    "vi": "sống",
+    "cloze": "Do you ____ near your workplace?"
+   },
+   {
+    "word": "like",
+    "pos": "v",
+    "ipa": "/laɪk/",
+    "def": "to enjoy something",
+    "example": "I like coffee.",
+    "vi": "thích",
+    "cloze": "Do you ____ your job?"
+   },
+   {
+    "word": "cook",
+    "pos": "v",
+    "ipa": "/kʊk/",
+    "def": "to make food",
+    "example": "I cook at home.",
+    "vi": "nấu ăn",
+    "cloze": "Do you ____ on weekends?"
+   },
+   {
+    "word": "busy",
+    "pos": "adj",
+    "ipa": "/ˈbɪzi/",
+    "def": "having a lot to do",
+    "example": "I’m busy today.",
+    "vi": "bận",
+    "cloze": "Are you ____ these days?"
+   },
+   {
+    "word": "tired",
+    "pos": "adj",
+    "ipa": "/ˈtaɪɚd/",
+    "def": "needing rest",
+    "example": "I’m tired after work.",
+    "vi": "mệt",
+    "cloze": "Are you ____ after work?"
+   },
+   {
+    "word": "free",
+    "pos": "adj",
+    "ipa": "/friː/",
+    "def": "not busy; available",
+    "example": "I’m free tonight.",
+    "vi": "rảnh",
+    "cloze": "Are you ____ this evening?"
+   },
+   {
+    "word": "ready",
+    "pos": "adj",
+    "ipa": "/ˈredi/",
+    "def": "prepared to do something",
+    "example": "I’m ready now.",
+    "vi": "sẵn sàng",
+    "cloze": "Are you ____ for class?"
+   }
+  ],
+  "grammarChoose": [
+   {
+    "prompt": "___ you work nearby?",
+    "vi": "Bạn làm việc gần đây à?"
+   },
+   {
+    "prompt": "___ you busy today?",
+    "vi": "Hôm nay bạn bận không?"
+   },
+   {
+    "prompt": "___ you like coffee?",
+    "vi": "Bạn thích cà phê không?"
+   },
+   {
+    "prompt": "___ you new here?",
+    "vi": "Bạn mới đến đây à?"
+   },
+   {
+    "prompt": "___ you live alone?",
+    "vi": "Bạn sống một mình à?"
+   },
+   {
+    "prompt": "___ you free tonight?",
+    "vi": "Tối nay bạn rảnh không?"
+   }
+  ],
+  "grammar": [
+   {
+    "section": "GRAMMAR IN USE · CHOOSE",
+    "sub": "Chọn Do hay Are",
+    "lines": [
+     "Đọc ý tiếng Việt. Chọn từ mở đầu trước khi nói cả câu.",
+     "___ you work nearby?",
+     "Bạn làm việc gần đây à?",
+     "___ you busy today?",
+     "Hôm nay bạn bận không?",
+     "___ you like coffee?",
+     "Bạn thích cà phê không?",
+     "___ you new here?",
+     "Bạn mới đến đây à?",
+     "___ you live alone?",
+     "Bạn sống một mình à?",
+     "___ you free tonight?",
+     "Tối nay bạn rảnh không?",
+     "Nói lựa chọn của bạn trước. Sau đó mới thử đọc cả câu."
+    ]
+   },
+   {
+    "section": "GRAMMAR IN USE · COMPARE",
+    "sub": "Do you + V hay Are you + …?",
+    "lines": [
+     "Nhìn phần sau you để chọn cấu trúc. Like / want / need cũng là động từ thường.",
+     "WHAT DO YOU",
+     "WANT TO KNOW?",
+     "MAIN VERB",
+     "DO YOU + V1 …?",
+     "work · live · like · need · go",
+     "Yes, I do. / No, I don’t.",
+     "BE INFORMATION",
+     "ARE YOU + …?",
+     "adjective · noun · preposition",
+     "Yes, I am. / No, I’m not.",
+     "ANSWER → ADD ONE DETAIL → ASK BACK"
+    ]
+   },
+   {
+    "section": "GRAMMAR IN USE · DO YOU",
+    "sub": "Hỏi và đáp với Do you…?",
+    "lines": [
+     "Hỏi, trả lời ngắn, rồi thêm một chi tiết nếu có thể.",
+     "QUESTION",
+     "Do you",
+     "work / cook / eat out / wake up early",
+     "ANSWER",
+     "Yes, I do. / No, I don’t.",
+     "ADD",
+     "I",
+     "work near here / cook at home / …",
+     "ASK BACK",
+     "What about you?",
+     "Nói theo chuỗi 4 bước — không dừng ở Yes hoặc No."
+    ]
+   },
+   {
+    "section": "GRAMMAR IN USE · ARE YOU",
+    "sub": "Hỏi và đáp với Are you…?",
+    "lines": [
+     "Dùng Are you với tính từ, danh từ hoặc cụm giới từ trong các mẫu dưới đây.",
+     "QUESTION",
+     "Are you",
+     "busy / tired / new here / from Da Nang",
+     "ANSWER",
+     "Yes, I am. / No, I’m not.",
+     "ADD",
+     "I’m",
+     "free after six / a little tired / …",
+     "ASK BACK",
+     "And you?",
+     "Mượn mẫu để bắt đầu; thông tin thật mới là mục tiêu."
+    ]
+   },
+   {
+    "section": "PRONUNCIATION · RHYTHM & STRESS",
+    "sub": "Nhịp câu hỏi và câu trả lời ngắn",
+    "lines": [
+     "Từ nội dung được nhấn rõ; DO YOU / ARE YOU thường nhẹ và nối với nhau.",
+     "DO YOU",
+     "Do you WORK near HERE?",
+     "/də jə/ → do_you",
+     "ARE YOU",
+     "Are you BUSY toDAY?",
+     "/ər jə/ → are_you",
+     "Short answers carry the stress",
+     "Yes, I DO. No, I DON’T. Yes, I AM. No, I’m NOT.",
+     "Shadow 3 lần: chậm → tự nhiên → nhìn partner và nói."
+    ]
+   }
+  ],
+  "dialogue": [
+   {
+    "who": "Mai",
+    "line": "Hi, I’m Mai. Are you new here?"
+   },
+   {
+    "who": "Nam",
+    "line": "Yes, I am. Do you come here often?"
+   },
+   {
+    "who": "Mai",
+    "line": "No, I don’t. Do you work nearby?"
+   },
+   {
+    "who": "Nam",
+    "line": "Yes, I do. I work in sales."
+   },
+   {
+    "who": "Mai",
+    "line": "Are you busy after work?"
+   },
+   {
+    "who": "Nam",
+    "line": "Sometimes. I’m usually free after six."
+   },
+   {
+    "who": "Mai",
+    "line": "Do you like coffee?"
+   },
+   {
+    "who": "Nam",
+    "line": "Yes, I do. What about you?"
+   }
+  ],
+  "listenCheck": [
+   {
+    "q": "Nam: new here?",
+    "a": "Yes. “Yes, I am.”"
+   },
+   {
+    "q": "Nam: work nearby?",
+    "a": "Yes. “Yes, I do.”"
+   },
+   {
+    "q": "Nam: free after six?",
+    "a": "Yes. “I’m usually free after six.”"
+   },
+   {
+    "q": "Nam: like coffee?",
+    "a": "Yes. “Yes, I do.”"
+   }
+  ]
+ },
+ "slides": 36
+}

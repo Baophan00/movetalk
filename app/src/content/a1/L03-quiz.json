@@ -1,0 +1,162 @@
+{
+ "n": 3,
+ "level": "A1",
+ "items": [
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "She ___ (cook) dinner every day.",
+   "answer": "cooks",
+   "options": [
+    "cooks",
+    "Does",
+    "are",
+    "don’t live"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "They ___ (not / live) nearby.",
+   "answer": "don’t live",
+   "options": [
+    "don’t live",
+    "Does",
+    "are",
+    "cooks"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ he work on Sundays?",
+   "answer": "Does",
+   "options": [
+    "Does",
+    "are",
+    "cooks",
+    "don’t live"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "He ___ (wash) the dishes.",
+   "answer": "washes",
+   "options": [
+    "washes",
+    "Does",
+    "are",
+    "cooks"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "She ___ (not / be) busy.",
+   "answer": "isn’t",
+   "options": [
+    "isn’t",
+    "Does",
+    "are",
+    "cooks"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "We ___ (be) good at cooking.",
+   "answer": "are",
+   "options": [
+    "are",
+    "Does",
+    "cooks",
+    "don’t live"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "My friend ___ (study) English.",
+   "answer": "studies",
+   "options": [
+    "studies",
+    "Does",
+    "are",
+    "cooks"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "She doesn’t ___ (go) out often.",
+   "answer": "go",
+   "options": [
+    "go",
+    "Does",
+    "are",
+    "cooks"
+   ]
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Cô ấy thường nấu bữa tối ở nhà.",
+   "answer": "She usually cooks dinner at home."
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Anh ấy không sống cùng bố mẹ.",
+   "answer": "He doesn’t live with his parents."
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Họ có thân thiện không?",
+   "answer": "Are they friendly?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Cô ấy không đi làm vào Chủ nhật.",
+   "answer": "She doesn’t go to work on Sundays."
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Anh ấy có rửa chén không?",
+   "answer": "Does he wash the dishes?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Chúng tôi đi dạo sau bữa tối.",
+   "answer": "We go for a walk after dinner."
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "dành thời gian với",
+   "answer": "spend time with"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "rửa chén",
+   "answer": "the dishes"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "giỏi về",
+   "answer": "good at"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "nghe nhạc",
+   "answer": "listens to music"
+  }
+ ]
+}

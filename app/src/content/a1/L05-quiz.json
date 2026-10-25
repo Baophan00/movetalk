@@ -1,0 +1,162 @@
+{
+ "n": 5,
+ "level": "A1",
+ "items": [
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ (This / These) shops are cheap.",
+   "answer": "These",
+   "options": [
+    "These",
+    "Does",
+    "Is",
+    "That"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "We need ___ (another / other) place.",
+   "answer": "another",
+   "options": [
+    "another",
+    "Does",
+    "Is",
+    "That"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "Do you know ___ (another / other) nice places?",
+   "answer": "other",
+   "options": [
+    "other",
+    "Does",
+    "Is",
+    "That"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "It’s ___ (a / an) amazing restaurant.",
+   "answer": "an",
+   "options": [
+    "an",
+    "Does",
+    "Is",
+    "That"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ (Is / Are) their new coworker friendly?",
+   "answer": "Is",
+   "options": [
+    "Is",
+    "Does",
+    "That",
+    "The other"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ (Do / Does) her restaurant serve breakfast?",
+   "answer": "Does",
+   "options": [
+    "Does",
+    "Is",
+    "That",
+    "The other"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "There are two cafés. This one is full. ___ (Another / The other) café has free tables.",
+   "answer": "The other",
+   "options": [
+    "The other",
+    "Does",
+    "Is",
+    "That"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Quick choice",
+   "prompt": "___ (That / Those) building is across the street.",
+   "answer": "That",
+   "options": [
+    "That",
+    "Does",
+    "Is",
+    "The other"
+   ]
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Đây là kế hoạch hiện tại của chúng tôi.",
+   "answer": "This is our current plan."
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Những cửa hàng kia có đắt không?",
+   "answer": "Are those shops expensive?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Bạn có biết một địa điểm khác không?",
+   "answer": "Do you know another place?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Nhà hàng địa phương của cô ấy có phục vụ bữa sáng không?",
+   "answer": "Does her local restaurant serve breakfast?"
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Chuyến đi tiếp theo của tôi là đến Huế.",
+   "answer": "My next trip is to Hue."
+  },
+  {
+   "kind": "translate",
+   "section": "Vietnamese to English",
+   "prompt": "Những nhà hàng này có rẻ không?",
+   "answer": "Are these restaurants cheap?"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "chuyến đi tiếp theo của tôi",
+   "answer": "My next trip"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "một mức giá tốt",
+   "answer": "a good price"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "bên kia đường",
+   "answer": "across the street"
+  },
+  {
+   "kind": "chunks",
+   "section": "Chunks",
+   "prompt": "những địa điểm khác",
+   "answer": "other places"
+  }
+ ]
+}

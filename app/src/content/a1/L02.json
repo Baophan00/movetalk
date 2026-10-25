@@ -1,0 +1,487 @@
+{
+ "n": 2,
+ "level": "A1",
+ "deck": "doc_2106bef8a4b3_MOVE_ACTIVATE_1_L02_EXPAND SUBJECT_VIP.pptx",
+ "parts": {
+  "vocab": [
+   {
+    "word": "brother",
+    "pos": "n",
+    "ipa": "/ˈbrʌðər/",
+    "def": "a male sibling",
+    "example": "My brother is at home.",
+    "vi": "anh/em trai",
+    "cloze": "Is your ____ at home?"
+   },
+   {
+    "word": "sister",
+    "pos": "n",
+    "ipa": "/ˈsɪstər/",
+    "def": "a female sibling",
+    "example": "My sister is happy.",
+    "vi": "chị/em gái",
+    "cloze": "Is your ____ happy?"
+   },
+   {
+    "word": "mother",
+    "pos": "n",
+    "ipa": "/ˈmʌðər/",
+    "def": "your female parent",
+    "example": "My mother likes tea.",
+    "vi": "mẹ",
+    "cloze": "Does your ____ like tea?"
+   },
+   {
+    "word": "father",
+    "pos": "n",
+    "ipa": "/ˈfɑːðər/",
+    "def": "your male parent",
+    "example": "My father drives a car.",
+    "vi": "bố",
+    "cloze": "Does your ____ drive a car?"
+   },
+   {
+    "word": "parents",
+    "pos": "n",
+    "ipa": "/ˈperənts/",
+    "def": "your mother and father",
+    "example": "My parents are at home.",
+    "vi": "bố mẹ",
+    "cloze": "Are your ____ at home?"
+   },
+   {
+    "word": "friend",
+    "pos": "n",
+    "ipa": "/frend/",
+    "def": "a person you know and like",
+    "example": "My friend lives near here.",
+    "vi": "bạn",
+    "cloze": "Does your ____ live near here?"
+   },
+   {
+    "word": "neighbor",
+    "pos": "n",
+    "ipa": "/ˈneɪbər/",
+    "def": "a person who lives near you",
+    "example": "My neighbor is friendly.",
+    "vi": "hàng xóm",
+    "cloze": "Is your ____ friendly?"
+   },
+   {
+    "word": "coworker",
+    "pos": "n",
+    "ipa": "/ˈkoʊwɜːrkər/",
+    "def": "a person you work with",
+    "example": "My coworker works in sales.",
+    "vi": "đồng nghiệp",
+    "cloze": "Does your ____ work in sales?"
+   },
+   {
+    "word": "teacher",
+    "pos": "n",
+    "ipa": "/ˈtiːtʃər/",
+    "def": "a person who teaches",
+    "example": "She’s a teacher.",
+    "vi": "giáo viên",
+    "cloze": "Is she a ____?"
+   },
+   {
+    "word": "doctor",
+    "pos": "n",
+    "ipa": "/ˈdɑːktər/",
+    "def": "a person who treats sick people",
+    "example": "He’s a doctor.",
+    "vi": "bác sĩ",
+    "cloze": "Is he a ____?"
+   },
+   {
+    "word": "driver",
+    "pos": "n",
+    "ipa": "/ˈdraɪvər/",
+    "def": "a person who drives",
+    "example": "My father is a driver.",
+    "vi": "tài xế",
+    "cloze": "Is your father a ____?"
+   },
+   {
+    "word": "shop",
+    "pos": "n",
+    "ipa": "/ʃɑːp/",
+    "def": "a place to buy things",
+    "example": "It’s a small shop.",
+    "vi": "cửa hàng",
+    "cloze": "Is it a small ____?"
+   },
+   {
+    "word": "café",
+    "pos": "n",
+    "ipa": "/kæˈfeɪ/",
+    "def": "a place to buy coffee",
+    "example": "The café is open.",
+    "vi": "quán cà phê",
+    "cloze": "Is the ____ open?"
+   },
+   {
+    "word": "restaurant",
+    "pos": "n",
+    "ipa": "/ˈrestərɑːnt/",
+    "def": "a place to eat meals",
+    "example": "The restaurant is busy.",
+    "vi": "nhà hàng",
+    "cloze": "Is the ____ busy?"
+   },
+   {
+    "word": "park",
+    "pos": "n",
+    "ipa": "/pɑːrk/",
+    "def": "a place with trees and paths",
+    "example": "The park is near here.",
+    "vi": "công viên",
+    "cloze": "Is the ____ near here?"
+   },
+   {
+    "word": "supermarket",
+    "pos": "n",
+    "ipa": "/ˈsuːpərmɑːrkɪt/",
+    "def": "a large shop for food",
+    "example": "They go to the supermarket.",
+    "vi": "siêu thị",
+    "cloze": "Do they go to the ____?"
+   },
+   {
+    "word": "breakfast",
+    "pos": "n",
+    "ipa": "/ˈbrekfəst/",
+    "def": "the first meal of the day",
+    "example": "They eat breakfast at home.",
+    "vi": "bữa sáng",
+    "cloze": "Do they eat ____ at home?"
+   },
+   {
+    "word": "lunch",
+    "pos": "n",
+    "ipa": "/lʌntʃ/",
+    "def": "a meal in the middle of the day",
+    "example": "We eat lunch together.",
+    "vi": "bữa trưa",
+    "cloze": "Do we eat ____ together?"
+   },
+   {
+    "word": "dinner",
+    "pos": "n",
+    "ipa": "/ˈdɪnər/",
+    "def": "the evening meal",
+    "example": "They cook dinner at home.",
+    "vi": "bữa tối",
+    "cloze": "Do they cook ____ at home?"
+   },
+   {
+    "word": "together",
+    "pos": "adv",
+    "ipa": "/təˈɡeðər/",
+    "def": "with another person or people",
+    "example": "They work together.",
+    "vi": "cùng nhau",
+    "cloze": "Do they work ____?"
+   },
+   {
+    "word": "car",
+    "pos": "n",
+    "ipa": "/kɑːr/",
+    "def": "a vehicle with four wheels",
+    "example": "He has a car.",
+    "vi": "ô tô",
+    "cloze": "Does he have a ____?"
+   },
+   {
+    "word": "bike",
+    "pos": "n",
+    "ipa": "/baɪk/",
+    "def": "a bicycle",
+    "example": "She rides a bike to work.",
+    "vi": "xe đạp",
+    "cloze": "Does she ride a ____?"
+   },
+   {
+    "word": "hungry",
+    "pos": "adj",
+    "ipa": "/ˈhʌŋɡri/",
+    "def": "wanting food",
+    "example": "They’re hungry.",
+    "vi": "đói",
+    "cloze": "Are they ____?"
+   },
+   {
+    "word": "thirsty",
+    "pos": "adj",
+    "ipa": "/ˈθɜːrsti/",
+    "def": "wanting a drink",
+    "example": "He’s thirsty.",
+    "vi": "khát nước",
+    "cloze": "Is he ____?"
+   }
+  ],
+  "grammarChoose": [],
+  "grammar": [
+   {
+    "section": "GRAMMAR IN USE · SUBJECT GROUPS",
+    "sub": "Cùng ý hỏi, đổi chủ ngữ",
+    "lines": [
+     "Chọn VERB hay BE, rồi chọn từ mở đầu theo chủ ngữ.",
+     "WHO ARE YOU",
+     "ASKING ABOUT?",
+     "DO/ DOES",
+     "Do I …?",
+     "Do we …?",
+     "Do they …?",
+     "Does he …?",
+     "Does she …?",
+     "Does it …?",
+     "Yes, they do./ No, they don’t. Yes, she does. / No, she doesn’t.",
+     "Yes, they are. / No, they aren’t.",
+     "Yes, he are. / No, he isn’t.",
+     "AM/ IS/ ARE",
+     "Am I …?",
+     "Are we …?",
+     "Are they …?",
+     "Is he …?",
+     "Is she …?",
+     "Is it …?"
+    ]
+   },
+   {
+    "section": "GRAMMAR IN USE · DOES",
+    "sub": "Hỏi và đáp với Does he / she…?",
+    "lines": [
+     "Sau DOES dùng động từ nguyên mẫu, kể cả have.",
+     "QUESTION",
+     "Does she",
+     "work here / like tea / have a car",
+     "ANSWER",
+     "Yes, she does. / No, she doesn’t.",
+     "ADD",
+     "She",
+     "works here / likes tea / has a car",
+     "ASK BACK",
+     "Does he work here too?",
+     "Does she WORK? Does she HAVE…? Không thêm -s sau DOES."
+    ]
+   },
+   {
+    "section": "GRAMMAR IN USE · IS",
+    "sub": "Hỏi và đáp với Is he / she / it…?",
+    "lines": [
+     "BE đi với thông tin mô tả: tính từ, danh từ hoặc cụm giới từ.",
+     "QUESTION",
+     "Is she",
+     "busy / a teacher / at work",
+     "ANSWER",
+     "Yes, she is. / No, she isn’t.",
+     "ADD",
+     "She’s",
+     "busy today / a teacher / at work",
+     "ASK BACK",
+     "Is he busy too?",
+     "He is = He’s · She is = She’s · It is = It’s"
+    ]
+   },
+   {
+    "section": "GRAMMAR IN USE · GROUPS",
+    "sub": "Nói về chúng ta và những người khác",
+    "lines": [
+     "WE gồm người nói. THEY nói về một nhóm khác.",
+     "DO WE / THEY…?",
+     "ARE WE / THEY…?",
+     "Do we need a table?",
+     "Yes, we do. / No, we don’t.",
+     "Do they work together?",
+     "Yes, they do. / No, they don’t.",
+     "Động từ sau DO giữ nguyên mẫu.",
+     "Are we ready?",
+     "Yes, we are. / No, we aren’t.",
+     "Are they at home?",
+     "Yes, they are. / No, they aren’t.",
+     "We are = We’re · They are = They’re",
+     "Một người: he / she / it. Nhóm có người nói: we. Nhóm khác: they."
+    ]
+   },
+   {
+    "section": "GRAMMAR IN USE · CONTRAST",
+    "sub": "Số ít hay số nhiều?",
+    "lines": [
+     "Nói thành câu hỏi. So sánh theo từng cặp.",
+     "Is she busy?",
+     "Are they busy?",
+     "Does he work here?",
+     "Do they work here?",
+     "Is he a teacher?",
+     "Are they teachers?",
+     "Does it work?",
+     "Do they work?",
+     "Does she have a car?",
+     "Do they have a car?",
+     "Is it open?",
+     "Are they open?",
+     "Đổi danh từ cho đúng: a teacher / teachers."
+    ]
+   },
+   {
+    "section": "GRAMMAR IN USE · REPAIR",
+    "sub": "Tìm lỗi rồi sửa câu",
+    "lines": [
+     "Nói lại câu đúng trước khi xem gợi ý của giáo viên.",
+     "Does she works here?",
+     "Động từ sau DOES?",
+     "Do he like coffee?",
+     "HE đi với DO hay DOES?",
+     "Are they a teacher?",
+     "Một người hay nhiều người?",
+     "Does he has a car?",
+     "Sau DOES: have hay has?",
+     "Is they ready?",
+     "THEY đi với IS hay ARE?",
+     "Do it work?",
+     "IT đi với DO hay DOES?",
+     "Sau khi sửa, chọn hai câu và hỏi thật."
+    ]
+   },
+   {
+    "section": "PRONUNCIATION · CONTRACTIONS",
+    "sub": "Nói liền chủ ngữ và BE",
+    "lines": [
+     "Nghe mẫu, nói chậm rõ rồi nói tự nhiên.",
+     "HE / SHE / IT",
+     "He’s a teacher.",
+     "/hiːz/",
+     "WE / YOU/ THEY",
+     "We’re READY.",
+     "/wɪr/",
+     "Short answers: giữ rõ từ mang câu trả lời",
+     "Yes, she IS. No, she ISN’T. Yes, they ARE. No, they AREN’T.",
+     "Câu trả lời ngắn khẳng định: Yes, she is. Không nói Yes, she’s.",
+     "She’s at work.",
+     "/ʃiːz /",
+     "It’s a /an/ in/ on/ at",
+     "They’re FRIENDLY.",
+     "/ðer/",
+     "You’re VERY KIND.",
+     "/ɪts /",
+     "/ jʊr / ; /jər/"
+    ]
+   },
+   {
+    "section": "PRONUNCIATION · QUESTION RHYTHM",
+    "sub": "Nhịp câu hỏi và câu trả lời",
+    "lines": [
+     "Nhấn thông tin chính. Giữ DOES / DO rõ đủ để người nghe hiểu.",
+     "DOES SHE…?",
+     "Does she WORK near HERE?",
+     "Does she /dʌz ʃiː/ · V sau DOES không có -s",
+     "DO THEY…?",
+     "Do they WORK toGETHER?",
+     "Do they /də ðeɪ/ khi nói nhẹ",
+     "Trả lời bằng đúng chủ ngữ và trợ động từ",
+     "Yes, she DOES. No, he DOESN’T. Yes, they DO. No, we DON’T.",
+     "Đổi lượt: hỏi, nghe, trả lời. Không chỉ đọc đồng thanh."
+    ]
+   }
+  ],
+  "dialogue": [
+   {
+    "who": "Work · Anna & Ben",
+    "line": "Xem sau khi nghe. Tìm câu hỏi mục tiêu rồi luyện theo vai."
+   },
+   {
+    "who": "Anna",
+    "line": "A"
+   },
+   {
+    "who": "Ben",
+    "line": "B"
+   },
+   {
+    "who": "Anna",
+    "line": "A"
+   },
+   {
+    "who": "Ben",
+    "line": "B"
+   },
+   {
+    "who": "Anna",
+    "line": "A"
+   },
+   {
+    "who": "Ben",
+    "line": "B"
+   },
+   {
+    "who": "Anna",
+    "line": "A"
+   },
+   {
+    "who": "Ben",
+    "line": "B"
+   },
+   {
+    "who": "Anna",
+    "line": "A"
+   },
+   {
+    "who": "Ben",
+    "line": "B"
+   }
+  ],
+  "listenCheck": [
+   {
+    "q": "Who is new at work?",
+    "a": "Mia is the new coworker."
+   },
+   {
+    "q": "Is Mia friendly?",
+    "a": "Yes, she is."
+   },
+   {
+    "q": "Are her teammates busy today?",
+    "a": "No, they aren’t."
+   },
+   {
+    "q": "Do they eat lunch together?",
+    "a": "Yes, they do."
+   },
+   {
+    "q": "Who is Minh?",
+    "a": "He is Lan’s brother."
+   },
+   {
+    "q": "Does he live near Lan?",
+    "a": "No, he doesn’t."
+   },
+   {
+    "q": "Are their parents in Da Nang?",
+    "a": "Yes, they are."
+   },
+   {
+    "q": "Does Minh help with dinner?",
+    "a": "Yes, he does."
+   },
+   {
+    "q": "Is it open on Sundays?",
+    "a": "Yes, it is."
+   },
+   {
+    "q": "Does it serve breakfast?",
+    "a": "Yes, it does."
+   },
+   {
+    "q": "Are Leo’s friends free?",
+    "a": "Yes, they are."
+   },
+   {
+    "q": "Do Mia and Leo need to book?",
+    "a": "No, they don’t."
+   }
+  ]
+ },
+ "slides": 45
+}
