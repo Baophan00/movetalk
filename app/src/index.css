@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: 220 33% 97%;
+    --surface: 0 0% 100%;
+    --line: 218 32% 91%;
+    --ink: 222 47% 11%;
+    --muted: 218 14% 45%;
+    --primary: 221 83% 53%;
+    --primary-soft: 221 100% 96%;
+    --accent: 38 92% 50%;
+    --ok: 158 64% 40%;
+    --warn: 4 72% 55%;
+  }
+
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'ss01';
+  }
+  ::selection { background: hsl(var(--primary) / .18); }
+
+  /* The learner reads Vietnamese and studies English: keep both legible, never cramped. */
+  h1, h2, h3 { letter-spacing: -0.02em; }
+  button, a { -webkit-tap-highlight-color: transparent; }
+
+  .card-hover { @apply transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift; }
+  .focus-ring { @apply outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg; }
+}
+
+@layer utilities {
+  .flip-3d { transform-style: preserve-3d; }
+  .backface-hidden { backface-visibility: hidden; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { scrollbar-width: none; }
+}

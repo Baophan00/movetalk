@@ -7,3 +7,7 @@ audio/render.log
 audio/supervise.log
 audio/jobs.json
 supabase/.temp/
+
+# React app
+app/node_modules/
+app/dist/
