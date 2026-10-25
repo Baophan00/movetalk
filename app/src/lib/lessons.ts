@@ -40,16 +40,16 @@ export const PART_ORDER = [
 ] as const
 
 export const PART_META: Record<string, { label: string; short: string }> = {
-  vocab: { label: 'Từ vựng', short: 'Từ vựng' },
-  grammar: { label: 'Ngữ pháp', short: 'Ngữ pháp' },
-  reading: { label: 'Đọc', short: 'Đọc' },
-  conversations: { label: 'Hội thoại', short: 'Hội thoại' },
-  listening: { label: 'Nghe và nhắc lại', short: 'Nghe' },
-  exercises: { label: 'Bài tập', short: 'Bài tập' },
-  speaking: { label: 'Nói', short: 'Nói' },
-  roleplay: { label: 'Nhập vai', short: 'Nhập vai' },
-  finalTask: { label: 'Bài cuối', short: 'Bài cuối' },
-  reference: { label: 'Tra nhanh', short: 'Tra nhanh' },
+  vocab: { label: 'Vocabulary', short: 'Words' },
+  grammar: { label: 'Grammar', short: 'Grammar' },
+  reading: { label: 'Reading', short: 'Reading' },
+  conversations: { label: 'Dialogue', short: 'Dialogue' },
+  listening: { label: 'Listen & repeat', short: 'Listening' },
+  exercises: { label: 'Practice', short: 'Practice' },
+  speaking: { label: 'Speaking', short: 'Speaking' },
+  roleplay: { label: 'Role-play', short: 'Role-play' },
+  finalTask: { label: 'Final task', short: 'Task' },
+  reference: { label: 'Quick look-up', short: 'Look-up' },
 }
 
 export function partsOf(lesson?: Lesson) {

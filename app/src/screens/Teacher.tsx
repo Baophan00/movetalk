@@ -260,23 +260,19 @@ export function TeacherOverview() {
       </motion.div>
 
       <div className="grid gap-3 sm:grid-cols-3">
-        {stats.map(({ icon: Icon, label, value, hint }) => (
-          <Card key={label} className="card-hover">
-            <CardBody className="flex items-center gap-3.5">
-              <span className="grid h-10 w-10 place-items-center rounded-xl bg-bg text-primary">
-                <Icon className="h-[18px] w-[18px]" />
-              </span>
-              <div>
-                <p className="text-[10.5px] font-bold uppercase tracking-[.12em] text-muted">{label}</p>
-                <p className="text-[19px] font-semibold leading-tight">{value}</p>
-                <p className="text-[11px] text-muted">{hint}</p>
-              </div>
-            </CardBody>
-          </Card>
+        {stats.map(({ icon: Icon, label, value, hint }, i) => (
+          <div key={label} className={cn('rounded-2xl p-4 shadow-card transition-transform hover:-translate-y-0.5', ['bg-[#dfd7fb]', 'bg-[#fde3c6]', 'bg-[#fbd0ee]'][i % 3])}>
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-white/45 text-ink">
+              <Icon className="h-[17px] w-[17px]" />
+            </span>
+            <p className="mt-3 text-[10.5px] font-bold uppercase tracking-[.12em] text-ink/50">{label}</p>
+            <p className="text-[22px] font-bold leading-tight text-ink">{value}</p>
+            <p className="text-[11px] text-ink/55">{hint}</p>
+          </div>
         ))}
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
+      <div className="grid items-start gap-4 lg:grid-cols-[1.4fr_1fr]">
         <Card>
           <CardHeader>
             <CardTitle>Today's sessions</CardTitle>

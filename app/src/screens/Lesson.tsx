@@ -45,7 +45,7 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
         <ArrowLeft className="h-3.5 w-3.5" /> Overview
       </button>
 
-      <div className="rounded-3xl border border-line bg-surface p-5 shadow-card sm:p-6">
+      <div className="rounded-3xl border border-[#ded4fb] bg-[#f3efff] p-5 shadow-card sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0">
             <p className="text-[11px] font-bold uppercase tracking-[.14em] text-primary">Lesson {lesson.n} · A1</p>
@@ -96,7 +96,7 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
                   <span
                     className={cn(
                       'grid h-5 w-5 shrink-0 place-items-center rounded-full text-[10px] font-bold',
-                      done ? 'bg-ok/15 text-ok' : on ? 'bg-primary text-white' : 'bg-ink/[.06] text-muted',
+                      done ? 'bg-[#c8f0e0] text-[#0f6b4f]' : on ? 'bg-primary text-white' : 'bg-ink/[.06] text-muted',
                     )}
                   >
                     {done ? <Check className="h-3 w-3" /> : i + 1}
@@ -123,7 +123,7 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
                   <p className="text-[10.5px] font-bold uppercase tracking-[.14em] text-muted">
                     Part {active + 1} of {parts.length}
                   </p>
-                  <p className="text-[15px] font-semibold">{PART_META[current?.key]?.label ?? 'Nội dung'}</p>
+                  <p className="text-[15px] font-semibold">{PART_META[current?.key]?.label ?? 'Content'}</p>
                 </div>
                 {seen.includes(active) && (
                   <span className="inline-flex items-center gap-1 text-[11.5px] font-semibold text-ok">

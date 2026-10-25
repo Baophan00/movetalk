@@ -14,9 +14,9 @@ export function Homework({ onBack, hasBackend }: Props) {
         <p className="mt-1 text-[13px] text-muted">Submissions are graded against criteria, not just right or wrong.</p>
       </div>
 
-      <Card>
+      <Card className="border-[#ded4fb] bg-[#f3efff]">
         <CardBody className="py-10 text-center">
-          <span className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-bg text-primary">
+          <span className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-white/70 text-[#7a5cf0] shadow-card">
             <BookOpen className="h-[22px] w-[22px]" />
           </span>
           <p className="mt-4 text-[15px] font-semibold">Nothing assigned yet</p>

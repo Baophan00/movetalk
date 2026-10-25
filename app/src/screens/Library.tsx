@@ -27,18 +27,16 @@ export function Library({ onBack }: Props) {
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         {[
-          { icon: FileText, title: 'Grammar tables', body: 'The tables used across the 10 A1 lessons.' },
-          { icon: Headphones, title: 'Audio', body: '548 sentences with audio, replay any time.' },
-        ].map(({ icon: Icon, title, body }) => (
-          <Card key={title} className="card-hover">
-            <CardBody>
-              <span className="grid h-9 w-9 place-items-center rounded-lg bg-bg text-primary">
-                <Icon className="h-4 w-4" />
-              </span>
-              <p className="mt-3 text-[13.5px] font-semibold">{title}</p>
-              <p className="mt-1 text-[12px] leading-relaxed text-muted">{body}</p>
-            </CardBody>
-          </Card>
+          { icon: FileText, title: 'Grammar tables', body: 'The tables used across the 10 A1 lessons.', tone: 'bg-[#dfd7fb]' },
+          { icon: Headphones, title: 'Audio', body: '548 sentences with audio, replay any time.', tone: 'bg-[#fde3c6]' },
+        ].map(({ icon: Icon, title, body, tone }) => (
+          <div key={title} className={`card-hover rounded-2xl p-4 shadow-card ${tone}`}>
+            <span className="grid h-9 w-9 place-items-center rounded-lg bg-white/45 text-ink">
+              <Icon className="h-4 w-4" />
+            </span>
+            <p className="mt-3 text-[13.5px] font-semibold text-ink">{title}</p>
+            <p className="mt-1 text-[12px] leading-relaxed text-ink/60">{body}</p>
+          </div>
         ))}
       </div>
 

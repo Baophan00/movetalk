@@ -17,7 +17,7 @@ export function TopBar({ title, crumb, onMenu, right, className }: Props) {
         className,
       )}
     >
-      <button onClick={onMenu} className="rounded-lg p-2 text-ink/70 hover:bg-ink/5 lg:hidden" aria-label="Mở menu">
+      <button onClick={onMenu} className="rounded-lg p-2 text-ink/70 hover:bg-ink/5 lg:hidden" aria-label="Open menu">
         <Menu className="h-5 w-5" />
       </button>
       <div className="min-w-0">

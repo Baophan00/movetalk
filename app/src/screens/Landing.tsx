@@ -2,6 +2,7 @@ import { motion } from 'motion/react'
 import { ArrowRight, BookOpen, Headphones, Mic, Sparkles, Volume2 } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { LESSONS } from '../lib/lessons'
+import { cn } from '../lib/utils'
 import { speak } from '../lib/audio'
 
 type Props = { onStart: () => void; onOpenLesson: () => void }
@@ -59,7 +60,7 @@ export function Landing({ onStart, onOpenLesson }: Props) {
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.55, delay: 0.1 }}
-            className="rounded-3xl border border-line bg-surface p-5 shadow-lift"
+            className="rounded-3xl border border-[#d9d0f7] bg-[#f3efff] p-5 shadow-lift"
           >
             <div className="flex items-center justify-between">
               <div>
@@ -101,27 +102,31 @@ export function Landing({ onStart, onOpenLesson }: Props) {
             <motion.div
               key={title}
               initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: i * 0.06 }}
-              className="rounded-2xl border border-line bg-surface p-5 shadow-card"
+              className={cn(
+                'rounded-3xl p-5 shadow-card',
+                ['bg-[#dfd7fb]', 'bg-[#fde3c6]', 'bg-[#fbd0ee]'][i % 3],
+              )}
             >
-              <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary-soft text-primary">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/45 text-ink">
                 <Icon className="h-[18px] w-[18px]" />
               </span>
-              <p className="mt-3.5 text-[14px] font-semibold">{title}</p>
-              <p className="mt-1.5 text-[12.5px] leading-relaxed text-muted">{body}</p>
+              <p className="mt-3.5 text-[14px] font-semibold text-ink">{title}</p>
+              <p className="mt-1.5 text-[12.5px] leading-relaxed text-ink/60">{body}</p>
             </motion.div>
           ))}
         </section>
 
-        <section className="mt-16 overflow-hidden rounded-3xl border border-primary/20 bg-primary p-8 text-white sm:p-10">
-          <div className="flex flex-wrap items-end justify-between gap-6">
+        <section className="relative mt-16 overflow-hidden rounded-3xl bg-[#7a5cf0] p-8 text-white sm:p-10">
+          <span className="pointer-events-none absolute -right-10 -top-12 h-40 w-40 rounded-full bg-white/15" />
+          <span className="pointer-events-none absolute bottom-6 right-24 h-8 w-8 rounded-full bg-[#f79be0]/70" />
+          <div className="relative flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-lg">
               <p className="text-[12px] font-semibold uppercase tracking-[.16em] text-white/70">Start today</p>
               <p className="mt-2 text-[26px] font-semibold leading-tight tracking-tight sm:text-[32px]">Twenty minutes a day, one lesson a week, speaking within a month.</p>
             </div>
-            <Button size="lg" className="bg-white text-primary hover:bg-white/90" onClick={onStart}>
+            <Button size="lg" className="bg-[#1b1735] text-white hover:bg-[#2a2450]" onClick={onStart}>
               Go to class <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
@@ -129,7 +134,7 @@ export function Landing({ onStart, onOpenLesson }: Props) {
       </main>
 
       <footer className="border-t border-line py-6">
-        <p className="mx-auto max-w-6xl px-5 text-[11.5px] text-muted sm:px-8">MOVE · học tiếng Anh bằng tình huống thật</p>
+        <p className="mx-auto max-w-6xl px-5 text-[11.5px] text-muted sm:px-8">MOVE · English through situations you actually meet</p>
       </footer>
     </div>
   )
