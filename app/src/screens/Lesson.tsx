@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import { motion } from 'motion/react'
 import { ArrowLeft, ArrowRight, Check, ChevronRight, Volume2 } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Progress } from '../components/ui/progress'
@@ -41,11 +40,11 @@ function Vocabulary({ items }: { items: LessonFile['parts']['vocab'] }) {
         <span>Tap a word for the Vietnamese meaning.</span>
         <span>{items.length} words</span>
       </p>
-      <ul className="divide-y divide-line/60 overflow-hidden rounded-2xl border border-line">
+      <ul className="overflow-hidden rounded-2xl border border-line sm:grid sm:grid-cols-2 sm:gap-x-5">
         {items.map((v) => {
           const isOpen = open.includes(v.word)
           return (
-            <li key={v.word} className={cn('transition-colors', isOpen ? 'bg-primary-soft/45' : 'bg-surface hover:bg-bg/60')}>
+            <li key={v.word} className={cn('border-b border-line/60 transition-colors last:border-b-0', isOpen ? 'bg-primary-soft/45' : 'bg-surface hover:bg-bg/60')}>
               <div
                 role="button"
                 tabIndex={0}
@@ -93,7 +92,7 @@ const VI_CHARS = /[àáảãạăằắẳẵặâầấẩẫậđèéẻẽẹ
 
 function Dialogue({ turns }: { turns: LessonFile['parts']['dialogue'] }) {
   return (
-    <div className="space-y-2.5">
+    <div className="space-y-1.5">
       {turns.map((t, i) => {
         const mine = i % 2 === 1
         return (
@@ -102,7 +101,9 @@ function Dialogue({ turns }: { turns: LessonFile['parts']['dialogue'] }) {
               {t.who.slice(0, 1)}
             </span>
             <div className={cn('max-w-[82%]', mine ? 'items-end text-right' : 'items-start')}>
-              <p className={cn('mb-0.5 px-1 text-[10px] font-semibold uppercase tracking-wide text-muted', mine && 'text-right')}>{t.who}</p>
+              {turns[i - 1]?.who !== t.who && (
+                <p className={cn('mb-0.5 px-1 text-[10px] font-semibold uppercase tracking-wide text-muted', mine && 'text-right')}>{t.who}</p>
+              )}
               <div
                 className={cn(
                   'group inline-flex items-start gap-2 rounded-2xl px-3 py-2 text-left',
@@ -266,7 +267,7 @@ function Choose({ items, fallback }: { items: PracticeItem[]; fallback: LessonFi
           {answered} / {items.length} answered · <span className="font-semibold text-ink">{right} right</span>
         </span>
       </div>
-      <ul className="divide-y divide-line/60 overflow-hidden rounded-2xl border border-line">
+      <ul className="overflow-hidden rounded-2xl border border-line sm:grid sm:grid-cols-2 sm:gap-x-5">
         {items.map((it, i) => {
           const pick = picked[i]
           const chosen = pick !== undefined
@@ -314,81 +315,129 @@ function Choose({ items, fallback }: { items: PracticeItem[]; fallback: LessonFi
   )
 }
 
-function Flow({ groups }: { groups: FlowGroup[] }) {
+function Flow({ groups, heading = true }: { groups: FlowGroup[]; heading?: boolean }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {groups.map((g) => (
         <div key={g.group}>
-          <div className="mb-2 flex items-center gap-2">
-            <span className="h-px flex-1 bg-line" />
-            <span className="text-[10.5px] font-bold uppercase tracking-[.16em] text-muted">{g.group}</span>
-            <span className="h-px flex-1 bg-line" />
-          </div>
-          <div className="space-y-2">
-            {g.slides.map((slide, i) => (
-              <details key={`${slide.title}-${i}`} open={g.slides.length <= 2} className="group rounded-2xl border border-line bg-surface px-3.5 py-2.5">
-                <summary className="flex cursor-pointer list-none items-center gap-2">
-                  <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted transition-transform group-open:rotate-90" />
-                  <span className="min-w-0 flex-1 break-words text-[13px] font-semibold leading-snug">
-                    {slide.title}
-                    {g.slides.filter((x) => x.title === slide.title).length > 1 && (
-                      <span className="ml-1.5 text-[11px] font-normal text-muted">
-                        {g.slides.findIndex((x) => x === slide) + 1}/{g.slides.length}
-                      </span>
-                    )}
-                  </span>
-                  <span className="shrink-0 text-[10.5px] text-muted">{slide.lines.length}</span>
-                </summary>
-                <ul className="mt-2 space-y-1 pl-5">
-                  {slide.lines.map((line, k) => (
-                    <li key={`${line}-${k}`} className="flex items-start gap-1.5 text-[12.5px] leading-relaxed text-ink/80">
-                      <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-ink/25" />
-                      <span className="min-w-0 flex-1 break-words">{line}</span>
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            ))}
+          {heading && (
+            <div className="mb-2 flex items-center gap-2">
+              <span className="h-px flex-1 bg-line" />
+              <span className="text-[10.5px] font-bold uppercase tracking-[.16em] text-muted">{g.group}</span>
+              <span className="h-px flex-1 bg-line" />
+            </div>
+          )}
+          <div className="grid gap-2.5 lg:grid-cols-2">
+            {g.slides.map((slide, i) => {
+              const dup = g.slides.filter((x) => x.title === slide.title).length > 1
+              return (
+                <div key={`${slide.title}-${i}`} className={cn('rounded-2xl border border-line bg-surface px-3.5 py-3', g.slides.length === 1 && 'lg:col-span-2')}>
+                  <div className="flex items-start gap-2">
+                    <span className="mt-0.5 h-5 w-1 shrink-0 rounded-full bg-primary/35" />
+                    <p className="min-w-0 flex-1 text-[12.5px] font-semibold leading-snug text-ink">
+                      {slide.title}
+                      {dup && <span className="ml-1.5 text-[10.5px] font-normal text-muted">{i + 1}/{g.slides.length}</span>}
+                    </p>
+                  </div>
+                  <ul className="mt-2 space-y-1">
+                    {slide.lines
+                      .filter((line) => line.trim().toLowerCase() !== slide.title.trim().toLowerCase())
+                      .map((line, k) => {
+                      const vi = VI_CHARS.test(line)
+                      const pattern = !vi && (/\+/.test(line) || /^[A-Z0-9 …?.,'\/-]{4,}$/.test(line))
+                      return (
+                        <li key={`${line}-${k}`} className={cn('flex items-start gap-1.5 text-[12.5px] leading-relaxed', vi ? 'text-ink/60' : 'text-ink/85')}>
+                          {!vi && !pattern && <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-ink/20" />}
+                          <span
+                            className={cn(
+                              'min-w-0 break-words',
+                              pattern ? 'rounded-md bg-ink/[.04] px-1.5 py-0.5 font-mono text-[11px] text-ink' : 'flex-1',
+                              vi && 'italic',
+                            )}
+                          >
+                            {line}
+                          </span>
+                        </li>
+                        )
+                      })}
+                  </ul>
+                </div>
+              )
+            })}
           </div>
         </div>
       ))}
     </div>
   )
 }
+type Tone = 'violet' | 'mint' | 'lavender' | 'sky' | 'peach' | 'rose'
+
+const TONES: Record<Tone, { soft: string; border: string; text: string; solid: string }> = {
+  violet: { soft: 'bg-[#f4f0ff]', border: 'border-[#ded4fb]', text: 'text-[#5b45a8]', solid: 'bg-[#7a5cf0]' },
+  mint: { soft: 'bg-[#eafaf3]', border: 'border-[#c9eddd]', text: 'text-[#0f6b4f]', solid: 'bg-[#2f9e79]' },
+  lavender: { soft: 'bg-[#eff1ff]', border: 'border-[#d7ddfb]', text: 'text-[#3f4c9a]', solid: 'bg-[#5a6ad4]' },
+  sky: { soft: 'bg-[#eaf5ff]', border: 'border-[#cbe6fb]', text: 'text-[#1c5a86]', solid: 'bg-[#3793d1]' },
+  peach: { soft: 'bg-[#fff3e6]', border: 'border-[#fbddc2]', text: 'text-[#8a5320]', solid: 'bg-[#e08a3c]' },
+  rose: { soft: 'bg-[#fdeef5]', border: 'border-[#f8d8e8]', text: 'text-[#8c3560]', solid: 'bg-[#c9528c]' },
+}
+
+/** Six sections instead of thirteen parts: the deck's blocks are folded into the stage they belong to. */
+const SECTIONS: { id: string; label: string; tone: Tone; keys: string[] }[] = [
+  { id: 'overview', label: 'Overview', tone: 'violet', keys: ['flow-Overview'] },
+  { id: 'words', label: 'Words', tone: 'mint', keys: ['vocab'] },
+  { id: 'grammar', label: 'Grammar', tone: 'lavender', keys: ['grammar', 'choose'] },
+  { id: 'listening', label: 'Listening', tone: 'sky', keys: ['flow-Before you listen', 'dialogue', 'check'] },
+  { id: 'speaking', label: 'Speaking', tone: 'peach', keys: ['flow-Pronunciation', 'flow-Activate', 'flow-Real talk'] },
+  { id: 'wrap', label: 'Wrap-up', tone: 'rose', keys: ['flow-Reflect', 'flow-Mission', 'flow-Work', 'flow-Point & say'] },
+]
 
 export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
   const lesson = lessonA1(lessonN) ?? A1[0]
   const [active, setActive] = useState(0)
   const [seen, setSeen] = useState<number[]>([])
 
-  const parts = useMemo(() => {
-    if (!lesson) return []
-    const nodes: Record<string, React.ReactNode> = {
+  const plan = useMemo(() => (lesson ? partPlan(lesson) : []), [lesson])
+
+  const nodes = useMemo<Record<string, React.ReactNode>>(() => {
+    if (!lesson) return {}
+    const n: Record<string, React.ReactNode> = {
       vocab: <Vocabulary items={lesson.parts.vocab} />,
       grammar: <Grammar sections={lesson.parts.grammar} />,
       dialogue: <Dialogue turns={lesson.parts.dialogue} />,
       check: <Checks items={lesson.parts.listenCheck} />,
-      choose: <Choose
-        items={quizFor(lesson.n)
-          .filter((q) => q.kind === 'choice' && q.options && q.options.length > 1)
-          .slice(0, 8)
-          .map((q) => ({
-            prompt: q.prompt,
-            vi: lesson.parts.grammarChoose.find((c) => c.prompt === q.prompt)?.vi,
-            options: q.options ?? [],
-            answer: q.answer,
-          }))}
-        fallback={lesson.parts.grammarChoose}
-      />,
+      choose: (
+        <Choose
+          items={quizFor(lesson.n)
+            .filter((q) => q.kind === 'choice' && q.options && q.options.length > 1)
+            .slice(0, 10)
+            .map((q) => ({
+              prompt: q.prompt,
+              vi: lesson.parts.grammarChoose.find((c) => c.prompt === q.prompt)?.vi,
+              options: q.options ?? [],
+              answer: q.answer,
+            }))}
+          fallback={lesson.parts.grammarChoose}
+        />
+      ),
     }
     for (const g of lesson.parts.flow) {
       if (g.group === 'Overview') continue
-      nodes[`flow-${g.group}`] = <Flow groups={[g]} />
+      n[`flow-${g.group}`] = <Flow groups={[g]} heading={false} />
     }
-    const plan = partPlan(lesson)
-    nodes['flow-Overview'] = <Overview lesson={lesson} partCount={plan.length} onStart={() => setActive(1)} />
-    return plan.map((p) => ({ ...p, node: nodes[p.key] }))
-  }, [lesson])
+    n['flow-Overview'] = <Overview lesson={lesson} partCount={plan.length} onStart={() => setActive(1)} />
+    return n
+  }, [lesson, plan.length])
+
+  const sections = useMemo(
+    () =>
+      SECTIONS.map((s) => ({
+        ...s,
+        blocks: s.keys
+          .filter((k) => nodes[k])
+          .map((k) => ({ key: k, label: plan.find((p) => p.key === k)?.label ?? '', node: nodes[k] })),
+      })).filter((s) => s.blocks.length > 0),
+    [nodes, plan],
+  )
 
   useEffect(() => {
     if (!lesson) return
@@ -396,25 +445,34 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
     setSeen(partsSeen(lesson.n))
   }, [lessonN, lesson])
 
+  const current = sections[active] ?? sections[0]
+
   useEffect(() => {
-    if (!lesson || !parts[active]) return
+    if (!lesson || !current) return
     const t = window.setTimeout(() => {
-      markPart(lesson.n, active)
+      for (const b of current.blocks) {
+        const i = plan.findIndex((p) => p.key === b.key)
+        if (i >= 0) markPart(lesson.n, i)
+        void pushPart(lesson.n, b.key)
+      }
       setSeen(partsSeen(lesson.n))
-      if (parts[active]) void pushPart(lesson.n, parts[active].key)
     }, 1200)
     return () => window.clearTimeout(t)
-  }, [active, lesson, parts.length])
+  }, [active, lesson, current, plan])
 
   if (!lesson) return null
 
-  const percent = parts.length ? Math.round((seen.length / parts.length) * 100) : 0
+  const opened = (sec: (typeof sections)[number]) =>
+    sec.blocks.some((b) => seen.includes(plan.findIndex((p) => p.key === b.key)))
+
+  const openedCount = sections.filter(opened).length
+  const percent = sections.length ? Math.round((openedCount / sections.length) * 100) : 0
   const prevLesson = A1.find((l) => l.n === lesson.n - 1)
   const nextLesson = A1.find((l) => l.n === lesson.n + 1)
-  const totalWords = lesson.parts.vocab.length
+  const tone = TONES[current?.tone ?? 'violet']
 
   return (
-    <div className="mx-auto max-w-6xl overflow-x-hidden px-4 pb-10 pt-4 sm:px-6 lg:px-8">
+    <div className="w-full px-3 pb-10 pt-3 sm:px-5 lg:px-7">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <button onClick={onBack} className="inline-flex items-center gap-1.5 text-[12.5px] text-muted transition-colors hover:text-ink">
           <ArrowLeft className="h-3.5 w-3.5" /> All lessons
@@ -426,7 +484,7 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
           <select
             value={lesson.n}
             onChange={(e) => onPickLesson(Number(e.target.value))}
-            className="focus-ring h-8 w-[calc(100vw-200px)] max-w-[260px] truncate rounded-xl border border-line bg-surface px-2 text-[12px] font-semibold tabular-nums sm:w-auto"
+            className="focus-ring h-8 w-[calc(100vw-200px)] max-w-[280px] truncate rounded-xl border border-line bg-surface px-2 text-[12px] font-semibold tabular-nums sm:w-auto"
             aria-label="Choose a lesson"
           >
             {A1.map((l) => (
@@ -441,75 +499,63 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
         </div>
       </div>
 
-      <div className="mt-3 rounded-2xl border border-[#ded4fb] bg-[#f3efff] px-4 py-3">
-        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
-          <p className="text-[10.5px] font-bold uppercase tracking-[.14em] text-primary">
-            A1 · Lesson {lesson.n} of {A1.length}
-          </p>
-          <p className="shrink-0 text-[11.5px] text-muted">
-            {totalWords} words · {parts.length} parts · {percent}% opened
-          </p>
+      <div className="mt-2.5 flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
+        <div className="min-w-0">
+          <p className="text-[10.5px] font-bold uppercase tracking-[.16em] text-primary">A1 · Lesson {lesson.n} of {A1.length}</p>
+          <h2 className="mt-0.5 truncate text-[22px] font-semibold leading-tight tracking-tight sm:text-[25px]">
+            {titleOf(lesson) || `Lesson ${lesson.n}`}
+          </h2>
         </div>
-        <div className="mt-2 flex items-center gap-3">
+        <div className="flex min-w-[160px] flex-1 items-center gap-3 sm:max-w-[300px]">
           <Progress value={percent} className="h-1.5 flex-1" />
           <span className="shrink-0 text-[11.5px] font-semibold tabular-nums text-ink">
-            {seen.length}/{parts.length}
+            {openedCount}/{sections.length} sections
           </span>
         </div>
       </div>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-[228px_1fr]">
-        <nav className="min-w-0">
-          <p className="mb-1.5 hidden px-2 text-[10.5px] font-bold uppercase tracking-[.14em] text-muted lg:block">Parts</p>
-          <div className="flex gap-1 overflow-x-auto pb-1 no-scrollbar lg:flex-col lg:gap-0.5 lg:overflow-visible lg:pb-0">
-            {parts.map((p, i) => {
-              const done = seen.includes(i)
-              const on = i === active
-              return (
-                <button
-                  key={p.key}
-                  onClick={() => setActive(i)}
-                  aria-current={on ? 'step' : undefined}
-                  className={cn(
-                    'flex shrink-0 items-center gap-2 rounded-lg px-2 py-1.5 text-left text-[12.5px] transition-colors lg:w-full',
-                    on ? 'bg-primary/10 font-semibold text-primary' : 'text-ink/70 hover:bg-ink/[.04]',
-                  )}
-                >
-                  <span className={cn('w-5 shrink-0 text-right text-[10.5px] font-bold tabular-nums', on ? 'text-primary' : 'text-muted/80')}>
-                    {i + 1}
-                  </span>
-                  <span className="min-w-0 flex-1 truncate">{p.label}</span>
-                  {done && <Check className={cn('h-3 w-3 shrink-0', on ? 'text-primary' : 'text-ok')} />}
-                </button>
-              )
-            })}
-          </div>
-        </nav>
-
-        <div className="min-w-0">
-          <motion.div
-            key={`${lesson.n}-${active}`}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            className="rounded-2xl border border-line bg-surface p-4 shadow-card sm:p-5"
-          >
-            <div className="mb-3 flex items-baseline justify-between gap-3">
-              <h3 className="text-[16px] font-semibold tracking-tight">{parts[active]?.label}</h3>
-              <span className="shrink-0 text-[11px] tabular-nums text-muted">
-                {active + 1} / {parts.length}
+      <div className="no-scrollbar mt-3 flex gap-1.5 overflow-x-auto pb-1">
+        {sections.map((sec, i) => {
+          const t = TONES[sec.tone]
+          const on = i === active
+          return (
+            <button
+              key={sec.id}
+              onClick={() => setActive(i)}
+              aria-current={on ? 'step' : undefined}
+              className={cn(
+                'flex shrink-0 items-center gap-1.5 rounded-xl border px-3 py-1.5 text-[12.5px] font-semibold transition-colors',
+                on ? cn(t.soft, t.border, t.text) : 'border-line bg-surface text-ink/65 hover:border-ink/15 hover:text-ink',
+              )}
+            >
+              <span className={cn('grid h-4 w-4 shrink-0 place-items-center rounded-[5px] text-[9.5px] font-bold tabular-nums', on ? 'bg-white/75' : t.soft, t.text)}>
+                {i + 1}
               </span>
+              {sec.label}
+              {opened(sec) && <Check className={cn('h-3 w-3', on ? t.text : 'text-ok')} />}
+            </button>
+          )
+        })}
+      </div>
+
+      {current && (
+        <section key={current.id} className={cn('mt-3 overflow-hidden rounded-3xl border', tone.border, 'bg-surface')}>
+          <header className={cn('flex flex-wrap items-center justify-between gap-2 px-4 py-3 sm:px-6', tone.soft)}>
+            <div className="min-w-0">
+              <p className={cn('text-[10.5px] font-bold uppercase tracking-[.16em]', tone.text)}>
+                Section {active + 1} of {sections.length}
+              </p>
+              <h3 className="mt-0.5 text-[19px] font-semibold leading-tight tracking-tight sm:text-[21px]">{current.label}</h3>
             </div>
-
-            {parts[active]?.node}
-
-            <div className={cn('mt-5 flex items-center justify-between gap-2 border-t border-line/60 pt-3.5', active === 0 && 'hidden')}>
-              <Button variant="ghost" size="sm" onClick={() => setActive((v) => Math.max(0, v - 1))} disabled={active === 0}>
-                <ArrowLeft className="h-3.5 w-3.5" /> Back
-              </Button>
-              {active < parts.length - 1 ? (
-                <Button size="sm" onClick={() => setActive((v) => v + 1)}>
-                  Next part <ArrowRight className="h-3.5 w-3.5" />
+            <div className="flex items-center gap-1.5">
+              {active > 0 && (
+                <Button variant="ghost" size="sm" onClick={() => setActive(active - 1)}>
+                  <ArrowLeft className="h-3.5 w-3.5" /> Back
+                </Button>
+              )}
+              {active < sections.length - 1 ? (
+                <Button size="sm" onClick={() => setActive(active + 1)}>
+                  Next section <ArrowRight className="h-3.5 w-3.5" />
                 </Button>
               ) : (
                 <Button size="sm" onClick={() => nextLesson && onPickLesson(nextLesson.n)} disabled={!nextLesson}>
@@ -517,9 +563,28 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
                 </Button>
               )}
             </div>
-          </motion.div>
-        </div>
-      </div>
+          </header>
+
+          <div className="space-y-5 px-4 py-4 sm:px-6 sm:py-5">
+            {current.blocks.map((b) => {
+              const i = plan.findIndex((p) => p.key === b.key)
+              const done = seen.includes(i)
+              return (
+                <div key={b.key}>
+                  {current.blocks.length > 1 && (
+                    <div className="mb-2 flex items-center gap-2">
+                      <p className={cn('text-[10.5px] font-bold uppercase tracking-[.14em]', tone.text)}>{b.label}</p>
+                      <span className="h-px flex-1 bg-line/70" />
+                      {done && <Check className="h-3 w-3 text-ok" />}
+                    </div>
+                  )}
+                  {b.node}
+                </div>
+              )
+            })}
+          </div>
+        </section>
+      )}
     </div>
   )
 }
