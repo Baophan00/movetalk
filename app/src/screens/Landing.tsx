@@ -1,7 +1,7 @@
 import { motion } from 'motion/react'
 import { ArrowRight, BookOpen, Headphones, Mic, Sparkles, Volume2 } from 'lucide-react'
 import { Button } from '../components/ui/button'
-import { LESSONS } from '../lib/lessons'
+import { A1, titleOf } from '../lib/curriculum'
 import { cn } from '../lib/utils'
 import { speak } from '../lib/audio'
 
@@ -14,9 +14,7 @@ const STEPS = [
 ]
 
 export function Landing({ onStart, onOpenLesson }: Props) {
-  const l1 = LESSONS[0]
-  const demo = l1.parts.vocab.find((b) => b.t === 'flashcard')
-  const cards = demo && demo.t === 'flashcard' ? demo.items.slice(0, 3) : []
+  const cards = A1[0]?.parts.vocab.slice(0, 3) ?? []
 
   return (
     <div className="min-h-screen bg-bg">
@@ -37,7 +35,7 @@ export function Landing({ onStart, onOpenLesson }: Props) {
         <section className="grid items-center gap-10 pt-6 lg:grid-cols-[1.05fr_.95fr] lg:pt-14">
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3 py-1.5 text-[11.5px] font-semibold text-muted">
-              <Sparkles className="h-3.5 w-3.5 text-accent" /> {LESSONS.length} lessons open · audio on every line
+              <Sparkles className="h-3.5 w-3.5 text-accent" /> {A1.length} lessons open · audio on every line
             </span>
             <h1 className="mt-5 text-[34px] font-semibold leading-[1.1] tracking-tight sm:text-[46px] lg:text-[52px]">
               English you can <span className="relative whitespace-nowrap text-primary">actually use<svg className="absolute -bottom-1 left-0 w-full" height="6" viewBox="0 0 200 6" preserveAspectRatio="none"><path d="M2 4c40-3 120-4 196-1" stroke="currentColor" strokeWidth="2.5" fill="none" opacity=".35" /></svg></span> tomorrow.
@@ -65,8 +63,8 @@ export function Landing({ onStart, onOpenLesson }: Props) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-[.14em] text-muted">Lesson 1 · A1</p>
-                <p className="mt-0.5 text-[15px] font-semibold">{l1.title}</p>
-                <p className="text-[12px] text-muted">{l1.vi}</p>
+                <p className="mt-0.5 text-[15px] font-semibold">{A1[0] ? titleOf(A1[0]) : 'First lesson'}</p>
+                <p className="text-[12px] text-muted">{A1[0]?.parts.vocab.length ?? 0} words · {A1[0]?.parts.grammar.length ?? 0} grammar blocks</p>
               </div>
               <span className="rounded-full bg-ok/10 px-2.5 py-1 text-[11px] font-semibold text-ok">open</span>
             </div>

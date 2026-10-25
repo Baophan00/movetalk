@@ -489,126 +489,660 @@
      "Mẫu chính: explain something to someone.",
      "TALK TO someone = nói với ai. TALK ABOUT something = nói về điều gì."
     ]
-   },
+   }
+  ],
+  "flow": [
    {
-    "section": "PRONUNCIATION · -ED SYSTEM",
-    "sub": "-ED: chọn theo ÂM cuối của từ gốc",
-    "lines": [
-     "Giống cách đọc S/ES: nghe âm cuối, không nhìn chữ cuối.",
-     "/t/",
-     "Sau /p k f s ʃ tʃ θ/",
-     "booked /bʊkt/",
-     "missed /mɪst/",
-     "asked /æskt/",
-     "Không thêm âm tiết",
-     "/d/",
-     "Sau nguyên âm và phụ âm",
-     "hữu thanh, trừ /d/",
-     "called /kɔːld/",
-     "changed /tʃeɪndʒd/",
-     "tried /traɪd/",
-     "Không thêm âm tiết",
-     "/ɪd/",
-     "Sau /t/ hoặc /d/",
-     "waited /ˈweɪtɪd/",
-     "decided /dɪˈsaɪdɪd/",
-     "needed /ˈniːdɪd/",
-     "Thêm một âm tiết",
-     "Hỏi: âm cuối là /t/ hoặc /d/? Nếu không, âm vô thanh hay hữu thanh?"
+    "group": "Warm-up",
+    "slides": [
+     {
+      "title": "MOVE.",
+      "lines": [
+       "MOVE.",
+       "ACTIVATE 1",
+       "L09 · MY LIFE ON A TIMELINE",
+       "Nhiều tình huống đời sống.",
+       "Nói rõ ý, thêm lý do và chi tiết.",
+       "PAST / NOW",
+       "and",
+       "ROUTINE / PLANS",
+       "SAY → ASK → RETRY",
+       "REACTIONS · FEELINGS · EVERYDAY LIFE"
+      ]
+     },
+     {
+      "title": "RECONNECT · L01–L08",
+      "lines": [
+       "RECONNECT · L01–L08",
+       "Chọn đầu câu hỏi trước khi nói",
+       "Nói cả câu rồi trả lời ngắn. Chưa cần đổi thời gian.",
+       "___ you ready?",
+       "AM / IS / ARE hoặc DO / DOES?",
+       "___ she work here?",
+       "BE hay động từ thường?",
+       "___ there any free seats?",
+       "Nhìn danh từ SEATS.",
+       "___ this café have Wi-Fi?",
+       "Chọn đầu câu, giữ HAVE.",
+       "___ those your notebooks?",
+       "Chọn IS hay ARE.",
+       "Where ___ your friend live?",
+       "Giữ LIVE dạng gốc.",
+       "Gọi lại: ARE YOU / DOES SHE / ARE THERE / DOES THIS CAFÉ / ARE THOSE / DOES."
+      ]
+     }
     ]
    },
    {
-    "section": "PRONUNCIATION · SORT & SAY",
-    "sub": "Đọc đuôi trước, rồi nói cả cụm",
-    "lines": [
-     "Chọn /t/ /d/ /ɪd/. Giáo viên mở đáp án từ Notes sau khi học viên thử.",
-     "booked a room / checked the price",
-     "Có thêm âm tiết không?",
-     "called a friend / returned an item",
-     "Đuôi có rung giọng không?",
-     "waited for a reply / decided to stay",
-     "Âm cuối từ gốc là gì?",
-     "missed a bus / asked for help",
-     "Đừng chèn âm “ịt” sau mọi từ.",
-     "tried on a jacket / changed a booking",
-     "Giữ cụm động từ và giới từ.",
-     "wanted a refund / needed a receipt",
-     "Đếm số âm tiết trước và sau -ED.",
-     "Lượt 2: nói câu thật với YESTERDAY / LAST WEEK. Không đọc từ rời."
+    "group": "Before you listen",
+    "slides": [
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "SHOPPING · Choosing the right headphones · Before you listen",
+       "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
+       "TALK FIRST",
+       "What do you check before buying something?",
+       "Do you prefer help from a shop assistant?",
+       "What do you usually listen to on a journey?",
+       "LISTENING MISSION",
+       "WHY is the customer replacing the headphones?",
+       "WHAT is the assistant checking now?",
+       "DOES the case cost extra?",
+       "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
+      ]
+     },
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "LEISURE · Choosing a day out · Before you listen",
+       "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
+       "TALK FIRST",
+       "What are you excited about this month?",
+       "Is there an activity you’re afraid of trying?",
+       "What do you check before booking a day out?",
+       "LISTENING MISSION",
+       "WHO is good at climbing?",
+       "WHY do they prefer the festival?",
+       "WHAT are they going to check before buying tickets?",
+       "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
+      ]
+     },
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "COMMUNITY · Finding the right group · Before you listen",
+       "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
+       "TALK FIRST",
+       "What would you like to learn outside work?",
+       "Who do you ask for help in a new place?",
+       "Do you prefer trying one session before joining a course?",
+       "LISTENING MISSION",
+       "WHY didn’t the visitor get in yesterday?",
+       "WHAT does the visitor want help with?",
+       "WHO do the bags belong to?",
+       "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
+      ]
+     }
     ]
    },
    {
-    "section": "PRONUNCIATION · HEAR & REBUILD",
-    "sub": "Nghe quá khứ, kể lại rồi hỏi tiếp",
-    "lines": [
-     "Nghe 2 lượt từ Notes. Ghi động từ V2 và chi tiết quan trọng, chưa xem lời đọc.",
-     "1 · BOOKING",
-     "Đã đặt gì? Khi nào?",
-     "2 · CUSTOMER SERVICE",
-     "Gọi cho ai? Đổi điều gì?",
-     "3 · A SMALL PROBLEM",
-     "Mất gì? Tìm thấy ở đâu?",
-     "4 · AN APPOINTMENT",
-     "Đã đợi bao lâu? Ai đã đến?",
-     "5 · A PURCHASE",
-     "Giá thế nào? Đã quyết định gì?",
-     "6 · YOUR TURN",
-     "Kể một việc tương tự, partner hỏi tiếp.",
-     "Không nghe được đuôi? Dùng cả mốc thời gian và ngữ cảnh để hiểu, rồi nghe lại."
+    "group": "Pronunciation",
+    "slides": [
+     {
+      "title": "PRONUNCIATION · -ED SYSTEM",
+      "lines": [
+       "PRONUNCIATION · -ED SYSTEM",
+       "-ED: chọn theo ÂM cuối của từ gốc",
+       "Giống cách đọc S/ES: nghe âm cuối, không nhìn chữ cuối.",
+       "/t/",
+       "Sau /p k f s ʃ tʃ θ/",
+       "booked /bʊkt/",
+       "missed /mɪst/",
+       "asked /æskt/",
+       "Không thêm âm tiết",
+       "/d/",
+       "Sau nguyên âm và phụ âm",
+       "hữu thanh, trừ /d/",
+       "called /kɔːld/",
+       "changed /tʃeɪndʒd/",
+       "tried /traɪd/",
+       "Không thêm âm tiết",
+       "/ɪd/",
+       "Sau /t/ hoặc /d/",
+       "waited /ˈweɪtɪd/",
+       "decided /dɪˈsaɪdɪd/",
+       "needed /ˈniːdɪd/",
+       "Thêm một âm tiết",
+       "Hỏi: âm cuối là /t/ hoặc /d/? Nếu không, âm vô thanh hay hữu thanh?"
+      ]
+     },
+     {
+      "title": "PRONUNCIATION · SORT & SAY",
+      "lines": [
+       "PRONUNCIATION · SORT & SAY",
+       "Đọc đuôi trước, rồi nói cả cụm",
+       "Chọn /t/ /d/ /ɪd/. Giáo viên mở đáp án từ Notes sau khi học viên thử.",
+       "booked a room / checked the price",
+       "Có thêm âm tiết không?",
+       "called a friend / returned an item",
+       "Đuôi có rung giọng không?",
+       "waited for a reply / decided to stay",
+       "Âm cuối từ gốc là gì?",
+       "missed a bus / asked for help",
+       "Đừng chèn âm “ịt” sau mọi từ.",
+       "tried on a jacket / changed a booking",
+       "Giữ cụm động từ và giới từ.",
+       "wanted a refund / needed a receipt",
+       "Đếm số âm tiết trước và sau -ED.",
+       "Lượt 2: nói câu thật với YESTERDAY / LAST WEEK. Không đọc từ rời."
+      ]
+     },
+     {
+      "title": "PRONUNCIATION · HEAR & REBUILD",
+      "lines": [
+       "PRONUNCIATION · HEAR & REBUILD",
+       "Nghe quá khứ, kể lại rồi hỏi tiếp",
+       "Nghe 2 lượt từ Notes. Ghi động từ V2 và chi tiết quan trọng, chưa xem lời đọc.",
+       "1 · BOOKING",
+       "Đã đặt gì? Khi nào?",
+       "2 · CUSTOMER SERVICE",
+       "Gọi cho ai? Đổi điều gì?",
+       "3 · A SMALL PROBLEM",
+       "Mất gì? Tìm thấy ở đâu?",
+       "4 · AN APPOINTMENT",
+       "Đã đợi bao lâu? Ai đã đến?",
+       "5 · A PURCHASE",
+       "Giá thế nào? Đã quyết định gì?",
+       "6 · YOUR TURN",
+       "Kể một việc tương tự, partner hỏi tiếp.",
+       "Không nghe được đuôi? Dùng cả mốc thời gian và ngữ cảnh để hiểu, rồi nghe lại."
+      ]
+     },
+     {
+      "title": "PRONUNCIATION · EVERYDAY QUESTIONS",
+      "lines": [
+       "PRONUNCIATION · EVERYDAY QUESTIONS",
+       "Câu hỏi ngắn, khác ý định nói",
+       "Đọc theo tình huống. Giọng tò mò, ngạc nhiên hay kiểm tra thông tin khác nhau.",
+       "Are_you sure?",
+       "Kiểm tra lại thông tin.",
+       "Are_you serious?",
+       "Ngạc nhiên; tránh giọng chế giễu.",
+       "Does_it work?",
+       "Kiểm tra thiết bị / phương án.",
+       "Does_it make sense?",
+       "Kiểm tra tính hợp lý / sự rõ ràng.",
+       "ARE YOU có thể đọc nhẹ /ər jə/. DOES IT: nối /z/ với /ɪ/, không bỏ IT."
+      ]
+     },
+     {
+      "title": "PRONUNCIATION · ADJECTIVE & PREPOSITION",
+      "lines": [
+       "PRONUNCIATION · ADJECTIVE & PREPOSITION",
+       "Đọc liền cụm, giữ giới từ nhẹ",
+       "Nối âm khi có phụ âm cuối + nguyên âm đầu. Đọc FOR / TO nhẹ khi không nhấn.",
+       "excited_about",
+       "/ɪkˈsaɪtɪd əˈbaʊt/",
+       "interested_in",
+       "/ˈɪntrəstɪd ɪn/",
+       "good_at",
+       "/ɡʊd æt/",
+       "ready_for",
+       "/ˈredi fər/",
+       "listen_to / wait_for",
+       "/ˈlɪsən tə/ /weɪt fər/",
+       "Đọc cả câu: I’m excited about the trip. / Who are you waiting for?"
+      ]
+     },
+     {
+      "title": "PRONUNCIATION · LISTEN & SORT",
+      "lines": [
+       "PRONUNCIATION · LISTEN & SORT",
+       "Nghe câu, chọn một trong bốn ý",
+       "Giáo viên đọc từ Notes. Ghi THƯỜNG / ĐANG / ĐÃ / DỰ ĐỊNH, rồi nhắc lại.",
+       "1 · __________________",
+       "Nghe ý và cụm động từ.",
+       "2 · __________________",
+       "Nghe ý và cụm động từ.",
+       "3 · __________________",
+       "Nghe ý và cụm động từ.",
+       "4 · __________________",
+       "Nghe ý và cụm động từ.",
+       "5 · __________________",
+       "Nghe ý và cụm động từ.",
+       "6 · __________________",
+       "Nghe ý và cụm động từ.",
+       "Không dùng riêng một âm cuối để đoán toàn bộ câu."
+      ]
+     }
     ]
    },
    {
-    "section": "PRONUNCIATION · EVERYDAY QUESTIONS",
-    "sub": "Câu hỏi ngắn, khác ý định nói",
-    "lines": [
-     "Đọc theo tình huống. Giọng tò mò, ngạc nhiên hay kiểm tra thông tin khác nhau.",
-     "Are_you sure?",
-     "Kiểm tra lại thông tin.",
-     "Are_you serious?",
-     "Ngạc nhiên; tránh giọng chế giễu.",
-     "Does_it work?",
-     "Kiểm tra thiết bị / phương án.",
-     "Does_it make sense?",
-     "Kiểm tra tính hợp lý / sự rõ ràng.",
-     "ARE YOU có thể đọc nhẹ /ər jə/. DOES IT: nối /z/ với /ɪ/, không bỏ IT."
+    "group": "Activate",
+    "slides": [
+     {
+      "title": "ACTIVATE · TEMPLATE REFLEX",
+      "lines": [
+       "ACTIVATE · TEMPLATE REFLEX",
+       "TRỘN HỆ · Vòng 1",
+       "Không có nhãn thì. Nhìn chủ ngữ, ý muốn nói và dạng câu để bật khung.",
+       "Có phải bạn đang …?",
+       "Anh ấy đã không …",
+       "Họ dự định sẽ không …",
+       "Cô ấy đã không …",
+       "Có phải bạn của bạn đã …?",
+       "Tôi sẽ không …",
+       "Nó đang không …",
+       "Có phải chúng tôi dự định sẽ …?",
+       "Bật khung trong 3 giây. Chưa điền động từ. Với trạng thái / nơi chốn, thử thêm khung BE."
+      ]
+     },
+     {
+      "title": "ACTIVATE · TEMPLATE KEY",
+      "lines": [
+       "ACTIVATE · TEMPLATE KEY",
+       "TRỘN HỆ · Vòng 1 · Đáp án",
+       "Đối chiếu đầu câu. Đổi chủ ngữ một lần nữa trước khi chuyển vòng.",
+       "Có phải bạn đang …?",
+       "Are + you + V-ing + …?",
+       "Anh ấy đã không …",
+       "He + didn’t + V + …",
+       "He + wasn’t + …",
+       "Họ dự định sẽ không …",
+       "They + aren’t going to + V + …",
+       "They + aren’t going to be + …",
+       "Cô ấy đã không …",
+       "She + didn’t + V + …",
+       "She + wasn’t + …",
+       "Có phải bạn của bạn đã …?",
+       "Did + your friend + V + …?",
+       "Was + your friend + …?",
+       "Tôi sẽ không …",
+       "I + won’t + V + …",
+       "I + won’t be + …",
+       "Nó đang không …",
+       "It + isn’t + V-ing + …",
+       "Có phải chúng tôi dự định sẽ …?",
+       "Are + we + going to + V + …?",
+       "Are + we + going to be + …?",
+       "Xanh: động từ thường. Nâu: BE + tính từ / danh từ / cụm giới từ. V = nguyên mẫu."
+      ]
+     },
+     {
+      "title": "ACTIVATE · TEMPLATE REFLEX",
+      "lines": [
+       "ACTIVATE · TEMPLATE REFLEX",
+       "TRỘN HỆ · Vòng 2",
+       "Không có nhãn thì. Nhìn chủ ngữ, ý muốn nói và dạng câu để bật khung.",
+       "Có phải họ đã …?",
+       "Có phải cô ấy …?",
+       "Vì sao anh ấy đang …?",
+       "Tôi dự định sẽ không …",
+       "Vì sao bạn của bạn sẽ …?",
+       "Chúng tôi đã không …",
+       "Nó không …",
+       "Có phải bạn dự định sẽ …?",
+       "Bật khung trong 3 giây. Chưa điền động từ. Với trạng thái / nơi chốn, thử thêm khung BE."
+      ]
+     },
+     {
+      "title": "ACTIVATE · TEMPLATE KEY",
+      "lines": [
+       "ACTIVATE · TEMPLATE KEY",
+       "TRỘN HỆ · Vòng 2 · Đáp án",
+       "Đối chiếu đầu câu. Đổi chủ ngữ một lần nữa trước khi chuyển vòng.",
+       "Có phải họ đã …?",
+       "Did + they + V + …?",
+       "Were + they + …?",
+       "Có phải cô ấy …?",
+       "Does + she + V + …?",
+       "Is + she + …?",
+       "Vì sao anh ấy đang …?",
+       "Why + is + he + V-ing + …?",
+       "Tôi dự định sẽ không …",
+       "I + am not going to + V + …",
+       "I + am not going to be + …",
+       "Vì sao bạn của bạn sẽ …?",
+       "Why + will + your friend + V + …?",
+       "Why + will + your friend + be + …?",
+       "Chúng tôi đã không …",
+       "We + didn’t + V + …",
+       "We + weren’t + …",
+       "Nó không …",
+       "It + doesn’t + V + …",
+       "It + isn’t + …",
+       "Có phải bạn dự định sẽ …?",
+       "Are + you + going to + V + …?",
+       "Are + you + going to be + …?",
+       "Xanh: động từ thường. Nâu: BE + tính từ / danh từ / cụm giới từ. V = nguyên mẫu."
+      ]
+     },
+     {
+      "title": "ACTIVATE · TEMPLATE REFLEX",
+      "lines": [
+       "ACTIVATE · TEMPLATE REFLEX",
+       "TRỘN HỆ · Vòng 3",
+       "Không có nhãn thì. Nhìn chủ ngữ, ý muốn nói và dạng câu để bật khung.",
+       "Có phải bạn của bạn đang …?",
+       "Chúng tôi sẽ không …",
+       "Vì sao tôi đã …?",
+       "Nó đã …",
+       "Vì sao cô ấy dự định sẽ …?",
+       "Họ … ở đâu?",
+       "Anh ấy không …",
+       "Bạn đang không …",
+       "Bật khung trong 3 giây. Chưa điền động từ. Với trạng thái / nơi chốn, thử thêm khung BE."
+      ]
+     },
+     {
+      "title": "ACTIVATE · TEMPLATE KEY",
+      "lines": [
+       "ACTIVATE · TEMPLATE KEY",
+       "TRỘN HỆ · Vòng 3 · Đáp án",
+       "Đối chiếu đầu câu. Đổi chủ ngữ một lần nữa trước khi chuyển vòng.",
+       "Có phải bạn của bạn đang …?",
+       "Is + your friend + V-ing + …?",
+       "Chúng tôi sẽ không …",
+       "We + won’t + V + …",
+       "We + won’t be + …",
+       "Vì sao tôi đã …?",
+       "Why + did + I + V + …?",
+       "Why + was + I + …?",
+       "Nó đã …",
+       "It + V2 / V-ed + …",
+       "It + was + …",
+       "Vì sao cô ấy dự định sẽ …?",
+       "Why + is + she + going to + V + …?",
+       "Why + is + she + going to be + …?",
+       "Họ … ở đâu?",
+       "Where + do + they + V + …?",
+       "Where + are + they + …?",
+       "Anh ấy không …",
+       "He + doesn’t + V + …",
+       "He + isn’t + …",
+       "Bạn đang không …",
+       "You + aren’t + V-ing + …",
+       "Xanh: động từ thường. Nâu: BE + tính từ / danh từ / cụm giới từ. V = nguyên mẫu."
+      ]
+     },
+     {
+      "title": "ACTIVATE · TEMPLATE REFLEX",
+      "lines": [
+       "ACTIVATE · TEMPLATE REFLEX",
+       "TRỘN HỆ · Vòng 4",
+       "Không có nhãn thì. Nhìn chủ ngữ, ý muốn nói và dạng câu để bật khung.",
+       "Có phải cô ấy sẽ …?",
+       "Bạn đã không …",
+       "Vì sao họ đang …?",
+       "Anh ấy dự định sẽ không …",
+       "Có phải tôi …?",
+       "Bạn của bạn đã … ở đâu?",
+       "Chúng tôi đang …",
+       "Có phải nó dự định sẽ …?",
+       "Bật khung trong 3 giây. Chưa điền động từ. Với trạng thái / nơi chốn, thử thêm khung BE."
+      ]
+     },
+     {
+      "title": "ACTIVATE · TEMPLATE KEY",
+      "lines": [
+       "ACTIVATE · TEMPLATE KEY",
+       "TRỘN HỆ · Vòng 4 · Đáp án",
+       "Đối chiếu đầu câu. Đổi chủ ngữ một lần nữa trước khi chuyển vòng.",
+       "Có phải cô ấy sẽ …?",
+       "Will + she + V + …?",
+       "Will + she + be + …?",
+       "Bạn đã không …",
+       "You + didn’t + V + …",
+       "You + weren’t + …",
+       "Vì sao họ đang …?",
+       "Why + are + they + V-ing + …?",
+       "Anh ấy dự định sẽ không …",
+       "He + isn’t going to + V + …",
+       "He + isn’t going to be + …",
+       "Có phải tôi …?",
+       "Do + I + V + …?",
+       "Am + I + …?",
+       "Bạn của bạn đã … ở đâu?",
+       "Where + did + your friend + V + …?",
+       "Where + was + your friend + …?",
+       "Chúng tôi đang …",
+       "We + are + V-ing + …",
+       "Có phải nó dự định sẽ …?",
+       "Is + it + going to + V + …?",
+       "Is + it + going to be + …?",
+       "Xanh: động từ thường. Nâu: BE + tính từ / danh từ / cụm giới từ. V = nguyên mẫu."
+      ]
+     },
+     {
+      "title": "ACTIVATE · SAY BEFORE THE MODEL",
+      "lines": [
+       "ACTIVATE · SAY BEFORE THE MODEL",
+       "Một cấu trúc, nhiều việc bạn thực sự làm",
+       "Nói trước khi xem mẫu. Thêm một lý do hoặc một chi tiết.",
+       "USUALLY · listen to",
+       "Tôi thường nghe nhạc trên xe buýt.",
+       "NOW · look for",
+       "Tôi đang tìm một món quà cho bạn.",
+       "YESTERDAY · pay for",
+       "Hôm qua tôi trả tiền mua vé bảo tàng.",
+       "TOMORROW · ask for",
+       "Ngày mai tôi dự định xin thêm thông tin.",
+       "PAST STATE · happy with",
+       "Tôi hài lòng với chuyến đi hôm qua.",
+       "NOW · excited about",
+       "Tôi háo hức về lễ hội cuối tuần này.",
+       "Hãy nói cả cụm: LISTEN TO / LOOK FOR / PAY FOR / ASK FOR."
+      ]
+     },
+     {
+      "title": "ACTIVATE · MODEL & NOTICE",
+      "lines": [
+       "ACTIVATE · MODEL & NOTICE",
+       "Mở rộng câu bằng lý do và chi tiết",
+       "Đọc mẫu rồi đổi người, vật, nơi hoặc lý do.",
+       "I usually listen to music on the bus.",
+       "It makes the journey more enjoyable.",
+       "I’m looking for a gift for a friend.",
+       "She’s interested in photography.",
+       "I paid for the museum tickets yesterday.",
+       "We wanted to avoid a long queue.",
+       "I’m going to ask for more information.",
+       "I’m not sure about the starting time.",
+       "I was happy with the trip yesterday.",
+       "The guide explained everything clearly.",
+       "I’m excited about the festival this weekend.",
+       "I’m going with some friends from my neighborhood.",
+       "Nối hai ý bằng BECAUSE / BUT / SO khi phù hợp. Không phải câu nào cũng cần thật dài."
+      ]
+     },
+     {
+      "title": "ACTIVATE · QUESTION SWITCH",
+      "lines": [
+       "ACTIVATE · QUESTION SWITCH",
+       "Nghe câu trả lời rồi chọn câu hỏi",
+       "Hỏi tiếp về người, lý do, vị trí hoặc lựa chọn.",
+       "I’m waiting for my cousin.",
+       "Hỏi đang đợi ai.",
+       "She’s interested in photography.",
+       "Hỏi cô ấy quan tâm điều gì.",
+       "I paid for the tickets yesterday.",
+       "Hỏi đã trả tiền chưa ở mốc hôm qua.",
+       "Yes, it worked with my old phone.",
+       "Hỏi thiết bị có hoạt động với máy cũ không.",
+       "I’m going to talk to the receptionist.",
+       "Hỏi dự định nói với ai.",
+       "No, I wasn’t happy with the room.",
+       "Hỏi có hài lòng với phòng không.",
+       "Chọn ARE / IS / DID / WAS / WERE theo đúng cấu trúc."
+      ]
+     },
+     {
+      "title": "ACTIVATE · REPAIR",
+      "lines": [
+       "ACTIVATE · REPAIR",
+       "Giữ giới từ, sửa đầu câu và dạng từ",
+       "Nói lại cả câu sau khi sửa.",
+       "I’m interested in learn photography.",
+       "Sau IN: danh từ hoặc V-ing.",
+       "Do you waiting for someone?",
+       "Đang diễn ra cần BE + V-ing.",
+       "Did you paid for the tickets?",
+       "Có DID rồi, giữ PAY.",
+       "She is afraid to heights.",
+       "Sợ điều gì: AFRAID OF + N.",
+       "Can you explain me this map?",
+       "Điều gì trước, người nhận sau TO.",
+       "These bags belong with the volunteers.",
+       "Mẫu thuộc về: BELONG TO.",
+       "Dùng lại câu đúng trong một ngữ cảnh khác. Đáp án trong Notes."
+      ]
+     },
+     {
+      "title": "ACTIVATE · PERSONAL MIX",
+      "lines": [
+       "ACTIVATE · PERSONAL MIX",
+       "Nói về sở thích, lựa chọn và trải nghiệm",
+       "Mỗi câu trả lời: ý chính + lý do hoặc ví dụ thật.",
+       "What are you interested in at the moment?",
+       "Một sở thích hoặc điều muốn tìm hiểu.",
+       "What are you excited about?",
+       "Điều bạn mong đợi; có thể dùng EXCITED ABOUT.",
+       "Were you happy with your last purchase?",
+       "Một món đồ và điều bạn thích / chưa thích.",
+       "Who do you usually ask for advice?",
+       "Một người và lý do tin tưởng.",
+       "What are you going to try this weekend?",
+       "Một dự định, địa điểm hoặc người đi cùng.",
+       "Hỏi thêm theo câu trả lời, không chỉ chuyển sang câu tiếp theo."
+      ]
+     },
+     {
+      "title": "ACTIVATE · VIETNAMESE TO ENGLISH",
+      "lines": [
+       "ACTIVATE · VIETNAMESE TO ENGLISH",
+       "Bật khung câu trong 3 giây",
+       "Lượt 1: bật đầu câu tiếng Anh. Lượt 2: nói cả câu. Đọc ngang, trộn các mốc thời gian.",
+       "01 Bạn có đang tìm chìa khóa không?",
+       "02 Anh ấy có đang đợi bạn không?",
+       "03 Anh ấy đã không gọi lại hôm qua.",
+       "04 Họ dự định sẽ không mua vé.",
+       "05 Có phải họ đã trả tiền hôm qua?",
+       "06 Có phải bạn thường đi làm bằng xe buýt?",
+       "07 Bạn có dự định đổi lịch hẹn không?",
+       "08 Có phải bạn của bạn đã ở đây hôm qua?",
+       "09 Sếp tôi đã không đồng ý với tôi hôm qua.",
+       "10 Tôi sẽ không nói cho ai biết.",
+       "11 Chúng tôi định sẽ không ở lại tối nay.",
+       "12 Nó đang không hoạt động.",
+       "THỬ THÁCH: đổi chủ ngữ, giữ ý. Hỏi lại một câu và trả lời bằng thông tin thật."
+      ]
+     }
     ]
    },
    {
-    "section": "PRONUNCIATION · ADJECTIVE & PREPOSITION",
-    "sub": "Đọc liền cụm, giữ giới từ nhẹ",
-    "lines": [
-     "Nối âm khi có phụ âm cuối + nguyên âm đầu. Đọc FOR / TO nhẹ khi không nhấn.",
-     "excited_about",
-     "/ɪkˈsaɪtɪd əˈbaʊt/",
-     "interested_in",
-     "/ˈɪntrəstɪd ɪn/",
-     "good_at",
-     "/ɡʊd æt/",
-     "ready_for",
-     "/ˈredi fər/",
-     "listen_to / wait_for",
-     "/ˈlɪsən tə/ /weɪt fər/",
-     "Đọc cả câu: I’m excited about the trip. / Who are you waiting for?"
+    "group": "Real talk",
+    "slides": [
+     {
+      "title": "REAL TALK · YOUR FOUR MEANINGS",
+      "lines": [
+       "REAL TALK · YOUR FOUR MEANINGS",
+       "Bốn ý về cuộc sống của bạn",
+       "Mỗi ô nói 1–2 câu. Partner hỏi một câu tiếp để lấy thêm thông tin.",
+       "THƯỜNG · usually",
+       "I usually…",
+       "ĐANG · right now",
+       "Right now, I’m…",
+       "ĐÃ · yesterday",
+       "Yesterday, I… / I was…",
+       "DỰ ĐỊNH · tomorrow",
+       "Tomorrow, I’m going to…",
+       "Tự chọn hoạt động. Không cần nói có nếu điều đó không đúng với bạn."
+      ]
+     },
+     {
+      "title": "REAL TALK · INFORMATION GAP",
+      "lines": [
+       "REAL TALK · INFORMATION GAP",
+       "Giải quyết một việc thường gặp",
+       "Chọn một tình huống. Hỏi để có đủ thông tin, rồi nói quyết định của bạn.",
+       "SHOP · a new device",
+       "Does it work? / Is it different from…?",
+       "EVENT · a weekend plan",
+       "Are you interested in…? / Are you afraid of…?",
+       "STATION · the right entrance",
+       "Are you sure? / Can you explain this to me?",
+       "HOTEL · a room problem",
+       "Are you happy with…? / Ask for help.",
+       "LOST ITEM · a bag",
+       "Who does it belong to? / What are you looking for?",
+       "CLOSE · next step",
+       "I’m going to ask / pay / talk to…",
+       "Dùng ít nhất một câu hỏi kiểm tra, một cụm giới từ và một kế hoạch tiếp theo."
+      ]
+     },
+     {
+      "title": "REAL TALK · FOLLOW-UP",
+      "lines": [
+       "REAL TALK · FOLLOW-UP",
+       "Câu hỏi tiếp giúp hiểu rõ hơn",
+       "Chọn một câu hỏi theo điều người kia vừa nói.",
+       "I’m interested in photography.",
+       "What do you like taking photos of?",
+       "I wasn’t happy with the hotel room.",
+       "What was the problem?",
+       "I’m looking for a gift.",
+       "Who is it for?",
+       "I’m going to try a new activity.",
+       "Why do you want to try it?",
+       "Không cần dùng từ khó để nói có chiều sâu. Thêm lý do, chi tiết và câu hỏi thật."
+      ]
+     }
     ]
    },
    {
-    "section": "PRONUNCIATION · LISTEN & SORT",
-    "sub": "Nghe câu, chọn một trong bốn ý",
-    "lines": [
-     "Giáo viên đọc từ Notes. Ghi THƯỜNG / ĐANG / ĐÃ / DỰ ĐỊNH, rồi nhắc lại.",
-     "1 · __________________",
-     "Nghe ý và cụm động từ.",
-     "2 · __________________",
-     "Nghe ý và cụm động từ.",
-     "3 · __________________",
-     "Nghe ý và cụm động từ.",
-     "4 · __________________",
-     "Nghe ý và cụm động từ.",
-     "5 · __________________",
-     "Nghe ý và cụm động từ.",
-     "6 · __________________",
-     "Nghe ý và cụm động từ.",
-     "Không dùng riêng một âm cuối để đoán toàn bộ câu."
+    "group": "Mission",
+    "slides": [
+     {
+      "title": "DAILY MISSION · THREE SHORT ROUNDS",
+      "lines": [
+       "DAILY MISSION · THREE SHORT ROUNDS",
+       "Mỗi ngày một vòng luyện ngắn",
+       "Ghi âm 45–60 giây. Nghe lại và chọn một lỗi để sửa.",
+       "DAY 1 · THƯỜNG / ĐANG",
+       "Dùng LISTEN TO / LOOK FOR / WAIT FOR.",
+       "DAY 1 · QUESTIONS",
+       "Do you…? / Are you…ing?",
+       "DAY 2 · ĐÃ",
+       "Kể một lần mua đồ / hỏi đường / đi chơi.",
+       "DAY 2 · QUESTIONS",
+       "Did you…? / Were you…?",
+       "DAY 3 · DỰ ĐỊNH",
+       "Nói dự định mới; hỏi ARE YOU SURE? khi cần.",
+       "DAY 3 · MIX",
+       "Partner hỏi ngẫu nhiên 4 mốc.",
+       "Không chép nguyên câu mẫu. Thay ít nhất một hoạt động và một chi tiết thật."
+      ]
+     },
+     {
+      "title": "DAILY MISSION · READ & RECORD",
+      "lines": [
+       "DAILY MISSION · READ & RECORD",
+       "Four moments in my life",
+       "Đọc theo cụm. Sau đó thay thông tin và nói lại về bạn.",
+       "I’m interested in exploring new places, and I usually take photos when I go out.",
+       "Right now, I’m looking for a small camera because my old one doesn’t work well.",
+       "Yesterday, I talked to a shop assistant and asked for a simple model.",
+       "He explained the buttons to me, but I wasn’t sure about the price.",
+       "Tomorrow, I’m going to visit another shop and compare two models.",
+       "I’m excited about a photography walk this weekend, but I’m worried about the rain.",
+       "I’m going to check the weather and ask a friend to join me.",
+       "Nói lần 2: usually / now / yesterday / tomorrow. Mỗi mốc một ý thật."
+      ]
+     }
     ]
    }
   ],

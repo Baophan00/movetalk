@@ -598,53 +598,401 @@
      "fewer / less",
      "Lượt 2: thay danh từ rồi đổi từ chỉ lượng cho phù hợp."
     ]
-   },
+   }
+  ],
+  "flow": [
    {
-    "section": "PRONUNCIATION · WEAK OF",
-    "sub": "ALL OF US: nghe cả cụm, không tách từng từ",
-    "lines": [
-     "Trong lời nói không nhấn, OF thường là /əv/. US / THEM cũng có thể đọc nhẹ.",
-     "all_of_us",
-     "/ɔːl əv əs/ → [ɔːləvəs]",
-     "all_of_them",
-     "/ɔːl əv ðəm/ → [ɔːləvðəm]",
-     "some_of_us",
-     "/sʌm əv əs/ → [sʌməvəs]",
-     "most_of_them",
-     "/moʊst əv ðəm/ → [moʊstəvðəm]",
-     "Giữ cụm liền mạch. Không cần nhấn OF hoặc đọc mạnh từng từ."
+    "group": "Warm-up",
+    "slides": [
+     {
+      "title": "MOVE.",
+      "lines": [
+       "MOVE.",
+       "ACTIVATE 1",
+       "L07 · QUANTITY & CHOICE",
+       "Chọn đúng lượng.",
+       "Nói rõ ý trong từng ngữ cảnh.",
+       "FEW / A FEW",
+       "and",
+       "MOST / ALMOST",
+       "CHOOSE → SPEAK",
+       "QUANTITY · CHOICE · CONNECTION"
+      ]
+     },
+     {
+      "title": "RECALL & CONNECT · L04–L06",
+      "lines": [
+       "RECALL & CONNECT · L04–L06",
+       "Cụm danh từ cần phần mở đầu nào?",
+       "Chọn và nói cả câu. Nêu lý do dựa vào danh từ chính.",
+       "this / these small shops",
+       "___ are open.",
+       "another / other quiet café",
+       "Do you know ___?",
+       "my / a my new colleague",
+       "___ works in sales.",
+       "an / a amazing place",
+       "It’s ___.",
+       "this / these useful information",
+       "___ is helpful.",
+       "another / other nice places",
+       "I know ___.",
+       "INFORMATION không đếm được: không dùng an information hoặc informations."
+      ]
+     },
+     {
+      "title": "RECALL & CONNECT · L04 → L05",
+      "lines": [
+       "RECALL & CONNECT · L04 → L05",
+       "Ôn cụm danh từ trước khi hỏi thêm",
+       "Ghép cụm từ theo đúng trật tự. Điền từ còn thiếu rồi nói cả câu.",
+       "new / my / colleague",
+       "___ __________ friendly?",
+       "small / those / shops",
+       "___ __________ sell local food?",
+       "restaurant / her / local",
+       "___ __________ serve breakfast?",
+       "our / trip / next",
+       "___ __________ in December?",
+       "place / another / nice",
+       "Do you know __________?",
+       "other / places / interesting",
+       "We visit __________ on weekends.",
+       "L05: Is your next trip in December? → When is your next trip?"
+      ]
+     }
     ]
    },
    {
-    "section": "PRONUNCIATION · GROUP CHUNKS",
-    "sub": "Nối OF, giữ rõ từ chỉ lượng",
-    "lines": [
-     "Đọc cụm rồi dùng ngay trong một câu hoàn chỉnh.",
-     "both_of_them · /boʊθəvðəm/",
-     "Both of them are free.",
-     "each_of_us · /iːtʃəvəs/",
-     "Each of us has a ticket.",
-     "a few_of_us · /ə fjuː əv əs/",
-     "A few of us work here.",
-     "none_of_it · /nʌnəvɪt/",
-     "None of it is useful.",
-     "Nhấn BOTH / EACH / FEW / NONE khi cần đối chiếu ý nghĩa."
+    "group": "Before you listen",
+    "slides": [
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "DAILY LIFE · Dinner for six · Before you listen",
+       "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
+       "TALK FIRST",
+       "Do you cook for your family?",
+       "What food do you usually buy?",
+       "Do you prefer a big or a small dinner?",
+       "LISTENING MISSION",
+       "WHAT is there only a little of?",
+       "HOW MANY people are coming?",
+       "WHO likes oranges?",
+       "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
+      ]
+     },
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "WORK LIFE · A training plan · Before you listen",
+       "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
+       "TALK FIRST",
+       "Do you have many meetings?",
+       "What equipment do you use?",
+       "Do all of your coworkers join the same training?",
+       "LISTENING MISSION",
+       "WHAT does each person need?",
+       "WHEN can the two trainers join?",
+       "WHY do they need less time?",
+       "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
+      ]
+     },
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "EXTRA LISTENING · Choosing a hotel · Before you listen",
+       "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
+       "TALK FIRST",
+       "Do you travel with much luggage?",
+       "Do you prefer a quiet hotel?",
+       "How do you choose between two places?",
+       "LISTENING MISSION",
+       "WHAT do both hotels have?",
+       "WHAT does neither include?",
+       "WHY do they choose the other hotel?",
+       "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
+      ]
+     }
     ]
    },
    {
-    "section": "PRONUNCIATION · CONTRASTIVE STRESS",
-    "sub": "Thêm A nhỏ, đổi thông điệp lớn",
-    "lines": [
-     "Nghe và nói sự khác biệt về ý. Đọc từ A nhẹ nhưng vẫn nhận ra được.",
-     "We have FEW options.",
-     "Ít lựa chọn, khó xoay xở.",
-     "We have a FEW options.",
-     "Có một vài lựa chọn.",
-     "There is LITTLE time.",
-     "Rất ít thời gian.",
-     "There is a LITTLE time.",
-     "Có một chút thời gian.",
-     "Partner nghe rồi diễn giải bằng tiếng Việt hoặc nói một hành động tiếp theo."
+    "group": "Pronunciation",
+    "slides": [
+     {
+      "title": "PRONUNCIATION · WEAK OF",
+      "lines": [
+       "PRONUNCIATION · WEAK OF",
+       "ALL OF US: nghe cả cụm, không tách từng từ",
+       "Trong lời nói không nhấn, OF thường là /əv/. US / THEM cũng có thể đọc nhẹ.",
+       "all_of_us",
+       "/ɔːl əv əs/ → [ɔːləvəs]",
+       "all_of_them",
+       "/ɔːl əv ðəm/ → [ɔːləvðəm]",
+       "some_of_us",
+       "/sʌm əv əs/ → [sʌməvəs]",
+       "most_of_them",
+       "/moʊst əv ðəm/ → [moʊstəvðəm]",
+       "Giữ cụm liền mạch. Không cần nhấn OF hoặc đọc mạnh từng từ."
+      ]
+     },
+     {
+      "title": "PRONUNCIATION · GROUP CHUNKS",
+      "lines": [
+       "PRONUNCIATION · GROUP CHUNKS",
+       "Nối OF, giữ rõ từ chỉ lượng",
+       "Đọc cụm rồi dùng ngay trong một câu hoàn chỉnh.",
+       "both_of_them · /boʊθəvðəm/",
+       "Both of them are free.",
+       "each_of_us · /iːtʃəvəs/",
+       "Each of us has a ticket.",
+       "a few_of_us · /ə fjuː əv əs/",
+       "A few of us work here.",
+       "none_of_it · /nʌnəvɪt/",
+       "None of it is useful.",
+       "Nhấn BOTH / EACH / FEW / NONE khi cần đối chiếu ý nghĩa."
+      ]
+     },
+     {
+      "title": "PRONUNCIATION · CONTRASTIVE STRESS",
+      "lines": [
+       "PRONUNCIATION · CONTRASTIVE STRESS",
+       "Thêm A nhỏ, đổi thông điệp lớn",
+       "Nghe và nói sự khác biệt về ý. Đọc từ A nhẹ nhưng vẫn nhận ra được.",
+       "We have FEW options.",
+       "Ít lựa chọn, khó xoay xở.",
+       "We have a FEW options.",
+       "Có một vài lựa chọn.",
+       "There is LITTLE time.",
+       "Rất ít thời gian.",
+       "There is a LITTLE time.",
+       "Có một chút thời gian.",
+       "Partner nghe rồi diễn giải bằng tiếng Việt hoặc nói một hành động tiếp theo."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Activate",
+    "slides": [
+     {
+      "title": "ACTIVATE · VIETNAMESE TO ENGLISH",
+      "lines": [
+       "ACTIVATE · VIETNAMESE TO ENGLISH",
+       "Từ ý tiếng Việt đến lượng phù hợp",
+       "Nói thành câu, giữ đúng loại danh từ và phạm vi nhóm.",
+       "Tôi có một vài người bạn ở đây.",
+       "Có người để liên lạc.",
+       "Chúng ta còn rất ít thời gian.",
+       "Cần đi ngay.",
+       "Đa số bạn của tôi làm gần đây.",
+       "Nói về nhóm bạn của tôi.",
+       "Gần như tất cả các ghế đều đã có người.",
+       "Chỉ còn một ghế trống.",
+       "Cả hai chúng tôi đều thích cà phê.",
+       "Đúng hai người.",
+       "Không quán nào trong hai quán đang mở.",
+       "Nói về đúng hai quán.",
+       "Sau câu trả lời, partner hỏi thêm HOW MUCH / HOW MANY."
+      ]
+     },
+     {
+      "title": "ACTIVATE · REPAIR",
+      "lines": [
+       "ACTIVATE · REPAIR",
+       "Sửa lỗi rồi nói lại cả ý",
+       "Một số câu cần thêm OF, đổi danh từ hoặc đổi từ chỉ lượng.",
+       "Almost people like this place.",
+       "Đa số mọi người.",
+       "Most of people work nearby.",
+       "Nói chung về mọi người.",
+       "Every of them has a ticket.",
+       "Giữ OF bằng cách đổi cấu trúc.",
+       "I need a few advice.",
+       "ADVICE không đếm được.",
+       "Both of them is ready.",
+       "Nhóm có hai người.",
+       "We have less meetings now.",
+       "Luyện mẫu chuẩn với danh từ số nhiều.",
+       "Sau sửa: đổi một danh từ, xem từ hạn định có cần thay đổi không."
+      ]
+     },
+     {
+      "title": "ACTIVATE · PERSONAL RESPONSE",
+      "lines": [
+       "ACTIVATE · PERSONAL RESPONSE",
+       "Nói về cuộc sống thật của bạn",
+       "Mỗi ý: chọn một lượng phù hợp và thêm một chi tiết.",
+       "Friends who live nearby",
+       "a few / few / most of…",
+       "Time after work",
+       "a little / little / a lot of…",
+       "Meetings at work",
+       "many / fewer / lots of…",
+       "Information before a trip",
+       "enough / some / little…",
+       "Two places you like",
+       "both / either / neither…",
+       "Your family’s routines",
+       "each / every / all of…",
+       "Không cần chọn từ giống partner. Nói đúng ý của bạn."
+      ]
+     },
+     {
+      "title": "ACTIVATE · LISTEN & REBUILD",
+      "lines": [
+       "ACTIVATE · LISTEN & REBUILD",
+       "Nghe, ghi từ khóa, dựng lại cả cụm",
+       "Giáo viên đọc. Chỉ ghi cụm lượng + nhóm / danh từ, rồi đặt câu hỏi.",
+       "1 · Người trong nhóm",
+       "________________________",
+       "2 · Thời gian",
+       "________________________",
+       "3 · Hai lựa chọn",
+       "________________________",
+       "4 · Thiết bị",
+       "________________________",
+       "5 · Bạn bè",
+       "________________________",
+       "6 · Ghế",
+       "________________________",
+       "Vòng 2: đổi lượng để thay đổi thông điệp, giữ câu đúng."
+      ]
+     },
+     {
+      "title": "ACTIVATE · MEANING TO RESPONSE",
+      "lines": [
+       "ACTIVATE · MEANING TO RESPONSE",
+       "Chọn lời đáp theo điều người nói cần",
+       "Không chỉ thay một từ. Nói lời đáp có ích trong ngữ cảnh.",
+       "We have little time.",
+       "Bạn cần đề xuất đi ngay.",
+       "We have a little time.",
+       "Bạn có thể đề xuất nghỉ ngắn.",
+       "Neither café is open.",
+       "Bạn cần tìm nơi khác.",
+       "Either café is fine.",
+       "Bạn có thể chọn một nơi.",
+       "Few of us know the new plan.",
+       "Bạn cần chia sẻ thông tin.",
+       "Almost all the seats are taken.",
+       "Bạn cần đặt chỗ sớm.",
+       "Mỗi lời đáp cần phản ánh đúng ý của từ chỉ lượng."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Real talk",
+    "slides": [
+     {
+      "title": "REAL TALK · PLAN FOR A GROUP",
+      "lines": [
+       "REAL TALK · PLAN FOR A GROUP",
+       "Chuẩn bị cho nhóm, hỏi để chọn lượng",
+       "Bạn tổ chức một buổi gặp mặt. Partner giữ thông tin trong Notes.",
+       "YOU NEED TO KNOW",
+       "People / chairs",
+       "Food / drinks",
+       "Time / equipment",
+       "Two possible places",
+       "YOUR GOAL",
+       "Hỏi ít nhất 5 câu.",
+       "Dùng một cụm OF.",
+       "Dùng một cặp few/little.",
+       "Chọn nơi và giải thích.",
+       "Dùng số thật khi cần làm rõ: a few là mấy người trong tình huống này?"
+      ]
+     },
+     {
+      "title": "REAL TALK · TWO OPTIONS",
+      "lines": [
+       "REAL TALK · TWO OPTIONS",
+       "Cả hai, một trong hai hay không nơi nào?",
+       "Hỏi về hai nơi rồi chọn. Sau đó thêm một lựa chọn thứ ba.",
+       "RIVER CAFÉ",
+       "Few quiet tables",
+       "Little space for luggage",
+       "Lots of snacks",
+       "Open after eleven",
+       "GARDEN CAFÉ",
+       "A few quiet tables",
+       "A little space for luggage",
+       "Some local food",
+       "Open after eleven",
+       "TRY: Both… / Either… / Neither… . Có 3 nơi rồi: Some of… / None of… ."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Reflect",
+    "slides": [
+     {
+      "title": "REFLECT & RETRY · SELF CHECK",
+      "lines": [
+       "REFLECT & RETRY · SELF CHECK",
+       "Bạn đang nhầm ở bước nào?",
+       "Chọn một điểm để sửa rồi nói lại bằng một danh từ khác.",
+       "NOUN TYPE",
+       "friends → a few; time → a little",
+       "GROUP REFERENCE",
+       "most people / most of my friends",
+       "MEANING",
+       "few ≠ a few; little ≠ a little",
+       "TWO OR A GROUP?",
+       "either / neither / both; some / none",
+       "SPEECH",
+       "all_of_us; most_of_them; each_of_us",
+       "Thử lại: kể kế hoạch của nhóm trong 60 giây, dùng 4 cụm lượng khác nhau."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Mission",
+    "slides": [
+     {
+      "title": "DAILY MISSION · 3-DAY PRACTICE",
+      "lines": [
+       "DAILY MISSION · 3-DAY PRACTICE",
+       "Ôn ngắn theo từng cặp",
+       "Mỗi ngày 5–7 phút. Nói trước khi mở mẫu.",
+       "DAY 1 · AMOUNT",
+       "few/a few; little/a little; much/many",
+       "DAY 1 · REAL LIFE",
+       "Nói 4 câu về thời gian và công việc.",
+       "DAY 2 · GROUPS",
+       "most of / all of / none of / both of",
+       "DAY 2 · CONNECT",
+       "Ghi âm 4 câu có OF + us/them/it.",
+       "DAY 3 · CHOICE",
+       "either/neither; some/any; fewer/less",
+       "DAY 3 · RETRY",
+       "Chọn 2 nơi, nói lựa chọn và lý do.",
+       "Gửi: bản ghi âm + một cặp câu có nghĩa khác nhau khi thêm A."
+      ]
+     },
+     {
+      "title": "DAILY MISSION · READ & RECORD",
+      "lines": [
+       "DAILY MISSION · READ & RECORD",
+       "A plan for all of us",
+       "Đọc theo cụm, giữ rõ từ chỉ lượng. Đổi thông tin để nói về nhóm của bạn.",
+       "Most of my friends work during the week, so we meet on Saturdays.",
+       "Almost all of us like local food, but a few of us don’t eat meat.",
+       "We have two cafés in mind. Both of them are near the park.",
+       "Neither of them is crowded in the morning.",
+       "Each of us has a different favorite dish, so we need a few options.",
+       "We don’t have much time, but we have a little money for breakfast.",
+       "Either café is fine. We just want less noise and fewer distractions.",
+       "Would you like some coffee? There is enough for all of us.",
+       "Ghi âm lần hai: sửa một điểm về ý nghĩa và một điểm nối âm OF."
+      ]
+     }
     ]
    }
   ],

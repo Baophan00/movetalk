@@ -454,90 +454,6 @@
     ]
    },
    {
-    "section": "PRONUNCIATION · THIS IS A",
-    "sub": "THIS_IS_A: ba từ, một cụm liền",
-    "lines": [
-     "Mẫu đọc chậm rõ. Dấu _ chỉ chỗ nối, không thêm âm mới.",
-     "this_is_a mug",
-     "/ðɪs ɪz ə mʌɡ/",
-     "this_is_an old charger",
-     "/ðɪs ɪz ən oʊld ˈtʃɑːrdʒər/",
-     "that_is_a bag",
-     "/ðæt ɪz ə bæɡ/",
-     "that’s_a bag",
-     "/ðæts ə bæɡ/",
-     "THIS kết thúc /s/, IS kết thúc /z/. THAT’S có cụm /ts/, không đọc thành /ðæz/."
-    ]
-   },
-   {
-    "section": "PRONUNCIATION · THERE IS",
-    "sub": "THERE’S_A_LOT_OF: nối cả cụm",
-    "lines": [
-     "THERE IS có thể rút thành THERE’S. LOT OF giữ nghĩa một lượng nhiều.",
-     "there_is_a socket",
-     "/ðer ɪz ə ˈsɑːkɪt/",
-     "there’s_a lot_of light",
-     "/ðerz ə lɑːt əv laɪt/",
-     "there_are two chairs",
-     "/ðer ər tuː tʃerz/",
-     "there_are_a lot_of people",
-     "/ðer ər ə lɑːt əv ˈpiːpəl/",
-     "LOT + OF: /t/ nối với /ə/. Trong giọng Mỹ nhanh, /t/ có thể thành [ɾ]."
-    ]
-   },
-   {
-    "section": "PRONUNCIATION · THESE / THOSE",
-    "sub": "THESE_ARE / THOSE_ARE: giữ rõ âm /z/",
-    "lines": [
-     "Nối /z/ với ARE. So sánh nguyên âm trước khi tăng tốc.",
-     "these_are my keys",
-     "/ðiːz ər maɪ kiːz/",
-     "those_are clean cups",
-     "/ðoʊz ər kliːn kʌps/",
-     "is_this your mug?",
-     "/ɪz ðɪs jər mʌɡ/",
-     "are_those seats free?",
-     "/ər ðoʊz siːts friː/",
-     "THIS /ðɪs/ và THESE /ðiːz/: khác cả nguyên âm và âm cuối. Không chỉ kéo dài âm."
-    ]
-   },
-   {
-    "section": "PRONUNCIATION · HEAR & REBUILD",
-    "sub": "Nghe cụm, chọn hình rồi nói cả câu",
-    "lines": [
-     "Giáo viên đọc từ Notes. Học viên chưa xem câu mẫu.",
-     "1 · Một cốc gần tay",
-     "This is a… / These are…",
-     "2 · Nhiều cốc ở xa",
-     "That’s a… / Those are…",
-     "3 · Có nhiều ánh sáng",
-     "There’s a lot of…",
-     "4 · Có hai ghế",
-     "There are…",
-     "5 · Hỏi bộ sạc gần tay",
-     "Is this…?",
-     "6 · Hỏi ghế ở xa còn trống",
-     "Are those…?",
-     "Lượt 2: đổi vật và vị trí, không học thuộc một đáp án."
-    ]
-   },
-   {
-    "section": "PRONUNCIATION · EXPERIENCE CHUNKS",
-    "sub": "THIS IS MY FIRST…: nói liền nhưng giữ âm cuối",
-    "lines": [
-     "FIRST kết thúc /st/. Nói chậm rõ trước, rồi đọc theo cụm.",
-     "this_is_my first_experience",
-     "/ðɪs ɪz maɪ fɜːrst ɪkˈspɪriəns/",
-     "is_that_your first choice?",
-     "/ɪz ðæt jər fɜːrst tʃɔɪs/",
-     "this_is_my second_visit",
-     "/ðɪs ɪz maɪ ˈsekənd ˈvɪzɪt/",
-     "once_a_year / twice_a_month",
-     "/wʌns ə jɪr/ /twaɪs ə mʌnθ/",
-     "FIRST EXPERIENCE: nối /t/ với nguyên âm sau. FIRST CHOICE: không thêm “tờ” giữa hai từ."
-    ]
-   },
-   {
     "section": "GRAMMAR IN USE · TWO SYSTEMS",
     "sub": "Hai người, hai góc nhìn",
     "lines": [
@@ -553,6 +469,439 @@
      "Those notebooks are yours.",
      "Đổi người nói, đổi từ chỉ định.",
      "Không có khoảng cách theo mét cố định. Gần–xa phụ thuộc góc nhìn và ngữ cảnh."
+    ]
+   }
+  ],
+  "flow": [
+   {
+    "group": "Warm-up",
+    "slides": [
+     {
+      "title": "MOVE.",
+      "lines": [
+       "MOVE.",
+       "ACTIVATE 1",
+       "L08 · POINT & DESCRIBE",
+       "Chỉ đúng vật.",
+       "Mô tả nơi bạn đang ở.",
+       "THIS / THAT",
+       "and",
+       "THERE IS / ARE",
+       "POINT → ASK → RESPOND",
+       "NEAR / FAR · ONE / MANY"
+      ]
+     },
+     {
+      "title": "RECALL & CONNECT · FIRST TRY",
+      "lines": [
+       "RECALL & CONNECT · FIRST TRY",
+       "Bạn còn gọi lại được gì?",
+       "Không nhìn mẫu. Với mỗi ý, nói câu hỏi và một câu trả lời thật.",
+       "Nó mất bao lâu ?",
+       "Bao lâu bạn mới gọi cho gia đình ?",
+       "Nó tốn nhiêu ?",
+       "Làm sao để nấu món này ?",
+       "Nó bao xa?",
+       "Bạn thích loại nước nào ?",
+       "Giữ lại một câu bạn chưa chắc để thử lại cuối buổi."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Before you listen",
+    "slides": [
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "DAILY LIFE · Choosing a table · Before you listen",
+       "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
+       "TALK FIRST",
+       "Do you work in cafés?",
+       "Do you need a socket?",
+       "Which seat do you usually choose?",
+       "LISTENING MISSION",
+       "WHICH seats are free?",
+       "WHERE is the socket?",
+       "WHAT does Mai own?",
+       "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
+      ]
+     },
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "WORK LIFE · A new desk · Before you listen",
+       "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
+       "TALK FIRST",
+       "What is on your desk?",
+       "Does your workplace have a meeting room?",
+       "Do you share office supplies?",
+       "LISTENING MISSION",
+       "WHO uses the desk by the window?",
+       "HOW MANY sockets are there?",
+       "WHAT is in the big box?",
+       "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
+      ]
+     },
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "TRAVEL · Checking a room · Before you listen",
+       "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
+       "TALK FIRST",
+       "What do you check first in a hotel room?",
+       "Do you need a fridge?",
+       "Do you prefer a room with a balcony?",
+       "LISTENING MISSION",
+       "WHERE is the balcony?",
+       "DOES the room have a fridge?",
+       "WHAT is next to the bed?",
+       "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Pronunciation",
+    "slides": [
+     {
+      "title": "PRONUNCIATION · THIS IS A",
+      "lines": [
+       "PRONUNCIATION · THIS IS A",
+       "THIS_IS_A: ba từ, một cụm liền",
+       "Mẫu đọc chậm rõ. Dấu _ chỉ chỗ nối, không thêm âm mới.",
+       "this_is_a mug",
+       "/ðɪs ɪz ə mʌɡ/",
+       "this_is_an old charger",
+       "/ðɪs ɪz ən oʊld ˈtʃɑːrdʒər/",
+       "that_is_a bag",
+       "/ðæt ɪz ə bæɡ/",
+       "that’s_a bag",
+       "/ðæts ə bæɡ/",
+       "THIS kết thúc /s/, IS kết thúc /z/. THAT’S có cụm /ts/, không đọc thành /ðæz/."
+      ]
+     },
+     {
+      "title": "PRONUNCIATION · THERE IS",
+      "lines": [
+       "PRONUNCIATION · THERE IS",
+       "THERE’S_A_LOT_OF: nối cả cụm",
+       "THERE IS có thể rút thành THERE’S. LOT OF giữ nghĩa một lượng nhiều.",
+       "there_is_a socket",
+       "/ðer ɪz ə ˈsɑːkɪt/",
+       "there’s_a lot_of light",
+       "/ðerz ə lɑːt əv laɪt/",
+       "there_are two chairs",
+       "/ðer ər tuː tʃerz/",
+       "there_are_a lot_of people",
+       "/ðer ər ə lɑːt əv ˈpiːpəl/",
+       "LOT + OF: /t/ nối với /ə/. Trong giọng Mỹ nhanh, /t/ có thể thành [ɾ]."
+      ]
+     },
+     {
+      "title": "PRONUNCIATION · THESE / THOSE",
+      "lines": [
+       "PRONUNCIATION · THESE / THOSE",
+       "THESE_ARE / THOSE_ARE: giữ rõ âm /z/",
+       "Nối /z/ với ARE. So sánh nguyên âm trước khi tăng tốc.",
+       "these_are my keys",
+       "/ðiːz ər maɪ kiːz/",
+       "those_are clean cups",
+       "/ðoʊz ər kliːn kʌps/",
+       "is_this your mug?",
+       "/ɪz ðɪs jər mʌɡ/",
+       "are_those seats free?",
+       "/ər ðoʊz siːts friː/",
+       "THIS /ðɪs/ và THESE /ðiːz/: khác cả nguyên âm và âm cuối. Không chỉ kéo dài âm."
+      ]
+     },
+     {
+      "title": "PRONUNCIATION · HEAR & REBUILD",
+      "lines": [
+       "PRONUNCIATION · HEAR & REBUILD",
+       "Nghe cụm, chọn hình rồi nói cả câu",
+       "Giáo viên đọc từ Notes. Học viên chưa xem câu mẫu.",
+       "1 · Một cốc gần tay",
+       "This is a… / These are…",
+       "2 · Nhiều cốc ở xa",
+       "That’s a… / Those are…",
+       "3 · Có nhiều ánh sáng",
+       "There’s a lot of…",
+       "4 · Có hai ghế",
+       "There are…",
+       "5 · Hỏi bộ sạc gần tay",
+       "Is this…?",
+       "6 · Hỏi ghế ở xa còn trống",
+       "Are those…?",
+       "Lượt 2: đổi vật và vị trí, không học thuộc một đáp án."
+      ]
+     },
+     {
+      "title": "PRONUNCIATION · EXPERIENCE CHUNKS",
+      "lines": [
+       "PRONUNCIATION · EXPERIENCE CHUNKS",
+       "THIS IS MY FIRST…: nói liền nhưng giữ âm cuối",
+       "FIRST kết thúc /st/. Nói chậm rõ trước, rồi đọc theo cụm.",
+       "this_is_my first_experience",
+       "/ðɪs ɪz maɪ fɜːrst ɪkˈspɪriəns/",
+       "is_that_your first choice?",
+       "/ɪz ðæt jər fɜːrst tʃɔɪs/",
+       "this_is_my second_visit",
+       "/ðɪs ɪz maɪ ˈsekənd ˈvɪzɪt/",
+       "once_a_year / twice_a_month",
+       "/wʌns ə jɪr/ /twaɪs ə mʌnθ/",
+       "FIRST EXPERIENCE: nối /t/ với nguyên âm sau. FIRST CHOICE: không thêm “tờ” giữa hai từ."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Activate",
+    "slides": [
+     {
+      "title": "ACTIVATE · QUESTION CHOICES",
+      "lines": [
+       "ACTIVATE · QUESTION CHOICES",
+       "Câu trả lời cho biết cần hỏi kiểu gì",
+       "Nhìn phần thông tin mới, rồi đặt câu hỏi tương ứng.",
+       "Yes, it is. That’s my first choice.",
+       "Is that your first choice?",
+       "No, it isn’t. This is my second visit.",
+       "Is this your first visit?",
+       "I come here twice a month.",
+       "How often do you come here?",
+       "That one by the window is my favorite.",
+       "Which one is your favorite?",
+       "Those are photos from our last trip.",
+       "What are those?",
+       "Chấp nhận câu hỏi khác nếu khớp câu trả lời và hợp ngữ cảnh."
+      ]
+     },
+     {
+      "title": "ACTIVATE · RAPID QUESTIONS",
+      "lines": [
+       "ACTIVATE · RAPID QUESTIONS",
+       "Một vật thật, bốn kiểu câu hỏi",
+       "Dùng đồ vật trong lớp. Giáo viên chỉ gần hoặc xa, học viên hỏi ngay.",
+       "THIS · your phone",
+       "Is this your phone?",
+       "THAT · a charger",
+       "Is that a charger?",
+       "THESE · your keys",
+       "Are these your keys?",
+       "THOSE · available seats",
+       "Are those seats available?",
+       "THIS · owner",
+       "Whose notebook is this?",
+       "THOSE · price",
+       "How much are those mugs?",
+       "Lượt 1 có mẫu. Lượt 2 che mẫu. Lượt 3 đổi người hỏi."
+      ]
+     },
+     {
+      "title": "ACTIVATE · VIETNAMESE TO ENGLISH",
+      "lines": [
+       "ACTIVATE · VIETNAMESE TO ENGLISH",
+       "Phản xạ từ ý muốn nói",
+       "Không dịch mỗi từ. Chọn THIS / THAT hoặc THERE trước.",
+       "Đây là bộ sạc của bạn à?",
+       "Gần tay, một bộ.",
+       "Những cái kia là hóa đơn của tôi.",
+       "Xa, nhiều cái.",
+       "Có ổ cắm gần bàn này không?",
+       "Hỏi sự hiện diện.",
+       "Quán này có Wi-Fi không?",
+       "Bắt đầu bằng THIS CAFÉ.",
+       "Có nhiều ánh sáng ở đây.",
+       "LIGHT không đếm được.",
+       "Những ghế kia còn trống không?",
+       "Xa, nhiều ghế.",
+       "KEY trong Notes. Sau câu trả lời hãy thêm một câu hỏi tiếp."
+      ]
+     },
+     {
+      "title": "ACTIVATE · REPAIR",
+      "lines": [
+       "ACTIVATE · REPAIR",
+       "Nghe lỗi, sửa rồi nói lại",
+       "Sửa cả câu và giải thích bằng một ý ngắn.",
+       "These is my bag.",
+       "Một cái gần tay.",
+       "Are that your keys?",
+       "Nhiều chìa khóa ở xa.",
+       "There have two chairs.",
+       "Giới thiệu có hai ghế.",
+       "This room have a balcony.",
+       "Phòng này có ban công.",
+       "Does this café has Wi-Fi?",
+       "Sau DOES dùng dạng nào?",
+       "Is there any free seats?",
+       "SEATS số nhiều.",
+       "Sửa một lỗi, rồi đổi danh từ và nói lại."
+      ]
+     },
+     {
+      "title": "ACTIVATE · SAME MEANING",
+      "lines": [
+       "ACTIVATE · SAME MEANING",
+       "Một ý, đổi cấu trúc",
+       "Nói câu bên phải trước khi mở đáp án.",
+       "There is a balcony in this room.",
+       "This room has a balcony.",
+       "This café has two entrances.",
+       "There are two entrances to this café.",
+       "Are there any meeting rooms in this office?",
+       "Does this office have any meeting rooms?",
+       "Do you have a charger in your bag?",
+       "Is there a charger in your bag?",
+       "Cả hai cách có thể đúng. Chọn theo điểm bắt đầu bạn muốn nhấn."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Real talk",
+    "slides": [
+     {
+      "title": "REAL TALK · FIND THE OBJECT",
+      "lines": [
+       "REAL TALK · FIND THE OBJECT",
+       "Tôi đang nói đến vật nào?",
+       "Một người mô tả, người kia chỉ đúng vật và hỏi xác nhận.",
+       "A · Chọn đồ vật bí mật",
+       "Dùng màu + vị trí; chưa nói tên.",
+       "B · Hỏi một hay nhiều",
+       "Is it…? / Are they…?",
+       "B · Chỉ và xác nhận",
+       "Do you mean this one / those ones?",
+       "A · Phản hồi",
+       "Yes, that one. / No, the other one.",
+       "Đổi vai",
+       "Chọn vật ở xa hơn hoặc đổi nhóm đồ.",
+       "Mục tiêu",
+       "4 câu hỏi + 2 câu mô tả với THERE.",
+       "Có thể dùng THESE / THOSE ONE(S). Trong ví dụ này: this one / those ones."
+      ]
+     },
+     {
+      "title": "REAL TALK · YOUR EXPERIENCE",
+      "lines": [
+       "REAL TALK · YOUR EXPERIENCE",
+       "Từ câu mẫu sang trải nghiệm thật",
+       "Chọn một hoạt động hoặc ảnh trên điện thoại. Hỏi và đáp, không cần dùng thì mới.",
+       "Một lần đầu",
+       "Is this your first time…?",
+       "Một chuyến đi",
+       "Is that your first trip to…?",
+       "Một lựa chọn",
+       "Is that your first choice?",
+       "Một kỷ niệm qua ảnh",
+       "What are those? / Which photo…?",
+       "Tần suất",
+       "How often do you…?",
+       "Đổi câu trả lời",
+       "No, it isn’t. This is my second…",
+       "Nếu chỉ xem ảnh cũ, có thể nói THAT để nhắc chuyến đi trong ảnh. Chọn góc nhìn rõ trước khi hỏi."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Reflect",
+    "slides": [
+     {
+      "title": "REFLECT & RETRY · SELF CHECK",
+      "lines": [
+       "REFLECT & RETRY · SELF CHECK",
+       "Tôi cần sửa bước nào?",
+       "Chọn một dòng và nói lại bằng đồ vật thật.",
+       "GẦN / XA",
+       "this / these ↔ that / those",
+       "MỘT / NHIỀU",
+       "this is ↔ these are",
+       "CHỈ VẬT / GIỚI THIỆU CÓ GÌ",
+       "That’s a café. ↔ There’s a café nearby.",
+       "BE / HAVE",
+       "Is there…? ↔ Does this room have…?",
+       "NỐI ÂM",
+       "this_is_a / that’s_a / there’s_a_lot_of",
+       "Nói lại lần 2: đổi một vật, một vị trí và một người sở hữu."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Mission",
+    "slides": [
+     {
+      "title": "DAILY MISSION · 3 DAYS",
+      "lines": [
+       "DAILY MISSION · 3 DAYS",
+       "Chỉ vật và mô tả nơi thật",
+       "Mỗi ngày 5–7 phút. Nói trước, kiểm tra sau.",
+       "DAY 1 · POINT",
+       "Chỉ 4 vật: this / that / these / those.",
+       "DAY 1 · ASK",
+       "Hỏi 4 câu IS / ARE và trả lời đầy đủ.",
+       "DAY 2 · DESCRIBE",
+       "Quay góc làm việc: 4 câu THERE IS / ARE.",
+       "DAY 2 · SWITCH",
+       "Đổi 2 câu sang nơi / người + HAVE / HAS.",
+       "DAY 3 · CONNECT",
+       "Ghi âm this is a / that’s a / there’s a lot of.",
+       "DAY 3 · RETRY",
+       "Nghe lại, sửa một lỗi và ghi âm lần hai.",
+       "Dùng vật thật. Không đọc danh sách câu mà không biết mình đang chỉ gì."
+      ]
+     },
+     {
+      "title": "DAILY MISSION · READ & RECORD",
+      "lines": [
+       "DAILY MISSION · READ & RECORD",
+       "A place to work",
+       "Đọc theo cụm. Sau đó đổi thông tin để giới thiệu góc làm việc của bạn.",
+       "This is a small café near my office. That’s my favorite table by the window.",
+       "These are my notebooks, and those are my friends’ bags by the door.",
+       "There’s a lot of natural light here. There are two sockets under this table.",
+       "This café has free Wi-Fi, but it doesn’t have a meeting room.",
+       "Is there any water on the counter? Yes, there is. Those cups are clean.",
+       "Is this seat free? Yes, it is. Sit here, and I’ll get you a drink.",
+       "Lần 2: nhìn quanh, chỉ vật thật và nói lại trong 45–60 giây."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Point & say",
+    "slides": [
+     {
+      "title": "POINT & SAY · CAFÉ",
+      "lines": [
+       "POINT & SAY · CAFÉ",
+       "Nhìn tranh và chỉ vật",
+       "Người nói ở bàn phía trước. Dùng THIS / THESE cho vật gần tay, THAT / THOSE cho vật ở xa.",
+       "Is this your mug?",
+       "Are these your notebooks?",
+       "What’s that?",
+       "What are those?",
+       "Is there a plant?"
+      ]
+     },
+     {
+      "title": "POINT & SAY · OFFICE",
+      "lines": [
+       "POINT & SAY · OFFICE",
+       "Mô tả bàn làm việc trong tranh",
+       "Chọn một vật để chỉ. Sau đó giới thiệu có gì bằng THERE IS / ARE.",
+       "This is… / These are…",
+       "That’s… / Those are…",
+       "There is… / There are…",
+       "This desk has…"
+      ]
+     }
     ]
    }
   ],

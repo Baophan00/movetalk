@@ -484,57 +484,547 @@
      "CÙNG LÀ THEIR",
      "restaurant: IS / DOES · restaurants: ARE / DO"
     ]
-   },
+   }
+  ],
+  "flow": [
    {
-    "section": "PRONUNCIATION · THIS / THESE",
-    "sub": "Nói rõ số ít và số nhiều",
-    "lines": [
-     "/ð/: đầu lưỡi chạm nhẹ giữa hai hàm răng, cho hơi thoát và giữ giọng.",
-     "THIS / THAT",
-     "this /ðɪs/ that /ðæt/",
-     "this place · that local shop",
-     "THESE / THOSE",
-     "these /ðiːz/ those /ðoʊz/",
-     "these places · those local shops",
-     "Nghe /ɪ/ và /iː/, rồi giữ âm cuối /s/ hoặc /z/",
-     "THIS nice place THESE nice places",
-     "Đừng đổi this thành these chỉ bằng cách thêm âm /z/; nguyên âm cũng khác."
+    "group": "Warm-up",
+    "slides": [
+     {
+      "title": "MOVE.",
+      "lines": [
+       "MOVE.",
+       "ACTIVATE 1",
+       "L04 · BUILD THE NOUN PHRASE",
+       "Nói rõ người, vật",
+       "và địa điểm bạn muốn nói đến.",
+       "MY NEXT TRIP",
+       "and",
+       "THOSE SHOPS",
+       "BUILD THE PHRASE → ASK → RESPOND",
+       "DETERMINER + (ADJECTIVE) + NOUN"
+      ]
+     },
+     {
+      "title": "RECALL & CONNECT · L04–L07",
+      "lines": [
+       "RECALL & CONNECT · L04–L07",
+       "Một vật, nhiều vật và lượng không đếm được",
+       "Nói cả cụm trước khi tạo câu.",
+       "one notebook",
+       "this / these?",
+       "two chairs",
+       "that / those?",
+       "some water",
+       "is / are?",
+       "a lot of people",
+       "is / are?",
+       "my office",
+       "have / has?",
+       "both windows",
+       "is / are?",
+       "KEY: this notebook; those chairs; water IS; people ARE; office HAS; windows ARE."
+      ]
+     },
+     {
+      "title": "RECALL & CONNECT",
+      "lines": [
+       "RECALL & CONNECT",
+       "Giữ cấu trúc, mở rộng danh từ",
+       "Chọn IS / ARE / DO / DOES, hỏi rồi thêm một thông tin thật.",
+       "___ your coworker friendly?",
+       "Đồng nghiệp của bạn thân thiện không?",
+       "___ your friends work nearby?",
+       "Bạn bè của bạn làm gần đây không?",
+       "___ this restaurant open?",
+       "Nhà hàng này đang mở không?",
+       "___ your sister like local food?",
+       "Chị/em gái bạn thích đồ ăn địa phương không?",
+       "___ those shops busy?",
+       "Những cửa hàng kia đông không?",
+       "___ your brother live in Hue?",
+       "Anh/em trai bạn sống ở Huế không?",
+       "Chú ý danh từ chính: coworker / friends / restaurant / shops."
+      ]
+     },
+     {
+      "title": "RECALL & CONNECT · EXPAND",
+      "lines": [
+       "RECALL & CONNECT · EXPAND",
+       "Từ đại từ đến cụm danh từ",
+       "Giữ ý muốn hỏi. Thay he / she / it / they bằng cụm rõ nghĩa hơn.",
+       "PRONOUN",
+       "NOUN PHRASE",
+       "Is she friendly?",
+       "Does she work here?",
+       "Are they open?",
+       "Do they sell food?",
+       "Is it cheap?",
+       "Is your new coworker friendly?",
+       "Does your new coworker work here?",
+       "Are those small shops open?",
+       "Do those small shops sell food?",
+       "Is this local restaurant cheap?",
+       "Tên gọi dài hơn, cơ chế BE / DO vẫn như L04–L03."
+      ]
+     }
     ]
    },
    {
-    "section": "PRONUNCIATION · PLURAL ENDINGS",
-    "sub": "Đuôi số nhiều: /s/, /z/, /ɪz/",
-    "lines": [
-     "Quy tắc âm cuối đã học ở L03 cũng dùng cho danh từ số nhiều.",
-     "shops /ʃɑːps/",
-     "/s/",
-     "trips /trɪps/",
-     "/s/",
-     "buildings /ˈbɪldɪŋz/",
-     "/z/",
-     "cities /ˈsɪtiz/",
-     "/z/",
-     "places /ˈpleɪsɪz/",
-     "/ɪz/",
-     "prices /ˈpraɪsɪz/",
-     "/ɪz/",
-     "this place → these places. that city → those cities."
+    "group": "Before you listen",
+    "slides": [
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "LUNCH · BEFORE YOU LISTEN",
+       "Trả lời về bạn. Nghe hai lượt rồi ghi từ khóa, chưa mở transcript.",
+       "TALK FIRST",
+       "Do you like local food?",
+       "Do you eat at small restaurants?",
+       "LISTENING MISSION",
+       "Is the restaurant new?",
+       "Does it serve local food?",
+       "Where does Leo’s friend work?",
+       "Lượt 1: hiểu ý. Lượt 2: nghe từ hạn định + tính từ + danh từ."
+      ]
+     },
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "WORK · BEFORE YOU LISTEN",
+       "Trả lời về bạn. Nghe hai lượt rồi ghi từ khóa, chưa mở transcript.",
+       "TALK FIRST",
+       "Is your coworker from another city?",
+       "Do you know a nice local restaurant?",
+       "LISTENING MISSION",
+       "Where is Minh from?",
+       "Does his family have a restaurant?",
+       "What do those shops sell?",
+       "Lượt 1: hiểu ý. Lượt 2: nghe từ hạn định + tính từ + danh từ."
+      ]
+     }
     ]
    },
    {
-    "section": "PRONUNCIATION · CHUNK & LINK",
-    "sub": "Nói cả cụm, nhấn thông tin chính",
-    "lines": [
-     "Luyện chậm rõ rồi tự nhiên. Đổi một chi tiết và nói lại.",
-     "CHUNK & STRESS",
-     "my NEXT trip · her NEXT trip",
-     "this LOCAL restaurant · those SMALL shops",
-     "LINKING",
-     "this‿amazing place",
-     "those‿old shops · it’s‿a nice place",
-     "Hỏi về nơi chốn với trọng tâm rõ",
-     "Is your NEXT trip to HUE? Do you know ANOTHER place?",
-     "Lượt 2: đổi Hue / Hanoi hoặc this / those. Giữ đúng danh từ và động từ."
+    "group": "Pronunciation",
+    "slides": [
+     {
+      "title": "PRONUNCIATION · THIS / THESE",
+      "lines": [
+       "PRONUNCIATION · THIS / THESE",
+       "Nói rõ số ít và số nhiều",
+       "/ð/: đầu lưỡi chạm nhẹ giữa hai hàm răng, cho hơi thoát và giữ giọng.",
+       "THIS / THAT",
+       "this /ðɪs/ that /ðæt/",
+       "this place · that local shop",
+       "THESE / THOSE",
+       "these /ðiːz/ those /ðoʊz/",
+       "these places · those local shops",
+       "Nghe /ɪ/ và /iː/, rồi giữ âm cuối /s/ hoặc /z/",
+       "THIS nice place THESE nice places",
+       "Đừng đổi this thành these chỉ bằng cách thêm âm /z/; nguyên âm cũng khác."
+      ]
+     },
+     {
+      "title": "PRONUNCIATION · PLURAL ENDINGS",
+      "lines": [
+       "PRONUNCIATION · PLURAL ENDINGS",
+       "Đuôi số nhiều: /s/, /z/, /ɪz/",
+       "Quy tắc âm cuối đã học ở L03 cũng dùng cho danh từ số nhiều.",
+       "shops /ʃɑːps/",
+       "/s/",
+       "trips /trɪps/",
+       "/s/",
+       "buildings /ˈbɪldɪŋz/",
+       "/z/",
+       "cities /ˈsɪtiz/",
+       "/z/",
+       "places /ˈpleɪsɪz/",
+       "/ɪz/",
+       "prices /ˈpraɪsɪz/",
+       "/ɪz/",
+       "this place → these places. that city → those cities."
+      ]
+     },
+     {
+      "title": "PRONUNCIATION · CHUNK & LINK",
+      "lines": [
+       "PRONUNCIATION · CHUNK & LINK",
+       "Nói cả cụm, nhấn thông tin chính",
+       "Luyện chậm rõ rồi tự nhiên. Đổi một chi tiết và nói lại.",
+       "CHUNK & STRESS",
+       "my NEXT trip · her NEXT trip",
+       "this LOCAL restaurant · those SMALL shops",
+       "LINKING",
+       "this‿amazing place",
+       "those‿old shops · it’s‿a nice place",
+       "Hỏi về nơi chốn với trọng tâm rõ",
+       "Is your NEXT trip to HUE? Do you know ANOTHER place?",
+       "Lượt 2: đổi Hue / Hanoi hoặc this / those. Giữ đúng danh từ và động từ."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Activate",
+    "slides": [
+     {
+      "title": "ACTIVATE · BUILD THE PHRASE",
+      "lines": [
+       "ACTIVATE · BUILD THE PHRASE",
+       "Từ gợi ý đến cụm danh từ",
+       "Nói cả cụm, rồi dùng nó trong một câu thật.",
+       "MY",
+       "next / trip",
+       "HER",
+       "local / restaurant",
+       "THOSE",
+       "small / shops",
+       "THESE",
+       "nice / places",
+       "ANOTHER",
+       "cheap / restaurant",
+       "OTHER",
+       "amazing / places",
+       "Vòng 2: đổi từ hạn định hoặc số lượng. Danh từ cần đổi thế nào?"
+      ]
+     },
+     {
+      "title": "ACTIVATE · VIETNAMESE TO ENGLISH",
+      "lines": [
+       "ACTIVATE · VIETNAMESE TO ENGLISH",
+       "Từ cụm danh từ đến câu hỏi",
+       "Nói cụm danh từ trước, rồi hoàn thành cả câu.",
+       "Nhà hàng địa phương này rẻ không?",
+       "IS…?",
+       "Đồng nghiệp mới của bạn thích đồ ăn địa phương?",
+       "DOES…?",
+       "Những cửa hàng kia đắt không?",
+       "ARE…?",
+       "Tôi cần một kế hoạch khác.",
+       "I NEED…",
+       "Bạn biết những nơi tuyệt vời khác không?",
+       "DO YOU KNOW…?",
+       "Chuyến đi tiếp theo của chúng ta đến Huế à?",
+       "IS…?",
+       "Kiểm tra thứ tự từ và danh từ chính trước khi chọn cấu trúc."
+      ]
+     },
+     {
+      "title": "ACTIVATE · FILL THE GAPS",
+      "lines": [
+       "ACTIVATE · FILL THE GAPS",
+       "Hoàn thành ý về một chuyến đi",
+       "Dùng mỗi từ một lần: my / our / this / those / another / other.",
+       "___ next trip is to Hue.",
+       "Chuyến đi của tôi",
+       "___ local restaurant serves good food.",
+       "Nhà hàng này",
+       "___ small shops sell coffee.",
+       "Những cửa hàng kia",
+       "___ current plan is to eat here.",
+       "Kế hoạch của nhóm",
+       "I know ___ cheap restaurant.",
+       "Một nhà hàng khác",
+       "Do you know ___ nice places?",
+       "Những địa điểm khác",
+       "Key: my / this / those / our / another / other. Sau đó kể lại thành đoạn ngắn."
+      ]
+     },
+     {
+      "title": "ACTIVATE · ASK & FOLLOW UP",
+      "lines": [
+       "ACTIVATE · ASK & FOLLOW UP",
+       "Một câu hỏi mở ra thông tin mới",
+       "Trả lời, thêm một chi tiết rồi hỏi tiếp theo điều vừa nghe.",
+       "QUESTION",
+       "Is this",
+       "local restaurant cheap",
+       "?",
+       "ANSWER",
+       "Yes, it is.",
+       "ADD",
+       "Its",
+       "food is good too.",
+       "ASK BACK",
+       "Do you know another nice place?",
+       "its food là cụm sở hữu. it’s cheap = it is cheap."
+      ]
+     },
+     {
+      "title": "ACTIVATE · NOUN PHRASE REVIEW",
+      "lines": [
+       "ACTIVATE · NOUN PHRASE REVIEW",
+       "Điền cả cụm, hoàn chỉnh ý",
+       "Dùng mỗi cụm một lần trong từng bài. Đọc lại thành tiếng và giải thích lựa chọn.",
+       "A. ĐOẠN VĂN",
+       "those shops · my sister",
+       "this café · her new job",
+       "Hi, I’m Mai. Lan is (1) __________.",
+       "She works at a hotel near here.",
+       "She loves (2) __________.",
+       "We’re in a café now. (3) __________",
+       "is quiet, so we often meet here.",
+       "See the shops across the street?",
+       "(4) __________ sell local gifts.",
+       "B. HỘI THOẠI",
+       "other places · the other café",
+       "another café · these tables",
+       "A: Are (5) __________ near us free?",
+       "B: No, they’re reserved.",
+       "A: Do you know (6) __________?",
+       "B: There are only two cafés here.",
+       "This one is full. (7) __________",
+       "across the road has free tables.",
+       "A: Are there (8) __________ nearby?",
+       "B: Yes, but they’re a ten-minute walk away.",
+       "NÓI TIẾP",
+       "Thay thông tin bằng người và địa điểm thật của bạn. Hỏi bạn học thêm 1 câu."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Real talk",
+    "slides": [
+     {
+      "title": "REAL TALK · MISSION GUIDE",
+      "lines": [
+       "REAL TALK · MISSION GUIDE",
+       "Hỏi để chọn một nơi phù hợp",
+       "Dùng cụm danh từ để giúp người nghe hiểu đúng nơi và lựa chọn bạn nói đến.",
+       "ENTER THE SCENE",
+       "Chọn một nhà hàng và một nơi ghé sau bữa ăn.",
+       "USE THE OPENER",
+       "Nêu rõ địa điểm: this restaurant / that café / my favorite place.",
+       "ASK & RESPOND",
+       "Hỏi về đồ ăn, giá, vị trí. Đề xuất another place nếu cần.",
+       "LISTEN & FOLLOW",
+       "Nghe câu trả lời rồi hỏi thêm other places hoặc chốt lựa chọn.",
+       "MISSION COMPLETE WHEN…",
+       "Hai người thống nhất một nơi ăn",
+       "và một nơi ghé sau bữa ăn.",
+       "□ possessive □ this / those □ another / other □ follow-up",
+       "Lượt đầu có cue. Lượt hai đổi một chi tiết: giá cao hoặc quán đông."
+      ]
+     },
+     {
+      "title": "REAL TALK · SCENE 1 · LOCAL FOOD",
+      "lines": [
+       "REAL TALK · SCENE 1 · LOCAL FOOD",
+       "Chọn nhà hàng cho một người bạn",
+       "Bạn của partner đến thăm. Chọn quán ăn phù hợp và một nơi để ghé sau đó.",
+       "IMAGINE THE MOMENT",
+       "Người bạn thích đồ ăn gì?",
+       "Giá và vị trí phù hợp chưa?",
+       "Có lựa chọn khác không?",
+       "IDEA PATHS — KHÔNG PHẢI CÂU HỎI MẪU",
+       "your friend",
+       "this restaurant",
+       "local food",
+       "a good price",
+       "START WITH…",
+       "“Does your friend like local food?”",
+       "NOW KEEP IT GOING",
+       "Q1",
+       "IS / DOES __________________________________________ ?",
+       "Q2",
+       "ANOTHER ____________________________________________",
+       "Q3",
+       "OTHER PLACES ________________________________________",
+       "Partner giới thiệu nơi thật. Cùng chốt nhà hàng và nơi ghé tiếp."
+      ]
+     },
+     {
+      "title": "REAL TALK · SCENE 2 · TRAVEL",
+      "lines": [
+       "REAL TALK · SCENE 2 · TRAVEL",
+       "Thống nhất chuyến đi tiếp theo",
+       "Chọn thành phố, nhà hàng và quán cà phê cho chuyến đi của hai người.",
+       "IMAGINE THE MOMENT",
+       "Thành phố nào?",
+       "Nhà hàng nào trong kế hoạch?",
+       "Thay quán khi giá quá cao?",
+       "IDEA PATHS — KHÔNG PHẢI CÂU HỎI MẪU",
+       "our next trip",
+       "our current plan",
+       "another restaurant",
+       "other places",
+       "START WITH…",
+       "“Is our next trip to Hue?”",
+       "NOW KEEP IT GOING",
+       "Q1",
+       "OUR PLAN ____________________________________________",
+       "Q2",
+       "THIS / THAT _________________________________________",
+       "Q3",
+       "ANOTHER / OTHER ____________________________________",
+       "Tình huống mới: nhà hàng đầu tiên quá đắt. Cùng chọn một nơi khác."
+      ]
+     },
+     {
+      "title": "REAL TALK · MODEL CONVERSATION",
+      "lines": [
+       "REAL TALK · MODEL CONVERSATION",
+       "CHANGING THE PLAN",
+       "Một hướng tham khảo. Thử nhiệm vụ trước khi mở mẫu.",
+       "Đọc sau role-play. Mượn cách hỏi tiếp, rồi thay địa điểm.",
+       "A",
+       "Is our next trip to Hue?",
+       "B",
+       "Yes. Do you know a nice place for lunch?",
+       "A",
+       "This local restaurant is good. Its prices are good too.",
+       "B",
+       "Is it open on Sundays?",
+       "A",
+       "Yes, but it’s usually busy.",
+       "B",
+       "Do you know another cheap restaurant?",
+       "A",
+       "Yes. I know a small place near my hotel.",
+       "B",
+       "What about other nice places nearby?",
+       "A",
+       "Those small shops are good for coffee.",
+       "B",
+       "Perfect. Let’s go there after lunch."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Reflect",
+    "slides": [
+     {
+      "title": "REFLECT & RETRY · REPAIR",
+      "lines": [
+       "REFLECT & RETRY · REPAIR",
+       "Sửa cụm, nói lại cả câu",
+       "Sửa một chỗ, nói lại cả câu rồi thay một chi tiết.",
+       "My trip next is to Hue.",
+       "Thứ tự tính từ và danh từ",
+       "Are those shop expensive?",
+       "Số nhiều của shop",
+       "Do you know another restaurants?",
+       "another + danh từ nào?",
+       "Do you know other amazing place?",
+       "other + danh từ nào?",
+       "Their new coworker are friendly.",
+       "Danh từ chính là coworker",
+       "The my local restaurant is cheap.",
+       "Có thể ghép the + my không?",
+       "Key trong Notes. Thử tự sửa trước khi xem gợi ý."
+      ]
+     },
+     {
+      "title": "REFLECT & RETRY · FEEDBACK",
+      "lines": [
+       "REFLECT & RETRY · FEEDBACK",
+       "Sửa một điểm rồi thử lại",
+       "Chọn một lỗi cụm danh từ và một điểm phát âm. Thực hiện lại cuộc trao đổi.",
+       "MY NEXT TRY",
+       "PARTNER CHECK",
+       "Câu tôi muốn sửa: __________",
+       "Câu sau khi sửa: __________",
+       "Cụm cần nói rõ: __________",
+       "Lượt 2: không nhìn mẫu.",
+       "Đổi một chi tiết và thử lại.",
+       "Tôi hiểu được câu hỏi.",
+       "Thứ tự hạn định + tính từ + danh từ.",
+       "This / those và số ít / số nhiều đúng.",
+       "Another / other phù hợp với danh từ.",
+       "Câu hỏi đi theo danh từ chính.",
+       "Lượt 2: đổi nhà hàng hoặc đổi thành phố. Giữ mục tiêu giao tiếp."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Mission",
+    "slides": [
+     {
+      "title": "DAILY MISSION · 3-DAY PRACTICE",
+      "lines": [
+       "DAILY MISSION · 3-DAY PRACTICE",
+       "Luyện lại trong ba ngày",
+       "Mỗi lần 5–8 phút. Thử gọi lại trước khi mở mẫu.",
+       "DAY 1 / DAY 2",
+       "Ngày 1: nghe lại bài Lunch.",
+       "Gọi lại 5 cụm danh từ.",
+       "Ngày 2: giới thiệu một nơi.",
+       "Dùng sở hữu và this / those.",
+       "DAY 3",
+       "Luyện bài đọc cuối.",
+       "Ghi âm rồi tự nói về bạn.",
+       "Dùng another và other.",
+       "NEXT CLASS · Mô tả một nơi mới, hỏi một câu IS / ARE và một câu DO / DOES.",
+       "Tự kiểm tra: tôi nói rõ danh từ chính, số lượng và lựa chọn khác chưa?"
+      ]
+     },
+     {
+      "title": "DAILY MISSION · EXTRA LISTENING",
+      "lines": [
+       "DAILY MISSION · EXTRA LISTENING",
+       "TRIP · BEFORE YOU LISTEN",
+       "Trả lời về bạn. Nghe hai lượt rồi ghi từ khóa, chưa mở transcript.",
+       "TALK FIRST",
+       "Is your next trip to another city?",
+       "Do you like trying local food?",
+       "LISTENING MISSION",
+       "Where is Leo’s next trip?",
+       "Is the first restaurant cheap?",
+       "What do they choose after lunch?",
+       "Lượt 1: hiểu ý. Lượt 2: nghe từ hạn định + tính từ + danh từ."
+      ]
+     },
+     {
+      "title": "DAILY MISSION · LISTEN & CHECK",
+      "lines": [
+       "DAILY MISSION · LISTEN & CHECK",
+       "TRIP · MIA & LEO",
+       "Xem sau khi nghe. Tìm câu hỏi mục tiêu rồi luyện theo vai.",
+       "NOTICE: tìm cụm danh từ; nghe rõ từ hạn định và danh từ chính.",
+       "MIA",
+       "Is your next trip to Hue, Leo?",
+       "LEO",
+       "Yes. This expensive restaurant is in our current plan.",
+       "MIA",
+       "I know another local restaurant near the river.",
+       "LEO",
+       "Is it cheap?",
+       "MIA",
+       "Yes, and the food is amazing.",
+       "LEO",
+       "Do you know other nice places nearby?",
+       "MIA",
+       "Yes. Those small shops are nice for coffee.",
+       "LEO",
+       "What about that tall building across the street?",
+       "MIA",
+       "It’s a hotel. Its café is small but nice.",
+       "LEO",
+       "Great. Let’s visit that café after lunch."
+      ]
+     },
+     {
+      "title": "DAILY MISSION · READ & RECORD",
+      "lines": [
+       "DAILY MISSION · READ & RECORD",
+       "Our next trip to Hue",
+       "Đọc theo cụm danh từ. Giữ rõ this / these và âm cuối số nhiều.",
+       "Our next trip is to Hue. My friend Lan knows a nice local restaurant near the river. This restaurant serves amazing food, and its prices are good. That tall building across the street is a hotel. Its café is small but comfortable.",
+       "Our current plan is to have lunch at the restaurant and visit those small shops afterward. Their local products are interesting, but some prices are high. The restaurant is sometimes busy. Lan knows another cheap place nearby. She also knows other nice places for coffee. These places are popular with local people. I like her ideas. We want a relaxing day with good food and time together.",
+       "our NEXT trip",
+       "THIS restaurant",
+       "THOSE small shops",
+       "ANOTHER place",
+       "OTHER nice places",
+       "Luyện 2 lượt rồi ghi âm 1 lượt, khoảng 60–90 giây. Sau đó tự giới thiệu một nơi bạn thích."
+      ]
+     }
     ]
    }
   ],

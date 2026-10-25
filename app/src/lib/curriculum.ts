@@ -17,6 +17,8 @@ export type VocabItem = {
 
 export type GrammarSection = { section: string; sub: string; lines: string[] }
 export type Turn = { who: string; line: string }
+export type FlowSlide = { title: string; lines: string[] }
+export type FlowGroup = { group: string; slides: FlowSlide[] }
 export type Check = { q: string; a: string }
 
 export type LessonFile = {
@@ -30,6 +32,7 @@ export type LessonFile = {
     grammarChoose: { prompt: string; vi: string }[]
     dialogue: Turn[]
     listenCheck: Check[]
+    flow: FlowGroup[]
   }
 }
 
@@ -60,6 +63,7 @@ function asLesson(raw: unknown): LessonFile {
       grammarChoose: parts.grammarChoose ?? [],
       dialogue: parts.dialogue ?? [],
       listenCheck: parts.listenCheck ?? [],
+      flow: parts.flow ?? [],
     },
   }
 }
@@ -98,7 +102,8 @@ export function titleOf(lesson: LessonFile): string {
 /** Parts with material in them — what the lesson screen actually shows. */
 export function partCount(lesson: LessonFile): number {
   const p = lesson.parts
-  return [p.vocab.length, p.grammar.length, p.dialogue.length, p.listenCheck.length, p.grammarChoose.length].filter(Boolean).length
+  const structured = [p.vocab.length, p.grammar.length, p.dialogue.length, p.listenCheck.length, p.grammarChoose.length].filter(Boolean).length
+  return structured + p.flow.length
 }
 
 export function lessonA1(n: number): LessonFile | undefined {

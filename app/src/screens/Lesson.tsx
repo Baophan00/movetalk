@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { ArrowLeft, ArrowRight, Check, ChevronRight, CircleCheck, Volume2 } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Progress } from '../components/ui/progress'
-import { A1, lessonA1, titleOf, type LessonFile } from '../lib/curriculum'
+import { A1, lessonA1, titleOf, type FlowGroup, type LessonFile } from '../lib/curriculum'
 import { speak } from '../lib/audio'
 import { markPart, partsSeen } from '../lib/progress'
 import { cn } from '../lib/utils'
@@ -84,7 +84,7 @@ function Grammar({ sections }: { sections: LessonFile['parts']['grammar'] }) {
             {g.lines.map((line, i) => (
               <li key={`${line}-${i}`} className="flex items-start gap-1.5 text-[12.5px] leading-relaxed text-ink/80">
                 <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-ink/25" />
-                <span className="min-w-0 flex-1">{line}</span>
+                <span className="min-w-0 flex-1 break-words">{line}</span>
               </li>
             ))}
           </ul>
@@ -161,6 +161,63 @@ function Choose({ items }: { items: LessonFile['parts']['grammarChoose'] }) {
   )
 }
 
+function Flow({ groups }: { groups: FlowGroup[] }) {
+  return (
+    <div className="space-y-4">
+      {groups.map((g) => (
+        <div key={g.group}>
+          <div className="mb-2 flex items-center gap-2">
+            <span className="h-px flex-1 bg-line" />
+            <span className="text-[10.5px] font-bold uppercase tracking-[.16em] text-muted">{g.group}</span>
+            <span className="h-px flex-1 bg-line" />
+          </div>
+          <div className="space-y-2">
+            {g.slides.map((slide, i) => (
+              <details key={`${slide.title}-${i}`} open={g.slides.length <= 2} className="group rounded-2xl border border-line bg-surface px-3.5 py-2.5">
+                <summary className="flex cursor-pointer list-none items-center gap-2">
+                  <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted transition-transform group-open:rotate-90" />
+                  <span className="min-w-0 flex-1 break-words text-[13px] font-semibold leading-snug">
+                    {slide.title}
+                    {g.slides.filter((x) => x.title === slide.title).length > 1 && (
+                      <span className="ml-1.5 text-[11px] font-normal text-muted">
+                        {g.slides.findIndex((x) => x === slide) + 1}/{g.slides.length}
+                      </span>
+                    )}
+                  </span>
+                  <span className="shrink-0 text-[10.5px] text-muted">{slide.lines.length}</span>
+                </summary>
+                <ul className="mt-2 space-y-1 pl-5">
+                  {slide.lines.map((line, k) => (
+                    <li key={`${line}-${k}`} className="flex items-start gap-1.5 text-[12.5px] leading-relaxed text-ink/80">
+                      <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-ink/25" />
+                      <span className="min-w-0 flex-1 break-words">{line}</span>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+const ORDER: Record<string, number> = {
+  'Warm-up': 10,
+  Vocabulary: 20,
+  'Before you listen': 30,
+  Grammar: 40,
+  Pronunciation: 50,
+  Dialogue: 60,
+  'Listening check': 70,
+  Activate: 80,
+  Practice: 85,
+  'Real talk': 90,
+  Reflect: 100,
+  Mission: 110,
+}
+
 export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
   const lesson = lessonA1(lessonN) ?? A1[0]
   const [active, setActive] = useState(0)
@@ -168,13 +225,20 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
 
   const parts = useMemo(() => {
     if (!lesson) return []
-    const list: { key: string; label: string; node: React.ReactNode }[] = []
-    if (lesson.parts.vocab.length) list.push({ key: 'vocab', label: 'Vocabulary', node: <Vocabulary items={lesson.parts.vocab} /> })
-    if (lesson.parts.grammar.length) list.push({ key: 'grammar', label: 'Grammar', node: <Grammar sections={lesson.parts.grammar} /> })
-    if (lesson.parts.dialogue.length) list.push({ key: 'dialogue', label: 'Dialogue', node: <Dialogue turns={lesson.parts.dialogue} /> })
-    if (lesson.parts.listenCheck.length) list.push({ key: 'check', label: 'Listening check', node: <Checks items={lesson.parts.listenCheck} /> })
-    if (lesson.parts.grammarChoose.length) list.push({ key: 'choose', label: 'Practice', node: <Choose items={lesson.parts.grammarChoose} /> })
-    return list
+    const list: { key: string; label: string; node: React.ReactNode; order: number }[] = []
+    const add = (key: string, label: string, node: React.ReactNode) =>
+      list.push({ key, label, node, order: ORDER[label] ?? 200 })
+
+    if (lesson.parts.vocab.length) add('vocab', 'Vocabulary', <Vocabulary items={lesson.parts.vocab} />)
+    if (lesson.parts.grammar.length) add('grammar', 'Grammar', <Grammar sections={lesson.parts.grammar} />)
+    if (lesson.parts.dialogue.length) add('dialogue', 'Dialogue', <Dialogue turns={lesson.parts.dialogue} />)
+    if (lesson.parts.listenCheck.length) add('check', 'Listening check', <Checks items={lesson.parts.listenCheck} />)
+    if (lesson.parts.grammarChoose.length) add('choose', 'Practice', <Choose items={lesson.parts.grammarChoose} />)
+    for (const g of lesson.parts.flow) {
+      const covered = (g.group === 'Grammar' && lesson.parts.grammar.length > 0) || (g.group === 'Vocabulary' && lesson.parts.vocab.length > 0)
+      if (!covered) add(`flow-${g.group}`, g.group, <Flow groups={[g]} />)
+    }
+    return list.sort((a, b) => a.order - b.order)
   }, [lesson])
 
   useEffect(() => {
@@ -200,10 +264,25 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
   const totalWords = lesson.parts.vocab.length
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-6xl overflow-x-hidden px-4 py-6 sm:px-6 lg:px-8">
       <button onClick={onBack} className="mb-4 inline-flex items-center gap-1.5 text-[12.5px] text-muted transition-colors hover:text-ink">
         <ArrowLeft className="h-3.5 w-3.5" /> Overview
       </button>
+
+      <div className="mb-3 flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+        {A1.map((l) => (
+          <button
+            key={l.n}
+            onClick={() => onPickLesson(l.n)}
+            className={cn(
+              'shrink-0 rounded-xl border px-2.5 py-1.5 text-[11.5px] font-semibold tabular-nums transition-colors',
+              l.n === lesson.n ? 'border-primary/40 bg-primary text-white' : 'border-line bg-surface text-ink/70 hover:bg-primary-soft/60',
+            )}
+          >
+            {String(l.n).padStart(2, '0')}
+          </button>
+        ))}
+      </div>
 
       <div className="rounded-3xl border border-[#ded4fb] bg-[#f3efff] p-5 shadow-card sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
@@ -229,7 +308,7 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
       </div>
 
       <div className="mt-5 grid gap-5 lg:grid-cols-[236px_1fr]">
-        <nav className="order-1 lg:order-none">
+        <nav className="order-1 min-w-0 lg:order-none">
           <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar lg:flex-col lg:overflow-visible">
             {parts.map((p, i) => {
               const done = seen.includes(i)

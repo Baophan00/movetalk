@@ -118,7 +118,26 @@ def parse_check(slides):
 
 
 
-GRAMMAR_TAGS = ("GRAMMAR IN USE", "PRONUNCIATION")
+GRAMMAR_TAGS = ("GRAMMAR IN USE",)
+
+# Everything the deck is made of, in teaching order. Structured parts (vocabulary, grammar,
+# dialogue, check) are built above; the rest is kept slide by slide so nothing on the deck is lost.
+FLOW_ORDER = ["Warm-up", "Before you listen", "Pronunciation", "Activate", "Real talk", "Reflect", "Mission", "Point & say", "Overview"]
+FLOW_OF = [
+    ("MOVE.", "Warm-up"),
+    ("RECALL & CONNECT", "Warm-up"),
+    ("BEFORE LISTENING", "Before you listen"),
+    ("PRONUNCIATION", "Pronunciation"),
+    ("ACTIVATE", "Activate"),
+    ("REAL TALK", "Real talk"),
+    ("REFLECT", "Reflect"),
+    ("DAILY MISSION", "Mission"),
+    ("POINT & SAY", "Point & say"),
+]
+FLOW_SKIP = ("LANGUAGE BANK", "GRAMMAR IN USE", "DIALOGUE", "· CHECK")
+FLOW_EXTRA = {"EVERYDAY SCENES": "Everyday scenes", "SPEAKING": "Speaking", "REVIEW MISSION": "Mission",
+              "POINT & SAY": "Point & say", "RECONNECT": "Warm-up", "NOUN PHRASES": "Grammar"}
+VI_MARK = re.compile(r"[àáảãạăâêôơưđ]|\?\s*$")
 GLUED = re.compile(r"(?<=[?.!])(?=[A-Z])")
 
 
@@ -126,6 +145,43 @@ def split_glued(line):
     """PowerPoint glues shapes together, so one line can hold three sentences: 'Do I …?Do we …?'."""
     parts = [p.strip() for p in GLUED.split(line) if p.strip()]
     return [p for p in parts if p not in {"?", ".", "…", "·"}]
+
+
+def flow_of(title):
+    upper = title.upper()
+    for tag, group in FLOW_OF:
+        if upper.startswith(tag) or tag in upper:
+            return group
+    for tag, group in FLOW_EXTRA.items():
+        if tag in upper:
+            return group
+    # A deck with its own section names (L07 uses EVERYDAY SCENES): keep the name, title-cased.
+    head = upper.split("·")[0].strip()
+    head = re.sub(r"\s+\d+$", "", head)          # LISTENING 1 / 2 / 3 are one group
+    if not head:
+        return "Notes"
+    if len(head) > 26 or VI_MARK.search(title):
+        return "Notes"                            # a Vietnamese sentence used as a slide title
+    return head.capitalize()
+
+
+def parse_flow(slides):
+    groups = {}
+    for s in slides:
+        title = s["title"].upper()
+        if any(skip in title for skip in FLOW_SKIP):
+            continue
+        # 'ACTIVATE 1' alone is a section divider pointing at the next block, not a slide to teach.
+        if re.fullmatch(r"ACTIVATE \d", s["title"].strip(), re.I):
+            continue
+        lines = clean(s["lines"])
+        if not lines:
+            continue
+        group = flow_of(s["title"])
+        head = re.sub(r"^(ACTIVATE 1|MOVE\.)\s*", "", s["title"]).strip()
+        groups.setdefault(group, []).append({"title": head or s["title"], "lines": lines})
+    order = [g for g in FLOW_ORDER if g in groups] + [g for g in groups if g not in FLOW_ORDER]
+    return [{"group": g, "slides": groups[g]} for g in order]
 
 
 def parse_grammar(slides):
@@ -158,6 +214,7 @@ def main():
     vocab = parse_vocab(slides)
     choose = parse_choose(slides)
     grammar = parse_grammar(slides)
+    flow = parse_flow(slides)
     dialogue = parse_dialogue(slides)
     check = parse_check(slides)
 
@@ -169,6 +226,7 @@ def main():
             "vocab": vocab,
             "grammarChoose": choose,
             "grammar": grammar,
+            "flow": flow,
             "dialogue": dialogue,
             "listenCheck": check,
         },
@@ -180,7 +238,7 @@ def main():
     path = os.path.join(dest, f"{label}.json")
     json.dump(lesson, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
-    print(f"{label}: vocab {len(vocab)} · grammar {len(grammar)} sections ({len(choose)} items) · dialogue {len(dialogue)} · check {len(check)}")
+    print(f"{label}: vocab {len(vocab)} · grammar {len(grammar)} · dialogue {len(dialogue)} · check {len(check)} · flow {[(f['group'], len(f['slides'])) for f in flow]}")
     for v in vocab[:3]:
         print(f"   {v['word']:8} {v['ipa']:14} {v['vi']:10} {v['cloze'][:40]}")
 

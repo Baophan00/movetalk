@@ -507,37 +507,436 @@
      "chưa về lúc nói.",
      "I was interested… / I’ve been interested in it for years. Trạng thái vẫn có thể dùng HAVE BEEN."
     ]
-   },
+   }
+  ],
+  "flow": [
    {
-    "section": "PRONUNCIATION · CONTRACTIONS",
-    "sub": "I’VE / SHE’S: nghe cả cụm sau chủ ngữ",
-    "lines": [
-     "Đọc đầy đủ rồi đọc dạng rút gọn. Không chèn nguyên âm sau /v/ hoặc /z/.",
-     "I have → I’ve /aɪv/",
-     "I’ve already booked it.",
-     "We have → We’ve /wiːv/",
-     "We’ve been there twice.",
-     "She has → She’s /ʃiːz/",
-     "She’s just sent the message.",
-     "She is → She’s /ʃiːz/",
-     "She’s ready for the trip.",
-     "SHE’S có thể là SHE IS hoặc SHE HAS. Nhìn phần theo sau để hiểu."
+    "group": "Warm-up",
+    "slides": [
+     {
+      "title": "MOVE.",
+      "lines": [
+       "MOVE.",
+       "ACTIVATE 1",
+       "L10 · THEN & UP TO NOW",
+       "Kể trải nghiệm. Hỏi chi tiết.",
+       "Kết nối quá khứ với hiện tại.",
+       "PAST SIMPLE",
+       "and",
+       "PRESENT PERFECT",
+       "ASK → TELL → CONNECT",
+       "EVER · YET · JUST · SINCE · FOR"
+      ]
+     },
+     {
+      "title": "RECONNECT · L09",
+      "lines": [
+       "RECONNECT · L09",
+       "Gọi lại V2 trước khi mở V3",
+       "Nói câu hỏi, rồi trả lời ngắn. Chưa xem đáp án trong Notes.",
+       "___ you buy it yesterday?",
+       "Hỏi hành động ở mốc đã qua.",
+       "___ she happy with the room?",
+       "Hỏi trạng thái trong quá khứ.",
+       "go → ___ / buy → ___",
+       "Gọi lại hai dạng quá khứ.",
+       "I didn’t ___ for it.",
+       "PAY hay PAID?",
+       "They ___ at the station last night.",
+       "WAS hay WERE?",
+       "Tell me one thing you did yesterday.",
+       "Một việc thật + một chi tiết.",
+       "Hôm qua là một mốc đã kết thúc. Bài này thêm góc nhìn tính đến hiện tại."
+      ]
+     }
     ]
    },
    {
-    "section": "PRONUNCIATION · CONNECTED SPEECH",
-    "sub": "HAVE YOU EVER · HAS SHE … YET",
-    "lines": [
-     "Nói liền cụm câu hỏi, nhấn trải nghiệm hoặc kết quả cần kiểm tra.",
-     "Have_you_ever…?",
-     "/həv jə ˈevər/",
-     "Have_you been there before?",
-     "Đọc YOU nhẹ, giữ BEEN rõ.",
-     "Has_she sent_it_yet?",
-     "Nối SENT_IT, nhấn YET khi cần.",
-     "I’ve just_arrived.",
-     "Giữ JUST + ARRIVED trong một nhịp.",
-     "Hỏi tiếp: WHEN did you go? / WHAT happened? Nhấn thông tin bạn thực sự muốn biết."
+    "group": "Before you listen",
+    "slides": [
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "TRAVEL · A booking mistake · Before you listen",
+       "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
+       "TALK FIRST",
+       "Have you ever booked a room online?",
+       "What can go wrong with a booking?",
+       "Who do you ask for help?",
+       "LISTENING MISSION",
+       "WHAT has Mai just done wrong?",
+       "WHAT did Ben do last month?",
+       "WHAT has Mai not done yet?",
+       "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
+      ]
+     },
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "WORK LIFE · An updated price list · Before you listen",
+       "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
+       "TALK FIRST",
+       "Do you often wait for a reply?",
+       "What do you check before sending a file?",
+       "Who helps when a delivery is late?",
+       "LISTENING MISSION",
+       "WHAT has Adam already done?",
+       "WHEN did the supplier send a message?",
+       "WHAT hasn’t Linh done yet?",
+       "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
+      ]
+     },
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "COMMUNITY · Trying pottery again · Before you listen",
+       "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
+       "TALK FIRST",
+       "Have you ever joined a creative workshop?",
+       "What did you make or do?",
+       "What would you like to try next?",
+       "LISTENING MISSION",
+       "HOW MANY times has the guest tried pottery?",
+       "WHEN did the guest first try it?",
+       "HOW LONG has the host taught here?",
+       "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Pronunciation",
+    "slides": [
+     {
+      "title": "PRONUNCIATION · CONTRACTIONS",
+      "lines": [
+       "PRONUNCIATION · CONTRACTIONS",
+       "I’VE / SHE’S: nghe cả cụm sau chủ ngữ",
+       "Đọc đầy đủ rồi đọc dạng rút gọn. Không chèn nguyên âm sau /v/ hoặc /z/.",
+       "I have → I’ve /aɪv/",
+       "I’ve already booked it.",
+       "We have → We’ve /wiːv/",
+       "We’ve been there twice.",
+       "She has → She’s /ʃiːz/",
+       "She’s just sent the message.",
+       "She is → She’s /ʃiːz/",
+       "She’s ready for the trip.",
+       "SHE’S có thể là SHE IS hoặc SHE HAS. Nhìn phần theo sau để hiểu."
+      ]
+     },
+     {
+      "title": "PRONUNCIATION · CONNECTED SPEECH",
+      "lines": [
+       "PRONUNCIATION · CONNECTED SPEECH",
+       "HAVE YOU EVER · HAS SHE … YET",
+       "Nói liền cụm câu hỏi, nhấn trải nghiệm hoặc kết quả cần kiểm tra.",
+       "Have_you_ever…?",
+       "/həv jə ˈevər/",
+       "Have_you been there before?",
+       "Đọc YOU nhẹ, giữ BEEN rõ.",
+       "Has_she sent_it_yet?",
+       "Nối SENT_IT, nhấn YET khi cần.",
+       "I’ve just_arrived.",
+       "Giữ JUST + ARRIVED trong một nhịp.",
+       "Hỏi tiếp: WHEN did you go? / WHAT happened? Nhấn thông tin bạn thực sự muốn biết."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Activate",
+    "slides": [
+     {
+      "title": "ACTIVATE · TEMPLATE REFLEX",
+      "lines": [
+       "ACTIVATE · TEMPLATE REFLEX",
+       "Chỉ bật khung câu trước",
+       "Không cần điền động từ ở lượt đầu. Chọn DID hay HAVE / HAS.",
+       "Bạn đã từng … chưa?",
+       "Trải nghiệm tính đến nay.",
+       "Cô ấy chưa …",
+       "Việc mong đợi, tính đến hiện tại.",
+       "Họ vừa mới …",
+       "Một kết quả rất gần hiện tại.",
+       "Bạn đã … khi nào?",
+       "Hỏi thời điểm của lần đã xảy ra.",
+       "Anh ấy đã … được bao lâu rồi?",
+       "Trạng thái còn đúng đến hiện tại.",
+       "Bạn của bạn đã … mấy lần?",
+       "Đếm trải nghiệm tính đến nay.",
+       "Vòng sau: đổi chủ ngữ thành HE / SHE / THEY / YOUR FRIEND."
+      ]
+     },
+     {
+      "title": "ACTIVATE · TEMPLATE KEY",
+      "lines": [
+       "ACTIVATE · TEMPLATE KEY",
+       "Đáp án khung câu",
+       "V = nguyên mẫu. V3 = quá khứ phân từ, gồm cả BEEN khi cần.",
+       "Have you ever + V3…?",
+       "Yes, I have. / No, I haven’t.",
+       "She hasn’t + V3 + … yet.",
+       "Không dùng SHE DOESN’T HAVE + V3.",
+       "They’ve just + V3 + …",
+       "JUST thường giữa HAVE và V3.",
+       "When did you + V…?",
+       "Về lần cụ thể đã xảy ra.",
+       "How long has he + V3…?",
+       "Hoặc HAS HE BEEN + trạng thái…?",
+       "How many times has your friend + V3…?",
+       "Hỏi xong, hỏi lần gần nhất bằng DID.",
+       "Không dịch mọi chữ “đã” thành HAVE. Nhìn ý và mốc thời gian trước."
+      ]
+     },
+     {
+      "title": "ACTIVATE · VIETNAMESE TO ENGLISH",
+      "lines": [
+       "ACTIVATE · VIETNAMESE TO ENGLISH",
+       "Cùng một chuyện, hai góc nhìn",
+       "Nói trước khi mở slide mẫu. Giữ mốc thời gian và giới từ.",
+       "Tôi chưa từng đi du lịch một mình.",
+       "Trải nghiệm đến nay.",
+       "Tôi đi Huế một mình năm ngoái.",
+       "Một lần ở năm đã qua.",
+       "Cô ấy vừa gửi địa chỉ cho tôi.",
+       "Kết quả vừa mới.",
+       "Họ chưa đưa ra quyết định.",
+       "Tính đến giờ.",
+       "Chúng tôi dùng dịch vụ này ba lần rồi.",
+       "Đếm đến hiện tại.",
+       "Tôi quen anh ấy từ năm 2020.",
+       "Vẫn còn quen biết.",
+       "Nói thêm một câu hoặc đặt một câu hỏi tiếp sau mỗi ý."
+      ]
+     },
+     {
+      "title": "ACTIVATE · MODEL & NOTICE",
+      "lines": [
+       "ACTIVATE · MODEL & NOTICE",
+       "Mẫu để đối chiếu sau khi nói",
+       "Đổi người, địa điểm hoặc số lần để tạo câu mới.",
+       "I’ve never travelled alone.",
+       "Have you ever travelled alone?",
+       "I went to Hue alone last year.",
+       "Who did you meet there?",
+       "She’s just sent me the address.",
+       "When did she send it?",
+       "They haven’t made a decision yet.",
+       "What are their options?",
+       "We’ve used this service three times.",
+       "When did you last use it?",
+       "I’ve known him since 2020.",
+       "How did you meet?",
+       "HAVE KNOWN + khoảng đến hiện tại. DID MEET + lần bắt đầu cụ thể."
+      ]
+     },
+     {
+      "title": "ACTIVATE · PERSONAL EXPERIENCE",
+      "lines": [
+       "ACTIVATE · PERSONAL EXPERIENCE",
+       "Trải nghiệm của bạn: hỏi rồi đào sâu",
+       "Nếu chưa từng: nói NO rồi chuyển sang trải nghiệm khác, không cần bịa.",
+       "Have you ever travelled alone?",
+       "When did you go? Who did you meet?",
+       "Have you ever lost something important?",
+       "What did you lose? Did you find it?",
+       "Have you ever asked a stranger for help?",
+       "What happened? Was the person helpful?",
+       "Have you ever changed a booking?",
+       "Why did you change it? Was it easy?",
+       "Have you ever tried an unusual activity?",
+       "Where did you try it? How did you feel?",
+       "Trả lời mở đầu bằng HAVE. Kể lần cụ thể bằng quá khứ đơn."
+      ]
+     },
+     {
+      "title": "ACTIVATE · TIMES & LAST TIME",
+      "lines": [
+       "ACTIVATE · TIMES & LAST TIME",
+       "Đếm trải nghiệm, kể lần gần nhất",
+       "Nói số thật hoặc “never”. Partner không hỏi theo thứ tự có sẵn.",
+       "How many times have you visited Hue?",
+       "When did you last go?",
+       "How many times have you moved home?",
+       "Why did you leave your last place?",
+       "How many times have you flown this year?",
+       "Where did you go on your last flight?",
+       "How many times have you used a delivery app this week?",
+       "What did you order last time?",
+       "THIS YEAR / THIS WEEK: ở đây tính đến hiện tại. LAST YEAR / LAST WEEK: đã khép lại."
+      ]
+     },
+     {
+      "title": "ACTIVATE · RECENT LIFE",
+      "lines": [
+       "ACTIVATE · RECENT LIFE",
+       "Dạo gần đây có gì mới?",
+       "Mỗi câu trả lời có kết quả hoặc trải nghiệm, rồi kể một chi tiết quá khứ.",
+       "Have you bought anything useful recently?",
+       "What did you buy? Why did you choose it?",
+       "Have you tried anything new lately?",
+       "When did you try it? Did you enjoy it?",
+       "Have you heard from an old friend lately?",
+       "What did they say?",
+       "Have you had any problems recently?",
+       "What happened? How did you deal with it?",
+       "Có thể trả lời: Not really. / No, I haven’t. Sau đó hỏi lại partner."
+      ]
+     },
+     {
+      "title": "ACTIVATE · HOW LONG",
+      "lines": [
+       "ACTIVATE · HOW LONG",
+       "Từ lúc bắt đầu đến bây giờ",
+       "Trả lời SINCE hoặc FOR, rồi hỏi sự kiện bắt đầu bằng quá khứ đơn.",
+       "How long have you lived in your current city?",
+       "When did you move here?",
+       "How long have you had your current phone?",
+       "When did you buy it?",
+       "How long have you known your closest friend?",
+       "Where did you meet?",
+       "How long have you been interested in your hobby?",
+       "What made you try it?",
+       "I’ve had this phone FOR… / SINCE… Không nói I have this phone since…"
+      ]
+     },
+     {
+      "title": "ACTIVATE · REPAIR & EXPLAIN",
+      "lines": [
+       "ACTIVATE · REPAIR & EXPLAIN",
+       "Sửa hệ thống, không chỉ sửa một từ",
+       "Nói lại cả câu. Sau đó giải thích vì sao chọn đầu câu hoặc dạng từ đó.",
+       "I have bought it yesterday.",
+       "Mốc quá khứ đã kết thúc.",
+       "Has she went there before?",
+       "Sau HAS dùng V3.",
+       "Did you ever been there?",
+       "Trải nghiệm đến hiện tại: HAVE + BEEN.",
+       "I’ve known her since five years.",
+       "Mốc hay độ dài?",
+       "She haven’t sent it yet.",
+       "HAVE hay HAS theo chủ ngữ?",
+       "I’ve been there twice last year.",
+       "Khoảng đếm đã khép lại.",
+       "Đáp án trong Notes. Cho một ví dụ khác sau khi sửa."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Real talk",
+    "slides": [
+     {
+      "title": "REAL TALK · OPEN CONVERSATION",
+      "lines": [
+       "REAL TALK · OPEN CONVERSATION",
+       "Chọn chuyện của bạn, nói thành hội thoại",
+       "Mỗi chủ đề: hỏi trải nghiệm / hiện tại, rồi hỏi ít nhất hai chi tiết quá khứ.",
+       "A PURCHASE",
+       "Something you’ve bought recently.",
+       "A SMALL PROBLEM",
+       "Something you’ve lost or needed help with.",
+       "A NEW EXPERIENCE",
+       "An activity you’ve tried for the first time.",
+       "A PLACE",
+       "A place you’ve visited more than once.",
+       "A PERSON",
+       "Someone you’ve known for a long time.",
+       "A RECENT TASK",
+       "Something you’ve already done or haven’t done yet.",
+       "Không cần nhét đủ từ signal. Chọn thì để người nghe hiểu đúng chuyện."
+      ]
+     },
+     {
+      "title": "REAL TALK · FOLLOW-UP ROUTE",
+      "lines": [
+       "REAL TALK · FOLLOW-UP ROUTE",
+       "Giữ câu chuyện đi tiếp",
+       "Chọn câu hỏi theo điều người kia vừa nói, không đọc như bảng kiểm.",
+       "I’ve never tried it.",
+       "What would you like to try?",
+       "I’ve done it twice.",
+       "When did you last do it?",
+       "I’ve just bought one.",
+       "Where did you buy it?",
+       "I’ve known her for years.",
+       "How did you meet?",
+       "I haven’t finished it yet.",
+       "What do you still need to do?",
+       "Hỏi tiếp một câu chưa có trên slide, dựa vào câu trả lời thật."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Reflect",
+    "slides": [
+     {
+      "title": "REFLECT & RETRY · SELF CHECK",
+      "lines": [
+       "REFLECT & RETRY · SELF CHECK",
+       "Bạn đang nhìn thời gian theo cách nào?",
+       "Chọn một câu vừa nói, kiểm tra rồi nói lại.",
+       "MỐC ĐÃ KẾT THÚC?",
+       "YESTERDAY / LAST… / …AGO → kể bằng V2 / DID.",
+       "TÍNH ĐẾN HIỆN TẠI?",
+       "Trải nghiệm / số lần / kết quả / kéo dài.",
+       "ĐỘNG TỪ ĐÚNG DẠNG?",
+       "DID + V; HAVE / HAS + V3.",
+       "TRẠNG THÁI CÓ BEEN?",
+       "Have you been…? / I’ve been…",
+       "SINCE / FOR ĐÚNG Ý?",
+       "Mốc bắt đầu / độ dài.",
+       "ĐÃ HỎI TIẾP CHƯA?",
+       "Have you ever…? rồi When did you…?",
+       "Lượt 2: giữ đúng ý trước, rồi mới tăng tốc."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Mission",
+    "slides": [
+     {
+      "title": "DAILY MISSION · THREE ROUNDS",
+      "lines": [
+       "DAILY MISSION · THREE ROUNDS",
+       "Mỗi ngày 5 phút, ghi âm 60 giây",
+       "Nói trước, nghe lại, sửa một lỗi rồi ghi lần hai.",
+       "DAY 1 · EXPERIENCE",
+       "Một việc từng / chưa từng làm.",
+       "DAY 1 · DETAILS",
+       "Kể một lần: WHEN / WHERE / WHO.",
+       "DAY 2 · RECENT LIFE",
+       "JUST / ALREADY / YET: 3 việc thật.",
+       "DAY 2 · HOW LONG",
+       "Một người / nơi / món đồ: SINCE / FOR.",
+       "DAY 3 · COUNT & CONNECT",
+       "Số lần đến nay + lần gần nhất.",
+       "DAY 3 · PARTNER",
+       "Hỏi tự do 5 câu, mỗi câu hỏi tiếp 1–2 lần.",
+       "Không cần tất cả câu đều hiện tại hoàn thành. Đổi sang quá khứ đơn khi kể một lần cụ thể."
+      ]
+     },
+     {
+      "title": "DAILY MISSION · READ & RETELL",
+      "lines": [
+       "DAILY MISSION · READ & RETELL",
+       "A new interest, from then to now",
+       "Đọc theo cụm, sau đó đổi trải nghiệm và kể chuyện của bạn.",
+       "I’ve been interested in photography since I bought my first camera.",
+       "I bought it last year, after a friend showed me some of her pictures.",
+       "Since then, I’ve joined two photo walks, but I’ve never taken a night photography class.",
+       "I went on my last photo walk in August. We explored a local market and talked to the sellers.",
+       "Recently, I’ve tried taking portraits, and I’ve just shared my first set of photos with my friends.",
+       "I haven’t received much feedback yet, but I’ve already noticed a few things I want to improve.",
+       "How about you? Have you tried anything new lately? When did you last do it?",
+       "Lần 2: một trải nghiệm đến nay + một lần cụ thể + một điều mới gần đây."
+      ]
+     }
     ]
    }
   ],

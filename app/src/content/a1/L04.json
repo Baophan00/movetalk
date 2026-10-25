@@ -436,41 +436,338 @@
      "How to book a table",
      "Để hỏi đầy đủ khi giao tiếp: How do I…? / Can you show me how to…?"
     ]
-   },
+   }
+  ],
+  "flow": [
    {
-    "section": "PRONUNCIATION · CHUNK & STRESS",
-    "sub": "Nhấn từ hỏi và thông tin chính",
-    "lines": [
-     "Dấu / chia cụm ý. Chữ in hoa là gợi ý nhấn, không đọc rời từng từ.",
-     "WHERE / do you WORK?",
-     "I WORK / at a HOTEL.",
-     "HOW OFTEN / do you EAT OUT?",
-     "TWICE / a WEEK.",
-     "HOW LONG / does it TAKE?",
-     "About TWENTY / MINUTES.",
-     "HOW MUCH / does it COST?",
-     "It costs TEN / DOLLARS.",
-     "Câu hỏi WH trung tính thường xuống giọng ở cuối. Ngữ cảnh có thể làm ngữ điệu thay đổi."
+    "group": "Warm-up",
+    "slides": [
+     {
+      "title": "MOVE.",
+      "lines": [
+       "MOVE.",
+       "ACTIVATE 1",
+       "L05 · ASK FOR DETAILS",
+       "Hỏi đúng thông tin.",
+       "Nghe và trả lời đúng ý.",
+       "WH + DO…?",
+       "and",
+       "WH + BE…?",
+       "ASK → ANSWER → ASK MORE",
+       "QUESTION WORD + DO / BE + SUBJECT"
+      ]
+     },
+     {
+      "title": "RECALL & CONNECT",
+      "lines": [
+       "RECALL & CONNECT",
+       "Giữ hai hệ, thêm từ để hỏi",
+       "Chọn từ mở đầu. Hỏi rồi trả lời ngắn bằng thông tin thật.",
+       "___ they work near here?",
+       "___ we busy today?",
+       "___ she live with her parents?",
+       "___ it open?",
+       "___ your brother have a car?",
+       "___ it in December?",
+       "Sau Yes / No, bạn còn muốn biết thêm điều gì?"
+      ]
+     }
     ]
    },
    {
-    "section": "PRONUNCIATION · QUESTION CHUNKS",
-    "sub": "Nghe một cụm, nhận ra cả câu hỏi",
-    "lines": [
-     "Một số cách nói thân mật trong tiếng Anh Mỹ. Dạng rõ vẫn đúng và luôn dùng được.",
-     "WHAT DO YOU…?",
-     "/wʌt də ju/ → [wəɾəjə] / [wʌdʒə]",
-     "do / you đọc nhẹ; cụm âm giữa có thể rút gọn.",
-     "What do you LIKE? → I like seafood.",
-     "WHAT’S YOUR…?",
-     "/wʌts jər/ → [wʌtʃɚ]",
-     "/ts/ + /j/ có thể hòa thành /tʃ/.",
-     "What’s your favorite FOOD? → Seafood.",
-     "WHAT ARE YOU…?",
-     "/wʌt ɑr ju/ → [wʌɾɚjə]/ [wʌdʒə]",
-     "are / you đọc nhẹ; /t/ có thể thành flap [ɾ].",
-     "What are you GOOD at? → I’m good at cooking.",
-     "LUYỆN: nói rõ → nói liền cụm → hỏi & đáp. Nhấn LIKE / FOOD / GOOD, không ép nói nhanh."
+    "group": "Before you listen",
+    "slides": [
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "DAILY LIFE · Getting to work · Before you listen",
+       "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
+       "TALK FIRST",
+       "How do you get to work?",
+       "How long does it take?",
+       "Do you work on weekends?",
+       "LISTENING MISSION",
+       "WHERE does Ben work?",
+       "HOW / HOW FAR / HOW LONG?",
+       "WHAT TIME / HOW OFTEN?",
+       "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
+      ]
+     },
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "WORK LIFE · A training session · Before you listen",
+       "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
+       "TALK FIRST",
+       "Do you have training at work?",
+       "What time do you start work?",
+       "What kind of skills do you practice?",
+       "LISTENING MISSION",
+       "WHERE / WHAT TIME?",
+       "HOW LONG / WHO?",
+       "WHAT KIND OF / HOW MANY?",
+       "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
+      ]
+     },
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "EXTRA LISTENING · A city tour · Before you listen",
+       "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
+       "TALK FIRST",
+       "What kind of tours do you like?",
+       "Do you prefer walking or taking a bus?",
+       "What do you ask before booking?",
+       "LISTENING MISSION",
+       "WHEN / HOW LONG?",
+       "HOW MUCH / HOW FAR?",
+       "HOW TO BOOK?",
+       "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Pronunciation",
+    "slides": [
+     {
+      "title": "PRONUNCIATION · CHUNK & STRESS",
+      "lines": [
+       "PRONUNCIATION · CHUNK & STRESS",
+       "Nhấn từ hỏi và thông tin chính",
+       "Dấu / chia cụm ý. Chữ in hoa là gợi ý nhấn, không đọc rời từng từ.",
+       "WHERE / do you WORK?",
+       "I WORK / at a HOTEL.",
+       "HOW OFTEN / do you EAT OUT?",
+       "TWICE / a WEEK.",
+       "HOW LONG / does it TAKE?",
+       "About TWENTY / MINUTES.",
+       "HOW MUCH / does it COST?",
+       "It costs TEN / DOLLARS.",
+       "Câu hỏi WH trung tính thường xuống giọng ở cuối. Ngữ cảnh có thể làm ngữ điệu thay đổi."
+      ]
+     },
+     {
+      "title": "PRONUNCIATION · QUESTION CHUNKS",
+      "lines": [
+       "PRONUNCIATION · QUESTION CHUNKS",
+       "Nghe một cụm, nhận ra cả câu hỏi",
+       "Một số cách nói thân mật trong tiếng Anh Mỹ. Dạng rõ vẫn đúng và luôn dùng được.",
+       "WHAT DO YOU…?",
+       "/wʌt də ju/ → [wəɾəjə] / [wʌdʒə]",
+       "do / you đọc nhẹ; cụm âm giữa có thể rút gọn.",
+       "What do you LIKE? → I like seafood.",
+       "WHAT’S YOUR…?",
+       "/wʌts jər/ → [wʌtʃɚ]",
+       "/ts/ + /j/ có thể hòa thành /tʃ/.",
+       "What’s your favorite FOOD? → Seafood.",
+       "WHAT ARE YOU…?",
+       "/wʌt ɑr ju/ → [wʌɾɚjə]/ [wʌdʒə]",
+       "are / you đọc nhẹ; /t/ có thể thành flap [ɾ].",
+       "What are you GOOD at? → I’m good at cooking.",
+       "LUYỆN: nói rõ → nói liền cụm → hỏi & đáp. Nhấn LIKE / FOOD / GOOD, không ép nói nhanh."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Activate",
+    "slides": [
+     {
+      "title": "ACTIVATE · BUILD THE QUESTION",
+      "lines": [
+       "ACTIVATE · BUILD THE QUESTION",
+       "Từ gợi ý thành câu hỏi",
+       "Giữ đúng thứ tự. Partner trả lời bằng thông tin thật.",
+       "WHERE / YOU / LIVE",
+       "Hỏi nơi sinh sống.",
+       "WHERE / YOUR FRIEND / NOW",
+       "Hỏi vị trí hiện tại.",
+       "WHAT TIME / SHE / START WORK",
+       "Hỏi giờ bắt đầu.",
+       "WHY / YOU / TIRED",
+       "Hỏi lý do.",
+       "WHAT KIND OF FOOD / YOU / LIKE",
+       "Hỏi loại đồ ăn.",
+       "HOW OFTEN / THEY / EAT OUT",
+       "Hỏi tần suất.",
+       "Vòng 2: đổi YOU thành HE/SHE hoặc đổi chủ ngữ thành cụm danh từ."
+      ]
+     },
+     {
+      "title": "ACTIVATE · REPAIR",
+      "lines": [
+       "ACTIVATE · REPAIR",
+       "Sửa câu, rồi dùng ngay",
+       "Mỗi câu có một lỗi về hệ hoặc thứ tự. Nói câu đúng.",
+       "Where you work?",
+       "Thêm từ cần thiết.",
+       "Why do you tired?",
+       "Chọn đúng hệ.",
+       "How long does it takes?",
+       "Sau DOES dùng dạng nào?",
+       "What kind food do you like?",
+       "Thiếu từ gì?",
+       "Who does cook dinner?",
+       "Hỏi ai là người nấu.",
+       "How to I pay by card?",
+       "Tạo câu hỏi trực tiếp.",
+       "Sau khi sửa, chọn 2 câu để hỏi giáo viên."
+      ]
+     },
+     {
+      "title": "ACTIVATE · VIETNAMESE TO ENGLISH",
+      "lines": [
+       "ACTIVATE · VIETNAMESE TO ENGLISH",
+       "Từ ý tiếng Việt đến câu hỏi",
+       "Nói trước khi xem mẫu. Dùng DO/DOES hoặc BE phù hợp.",
+       "Bạn làm nghề gì?",
+       "Hỏi nghề nghiệp.",
+       "Nhà hàng này cách đây bao xa?",
+       "Hỏi khoảng cách.",
+       "Đi đến đó mất bao lâu?",
+       "Hỏi thời gian cần thiết.",
+       "Vé này giá bao nhiêu?",
+       "Dùng COST hoặc BE.",
+       "Bạn thích loại phim nào?",
+       "Hỏi loại phim.",
+       "Bạn có thể chỉ tôi cách đặt bàn không?",
+       "Dùng HOW TO trong câu.",
+       "Mỗi câu hỏi cần một câu trả lời đúng loại thông tin."
+      ]
+     },
+     {
+      "title": "ACTIVATE · ANSWER TO QUESTION",
+      "lines": [
+       "ACTIVATE · ANSWER TO QUESTION",
+       "Nghe câu trả lời, đặt câu hỏi phù hợp",
+       "Giáo viên đọc đáp án. Học viên hỏi để lấy đúng thông tin đó.",
+       "By motorbike.",
+       "Hỏi phương tiện đến nơi làm việc.",
+       "Twice a month.",
+       "Hỏi tần suất gặp bạn bè.",
+       "For about an hour.",
+       "Hỏi thời gian học mỗi tối.",
+       "Because it’s quiet.",
+       "Hỏi lý do thích quán này.",
+       "The blue one is mine.",
+       "Hỏi chiếc túi nào của người nói.",
+       "My mother does.",
+       "Hỏi ai nấu bữa tối.",
+       "Có thể có nhiều câu đúng. Nêu rõ ngữ cảnh trước khi hỏi."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Real talk",
+    "slides": [
+     {
+      "title": "REAL TALK · SCENE 1",
+      "lines": [
+       "REAL TALK · SCENE 1",
+       "Làm quen để tìm điểm chung",
+       "Bạn gặp một người mới. Tìm một hoạt động cả hai đều thích và có thể làm cùng nhau.",
+       "ASK ABOUT",
+       "Work / hometown",
+       "Free-time activities",
+       "Frequency",
+       "Favorite kind of food",
+       "A free day to meet",
+       "YOUR GOAL",
+       "Thống nhất một hoạt động",
+       "và một thời điểm.",
+       "Hỏi tiếp từ câu trả lời:",
+       "Why? / How often? / When?"
+      ]
+     },
+     {
+      "title": "REAL TALK · SCENE 3",
+      "lines": [
+       "REAL TALK · SCENE 3",
+       "Chọn một quán ăn cho cuối tuần",
+       "Hỏi để chọn quán, cách di chuyển và thời gian gặp. Partner dùng thông tin dưới đây.",
+       "RIVER CAFÉ",
+       "Local food / near the river",
+       "3 km / 10 minutes by taxi",
+       "About $8 per person",
+       "Book by phone",
+       "GARDEN RESTAURANT",
+       "Seafood / across from the park",
+       "6 km / 20 minutes by taxi",
+       "About $15 per person",
+       "Book online",
+       "GOAL: chọn một nơi và giải thích lý do. Hỏi thêm cách đặt bàn bằng HOW TO."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Reflect",
+    "slides": [
+     {
+      "title": "REFLECT & RETRY · REPAIR",
+      "lines": [
+       "REFLECT & RETRY · REPAIR",
+       "Một câu hỏi rõ hơn sau mỗi lần thử",
+       "Giáo viên chọn một lỗi, học viên nói lại rồi đổi thông tin.",
+       "Chọn đúng loại thông tin",
+       "How far → kilometers. How long → minutes.",
+       "Chọn đúng hệ",
+       "Where do you work? / Where are you?",
+       "Giữ động từ nguyên mẫu",
+       "How much does it cost?",
+       "Nghe để hỏi tiếp",
+       "By bus. → How long does it take?",
+       "THỬ LẠI: trò chuyện 60–90 giây, hỏi ít nhất 4 câu không nhìn mẫu."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Mission",
+    "slides": [
+     {
+      "title": "DAILY MISSION · 3-DAY PRACTICE",
+      "lines": [
+       "DAILY MISSION · 3-DAY PRACTICE",
+       "Ba ngày để dùng lại câu hỏi",
+       "Mỗi ngày 5–7 phút. Tự hỏi trước khi mở mẫu.",
+       "DAY 1 · RECALL",
+       "Gọi lại 6 câu hỏi, chọn cả DO và BE.",
+       "DAY 1 · ANSWER",
+       "Trả lời thật, thêm một chi tiết.",
+       "DAY 2 · LISTEN",
+       "Nghe hội thoại bên dưới, ghi 5 thông tin.",
+       "DAY 2 · SWITCH",
+       "Đổi YOU thành HE/SHE và hỏi lại.",
+       "DAY 3 · REAL USE",
+       "Hỏi một người 5 câu về lịch trình.",
+       "DAY 3 · RECORD",
+       "Đọc đoạn cuối, rồi ghi âm bản của bạn.",
+       "Gửi: 1 đoạn ghi âm + 1 câu bạn đã tự sửa."
+      ]
+     },
+     {
+      "title": "DAILY MISSION · READ & RECORD",
+      "lines": [
+       "DAILY MISSION · READ & RECORD",
+       "Questions for a weekend plan",
+       "Đọc theo cụm, rồi thay thông tin để ghi âm bản của bạn trong 1–2 phút.",
+       "When are you free this weekend? I’m free on Saturday morning.",
+       "What kind of food do you like? I like seafood and local dishes.",
+       "Which restaurant do you prefer? I prefer the one near the river.",
+       "How far is it from here? It’s about three kilometers away.",
+       "How long does it take to get there? About ten minutes by taxi.",
+       "How much does it cost? About eight dollars per person.",
+       "How often do you eat there? Once or twice a month.",
+       "Can you show me how to book a table? Sure. Call this number.",
+       "RETRY: bỏ mẫu, tự hỏi và trả lời ít nhất 5 câu bằng thông tin thật."
+      ]
+     }
     ]
    }
   ],

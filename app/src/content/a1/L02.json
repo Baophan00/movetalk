@@ -344,45 +344,448 @@
      "IT đi với DO hay DOES?",
      "Sau khi sửa, chọn hai câu và hỏi thật."
     ]
-   },
+   }
+  ],
+  "flow": [
    {
-    "section": "PRONUNCIATION · CONTRACTIONS",
-    "sub": "Nói liền chủ ngữ và BE",
-    "lines": [
-     "Nghe mẫu, nói chậm rõ rồi nói tự nhiên.",
-     "HE / SHE / IT",
-     "He’s a teacher.",
-     "/hiːz/",
-     "WE / YOU/ THEY",
-     "We’re READY.",
-     "/wɪr/",
-     "Short answers: giữ rõ từ mang câu trả lời",
-     "Yes, she IS. No, she ISN’T. Yes, they ARE. No, they AREN’T.",
-     "Câu trả lời ngắn khẳng định: Yes, she is. Không nói Yes, she’s.",
-     "She’s at work.",
-     "/ʃiːz /",
-     "It’s a /an/ in/ on/ at",
-     "They’re FRIENDLY.",
-     "/ðer/",
-     "You’re VERY KIND.",
-     "/ɪts /",
-     "/ jʊr / ; /jər/"
+    "group": "Warm-up",
+    "slides": [
+     {
+      "title": "MOVE.",
+      "lines": [
+       "MOVE.",
+       "ACTIVATE 1",
+       "L02 · EXPAND THE SUBJECT",
+       "Cùng ý muốn hỏi.",
+       "Đổi chủ ngữ, chọn đúng cấu trúc.",
+       "IS / DOES…?",
+       "or",
+       "ARE / DO…?",
+       "ASK → ANSWER → FOLLOW UP",
+       "HE / SHE / IT · WE / THEY"
+      ]
+     },
+     {
+      "title": "RECALL & CONNECT",
+      "lines": [
+       "RECALL & CONNECT",
+       "Từ L02 đến L02",
+       "Chọn Do / Are. Hỏi và trả lời ngắn trước khi đổi chủ ngữ.",
+       "___ you busy today?",
+       "Bạn bận hôm nay không?",
+       "___ you work nearby?",
+       "Bạn làm việc gần đây không?",
+       "___ you free this weekend?",
+       "Cuối tuần bạn rảnh không?",
+       "___ you like your job?",
+       "Bạn thích công việc của mình không?",
+       "___ you tired after work?",
+       "Sau giờ làm bạn có mệt không?",
+       "___ you use English at work?",
+       "Bạn có dùng tiếng Anh ở chỗ làm không?",
+       "Tiếp theo: hỏi về he / she / it và we / they."
+      ]
+     }
     ]
    },
    {
-    "section": "PRONUNCIATION · QUESTION RHYTHM",
-    "sub": "Nhịp câu hỏi và câu trả lời",
-    "lines": [
-     "Nhấn thông tin chính. Giữ DOES / DO rõ đủ để người nghe hiểu.",
-     "DOES SHE…?",
-     "Does she WORK near HERE?",
-     "Does she /dʌz ʃiː/ · V sau DOES không có -s",
-     "DO THEY…?",
-     "Do they WORK toGETHER?",
-     "Do they /də ðeɪ/ khi nói nhẹ",
-     "Trả lời bằng đúng chủ ngữ và trợ động từ",
-     "Yes, she DOES. No, he DOESN’T. Yes, they DO. No, we DON’T.",
-     "Đổi lượt: hỏi, nghe, trả lời. Không chỉ đọc đồng thanh."
+    "group": "Before you listen",
+    "slides": [
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "WORK · BEFORE YOU LISTEN",
+       "Trả lời về bạn. Nghe hai lượt rồi ghi từ khóa, chưa mở transcript.",
+       "TALK FIRST",
+       "Is your coworker friendly?",
+       "Do your friends eat lunch together?",
+       "LISTENING MISSION",
+       "Who is new at work?",
+       "Is Mia friendly?",
+       "Are her teammates busy today?",
+       "Lượt 1: hiểu ý. Lượt 2: nhận diện IS / DOES / ARE / DO."
+      ]
+     },
+     {
+      "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+      "lines": [
+       "LISTEN & DISCOVER · BEFORE LISTENING",
+       "FAMILY · BEFORE YOU LISTEN",
+       "Trả lời về bạn. Nghe hai lượt rồi ghi từ khóa, chưa mở transcript.",
+       "TALK FIRST",
+       "Do your parents live near you?",
+       "Is someone in your family a good cook?",
+       "LISTENING MISSION",
+       "Who is Minh?",
+       "Does he live near Lan?",
+       "Are their parents in Da Nang?",
+       "Lượt 1: hiểu ý. Lượt 2: nhận diện IS / DOES / ARE / DO."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Pronunciation",
+    "slides": [
+     {
+      "title": "PRONUNCIATION · CONTRACTIONS",
+      "lines": [
+       "PRONUNCIATION · CONTRACTIONS",
+       "Nói liền chủ ngữ và BE",
+       "Nghe mẫu, nói chậm rõ rồi nói tự nhiên.",
+       "HE / SHE / IT",
+       "He’s a teacher.",
+       "/hiːz/",
+       "WE / YOU/ THEY",
+       "We’re READY.",
+       "/wɪr/",
+       "Short answers: giữ rõ từ mang câu trả lời",
+       "Yes, she IS. No, she ISN’T. Yes, they ARE. No, they AREN’T.",
+       "Câu trả lời ngắn khẳng định: Yes, she is. Không nói Yes, she’s.",
+       "She’s at work.",
+       "/ʃiːz /",
+       "It’s a /an/ in/ on/ at",
+       "They’re FRIENDLY.",
+       "/ðer/",
+       "You’re VERY KIND.",
+       "/ɪts /",
+       "/ jʊr / ; /jər/"
+      ]
+     },
+     {
+      "title": "PRONUNCIATION · QUESTION RHYTHM",
+      "lines": [
+       "PRONUNCIATION · QUESTION RHYTHM",
+       "Nhịp câu hỏi và câu trả lời",
+       "Nhấn thông tin chính. Giữ DOES / DO rõ đủ để người nghe hiểu.",
+       "DOES SHE…?",
+       "Does she WORK near HERE?",
+       "Does she /dʌz ʃiː/ · V sau DOES không có -s",
+       "DO THEY…?",
+       "Do they WORK toGETHER?",
+       "Do they /də ðeɪ/ khi nói nhẹ",
+       "Trả lời bằng đúng chủ ngữ và trợ động từ",
+       "Yes, she DOES. No, he DOESN’T. Yes, they DO. No, we DON’T.",
+       "Đổi lượt: hỏi, nghe, trả lời. Không chỉ đọc đồng thanh."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Activate",
+    "slides": [
+     {
+      "title": "ACTIVATE · CUE TO QUESTION",
+      "lines": [
+       "ACTIVATE · CUE TO QUESTION",
+       "Từ chủ ngữ và gợi ý đến câu hỏi",
+       "Vòng đầu có thời gian chuẩn bị. Tăng tốc khi chọn cấu trúc ổn định.",
+       "HE",
+       "eat breakfast at home",
+       "SHE",
+       "available today",
+       "THEY",
+       "ride bikes",
+       "THEY",
+       "hungry now",
+       "IT",
+       "open on Sundays",
+       "WE",
+       "need a table",
+       "Vòng 2: chỉ nghe cue. Vòng 3: trả lời câu hỏi vừa tạo."
+      ]
+     },
+     {
+      "title": "ACTIVATE · VIETNAMESE TO ENGLISH",
+      "lines": [
+       "ACTIVATE · VIETNAMESE TO ENGLISH",
+       "Từ ý tiếng Việt đến câu hỏi",
+       "Nói thành tiếng trước khi mở đáp án.",
+       "Anh ấy ăn sáng ở nhà không?",
+       "HE / eat breakfast",
+       "Cô ấy bận hôm nay không?",
+       "SHE / busy today",
+       "Họ thích cà phê không?",
+       "THEY / like coffee",
+       "Họ khát nước không?",
+       "THEY / thirsty",
+       "Quán đó mở vào Chủ nhật không?",
+       "IT / open on Sundays",
+       "Chúng ta cần đặt bàn không?",
+       "WE / need to book a table",
+       "Chọn chủ ngữ, chọn VERB / BE, rồi hỏi. Không cần dịch từng từ."
+      ]
+     },
+     {
+      "title": "ACTIVATE · SWITCH THE SUBJECT",
+      "lines": [
+       "ACTIVATE · SWITCH THE SUBJECT",
+       "Giữ ý, đổi chủ ngữ",
+       "Giáo viên đọc cue. Học viên hỏi, partner trả lời.",
+       "SHE",
+       "work here",
+       "THEY",
+       "work here",
+       "HE",
+       "busy today",
+       "WE",
+       "busy today",
+       "IT",
+       "new",
+       "THEY",
+       "new",
+       "Lượt cuối: giáo viên đổi cue ngẫu nhiên, học viên tự chọn cấu trúc."
+      ]
+     },
+     {
+      "title": "ACTIVATE · FOLLOW-UP",
+      "lines": [
+       "ACTIVATE · FOLLOW-UP",
+       "Hỏi tiếp từ câu trả lời",
+       "Mượn mẫu để nói về người thật. ADD là phần hỗ trợ.",
+       "QUESTION",
+       "Does she",
+       "live near you",
+       "?",
+       "ANSWER",
+       "Yes, she does.",
+       "ADD",
+       "She",
+       "lives next door.",
+       "ASK BACK",
+       "Is she your coworker?",
+       "Nghe chi tiết: next door. Chọn câu tiếp theo có liên quan."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Real talk",
+    "slides": [
+     {
+      "title": "REAL TALK · MISSION GUIDE",
+      "lines": [
+       "REAL TALK · MISSION GUIDE",
+       "Hỏi để hiểu người khác",
+       "Chọn một người, một nhóm hoặc một địa điểm. Hỏi để đạt mục tiêu.",
+       "ENTER THE SCENE",
+       "Chọn người hoặc nhóm có thật. Giải thích he / she / it / they chỉ ai.",
+       "USE THE OPENER",
+       "Dùng một câu mở đầu rồi hỏi theo câu trả lời của partner.",
+       "ASK & RESPOND",
+       "Dùng IS / DOES cho một người hoặc một vật; ARE / DO cho nhóm.",
+       "LISTEN & FOLLOW",
+       "Nghe chi tiết trong câu trả lời để hỏi tiếp. Đừng đọc danh sách câu hỏi.",
+       "MISSION COMPLETE WHEN…",
+       "Bạn hỏi và trả lời đúng chủ ngữ,",
+       "có ít nhất một câu hỏi tiếp nối.",
+       "□ IS / DOES □ ARE / DO □ follow-up □ mục tiêu hoàn thành",
+       "Chuẩn bị 20 giây. Lượt đầu được nhìn cue, lượt hai giảm hỗ trợ."
+      ]
+     },
+     {
+      "title": "REAL TALK · SCENE 1 · NEIGHBOR",
+      "lines": [
+       "REAL TALK · SCENE 1 · NEIGHBOR",
+       "Tìm hiểu hàng xóm mới",
+       "Partner nói: “I have a new neighbor.” Tìm một sở thích chung để bắt chuyện.",
+       "IMAGINE THE MOMENT",
+       "Người đó là ai?",
+       "Bạn muốn tìm điểm chung nào?",
+       "Câu trả lời vừa rồi gợi ý gì?",
+       "IDEA PATHS — KHÔNG PHẢI CÂU HỎI MẪU",
+       "work",
+       "coffee / tea",
+       "free time",
+       "nearby places",
+       "START WITH…",
+       "“Is your new neighbor friendly?”",
+       "NOW KEEP IT GOING",
+       "Q1",
+       "IS / DOES __________________________________________ ?",
+       "Q2",
+       "IS / DOES __________________________________________ ?",
+       "Q3",
+       "IS / DOES __________________________________________ ?",
+       "Hỏi về một người. Phản hồi rồi hỏi tiếp từ điều vừa nghe."
+      ]
+     },
+     {
+      "title": "REAL TALK · SCENE 2 · PHOTO",
+      "lines": [
+       "REAL TALK · SCENE 2 · PHOTO",
+       "Một người và một nhóm trong ảnh",
+       "Dùng ảnh gia đình hoặc tưởng tượng. Tìm hiểu ai sống cùng nhau và một hoạt động chung.",
+       "IMAGINE THE MOMENT",
+       "Chọn một người và một nhóm.",
+       "Nói rõ he / she / they chỉ ai.",
+       "Nghe để hỏi tiếp.",
+       "IDEA PATHS — KHÔNG PHẢI CÂU HỎI MẪU",
+       "family",
+       "home",
+       "meals",
+       "weekends",
+       "START WITH…",
+       "“Is he your brother?”",
+       "NOW KEEP IT GOING",
+       "Q1",
+       "IS / DOES __________________________________________ ?",
+       "Q2",
+       "ARE / DO __________________________________________ ?",
+       "Q3",
+       "IS / DOES / ARE / DO ______________________________ ?",
+       "Mục tiêu: biết mối quan hệ, nơi ở và một hoạt động chung."
+      ]
+     },
+     {
+      "title": "REAL TALK · SCENE 3 · CAFÉ",
+      "lines": [
+       "REAL TALK · SCENE 3 · CAFÉ",
+       "Chọn quán cho nhóm bạn",
+       "Hỏi về quán và lịch của nhóm để thống nhất nơi gặp, giờ gặp.",
+       "IMAGINE THE MOMENT",
+       "IT chỉ quán đang được nói đến.",
+       "THEY chỉ nhóm bạn khác.",
+       "WE gồm bạn và người đối diện.",
+       "IDEA PATHS — KHÔNG PHẢI CÂU HỎI MẪU",
+       "open",
+       "breakfast",
+       "free time",
+       "booking",
+       "START WITH…",
+       "“Is it open on Sundays?”",
+       "NOW KEEP IT GOING",
+       "Q1",
+       "IS / DOES __________________________________________ ?",
+       "Q2",
+       "ARE / DO __________________________________________ ?",
+       "Q3",
+       "ARE WE / DO WE __________________________________ ?",
+       "Mục tiêu: chốt quán và giờ gặp, kiểm tra có cần đặt bàn không."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Reflect",
+    "slides": [
+     {
+      "title": "REFLECT & RETRY · FEEDBACK",
+      "lines": [
+       "REFLECT & RETRY · FEEDBACK",
+       "Sửa câu rồi thử lại",
+       "Chọn một lỗi về cấu trúc và một điểm phát âm. Nói lại 60–90 giây.",
+       "MY NEXT TRY",
+       "PARTNER CHECK",
+       "Câu tôi muốn sửa: __________",
+       "Câu sau khi sửa: __________",
+       "Cụm cần nói rõ: __________",
+       "Lượt 2: không nhìn mẫu.",
+       "Đổi một chi tiết và thử lại.",
+       "Tôi hiểu được câu hỏi.",
+       "Chủ ngữ đi đúng IS / ARE / DO / DOES.",
+       "Sau DOES dùng động từ nguyên mẫu.",
+       "Câu trả lời đúng chủ ngữ.",
+       "Cuộc trao đổi có kết quả.",
+       "Lượt 2: đổi một người thành một nhóm. Tự chọn lại cấu trúc."
+      ]
+     }
+    ]
+   },
+   {
+    "group": "Mission",
+    "slides": [
+     {
+      "title": "DAILY MISSION · 3-DAY PRACTICE",
+      "lines": [
+       "DAILY MISSION · 3-DAY PRACTICE",
+       "Luyện lại trong ba ngày",
+       "Mỗi lần 5–7 phút. Thử gọi lại trước khi mở mẫu.",
+       "DAY 1 / DAY 2",
+       "Ngày 1: nghe lại bài Work.",
+       "Che chữ, trả lời câu hỏi.",
+       "Ngày 2: hỏi về một người",
+       "và một nhóm có thật.",
+       "DAY 3",
+       "Ghi âm hai vai.",
+       "Có IS / DOES / ARE / DO.",
+       "Dùng lại 4 chunks của L02.",
+       "NEXT CLASS · Nghe cue he / she / it / we / they, tạo câu hỏi rồi trả lời.",
+       "Tự kiểm tra: sau DOES tôi còn thêm -s không? Tôi trả lời đúng chủ ngữ chưa?"
+      ]
+     },
+     {
+      "title": "DAILY MISSION · EXTRA LISTENING",
+      "lines": [
+       "DAILY MISSION · EXTRA LISTENING",
+       "CAFÉ · BEFORE YOU LISTEN",
+       "Trả lời về bạn. Nghe hai lượt rồi ghi từ khóa, chưa mở transcript.",
+       "TALK FIRST",
+       "Do you meet friends at cafés?",
+       "Are your friends free on Sundays?",
+       "LISTENING MISSION",
+       "Is the café open on Sundays?",
+       "Does it serve breakfast?",
+       "Are Leo’s friends free this Sunday?",
+       "Lượt 1: hiểu ý. Lượt 2: nhận diện IS / DOES / ARE / DO."
+      ]
+     },
+     {
+      "title": "DAILY MISSION · LISTEN & CHECK",
+      "lines": [
+       "DAILY MISSION · LISTEN & CHECK",
+       "CAFÉ · MIA & LEO",
+       "Xem sau khi nghe. Tìm câu hỏi mục tiêu rồi luyện theo vai.",
+       "MIA",
+       "A",
+       "Is the café near the park open on Sundays?",
+       "LEO",
+       "B",
+       "Yes, it is. I go there with my friends.",
+       "MIA",
+       "A",
+       "Does it serve breakfast?",
+       "LEO",
+       "B",
+       "Yes, it does. The food is good.",
+       "MIA",
+       "A",
+       "Are your friends free this Sunday?",
+       "LEO",
+       "B",
+       "Yes, they are. We can meet in the morning.",
+       "MIA",
+       "A",
+       "Do they like quiet cafés?",
+       "LEO",
+       "B",
+       "Yes, they do. They like talking over coffee.",
+       "MIA",
+       "A",
+       "Do we need to book a table?",
+       "LEO",
+       "B",
+       "No, we don’t. It’s usually quiet before lunch.",
+       "NOTICE: sau DOES dùng động từ nguyên mẫu; trả lời đúng chủ ngữ."
+      ]
+     },
+     {
+      "title": "DAILY MISSION · READ & RECORD",
+      "lines": [
+       "DAILY MISSION · READ & RECORD",
+       "A Sunday with my family",
+       "Đọc theo cụm, luyện contraction và nối âm. Sau đó ghi âm cả bài gửi cô.",
+       "Hi, I’m Linh. My brother’s name is Minh. He’s a driver, and he’s a little tired after work. My sister is Mai. She’s a teacher, and she’s at home today. She likes cooking dinner for our parents.",
+       "Our parents live near a park. They’re friendly, and they’re always happy to see us. We’re a close family. On Sundays, we’re often at a café near the supermarket. It’s a small café, and it’s open for breakfast. The coffee is good. We eat breakfast together and talk about our week. After breakfast, we ride our bikes to the park.",
+       "he’s‿a driver",
+       "she’s‿a teacher",
+       "it’s‿a small café",
+       "we’re‿often",
+       "they’re‿always",
+       "Luyện 2 lượt rồi ghi âm 1 lượt, khoảng 60–90 giây. Giữ âm cuối và nhịp câu tự nhiên."
+      ]
+     }
     ]
    }
   ],

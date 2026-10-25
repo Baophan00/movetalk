@@ -2,7 +2,7 @@ import { BookOpen, ClipboardList, Layers, Upload } from 'lucide-react'
 import { Card, CardBody, CardHeader, CardTitle } from '../components/ui/card'
 import { Badge } from '../components/ui/badge'
 import { Button } from '../components/ui/button'
-import { LESSONS } from '../lib/lessons'
+import { A1, titleOf } from '../lib/curriculum'
 
 export function TeacherAssignments() {
   return (
@@ -44,17 +44,17 @@ export function TeacherAssignments() {
         <Card>
           <CardHeader>
             <CardTitle>Content library</CardTitle>
-            <Badge tone="primary">{LESSONS.length}</Badge>
+            <Badge tone="primary">{A1.length}</Badge>
           </CardHeader>
           <CardBody className="pt-1">
             <p className="text-[12px] text-muted">What you can hand out. Toggle per student, preview as they see it.</p>
             <ul className="mt-3 space-y-1.5">
-              {LESSONS.map((l) => (
+              {A1.map((l) => (
                 <li key={l.n} className="flex items-center gap-2.5 rounded-xl border border-line px-3 py-2">
                   <span className="grid h-6 w-6 place-items-center rounded-md bg-primary-soft text-[10px] font-bold text-primary">
                     {String(l.n).padStart(2, '0')}
                   </span>
-                  <span className="min-w-0 flex-1 truncate text-[12.5px] font-medium">{l.title}</span>
+                  <span className="min-w-0 flex-1 truncate text-[12.5px] font-medium">{titleOf(l) || `Lesson ${l.n}`}</span>
                   <Badge tone="ok">live</Badge>
                 </li>
               ))}
