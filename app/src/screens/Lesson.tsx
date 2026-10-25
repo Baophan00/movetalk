@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'motion/react'
-import { ArrowLeft, ArrowRight, Check, ChevronRight, CircleCheck, Volume2 } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, ChevronRight, Volume2 } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Progress } from '../components/ui/progress'
 import { A1, lessonA1, partPlan, quizFor, titleOf, type FlowGroup, type LessonFile } from '../lib/curriculum'
@@ -36,56 +36,89 @@ function Vocabulary({ items }: { items: LessonFile['parts']['vocab'] }) {
   const toggle = (w: string) => setOpen((o) => (o.includes(w) ? o.filter((x) => x !== w) : [...o, w]))
 
   return (
-    <div className="grid gap-2 sm:grid-cols-2">
-      {items.map((v) => {
-        const isOpen = open.includes(v.word)
-        return (
-          <div
-            key={v.word}
-            role="button"
-            tabIndex={0}
-            aria-expanded={isOpen}
-            onClick={() => toggle(v.word)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault()
-                toggle(v.word)
-              }
-            }}
-            className={cn(
-              'cursor-pointer rounded-2xl border p-3.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40',
-              isOpen ? 'border-primary/30 bg-primary-soft/60' : 'border-line bg-surface hover:border-primary/30',
-            )}
-          >
-            <div className="flex items-start gap-2">
-              <div className="min-w-0 flex-1">
-                <span className="block truncate text-[14.5px] font-semibold">{v.word}</span>
-                <span className="block truncate text-[11.5px] text-muted">
-                  {v.pos}
-                  {v.ipa && (
-                    <>
-                      <span className="mx-1 opacity-40">·</span>
-                      <span className="font-mono">{v.ipa}</span>
-                    </>
+    <div>
+      <p className="mb-2 flex items-center justify-between text-[11.5px] text-muted">
+        <span>Tap a word for the Vietnamese meaning.</span>
+        <span>{items.length} words</span>
+      </p>
+      <ul className="divide-y divide-line/60 overflow-hidden rounded-2xl border border-line">
+        {items.map((v) => {
+          const isOpen = open.includes(v.word)
+          return (
+            <li key={v.word} className={cn('transition-colors', isOpen ? 'bg-primary-soft/45' : 'bg-surface hover:bg-bg/60')}>
+              <div
+                role="button"
+                tabIndex={0}
+                aria-expanded={isOpen}
+                onClick={() => toggle(v.word)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    toggle(v.word)
+                  }
+                }}
+                className="flex cursor-pointer items-center gap-2.5 px-3.5 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+              >
+                <div className="flex min-w-0 flex-1 items-baseline gap-2">
+                  <p className="shrink-0 text-[15px] font-semibold leading-tight text-ink">{v.word}</p>
+                  {v.ipa && <p className="truncate font-mono text-[11.5px] text-muted">{v.ipa}</p>}
+                  {v.pos && (
+                    <span className="shrink-0 rounded bg-ink/[.05] px-1.5 py-px text-[9.5px] font-semibold uppercase tracking-wide text-muted">
+                      {v.pos}
+                    </span>
                   )}
+                </div>
+                <span onClick={(e) => e.stopPropagation()}>
+                  <PlayButton text={v.word} small />
                 </span>
+                <ChevronRight className={cn('h-4 w-4 shrink-0 text-muted transition-transform', isOpen && 'rotate-90')} />
               </div>
-              <span onClick={(e) => e.stopPropagation()}>
-                <PlayButton text={v.word} small />
-              </span>
+              {isOpen && (
+                <div className="px-3.5 pb-3">
+                  <p className="text-[13px] font-medium text-ink">{v.vi}</p>
+                  {v.def && <p className="mt-0.5 text-[12px] text-muted">{v.def}</p>}
+                  {v.example && <p className="mt-1.5 border-l-2 border-primary/25 pl-2 text-[12.5px] italic text-ink/75">{v.example}</p>}
+                  {v.cloze && <p className="mt-1 text-[11.5px] text-muted">Fill in: {v.cloze}</p>}
+                </div>
+              )}
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
+
+const VI_CHARS = /[àáảãạăằắẳẵặâầấẩẫậđèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵ]/i
+
+function Dialogue({ turns }: { turns: LessonFile['parts']['dialogue'] }) {
+  return (
+    <div className="space-y-2.5">
+      {turns.map((t, i) => {
+        const mine = i % 2 === 1
+        return (
+          <div key={`${t.who}-${i}`} className={cn('flex items-end gap-2', mine && 'flex-row-reverse')}>
+            <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary-soft text-[10px] font-bold text-primary">
+              {t.who.slice(0, 1)}
+            </span>
+            <div className={cn('max-w-[82%]', mine ? 'items-end text-right' : 'items-start')}>
+              <p className={cn('mb-0.5 px-1 text-[10px] font-semibold uppercase tracking-wide text-muted', mine && 'text-right')}>{t.who}</p>
+              <div
+                className={cn(
+                  'group inline-flex items-start gap-2 rounded-2xl px-3 py-2 text-left',
+                  mine ? 'rounded-br-md bg-primary text-white' : 'rounded-bl-md bg-bg text-ink',
+                )}
+              >
+                <p className="min-w-0 text-[13px] leading-snug">{t.line}</p>
+                <button
+                  onClick={() => speak(t.line)}
+                  className={cn('mt-0.5 shrink-0 opacity-60 transition-opacity hover:opacity-100', mine ? 'text-white' : 'text-primary')}
+                  aria-label={PLAY_LABEL}
+                >
+                  <Volume2 className="h-3.5 w-3.5" />
+                </button>
+              </div>
             </div>
-            {isOpen ? (
-              <div className="mt-2 border-t border-line/70 pt-2">
-                <p className="text-[12.5px] font-medium">{v.vi}</p>
-                {v.def && <p className="text-[11.5px] text-muted">{v.def}</p>}
-                {v.example && <p className="mt-1.5 text-[12px] italic text-ink/75">{v.example}</p>}
-                {v.cloze && <p className="mt-1 text-[11.5px] text-muted">Recall: {v.cloze}</p>}
-              </div>
-            ) : (
-              <p className="mt-2 flex items-center gap-1 text-[11px] text-muted">
-                Tap for the meaning <ChevronRight className="h-3 w-3" />
-              </p>
-            )}
           </div>
         )
       })}
@@ -93,44 +126,40 @@ function Vocabulary({ items }: { items: LessonFile['parts']['vocab'] }) {
   )
 }
 
-function Grammar({ sections }: { sections: LessonFile['parts']['grammar'] }) {
-  return (
-    <div className="space-y-3">
-      {sections.map((g) => (
-        <div key={g.section + g.sub} className="rounded-2xl border border-line bg-surface p-4">
-          <p className="text-[10.5px] font-bold uppercase tracking-[.14em] text-primary">{g.section}</p>
-          {g.sub && <p className="mt-1 text-[14px] font-semibold leading-snug">{g.sub}</p>}
-          <ul className="mt-2 space-y-1.5">
-            {g.lines.map((line, i) => (
-              <li key={`${line}-${i}`} className="flex items-start gap-1.5 text-[12.5px] leading-relaxed text-ink/80">
-                <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-ink/25" />
-                <span className="min-w-0 flex-1 break-words">{line}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </div>
-  )
+/** "Chọn Do hay Are" reads as an instruction, so show it in English; the note lines stay Vietnamese. */
+function englishSub(sub: string) {
+  const m = sub.match(/^Chọn\s+(.+?)\s+hay\s+(.+)$/i)
+  if (m) return `${m[1].trim()} or ${m[2].trim()}?`
+  return sub.replace(/\shay\s/gi, ' or ')
 }
 
-function Dialogue({ turns }: { turns: LessonFile['parts']['dialogue'] }) {
+function Grammar({ sections }: { sections: LessonFile['parts']['grammar'] }) {
   return (
-    <div className="space-y-2">
-      {turns.map((t, i) => (
-        <div key={`${t.who}-${i}`} className={cn('flex gap-2', i % 2 === 1 && 'flex-row-reverse')}>
-          <span className="mt-1 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary-soft text-[10.5px] font-bold text-primary">
-            {t.who.slice(0, 1)}
-          </span>
-          <div className={cn('max-w-[86%] rounded-2xl px-3.5 py-2', i % 2 === 1 ? 'bg-primary text-white' : 'bg-bg text-ink')}>
-            <div className="flex items-start gap-2">
-              <p className="min-w-0 flex-1 text-[13px] leading-snug">{t.line}</p>
-              <button onClick={() => speak(t.line)} className={cn('mt-0.5 shrink-0', i % 2 === 1 ? 'text-white/80' : 'text-primary')} aria-label={PLAY_LABEL}>
-                <Volume2 className="h-3.5 w-3.5" />
-              </button>
-            </div>
-            <p className={cn('mt-0.5 text-[10px] font-semibold uppercase tracking-wide', i % 2 === 1 ? 'text-white/60' : 'text-muted')}>{t.who}</p>
-          </div>
+    <div className="space-y-2.5">
+      {sections.map((g) => (
+        <div key={g.section + g.sub} className="rounded-2xl border border-line bg-surface px-4 py-3.5">
+          <p className="text-[10px] font-bold uppercase tracking-[.14em] text-primary">{g.section}</p>
+          {g.sub && <p className="mt-1 text-[14.5px] font-semibold leading-snug">{englishSub(g.sub)}</p>}
+          <ul className="mt-2 space-y-1">
+            {g.lines.map((line, i) => {
+              const vi = VI_CHARS.test(line)
+              const pattern = !vi && (/\+/.test(line) || /^[A-Z0-9 …?.,'\/-]{4,}$/.test(line))
+              return (
+                <li key={`${line}-${i}`} className={cn('flex items-start gap-2 text-[12.5px] leading-relaxed', vi ? 'text-muted' : 'text-ink/85')}>
+                  {!vi && !pattern && <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-ink/25" />}
+                  <span
+                    className={cn(
+                      'break-words',
+                      pattern ? 'rounded-md bg-ink/[.045] px-1.5 py-0.5 font-mono text-[11.5px] text-ink' : 'min-w-0 flex-1',
+                      vi && 'italic',
+                    )}
+                  >
+                    {line}
+                  </span>
+                </li>
+              )
+            })}
+          </ul>
         </div>
       ))}
     </div>
@@ -160,7 +189,7 @@ function Checks({ items }: { items: LessonFile['parts']['listenCheck'] }) {
 
 type PracticeItem = { prompt: string; vi?: string; options: string[]; answer: string }
 
-/** The handout's choose exercises, with the deck's own answer key. Tap an option, see at once. */
+/** The handout's choose exercises, with the deck's own answer key. One tap, immediate answer. */
 function Choose({ items, fallback }: { items: PracticeItem[]; fallback: LessonFile['parts']['grammarChoose'] }) {
   const [picked, setPicked] = useState<Record<number, string>>({})
 
@@ -183,57 +212,56 @@ function Choose({ items, fallback }: { items: PracticeItem[]; fallback: LessonFi
 
   return (
     <div>
-      <div className="mb-3 flex items-center justify-between text-[11.5px] text-muted">
-        <span>
-          {answered} of {items.length} answered
+      <div className="mb-2 flex items-center justify-between text-[11.5px] text-muted">
+        <span>Pick the missing word.</span>
+        <span className="tabular-nums">
+          {answered} / {items.length} answered · <span className="font-semibold text-ink">{right} right</span>
         </span>
-        <span className="font-semibold text-ink">{right} right</span>
       </div>
-      <div className="grid gap-2">
+      <ul className="divide-y divide-line/60 overflow-hidden rounded-2xl border border-line">
         {items.map((it, i) => {
           const pick = picked[i]
           const chosen = pick !== undefined
+          const ok = pick === it.answer
           return (
-            <div key={`${it.prompt}-${i}`} className="rounded-2xl border border-line bg-surface p-3.5">
-              <p className="text-[13.5px] font-medium">{it.prompt}</p>
-              {it.vi && <p className="mt-0.5 text-[11.5px] text-muted">{it.vi}</p>}
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                {it.options.map((opt) => {
-                  const isRight = opt === it.answer
-                  const isPick = opt === pick
-                  return (
-                    <button
-                      key={opt}
-                      disabled={chosen}
-                      onClick={() => setPicked((p) => ({ ...p, [i]: opt }))}
-                      className={cn(
-                        'rounded-xl border px-3 py-1.5 text-[12.5px] font-medium transition-colors',
-                        !chosen && 'border-line hover:border-primary/40 hover:bg-primary-soft/50',
-                        chosen && isRight && 'border-[#0f6b4f]/30 bg-[#c8f0e0] text-[#0f6b4f]',
-                        chosen && isPick && !isRight && 'border-[#8a2b22]/30 bg-[#fde4e1] text-[#8a2b22]',
-                        chosen && !isRight && !isPick && 'border-line text-muted opacity-60',
-                      )}
-                    >
-                      {opt}
-                    </button>
-                  )
-                })}
+            <li key={`${it.prompt}-${i}`} className={cn('bg-surface px-3.5 py-2.5', chosen && (ok ? 'bg-[#f1fbf5]' : 'bg-[#fdf3f2]'))}>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                <div className="min-w-0 flex-1">
+                  <p className="text-[13.5px] font-medium leading-snug">{it.prompt}</p>
+                  {it.vi && <p className="text-[11.5px] text-muted">{it.vi}</p>}
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {it.options.map((opt) => {
+                    const isRight = opt === it.answer
+                    const isPick = opt === pick
+                    return (
+                      <button
+                        key={opt}
+                        disabled={chosen}
+                        onClick={() => setPicked((p) => ({ ...p, [i]: opt }))}
+                        className={cn(
+                          'rounded-lg border px-2.5 py-1 text-[12.5px] font-medium transition-colors',
+                          !chosen && 'border-line hover:border-primary/40 hover:bg-primary-soft/60',
+                          chosen && isRight && 'border-[#0f6b4f]/30 bg-[#c8f0e0] text-[#0f6b4f]',
+                          chosen && isPick && !isRight && 'border-[#8a2b22]/30 bg-[#fde4e1] text-[#8a2b22]',
+                          chosen && !isRight && !isPick && 'border-line/70 text-muted opacity-50',
+                        )}
+                      >
+                        {opt}
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
-              {chosen && (
-                <p className="mt-1.5 text-[11.5px] font-semibold">
-                  {pick === it.answer ? (
-                    <span className="text-[#0f6b4f]">Right. Say the whole question out loud.</span>
-                  ) : (
-                    <span className="text-[#8a2b22]">
-                      It is "{it.answer}". Read it out loud once with that word.
-                    </span>
-                  )}
+              {chosen && !ok && (
+                <p className="mt-1.5 text-[11.5px] text-[#8a2b22]">
+                  It is “{it.answer}”. Say the whole question once with it.
                 </p>
               )}
-            </div>
+            </li>
           )
         })}
-      </div>
+      </ul>
     </div>
   )
 }
@@ -333,52 +361,54 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
   const totalWords = lesson.parts.vocab.length
 
   return (
-    <div className="mx-auto max-w-6xl overflow-x-hidden px-4 py-6 sm:px-6 lg:px-8">
-      <button onClick={onBack} className="mb-4 inline-flex items-center gap-1.5 text-[12.5px] text-muted transition-colors hover:text-ink">
-        <ArrowLeft className="h-3.5 w-3.5" /> Overview
-      </button>
-
-      <div className="mb-3 flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-        {A1.map((l) => (
-          <button
-            key={l.n}
-            onClick={() => onPickLesson(l.n)}
-            className={cn(
-              'shrink-0 rounded-xl border px-2.5 py-1.5 text-[11.5px] font-semibold tabular-nums transition-colors',
-              l.n === lesson.n ? 'border-primary/40 bg-primary text-white' : 'border-line bg-surface text-ink/70 hover:bg-primary-soft/60',
-            )}
+    <div className="mx-auto max-w-6xl overflow-x-hidden px-4 pb-10 pt-4 sm:px-6 lg:px-8">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <button onClick={onBack} className="inline-flex items-center gap-1.5 text-[12.5px] text-muted transition-colors hover:text-ink">
+          <ArrowLeft className="h-3.5 w-3.5" /> All lessons
+        </button>
+        <div className="flex items-center gap-1.5">
+          <Button variant="outline" size="icon" aria-label="Previous lesson" disabled={!prevLesson} onClick={() => prevLesson && onPickLesson(prevLesson.n)}>
+            <ArrowLeft className="h-3.5 w-3.5" />
+          </Button>
+          <select
+            value={lesson.n}
+            onChange={(e) => onPickLesson(Number(e.target.value))}
+            className="focus-ring h-8 rounded-xl border border-line bg-surface px-2 text-[12px] font-semibold tabular-nums"
+            aria-label="Choose a lesson"
           >
-            {String(l.n).padStart(2, '0')}
-          </button>
-        ))}
-      </div>
-
-      <div className="rounded-3xl border border-[#ded4fb] bg-[#f3efff] p-5 shadow-card sm:p-6">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="min-w-0">
-            <p className="text-[11px] font-bold uppercase tracking-[.14em] text-primary">Lesson {lesson.n} · A1</p>
-            <h2 className="mt-1 text-[24px] font-semibold leading-tight tracking-tight sm:text-[28px]">
-              {titleOf(lesson) || `Lesson ${lesson.n}`}
-            </h2>
-            <p className="mt-1 text-[13px] text-muted">
-              {totalWords} words · {parts.length} parts
-            </p>
-          </div>
-          <div className="w-full sm:w-[220px]">
-            <div className="flex items-center justify-between text-[11.5px] text-muted">
-              <span>Lesson progress</span>
-              <span className="font-semibold text-ink">
-                {seen.length}/{parts.length}
-              </span>
-            </div>
-            <Progress value={percent} className="mt-1.5" />
-          </div>
+            {A1.map((l) => (
+              <option key={l.n} value={l.n}>
+                Lesson {l.n} · {titleOf(l) || 'A1'}
+              </option>
+            ))}
+          </select>
+          <Button variant="outline" size="icon" aria-label="Next lesson" disabled={!nextLesson} onClick={() => nextLesson && onPickLesson(nextLesson.n)}>
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Button>
         </div>
       </div>
 
-      <div className="mt-5 grid gap-5 lg:grid-cols-[236px_1fr]">
-        <nav className="order-1 min-w-0 lg:order-none">
-          <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar lg:flex-col lg:overflow-visible">
+      <div className="mt-3 rounded-2xl border border-[#ded4fb] bg-[#f3efff] px-4 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+          <p className="text-[10.5px] font-bold uppercase tracking-[.14em] text-primary">
+            A1 · Lesson {lesson.n} of {A1.length}
+          </p>
+          <p className="shrink-0 text-[11.5px] text-muted">
+            {totalWords} words · {parts.length} parts · {percent}% opened
+          </p>
+        </div>
+        <div className="mt-2 flex items-center gap-3">
+          <Progress value={percent} className="h-1.5 flex-1" />
+          <span className="shrink-0 text-[11.5px] font-semibold tabular-nums text-ink">
+            {seen.length}/{parts.length}
+          </span>
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-4 lg:grid-cols-[228px_1fr]">
+        <nav className="min-w-0">
+          <p className="mb-1.5 hidden px-2 text-[10.5px] font-bold uppercase tracking-[.14em] text-muted lg:block">Parts</p>
+          <div className="flex gap-1 overflow-x-auto pb-1 no-scrollbar lg:flex-col lg:gap-0.5 lg:overflow-visible lg:pb-0">
             {parts.map((p, i) => {
               const done = seen.includes(i)
               const on = i === active
@@ -386,77 +416,55 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
                 <button
                   key={p.key}
                   onClick={() => setActive(i)}
+                  aria-current={on ? 'step' : undefined}
                   className={cn(
-                    'flex shrink-0 items-center gap-2 rounded-xl px-2.5 py-2 text-left text-[12.5px] font-medium transition-colors lg:w-full',
-                    on ? 'bg-primary-soft text-primary' : 'text-ink/70 hover:bg-ink/[.04]',
+                    'flex shrink-0 items-center gap-2 rounded-lg px-2 py-1.5 text-left text-[12.5px] transition-colors lg:w-full',
+                    on ? 'bg-primary/10 font-semibold text-primary' : 'text-ink/70 hover:bg-ink/[.04]',
                   )}
                 >
-                  <span
-                    className={cn(
-                      'grid h-5 w-5 shrink-0 place-items-center rounded-full text-[10px] font-bold',
-                      done ? 'bg-[#c8f0e0] text-[#0f6b4f]' : on ? 'bg-primary text-white' : 'bg-ink/[.06] text-muted',
-                    )}
-                  >
-                    {done ? <Check className="h-3 w-3" /> : i + 1}
+                  <span className={cn('w-5 shrink-0 text-right text-[10.5px] font-bold tabular-nums', on ? 'text-primary' : 'text-muted/80')}>
+                    {i + 1}
                   </span>
-                  <span className="whitespace-nowrap lg:whitespace-normal">{p.label}</span>
+                  <span className="min-w-0 flex-1 truncate">{p.label}</span>
+                  {done && <Check className={cn('h-3 w-3 shrink-0', on ? 'text-primary' : 'text-ok')} />}
                 </button>
               )
             })}
           </div>
         </nav>
 
-        <div className="order-2 min-w-0 lg:order-none">
-            <motion.div
-              key={`${lesson.n}-${active}`}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-              className="rounded-3xl border border-line bg-surface p-5 shadow-card sm:p-6"
-            >
-              <div className="mb-4 flex items-center justify-between gap-3 border-b border-line/70 pb-3">
-                <div>
-                  <p className="text-[10.5px] font-bold uppercase tracking-[.14em] text-muted">
-                    Part {active + 1} of {parts.length}
-                  </p>
-                  <p className="text-[15px] font-semibold">{parts[active]?.label}</p>
-                </div>
-                {seen.includes(active) && (
-                  <span className="inline-flex items-center gap-1 text-[11.5px] font-semibold text-ok">
-                    <CircleCheck className="h-3.5 w-3.5" /> opened
-                  </span>
-                )}
-              </div>
+        <div className="min-w-0">
+          <motion.div
+            key={`${lesson.n}-${active}`}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            className="rounded-2xl border border-line bg-surface p-4 shadow-card sm:p-5"
+          >
+            <div className="mb-3 flex items-baseline justify-between gap-3">
+              <h3 className="text-[16px] font-semibold tracking-tight">{parts[active]?.label}</h3>
+              <span className="shrink-0 text-[11px] tabular-nums text-muted">
+                {active + 1} / {parts.length}
+              </span>
+            </div>
 
-              {parts[active]?.node}
+            {parts[active]?.node}
 
-              <div className="mt-6 flex items-center justify-between gap-3 border-t border-line/70 pt-4">
-                <Button variant="ghost" size="sm" onClick={() => setActive((v) => Math.max(0, v - 1))} disabled={active === 0}>
-                  <ArrowLeft className="h-3.5 w-3.5" /> Previous part
+            <div className="mt-5 flex items-center justify-between gap-2 border-t border-line/60 pt-3.5">
+              <Button variant="ghost" size="sm" onClick={() => setActive((v) => Math.max(0, v - 1))} disabled={active === 0}>
+                <ArrowLeft className="h-3.5 w-3.5" /> Back
+              </Button>
+              {active < parts.length - 1 ? (
+                <Button size="sm" onClick={() => setActive((v) => v + 1)}>
+                  Next part <ArrowRight className="h-3.5 w-3.5" />
                 </Button>
-                {active < parts.length - 1 ? (
-                  <Button size="sm" onClick={() => setActive((v) => v + 1)}>
-                    Next part <ArrowRight className="h-3.5 w-3.5" />
-                  </Button>
-                ) : (
-                  <Button size="sm" onClick={() => nextLesson && onPickLesson(nextLesson.n)} disabled={!nextLesson}>
-                    Go to lesson {nextLesson ? nextLesson.n : ''} <ArrowRight className="h-3.5 w-3.5" />
-                  </Button>
-                )}
-              </div>
-            </motion.div>
-
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-surface/70 px-4 py-3">
-            <Button variant="outline" size="sm" onClick={() => prevLesson && onPickLesson(prevLesson.n)} disabled={!prevLesson}>
-              <ArrowLeft className="h-3.5 w-3.5" /> Lesson {prevLesson ? prevLesson.n : ''}
-            </Button>
-            <p className="text-[11.5px] text-muted">
-              Lesson {lesson.n} of {A1.length}
-            </p>
-            <Button variant="outline" size="sm" onClick={() => nextLesson && onPickLesson(nextLesson.n)} disabled={!nextLesson}>
-              Lesson {nextLesson ? nextLesson.n : ''} <ArrowRight className="h-3.5 w-3.5" />
-            </Button>
-          </div>
+              ) : (
+                <Button size="sm" onClick={() => nextLesson && onPickLesson(nextLesson.n)} disabled={!nextLesson}>
+                  {nextLesson ? `Lesson ${nextLesson.n}` : 'Done'} <ArrowRight className="h-3.5 w-3.5" />
+                </Button>
+              )}
+            </div>
+          </motion.div>
         </div>
       </div>
     </div>

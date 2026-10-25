@@ -13,7 +13,7 @@ import { TeacherAssignments } from './screens/TeacherAssignments'
 import { Button } from './components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from './components/ui/dialog'
 import { Input } from './components/ui/input'
-import { A1 } from './lib/curriculum'
+import { A1, lessonA1, titleOf } from './lib/curriculum'
 import { partsSeen } from './lib/progress'
 import { pullProgress } from './lib/sync'
 import { supabase } from './lib/supabase'
@@ -141,7 +141,7 @@ export default function App() {
     landing: '',
     dashboard: 'Overview',
     lessons: 'Lessons',
-    lesson: `Lesson ${lessonN}`,
+    lesson: titleOf(lessonA1(lessonN) ?? A1[0]) || `Lesson ${lessonN}`,
     homework: 'Homework',
     library: 'Review',
     't-overview': 'Overview',
@@ -171,7 +171,7 @@ export default function App() {
           crumb={route === 'lesson' ? 'Level A1' : TEACHER_ROUTES.includes(route) ? 'Teacher' : undefined}
           onMenu={() => setMenu(true)}
           right={
-            !TEACHER_ROUTES.includes(route) && (
+            !TEACHER_ROUTES.includes(route) && route !== 'lesson' && (
               <Button variant="soft" size="sm" className="hidden sm:inline-flex" onClick={() => openLesson(lessonN)}>
                 Continue
               </Button>
