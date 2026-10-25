@@ -44,11 +44,12 @@ type Props = {
   user: { name: string; email: string }
   onSignOut: () => void
   onSwitchRole: () => void
+  canSwitch: boolean
   done: number
   total: number
 }
 
-export function Sidebar({ role, route, onNav, open, onClose, user, onSignOut, onSwitchRole, done, total }: Props) {
+export function Sidebar({ role, route, onNav, open, onClose, user, onSignOut, onSwitchRole, canSwitch, done, total }: Props) {
   const items = role === 'teacher' ? TEACHER_NAV : STUDENT_NAV
 
   return (
@@ -73,6 +74,7 @@ export function Sidebar({ role, route, onNav, open, onClose, user, onSignOut, on
           </button>
         </div>
 
+        {canSwitch && (
         <div className="mx-4 mt-4 flex rounded-xl bg-bg p-1">
           <button
             onClick={() => role !== 'student' && onSwitchRole()}
@@ -93,6 +95,7 @@ export function Sidebar({ role, route, onNav, open, onClose, user, onSignOut, on
             Teacher
           </button>
         </div>
+        )}
 
         <nav className="mt-4 flex-1 overflow-y-auto px-3 pb-4">
           <ul className="space-y-1">

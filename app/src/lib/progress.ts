@@ -27,3 +27,14 @@ export function partsSeen(lesson: number): number[] {
 export function lessonPercent(lesson: number, total: number) {
   return total ? Math.round((partsSeen(lesson).length / total) * 100) : 0
 }
+
+/** Union remote progress into the browser cache; never removes what is already local. */
+export function mergeProgress(remote: Record<number, number[]>) {
+  const all = read()
+  for (const [lesson, indexes] of Object.entries(remote)) {
+    const seen = new Set([...(all[lesson] ?? []), ...indexes])
+    all[lesson] = [...seen].sort((a, b) => a - b)
+  }
+  localStorage.setItem(KEY, JSON.stringify(all))
+  return all
+}

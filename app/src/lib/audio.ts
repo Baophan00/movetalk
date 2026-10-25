@@ -1,6 +1,9 @@
 import map from '../content/audio-map.json'
+import words from '../content/word-audio.json'
 
-const table = map as Record<string, string>
+// Recorded dialogue lines from the old pass, plus one clip per vocabulary word generated with the
+// macOS voice; the sentence table wins if the same key appears in both.
+const table = { ...(words as Record<string, string>), ...(map as Record<string, string>) }
 
 let current: HTMLAudioElement | null = null
 

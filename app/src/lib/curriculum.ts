@@ -99,6 +99,41 @@ export function titleOf(lesson: LessonFile): string {
     .join(' ')
 }
 
+/** Teaching order of the parts; also the identity used when progress is stored. */
+export const PART_ORDER: Record<string, number> = {
+  'Warm-up': 10,
+  Vocabulary: 20,
+  'Before you listen': 30,
+  Grammar: 40,
+  Pronunciation: 50,
+  Dialogue: 60,
+  'Listening check': 70,
+  Activate: 80,
+  Practice: 85,
+  'Real talk': 90,
+  Reflect: 100,
+  Mission: 110,
+}
+
+export type PartPlan = { key: string; label: string }
+
+/** The parts a lesson actually shows, in order — the single source the screen and the sync share. */
+export function partPlan(lesson: LessonFile): PartPlan[] {
+  const plan: (PartPlan & { order: number })[] = []
+  const push = (key: string, label: string) => plan.push({ key, label, order: PART_ORDER[label] ?? 200 })
+  const p = lesson.parts
+  if (p.vocab.length) push('vocab', 'Vocabulary')
+  if (p.grammar.length) push('grammar', 'Grammar')
+  if (p.dialogue.length) push('dialogue', 'Dialogue')
+  if (p.listenCheck.length) push('check', 'Listening check')
+  if (p.grammarChoose.length) push('choose', 'Practice')
+  for (const g of p.flow) {
+    const covered = (g.group === 'Grammar' && p.grammar.length > 0) || (g.group === 'Vocabulary' && p.vocab.length > 0)
+    if (!covered) push(`flow-${g.group}`, g.group)
+  }
+  return plan.sort((a, b) => a.order - b.order).map(({ key, label }) => ({ key, label }))
+}
+
 /** Parts with material in them — what the lesson screen actually shows. */
 export function partCount(lesson: LessonFile): number {
   const p = lesson.parts

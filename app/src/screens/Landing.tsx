@@ -5,7 +5,7 @@ import { A1, titleOf } from '../lib/curriculum'
 import { cn } from '../lib/utils'
 import { speak } from '../lib/audio'
 
-type Props = { onStart: () => void; onOpenLesson: () => void }
+type Props = { onStart: () => void; onOpenLesson: () => void; signedIn: boolean; onContinue: () => void }
 
 const STEPS = [
   { icon: BookOpen, title: 'Words inside real sentences', body: 'No isolated vocabulary. Every word arrives with two sentences you can use tomorrow.' },
@@ -13,7 +13,7 @@ const STEPS = [
   { icon: Mic, title: 'Speak for a reason', body: 'Each lesson ends with a concrete speaking task, not a gap-fill drill.' },
 ]
 
-export function Landing({ onStart, onOpenLesson }: Props) {
+export function Landing({ onStart, onOpenLesson, signedIn, onContinue }: Props) {
   const cards = A1[0]?.parts.vocab.slice(0, 3) ?? []
 
   return (
@@ -26,8 +26,8 @@ export function Landing({ onStart, onOpenLesson }: Props) {
             <span className="block text-[11px] text-muted">English you can use</span>
           </span>
         </div>
-        <Button variant="ghost" size="sm" onClick={onStart}>
-          Sign in
+        <Button variant="ghost" size="sm" onClick={signedIn ? onContinue : onStart}>
+          {signedIn ? 'Open MOVE' : 'Sign in'}
         </Button>
       </header>
 
@@ -35,7 +35,7 @@ export function Landing({ onStart, onOpenLesson }: Props) {
         <section className="grid items-center gap-10 pt-6 lg:grid-cols-[1.05fr_.95fr] lg:pt-14">
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3 py-1.5 text-[11.5px] font-semibold text-muted">
-              <Sparkles className="h-3.5 w-3.5 text-accent" /> {A1.length} lessons open · audio on every line
+              <Sparkles className="h-3.5 w-3.5 text-accent" /> {A1.length} lessons open · every word has audio
             </span>
             <h1 className="mt-5 text-[34px] font-semibold leading-[1.1] tracking-tight sm:text-[46px] lg:text-[52px]">
               English you can <span className="relative whitespace-nowrap text-primary">actually use<svg className="absolute -bottom-1 left-0 w-full" height="6" viewBox="0 0 200 6" preserveAspectRatio="none"><path d="M2 4c40-3 120-4 196-1" stroke="currentColor" strokeWidth="2.5" fill="none" opacity=".35" /></svg></span> tomorrow.

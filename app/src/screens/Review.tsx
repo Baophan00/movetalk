@@ -65,8 +65,8 @@ function buildSession(n: number): Question[] {
   return shuffle(mixed).slice(0, SESSION_SIZE)
 }
 
-export function Review() {
-  const [lessonN, setLessonN] = useState(A1[0]?.n ?? 1)
+export function Review({ initialLesson }: { initialLesson?: number }) {
+  const [lessonN, setLessonN] = useState(initialLesson ?? A1[0]?.n ?? 1)
   const [session, setSession] = useState<Question[] | null>(null)
   const [index, setIndex] = useState(0)
   const [picked, setPicked] = useState<string | null>(null)

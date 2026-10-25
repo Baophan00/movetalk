@@ -3,9 +3,10 @@ import { AnimatePresence, motion } from 'motion/react'
 import { ArrowLeft, ArrowRight, Check, ChevronRight, CircleCheck, Volume2 } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Progress } from '../components/ui/progress'
-import { A1, lessonA1, titleOf, type FlowGroup, type LessonFile } from '../lib/curriculum'
+import { A1, lessonA1, partPlan, titleOf, type FlowGroup, type LessonFile } from '../lib/curriculum'
 import { speak } from '../lib/audio'
 import { markPart, partsSeen } from '../lib/progress'
+import { pushPart } from '../lib/sync'
 import { cn } from '../lib/utils'
 
 type Props = {
@@ -203,21 +204,6 @@ function Flow({ groups }: { groups: FlowGroup[] }) {
   )
 }
 
-const ORDER: Record<string, number> = {
-  'Warm-up': 10,
-  Vocabulary: 20,
-  'Before you listen': 30,
-  Grammar: 40,
-  Pronunciation: 50,
-  Dialogue: 60,
-  'Listening check': 70,
-  Activate: 80,
-  Practice: 85,
-  'Real talk': 90,
-  Reflect: 100,
-  Mission: 110,
-}
-
 export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
   const lesson = lessonA1(lessonN) ?? A1[0]
   const [active, setActive] = useState(0)
@@ -225,20 +211,15 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
 
   const parts = useMemo(() => {
     if (!lesson) return []
-    const list: { key: string; label: string; node: React.ReactNode; order: number }[] = []
-    const add = (key: string, label: string, node: React.ReactNode) =>
-      list.push({ key, label, node, order: ORDER[label] ?? 200 })
-
-    if (lesson.parts.vocab.length) add('vocab', 'Vocabulary', <Vocabulary items={lesson.parts.vocab} />)
-    if (lesson.parts.grammar.length) add('grammar', 'Grammar', <Grammar sections={lesson.parts.grammar} />)
-    if (lesson.parts.dialogue.length) add('dialogue', 'Dialogue', <Dialogue turns={lesson.parts.dialogue} />)
-    if (lesson.parts.listenCheck.length) add('check', 'Listening check', <Checks items={lesson.parts.listenCheck} />)
-    if (lesson.parts.grammarChoose.length) add('choose', 'Practice', <Choose items={lesson.parts.grammarChoose} />)
-    for (const g of lesson.parts.flow) {
-      const covered = (g.group === 'Grammar' && lesson.parts.grammar.length > 0) || (g.group === 'Vocabulary' && lesson.parts.vocab.length > 0)
-      if (!covered) add(`flow-${g.group}`, g.group, <Flow groups={[g]} />)
+    const nodes: Record<string, React.ReactNode> = {
+      vocab: <Vocabulary items={lesson.parts.vocab} />,
+      grammar: <Grammar sections={lesson.parts.grammar} />,
+      dialogue: <Dialogue turns={lesson.parts.dialogue} />,
+      check: <Checks items={lesson.parts.listenCheck} />,
+      choose: <Choose items={lesson.parts.grammarChoose} />,
     }
-    return list.sort((a, b) => a.order - b.order)
+    for (const g of lesson.parts.flow) nodes[`flow-${g.group}`] = <Flow groups={[g]} />
+    return partPlan(lesson).map((p) => ({ ...p, node: nodes[p.key] }))
   }, [lesson])
 
   useEffect(() => {
@@ -252,6 +233,7 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
     const t = window.setTimeout(() => {
       markPart(lesson.n, active)
       setSeen(partsSeen(lesson.n))
+      if (parts[active]) void pushPart(lesson.n, parts[active].key)
     }, 1200)
     return () => window.clearTimeout(t)
   }, [active, lesson, parts.length])
