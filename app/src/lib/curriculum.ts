@@ -83,7 +83,13 @@ export const A1_QUIZ: Record<number, QuizItem[]> = Object.fromEntries(
 )
 
 /** 'doc_ab12_MOVE_ACTIVATE_1_L01_BUILD YES-NO QUESTION _VIP.pptx' -> 'BUILD YES-NO QUESTION' */
+const TITLE_FIX: Record<number, string> = {
+  5: 'This, That, These, Those, There + be',
+  7: 'Revision: Lessons 1-6',
+}
+
 export function titleOf(lesson: LessonFile): string {
+  if (TITLE_FIX[lesson.n]) return TITLE_FIX[lesson.n]
   const raw = (lesson.deck ?? '')
     .replace(/^doc_[a-f0-9]+_/i, '')
     .replace(/^MOVE[\s_]*ACTIVATE[\s_]*1[\s_]*L\d+[\s_]*/i, '')

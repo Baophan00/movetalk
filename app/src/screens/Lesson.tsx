@@ -238,80 +238,90 @@ function Overview({ lesson, partCount, onStart }: { lesson: LessonFile; partCoun
 
 type PracticeItem = { prompt: string; vi?: string; options: string[]; answer: string }
 
-/** The handout's choose exercises, with the deck's own answer key. One tap, immediate answer. */
-function Choose({ items, fallback }: { items: PracticeItem[]; fallback: LessonFile['parts']['grammarChoose'] }) {
+/** The handout's choose exercise, laid out like the slide: two columns of cards, meaning under each. */
+function Choose({ items }: { items: PracticeItem[] }) {
   const [picked, setPicked] = useState<Record<number, string>>({})
 
-  if (items.length === 0) {
-    return (
-      <div className="space-y-2">
-        {fallback.map((c) => (
-          <div key={c.prompt} className="rounded-2xl border border-line bg-surface px-3.5 py-2.5">
-            <p className="text-[13.5px] font-medium">{c.prompt}</p>
-            <p className="mt-0.5 text-[11.5px] text-muted">{c.vi}</p>
-            <p className="mt-1.5 text-[11.5px] text-muted">Say it out loud, then check with your teacher.</p>
-          </div>
-        ))}
-      </div>
-    )
-  }
+  if (items.length === 0) return null
 
   const right = items.filter((it, i) => picked[i] === it.answer).length
   const answered = Object.keys(picked).length
 
   return (
     <div>
-      <div className="mb-2 flex items-center justify-between text-[11.5px] text-muted">
-        <span>Pick the missing word.</span>
+      <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2 text-[11.5px] text-muted">
+        <span>Read the Vietnamese, then choose Do or Are. Say the whole question out loud.</span>
         <span className="tabular-nums">
           {answered} / {items.length} answered · <span className="font-semibold text-ink">{right} right</span>
         </span>
       </div>
-      <ul className="overflow-hidden rounded-2xl border border-line sm:grid sm:grid-cols-2 sm:gap-x-5">
+      <ul className="grid gap-2.5 sm:grid-cols-2">
         {items.map((it, i) => {
           const pick = picked[i]
           const chosen = pick !== undefined
           const ok = pick === it.answer
           return (
-            <li key={`${it.prompt}-${i}`} className={cn('bg-surface px-3.5 py-2.5', chosen && (ok ? 'bg-[#f1fbf5]' : 'bg-[#fdf3f2]'))}>
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                <div className="min-w-0 flex-1">
-                  <p className="text-[13.5px] font-medium leading-snug">{it.prompt}</p>
-                  {it.vi && <p className="text-[11.5px] text-muted">{it.vi}</p>}
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {it.options.map((opt) => {
-                    const isRight = opt === it.answer
-                    const isPick = opt === pick
-                    return (
-                      <button
-                        key={opt}
-                        disabled={chosen}
-                        onClick={() => setPicked((p) => ({ ...p, [i]: opt }))}
-                        className={cn(
-                          'rounded-lg border px-2.5 py-1 text-[12.5px] font-medium transition-colors',
-                          !chosen && 'border-line hover:border-primary/40 hover:bg-primary-soft/60',
-                          chosen && isRight && 'border-[#0f6b4f]/30 bg-[#c8f0e0] text-[#0f6b4f]',
-                          chosen && isPick && !isRight && 'border-[#8a2b22]/30 bg-[#fde4e1] text-[#8a2b22]',
-                          chosen && !isRight && !isPick && 'border-line/70 text-muted opacity-50',
-                        )}
-                      >
-                        {opt}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-              {chosen && !ok && (
-                <p className="mt-1.5 text-[11.5px] text-[#8a2b22]">
-                  It is “{it.answer}”. Say the whole question once with it.
-                </p>
+            <li
+              key={`${it.prompt}-${i}`}
+              className={cn(
+                'rounded-2xl border px-4 py-3 transition-colors',
+                !chosen && 'border-[#e7e2f5] bg-[#fbf8ff]',
+                chosen && ok && 'border-[#bfe7d3] bg-[#f1fbf5]',
+                chosen && !ok && 'border-[#f3c9c4] bg-[#fdf3f2]',
               )}
+            >
+              <p className="text-[14px] font-medium leading-snug text-ink">
+                {it.prompt.split(/_+/).map((chunk, k) => (
+                  <span key={k}>
+                    {k > 0 && (
+                      <span className="mx-1 inline-block w-8 border-b-2 border-dashed border-primary/50 align-baseline">&nbsp;</span>
+                    )}
+                    <Highlight text={chunk} />
+                  </span>
+                ))}
+              </p>
+              <p className="mt-1 text-[11.5px] italic text-ink/55">{it.vi}</p>
+              <div className="mt-2 flex items-center gap-1.5">
+                {['Do', 'Are'].map((opt) => {
+                  const isRight = opt === it.answer
+                  const isPick = opt === pick
+                  return (
+                    <button
+                      key={opt}
+                      disabled={chosen}
+                      onClick={() => setPicked((p) => ({ ...p, [i]: opt }))}
+                      className={cn(
+                        'rounded-lg border px-3 py-1 text-[12px] font-semibold transition-colors',
+                        !chosen && 'border-line bg-surface hover:border-primary/40 hover:bg-primary-soft/60',
+                        chosen && isRight && 'border-[#0f6b4f]/30 bg-[#c8f0e0] text-[#0f6b4f]',
+                        chosen && isPick && !isRight && 'border-[#8a2b22]/30 bg-[#fde4e1] text-[#8a2b22]',
+                        chosen && !isRight && !isPick && 'border-line/60 text-muted opacity-60',
+                      )}
+                    >
+                      {opt}
+                    </button>
+                  )
+                })}
+                {chosen && !ok && <span className="ml-1 text-[11.5px] text-[#8a2b22]">It is “{it.answer}”.</span>}
+              </div>
             </li>
           )
         })}
       </ul>
     </div>
+  )
+}
+
+/** Bold the word that carries the meaning: the first word after "you". */
+function Highlight({ text }: { text: string }) {
+  const m = text.match(/^(.*?\byou\s+)(\S+)(.*)$/i)
+  if (!m) return <>{text}</>
+  return (
+    <>
+      {m[1]}
+      <span className="font-bold text-[#c8352a]">{m[2]}</span>
+      {m[3]}
+    </>
   )
 }
 
@@ -402,7 +412,7 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
     if (!lesson) return {}
     const n: Record<string, React.ReactNode> = {
       vocab: <Vocabulary items={lesson.parts.vocab} />,
-      grammar: <Grammar sections={lesson.parts.grammar} />,
+      grammar: <Grammar sections={lesson.parts.grammar.filter((g) => !/CHOOSE/i.test(g.section))} />,
       dialogue: <Dialogue turns={lesson.parts.dialogue} />,
       check: <Checks items={lesson.parts.listenCheck} />,
       choose: (
@@ -416,7 +426,6 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
               options: q.options ?? [],
               answer: q.answer,
             }))}
-          fallback={lesson.parts.grammarChoose}
         />
       ),
     }
