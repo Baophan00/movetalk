@@ -1,5 +1,126 @@
 {
  "n": 6,
  "level": "A1",
- "items": []
+ "items": [
+  {
+   "kind": "typed",
+   "section": "Check, then use it",
+   "prompt": "next / my / trip",
+   "answer": "my next trip"
+  },
+  {
+   "kind": "typed",
+   "section": "Check, then use it",
+   "prompt": "small / those / shops",
+   "answer": "those small shops"
+  },
+  {
+   "kind": "typed",
+   "section": "Check, then use it",
+   "prompt": "local / her / restaurant",
+   "answer": "her local restaurant"
+  },
+  {
+   "kind": "typed",
+   "section": "Check, then use it",
+   "prompt": "amazing / another / place",
+   "answer": "another amazing place"
+  },
+  {
+   "kind": "choice",
+   "section": "Check, then use it",
+   "prompt": "___ your new coworker friendly?",
+   "answer": "Is",
+   "options": [
+    "Is",
+    "Do",
+    "My",
+    "Our"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Check, then use it",
+   "prompt": "___ those small shops sell local food?",
+   "answer": "Do",
+   "options": [
+    "Do",
+    "Is",
+    "My",
+    "Our"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Check, then use it",
+   "prompt": "Do you know ___ cheap restaurant?",
+   "answer": "another",
+   "options": [
+    "another",
+    "Do",
+    "Is",
+    "My"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Check, then use it",
+   "prompt": "Do you know ___ nice places?",
+   "answer": "other",
+   "options": [
+    "other",
+    "Do",
+    "Is",
+    "My"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Check, then use it",
+   "prompt": "___ next trip is to Hue",
+   "answer": "My",
+   "options": [
+    "My",
+    "Do",
+    "Is",
+    "Our"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Check, then use it",
+   "prompt": "___ local restaurant serves good food",
+   "answer": "This",
+   "options": [
+    "This",
+    "Do",
+    "Is",
+    "My"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Check, then use it",
+   "prompt": "___ small shops sell coffee",
+   "answer": "Those",
+   "options": [
+    "Those",
+    "Do",
+    "Is",
+    "My"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Check, then use it",
+   "prompt": "___ current plan is to eat here. I know (13) ___ cheap restaurant. Do you know (14) ___ nice places?",
+   "answer": "Our",
+   "options": [
+    "Our",
+    "Do",
+    "Is",
+    "My"
+   ]
+  }
+ ]
 }

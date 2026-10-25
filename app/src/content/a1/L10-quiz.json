@@ -1,5 +1,54 @@
 {
  "n": 10,
  "level": "A1",
- "items": []
+ "items": [
+  {
+   "kind": "reveal",
+   "section": "Build the frame",
+   "prompt": "Bạn đã từng … chưa?",
+   "answer": "Have you ever + V3…?"
+  },
+  {
+   "kind": "reveal",
+   "section": "Build the frame",
+   "prompt": "Cô ấy chưa … (việc mong đợi đến hiện tại)",
+   "answer": "She hasn’t + V3 + … yet"
+  },
+  {
+   "kind": "reveal",
+   "section": "Build the frame",
+   "prompt": "Họ vừa mới",
+   "answer": "They’ve just + V3"
+  },
+  {
+   "kind": "reveal",
+   "section": "Build the frame",
+   "prompt": "Bạn đã … khi nào? (một lần cụ thể)",
+   "answer": "When did you + V…?"
+  },
+  {
+   "kind": "reveal",
+   "section": "Build the frame",
+   "prompt": "Anh ấy đã … được bao lâu rồi? (vẫn còn đúng)",
+   "answer": "How long has he + V3…? / How long has he been + …?"
+  },
+  {
+   "kind": "reveal",
+   "section": "Build the frame",
+   "prompt": "Bạn của bạn đã … mấy lần tính đến nay?",
+   "answer": "How many times has your friend + V3…?"
+  },
+  {
+   "kind": "typed",
+   "section": "Build the frame",
+   "prompt": "Sửa: I have bought it yesterday",
+   "answer": "I bought it yesterday"
+  },
+  {
+   "kind": "typed",
+   "section": "Build the frame",
+   "prompt": "Sửa: I’ve known her since five years",
+   "answer": "I’ve known her for five years"
+  }
+ ]
 }

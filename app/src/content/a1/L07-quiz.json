@@ -1,5 +1,86 @@
 {
  "n": 7,
  "level": "A1",
- "items": []
+ "items": [
+  {
+   "kind": "choice",
+   "section": "Choose and say it",
+   "prompt": "We have ___ time, so let’s talk",
+   "answer": "a little",
+   "options": [
+    "a little",
+    "a few"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Choose and say it",
+   "prompt": "___ the seats are taken",
+   "answer": "Almost all",
+   "options": [
+    "Almost",
+    "Almost all"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Choose and say it",
+   "prompt": "I don’t have ___ information",
+   "answer": "much",
+   "options": [
+    "many",
+    "much"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Choose and say it",
+   "prompt": "There are two cafés. ___ is open",
+   "answer": "Neither",
+   "options": [
+    "Neither",
+    "None"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Choose and say it",
+   "prompt": "___ of my friends work nearby",
+   "answer": "Most",
+   "options": [
+    "Most",
+    "Almost"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Choose and say it",
+   "prompt": "We need ___ chairs and less equipment",
+   "answer": "fewer",
+   "options": [
+    "fewer",
+    "less"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Choose and say it",
+   "prompt": "Each of them ___ a ticket",
+   "answer": "has",
+   "options": [
+    "has",
+    "have"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Choose and say it",
+   "prompt": "Can I have ___ water, please?",
+   "answer": "some. ANY trong câu yêu cầu có thể xuất hiện tùy ý định, nhưng SOME là lựa chọn thông thường ở đây",
+   "options": [
+    "some",
+    "any"
+   ]
+  }
+ ]
 }

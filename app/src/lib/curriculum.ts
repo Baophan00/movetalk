@@ -34,7 +34,7 @@ export type LessonFile = {
 }
 
 export type QuizItem = {
-  kind: 'choice' | 'translate' | 'chunks'
+  kind: 'choice' | 'translate' | 'chunks' | 'reveal'
   section: string
   prompt: string
   answer: string

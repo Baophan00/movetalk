@@ -9,7 +9,7 @@ import { cn } from '../lib/utils'
 
 type Question = {
   id: string
-  kind: 'choice' | 'typed'
+  kind: 'choice' | 'typed' | 'reveal'
   section: string
   prompt: string
   hint?: string
@@ -51,7 +51,7 @@ function vocabQuestions(n: number): Question[] {
 function reviewQuestions(n: number): Question[] {
   return quizFor(n).map((item: QuizItem, i: number) => ({
     id: `q${n}-${i}`,
-    kind: item.kind === 'choice' ? ('choice' as const) : ('typed' as const),
+    kind: item.kind === 'choice' ? ('choice' as const) : item.kind === 'reveal' ? ('reveal' as const) : ('typed' as const),
     section: item.section.replace(/^\d+\s*[·.]?\s*/, '').slice(0, 46),
     prompt: item.prompt,
     answer: item.answer,
@@ -71,6 +71,8 @@ export function Review() {
   const [index, setIndex] = useState(0)
   const [picked, setPicked] = useState<string | null>(null)
   const [typed, setTyped] = useState('')
+  const [revealed, setRevealed] = useState(false)
+  const [selfMark, setSelfMark] = useState<boolean | null>(null)
   const [score, setScore] = useState(0)
   const [wrong, setWrong] = useState<Question[]>([])
   const [done, setDone] = useState(false)
@@ -88,13 +90,22 @@ export function Review() {
     setDone(false)
   }
 
+  const norm = (v: string) => v.trim().toLowerCase().replace(/[.?!,]/g, '')
   const correct = current
     ? current.kind === 'choice'
       ? picked === current.answer
-      : typed.trim().toLowerCase().replace(/[.?!,]/g, '') === current.answer.trim().toLowerCase().replace(/[.?!,]/g, '')
+      : current.kind === 'reveal'
+        ? selfMark === true
+        : norm(typed) === norm(current.answer)
     : false
 
-  const answered = current ? (current.kind === 'choice' ? picked !== null : typed.trim().length > 0) : false
+  const answered = current
+    ? current.kind === 'choice'
+      ? picked !== null
+      : current.kind === 'reveal'
+        ? selfMark !== null
+        : typed.trim().length > 0
+    : false
 
   const next = () => {
     if (!current) return
@@ -108,6 +119,8 @@ export function Review() {
     setIndex(index + 1)
     setPicked(null)
     setTyped('')
+    setRevealed(false)
+    setSelfMark(null)
   }
 
   const retryWrong = () => {
@@ -256,6 +269,28 @@ export function Review() {
               )
             })}
           </div>
+        ) : current.kind === 'reveal' ? (
+          <div className="mt-5">
+            {!revealed ? (
+              <Button variant="outline" onClick={() => setRevealed(true)}>
+                Show the model answer
+              </Button>
+            ) : (
+              <div className="rounded-2xl bg-bg px-4 py-3.5">
+                <p className="text-[10.5px] font-bold uppercase tracking-[.14em] text-muted">Model answer</p>
+                <p className="mt-1 text-[15px] font-semibold leading-snug">{current.answer}</p>
+                <p className="mt-1 text-[11.5px] text-muted">Say it out loud once before you mark yourself.</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <Button size="sm" onClick={() => setSelfMark(true)} disabled={selfMark !== null}>
+                    <Check className="h-3.5 w-3.5" /> I had it
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => setSelfMark(false)} disabled={selfMark !== null}>
+                    Not yet
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
         ) : (
           <form
             className="mt-5"
@@ -275,7 +310,7 @@ export function Review() {
           </form>
         )}
 
-        {answered && (
+        {answered && current.kind !== 'reveal' && (
           <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="mt-4 rounded-2xl bg-bg/80 px-4 py-3">
             <p className="text-[12.5px] font-semibold">
               {correct ? 'Correct' : 'Answer'}: <span className="font-normal">{current.answer}</span>

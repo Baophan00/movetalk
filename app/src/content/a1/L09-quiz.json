@@ -1,5 +1,54 @@
 {
  "n": 9,
  "level": "A1",
- "items": []
+ "items": [
+  {
+   "kind": "reveal",
+   "section": "Frame, then say it",
+   "prompt": "Có phải anh ấy đang …?",
+   "answer": "Is he + V-ing…?"
+  },
+  {
+   "kind": "reveal",
+   "section": "Frame, then say it",
+   "prompt": "Họ đã không",
+   "answer": "They didn’t + V… / They weren’t +"
+  },
+  {
+   "kind": "reveal",
+   "section": "Frame, then say it",
+   "prompt": "Cô ấy đã không",
+   "answer": "She didn’t + V… / She wasn’t +"
+  },
+  {
+   "kind": "reveal",
+   "section": "Frame, then say it",
+   "prompt": "Có phải bạn của bạn đã …?",
+   "answer": "Did your friend + V…? / Was your friend + …?"
+  },
+  {
+   "kind": "reveal",
+   "section": "Frame, then say it",
+   "prompt": "Chúng tôi dự định sẽ không",
+   "answer": "We aren’t going to + V… / We aren’t going to be +"
+  },
+  {
+   "kind": "reveal",
+   "section": "Frame, then say it",
+   "prompt": "Vì sao họ đang …?",
+   "answer": "Why are they + V-ing…?"
+  },
+  {
+   "kind": "reveal",
+   "section": "Frame, then say it",
+   "prompt": "Bạn sẽ không",
+   "answer": "You won’t + V… / You won’t be +"
+  },
+  {
+   "kind": "reveal",
+   "section": "Frame, then say it",
+   "prompt": "Họ … ở đâu?",
+   "answer": "Where do they + V…? / Where are they + …?"
+  }
+ ]
 }

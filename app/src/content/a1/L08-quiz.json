@@ -1,5 +1,90 @@
 {
  "n": 8,
  "level": "A1",
- "items": []
+ "items": [
+  {
+   "kind": "choice",
+   "section": "Check yourself",
+   "prompt": "We have ___ time, so let’s talk.",
+   "answer": "a little",
+   "options": [
+    "a little",
+    "a few"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Check yourself",
+   "prompt": "___ the seats are taken. Only one is free.",
+   "answer": "Almost all",
+   "options": [
+    "Almost all",
+    "Almost"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Check yourself",
+   "prompt": "I don’t have ___ information.",
+   "answer": "much",
+   "options": [
+    "many",
+    "much"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Check yourself",
+   "prompt": "There are two cafés. ___ is open.",
+   "answer": "Neither",
+   "options": [
+    "Neither",
+    "None"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Check yourself",
+   "prompt": "___ of my friends work nearby.",
+   "answer": "Most",
+   "options": [
+    "Most",
+    "Almost"
+   ]
+  },
+  {
+   "kind": "choice",
+   "section": "Check yourself",
+   "prompt": "We need ___ chairs and less equipment.",
+   "answer": "fewer",
+   "options": [
+    "fewer",
+    "less"
+   ]
+  },
+  {
+   "kind": "typed",
+   "section": "Check yourself",
+   "prompt": "Sửa: Every of them has a ticket",
+   "answer": "Each of them has a ticket. / Every one of them has a ticket"
+  },
+  {
+   "kind": "typed",
+   "section": "Check yourself",
+   "prompt": "Dịch: Cả hai chúng tôi đều thích cà phê",
+   "answer": "Both of us like coffee"
+  },
+  {
+   "kind": "typed",
+   "section": "Check yourself",
+   "prompt": "Dịch: Chúng ta còn rất ít thời gian, cần đi ngay",
+   "answer": "We have very little time. We need to leave now"
+  },
+  {
+   "kind": "typed",
+   "section": "Check yourself",
+   "prompt": "Dịch: Đa số bạn của tôi làm gần đây",
+   "answer": "Most of my friends work nearby"
+  }
+ ]
 }
