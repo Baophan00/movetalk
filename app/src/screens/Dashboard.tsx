@@ -4,7 +4,7 @@ import { Button } from '../components/ui/button'
 import { Card, CardBody, CardHeader, CardTitle } from '../components/ui/card'
 import { Badge } from '../components/ui/badge'
 import { Progress, Ring } from '../components/ui/progress'
-import { LESSONS, partsOf } from '../lib/lessons'
+import { A1, partCount, titleOf } from '../lib/curriculum'
 import { partsSeen } from '../lib/progress'
 import { cn } from '../lib/utils'
 
@@ -20,18 +20,18 @@ const TRACKS = [
 ]
 
 export function Dashboard({ name, onOpenLesson, onHomework }: Props) {
-  const next = LESSONS.find((l) => partsSeen(l.n).length < partsOf(l).length) || LESSONS[0]
-  const totalParts = partsOf(next).length
+  const next = A1.find((l) => partsSeen(l.n).length < partCount(l)) || A1[0]
+  const totalParts = partCount(next)
   const read = partsSeen(next.n).length
   const percent = totalParts ? Math.round((read / totalParts) * 100) : 0
-  const opened = LESSONS.filter((l) => partsSeen(l.n).length > 0).length
-  const doneAll = LESSONS.filter((l) => partsSeen(l.n).length >= partsOf(l).length).length
-  const partsRead = LESSONS.reduce((n, l) => n + partsSeen(l.n).length, 0)
+  const opened = A1.filter((l) => partsSeen(l.n).length > 0).length
+  const doneAll = A1.filter((l) => partsSeen(l.n).length >= partCount(l)).length
+  const partsRead = A1.reduce((n, l) => n + partsSeen(l.n).length, 0)
 
   const stats = [
     { icon: Flame, label: 'Streak', value: opened ? `${Math.min(opened, 7)}` : '0', hint: 'days in a row' },
-    { icon: BookOpen, label: 'Parts read', value: String(partsRead), hint: `of ${LESSONS.reduce((n, l) => n + partsOf(l).length, 0)} parts` },
-    { icon: Target, label: 'Lessons done', value: String(doneAll), hint: `${LESSONS.length} lessons open` },
+    { icon: BookOpen, label: 'Parts read', value: String(partsRead), hint: `of ${A1.reduce((n, l) => n + partCount(l), 0)} parts` },
+    { icon: Target, label: 'Lessons done', value: String(doneAll), hint: `${A1.length} lessons open` },
   ]
 
   return (
@@ -49,7 +49,7 @@ export function Dashboard({ name, onOpenLesson, onHomework }: Props) {
         <div className="relative max-w-[430px]">
           <p className="text-[11px] font-bold uppercase tracking-[.16em] text-ink/50">Level A1 · lesson {next.n}</p>
           <h3 className="mt-1.5 text-[21px] font-bold leading-snug tracking-tight text-ink sm:text-[24px]">
-            {next.title}
+            {titleOf(next)}
           </h3>
           <p className="mt-1 text-[12.5px] leading-relaxed text-ink/65">
             {read ? `${read} of ${totalParts} parts opened.` : 'Ten minutes gets you the first part.'}
@@ -72,9 +72,8 @@ export function Dashboard({ name, onOpenLesson, onHomework }: Props) {
             <div>
               <Badge tone="primary">Next up</Badge>
               <CardTitle className="mt-2 text-[17px]">
-                Lesson {next.n}: {next.title}
+                Lesson {next.n}: {titleOf(next)}
               </CardTitle>
-              <p className="mt-0.5 text-[12.5px] text-muted">{next.vi}</p>
             </div>
             <div className="relative grid shrink-0 place-items-center">
               <Ring value={percent} size={64} stroke={6} />
@@ -83,11 +82,18 @@ export function Dashboard({ name, onOpenLesson, onHomework }: Props) {
           </CardHeader>
           <CardBody className="pt-2">
             <div className="flex flex-wrap gap-1.5">
-              {next.today.slice(0, 4).map((t, i) => (
-                <span key={t} className={i > 1 ? 'hidden rounded-full bg-bg px-2.5 py-1 text-[11.5px] text-muted sm:inline' : 'rounded-full bg-bg px-2.5 py-1 text-[11.5px] text-muted'}>
-                  {t}
-                </span>
-              ))}
+              {[
+                `${next.parts.vocab.length} words`,
+                `${next.parts.grammar.length} grammar blocks`,
+                next.parts.dialogue.length ? 'dialogue' : '',
+                next.parts.listenCheck.length ? 'listening check' : '',
+              ]
+                .filter(Boolean)
+                .map((t) => (
+                  <span key={t} className="rounded-full bg-bg px-2.5 py-1 text-[11.5px] text-muted">
+                    {t}
+                  </span>
+                ))}
             </div>
             <div className="mt-3">
               <Progress value={percent} />
@@ -109,7 +115,7 @@ export function Dashboard({ name, onOpenLesson, onHomework }: Props) {
         <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
           {stats.map(({ icon: Icon, label, value, hint }, i) => {
             const tones = ['bg-[#c3b4f7]', 'bg-[#fbb463]', 'bg-[#f79be0]']
-            const rat = [percent, Math.round((partsRead / Math.max(1, LESSONS.reduce((n, l) => n + partsOf(l).length, 0))) * 100), Math.round((doneAll / Math.max(1, LESSONS.length)) * 100)]
+            const rat = [percent, Math.round((partsRead / Math.max(1, A1.reduce((n, l) => n + partCount(l), 0))) * 100), Math.round((doneAll / Math.max(1, A1.length)) * 100)]
             return (
               <div key={label} className={cn('rounded-2xl p-4 shadow-card transition-transform hover:-translate-y-0.5', tones[i % 3])}>
                 <div className="flex items-start justify-between">
@@ -143,7 +149,7 @@ export function Dashboard({ name, onOpenLesson, onHomework }: Props) {
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {TRACKS.map((t, i) => {
-            const lessons = t.live ? LESSONS.filter((l) => l.n <= (t.key === 'A1' ? 10 : 10)) : []
+            const lessons = t.live ? A1 : []
             const openedHere = lessons.filter((l) => partsSeen(l.n).length > 0).length
             return (
               <motion.div key={t.key} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.04 * i, duration: 0.3 }}>

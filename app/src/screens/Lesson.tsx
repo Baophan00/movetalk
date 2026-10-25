@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { ArrowLeft, ArrowRight, Check, CircleCheck } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, ChevronRight, CircleCheck, Volume2 } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Progress } from '../components/ui/progress'
-import { Blocks } from '../components/LessonBlocks'
-import { LESSONS, PART_META, partsOf } from '../lib/lessons'
+import { A1, lessonA1, titleOf, type LessonFile } from '../lib/curriculum'
+import { speak } from '../lib/audio'
 import { markPart, partsSeen } from '../lib/progress'
 import { cn } from '../lib/utils'
 
@@ -14,30 +14,190 @@ type Props = {
   onBack: () => void
 }
 
+const PLAY_LABEL = 'Play'
+
+function PlayButton({ text, small }: { text: string; small?: boolean }) {
+  return (
+    <Button
+      variant="outline"
+      size="icon"
+      aria-label={PLAY_LABEL}
+      onClick={() => speak(text)}
+      className={cn(small ? 'h-7 w-7' : 'h-8 w-8', 'shrink-0')}
+    >
+      <Volume2 className={small ? 'h-3 w-3' : 'h-3.5 w-3.5'} />
+    </Button>
+  )
+}
+
+function Vocabulary({ items }: { items: LessonFile['parts']['vocab'] }) {
+  const [open, setOpen] = useState<string[]>([])
+  const toggle = (w: string) => setOpen((o) => (o.includes(w) ? o.filter((x) => x !== w) : [...o, w]))
+
+  return (
+    <div className="grid gap-2 sm:grid-cols-2">
+      {items.map((v) => {
+        const isOpen = open.includes(v.word)
+        return (
+          <div key={v.word} className={cn('rounded-2xl border p-3.5 transition-colors', isOpen ? 'border-primary/30 bg-primary-soft/60' : 'border-line bg-surface')}>
+            <div className="flex items-start gap-2">
+              <button onClick={() => toggle(v.word)} className="min-w-0 flex-1 text-left">
+                <span className="block truncate text-[14.5px] font-semibold">{v.word}</span>
+                <span className="block truncate text-[11.5px] text-muted">
+                  {v.pos}
+                  {v.ipa && <span className="ml-1.5 font-mono">{v.ipa}</span>}
+                </span>
+              </button>
+              <PlayButton text={v.word} small />
+            </div>
+            {isOpen ? (
+              <div className="mt-2 border-t border-line/70 pt-2">
+                <p className="text-[12.5px] font-medium">{v.vi}</p>
+                {v.def && <p className="text-[11.5px] text-muted">{v.def}</p>}
+                {v.example && (
+                  <p className="mt-1.5 flex items-start gap-1.5 text-[12px] italic text-ink/75">
+                    <span className="min-w-0 flex-1">{v.example}</span>
+                  </p>
+                )}
+                {v.cloze && <p className="mt-1 text-[11.5px] text-muted">Recall: {v.cloze}</p>}
+              </div>
+            ) : (
+              <p className="mt-2 flex items-center gap-1 text-[11px] text-muted">
+                Tap for the meaning <ChevronRight className="h-3 w-3" />
+              </p>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+function Grammar({ sections }: { sections: LessonFile['parts']['grammar'] }) {
+  return (
+    <div className="space-y-3">
+      {sections.map((g) => (
+        <div key={g.section + g.sub} className="rounded-2xl border border-line bg-surface p-4">
+          <p className="text-[10.5px] font-bold uppercase tracking-[.14em] text-primary">{g.section}</p>
+          {g.sub && <p className="mt-1 text-[14px] font-semibold leading-snug">{g.sub}</p>}
+          <ul className="mt-2 space-y-1.5">
+            {g.lines.map((line, i) => (
+              <li key={`${line}-${i}`} className="flex items-start gap-1.5 text-[12.5px] leading-relaxed text-ink/80">
+                <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-ink/25" />
+                <span className="min-w-0 flex-1">{line}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function Dialogue({ turns }: { turns: LessonFile['parts']['dialogue'] }) {
+  return (
+    <div className="space-y-2">
+      {turns.map((t, i) => (
+        <div key={`${t.who}-${i}`} className={cn('flex gap-2', i % 2 === 1 && 'flex-row-reverse')}>
+          <span className="mt-1 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary-soft text-[10.5px] font-bold text-primary">
+            {t.who.slice(0, 1)}
+          </span>
+          <div className={cn('max-w-[86%] rounded-2xl px-3.5 py-2', i % 2 === 1 ? 'bg-primary text-white' : 'bg-bg text-ink')}>
+            <div className="flex items-start gap-2">
+              <p className="min-w-0 flex-1 text-[13px] leading-snug">{t.line}</p>
+              <button onClick={() => speak(t.line)} className={cn('mt-0.5 shrink-0', i % 2 === 1 ? 'text-white/80' : 'text-primary')} aria-label={PLAY_LABEL}>
+                <Volume2 className="h-3.5 w-3.5" />
+              </button>
+            </div>
+            <p className={cn('mt-0.5 text-[10px] font-semibold uppercase tracking-wide', i % 2 === 1 ? 'text-white/60' : 'text-muted')}>{t.who}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function Checks({ items }: { items: LessonFile['parts']['listenCheck'] }) {
+  const [shown, setShown] = useState<number[]>([])
+  return (
+    <div className="divide-y divide-line/70">
+      {items.map((c, i) => (
+        <button key={c.q} onClick={() => setShown((s) => (s.includes(i) ? s : [...s, i]))} className="flex w-full items-start gap-3 py-2.5 text-left">
+          <span className="mt-0.5 w-6 shrink-0 text-[11px] tabular-nums text-muted">{String(i + 1).padStart(2, '0')}</span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-[13px] font-medium">{c.q}</span>
+            {shown.includes(i) ? (
+              <span className="mt-1 block text-[12px] text-[#0f6b4f]">{c.a}</span>
+            ) : (
+              <span className="mt-1 block text-[11px] text-muted">Tap to check</span>
+            )}
+          </span>
+        </button>
+      ))}
+    </div>
+  )
+}
+
+function Choose({ items }: { items: LessonFile['parts']['grammarChoose'] }) {
+  const [shown, setShown] = useState<number[]>([])
+  return (
+    <div className="space-y-2">
+      {items.map((c, i) => (
+        <button
+          key={c.prompt}
+          onClick={() => setShown((s) => (s.includes(i) ? s : [...s, i]))}
+          className="w-full rounded-2xl border border-line bg-surface px-3.5 py-2.5 text-left"
+        >
+          <p className="text-[13.5px] font-medium">{c.prompt}</p>
+          <p className="mt-0.5 text-[11.5px] text-muted">{c.vi}</p>
+          {shown.includes(i) && (
+            <p className="mt-1.5 text-[11.5px] font-semibold text-primary">
+              Say the full question, then check with the audio above.
+            </p>
+          )}
+        </button>
+      ))}
+    </div>
+  )
+}
+
 export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
-  const lesson = LESSONS.find((l) => l.n === lessonN) || LESSONS[0]
-  const parts = useMemo(() => partsOf(lesson), [lesson])
+  const lesson = lessonA1(lessonN) ?? A1[0]
   const [active, setActive] = useState(0)
-  const [seen, setSeen] = useState<number[]>(() => partsSeen(lesson.n))
+  const [seen, setSeen] = useState<number[]>([])
+
+  const parts = useMemo(() => {
+    if (!lesson) return []
+    const list: { key: string; label: string; node: React.ReactNode }[] = []
+    if (lesson.parts.vocab.length) list.push({ key: 'vocab', label: 'Vocabulary', node: <Vocabulary items={lesson.parts.vocab} /> })
+    if (lesson.parts.grammar.length) list.push({ key: 'grammar', label: 'Grammar', node: <Grammar sections={lesson.parts.grammar} /> })
+    if (lesson.parts.dialogue.length) list.push({ key: 'dialogue', label: 'Dialogue', node: <Dialogue turns={lesson.parts.dialogue} /> })
+    if (lesson.parts.listenCheck.length) list.push({ key: 'check', label: 'Listening check', node: <Checks items={lesson.parts.listenCheck} /> })
+    if (lesson.parts.grammarChoose.length) list.push({ key: 'choose', label: 'Practice', node: <Choose items={lesson.parts.grammarChoose} /> })
+    return list
+  }, [lesson])
 
   useEffect(() => {
+    if (!lesson) return
     setActive(0)
     setSeen(partsSeen(lesson.n))
-  }, [lesson.n])
+  }, [lessonN, lesson])
 
   useEffect(() => {
-    if (!parts[active]) return
+    if (!lesson || !parts[active]) return
     const t = window.setTimeout(() => {
       markPart(lesson.n, active)
       setSeen(partsSeen(lesson.n))
     }, 1200)
     return () => window.clearTimeout(t)
-  }, [active, lesson.n, parts.length])
+  }, [active, lesson, parts.length])
 
-  const current = parts[active]
+  if (!lesson) return null
+
   const percent = parts.length ? Math.round((seen.length / parts.length) * 100) : 0
-  const prevLesson = LESSONS.find((l) => l.n === lesson.n - 1)
-  const nextLesson = LESSONS.find((l) => l.n === lesson.n + 1)
+  const prevLesson = A1.find((l) => l.n === lesson.n - 1)
+  const nextLesson = A1.find((l) => l.n === lesson.n + 1)
+  const totalWords = lesson.parts.vocab.length
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
@@ -49,8 +209,12 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0">
             <p className="text-[11px] font-bold uppercase tracking-[.14em] text-primary">Lesson {lesson.n} · A1</p>
-            <h2 className="mt-1 text-[24px] font-semibold leading-tight tracking-tight sm:text-[28px]">{lesson.title}</h2>
-            <p className="mt-1 text-[13px] text-muted">{lesson.vi}</p>
+            <h2 className="mt-1 text-[24px] font-semibold leading-tight tracking-tight sm:text-[28px]">
+              {titleOf(lesson) || `Lesson ${lesson.n}`}
+            </h2>
+            <p className="mt-1 text-[13px] text-muted">
+              {totalWords} words · {parts.length} parts
+            </p>
           </div>
           <div className="w-full sm:w-[220px]">
             <div className="flex items-center justify-between text-[11.5px] text-muted">
@@ -62,35 +226,21 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
             <Progress value={percent} className="mt-1.5" />
           </div>
         </div>
-
-        <div className="mt-4 flex flex-wrap gap-1.5">
-          <span className="rounded-full bg-primary-soft px-2.5 py-1 text-[11.5px] font-medium text-primary">
-            {parts.length} parts
-          </span>
-          {lesson.today.map((t) => (
-            <span key={t} className="rounded-full bg-bg px-2.5 py-1 text-[11.5px] text-muted">
-              {t}
-            </span>
-          ))}
-        </div>
       </div>
 
       <div className="mt-5 grid gap-5 lg:grid-cols-[236px_1fr]">
-        {/* part rail: right column on desktop, top row on mobile */}
         <nav className="order-1 lg:order-none">
-          <div className="no-scrollbar flex gap-1.5 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible lg:pb-0">
+          <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar lg:flex-col lg:overflow-visible">
             {parts.map((p, i) => {
-              const on = i === active
               const done = seen.includes(i)
+              const on = i === active
               return (
                 <button
                   key={p.key}
                   onClick={() => setActive(i)}
                   className={cn(
-                    'flex shrink-0 items-center gap-2 rounded-xl border px-3 py-2 text-left text-[12.5px] font-medium transition-all lg:w-full',
-                    on
-                      ? 'border-primary/30 bg-primary-soft text-primary'
-                      : 'border-line bg-surface text-ink/70 hover:border-primary/25 hover:text-ink',
+                    'flex shrink-0 items-center gap-2 rounded-xl px-2.5 py-2 text-left text-[12.5px] font-medium transition-colors lg:w-full',
+                    on ? 'bg-primary-soft text-primary' : 'text-ink/70 hover:bg-ink/[.04]',
                   )}
                 >
                   <span
@@ -101,7 +251,7 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
                   >
                     {done ? <Check className="h-3 w-3" /> : i + 1}
                   </span>
-                  <span className="whitespace-nowrap lg:whitespace-normal">{PART_META[p.key]?.label ?? p.key}</span>
+                  <span className="whitespace-nowrap lg:whitespace-normal">{p.label}</span>
                 </button>
               )
             })}
@@ -123,7 +273,7 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
                   <p className="text-[10.5px] font-bold uppercase tracking-[.14em] text-muted">
                     Part {active + 1} of {parts.length}
                   </p>
-                  <p className="text-[15px] font-semibold">{PART_META[current?.key]?.label ?? 'Content'}</p>
+                  <p className="text-[15px] font-semibold">{parts[active]?.label}</p>
                 </div>
                 {seen.includes(active) && (
                   <span className="inline-flex items-center gap-1 text-[11.5px] font-semibold text-ok">
@@ -132,7 +282,7 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
                 )}
               </div>
 
-              {current && <Blocks blocks={current.blocks} />}
+              {parts[active]?.node}
 
               <div className="mt-6 flex items-center justify-between gap-3 border-t border-line/70 pt-4">
                 <Button variant="ghost" size="sm" onClick={() => setActive((v) => Math.max(0, v - 1))} disabled={active === 0}>
@@ -155,7 +305,9 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
             <Button variant="outline" size="sm" onClick={() => prevLesson && onPickLesson(prevLesson.n)} disabled={!prevLesson}>
               <ArrowLeft className="h-3.5 w-3.5" /> Lesson {prevLesson ? prevLesson.n : ''}
             </Button>
-            <p className="text-[11.5px] text-muted">Lesson {lesson.n} of {LESSONS.length} open</p>
+            <p className="text-[11.5px] text-muted">
+              Lesson {lesson.n} of {A1.length}
+            </p>
             <Button variant="outline" size="sm" onClick={() => nextLesson && onPickLesson(nextLesson.n)} disabled={!nextLesson}>
               Lesson {nextLesson ? nextLesson.n : ''} <ArrowRight className="h-3.5 w-3.5" />
             </Button>

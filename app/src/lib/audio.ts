@@ -10,9 +10,22 @@ export function clipFor(text: string): string | undefined {
 }
 
 /** One voice at a time: a learner tapping a second line should never hear two. */
+/**
+ * Recorded clips win; anything without a clip falls back to the browser voice, so a new word is
+ * never silent just because the audio pass has not reached it yet.
+ */
 export function speak(text: string, onDone?: () => void) {
   const src = clipFor(text)
-  if (!src) return false
+  if (!src) {
+    if (!('speechSynthesis' in window)) return false
+    window.speechSynthesis.cancel()
+    const utter = new SpeechSynthesisUtterance(text)
+    utter.lang = 'en-US'
+    utter.rate = 0.95
+    utter.onend = () => onDone?.()
+    window.speechSynthesis.speak(utter)
+    return true
+  }
   if (current) {
     current.pause()
     current = null

@@ -78,6 +78,29 @@ export const A1_QUIZ: Record<number, QuizItem[]> = Object.fromEntries(
   }),
 )
 
+/** 'doc_ab12_MOVE_ACTIVATE_1_L01_BUILD YES-NO QUESTION _VIP.pptx' -> 'BUILD YES-NO QUESTION' */
+export function titleOf(lesson: LessonFile): string {
+  const raw = (lesson.deck ?? '')
+    .replace(/^doc_[a-f0-9]+_/i, '')
+    .replace(/^MOVE[\s_]*ACTIVATE[\s_]*1[\s_]*L\d+[\s_]*/i, '')
+    .replace(/[\s_]*VIP.*$/i, '')
+    .replace(/\.pptx$/i, '')
+    .replace(/[\s_]+/g, ' ')
+    .trim()
+  // 'BUILD YES-NO QUESTION' -> 'Build Yes-No Question'
+  return raw
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.split('-').map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join('-'))
+    .join(' ')
+}
+
+/** Parts with material in them — what the lesson screen actually shows. */
+export function partCount(lesson: LessonFile): number {
+  const p = lesson.parts
+  return [p.vocab.length, p.grammar.length, p.dialogue.length, p.listenCheck.length, p.grammarChoose.length].filter(Boolean).length
+}
+
 export function lessonA1(n: number): LessonFile | undefined {
   return A1.find((l) => l.n === n)
 }

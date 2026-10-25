@@ -11,7 +11,8 @@ import { TeacherAssignments } from './screens/TeacherAssignments'
 import { Button } from './components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from './components/ui/dialog'
 import { Input } from './components/ui/input'
-import { LESSONS } from './lib/lessons'
+import { A1 } from './lib/curriculum'
+import { partsSeen } from './lib/progress'
 
 type User = { name: string; email: string; role: Role }
 
@@ -130,8 +131,8 @@ export default function App() {
         user={user}
         onSignOut={signOut}
         onSwitchRole={switchRole}
-        done={1}
-        total={LESSONS.length}
+        done={A1.filter((l) => partsSeen(l.n).length > 0).length}
+        total={A1.length}
       />
       <div className="lg:pl-[264px]">
         <TopBar
