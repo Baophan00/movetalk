@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ArrowLeft, ArrowRight, Check, ChevronRight, Volume2 } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, ChevronRight, Info, Volume2 } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Progress } from '../components/ui/progress'
 import { A1, lessonA1, partPlan, quizFor, titleOf, type FlowGroup, type LessonFile } from '../lib/curriculum'
@@ -15,6 +15,47 @@ type Props = {
 }
 
 const PLAY_LABEL = 'Play'
+const VI_CHARS = /[àáảãạăằắẳẵặâầấẩẫậđèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵ]/i
+
+type Tone = 'violet' | 'mint' | 'lavender' | 'sky' | 'peach' | 'rose' | 'amber'
+
+const TONES: Record<Tone, { soft: string; border: string; text: string; solid: string; chip: string }> = {
+  violet: { soft: 'bg-[#f4f0ff]', border: 'border-[#ded4fb]', text: 'text-[#5b45a8]', solid: 'bg-[#7a5cf0]', chip: 'bg-[#ece5ff] text-[#5b45a8]' },
+  mint: { soft: 'bg-[#eafaf3]', border: 'border-[#c9eddd]', text: 'text-[#0f6b4f]', solid: 'bg-[#2f9e79]', chip: 'bg-[#d9f4e9] text-[#0f6b4f]' },
+  lavender: { soft: 'bg-[#eff1ff]', border: 'border-[#d7ddfb]', text: 'text-[#3f4c9a]', solid: 'bg-[#5a6ad4]', chip: 'bg-[#e4e8ff] text-[#3f4c9a]' },
+  sky: { soft: 'bg-[#eaf5ff]', border: 'border-[#cbe6fb]', text: 'text-[#1c5a86]', solid: 'bg-[#3793d1]', chip: 'bg-[#dcefff] text-[#1c5a86]' },
+  peach: { soft: 'bg-[#fff3e6]', border: 'border-[#fbddc2]', text: 'text-[#8a5320]', solid: 'bg-[#e08a3c]', chip: 'bg-[#ffe8d2] text-[#8a5320]' },
+  rose: { soft: 'bg-[#fdeef5]', border: 'border-[#f8d8e8]', text: 'text-[#8c3560]', solid: 'bg-[#c9528c]', chip: 'bg-[#fbdfed] text-[#8c3560]' },
+  amber: { soft: 'bg-[#fff8e8]', border: 'border-[#f3e3bd]', text: 'text-[#7a5a12]', solid: 'bg-[#c99a2e]', chip: 'bg-[#fbf0d4] text-[#7a5a12]' },
+}
+
+/** Six sections instead of thirteen parts: the deck's blocks are folded into the stage they belong to. */
+const SECTIONS: { id: string; label: string; tone: Tone; keys: string[] }[] = [
+  { id: 'overview', label: 'Overview', tone: 'violet', keys: ['flow-Overview'] },
+  { id: 'words', label: 'Words', tone: 'mint', keys: ['vocab'] },
+  { id: 'grammar', label: 'Grammar', tone: 'lavender', keys: ['grammar', 'choose'] },
+  { id: 'listening', label: 'Listening', tone: 'sky', keys: ['flow-Before you listen', 'dialogue', 'check'] },
+  { id: 'speaking', label: 'Speaking', tone: 'peach', keys: ['flow-Pronunciation', 'flow-Activate', 'flow-Real talk'] },
+  { id: 'wrap', label: 'Wrap-up', tone: 'rose', keys: ['flow-Reflect', 'flow-Mission', 'flow-Work', 'flow-Point & say'] },
+]
+
+const FLOW_TONE: Record<string, Tone> = {
+  Overview: 'violet',
+  'Before you listen': 'sky',
+  Pronunciation: 'peach',
+  Activate: 'lavender',
+  'Real talk': 'rose',
+  Reflect: 'mint',
+  Mission: 'mint',
+  Work: 'sky',
+  'Point & say': 'amber',
+  'Everyday scenes': 'rose',
+  Speaking: 'peach',
+  Listening: 'sky',
+  Notes: 'amber',
+}
+
+const POS_TONE: Record<string, Tone> = { v: 'peach', n: 'mint', adj: 'sky', adv: 'rose', prep: 'lavender' }
 
 function PlayButton({ text, small }: { text: string; small?: boolean }) {
   return (
@@ -30,21 +71,60 @@ function PlayButton({ text, small }: { text: string; small?: boolean }) {
   )
 }
 
+function Chip({ children, tone = 'violet' }: { children: React.ReactNode; tone?: Tone }) {
+  return (
+    <span className={cn('rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide', TONES[tone].chip)}>
+      {children}
+    </span>
+  )
+}
+
+function isPattern(line: string) {
+  return !VI_CHARS.test(line) && (/\+/.test(line) || /^[A-Z0-9 …?.,'/-]{4,}$/.test(line))
+}
+
+/** "Chọn Do hay Are" reads as an instruction, so show it in English; the note lines stay Vietnamese. */
+function englishSub(sub: string) {
+  const m = sub.match(/^Chọn\s+(.+?)\s+hay\s+(.+)$/i)
+  if (m) return `${m[1].trim()} or ${m[2].trim()}?`
+  return sub.replace(/\shay\s/gi, ' or ')
+}
+
+/** Bold the word that carries the meaning: the first word after "you". */
+function Highlight({ text }: { text: string }) {
+  const m = text.match(/^(.*?\byou\s+)(\S+)(.*)$/i)
+  if (!m) return <>{text}</>
+  return (
+    <>
+      {m[1]}
+      <span className="font-bold text-[#c8352a]">{m[2]}</span>
+      {m[3]}
+    </>
+  )
+}
+
 function Vocabulary({ items }: { items: LessonFile['parts']['vocab'] }) {
   const [open, setOpen] = useState<string[]>([])
   const toggle = (w: string) => setOpen((o) => (o.includes(w) ? o.filter((x) => x !== w) : [...o, w]))
 
   return (
     <div>
-      <p className="mb-2 flex items-center justify-between text-[11.5px] text-muted">
-        <span>Tap a word for the Vietnamese meaning.</span>
+      <div className="mb-2.5 flex items-center justify-between text-[11.5px] text-muted">
+        <span>Tap a word for the meaning, the example and the gap.</span>
         <span>{items.length} words</span>
-      </p>
-      <ul className="overflow-hidden rounded-2xl border border-line sm:grid sm:grid-cols-2 sm:gap-x-5">
+      </div>
+      <ul className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
         {items.map((v) => {
           const isOpen = open.includes(v.word)
+          const pos = (v.pos ?? '').toLowerCase().slice(0, 3)
           return (
-            <li key={v.word} className={cn('border-b border-line/60 transition-colors last:border-b-0', isOpen ? 'bg-primary-soft/45' : 'bg-surface hover:bg-bg/60')}>
+            <li
+              key={v.word}
+              className={cn(
+                'rounded-2xl border transition-shadow',
+                isOpen ? 'border-[#c9eddd] bg-[#f6fdfa] shadow-card' : 'border-line bg-surface hover:shadow-card',
+              )}
+            >
               <div
                 role="button"
                 tabIndex={0}
@@ -56,16 +136,14 @@ function Vocabulary({ items }: { items: LessonFile['parts']['vocab'] }) {
                     toggle(v.word)
                   }
                 }}
-                className="flex cursor-pointer items-center gap-2.5 px-3.5 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                className="flex cursor-pointer items-center gap-2 px-3.5 py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
               >
-                <div className="flex min-w-0 flex-1 items-baseline gap-2">
-                  <p className="shrink-0 text-[15px] font-semibold leading-tight text-ink">{v.word}</p>
-                  {v.ipa && <p className="truncate font-mono text-[11.5px] text-muted">{v.ipa}</p>}
-                  {v.pos && (
-                    <span className="shrink-0 rounded bg-ink/[.05] px-1.5 py-px text-[9.5px] font-semibold uppercase tracking-wide text-muted">
-                      {v.pos}
-                    </span>
-                  )}
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[16px] font-semibold leading-tight text-ink">{v.word}</p>
+                  <div className="mt-0.5 flex items-baseline gap-1.5">
+                    {v.ipa && <span className="truncate font-mono text-[11px] text-muted">{v.ipa}</span>}
+                    {v.pos && <Chip tone={POS_TONE[pos] ?? 'lavender'}>{v.pos}</Chip>}
+                  </div>
                 </div>
                 <span onClick={(e) => e.stopPropagation()}>
                   <PlayButton text={v.word} small />
@@ -73,11 +151,11 @@ function Vocabulary({ items }: { items: LessonFile['parts']['vocab'] }) {
                 <ChevronRight className={cn('h-4 w-4 shrink-0 text-muted transition-transform', isOpen && 'rotate-90')} />
               </div>
               {isOpen && (
-                <div className="px-3.5 pb-3">
-                  <p className="text-[13px] font-medium text-ink">{v.vi}</p>
-                  {v.def && <p className="mt-0.5 text-[12px] text-muted">{v.def}</p>}
-                  {v.example && <p className="mt-1.5 border-l-2 border-primary/25 pl-2 text-[12.5px] italic text-ink/75">{v.example}</p>}
-                  {v.cloze && <p className="mt-1 text-[11.5px] text-muted">Fill in: {v.cloze}</p>}
+                <div className="space-y-1 px-3.5 pb-3">
+                  <p className="text-[13px] font-semibold text-[#0f6b4f]">{v.vi}</p>
+                  {v.def && <p className="text-[11.5px] text-muted">{v.def}</p>}
+                  {v.example && <p className="rounded-xl bg-[#eafaf3] px-2.5 py-1.5 text-[12px] italic text-ink/75">{v.example}</p>}
+                  {v.cloze && <p className="text-[11.5px] text-muted">Gap: {v.cloze}</p>}
                 </div>
               )}
             </li>
@@ -88,26 +166,142 @@ function Vocabulary({ items }: { items: LessonFile['parts']['vocab'] }) {
   )
 }
 
-const VI_CHARS = /[àáảãạăằắẳẵặâầấẩẫậđèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵ]/i
+const STAGES: Record<string, Tone> = {
+  QUESTION: 'violet',
+  ANSWER: 'mint',
+  'ASK BACK': 'sky',
+  ADD: 'peach',
+  'ASK & RESPOND': 'sky',
+  'LISTEN & FOLLOW': 'mint',
+  'MISSION COMPLETE WHEN…': 'rose',
+}
+
+type Block = { label?: string; lines: string[] }
+
+/** Split a slide's lines into stages (QUESTION / ANSWER / ASK BACK) so a template reads as a table, not a list. */
+function intoBlocks(lines: string[]): Block[] {
+  const blocks: Block[] = [{ lines: [] }]
+  for (const line of lines) {
+    const key = line.trim().toUpperCase()
+    if (STAGES[key]) {
+      blocks.push({ label: key, lines: [] })
+      continue
+    }
+    blocks[blocks.length - 1].lines.push(line)
+  }
+  return blocks.filter((b) => b.lines.length > 0)
+}
+
+function Grammar({ sections }: { sections: LessonFile['parts']['grammar'] }) {
+  return (
+    <div className="space-y-3">
+      {sections.map((g) => {
+        const blocks = intoBlocks(g.lines)
+        const staged = blocks.filter((b) => b.label).length >= 2
+        const notes = blocks.flatMap((b) => b.lines).filter((l) => VI_CHARS.test(l))
+        return (
+          <article key={g.section + g.sub} className="overflow-hidden rounded-2xl border border-line bg-surface">
+            <header className="flex flex-wrap items-center gap-2 border-b border-line/60 bg-[#fbfaff] px-4 py-2">
+              <Chip tone="lavender">{g.section}</Chip>
+              {g.sub && <p className="min-w-0 flex-1 text-[13.5px] font-semibold leading-snug">{englishSub(g.sub)}</p>}
+            </header>
+
+            <div className="space-y-3 px-4 py-3">
+              {staged ? (
+                <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                  {blocks.map((b, bi) => {
+                    const t = b.label ? TONES[STAGES[b.label] ?? 'lavender'] : TONES.amber
+                    return (
+                      <div key={`${b.label}-${bi}`} className={cn('rounded-xl border px-3 py-2', t.border, t.soft)}>
+                        <p className={cn('mb-1 text-[10px] font-bold uppercase tracking-[.12em]', t.text)}>{b.label ?? 'Note'}</p>
+                        <ul className="space-y-1">
+                          {b.lines.map((line, i) => {
+                            const vi = VI_CHARS.test(line)
+                            return (
+                              <li
+                                key={`${line}-${i}`}
+                                className={cn(
+                                  'break-words text-[12.5px] leading-snug',
+                                  vi ? 'italic text-ink/60' : isPattern(line) ? 'font-mono text-[11.5px] font-semibold text-ink' : 'text-ink/85',
+                                )}
+                              >
+                                {line}
+                              </li>
+                            )
+                          })}
+                        </ul>
+                      </div>
+                    )
+                  })}
+                </div>
+              ) : (
+                <>
+                  <ul className="space-y-1">
+                    {g.lines
+                      .filter((l) => !VI_CHARS.test(l))
+                      .map((line, i) => (
+                        <li key={`${line}-${i}`} className="flex items-start gap-2 text-[13px] leading-relaxed text-ink/85">
+                          {isPattern(line) ? (
+                            <span className={cn('rounded-md px-1.5 py-0.5 font-mono text-[11px]', /ARE/.test(line) ? TONES.sky.chip : TONES.violet.chip)}>
+                              {line}
+                            </span>
+                          ) : (
+                            <>
+                              <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-primary/50" />
+                              <span className="min-w-0 flex-1 break-words">{line}</span>
+                            </>
+                          )}
+                        </li>
+                      ))}
+                  </ul>
+                  {notes.length > 0 && (
+                    <div className="flex items-start gap-2 rounded-xl bg-[#fff8e8] px-3 py-2">
+                      <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#7a5a12]" />
+                      <div className="min-w-0 space-y-0.5">
+                        {notes.map((n, i) => (
+                          <p key={`${n}-${i}`} className="text-[11.5px] leading-relaxed text-[#7a5a12]">
+                            {n}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </article>
+        )
+      })}
+    </div>
+  )
+}
 
 function Dialogue({ turns }: { turns: LessonFile['parts']['dialogue'] }) {
+  const speakers = [...new Set(turns.map((t) => t.who))]
   return (
     <div className="space-y-1.5">
       {turns.map((t, i) => {
-        const mine = i % 2 === 1
+        const mine = speakers.indexOf(t.who) % 2 === 1
         return (
           <div key={`${t.who}-${i}`} className={cn('flex items-end gap-2', mine && 'flex-row-reverse')}>
-            <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary-soft text-[10px] font-bold text-primary">
+            <span
+              className={cn(
+                'grid h-6 w-6 shrink-0 place-items-center rounded-full text-[10px] font-bold',
+                mine ? TONES.sky.chip : TONES.violet.chip,
+              )}
+            >
               {t.who.slice(0, 1)}
             </span>
             <div className={cn('max-w-[82%]', mine ? 'items-end text-right' : 'items-start')}>
               {turns[i - 1]?.who !== t.who && (
-                <p className={cn('mb-0.5 px-1 text-[10px] font-semibold uppercase tracking-wide text-muted', mine && 'text-right')}>{t.who}</p>
+                <p className={cn('mb-0.5 px-1 text-[10px] font-semibold uppercase tracking-wide text-muted', mine && 'text-right')}>
+                  {t.who}
+                </p>
               )}
               <div
                 className={cn(
                   'group inline-flex items-start gap-2 rounded-2xl px-3 py-2 text-left',
-                  mine ? 'rounded-br-md bg-primary text-white' : 'rounded-bl-md bg-bg text-ink',
+                  mine ? 'rounded-br-md bg-[#3793d1] text-white' : 'rounded-bl-md bg-[#f1ecff] text-ink',
                 )}
               >
                 <p className="min-w-0 text-[13px] leading-snug">{t.line}</p>
@@ -127,64 +321,34 @@ function Dialogue({ turns }: { turns: LessonFile['parts']['dialogue'] }) {
   )
 }
 
-/** "Chọn Do hay Are" reads as an instruction, so show it in English; the note lines stay Vietnamese. */
-function englishSub(sub: string) {
-  const m = sub.match(/^Chọn\s+(.+?)\s+hay\s+(.+)$/i)
-  if (m) return `${m[1].trim()} or ${m[2].trim()}?`
-  return sub.replace(/\shay\s/gi, ' or ')
-}
-
-function Grammar({ sections }: { sections: LessonFile['parts']['grammar'] }) {
-  return (
-    <div className="space-y-2.5">
-      {sections.map((g) => (
-        <div key={g.section + g.sub} className="rounded-2xl border border-line bg-surface px-4 py-3.5">
-          <p className="text-[10px] font-bold uppercase tracking-[.14em] text-primary">{g.section}</p>
-          {g.sub && <p className="mt-1 text-[14.5px] font-semibold leading-snug">{englishSub(g.sub)}</p>}
-          <ul className="mt-2 space-y-1">
-            {g.lines.map((line, i) => {
-              const vi = VI_CHARS.test(line)
-              const pattern = !vi && (/\+/.test(line) || /^[A-Z0-9 …?.,'\/-]{4,}$/.test(line))
-              return (
-                <li key={`${line}-${i}`} className={cn('flex items-start gap-2 text-[12.5px] leading-relaxed', vi ? 'text-muted' : 'text-ink/85')}>
-                  {!vi && !pattern && <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-ink/25" />}
-                  <span
-                    className={cn(
-                      'break-words',
-                      pattern ? 'rounded-md bg-ink/[.045] px-1.5 py-0.5 font-mono text-[11.5px] text-ink' : 'min-w-0 flex-1',
-                      vi && 'italic',
-                    )}
-                  >
-                    {line}
-                  </span>
-                </li>
-              )
-            })}
-          </ul>
-        </div>
-      ))}
-    </div>
-  )
-}
-
 function Checks({ items }: { items: LessonFile['parts']['listenCheck'] }) {
   const [shown, setShown] = useState<number[]>([])
   return (
-    <div className="divide-y divide-line/70">
-      {items.map((c, i) => (
-        <button key={c.q} onClick={() => setShown((s) => (s.includes(i) ? s : [...s, i]))} className="flex w-full items-start gap-3 py-2.5 text-left">
-          <span className="mt-0.5 w-6 shrink-0 text-[11px] tabular-nums text-muted">{String(i + 1).padStart(2, '0')}</span>
-          <span className="min-w-0 flex-1">
-            <span className="block text-[13px] font-medium">{c.q}</span>
-            {shown.includes(i) ? (
-              <span className="mt-1 block text-[12px] text-[#0f6b4f]">{c.a}</span>
+    <ul className="grid gap-2 sm:grid-cols-2">
+      {items.map((c, i) => {
+        const open = shown.includes(i)
+        return (
+          <li
+            key={c.q}
+            className={cn('rounded-2xl border px-3.5 py-2.5 transition-colors', open ? 'border-[#c9eddd] bg-[#f6fdfa]' : 'border-line bg-surface')}
+          >
+            <div className="flex items-start gap-2">
+              <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-md bg-[#dcefff] text-[10px] font-bold text-[#1c5a86]">
+                {i + 1}
+              </span>
+              <p className="min-w-0 flex-1 text-[13px] font-medium leading-snug">{c.q}</p>
+            </div>
+            {open ? (
+              <p className="mt-1.5 border-l-2 border-[#2f9e79]/40 pl-2 text-[12px] text-[#0f6b4f]">{c.a}</p>
             ) : (
-              <span className="mt-1 block text-[11px] text-muted">Tap to check</span>
+              <button onClick={() => setShown((s) => [...s, i])} className="mt-1.5 text-[11.5px] font-semibold text-primary hover:underline">
+                Show the answer
+              </button>
             )}
-          </span>
-        </button>
-      ))}
-    </div>
+          </li>
+        )
+      })}
+    </ul>
   )
 }
 
@@ -199,38 +363,25 @@ function Overview({ lesson, partCount, onStart }: { lesson: LessonFile; partCoun
       <span aria-hidden className="pointer-events-none absolute -right-3 -top-6 select-none text-[118px] font-bold leading-none text-primary/[.07]">
         {String(lesson.n).padStart(2, '0')}
       </span>
-      <p className="text-[10.5px] font-bold uppercase tracking-[.16em] text-primary">
-        A1 · Lesson {lesson.n}
-      </p>
+      <p className="text-[10.5px] font-bold uppercase tracking-[.16em] text-primary">A1 · Lesson {lesson.n}</p>
       <h3 className="mt-1.5 max-w-[22ch] text-[26px] font-semibold leading-[1.15] tracking-tight sm:text-[30px]">
         {titleOf(lesson) || `Lesson ${lesson.n}`}
       </h3>
       {vi && <p className="mt-2 max-w-[46ch] text-[13.5px] leading-relaxed text-ink/70">{vi}</p>}
 
       <div className="mt-4 flex flex-wrap gap-1.5">
-        <span className="rounded-full border border-[#ded4fb] bg-surface px-2.5 py-1 text-[11px] font-medium text-ink/75">
-          {lesson.parts.vocab.length} words
-        </span>
-        <span className="rounded-full border border-[#ded4fb] bg-surface px-2.5 py-1 text-[11px] font-medium text-ink/75">
-          {partCount} parts
-        </span>
-        {lesson.parts.dialogue.length > 0 && (
-          <span className="rounded-full border border-[#ded4fb] bg-surface px-2.5 py-1 text-[11px] font-medium text-ink/75">
-            {lesson.parts.dialogue.length} dialogue lines
-          </span>
-        )}
-        {lesson.parts.listenCheck.length > 0 && (
-          <span className="rounded-full border border-[#ded4fb] bg-surface px-2.5 py-1 text-[11px] font-medium text-ink/75">
-            {lesson.parts.listenCheck.length} listening checks
-          </span>
-        )}
+        <Chip tone="mint">{lesson.parts.vocab.length} words</Chip>
+        <Chip tone="lavender">{partCount} sections</Chip>
+        {lesson.parts.dialogue.length > 0 && <Chip tone="sky">{lesson.parts.dialogue.length} dialogue lines</Chip>}
+        {lesson.parts.listenCheck.length > 0 && <Chip tone="sky">{lesson.parts.listenCheck.length} listening checks</Chip>}
+        {lesson.parts.grammarChoose.length > 0 && <Chip tone="peach">{lesson.parts.grammarChoose.length} sentences to choose</Chip>}
       </div>
 
       <div className="mt-5 flex items-center gap-3">
         <Button size="sm" onClick={onStart}>
           Start the lesson <ArrowRight className="h-3.5 w-3.5" />
         </Button>
-        <p className="hidden text-[11.5px] text-muted sm:block">Title slide of the handout. Next part opens Vocabulary.</p>
+        <p className="hidden text-[11.5px] text-muted sm:block">Title slide of the handout. Next section opens Words.</p>
       </div>
     </div>
   )
@@ -280,7 +431,7 @@ function Choose({ items }: { items: PracticeItem[] }) {
                   </span>
                 ))}
               </p>
-              <p className="mt-1 text-[11.5px] italic text-ink/55">{it.vi}</p>
+              {it.vi && <p className="mt-1 text-[11.5px] italic text-ink/55">{it.vi}</p>}
               <div className="mt-2 flex items-center gap-1.5">
                 {['Do', 'Are'].map((opt) => {
                   const isRight = opt === it.answer
@@ -312,94 +463,79 @@ function Choose({ items }: { items: PracticeItem[] }) {
   )
 }
 
-/** Bold the word that carries the meaning: the first word after "you". */
-function Highlight({ text }: { text: string }) {
-  const m = text.match(/^(.*?\byou\s+)(\S+)(.*)$/i)
-  if (!m) return <>{text}</>
-  return (
-    <>
-      {m[1]}
-      <span className="font-bold text-[#c8352a]">{m[2]}</span>
-      {m[3]}
-    </>
-  )
-}
-
-function Flow({ groups, heading = true }: { groups: FlowGroup[]; heading?: boolean }) {
+function Flow({ groups }: { groups: FlowGroup[] }) {
   return (
     <div className="space-y-3">
-      {groups.map((g) => (
-        <div key={g.group}>
-          {heading && (
-            <div className="mb-2 flex items-center gap-2">
-              <span className="h-px flex-1 bg-line" />
-              <span className="text-[10.5px] font-bold uppercase tracking-[.16em] text-muted">{g.group}</span>
-              <span className="h-px flex-1 bg-line" />
-            </div>
-          )}
-          <div className="grid gap-2.5 lg:grid-cols-2">
+      {groups.map((g) => {
+        const tone = TONES[FLOW_TONE[g.group] ?? 'violet']
+        return (
+          <div key={g.group} className="grid gap-2.5 lg:grid-cols-2">
             {g.slides.map((slide, i) => {
               const dup = g.slides.filter((x) => x.title === slide.title).length > 1
+              const body = slide.lines.filter((line) => line.trim().toLowerCase() !== slide.title.trim().toLowerCase())
+              const viShare = body.filter((l) => VI_CHARS.test(l)).length / Math.max(body.length, 1)
+              const readingSlide = viShare >= 0.6
               return (
-                <div key={`${slide.title}-${i}`} className={cn('rounded-2xl border border-line bg-surface px-3.5 py-3', g.slides.length === 1 && 'lg:col-span-2')}>
-                  <div className="flex items-start gap-2">
-                    <span className="mt-0.5 h-5 w-1 shrink-0 rounded-full bg-primary/35" />
-                    <p className="min-w-0 flex-1 text-[12.5px] font-semibold leading-snug text-ink">
-                      {slide.title}
-                      {dup && <span className="ml-1.5 text-[10.5px] font-normal text-muted">{i + 1}/{g.slides.length}</span>}
-                    </p>
-                  </div>
-                  <ul className="mt-2 space-y-1">
-                    {slide.lines
-                      .filter((line) => line.trim().toLowerCase() !== slide.title.trim().toLowerCase())
-                      .map((line, k) => {
+                <article
+                  key={`${slide.title}-${i}`}
+                  className={cn('overflow-hidden rounded-2xl border border-line bg-surface', g.slides.length === 1 && 'lg:col-span-2')}
+                >
+                  <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', tone.soft)}>
+                    <span className={cn('h-2 w-2 shrink-0 rounded-full', tone.solid)} />
+                    <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', tone.text)}>{slide.title}</p>
+                    {dup && (
+                      <span className="text-[10.5px] text-muted">
+                        {i + 1}/{g.slides.length}
+                      </span>
+                    )}
+                  </header>
+                  <ul className="space-y-1 px-3.5 py-2.5">
+                    {body.map((line, k) => {
                       const vi = VI_CHARS.test(line)
-                      const pattern = !vi && (/\+/.test(line) || /^[A-Z0-9 …?.,'\/-]{4,}$/.test(line))
+                      const pattern = isPattern(line)
+                      const check = /^(Tôi|Có |Câu trả lời|Cuộc|Do \/ Are)/.test(line)
+                      const teacher = /^Giáo viên/i.test(line)
                       return (
-                        <li key={`${line}-${k}`} className={cn('flex items-start gap-1.5 text-[12.5px] leading-relaxed', vi ? 'text-ink/60' : 'text-ink/85')}>
+                        <li
+                          key={`${line}-${k}`}
+                          className={cn(
+                            'flex items-start gap-1.5 text-[12.5px] leading-relaxed',
+                            readingSlide ? 'text-ink/75' : vi ? 'text-ink/55' : 'text-ink/85',
+                          )}
+                        >
                           {!vi && !pattern && <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-ink/20" />}
+                          {check && (
+                            <span className={cn('mt-0.5 grid h-3.5 w-3.5 shrink-0 place-items-center rounded border', 'border-ink/25')} />
+                          )}
                           <span
                             className={cn(
                               'min-w-0 break-words',
-                              pattern ? 'rounded-md bg-ink/[.04] px-1.5 py-0.5 font-mono text-[11px] text-ink' : 'flex-1',
-                              vi && 'italic',
+                              pattern ? cn('rounded-md px-1.5 py-0.5 font-mono text-[11px]', tone.chip) : 'flex-1',
+                              vi && !readingSlide && 'italic',
+                              readingSlide && vi && 'font-medium',
                             )}
                           >
-                            {line}
+                            {teacher && <Info className="mr-1 inline h-3 w-3 text-[#7a5a12]" />}
+                            {line.split(/_{3,}/).map((chunk, ci, arr) => (
+                              <span key={ci}>
+                                {chunk}
+                                {ci < arr.length - 1 && <span className="mx-1 inline-block w-16 border-b border-dashed border-ink/40 align-baseline">&nbsp;</span>}
+                              </span>
+                            ))}
                           </span>
                         </li>
-                        )
-                      })}
+                      )
+                    })}
                   </ul>
-                </div>
+                </article>
               )
             })}
           </div>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }
-type Tone = 'violet' | 'mint' | 'lavender' | 'sky' | 'peach' | 'rose'
-
-const TONES: Record<Tone, { soft: string; border: string; text: string; solid: string }> = {
-  violet: { soft: 'bg-[#f4f0ff]', border: 'border-[#ded4fb]', text: 'text-[#5b45a8]', solid: 'bg-[#7a5cf0]' },
-  mint: { soft: 'bg-[#eafaf3]', border: 'border-[#c9eddd]', text: 'text-[#0f6b4f]', solid: 'bg-[#2f9e79]' },
-  lavender: { soft: 'bg-[#eff1ff]', border: 'border-[#d7ddfb]', text: 'text-[#3f4c9a]', solid: 'bg-[#5a6ad4]' },
-  sky: { soft: 'bg-[#eaf5ff]', border: 'border-[#cbe6fb]', text: 'text-[#1c5a86]', solid: 'bg-[#3793d1]' },
-  peach: { soft: 'bg-[#fff3e6]', border: 'border-[#fbddc2]', text: 'text-[#8a5320]', solid: 'bg-[#e08a3c]' },
-  rose: { soft: 'bg-[#fdeef5]', border: 'border-[#f8d8e8]', text: 'text-[#8c3560]', solid: 'bg-[#c9528c]' },
-}
-
-/** Six sections instead of thirteen parts: the deck's blocks are folded into the stage they belong to. */
-const SECTIONS: { id: string; label: string; tone: Tone; keys: string[] }[] = [
-  { id: 'overview', label: 'Overview', tone: 'violet', keys: ['flow-Overview'] },
-  { id: 'words', label: 'Words', tone: 'mint', keys: ['vocab'] },
-  { id: 'grammar', label: 'Grammar', tone: 'lavender', keys: ['grammar', 'choose'] },
-  { id: 'listening', label: 'Listening', tone: 'sky', keys: ['flow-Before you listen', 'dialogue', 'check'] },
-  { id: 'speaking', label: 'Speaking', tone: 'peach', keys: ['flow-Pronunciation', 'flow-Activate', 'flow-Real talk'] },
-  { id: 'wrap', label: 'Wrap-up', tone: 'rose', keys: ['flow-Reflect', 'flow-Mission', 'flow-Work', 'flow-Point & say'] },
-]
 
 export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
   const lesson = lessonA1(lessonN) ?? A1[0]
@@ -431,11 +567,11 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
     }
     for (const g of lesson.parts.flow) {
       if (g.group === 'Overview') continue
-      n[`flow-${g.group}`] = <Flow groups={[g]} heading={false} />
+      n[`flow-${g.group}`] = <Flow groups={[g]} />
     }
-    n['flow-Overview'] = <Overview lesson={lesson} partCount={plan.length} onStart={() => setActive(1)} />
+    n['flow-Overview'] = <Overview lesson={lesson} partCount={SECTIONS.length} onStart={() => setActive(1)} />
     return n
-  }, [lesson, plan.length])
+  }, [lesson])
 
   const sections = useMemo(
     () =>
@@ -471,9 +607,7 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
 
   if (!lesson) return null
 
-  const opened = (sec: (typeof sections)[number]) =>
-    sec.blocks.some((b) => seen.includes(plan.findIndex((p) => p.key === b.key)))
-
+  const opened = (sec: (typeof sections)[number]) => sec.blocks.some((b) => seen.includes(plan.findIndex((p) => p.key === b.key)))
   const openedCount = sections.filter(opened).length
   const percent = sections.length ? Math.round((openedCount / sections.length) * 100) : 0
   const prevLesson = A1.find((l) => l.n === lesson.n - 1)
@@ -510,7 +644,9 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
 
       <div className="mt-2.5 flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
         <div className="min-w-0">
-          <p className="text-[10.5px] font-bold uppercase tracking-[.16em] text-primary">A1 · Lesson {lesson.n} of {A1.length}</p>
+          <p className="text-[10.5px] font-bold uppercase tracking-[.16em] text-primary">
+            A1 · Lesson {lesson.n} of {A1.length}
+          </p>
           <h2 className="mt-0.5 truncate text-[22px] font-semibold leading-tight tracking-tight sm:text-[25px]">
             {titleOf(lesson) || `Lesson ${lesson.n}`}
           </h2>
@@ -548,7 +684,7 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
       </div>
 
       {current && (
-        <section key={current.id} className={cn('mt-3 overflow-hidden rounded-3xl border', tone.border, 'bg-surface')}>
+        <section key={current.id} className={cn('mt-3 overflow-hidden rounded-3xl border bg-surface', tone.border)}>
           <header className={cn('flex flex-wrap items-center justify-between gap-2 px-4 py-3 sm:px-6', tone.soft)}>
             <div className="min-w-0">
               <p className={cn('text-[10.5px] font-bold uppercase tracking-[.16em]', tone.text)}>
