@@ -29,15 +29,56 @@ const TONES: Record<Tone, { soft: string; border: string; text: string; solid: s
   amber: { soft: 'bg-[#fff8e8]', border: 'border-[#f3e3bd]', text: 'text-[#7a5a12]', solid: 'bg-[#c99a2e]', chip: 'bg-[#fbf0d4] text-[#7a5a12]' },
 }
 
-/** Six sections instead of thirteen parts: the deck's blocks are folded into the stage they belong to. */
-const SECTIONS: { id: string; label: string; tone: Tone; keys: string[] }[] = [
-  { id: 'overview', label: 'Overview', tone: 'violet', keys: ['flow-Overview'] },
-  { id: 'words', label: 'Words', tone: 'mint', keys: ['vocab'] },
-  { id: 'grammar', label: 'Grammar', tone: 'lavender', keys: ['grammar', 'choose'] },
-  { id: 'listening', label: 'Listening', tone: 'sky', keys: ['flow-Before you listen', 'dialogue', 'check'] },
-  { id: 'speaking', label: 'Speaking', tone: 'peach', keys: ['flow-Pronunciation', 'flow-Activate', 'flow-Real talk'] },
-  { id: 'wrap', label: 'Wrap-up', tone: 'rose', keys: ['flow-Reflect', 'flow-Mission', 'flow-Work', 'flow-Point & say'] },
-]
+/** The sections a lesson shows, in the order the handout runs them. */
+const FLOW_LABEL: Record<string, string> = {
+  Pronunciation: 'Pronunciation',
+  Activate: 'Activate',
+  'Real talk': 'Real talk',
+  Reflect: 'Reflect & Retry',
+  Mission: 'Daily mission',
+  Work: 'Work',
+  Notes: 'Notes',
+  'Point & say': 'Point & say',
+  Speaking: 'Speaking',
+  'Everyday scenes': 'Everyday scenes',
+  Listening: 'Listening',
+  'Before you listen': 'Before you listen',
+}
+
+const TONE_CYCLE: Tone[] = ['peach', 'rose', 'mint', 'amber', 'lavender', 'sky', 'violet']
+
+type SecDef = { id: string; label: string; tone: Tone; keys: string[] }
+
+function sectionDefs(lesson: LessonFile): SecDef[] {
+  const groups = lesson.parts.flow.map((g) => g.group)
+  const has = (g: string) => groups.includes(g)
+  const defs: SecDef[] = [{ id: 'overview', label: 'Overview', tone: 'violet', keys: ['flow-Overview'] }]
+
+  if (lesson.parts.vocab.length) defs.push({ id: 'words', label: 'Words', tone: 'mint', keys: ['vocab'] })
+
+  const grammarKeys: string[] = []
+  if (lesson.parts.grammar.length) grammarKeys.push('grammar')
+  if (lesson.parts.grammarChoose.length) grammarKeys.push('choose')
+  if (has('Grammar')) grammarKeys.push('flow-Grammar')
+  if (grammarKeys.length) defs.push({ id: 'grammar', label: 'Grammar', tone: 'lavender', keys: grammarKeys })
+
+  const listenKeys = ['flow-Before you listen', 'dialogue', 'check'].filter(
+    (k) => (k === 'dialogue' ? lesson.parts.dialogue.length > 0 : k === 'check' ? lesson.parts.listenCheck.length > 0 : has('Before you listen')),
+  )
+  if (listenKeys.length) defs.push({ id: 'listen', label: 'Listen & discover', tone: 'sky', keys: listenKeys })
+
+  const rest = groups.filter((g) => g !== 'Overview' && g !== 'Before you listen' && g !== 'Grammar')
+  rest.forEach((g, i) => {
+    defs.push({
+      id: `flow-${g}`,
+      label: FLOW_LABEL[g] ?? g,
+      tone: FLOW_TONE[g] ?? TONE_CYCLE[i % TONE_CYCLE.length],
+      keys: [`flow-${g}`],
+    })
+  })
+
+  return defs
+}
 
 const FLOW_TONE: Record<string, Tone> = {
   Overview: 'violet',
@@ -353,14 +394,14 @@ function Checks({ items }: { items: LessonFile['parts']['listenCheck'] }) {
 }
 
 /** The deck opens on a title slide; show it as a cover, not as a wall of slide lines. */
-function Overview({ lesson, partCount, onStart }: { lesson: LessonFile; partCount: number; onStart: () => void }) {
+function Overview({ lesson, agenda, onStart }: { lesson: LessonFile; agenda: SecDef[]; onStart: () => void }) {
   const g = lesson.parts.flow.find((x) => x.group === 'Overview')
   const lines = g?.slides?.[0]?.lines ?? []
   const vi = lines.find((l) => VI_CHARS.test(l) && l.length > 8)
 
   return (
     <div className="relative overflow-hidden rounded-2xl border border-[#ded4fb] bg-[#f8f5ff] px-5 py-6 sm:px-7 sm:py-8">
-      <span aria-hidden className="pointer-events-none absolute -right-3 -top-6 select-none text-[118px] font-bold leading-none text-primary/[.07]">
+      <span aria-hidden className="pointer-events-none absolute right-4 top-1 select-none text-[96px] font-bold leading-none text-primary/[.06]">
         {String(lesson.n).padStart(2, '0')}
       </span>
       <p className="text-[10.5px] font-bold uppercase tracking-[.16em] text-primary">A1 · Lesson {lesson.n}</p>
@@ -371,7 +412,7 @@ function Overview({ lesson, partCount, onStart }: { lesson: LessonFile; partCoun
 
       <div className="mt-4 flex flex-wrap gap-1.5">
         <Chip tone="mint">{lesson.parts.vocab.length} words</Chip>
-        <Chip tone="lavender">{partCount} sections</Chip>
+        <Chip tone="lavender">{agenda.length} sections</Chip>
         {lesson.parts.dialogue.length > 0 && <Chip tone="sky">{lesson.parts.dialogue.length} dialogue lines</Chip>}
         {lesson.parts.listenCheck.length > 0 && <Chip tone="sky">{lesson.parts.listenCheck.length} listening checks</Chip>}
         {lesson.parts.grammarChoose.length > 0 && <Chip tone="peach">{lesson.parts.grammarChoose.length} sentences to choose</Chip>}
@@ -463,11 +504,44 @@ function Choose({ items }: { items: PracticeItem[] }) {
   )
 }
 
-function Flow({ groups }: { groups: FlowGroup[] }) {
+const GENERIC_LABEL = /^[A-Z][A-Z0-9 ,&/'’+…-]{2,30}$/
+
+type Palette = (typeof TONES)[Tone]
+
+function LineRow({ line, pal, reading }: { line: string; pal: Palette; reading: boolean }) {
+  const vi = VI_CHARS.test(line)
+  const pattern = isPattern(line)
+  const check = /^(Tôi|Có |Câu trả lời|Cuộc|Do \/ Are)/.test(line)
+  const teacher = /^Giáo viên/i.test(line)
+  return (
+    <li className={cn('flex items-start gap-1.5 text-[12.5px] leading-relaxed', reading ? 'text-ink/75' : vi ? 'text-ink/55' : 'text-ink/85')}>
+      {check && <span className="mt-0.5 grid h-3.5 w-3.5 shrink-0 place-items-center rounded border border-ink/25" />}
+      {!vi && !pattern && !check && <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-ink/20" />}
+      <span
+        className={cn(
+          'min-w-0 break-words',
+          pattern ? cn('rounded-md px-1.5 py-0.5 font-mono text-[11px]', pal.chip) : 'flex-1',
+          vi && !reading && 'italic',
+          reading && vi && 'font-medium',
+        )}
+      >
+        {teacher && <Info className="mr-1 inline h-3 w-3 text-[#7a5a12]" />}
+        {line.split(/_{3,}/).map((chunk, ci, arr) => (
+          <span key={ci}>
+            {chunk}
+            {ci < arr.length - 1 && <span className="mx-1 inline-block w-16 border-b border-dashed border-ink/40 align-baseline">&nbsp;</span>}
+          </span>
+        ))}
+      </span>
+    </li>
+  )
+}
+
+function Flow({ groups, tone: sectionTone }: { groups: FlowGroup[]; tone?: Tone }) {
   return (
     <div className="space-y-3">
       {groups.map((g) => {
-        const tone = TONES[FLOW_TONE[g.group] ?? 'violet']
+        const pal = TONES[sectionTone ?? FLOW_TONE[g.group] ?? 'violet']
         return (
           <div key={g.group} className="grid gap-2.5 lg:grid-cols-2">
             {g.slides.map((slide, i) => {
@@ -475,58 +549,71 @@ function Flow({ groups }: { groups: FlowGroup[] }) {
               const body = slide.lines.filter((line) => line.trim().toLowerCase() !== slide.title.trim().toLowerCase())
               const viShare = body.filter((l) => VI_CHARS.test(l)).length / Math.max(body.length, 1)
               const readingSlide = viShare >= 0.6
+
+              // A slide made of stage labels (ENTER THE SCENE, DAY 1, PREDICT…) reads better as steps.
+              const blocks: { label?: string; lines: string[] }[] = [{ lines: [] }]
+              for (const line of body) {
+                const t = line.trim()
+                if (GENERIC_LABEL.test(t) && !t.includes('+') && !t.endsWith('?')) blocks.push({ label: t, lines: [] })
+                else blocks[blocks.length - 1].lines.push(line)
+              }
+              const labelled = blocks.filter((b) => b.label && b.lines.length > 0)
+              const stepped = labelled.length >= 2
+              // Labels written before their items ("MY NEXT TRY", "PARTNER CHECK") stay as a chip row.
+              const looseLabels = stepped ? [] : [...new Set(blocks.map((b) => b.label).filter(Boolean) as string[])]
+
               return (
                 <article
                   key={`${slide.title}-${i}`}
                   className={cn('overflow-hidden rounded-2xl border border-line bg-surface', g.slides.length === 1 && 'lg:col-span-2')}
                 >
-                  <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', tone.soft)}>
-                    <span className={cn('h-2 w-2 shrink-0 rounded-full', tone.solid)} />
-                    <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', tone.text)}>{slide.title}</p>
+                  <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
+                    <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
+                    <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{slide.title}</p>
                     {dup && (
                       <span className="text-[10.5px] text-muted">
                         {i + 1}/{g.slides.length}
                       </span>
                     )}
                   </header>
-                  <ul className="space-y-1 px-3.5 py-2.5">
-                    {body.map((line, k) => {
-                      const vi = VI_CHARS.test(line)
-                      const pattern = isPattern(line)
-                      const check = /^(Tôi|Có |Câu trả lời|Cuộc|Do \/ Are)/.test(line)
-                      const teacher = /^Giáo viên/i.test(line)
-                      return (
-                        <li
-                          key={`${line}-${k}`}
-                          className={cn(
-                            'flex items-start gap-1.5 text-[12.5px] leading-relaxed',
-                            readingSlide ? 'text-ink/75' : vi ? 'text-ink/55' : 'text-ink/85',
-                          )}
-                        >
-                          {!vi && !pattern && <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-ink/20" />}
-                          {check && (
-                            <span className={cn('mt-0.5 grid h-3.5 w-3.5 shrink-0 place-items-center rounded border', 'border-ink/25')} />
-                          )}
-                          <span
-                            className={cn(
-                              'min-w-0 break-words',
-                              pattern ? cn('rounded-md px-1.5 py-0.5 font-mono text-[11px]', tone.chip) : 'flex-1',
-                              vi && !readingSlide && 'italic',
-                              readingSlide && vi && 'font-medium',
+
+                  {stepped ? (
+                    <div className="grid gap-2 px-3.5 py-3 sm:grid-cols-2">
+                      {blocks
+                        .filter((b) => b.lines.length > 0)
+                        .map((b, bi) => (
+                          <div key={`${b.label}-${bi}`} className={cn('rounded-xl border px-2.5 py-2', pal.border, pal.soft, !b.label && 'sm:col-span-2')}>
+                            {b.label && (
+                              <p className={cn('mb-1 text-[9.5px] font-bold uppercase tracking-[.12em]', pal.text)}>{b.label}</p>
                             )}
-                          >
-                            {teacher && <Info className="mr-1 inline h-3 w-3 text-[#7a5a12]" />}
-                            {line.split(/_{3,}/).map((chunk, ci, arr) => (
-                              <span key={ci}>
-                                {chunk}
-                                {ci < arr.length - 1 && <span className="mx-1 inline-block w-16 border-b border-dashed border-ink/40 align-baseline">&nbsp;</span>}
-                              </span>
-                            ))}
-                          </span>
-                        </li>
-                      )
-                    })}
-                  </ul>
+                            <ul className="space-y-0.5">
+                              {b.lines.map((line, li) => (
+                                <LineRow key={`${line}-${li}`} line={line} pal={pal} reading={readingSlide} />
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                    </div>
+                  ) : (
+                    <div className="px-3.5 py-2.5">
+                      {looseLabels.length > 0 && (
+                        <div className="mb-1.5 flex flex-wrap gap-1">
+                          {looseLabels.map((l) => (
+                            <span key={l} className={cn('rounded px-1.5 py-0.5 text-[9.5px] font-bold uppercase tracking-wide', pal.chip)}>
+                              {l}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      <ul className="space-y-1">
+                        {body
+                          .filter((line) => !looseLabels.includes(line.trim()))
+                          .map((line, k) => (
+                            <LineRow key={`${line}-${k}`} line={line} pal={pal} reading={readingSlide} />
+                          ))}
+                      </ul>
+                    </div>
+                  )}
                 </article>
               )
             })}
@@ -567,21 +654,25 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
     }
     for (const g of lesson.parts.flow) {
       if (g.group === 'Overview') continue
-      n[`flow-${g.group}`] = <Flow groups={[g]} />
+      n[`flow-${g.group}`] = <Flow groups={[g]} tone={FLOW_TONE[g.group]} />
     }
-    n['flow-Overview'] = <Overview lesson={lesson} partCount={SECTIONS.length} onStart={() => setActive(1)} />
+    n['flow-Overview'] = <Overview lesson={lesson} agenda={sectionDefs(lesson).slice(1)} onStart={() => setActive(1)} />
     return n
   }, [lesson])
 
+  const defs = useMemo(() => (lesson ? sectionDefs(lesson) : []), [lesson])
+
   const sections = useMemo(
     () =>
-      SECTIONS.map((s) => ({
-        ...s,
-        blocks: s.keys
-          .filter((k) => nodes[k])
-          .map((k) => ({ key: k, label: plan.find((p) => p.key === k)?.label ?? '', node: nodes[k] })),
-      })).filter((s) => s.blocks.length > 0),
-    [nodes, plan],
+      defs
+        .map((sec) => ({
+          ...sec,
+          blocks: sec.keys
+            .filter((k) => nodes[k])
+            .map((k) => ({ key: k, label: plan.find((p) => p.key === k)?.label ?? '', node: nodes[k] })),
+        }))
+        .filter((sec) => sec.blocks.length > 0),
+    [defs, nodes, plan],
   )
 
   useEffect(() => {
@@ -609,7 +700,7 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
 
   const opened = (sec: (typeof sections)[number]) => sec.blocks.some((b) => seen.includes(plan.findIndex((p) => p.key === b.key)))
   const openedCount = sections.filter(opened).length
-  const percent = sections.length ? Math.round((openedCount / sections.length) * 100) : 0
+  const percent = plan.length ? Math.round((seen.length / plan.length) * 100) : 0
   const prevLesson = A1.find((l) => l.n === lesson.n - 1)
   const nextLesson = A1.find((l) => l.n === lesson.n + 1)
   const tone = TONES[current?.tone ?? 'violet']
@@ -654,12 +745,12 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
         <div className="flex min-w-[160px] flex-1 items-center gap-3 sm:max-w-[300px]">
           <Progress value={percent} className="h-1.5 flex-1" />
           <span className="shrink-0 text-[11.5px] font-semibold tabular-nums text-ink">
-            {openedCount}/{sections.length} sections
+            {openedCount}/{sections.length} sections · {seen.length}/{plan.length} parts
           </span>
         </div>
       </div>
 
-      <div className="no-scrollbar mt-3 flex gap-1.5 overflow-x-auto pb-1">
+      <div className="no-scrollbar mt-3 flex gap-1.5 overflow-x-auto pb-1 lg:flex-wrap lg:overflow-visible">
         {sections.map((sec, i) => {
           const t = TONES[sec.tone]
           const on = i === active
