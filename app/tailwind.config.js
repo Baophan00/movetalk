@@ -11,6 +11,8 @@ export default {
         muted: 'hsl(var(--muted))',
         primary: { DEFAULT: 'hsl(var(--primary))', soft: 'hsl(var(--primary-soft))' },
         accent: 'hsl(var(--accent))',
+        pink: 'hsl(var(--pink))',
+        mint: 'hsl(var(--mint))',
         ok: 'hsl(var(--ok))',
         warn: 'hsl(var(--warn))',
       },

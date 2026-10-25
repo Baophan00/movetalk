@@ -42,7 +42,30 @@ export function Dashboard({ name, onOpenLesson, onHomework }: Props) {
         <p className="mt-1 text-[13.5px] text-muted">One part a day is enough. You are on lesson {next.n}.</p>
       </motion.div>
 
-      <div className="grid gap-4 lg:grid-cols-[1.6fr_1fr]">
+      <div className="relative overflow-hidden rounded-3xl bg-[#c3b4f7] px-5 py-6 shadow-card sm:px-7 sm:py-7">
+        <span className="pointer-events-none absolute -right-8 -top-10 h-32 w-32 rounded-full bg-white/25" />
+        <span className="pointer-events-none absolute right-16 top-14 h-10 w-10 rounded-full bg-[#f79be0]/70" />
+        <span className="pointer-events-none absolute bottom-4 right-28 hidden h-6 w-6 rounded-full bg-white/40 sm:block" />
+        <div className="relative max-w-[430px]">
+          <p className="text-[11px] font-bold uppercase tracking-[.16em] text-ink/50">Level A1 · lesson {next.n}</p>
+          <h3 className="mt-1.5 text-[21px] font-bold leading-snug tracking-tight text-ink sm:text-[24px]">
+            {next.title}
+          </h3>
+          <p className="mt-1 text-[12.5px] leading-relaxed text-ink/65">
+            {read ? `${read} of ${totalParts} parts opened.` : 'Ten minutes gets you the first part.'}
+          </p>
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <Button className="bg-[#1b1735] text-white hover:bg-[#2a2450]" onClick={() => onOpenLesson(next.n)}>
+              <Play className="h-4 w-4" /> {read ? 'Continue lesson' : 'Start lesson'}
+            </Button>
+            <Button variant="ghost" className="text-ink/70 hover:bg-white/30" onClick={() => onOpenLesson(next.n)}>
+              See all lessons <ArrowRight className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid items-start gap-4 lg:grid-cols-[1.6fr_1fr]">
         <Card className="relative overflow-hidden">
           <span className="absolute inset-x-0 top-0 h-1 bg-primary" />
           <CardHeader className="pt-6">
@@ -84,20 +107,26 @@ export function Dashboard({ name, onOpenLesson, onHomework }: Props) {
         </Card>
 
         <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-          {stats.map(({ icon: Icon, label, value, hint }) => (
-            <Card key={label} className="card-hover">
-              <CardBody className="flex items-center gap-3.5 py-3.5">
-                <span className="grid h-10 w-10 place-items-center rounded-xl bg-bg text-primary">
-                  <Icon className="h-[18px] w-[18px]" />
-                </span>
-                <div>
-                  <p className="text-[10.5px] font-bold uppercase tracking-[.12em] text-muted">{label}</p>
-                  <p className="text-[19px] font-semibold leading-tight">{value}</p>
-                  <p className="text-[11px] text-muted">{hint}</p>
+          {stats.map(({ icon: Icon, label, value, hint }, i) => {
+            const tones = ['bg-[#c3b4f7]', 'bg-[#fbb463]', 'bg-[#f79be0]']
+            const rat = [percent, Math.round((partsRead / Math.max(1, LESSONS.reduce((n, l) => n + partsOf(l).length, 0))) * 100), Math.round((doneAll / Math.max(1, LESSONS.length)) * 100)]
+            return (
+              <div key={label} className={cn('rounded-2xl p-4 shadow-card transition-transform hover:-translate-y-0.5', tones[i % 3])}>
+                <div className="flex items-start justify-between">
+                  <span className="grid h-9 w-9 place-items-center rounded-xl bg-white/35 text-ink">
+                    <Icon className="h-[17px] w-[17px]" />
+                  </span>
+                  <span className="text-[11px] font-semibold text-ink/45">{rat[i]}%</span>
                 </div>
-              </CardBody>
-            </Card>
-          ))}
+                <p className="mt-3 text-[12.5px] font-semibold leading-tight text-ink">{label}</p>
+                <p className="text-[22px] font-bold leading-tight text-ink">{value}</p>
+                <p className="text-[11px] text-ink/55">{hint}</p>
+                <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-ink/15">
+                  <div className="h-full rounded-full bg-[#1b1735]" style={{ width: `${Math.min(100, rat[i])}%` }} />
+                </div>
+              </div>
+            )
+          })}
         </div>
       </div>
 

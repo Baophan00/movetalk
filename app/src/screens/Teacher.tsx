@@ -54,8 +54,8 @@ function SessionBlock({ o, onClick }: { o: Occurrence; onClick: () => void }) {
       className={cn(
         'absolute inset-x-1 overflow-hidden rounded-lg border-l-[3px] px-2 py-1 text-left transition-all hover:z-10 hover:shadow-card',
         trial
-          ? 'border-l-accent bg-accent/12 text-[#8a5a00] hover:bg-accent/18'
-          : 'border-l-primary bg-primary/[.08] text-primary hover:bg-primary/[.13]',
+          ? 'border-l-[#de8a1e] bg-[#fde3c2] text-[#7a4300] hover:bg-[#fbd8ae]'
+          : 'border-l-[#6b4ef2] bg-[#e2dafb] text-[#2b2350] hover:bg-[#d7ccfa]',
       )}
       style={{ top, height }}
     >

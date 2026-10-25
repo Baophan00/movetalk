@@ -4,14 +4,17 @@
 
 @layer base {
   :root {
-    --bg: 220 33% 97%;
+    /* Lively EdTech palette: lavender page, ink navy, violet action, warm secondaries. */
+    --bg: 252 60% 97%;
     --surface: 0 0% 100%;
-    --line: 218 32% 91%;
-    --ink: 222 47% 11%;
-    --muted: 218 14% 45%;
-    --primary: 221 83% 53%;
-    --primary-soft: 221 100% 96%;
-    --accent: 38 92% 50%;
+    --line: 250 30% 92%;
+    --ink: 250 40% 14%;
+    --muted: 250 12% 46%;
+    --primary: 253 72% 62%;
+    --primary-soft: 253 100% 96%;
+    --accent: 30 93% 60%;
+    --pink: 319 84% 68%;
+    --mint: 168 58% 45%;
     --ok: 158 64% 40%;
     --warn: 4 72% 55%;
   }
