@@ -233,13 +233,230 @@ function intoBlocks(lines: string[]): Block[] {
   return blocks.filter((b) => b.lines.length > 0)
 }
 
+const SUBJECTS = ['I', 'you', 'we', 'they', 'he', 'she', 'it'] as const
+type Subj = (typeof SUBJECTS)[number]
+
+type QCell = { verb: string; subject: Subj }
+type AnswerRow = { subject: Subj; be: boolean; text: string }
+
+/** "Do I …?" / "Is she …?" lines turn into a subject table: one column for DO/DOES, one for BE. */
+
+const BE_FOR: Record<Subj, string> = { I: 'am', you: 'are', we: 'are', they: 'are', he: 'is', she: 'is', it: 'is' }
+const DO_FOR: Record<Subj, string> = { I: 'do', you: 'do', we: 'do', they: 'do', he: 'does', she: 'does', it: 'does' }
+
+/** One deck line can carry two short answers ("Yes, they do. / No, they don't. Yes, she does."). */
+function parseAnswers(line: string): AnswerRow[] {
+  const out: AnswerRow[] = []
+  for (const seg of line.split(/(?<=\.)\s*(?=Yes|No)/)) {
+    const m = seg.match(/\b(I|you|we|they|he|she|it)\s+(do|does|am|is|are)\b/i)
+    if (!m) continue
+    const subject = m[1] as Subj
+    const verb = m[2].toLowerCase()
+    const be = ['am', 'is', 'are'].includes(verb)
+    const correct = be ? BE_FOR[subject] : DO_FOR[subject]
+    let text = seg.trim()
+    if (verb !== correct) {
+      let swapped = false
+      text = text.replace(be ? /\b(am|is|are)\b/i : /\b(do|does)\b/i, (hit) => {
+        if (swapped) return hit
+        swapped = true
+        return correct
+      })
+    }
+    out.push({ subject, be, text })
+  }
+  return out
+}
+
+function readSubjectGroups(lines: string[]) {
+  const cells: QCell[] = []
+  const answers: AnswerRow[] = []
+  const rest: string[] = []
+  for (const raw of lines) {
+    const line = raw.trim()
+    const q = line.match(/^(Do|Does|Am|Is|Are)\s+(I|you|we|they|he|she|it)\s*(?:\.\.\.|…)\s*\?$/)
+    if (q) {
+      cells.push({ verb: q[1], subject: q[2] as Subj })
+      continue
+    }
+    if (/^(?:Yes|No)\b/i.test(line)) {
+      answers.push(...parseAnswers(line))
+      continue
+    }
+    rest.push(raw)
+  }
+  const seen = new Set<string>()
+  const unique = answers.filter((a) => {
+    const k = `${a.subject}-${a.be}`
+    if (seen.has(k)) return false
+    seen.add(k)
+    return true
+  })
+  return { cells, answers: unique, rest }
+}
+
+function SubjectMatrix({ cells, answers }: { cells: QCell[]; answers: AnswerRow[] }) {
+  const hasDo = cells.some((c) => !['am', 'is', 'are'].includes(c.verb.toLowerCase()))
+  const hasBe = cells.some((c) => ['am', 'is', 'are'].includes(c.verb.toLowerCase()))
+  const rows = [...new Set(cells.map((c) => c.subject))]
+
+  const cellFor = (subject: Subj, be: boolean) =>
+    cells.find((c) => c.subject === subject && ['am', 'is', 'are'].includes(c.verb.toLowerCase()) === be)
+  const answerFor = (subject: Subj, be: boolean) => answers.find((a) => a.subject === subject && a.be === be)
+
+  return (
+    <div className="overflow-hidden rounded-2xl border border-line">
+      <div className="grid grid-cols-[68px_1fr_1fr] border-b border-line bg-[#fbfaff] text-[10px] font-bold uppercase tracking-[.1em]">
+        <div className="px-3 py-1.5 text-muted">Subject</div>
+        {hasDo && <div className="border-l border-line/70 px-3 py-1.5 text-[#5b45a8]">Do / Does</div>}
+        {hasBe && <div className="border-l border-line/70 px-3 py-1.5 text-[#1c5a86]">Am / Is / Are</div>}
+      </div>
+      {rows.map((subject, i) => (
+        <div key={subject} className={cn('grid grid-cols-[68px_1fr_1fr] items-stretch text-[13px]', i % 2 === 1 && 'bg-[#fcfbff]')}>
+          <div className="px-3 py-2 font-semibold text-ink">{subject}</div>
+          {hasDo && (
+            <div className="border-l border-line/70 px-3 py-2">
+              {(() => {
+                const c = cellFor(subject, false)
+                const a = answerFor(subject, false)
+                return c ? (
+                  <>
+                    <span className="rounded-md bg-[#ece5ff] px-1.5 py-0.5 font-mono text-[12px] font-semibold text-[#5b45a8]">
+                      {c.verb} {c.subject} …
+                    </span>
+                    {a && <p className="mt-1 text-[11px] leading-snug text-ink/60">{a.text}</p>}
+                  </>
+                ) : (
+                  <span className="text-muted">—</span>
+                )
+              })()}
+            </div>
+          )}
+          {hasBe && (
+            <div className="border-l border-line/70 px-3 py-2">
+              {(() => {
+                const c = cellFor(subject, true)
+                const a = answerFor(subject, true)
+                return c ? (
+                  <>
+                    <span className="rounded-md bg-[#dcefff] px-1.5 py-0.5 font-mono text-[12px] font-semibold text-[#1c5a86]">
+                      {c.verb} {c.subject} …
+                    </span>
+                    {a && <p className="mt-1 text-[11px] leading-snug text-ink/60">{a.text}</p>}
+                  </>
+                ) : (
+                  <span className="text-muted">—</span>
+                )
+              })()}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+
+const SINGULAR = /^(Is|Does|Was)\b/i
+
+/** The deck compares one person with a group; show the two forms side by side. */
+function ContrastPairs({ lines }: { lines: string[] }) {
+  const questions = lines.filter((l) => /\?$/.test(l.trim()))
+  const rest = lines.filter((l) => !/\?$/.test(l.trim()))
+  const rows: { one?: string; many?: string }[] = []
+  for (const q of questions) {
+    if (SINGULAR.test(q) || !rows.length || rows[rows.length - 1].many) rows.push({ one: q })
+    else rows[rows.length - 1].many = q
+  }
+  return (
+    <div className="space-y-2">
+      <div className="grid grid-cols-[1fr_18px_1fr] items-center gap-1 text-[9.5px] font-bold uppercase tracking-[.1em] text-muted">
+        <span>One person</span>
+        <span />
+        <span>A group</span>
+      </div>
+      <div className="space-y-1.5">
+        {rows.map((r, i) => (
+          <div key={i} className="grid grid-cols-[1fr_18px_1fr] items-center gap-1">
+            <span className="rounded-lg border border-[#ded4fb] bg-[#f6f2ff] px-2 py-1.5 font-mono text-[11.5px] text-[#5b45a8]">{r.one ?? '—'}</span>
+            <span className="text-center text-[11px] text-muted">↔</span>
+            <span className="rounded-lg border border-[#cbe6fb] bg-[#eff8ff] px-2 py-1.5 font-mono text-[11.5px] text-[#1c5a86]">{r.many ?? '—'}</span>
+          </div>
+        ))}
+      </div>
+      {rest.length > 0 && <p className="text-[11px] italic text-ink/55">{rest.join(' · ')}</p>}
+    </div>
+  )
+}
+
+/** "Does she works here?" + a Vietnamese nudge: read them as mistakes to repair, not as examples. */
+function RepairCards({ lines }: { lines: string[] }) {
+  const items: { wrong: string; hint?: string }[] = []
+  const HINT = /^(Sau|Động|Một|Câu|Có|HE |THEY |Nhóm|Chọn|Nói|Số |Danh)\b/
+  for (const line of lines) {
+    if (VI_CHARS.test(line) || HINT.test(line)) {
+      if (items.length) items[items.length - 1].hint = line
+      continue
+    }
+    items.push({ wrong: line })
+  }
+  return (
+    <ul className="grid gap-2 sm:grid-cols-2">
+      {items.map((it, i) => (
+        <li key={`${it.wrong}-${i}`} className="rounded-xl border border-[#f3c9c4] bg-[#fdf5f4] px-3 py-2">
+          <p className="flex items-start gap-1.5 text-[13px] font-medium leading-snug text-[#8a2b22]">
+            <span className="mt-0.5 shrink-0 font-bold">×</span>
+            <span className="min-w-0">{it.wrong}</span>
+          </p>
+          {it.hint && <p className="mt-1 text-[11px] italic text-[#8a5320]">{it.hint}</p>}
+          <p className="mt-1 text-[10.5px] font-semibold uppercase tracking-wide text-muted">Say it again, right</p>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+
+/** Question + short answer pairs read as a drill: the question, then what you say back. */
+function QaList({ lines }: { lines: string[] }) {
+  const pairs: { q: string; a?: string }[] = []
+  for (const raw of lines) {
+    const line = raw.trim()
+    if (/\?$/.test(line)) pairs.push({ q: line })
+    else if (pairs.length && !pairs[pairs.length - 1].a) pairs[pairs.length - 1].a = line
+  }
+  const leftover = lines.filter((l) => !VI_CHARS.test(l) && !pairs.some((p) => p.q === l.trim() || p.a === l.trim()))
+  return (
+    <div className="space-y-2">
+      <ul className="grid gap-2 sm:grid-cols-2">
+        {pairs.map((p, i) => (
+          <li key={`${p.q}-${i}`} className="rounded-xl border border-line bg-surface px-3 py-2">
+            <p className="text-[13px] font-semibold leading-snug text-ink">{p.q}</p>
+            {p.a && <p className="mt-1 border-l-2 border-[#2f9e79]/40 pl-2 text-[12px] text-[#0f6b4f]">{p.a}</p>}
+          </li>
+        ))}
+      </ul>
+      {leftover.length > 0 && <p className="text-[11px] italic text-ink/55">{leftover.join(' · ')}</p>}
+    </div>
+  )
+}
+
 function Grammar({ sections }: { sections: LessonFile['parts']['grammar'] }) {
   return (
     <div className="space-y-3">
       {sections.map((g) => {
-        const blocks = intoBlocks(g.lines)
+        const groups = readSubjectGroups(g.lines)
+        const matrix = groups.cells.length >= 4
+        const questions = g.lines.filter((l) => /\?$/.test(l.trim()) && !/\.\.\.|…/.test(l)).length
+        const isQa = !matrix && questions >= 3 && !/REPAIR|CONTRAST/i.test(g.section)
+        const isContrast = /CONTRAST/i.test(g.section)
+        const isRepair = /REPAIR/i.test(g.section)
+        const NOISE = /^(WHO ARE YOU|ASKING ABOUT\?|DO\s*\/\s*DOES|AM\s*\/\s*IS\s*\/\s*ARE)$/i
+        const lines = matrix ? groups.rest.filter((l) => !NOISE.test(l.trim())) : g.lines
+        const blocks = intoBlocks(lines)
         const staged = blocks.filter((b) => b.label).length >= 2
         const notes = blocks.flatMap((b) => b.lines).filter((l) => VI_CHARS.test(l))
+        void lines
         return (
           <article key={g.section + g.sub} className="overflow-hidden rounded-2xl border border-line bg-surface">
             <header className="flex flex-wrap items-center gap-2 border-b border-line/60 bg-[#fbfaff] px-4 py-2">
@@ -248,7 +465,28 @@ function Grammar({ sections }: { sections: LessonFile['parts']['grammar'] }) {
             </header>
 
             <div className="space-y-3 px-4 py-3">
-              {staged ? (
+              {matrix && <SubjectMatrix cells={groups.cells} answers={groups.answers} />}
+              {isRepair ? (
+                <RepairCards lines={g.lines} />
+              ) : isContrast ? (
+                <ContrastPairs lines={g.lines} />
+              ) : isQa ? (
+                <>
+                  <QaList lines={lines} />
+                  {notes.length > 0 && (
+                    <div className="flex items-start gap-2 rounded-xl bg-[#fff8e8] px-3 py-2">
+                      <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#7a5a12]" />
+                      <div className="min-w-0 space-y-0.5">
+                        {notes.map((n, i) => (
+                          <p key={`${n}-${i}`} className="text-[11.5px] leading-relaxed text-[#7a5a12]">
+                            {n}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : staged ? (
                 <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
                   {blocks.map((b, bi) => {
                     const t = b.label ? TONES[STAGES[b.label] ?? 'lavender'] : TONES.amber
@@ -278,7 +516,7 @@ function Grammar({ sections }: { sections: LessonFile['parts']['grammar'] }) {
               ) : (
                 <>
                   <ul className="space-y-1">
-                    {g.lines
+                    {lines
                       .filter((l) => !VI_CHARS.test(l))
                       .map((line, i) => (
                         <li key={`${line}-${i}`} className="flex items-start gap-2 text-[13px] leading-relaxed text-ink/85">
