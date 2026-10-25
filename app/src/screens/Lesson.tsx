@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
-import { AnimatePresence, motion } from 'motion/react'
+import { motion } from 'motion/react'
 import { ArrowLeft, ArrowRight, Check, ChevronRight, CircleCheck, Volume2 } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Progress } from '../components/ui/progress'
-import { A1, lessonA1, partPlan, titleOf, type FlowGroup, type LessonFile } from '../lib/curriculum'
+import { A1, lessonA1, partPlan, quizFor, titleOf, type FlowGroup, type LessonFile } from '../lib/curriculum'
 import { speak } from '../lib/audio'
 import { markPart, partsSeen } from '../lib/progress'
 import { pushPart } from '../lib/sync'
@@ -40,26 +40,45 @@ function Vocabulary({ items }: { items: LessonFile['parts']['vocab'] }) {
       {items.map((v) => {
         const isOpen = open.includes(v.word)
         return (
-          <div key={v.word} className={cn('rounded-2xl border p-3.5 transition-colors', isOpen ? 'border-primary/30 bg-primary-soft/60' : 'border-line bg-surface')}>
+          <div
+            key={v.word}
+            role="button"
+            tabIndex={0}
+            aria-expanded={isOpen}
+            onClick={() => toggle(v.word)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                toggle(v.word)
+              }
+            }}
+            className={cn(
+              'cursor-pointer rounded-2xl border p-3.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40',
+              isOpen ? 'border-primary/30 bg-primary-soft/60' : 'border-line bg-surface hover:border-primary/30',
+            )}
+          >
             <div className="flex items-start gap-2">
-              <button onClick={() => toggle(v.word)} className="min-w-0 flex-1 text-left">
+              <div className="min-w-0 flex-1">
                 <span className="block truncate text-[14.5px] font-semibold">{v.word}</span>
                 <span className="block truncate text-[11.5px] text-muted">
                   {v.pos}
-                  {v.ipa && <span className="ml-1.5 font-mono">{v.ipa}</span>}
+                  {v.ipa && (
+                    <>
+                      <span className="mx-1 opacity-40">·</span>
+                      <span className="font-mono">{v.ipa}</span>
+                    </>
+                  )}
                 </span>
-              </button>
-              <PlayButton text={v.word} small />
+              </div>
+              <span onClick={(e) => e.stopPropagation()}>
+                <PlayButton text={v.word} small />
+              </span>
             </div>
             {isOpen ? (
               <div className="mt-2 border-t border-line/70 pt-2">
                 <p className="text-[12.5px] font-medium">{v.vi}</p>
                 {v.def && <p className="text-[11.5px] text-muted">{v.def}</p>}
-                {v.example && (
-                  <p className="mt-1.5 flex items-start gap-1.5 text-[12px] italic text-ink/75">
-                    <span className="min-w-0 flex-1">{v.example}</span>
-                  </p>
-                )}
+                {v.example && <p className="mt-1.5 text-[12px] italic text-ink/75">{v.example}</p>}
                 {v.cloze && <p className="mt-1 text-[11.5px] text-muted">Recall: {v.cloze}</p>}
               </div>
             ) : (
@@ -139,25 +158,82 @@ function Checks({ items }: { items: LessonFile['parts']['listenCheck'] }) {
   )
 }
 
-function Choose({ items }: { items: LessonFile['parts']['grammarChoose'] }) {
-  const [shown, setShown] = useState<number[]>([])
+type PracticeItem = { prompt: string; vi?: string; options: string[]; answer: string }
+
+/** The handout's choose exercises, with the deck's own answer key. Tap an option, see at once. */
+function Choose({ items, fallback }: { items: PracticeItem[]; fallback: LessonFile['parts']['grammarChoose'] }) {
+  const [picked, setPicked] = useState<Record<number, string>>({})
+
+  if (items.length === 0) {
+    return (
+      <div className="space-y-2">
+        {fallback.map((c) => (
+          <div key={c.prompt} className="rounded-2xl border border-line bg-surface px-3.5 py-2.5">
+            <p className="text-[13.5px] font-medium">{c.prompt}</p>
+            <p className="mt-0.5 text-[11.5px] text-muted">{c.vi}</p>
+            <p className="mt-1.5 text-[11.5px] text-muted">Say it out loud, then check with your teacher.</p>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  const right = items.filter((it, i) => picked[i] === it.answer).length
+  const answered = Object.keys(picked).length
+
   return (
-    <div className="space-y-2">
-      {items.map((c, i) => (
-        <button
-          key={c.prompt}
-          onClick={() => setShown((s) => (s.includes(i) ? s : [...s, i]))}
-          className="w-full rounded-2xl border border-line bg-surface px-3.5 py-2.5 text-left"
-        >
-          <p className="text-[13.5px] font-medium">{c.prompt}</p>
-          <p className="mt-0.5 text-[11.5px] text-muted">{c.vi}</p>
-          {shown.includes(i) && (
-            <p className="mt-1.5 text-[11.5px] font-semibold text-primary">
-              Say the full question, then check with the audio above.
-            </p>
-          )}
-        </button>
-      ))}
+    <div>
+      <div className="mb-3 flex items-center justify-between text-[11.5px] text-muted">
+        <span>
+          {answered} of {items.length} answered
+        </span>
+        <span className="font-semibold text-ink">{right} right</span>
+      </div>
+      <div className="grid gap-2">
+        {items.map((it, i) => {
+          const pick = picked[i]
+          const chosen = pick !== undefined
+          return (
+            <div key={`${it.prompt}-${i}`} className="rounded-2xl border border-line bg-surface p-3.5">
+              <p className="text-[13.5px] font-medium">{it.prompt}</p>
+              {it.vi && <p className="mt-0.5 text-[11.5px] text-muted">{it.vi}</p>}
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {it.options.map((opt) => {
+                  const isRight = opt === it.answer
+                  const isPick = opt === pick
+                  return (
+                    <button
+                      key={opt}
+                      disabled={chosen}
+                      onClick={() => setPicked((p) => ({ ...p, [i]: opt }))}
+                      className={cn(
+                        'rounded-xl border px-3 py-1.5 text-[12.5px] font-medium transition-colors',
+                        !chosen && 'border-line hover:border-primary/40 hover:bg-primary-soft/50',
+                        chosen && isRight && 'border-[#0f6b4f]/30 bg-[#c8f0e0] text-[#0f6b4f]',
+                        chosen && isPick && !isRight && 'border-[#8a2b22]/30 bg-[#fde4e1] text-[#8a2b22]',
+                        chosen && !isRight && !isPick && 'border-line text-muted opacity-60',
+                      )}
+                    >
+                      {opt}
+                    </button>
+                  )
+                })}
+              </div>
+              {chosen && (
+                <p className="mt-1.5 text-[11.5px] font-semibold">
+                  {pick === it.answer ? (
+                    <span className="text-[#0f6b4f]">Right. Say the whole question out loud.</span>
+                  ) : (
+                    <span className="text-[#8a2b22]">
+                      It is "{it.answer}". Read it out loud once with that word.
+                    </span>
+                  )}
+                </p>
+              )}
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }
@@ -216,7 +292,18 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
       grammar: <Grammar sections={lesson.parts.grammar} />,
       dialogue: <Dialogue turns={lesson.parts.dialogue} />,
       check: <Checks items={lesson.parts.listenCheck} />,
-      choose: <Choose items={lesson.parts.grammarChoose} />,
+      choose: <Choose
+        items={quizFor(lesson.n)
+          .filter((q) => q.kind === 'choice' && q.options && q.options.length > 1)
+          .slice(0, 8)
+          .map((q) => ({
+            prompt: q.prompt,
+            vi: lesson.parts.grammarChoose.find((c) => c.prompt === q.prompt)?.vi,
+            options: q.options ?? [],
+            answer: q.answer,
+          }))}
+        fallback={lesson.parts.grammarChoose}
+      />,
     }
     for (const g of lesson.parts.flow) nodes[`flow-${g.group}`] = <Flow groups={[g]} />
     return partPlan(lesson).map((p) => ({ ...p, node: nodes[p.key] }))
@@ -320,12 +407,10 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
         </nav>
 
         <div className="order-2 min-w-0 lg:order-none">
-          <AnimatePresence mode="wait">
             <motion.div
               key={`${lesson.n}-${active}`}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
               className="rounded-3xl border border-line bg-surface p-5 shadow-card sm:p-6"
             >
@@ -360,7 +445,6 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
                 )}
               </div>
             </motion.div>
-          </AnimatePresence>
 
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-surface/70 px-4 py-3">
             <Button variant="outline" size="sm" onClick={() => prevLesson && onPickLesson(prevLesson.n)} disabled={!prevLesson}>

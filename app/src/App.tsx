@@ -5,6 +5,7 @@ import { TopBar } from './components/TopBar'
 import { Landing } from './screens/Landing'
 import { Dashboard } from './screens/Dashboard'
 import { Lesson } from './screens/Lesson'
+import { Lessons } from './screens/Lessons'
 import { Homework } from './screens/Homework'
 import { Review } from './screens/Review'
 import { TeacherOverview, TeacherSchedule, TeacherStudents } from './screens/Teacher'
@@ -33,6 +34,7 @@ export default function App() {
   const [view, setView] = useState<Role>('student')
   const [lessonN, setLessonN] = useState(1)
   const [quizLesson, setQuizLesson] = useState<number | null>(null)
+  const [autoReview, setAutoReview] = useState(0)
   const [menu, setMenu] = useState(false)
   const [signInOpen, setSignInOpen] = useState(false)
 
@@ -52,6 +54,17 @@ export default function App() {
 
   useEffect(() => {
     let alive = true
+    // Dev-only shortcut so the teacher screens can be exercised without a live teacher login.
+    // import.meta.env.DEV is false in the production build, so this never ships.
+    if (import.meta.env.DEV && localStorage.getItem('mt2_dev_teacher')) {
+      setProfile({ id: 'dev', email: 'dev@local', name: 'Dev Teacher', role: 'teacher' })
+      setView('teacher')
+      setRoute(FIRST_TEACHER)
+      setBooting(false)
+      return () => {
+        alive = false
+      }
+    }
     currentSession().then((session) => {
       if (alive) void applySession(session)
     })
@@ -86,8 +99,9 @@ export default function App() {
     go('lesson')
   }
 
-  const openReview = (n: number) => {
+  const openReview = (n: number, auto = false) => {
     setQuizLesson(n)
+    setAutoReview(auto ? Date.now() : 0)
     go('library')
   }
 
@@ -126,6 +140,7 @@ export default function App() {
   const titles: Record<Route, string> = {
     landing: '',
     dashboard: 'Overview',
+    lessons: 'Lessons',
     lesson: `Lesson ${lessonN}`,
     homework: 'Homework',
     library: 'Review',
@@ -165,8 +180,9 @@ export default function App() {
         />
         <main key={route + lessonN} className="animate-fade-up">
           {route === 'dashboard' && (
-            <Dashboard name={profile.name} onOpenLesson={openLesson} onHomework={() => go('homework')} />
+            <Dashboard name={profile.name} onOpenLesson={openLesson} onHomework={() => go('homework')} onLessons={() => go('lessons')} />
           )}
+          {route === 'lessons' && <Lessons onOpenLesson={openLesson} onOpenReview={openReview} />}
           {route === 'lesson' && <Lesson lessonN={lessonN} onPickLesson={setLessonN} onBack={() => go('dashboard')} />}
           {route === 'homework' && (
             <Homework
@@ -175,11 +191,11 @@ export default function App() {
               hasBackend={profile.role === 'teacher'}
             />
           )}
-          {route === 'library' && <Review initialLesson={quizLesson ?? undefined} />}
-          {route === 't-overview' && <TeacherOverview />}
-          {route === 't-schedule' && <TeacherSchedule />}
-          {route === 't-students' && <TeacherStudents />}
-          {route === 't-assignments' && <TeacherAssignments />}
+          {route === 'library' && <Review initialLesson={quizLesson ?? undefined} autoStart={autoReview} />}
+          {route === 't-overview' && <TeacherOverview onOpenLesson={openLesson} />}
+          {route === 't-schedule' && <TeacherSchedule onOpenLesson={openLesson} />}
+          {route === 't-students' && <TeacherStudents onOpenLesson={openLesson} />}
+          {route === 't-assignments' && <TeacherAssignments onOpenLesson={openLesson} />}
         </main>
       </div>
     </div>

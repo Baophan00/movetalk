@@ -9,6 +9,7 @@ import { Ring } from './ui/progress'
 export type Route =
   | 'landing'
   | 'dashboard'
+  | 'lessons'
   | 'lesson'
   | 'homework'
   | 'library'
@@ -23,7 +24,7 @@ type NavItem = { key: Route; label: string; icon: typeof Home }
 
 const STUDENT_NAV: NavItem[] = [
   { key: 'dashboard', label: 'Overview', icon: Home },
-  { key: 'lesson', label: 'Lessons', icon: Compass },
+  { key: 'lessons', label: 'Lessons', icon: Compass },
   { key: 'library', label: 'Review', icon: Layers },
   { key: 'homework', label: 'Homework', icon: BookOpen },
 ]
@@ -124,7 +125,7 @@ export function Sidebar({ role, route, onNav, open, onClose, user, onSignOut, on
               <p className="mt-6 px-2 pb-2 text-[10.5px] font-bold uppercase tracking-[.14em] text-muted">Level</p>
               <ul className="space-y-1">
                 <li>
-                  <button onClick={() => onNav('lesson')} className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left hover:bg-ink/[.04]">
+                  <button onClick={() => onNav('lessons')} className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left hover:bg-ink/[.04]">
                     <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-primary-soft text-[10.5px] font-bold text-primary">A1</span>
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-[13px] font-medium text-ink/85">Activate 1</span>

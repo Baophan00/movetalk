@@ -12,6 +12,7 @@ type Props = {
   name: string
   onOpenLesson: (n: number) => void
   onHomework: () => void
+  onLessons: () => void
 }
 
 const TRACKS = [
@@ -19,7 +20,7 @@ const TRACKS = [
   { key: 'A2', name: 'Activate 2', count: 50, live: false, open: 0 },
 ]
 
-export function Dashboard({ name, onOpenLesson, onHomework }: Props) {
+export function Dashboard({ name, onOpenLesson, onHomework, onLessons }: Props) {
   const next = A1.find((l) => partsSeen(l.n).length < partCount(l)) || A1[0]
   const totalParts = partCount(next)
   const read = partsSeen(next.n).length
@@ -58,7 +59,7 @@ export function Dashboard({ name, onOpenLesson, onHomework }: Props) {
             <Button className="bg-[#1b1735] text-white hover:bg-[#2a2450]" onClick={() => onOpenLesson(next.n)}>
               <Play className="h-4 w-4" /> {read ? 'Continue lesson' : 'Start lesson'}
             </Button>
-            <Button variant="ghost" className="text-ink/70 hover:bg-white/30" onClick={() => onOpenLesson(next.n)}>
+            <Button variant="ghost" className="text-ink/70 hover:bg-white/30" onClick={onLessons}>
               See all lessons <ArrowRight className="h-3.5 w-3.5" />
             </Button>
           </div>

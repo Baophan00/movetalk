@@ -1,9 +1,9 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'motion/react'
 import { ArrowLeft, ArrowRight, Check, RotateCcw, Volume2, X } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Card } from '../components/ui/card'
-import { A1, quizFor, type QuizItem } from '../lib/curriculum'
+import { A1, quizFor, titleOf, type QuizItem } from '../lib/curriculum'
 import { hasAudio, speak } from '../lib/audio'
 import { cn } from '../lib/utils'
 
@@ -65,12 +65,14 @@ function buildSession(n: number): Question[] {
   return shuffle(mixed).slice(0, SESSION_SIZE)
 }
 
-export function Review({ initialLesson }: { initialLesson?: number }) {
+export function Review({ initialLesson, autoStart = 0 }: { initialLesson?: number; autoStart?: number }) {
   const [lessonN, setLessonN] = useState(initialLesson ?? A1[0]?.n ?? 1)
   const [session, setSession] = useState<Question[] | null>(null)
+
   const [index, setIndex] = useState(0)
   const [picked, setPicked] = useState<string | null>(null)
   const [typed, setTyped] = useState('')
+  const [checked, setChecked] = useState(false)
   const [revealed, setRevealed] = useState(false)
   const [selfMark, setSelfMark] = useState<boolean | null>(null)
   const [score, setScore] = useState(0)
@@ -85,6 +87,7 @@ export function Review({ initialLesson }: { initialLesson?: number }) {
     setIndex(0)
     setPicked(null)
     setTyped('')
+    setChecked(false)
     setScore(0)
     setWrong([])
     setDone(false)
@@ -104,7 +107,7 @@ export function Review({ initialLesson }: { initialLesson?: number }) {
       ? picked !== null
       : current.kind === 'reveal'
         ? selfMark !== null
-        : typed.trim().length > 0
+        : checked && typed.trim().length > 0
     : false
 
   const next = () => {
@@ -119,9 +122,18 @@ export function Review({ initialLesson }: { initialLesson?: number }) {
     setIndex(index + 1)
     setPicked(null)
     setTyped('')
+    setChecked(false)
     setRevealed(false)
     setSelfMark(null)
   }
+
+  // Arriving from "Start review" in Homework: begin at once instead of asking for the lesson again.
+  // autoStart is a token, so a second visit without it never starts on its own.
+  useEffect(() => {
+    if (!autoStart) return
+    if (pool > 0) start()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoStart])
 
   const retryWrong = () => {
     if (!wrong.length) return
@@ -129,6 +141,7 @@ export function Review({ initialLesson }: { initialLesson?: number }) {
     setIndex(0)
     setPicked(null)
     setTyped('')
+    setChecked(false)
     setScore(0)
     setDone(false)
   }
@@ -159,10 +172,10 @@ export function Review({ initialLesson }: { initialLesson?: number }) {
                   {String(l.n).padStart(2, '0')}
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-[13px] font-semibold">
+                  <span className="block truncate text-[13px] font-semibold">{titleOf(l) || `Lesson ${l.n}`}</span>
+                  <span className="block truncate text-[11.5px] text-muted">
                     {l.parts.vocab.length} words · {count ? `${count} exercises` : 'vocabulary only'}
                   </span>
-                  <span className="block truncate text-[11.5px] text-muted">{l.deck?.replace(/_VIP.*/, '') ?? 'A1'}</span>
                 </span>
               </button>
             )
@@ -253,7 +266,7 @@ export function Review({ initialLesson }: { initialLesson?: number }) {
                 <button
                   key={opt}
                   onClick={() => !answered && setPicked(opt)}
-                  disabled={answered}
+                  disabled={checked}
                   className={cn(
                     'flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left text-[14px] transition-colors',
                     state === 'idle' && 'border-line bg-surface hover:border-primary/40 hover:bg-primary-soft/50',
@@ -296,13 +309,14 @@ export function Review({ initialLesson }: { initialLesson?: number }) {
             className="mt-5"
             onSubmit={(e) => {
               e.preventDefault()
-              if (answered) next()
+              if (!checked && typed.trim()) setChecked(true)
+              else if (answered) next()
             }}
           >
             <input
               value={typed}
               onChange={(e) => setTyped(e.target.value)}
-              disabled={answered}
+              disabled={checked}
               placeholder="Type your English answer"
               className="focus-ring w-full rounded-2xl border border-line bg-surface px-4 py-3 text-[15px] outline-none disabled:opacity-70"
               autoFocus
@@ -323,8 +337,17 @@ export function Review({ initialLesson }: { initialLesson?: number }) {
           <Button variant="ghost" size="sm" onClick={() => setSession(null)}>
             <ArrowLeft className="h-3.5 w-3.5" /> Leave
           </Button>
-          <Button size="sm" onClick={next} disabled={!answered}>
-            {index + 1 === session.length ? 'Finish' : 'Next'} <ArrowRight className="h-3.5 w-3.5" />
+          <Button
+            size="sm"
+            onClick={() => (current.kind === 'typed' && !checked && typed.trim() ? setChecked(true) : next())}
+            disabled={current.kind === 'typed' ? !typed.trim() : !answered}
+          >
+            {current.kind === 'typed' && !checked
+              ? 'Check'
+              : index + 1 === session.length
+                ? 'Finish'
+                : 'Next'}{' '}
+            <ArrowRight className="h-3.5 w-3.5" />
           </Button>
         </div>
       </Card>
