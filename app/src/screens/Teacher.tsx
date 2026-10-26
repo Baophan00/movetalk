@@ -785,6 +785,47 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
   const todayKey = isoDate(now)
   const todayNotes = notesOn(notes, todayKey)
 
+  /** Everything in the next seven days, hours and calendar notes in one timeline. */
+  const ahead = (() => {
+    const out: {
+      id: string
+      when: number
+      dayLabel: string
+      dayNum: number
+      kind: 'lesson' | 'note'
+      label: string
+      sub: string
+      studentId?: string
+    }[] = []
+    const nowMin = now.getHours() * 60 + now.getMinutes()
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i)
+      const key = isoDate(d)
+      const wd = (d.getDay() + 6) % 7
+      const dayLabel = i === 0 ? 'Today' : i === 1 ? 'Tmrw' : DAY_NAMES[wd].slice(0, 3)
+      for (const s of data.sessions) {
+        if (s.weekday !== wd) continue
+        const occ = occurrence(data, s, key)
+        if (occ.cancelled) continue
+        if (i === 0 && occ.end <= nowMin) continue
+        out.push({
+          id: `${s.id}-${key}`,
+          when: d.getTime() + occ.start * 60000,
+          dayLabel,
+          dayNum: d.getDate(),
+          kind: 'lesson',
+          label: data.students.find((x) => x.id === s.studentId)?.name ?? 'Student',
+          sub: `${hhmm(occ.start)}–${hhmm(occ.end)}${s.kind === 'trial' ? ' · trial' : ''}`,
+          studentId: s.studentId,
+        })
+      }
+      for (const n of notesOn(notes, key)) {
+        out.push({ id: n.id, when: d.getTime() - 1, dayLabel, dayNum: d.getDate(), kind: 'note', label: n.text, sub: 'note' })
+      }
+    }
+    return out.sort((a, b) => a.when - b.when)
+  })()
+
   const student = (id: string) => data.students.find((s) => s.id === id)
 
   /** The next six hours that actually happen, walking forward from today. */
@@ -807,7 +848,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
   const monthOffset = (firstOfMonth.getDay() + 6) % 7
   const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
   const monthCells = Array.from({ length: monthOffset + daysInMonth }, (_, i) => (i < monthOffset ? null : i - monthOffset + 1))
-  const assignmentsOut = data.assignments.filter((a) => a.status === 'assigned')
+
 
   const kpis = [
     { icon: CalendarDays, label: 'Sessions today', value: String(today.length), hint: today.length ? `${hhmm(today[0].start)} first` : 'nothing booked', chip: 'bg-[#e8f0ff] text-[#2f6bff]', bar: 'bg-[#2f6bff]', values: perDay },
@@ -1201,60 +1242,48 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
               })()}
           </Dialog>
 
-          {earnings.total > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>{MONTHS[now.getMonth()]} earnings</CardTitle>
-                <Badge tone="ok">{vnd(earnings.total)}</Badge>
-              </CardHeader>
-              <CardBody className="pt-1">
-                <ul className="divide-y divide-line/70">
-                  {earnings.rows
-                    .filter((r) => r.amount > 0)
-                    .slice(0, 4)
-                    .map((r) => (
-                      <li key={r.student.id} className="flex items-center justify-between gap-2 py-2">
-                        <span className="min-w-0">
-                          <span className="block truncate text-[12.5px] font-medium">{r.student.name}</span>
-                          <span className="block text-[11px] text-muted">
-                            {r.hours.toFixed(1).replace('.0', '')} h × {vnd(r.student.rate ?? 0)}
-                          </span>
-                        </span>
-                        <span className="shrink-0 text-[12.5px] font-semibold tabular-nums">{vnd(r.amount)}</span>
-                      </li>
-                    ))}
-                </ul>
-                <p className="mt-2 text-[11px] leading-relaxed text-muted">
-                  {earnings.rows.filter((r) => r.student.rate).length} of {data.students.length} students have a rate. Called-off
-                  dates are already taken out.
-                </p>
-              </CardBody>
-            </Card>
-          )}
-
           {/* reminders */}
-          <Card>
+          <Card className="border-[#eeddb8] bg-gradient-to-b from-[#fffaf0] to-white shadow-[0_10px_30px_rgba(180,140,60,.10)]">
             <CardHeader>
-              <CardTitle>Reminders</CardTitle>
+              <div>
+                <CardTitle>Reminders</CardTitle>
+                <p className="mt-0.5 text-[11.5px] text-muted">The seven days ahead: hours to teach, and the notes you left on the calendar.</p>
+              </div>
+              <Badge tone="accent">{ahead.length}</Badge>
             </CardHeader>
-            <CardBody className="space-y-1.5 pt-1">
-              {[
-                nextUp ? { icon: Clock, text: `Next hour ${hhmm(nextUp.s.start)} with ${student(nextUp.s.studentId)?.name}` } : null,
-                trials.length ? { icon: GraduationCap, text: `${trials.length} trial${trials.length > 1 ? 's' : ''} to convert: ${trials.map((t) => t.name).slice(0, 2).join(', ')}` } : null,
-                assignmentsOut.length
-                  ? { icon: Video, text: `${assignmentsOut.length} assignment${assignmentsOut.length > 1 ? 's' : ''} sent this week` }
-                  : { icon: Video, text: 'No assignment sent yet — the library is one click away' },
-              ]
-                .filter(Boolean)
-                .map((item, i) => {
-                  const Icon = (item as { icon: typeof Clock }).icon
-                  return (
-                    <div key={i} className="flex items-start gap-2 rounded-xl bg-bg/60 px-3 py-2">
-                      <Icon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#4a6fb5]" />
-                      <p className="text-[12px] leading-relaxed text-ink/75">{(item as { text: string }).text}</p>
-                    </div>
-                  )
-                })}
+            <CardBody className="pt-1">
+              {ahead.length === 0 ? (
+                <p className="rounded-xl bg-white/70 px-3 py-4 text-center text-[12px] text-muted">
+                  Nothing in the next seven days.
+                </p>
+              ) : (
+                <ul className="space-y-1">
+                  {ahead.slice(0, 9).map((it) => (
+                    <li key={it.id} className="flex items-start gap-2.5 rounded-xl bg-white/85 px-2.5 py-2 ring-1 ring-[#f1e4c9]">
+                      <span className="w-9 shrink-0 text-center">
+                        <span className="block text-[9px] font-bold uppercase tracking-wide text-[#96702a]">{it.dayLabel}</span>
+                        <span className="block text-[12.5px] font-semibold tabular-nums text-[#3d2f14]">{it.dayNum}</span>
+                      </span>
+                      <span
+                        className="mt-1 h-2 w-2 shrink-0 rounded-full"
+                        style={{ backgroundColor: it.kind === 'note' ? '#d97706' : tones[it.studentId ?? '']?.edge ?? '#2f6bff' }}
+                      />
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-[12px] font-medium leading-snug text-[#2c2618]">{it.label}</span>
+                        <span className="block text-[10.5px] text-[#8a7a58]">{it.sub}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {ahead.length > 9 && (
+                <button
+                  onClick={() => onGo?.('t-schedule')}
+                  className="mt-2 flex w-full items-center justify-center gap-1 rounded-xl border border-[#e8d9b6] py-1.5 text-[11.5px] font-semibold text-[#8a6a2a] transition-colors hover:bg-white"
+                >
+                  {ahead.length - 9} more in the next seven days <ChevronRight className="h-3 w-3" />
+                </button>
+              )}
             </CardBody>
           </Card>
         </div>
