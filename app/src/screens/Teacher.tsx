@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from '../compon
 import { Input } from '../components/ui/input'
 import { A1 } from '../lib/curriculum'
 import { addNote, loadNotes, notesOn, removeNote, toggleNote, type Note } from '../lib/notes'
+import { toneMap, type Tone } from '../lib/palette'
 import {
   addSession,
   addStudent,
@@ -93,12 +94,14 @@ function Block({
   student,
   date,
   occ,
+  tone,
   onClick,
 }: {
   s: Session
   student?: Student
   date: Date
   occ: { start: number; end: number; cancelled: boolean }
+  tone: Tone
   onClick: () => void
 }) {
   const top = (occ.start - START_MIN) * PX_PER_MIN
@@ -108,24 +111,28 @@ function Block({
   return (
     <button
       onClick={onClick}
-      style={{ top, height }}
+      style={{
+        top,
+        height,
+        backgroundColor: occ.cancelled ? '#F4F2F9' : tone.bg,
+        borderLeftColor: occ.cancelled ? '#B9B3C9' : tone.edge,
+        color: occ.cancelled ? '#6B6480' : tone.text,
+        borderStyle: occ.cancelled ? 'dashed' : undefined,
+      }}
       title={occ.cancelled ? 'Called off this date' : undefined}
       className={cn(
-        'absolute inset-x-1 overflow-hidden rounded-lg border-l-2 px-2 py-1 text-left transition-colors',
-        occ.cancelled
-          ? 'border-l-[#b9b3c9] border border-dashed border-[#d6d1e2] bg-[#f4f2f9] text-[#6b6480]'
-          : s.kind === 'trial'
-            ? 'border-l-[#de8a1e] bg-[#fde3c2] text-[#7a4300] hover:bg-[#fbd8ae]'
-            : 'border-l-[#6b4ef2] bg-[#e2dafb] text-[#2b2350] hover:bg-[#d7ccfa]',
-        moved && !occ.cancelled && 'ring-1 ring-[#6b4ef2]/40',
+        'absolute inset-x-1 overflow-hidden rounded-lg border-l-[3px] px-2 py-1 text-left shadow-[0_1px_2px_rgba(16,24,40,.06)] transition-transform hover:-translate-y-px',
+        occ.cancelled && 'border border-dashed',
         isPast && 'opacity-70',
+        moved && !occ.cancelled && 'ring-1 ring-[#16233f]/15',
       )}
     >
       <span className={cn('block truncate text-[11.5px] font-semibold leading-tight', occ.cancelled && 'line-through')}>
         {student?.name ?? s.studentId}
       </span>
-      <span className="block truncate text-[10px] opacity-75">
+      <span className="block truncate text-[10px] opacity-80">
         {occ.cancelled ? 'called off' : `${hhmm(occ.start)}–${hhmm(occ.end)}`}
+        {!occ.cancelled && s.kind === 'trial' && ' · trial'}
       </span>
     </button>
   )
@@ -133,6 +140,7 @@ function Block({
 
 export function TeacherSchedule({ onOpenLesson }: Shared) {
   const [data, setData] = useTeaching()
+  const tones = useMemo(() => toneMap(data.students), [data.students])
   const [monday, setMonday] = useState(() => weekStart(new Date()))
   const [picked, setPicked] = useState<{ s: Session; date: Date } | null>(null)
   const [move, setMove] = useState({ start: '', end: '' })
@@ -233,6 +241,7 @@ export function TeacherSchedule({ onOpenLesson }: Shared) {
                           student={studentById(s.studentId)}
                           date={date}
                           occ={occ}
+                          tone={tones[s.studentId]}
                           onClick={() => {
                             setMove({ start: hhmm(occ.start), end: hhmm(occ.end) })
                             setPicked({ s, date })
@@ -740,21 +749,6 @@ function greeting(d: Date) {
   return 'Good evening'
 }
 
-const TINTS = [
-  { edge: 'border-l-[#2f6bff]', chip: 'bg-[#e8f0ff] text-[#2f6bff]' },
-  { edge: 'border-l-[#0f8a5f]', chip: 'bg-[#e6f7ef] text-[#0f8a5f]' },
-  { edge: 'border-l-[#6b4ef2]', chip: 'bg-[#f0ecff] text-[#6b4ef2]' },
-  { edge: 'border-l-[#c2410c]', chip: 'bg-[#fdece3] text-[#b45309]' },
-  { edge: 'border-l-[#0e7490]', chip: 'bg-[#e3f6fa] text-[#0e7490]' },
-]
-
-/** Same student, same colour, every time the page is opened. */
-function tintOf(id: string) {
-  let h = 0
-  for (const c of id) h = (h * 31 + c.charCodeAt(0)) | 0
-  return TINTS[Math.abs(h) % TINTS.length]
-}
-
 function initials(name: string) {
   const parts = name.trim().split(/\s+/)
   return (parts.length > 1 ? parts[0][0] + parts[parts.length - 1][0] : name.slice(0, 2)).toUpperCase()
@@ -783,6 +777,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
 
   const perDay = DAY_NAMES.map((_, d) => data.sessions.filter((s) => s.weekday === d).length)
   const earnings = useMemo(() => monthEarnings(data), [data])
+  const tones = useMemo(() => toneMap(data.students), [data.students])
   const monthly = useMemo(() => earningsAhead(data), [data])
   const [notes, setNotes] = useState<Note[]>(loadNotes)
   const [noteDay, setNoteDay] = useState<number | null>(null)
@@ -1045,26 +1040,31 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
               )}
               <ul className="space-y-1">
                 {today.map((s) => {
-                  const t = tintOf(s.studentId)
+                  const t = tones[s.studentId]
                   const name = student(s.studentId)?.name ?? 'Student'
                   const isPast = s.end <= now.getHours() * 60 + now.getMinutes()
                   return (
                     <li key={s.id}>
                       <button
                         onClick={() => setOpenId(s.studentId)}
+                        style={{ backgroundColor: t.bg, borderLeftColor: t.edge, color: t.text }}
                         className={cn(
-                          'flex w-full items-center gap-2.5 rounded-xl border-l-[3px] bg-bg/40 px-2.5 py-2 text-left transition-colors hover:bg-bg',
-                          t.edge,
+                          'flex w-full items-center gap-2.5 rounded-xl border-l-[3px] px-2.5 py-2 text-left transition-transform hover:-translate-y-px',
                           isPast && 'opacity-55',
                         )}
                       >
-                        <span className={cn('grid h-8 w-8 shrink-0 place-items-center rounded-lg text-[10.5px] font-bold', t.chip)}>
+                        <span
+                          style={{ backgroundColor: t.hover }}
+                          className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-[10.5px] font-bold"
+                        >
                           {initials(name)}
                         </span>
                         <span className="min-w-0 flex-1">
                           <span className="flex items-center gap-1.5">
                             <span className="truncate text-[13px] font-medium">{name}</span>
-                            {s.kind === 'trial' && <span className="rounded-full bg-[#fdece3] px-1.5 py-px text-[9.5px] font-bold uppercase tracking-wide text-[#b45309]">trial</span>}
+                            {s.kind === 'trial' && (
+                              <span className="rounded-full bg-white/70 px-1.5 py-px text-[9.5px] font-bold uppercase tracking-wide">trial</span>
+                            )}
                           </span>
                           <span className="block text-[11px] tabular-nums text-muted">
                             {hhmm(s.start)}–{hhmm(s.end)} · {s.end - s.start} min · 1-1
