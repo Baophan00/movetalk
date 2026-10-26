@@ -23,7 +23,7 @@ import {
   setStudentStatus,
   updateStudent,
   hhmmToMin,
-  earningsByMonth,
+  earningsAhead,
   monthEarnings,
   monthHours,
   vnd,
@@ -783,7 +783,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
 
   const perDay = DAY_NAMES.map((_, d) => data.sessions.filter((s) => s.weekday === d).length)
   const earnings = useMemo(() => monthEarnings(data), [data])
-  const monthly = useMemo(() => earningsByMonth(data), [data])
+  const monthly = useMemo(() => earningsAhead(data), [data])
   const [notes, setNotes] = useState<Note[]>(loadNotes)
   const [noteDay, setNoteDay] = useState<number | null>(null)
   const [noteText, setNoteText] = useState('')
@@ -1265,10 +1265,11 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
           <div>
             <CardTitle>Earnings by month</CardTitle>
             <p className="mt-0.5 text-[11.5px] text-muted">
-              At the rates you set, with the hours the week actually holds. Called-off dates are out.
+              Projected from the week you keep and the rates you set, starting this month. Nothing here is recorded income yet,
+              and past months are left out because none of them were recorded.
             </p>
           </div>
-          <Badge tone="primary">{vnd(monthly[monthly.length - 1]?.amount ?? 0)}</Badge>
+          <Badge tone="primary">{vnd(monthly[0]?.amount ?? 0)} projected</Badge>
         </CardHeader>
         <CardBody className="pt-1">
           <table className="w-full text-left">
@@ -1287,7 +1288,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
                   <tr key={m.date.toISOString()} className={cn(m.current && 'bg-[#fff8ec]')}>
                     <td className="py-2 text-[12.5px] font-medium">
                       {MONTHS[m.date.getMonth()]} {m.date.getFullYear()}
-                      {m.current && <span className="ml-1.5 rounded-full bg-[#fdece3] px-1.5 py-px text-[9px] font-bold uppercase text-[#b45309]">now</span>}
+                      {m.current && <span className="ml-1.5 rounded-full bg-[#fdece3] px-1.5 py-px text-[9px] font-bold uppercase text-[#b45309]">this month</span>}
                     </td>
                     <td className="py-2 text-right text-[12.5px] tabular-nums text-muted">{m.hours.toFixed(1).replace('.0', '')}</td>
                     <td className={cn('py-2 text-right text-[12.5px] font-semibold tabular-nums', m.amount ? '' : 'text-muted')}>
