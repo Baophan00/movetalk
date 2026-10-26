@@ -6,7 +6,24 @@ import { Button } from '../components/ui/button'
 import { Card, CardBody, CardHeader, CardTitle } from '../components/ui/card'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '../components/ui/dialog'
 import { Input } from '../components/ui/input'
-import { addSession, addStudent, loadTeaching, removeSession, setStudentStatus, type Session, type Teaching } from '../lib/teaching'
+import { A1 } from '../lib/curriculum'
+import {
+  addSession,
+  addStudent,
+  clashFor,
+  clearOverride,
+  isoDate,
+  loadTeaching,
+  occurrence,
+  removeSession,
+  removeStudent,
+  setOverride,
+  setStudentStatus,
+  updateStudent,
+  hhmmToMin,
+  type Session,
+  type Teaching,
+} from '../lib/teaching'
 import { addDays, fmtHour, hhmm, weekStart, type Student } from '../lib/schedule'
 import { cn } from '../lib/utils'
 
@@ -45,25 +62,44 @@ function WeekNav({ monday, onChange }: { monday: Date; onChange: (d: Date) => vo
   )
 }
 
-function Block({ s, student, date, onClick }: { s: Session; student?: Student; date: Date; onClick: () => void }) {
-  const top = (s.start - START_MIN) * PX_PER_MIN
-  const height = Math.max(26, (s.end - s.start) * PX_PER_MIN - 2)
-  const isPast = date.getTime() + s.end * 60000 < Date.now()
+function Block({
+  s,
+  student,
+  date,
+  occ,
+  onClick,
+}: {
+  s: Session
+  student?: Student
+  date: Date
+  occ: { start: number; end: number; cancelled: boolean }
+  onClick: () => void
+}) {
+  const top = (occ.start - START_MIN) * PX_PER_MIN
+  const height = Math.max(26, (occ.end - occ.start) * PX_PER_MIN - 2)
+  const isPast = date.getTime() + occ.end * 60000 < Date.now()
+  const moved = occ.start !== s.start || occ.end !== s.end
   return (
     <button
       onClick={onClick}
       style={{ top, height }}
+      title={occ.cancelled ? 'Called off this date' : undefined}
       className={cn(
         'absolute inset-x-1 overflow-hidden rounded-lg border-l-2 px-2 py-1 text-left transition-colors',
-        s.kind === 'trial'
-          ? 'border-l-[#de8a1e] bg-[#fde3c2] text-[#7a4300] hover:bg-[#fbd8ae]'
-          : 'border-l-[#6b4ef2] bg-[#e2dafb] text-[#2b2350] hover:bg-[#d7ccfa]',
+        occ.cancelled
+          ? 'border-l-[#b9b3c9] border border-dashed border-[#d6d1e2] bg-[#f4f2f9] text-[#6b6480]'
+          : s.kind === 'trial'
+            ? 'border-l-[#de8a1e] bg-[#fde3c2] text-[#7a4300] hover:bg-[#fbd8ae]'
+            : 'border-l-[#6b4ef2] bg-[#e2dafb] text-[#2b2350] hover:bg-[#d7ccfa]',
+        moved && !occ.cancelled && 'ring-1 ring-[#6b4ef2]/40',
         isPast && 'opacity-70',
       )}
     >
-      <span className="block truncate text-[11.5px] font-semibold leading-tight">{student?.name ?? s.studentId}</span>
+      <span className={cn('block truncate text-[11.5px] font-semibold leading-tight', occ.cancelled && 'line-through')}>
+        {student?.name ?? s.studentId}
+      </span>
       <span className="block truncate text-[10px] opacity-75">
-        {hhmm(s.start)}–{hhmm(s.end)}
+        {occ.cancelled ? 'called off' : `${hhmm(occ.start)}–${hhmm(occ.end)}`}
       </span>
     </button>
   )
@@ -72,7 +108,8 @@ function Block({ s, student, date, onClick }: { s: Session; student?: Student; d
 export function TeacherSchedule({ onOpenLesson }: Shared) {
   const [data, setData] = useTeaching()
   const [monday, setMonday] = useState(() => weekStart(new Date()))
-  const [picked, setPicked] = useState<Session | null>(null)
+  const [picked, setPicked] = useState<{ s: Session; date: Date } | null>(null)
+  const [move, setMove] = useState({ start: '', end: '' })
   const [adding, setAdding] = useState(false)
   const [form, setForm] = useState({ studentId: '', weekday: 0, start: '18:00', kind: 'lesson' as 'lesson' | 'trial' })
   const [error, setError] = useState('')
@@ -96,11 +133,13 @@ export function TeacherSchedule({ onOpenLesson }: Shared) {
     }
     const [h, m] = form.start.split(':').map(Number)
     const start = (h || 0) * 60 + (m || 0)
-    const next = addSession(data, { studentId, weekday: form.weekday, start, end: start + 60, kind: form.kind })
-    if (next === data) {
-      setError('That hour is already taken.')
+    const clash = clashFor(data, { weekday: form.weekday, start, end: start + 60 })
+    if (clash) {
+      const who = studentById(clash.studentId)?.name ?? 'another student'
+      setError(`${hhmm(clash.start)}–${hhmm(clash.end)} on ${DAY_NAMES[form.weekday]} is already ${who}'s.`)
       return
     }
+    const next = addSession(data, { studentId, weekday: form.weekday, start, end: start + 60, kind: form.kind })
     setData(next)
     setAdding(false)
     setError('')
@@ -158,9 +197,22 @@ export function TeacherSchedule({ onOpenLesson }: Shared) {
                     {hours.map((m) => (
                       <div key={m} style={{ height: 30 * PX_PER_MIN }} className="border-b border-line/40" />
                     ))}
-                    {mine.map((s) => (
-                      <Block key={s.id} s={s} student={studentById(s.studentId)} date={date} onClick={() => setPicked(s)} />
-                    ))}
+                    {mine.map((s) => {
+                      const occ = occurrence(data, s, isoDate(date))
+                      return (
+                        <Block
+                          key={s.id}
+                          s={s}
+                          student={studentById(s.studentId)}
+                          date={date}
+                          occ={occ}
+                          onClick={() => {
+                            setMove({ start: hhmm(occ.start), end: hhmm(occ.end) })
+                            setPicked({ s, date })
+                          }}
+                        />
+                      )
+                    })}
                   </div>
                 )
               })}
@@ -233,43 +285,115 @@ export function TeacherSchedule({ onOpenLesson }: Shared) {
       </Dialog>
 
       <Dialog open={Boolean(picked)} onOpenChange={(v) => !v && setPicked(null)}>
-        {picked && (
-          <DialogContent>
-            <DialogTitle>{studentById(picked.studentId)?.name}</DialogTitle>
-            <DialogDescription>
-              {DAY_NAMES[picked.weekday]} · {hhmm(picked.start)}–{hhmm(picked.end)} · every week · GMT+7
-            </DialogDescription>
-            <div className="mt-4 flex flex-wrap items-center gap-2">
-              <Badge tone={picked.kind === 'trial' ? 'accent' : 'primary'}>{picked.kind === 'trial' ? 'Trial lesson' : 'Regular lesson'}</Badge>
-              <Badge tone="neutral">{picked.end - picked.start} min</Badge>
-            </div>
-            <div className="mt-4 flex flex-wrap gap-2">
-              <Button size="sm" onClick={() => onOpenLesson(1)}>
-                <Video className="h-3.5 w-3.5" /> Open lesson 1
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => {
-                  setData(setStudentStatus(data, picked.studentId, 'active'))
-                  setPicked(null)
-                }}
-              >
-                <GraduationCap className="h-3.5 w-3.5" /> Make regular
-              </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => {
-                  setData(removeSession(data, picked.id))
-                  setPicked(null)
-                }}
-              >
-                <Trash2 className="h-3.5 w-3.5" /> Remove this hour
-              </Button>
-            </div>
-          </DialogContent>
-        )}
+        {picked && (() => {
+          const { s, date } = picked
+          const occ = occurrence(data, s, isoDate(date))
+          const when = isoDate(date)
+          const student = studentById(s.studentId)
+          return (
+            <DialogContent>
+              <DialogTitle>{student?.name ?? s.studentId}</DialogTitle>
+              <DialogDescription>
+                {date.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' })} ·{' '}
+                {occ.cancelled ? 'called off' : `${hhmm(occ.start)}–${hhmm(occ.end)}`} · repeats every {DAY_NAMES[s.weekday]} · GMT+7
+              </DialogDescription>
+
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                <Badge tone={s.kind === 'trial' ? 'accent' : 'primary'}>{s.kind === 'trial' ? 'Trial lesson' : 'Regular lesson'}</Badge>
+                <Badge tone="neutral">{s.end - s.start} min</Badge>
+                {occ.cancelled && <Badge tone="neutral">No lesson this date</Badge>}
+                {(occ.start !== s.start || occ.end !== s.end) && !occ.cancelled && <Badge tone="accent">Moved this date</Badge>}
+              </div>
+
+              <div className="mt-4 rounded-xl border border-line bg-bg/50 p-3">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted">This date only</p>
+                <div className="mt-2 flex flex-wrap items-end gap-2">
+                  <label className="block">
+                    <span className="mb-1 block text-[11px] text-muted">From</span>
+                    <Input
+                      type="time"
+                      value={move.start}
+                      onChange={(e) => setMove({ ...move, start: e.target.value })}
+                      className="h-8 w-[104px] px-2 py-1 text-[12.5px]"
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="mb-1 block text-[11px] text-muted">To</span>
+                    <Input
+                      type="time"
+                      value={move.end}
+                      onChange={(e) => setMove({ ...move, end: e.target.value })}
+                      className="h-8 w-[104px] px-2 py-1 text-[12.5px]"
+                    />
+                  </label>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      const startMin = hhmmToMin(move.start)
+                      const endMin = hhmmToMin(move.end)
+                      if (endMin <= startMin) {
+                        setError('The end has to come after the start.')
+                        return
+                      }
+                      const clash = clashFor(data, { weekday: s.weekday, start: startMin, end: endMin, date: when }, s.id)
+                      if (clash) {
+                        setError(`${studentById(clash.studentId)?.name ?? 'Another student'} already has that hour on this date.`)
+                        return
+                      }
+                      setData(setOverride(data, { sessionId: s.id, date: when, start: startMin, end: endMin }))
+                      setError('')
+                      setPicked(null)
+                    }}
+                  >
+                    Move
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => {
+                      setData(occ.cancelled ? clearOverride(data, s.id, when) : setOverride(data, { sessionId: s.id, date: when, cancelled: true }))
+                      setPicked(null)
+                    }}
+                  >
+                    {occ.cancelled ? 'Undo call-off' : 'Call this one off'}
+                  </Button>
+                </div>
+                <p className="mt-2 text-[11px] leading-relaxed text-muted">
+                  The weekly hour stays; only {date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} changes.
+                </p>
+              </div>
+
+              {error && <p className="mt-3 text-[12px] text-[#8a2b22]">{error}</p>}
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Button size="sm" onClick={() => onOpenLesson(student?.lessonN ?? 1)}>
+                  <Video className="h-3.5 w-3.5" /> Open lesson {student?.lessonN ?? 1}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    setData(setStudentStatus(data, s.studentId, 'active'))
+                    setPicked(null)
+                  }}
+                >
+                  <GraduationCap className="h-3.5 w-3.5" /> Make regular
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    setData(removeSession(data, s.id))
+                    setPicked(null)
+                  }}
+                >
+                  <Trash2 className="h-3.5 w-3.5" /> Remove from every week
+                </Button>
+              </div>
+            </DialogContent>
+          )
+        })()}
       </Dialog>
     </div>
   )
@@ -282,9 +406,33 @@ function studentSessions(data: Teaching, id: string) {
 export function TeacherStudents({ onOpenLesson }: Shared) {
   const [data, setData] = useTeaching()
   const [adding, setAdding] = useState(false)
-  const [name, setName] = useState('')
+  const [draft, setDraft] = useState({ name: '', email: '', level: '', rate: '' })
   const [openId, setOpenId] = useState<string | null>(null)
+  const [form, setForm] = useState<{ name: string; email: string; level: string; rate: string; note: string; lessonN: number }>({
+    name: '',
+    email: '',
+    level: '',
+    rate: '',
+    note: '',
+    lessonN: 1,
+  })
+  const [confirmDelete, setConfirmDelete] = useState(false)
   const student = data.students.find((s) => s.id === openId)
+
+  const open = (id: string) => {
+    const s = data.students.find((x) => x.id === id)
+    if (!s) return
+    setForm({
+      name: s.name,
+      email: s.email ?? '',
+      level: s.level ?? '',
+      rate: s.rate ? String(s.rate) : '',
+      note: s.note ?? '',
+      lessonN: s.lessonN ?? 1,
+    })
+    setConfirmDelete(false)
+    setOpenId(id)
+  }
 
   return (
     <div className="mx-auto max-w-[1180px] px-4 py-6 sm:px-6 lg:px-8">
@@ -305,23 +453,26 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
             <tr>
               <th className="px-4 py-2.5 font-semibold">Student</th>
               <th className="px-4 py-2.5 font-semibold">Status</th>
+              <th className="hidden px-4 py-2.5 font-semibold sm:table-cell">Level</th>
               <th className="hidden px-4 py-2.5 font-semibold sm:table-cell">Sessions this week</th>
-              <th className="hidden px-4 py-2.5 font-semibold md:table-cell">First session</th>
+              <th className="hidden px-4 py-2.5 font-semibold md:table-cell">On lesson</th>
               <th className="px-4 py-2.5" />
             </tr>
           </thead>
           <tbody className="divide-y divide-line/70">
             {data.students.map((s) => {
               const mine = studentSessions(data, s.id)
-              const first = mine[0]
               return (
-                <tr key={s.id} className="cursor-pointer hover:bg-bg/40" onClick={() => setOpenId(s.id)}>
+                <tr key={s.id} className="cursor-pointer hover:bg-bg/40" onClick={() => open(s.id)}>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2.5">
                       <span className="grid h-8 w-8 place-items-center rounded-full bg-primary-soft text-[11.5px] font-bold text-primary">
                         {s.name.slice(0, 1)}
                       </span>
-                      <span className="text-[13px] font-medium">{s.name}</span>
+                      <span>
+                        <span className="block text-[13px] font-medium">{s.name}</span>
+                        {s.email && <span className="block truncate text-[11px] text-muted">{s.email}</span>}
+                      </span>
                     </div>
                   </td>
                   <td className="px-4 py-3">
@@ -329,16 +480,15 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
                       {s.status === 'trial' ? 'Trial' : s.status === 'paused' ? 'Paused' : 'Regular'}
                     </Badge>
                   </td>
+                  <td className="hidden px-4 py-3 text-[12.5px] text-muted sm:table-cell">{s.level || '—'}</td>
                   <td className="hidden px-4 py-3 text-[12.5px] text-muted sm:table-cell">{mine.length} × 60 min</td>
-                  <td className="hidden px-4 py-3 text-[12.5px] text-muted md:table-cell">
-                    {first ? `${DAY_NAMES[first.weekday]} ${hhmm(first.start)}` : '—'}
-                  </td>
+                  <td className="hidden px-4 py-3 text-[12.5px] text-muted md:table-cell">Lesson {s.lessonN ?? 1}</td>
                   <td className="px-4 py-3 text-right">
                     <button
                       aria-label={`Open ${s.name}`}
                       onClick={(e) => {
                         e.stopPropagation()
-                        setOpenId(s.id)
+                        open(s.id)
                       }}
                       className="inline-grid h-8 w-8 place-items-center rounded-lg text-muted hover:bg-ink/5"
                     >
@@ -357,17 +507,28 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
           <DialogTitle>Add a student</DialogTitle>
           <DialogDescription>They start on a trial; book their first hour from the schedule.</DialogDescription>
           <div className="mt-4 space-y-3">
-            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Student name" autoFocus />
+            <Input value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} placeholder="Student name" autoFocus />
+            <Input value={draft.email} onChange={(e) => setDraft({ ...draft, email: e.target.value })} placeholder="Email (for the invite)" type="email" />
+            <div className="grid grid-cols-2 gap-3">
+              <Input value={draft.level} onChange={(e) => setDraft({ ...draft, level: e.target.value })} placeholder="Level, e.g. A1" />
+              <Input value={draft.rate} onChange={(e) => setDraft({ ...draft, rate: e.target.value })} placeholder="Rate / hour" inputMode="numeric" />
+            </div>
             <div className="flex justify-end gap-2">
               <Button variant="ghost" size="sm" onClick={() => setAdding(false)}>
                 Cancel
               </Button>
               <Button
                 size="sm"
-                disabled={!name.trim()}
+                disabled={!draft.name.trim()}
                 onClick={() => {
-                  setData(addStudent(data, name))
-                  setName('')
+                  setData(
+                    addStudent(data, draft.name, 'trial', {
+                      email: draft.email.trim() || undefined,
+                      level: draft.level.trim() || undefined,
+                      rate: draft.rate ? Number(draft.rate) : undefined,
+                    }),
+                  )
+                  setDraft({ name: '', email: '', level: '', rate: '' })
                   setAdding(false)
                 }}
               >
@@ -386,31 +547,110 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
               {student.status === 'trial' ? 'On trial' : student.status === 'paused' ? 'Paused' : 'Regular student'} ·{' '}
               {studentSessions(data, student.id).length} hours a week
             </DialogDescription>
+
+            <div className="mt-4 space-y-2.5">
+              <label className="block">
+                <span className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-muted">Name</span>
+                <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-muted">Email</span>
+                <Input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="name@email.com" />
+              </label>
+              <div className="grid grid-cols-3 gap-2">
+                <label className="block">
+                  <span className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-muted">Level</span>
+                  <Input value={form.level} onChange={(e) => setForm({ ...form, level: e.target.value })} placeholder="A1" />
+                </label>
+                <label className="block">
+                  <span className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-muted">Rate</span>
+                  <Input value={form.rate} onChange={(e) => setForm({ ...form, rate: e.target.value })} placeholder="0" inputMode="numeric" />
+                </label>
+                <label className="block">
+                  <span className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-muted">On lesson</span>
+                  <select
+                    value={form.lessonN}
+                    onChange={(e) => setForm({ ...form, lessonN: Number(e.target.value) })}
+                    className="focus-ring w-full rounded-xl border border-line bg-surface px-2 py-2 text-[13px]"
+                  >
+                    {A1.map((l) => (
+                      <option key={l.n} value={l.n}>
+                        {l.n}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+              <label className="block">
+                <span className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-muted">Note</span>
+                <textarea
+                  value={form.note}
+                  onChange={(e) => setForm({ ...form, note: e.target.value })}
+                  rows={2}
+                  placeholder="What to remember before the next hour"
+                  className="focus-ring w-full resize-none rounded-xl border border-line bg-surface px-3 py-2 text-[13px]"
+                />
+              </label>
+              <div className="flex justify-end">
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    setData(
+                      updateStudent(data, student.id, {
+                        name: form.name.trim() || student.name,
+                        email: form.email.trim() || undefined,
+                        level: form.level.trim() || undefined,
+                        rate: form.rate ? Number(form.rate) : undefined,
+                        note: form.note.trim(),
+                        lessonN: form.lessonN,
+                      }),
+                    )
+                    setOpenId(null)
+                  }}
+                >
+                  Save
+                </Button>
+              </div>
+            </div>
+
             <ul className="mt-4 space-y-1.5">
               {studentSessions(data, student.id).map((s) => (
                 <li key={s.id} className="flex items-center justify-between rounded-xl bg-bg px-3 py-2 text-[12.5px]">
                   <span className="font-medium">
                     {DAY_NAMES[s.weekday]} {hhmm(s.start)}–{hhmm(s.end)}
                   </span>
-                  <button
-                    onClick={() => setData(removeSession(data, s.id))}
-                    className="text-[11.5px] font-semibold text-warn"
-                  >
+                  <button onClick={() => setData(removeSession(data, s.id))} className="text-[11.5px] font-semibold text-warn">
                     Remove
                   </button>
                 </li>
               ))}
               {studentSessions(data, student.id).length === 0 && <li className="text-[12.5px] text-muted">No hours booked yet.</li>}
             </ul>
+
             <div className="mt-4 flex flex-wrap gap-2">
-              <Button size="sm" onClick={() => onOpenLesson(1)}>
-                <Play className="h-3.5 w-3.5" /> Open lesson 1
+              <Button size="sm" onClick={() => onOpenLesson(student.lessonN ?? 1)}>
+                <Play className="h-3.5 w-3.5" /> Open lesson {student.lessonN ?? 1}
               </Button>
               <Button size="sm" variant="outline" onClick={() => setData(setStudentStatus(data, student.id, 'active'))}>
                 <GraduationCap className="h-3.5 w-3.5" /> Make regular
               </Button>
               <Button size="sm" variant="ghost" onClick={() => setData(setStudentStatus(data, student.id, 'paused'))}>
                 <Pause className="h-3.5 w-3.5" /> Pause
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="ml-auto text-[#8a2b22] hover:bg-[#fbeceb]"
+                onClick={() => {
+                  if (!confirmDelete) {
+                    setConfirmDelete(true)
+                    return
+                  }
+                  setData(removeStudent(data, student.id))
+                  setOpenId(null)
+                }}
+              >
+                <Trash2 className="h-3.5 w-3.5" /> {confirmDelete ? 'Delete for good?' : 'Delete'}
               </Button>
             </div>
           </DialogContent>
@@ -550,7 +790,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
                   {nextUp.s.kind === 'trial' && ' · trial'}
                 </p>
                 <div className="mt-3 flex gap-2">
-                  <Button size="sm" onClick={() => onOpenLesson(1)}>
+                  <Button size="sm" onClick={() => onOpenLesson(student(nextUp.s.studentId)?.lessonN ?? 1)}>
                     <Play className="h-3.5 w-3.5" /> Open lesson
                   </Button>
                   <Button size="sm" variant="outline" onClick={() => setOpenId(nextUp.s.studentId)}>
@@ -753,8 +993,8 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
               ))}
             </ul>
             <div className="mt-4 flex flex-wrap gap-2">
-              <Button size="sm" onClick={() => onOpenLesson(1)}>
-                <Video className="h-3.5 w-3.5" /> Open lesson 1
+              <Button size="sm" onClick={() => onOpenLesson(openStudent.lessonN ?? 1)}>
+                <Video className="h-3.5 w-3.5" /> Open lesson {openStudent.lessonN ?? 1}
               </Button>
               <Button size="sm" variant="outline" onClick={() => setData(setStudentStatus(data, openStudent.id, 'active'))}>
                 Make regular

@@ -1,7 +1,7 @@
 /**
  * The teaching week, as it actually runs: one tutor, twelve 1-1 students, mostly evenings,
- * 30-minute slots, a few trial sessions. Recurring rows are the week template; a specific
- * date can override one occurrence without touching the template (see `sessionsFor`).
+ * 30-minute slots, a few trial sessions. These rows are only the starting point: the teacher's
+ * own edits live in `teaching.ts`, including one-date changes on top of the weekly template.
  */
 
 export type StudentStatus = 'trial' | 'active' | 'paused'
@@ -11,6 +11,13 @@ export type Student = {
   name: string
   status: StudentStatus
   note?: string
+  email?: string
+  /** A1, A2 … shown next to the name, never guessed from progress. */
+  level?: string
+  /** What they pay per hour, in the currency the tutor quotes. */
+  rate?: number
+  /** The lesson they are on now, so Open lesson opens the right one. */
+  lessonN?: number
 }
 
 export type Slot = {
