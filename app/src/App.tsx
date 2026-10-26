@@ -8,6 +8,7 @@ import { Lesson } from './screens/Lesson'
 import { Lessons } from './screens/Lessons'
 import { Homework } from './screens/Homework'
 import { Review } from './screens/Review'
+import { Practice } from './screens/Practice'
 import { TeacherOverview, TeacherSchedule, TeacherStudents } from './screens/Teacher'
 import { TeacherAssignments } from './screens/TeacherAssignments'
 import { Button } from './components/ui/button'
@@ -34,6 +35,7 @@ export default function App() {
   const [view, setView] = useState<Role>('student')
   const [lessonN, setLessonN] = useState(1)
   const [quizLesson, setQuizLesson] = useState<number | null>(null)
+  const [practiceN, setPracticeN] = useState(1)
   const [autoReview, setAutoReview] = useState(0)
   const [menu, setMenu] = useState(false)
   const [signInOpen, setSignInOpen] = useState(false)
@@ -99,6 +101,11 @@ export default function App() {
     go('lesson')
   }
 
+  const openPractice = (n: number) => {
+    setPracticeN(n)
+    go('practice')
+  }
+
   const openReview = (n: number, auto = false) => {
     setQuizLesson(n)
     setAutoReview(auto ? Date.now() : 0)
@@ -144,6 +151,7 @@ export default function App() {
     lesson: `Lesson ${lessonN}`,
     homework: 'Homework',
     library: 'Review',
+    practice: `Lesson ${practiceN} · Practice`,
     't-overview': 'Overview',
     't-schedule': 'Schedule',
     't-students': 'Students',
@@ -180,18 +188,19 @@ export default function App() {
         />
         <main key={route + lessonN} className="animate-fade-up">
           {route === 'dashboard' && (
-            <Dashboard name={profile.name} onOpenLesson={openLesson} onHomework={() => go('homework')} onLessons={() => go('lessons')} />
+            <Dashboard name={profile.name} onOpenLesson={openPractice} onHomework={() => go('homework')} onLessons={() => go('lessons')} />
           )}
-          {route === 'lessons' && <Lessons onOpenLesson={openLesson} onOpenReview={openReview} />}
+          {route === 'lessons' && <Lessons onPractice={openPractice} />}
           {route === 'lesson' && <Lesson lessonN={lessonN} onPickLesson={setLessonN} onBack={() => go('dashboard')} />}
           {route === 'homework' && (
             <Homework
               onOpenReview={openReview}
-              onOpenLesson={openLesson}
+              onOpenLesson={openPractice}
               hasBackend={profile.role === 'teacher'}
             />
           )}
           {route === 'library' && <Review initialLesson={quizLesson ?? undefined} autoStart={autoReview} />}
+          {route === 'practice' && <Practice lessonN={practiceN} onBack={() => go('lessons')} />}
           {route === 't-overview' && <TeacherOverview onOpenLesson={openLesson} name={profile.name} onGo={go} />}
           {route === 't-schedule' && <TeacherSchedule onOpenLesson={openLesson} />}
           {route === 't-students' && <TeacherStudents onOpenLesson={openLesson} />}

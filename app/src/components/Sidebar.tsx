@@ -13,6 +13,7 @@ export type Route =
   | 'lesson'
   | 'homework'
   | 'library'
+  | 'practice'
   | 't-overview'
   | 't-schedule'
   | 't-students'

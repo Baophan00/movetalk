@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ArrowRight, CalendarDays, ClipboardList, RefreshCw, X } from 'lucide-react'
+import { ArrowRight, CalendarDays, ClipboardList, Mic, Play, RefreshCw, X } from 'lucide-react'
 import { Badge } from '../components/ui/badge'
 import { Button } from '../components/ui/button'
 import { Card, CardBody } from '../components/ui/card'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '../components/ui/dialog'
 import { Input } from '../components/ui/input'
 import { A1, partPlan, titleOf } from '../lib/curriculum'
+import { isPracticeOpen, lockLesson, unlockLesson } from '../lib/access'
+import { listVoice, markHeard, removeVoice } from '../lib/voice'
 import { closeAssignment, createAssignmentFor, listAccounts, teacherAssignments, type Account, type TeacherAssignment } from '../lib/assignments'
 import { cn } from '../lib/utils'
 
@@ -21,6 +23,8 @@ export function TeacherAssignments({ onOpenLesson }: { onOpenLesson: (n: number)
   const [form, setForm] = useState({ lessonN: 1, due: isoIn(3), title: '', studentIds: [] as string[] })
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
+  const [voices, setVoices] = useState(listVoice)
+  const [unlocked, setUnlocked] = useState<number[]>([])
 
   const refresh = async () => {
     const [a, l] = await Promise.all([listAccounts(), teacherAssignments()])
@@ -31,6 +35,11 @@ export function TeacherAssignments({ onOpenLesson }: { onOpenLesson: (n: number)
 
   useEffect(() => {
     void refresh()
+  }, [])
+
+  // Practice access is read after mount: localStorage is not available during the first render pass.
+  useEffect(() => {
+    setUnlocked(A1.map((l) => l.n).filter((n) => isPracticeOpen(n)))
   }, [])
 
   const lesson = useMemo(() => A1.find((l) => l.n === form.lessonN) ?? A1[0], [form.lessonN])
@@ -251,6 +260,84 @@ export function TeacherAssignments({ onOpenLesson }: { onOpenLesson: (n: number)
           </div>
         </DialogContent>
       </Dialog>
+
+      <Card className="mt-4">
+        <CardBody className="p-4">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-[14px] font-semibold">Practice unlocks</p>
+              <p className="mt-0.5 text-[11.5px] text-muted">
+                A lesson opens when you assign it, or here when you unlock it by hand.
+              </p>
+            </div>
+            <Badge tone="neutral">{unlocked.length} open</Badge>
+          </div>
+          <ul className="mt-3 grid gap-1.5 sm:grid-cols-2">
+            {A1.map((l) => {
+              const on = unlocked.includes(l.n)
+              return (
+                <li key={l.n} className="flex items-center justify-between gap-2 rounded-xl bg-bg/60 px-2.5 py-1.5">
+                  <span className="min-w-0 truncate text-[12px]">
+                    <b className="tabular-nums">{String(l.n).padStart(2, '0')}</b> {titleOf(l) || `Lesson ${l.n}`}
+                  </span>
+                  <Button
+                    size="sm"
+                    variant={on ? 'ghost' : 'outline'}
+                    className="h-7 shrink-0 px-2 text-[11px]"
+                    onClick={() => {
+                      setUnlocked(on ? lockLesson(l.n) : unlockLesson(l.n))
+                    }}
+                  >
+                    {on ? 'Lock' : 'Unlock'}
+                  </Button>
+                </li>
+              )
+            })}
+          </ul>
+        </CardBody>
+      </Card>
+
+      <Card className="mt-4">
+        <CardBody className="p-4">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="flex items-center gap-1.5 text-[14px] font-semibold">
+                <Mic className="h-4 w-4 text-[#6b4ef2]" /> Voice from students
+              </p>
+              <p className="mt-0.5 text-[11.5px] text-muted">Press play, then mark it heard once you have listened.</p>
+            </div>
+            <Badge tone={voices.length ? 'accent' : 'neutral'}>{voices.length || 'none'}</Badge>
+          </div>
+          <ul className="mt-3 space-y-1.5">
+            {voices.map((v) => (
+              <li key={v.id} className="rounded-xl bg-bg/60 px-2.5 py-2">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="min-w-0 truncate text-[12px] font-medium">
+                    Lesson {v.lesson} · {new Date(v.at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                  <span className="flex shrink-0 items-center gap-1.5">
+                    <button
+                      onClick={() => setVoices(markHeard(v.id))}
+                      className={cn('text-[11px] font-semibold', v.heard ? 'text-[#0f8a5f]' : 'text-muted hover:text-ink')}
+                    >
+                      {v.heard ? 'heard ✓' : 'mark heard'}
+                    </button>
+                    <button onClick={() => setVoices(removeVoice(v.id))} className="text-muted hover:text-[#a33a2c]" aria-label="Delete take">
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </span>
+                </div>
+                <audio controls src={v.file} className="mt-1.5 h-8 w-full" />
+              </li>
+            ))}
+            {!voices.length && (
+              <li className="flex items-center gap-2 rounded-xl bg-bg/60 px-3 py-3 text-[12px] text-muted">
+                <Play className="h-3.5 w-3.5" /> Nothing recorded yet. Students record in Practice → Say it.
+              </li>
+            )}
+          </ul>
+        </CardBody>
+      </Card>
     </div>
   )
 }
