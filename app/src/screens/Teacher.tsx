@@ -7,6 +7,7 @@ import { Card, CardBody, CardHeader, CardTitle } from '../components/ui/card'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '../components/ui/dialog'
 import { Input } from '../components/ui/input'
 import { A1 } from '../lib/curriculum'
+import { addNote, loadNotes, notesOn, removeNote, toggleNote, type Note } from '../lib/notes'
 import {
   addSession,
   addStudent,
@@ -738,6 +739,26 @@ function greeting(d: Date) {
   return 'Good evening'
 }
 
+const TINTS = [
+  { edge: 'border-l-[#2f6bff]', chip: 'bg-[#e8f0ff] text-[#2f6bff]' },
+  { edge: 'border-l-[#0f8a5f]', chip: 'bg-[#e6f7ef] text-[#0f8a5f]' },
+  { edge: 'border-l-[#6b4ef2]', chip: 'bg-[#f0ecff] text-[#6b4ef2]' },
+  { edge: 'border-l-[#c2410c]', chip: 'bg-[#fdece3] text-[#b45309]' },
+  { edge: 'border-l-[#0e7490]', chip: 'bg-[#e3f6fa] text-[#0e7490]' },
+]
+
+/** Same student, same colour, every time the page is opened. */
+function tintOf(id: string) {
+  let h = 0
+  for (const c of id) h = (h * 31 + c.charCodeAt(0)) | 0
+  return TINTS[Math.abs(h) % TINTS.length]
+}
+
+function initials(name: string) {
+  const parts = name.trim().split(/\s+/)
+  return (parts.length > 1 ? parts[0][0] + parts[parts.length - 1][0] : name.slice(0, 2)).toUpperCase()
+}
+
 function Spark({ values, tone }: { values: number[]; tone: string }) {
   const max = Math.max(1, ...values)
   return (
@@ -761,6 +782,17 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
 
   const perDay = DAY_NAMES.map((_, d) => data.sessions.filter((s) => s.weekday === d).length)
   const earnings = useMemo(() => monthEarnings(data), [data])
+  const [notes, setNotes] = useState<Note[]>(loadNotes)
+  const [noteDay, setNoteDay] = useState<number | null>(null)
+  const [noteText, setNoteText] = useState('')
+
+  /** Hours still ahead this week, counted from now, not from the start of Monday. */
+  const minutesLeft = data.sessions.reduce((acc, s) => {
+    if (s.weekday < todayIdx) return acc
+    if (s.weekday > todayIdx) return acc + (s.end - s.start)
+    const nowMin = now.getHours() * 60 + now.getMinutes()
+    return acc + Math.max(0, s.end - Math.max(s.start, nowMin))
+  }, 0)
   const student = (id: string) => data.students.find((s) => s.id === id)
 
   /** The next six hours that actually happen, walking forward from today. */
@@ -789,7 +821,15 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
     { icon: CalendarDays, label: 'Sessions today', value: String(today.length), hint: today.length ? `${hhmm(today[0].start)} first` : 'nothing booked', chip: 'bg-[#e8f0ff] text-[#2f6bff]', bar: 'bg-[#2f6bff]', values: perDay },
     { icon: Clock, label: 'Hours this week', value: (minutes / 60).toFixed(1), hint: `${data.sessions.length} sessions`, chip: 'bg-[#e6f7ef] text-[#0f8a5f]', bar: 'bg-[#0f8a5f]', values: perDay },
     { icon: Users, label: 'Students', value: String(data.students.length), hint: `${data.students.filter((s) => s.status === 'active').length} regular`, chip: 'bg-[#f0ecff] text-[#6b4ef2]', bar: 'bg-[#6b4ef2]', values: perDay },
-    { icon: GraduationCap, label: 'Trials waiting', value: String(trials.length), hint: 'convert after 2nd hour', chip: 'bg-[#fff3e2] text-[#b57513]', bar: 'bg-[#e0a13c]', values: perDay },
+    {
+      icon: Clock,
+      label: 'Hours left this week',
+      value: (minutesLeft / 60).toFixed(1),
+      hint: nextUp ? `next ${DAY_NAMES[nextUp.s.weekday]} ${hhmm(nextUp.s.start)}` : 'week is done',
+      chip: 'bg-[#fff3e2] text-[#b57513]',
+      bar: 'bg-[#e0a13c]',
+      values: perDay,
+    },
   ]
 
   return (
@@ -964,25 +1004,64 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
           {/* today */}
           <Card>
             <CardHeader>
-              <CardTitle>Today</CardTitle>
-              <Badge tone="primary">{today.length}</Badge>
+              <div>
+                <CardTitle>Today&rsquo;s schedule</CardTitle>
+                <p className="mt-0.5 text-[11.5px] text-muted">
+                  {now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
+                </p>
+              </div>
+              <Badge tone={today.length ? 'primary' : 'neutral'}>
+                {today.length} hour{today.length === 1 ? '' : 's'}
+              </Badge>
             </CardHeader>
             <CardBody className="pt-1">
-              {today.length === 0 && <p className="py-5 text-center text-[13px] text-muted">No sessions booked today.</p>}
-              <ul className="divide-y divide-line/70">
-                {today.map((s) => (
-                  <li key={s.id} className="flex items-center gap-2.5 py-2">
-                    <span className="w-[78px] shrink-0 text-[11.5px] tabular-nums text-muted">
-                      {hhmm(s.start)}–{hhmm(s.end)}
-                    </span>
-                    <span className="min-w-0 flex-1 truncate text-[12.5px] font-medium">{student(s.studentId)?.name}</span>
-                    {s.kind === 'trial' && <Badge tone="accent">Trial</Badge>}
-                    <Button size="sm" variant="ghost" onClick={() => setOpenId(s.studentId)}>
-                      Open
-                    </Button>
-                  </li>
-                ))}
+              {today.length === 0 && (
+                <div className="rounded-xl bg-bg/60 px-3 py-6 text-center">
+                  <p className="text-[13px] font-medium text-ink">Nothing booked today</p>
+                  <p className="mt-0.5 text-[11.5px] text-muted">The next hour shows up here the evening before.</p>
+                </div>
+              )}
+              <ul className="space-y-1">
+                {today.map((s) => {
+                  const t = tintOf(s.studentId)
+                  const name = student(s.studentId)?.name ?? 'Student'
+                  const isPast = s.end <= now.getHours() * 60 + now.getMinutes()
+                  return (
+                    <li key={s.id}>
+                      <button
+                        onClick={() => setOpenId(s.studentId)}
+                        className={cn(
+                          'flex w-full items-center gap-2.5 rounded-xl border-l-[3px] bg-bg/40 px-2.5 py-2 text-left transition-colors hover:bg-bg',
+                          t.edge,
+                          isPast && 'opacity-55',
+                        )}
+                      >
+                        <span className={cn('grid h-8 w-8 shrink-0 place-items-center rounded-lg text-[10.5px] font-bold', t.chip)}>
+                          {initials(name)}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="flex items-center gap-1.5">
+                            <span className="truncate text-[13px] font-medium">{name}</span>
+                            {s.kind === 'trial' && <span className="rounded-full bg-[#fdece3] px-1.5 py-px text-[9.5px] font-bold uppercase tracking-wide text-[#b45309]">trial</span>}
+                          </span>
+                          <span className="block text-[11px] tabular-nums text-muted">
+                            {hhmm(s.start)}–{hhmm(s.end)} · {s.end - s.start} min · 1-1
+                          </span>
+                        </span>
+                        <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted" />
+                      </button>
+                    </li>
+                  )
+                })}
               </ul>
+              {today.length > 0 && (
+                <button
+                  onClick={() => onGo?.('t-schedule')}
+                  className="mt-2 flex w-full items-center justify-center gap-1 rounded-xl border border-line py-1.5 text-[11.5px] font-semibold text-[#4a6fb5] transition-colors hover:bg-[#f4f8ff]"
+                >
+                  See the whole week <ChevronRight className="h-3 w-3" />
+                </button>
+              )}
             </CardBody>
           </Card>
 
@@ -1005,23 +1084,150 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
                   const weekday = (new Date(now.getFullYear(), now.getMonth(), day).getDay() + 6) % 7
                   const count = perDay[weekday]
                   const isToday = day === now.getDate()
+                  const key = isoDate(new Date(now.getFullYear(), now.getMonth(), day))
+                  const dayNotes = notesOn(notes, key)
                   return (
-                    <span
+                    <button
                       key={day}
+                      onClick={() => {
+                        setNoteDay(day)
+                        setNoteText('')
+                      }}
                       className={cn(
-                        'relative grid h-7 place-items-center rounded-lg text-[11.5px] tabular-nums',
-                        isToday ? 'bg-[#2f6bff] font-semibold text-white' : count ? 'bg-[#f2f6ff] text-[#26344f]' : 'text-muted',
+                        'relative grid h-7 place-items-center rounded-lg text-[11.5px] tabular-nums transition-colors',
+                        isToday
+                          ? 'bg-[#2f6bff] font-semibold text-white'
+                          : count
+                            ? 'bg-[#f2f6ff] text-[#26344f] hover:bg-[#e3ecff]'
+                            : 'text-muted hover:bg-bg',
                       )}
-                      title={count ? `${count} sessions` : undefined}
+                      title={[count ? `${count} hours` : null, dayNotes.length ? `${dayNotes.length} note` : null].filter(Boolean).join(' · ') || 'Add a note'}
                     >
                       {day}
-                      {!isToday && count > 0 && <span className="absolute bottom-[3px] h-[3px] w-[3px] rounded-full bg-[#2f6bff]" />}
-                    </span>
+                      <span className="absolute bottom-[2px] flex gap-[2px]">
+                        {count > 0 && <span className={cn('h-[3px] w-[3px] rounded-full', isToday ? 'bg-white' : 'bg-[#2f6bff]')} />}
+                        {dayNotes.length > 0 && <span className="h-[3px] w-[3px] rounded-full bg-[#d97706]" />}
+                      </span>
+                    </button>
                   )
                 })}
               </div>
+              <p className="mt-2 flex items-center justify-end gap-3 text-[10.5px] text-muted">
+                <span className="flex items-center gap-1"><span className="h-[3px] w-[3px] rounded-full bg-[#2f6bff]" /> teaching day</span>
+                <span className="flex items-center gap-1"><span className="h-[3px] w-[3px] rounded-full bg-[#d97706]" /> note</span>
+              </p>
             </CardBody>
           </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Notes</CardTitle>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => {
+                  setNoteDay(now.getDate())
+                  setNoteText('')
+                }}
+              >
+                <Plus className="h-3.5 w-3.5" /> Add
+              </Button>
+            </CardHeader>
+            <CardBody className="pt-1">
+              {notes.length === 0 ? (
+                <p className="rounded-xl bg-bg/60 px-3 py-4 text-center text-[12px] text-muted">
+                  Tap a day above to keep a note: a call to make, a birthday, a thing to bring.
+                </p>
+              ) : (
+                <ul className="space-y-1">
+                  {[...notes]
+                    .sort((a, b) => a.date.localeCompare(b.date))
+                    .slice(0, 5)
+                    .map((n) => (
+                      <li key={n.id} className="flex items-start gap-2 rounded-xl bg-bg/50 px-2.5 py-1.5">
+                        <button
+                          aria-label={n.done ? 'Mark as not done' : 'Mark as done'}
+                          onClick={() => setNotes(toggleNote(notes, n.id))}
+                          className={cn(
+                            'mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded border text-[9px]',
+                            n.done ? 'border-[#0f8a5f] bg-[#0f8a5f] text-white' : 'border-line text-transparent hover:border-[#0f8a5f]',
+                          )}
+                        >
+                          ✓
+                        </button>
+                        <span className="min-w-0 flex-1">
+                          <span className={cn('block text-[12px] leading-snug', n.done && 'text-muted line-through')}>{n.text}</span>
+                          <span className="block text-[10.5px] text-muted">
+                            {new Date(n.date + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                          </span>
+                        </span>
+                        <button onClick={() => setNotes(removeNote(notes, n.id))} aria-label="Delete note" className="text-muted hover:text-warn">
+                          ×
+                        </button>
+                      </li>
+                    ))}
+                </ul>
+              )}
+            </CardBody>
+          </Card>
+
+          <Dialog open={noteDay !== null} onOpenChange={(v) => !v && setNoteDay(null)}>
+            {noteDay !== null &&
+              (() => {
+                const d = new Date(now.getFullYear(), now.getMonth(), noteDay)
+                const key = isoDate(d)
+                const list = notesOn(notes, key)
+                return (
+                  <DialogContent>
+                    <DialogTitle>{d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}</DialogTitle>
+                    <DialogDescription>Your own note for this date. Students never see it.</DialogDescription>
+                    <div className="mt-3 flex gap-2">
+                      <Input
+                        value={noteText}
+                        onChange={(e) => setNoteText(e.target.value)}
+                        placeholder="Call Chi Hiền at 8 · bring the handout"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && noteText.trim()) {
+                            setNotes(addNote(notes, key, noteText))
+                            setNoteText('')
+                          }
+                        }}
+                      />
+                      <Button
+                        size="sm"
+                        disabled={!noteText.trim()}
+                        onClick={() => {
+                          setNotes(addNote(notes, key, noteText))
+                          setNoteText('')
+                        }}
+                      >
+                        Add
+                      </Button>
+                    </div>
+                    <ul className="mt-3 space-y-1.5">
+                      {list.map((n) => (
+                        <li key={n.id} className="flex items-start gap-2 rounded-xl bg-bg px-3 py-2">
+                          <button
+                            onClick={() => setNotes(toggleNote(notes, n.id))}
+                            className={cn(
+                              'mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded border text-[9px]',
+                              n.done ? 'border-[#0f8a5f] bg-[#0f8a5f] text-white' : 'border-line text-transparent',
+                            )}
+                          >
+                            ✓
+                          </button>
+                          <span className={cn('flex-1 text-[12.5px] leading-snug', n.done && 'text-muted line-through')}>{n.text}</span>
+                          <button onClick={() => setNotes(removeNote(notes, n.id))} className="text-muted hover:text-warn" aria-label="Delete note">
+                            ×
+                          </button>
+                        </li>
+                      ))}
+                      {list.length === 0 && <li className="text-[12px] text-muted">No note on this date yet.</li>}
+                    </ul>
+                  </DialogContent>
+                )
+              })()}
+          </Dialog>
 
           {earnings.total > 0 && (
             <Card>
