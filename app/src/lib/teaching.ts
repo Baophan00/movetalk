@@ -32,7 +32,7 @@ export type Teaching = {
 const KEY = 'mt2_teaching'
 
 /** Bumped when the weekly template itself is corrected, so a stored copy does not keep the old grid. */
-const SEED_VERSION = 2
+const SEED_VERSION = 3
 
 function seed(): Teaching {
   return {
