@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'motion/react'
-import { CalendarDays, ChevronLeft, ChevronRight, Clock, GraduationCap, MoreHorizontal, Pause, Play, Plus, Trash2, Users, Video } from 'lucide-react'
+import { CalendarDays, Check, ChevronLeft, ChevronRight, Clock, GraduationCap, MoreHorizontal, Pause, Play, Plus, Trash2, Users, Video } from 'lucide-react'
 import { Badge } from '../components/ui/badge'
 import { Button } from '../components/ui/button'
 import { Card, CardBody, CardHeader, CardTitle } from '../components/ui/card'
@@ -785,46 +785,6 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
   const todayKey = isoDate(now)
   const todayNotes = notesOn(notes, todayKey)
 
-  /** Everything in the next seven days, hours and calendar notes in one timeline. */
-  const ahead = (() => {
-    const out: {
-      id: string
-      when: number
-      dayLabel: string
-      dayNum: number
-      kind: 'lesson' | 'note'
-      label: string
-      sub: string
-      studentId?: string
-    }[] = []
-    const nowMin = now.getHours() * 60 + now.getMinutes()
-    for (let i = 0; i < 7; i++) {
-      const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i)
-      const key = isoDate(d)
-      const wd = (d.getDay() + 6) % 7
-      const dayLabel = i === 0 ? 'Today' : i === 1 ? 'Tmrw' : DAY_NAMES[wd].slice(0, 3)
-      for (const s of data.sessions) {
-        if (s.weekday !== wd) continue
-        const occ = occurrence(data, s, key)
-        if (occ.cancelled) continue
-        if (i === 0 && occ.end <= nowMin) continue
-        out.push({
-          id: `${s.id}-${key}`,
-          when: d.getTime() + occ.start * 60000,
-          dayLabel,
-          dayNum: d.getDate(),
-          kind: 'lesson',
-          label: data.students.find((x) => x.id === s.studentId)?.name ?? 'Student',
-          sub: `${hhmm(occ.start)}–${hhmm(occ.end)}${s.kind === 'trial' ? ' · trial' : ''}`,
-          studentId: s.studentId,
-        })
-      }
-      for (const n of notesOn(notes, key)) {
-        out.push({ id: n.id, when: d.getTime() - 1, dayLabel, dayNum: d.getDate(), kind: 'note', label: n.text, sub: 'note' })
-      }
-    }
-    return out.sort((a, b) => a.when - b.when)
-  })()
 
   const student = (id: string) => data.students.find((s) => s.id === id)
 
@@ -844,6 +804,62 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
   }, [data.sessions, todayIdx])
 
   const nextUp = upcoming[0]
+
+  /** Exceptions, not schedule: what is waiting to be decided or fixed. */
+  const needsLook = (() => {
+    const rows: { id: string; title: string; detail: string; go: 't-schedule' | 't-students' | 't-assignments' | 'library'; tone: string }[] = []
+    const openTrials = data.students.filter((st) => st.status === 'trial')
+    if (openTrials.length) {
+      const hours = openTrials.reduce((n, st) => n + studentSessions(data, st.id).length, 0)
+      rows.push({
+        id: 'trials',
+        title: `${openTrials.length} trial${openTrials.length > 1 ? 's' : ''} not regular yet`,
+        detail: `${openTrials.map((t) => t.name).slice(0, 3).join(', ')} · ${hours} hour${hours === 1 ? '' : 's'} booked — decide after the next one`,
+        go: 't-students',
+        tone: '#6b4ef2',
+      })
+    }
+    const unpriced = data.students.filter((st) => !st.rate)
+    if (unpriced.length) {
+      rows.push({
+        id: 'rate',
+        title: `${unpriced.length} student${unpriced.length > 1 ? 's' : ''} without a rate`,
+        detail: `Set it and the month starts counting — ${unpriced.map((t) => t.name).slice(0, 3).join(', ')}`,
+        go: 't-students',
+        tone: '#b57513',
+      })
+    }
+    const noEmail = data.students.filter((st) => !st.email)
+    if (noEmail.length) {
+      rows.push({
+        id: 'email',
+        title: `${noEmail.length} without an email`,
+        detail: 'No email means no assignment can reach them',
+        go: 't-students',
+        tone: '#2f6bff',
+      })
+    }
+    const mondayOfWeek = weekStart(now)
+    let calledOff = 0
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(mondayOfWeek.getFullYear(), mondayOfWeek.getMonth(), mondayOfWeek.getDate() + i)
+      const key = isoDate(d)
+      for (const s of data.sessions) {
+        if (s.weekday !== i) continue
+        if (occurrence(data, s, key).cancelled) calledOff++
+      }
+    }
+    if (calledOff) {
+      rows.push({
+        id: 'called-off',
+        title: `${calledOff} hour${calledOff > 1 ? 's' : ''} called off this week`,
+        detail: 'Not taught, not paid — move one or let it go',
+        go: 't-schedule',
+        tone: '#c2410c',
+      })
+    }
+    return rows
+  })()
   const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
   const monthOffset = (firstOfMonth.getDay() + 6) % 7
   const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
@@ -1242,47 +1258,39 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
               })()}
           </Dialog>
 
-          {/* reminders */}
+          {/* needs a look */}
           <Card className="border-[#eeddb8] bg-gradient-to-b from-[#fffaf0] to-white shadow-[0_10px_30px_rgba(180,140,60,.10)]">
             <CardHeader>
               <div>
-                <CardTitle>Reminders</CardTitle>
-                <p className="mt-0.5 text-[11.5px] text-muted">The seven days ahead: hours to teach, and the notes you left on the calendar.</p>
+                <CardTitle>Needs a look</CardTitle>
+                <p className="mt-0.5 text-[11.5px] text-muted">Things waiting on you, not things already on the calendar.</p>
               </div>
-              <Badge tone="accent">{ahead.length}</Badge>
+              <Badge tone={needsLook.length ? 'accent' : 'ok'}>{needsLook.length || 'clear'}</Badge>
             </CardHeader>
             <CardBody className="pt-1">
-              {ahead.length === 0 ? (
-                <p className="rounded-xl bg-white/70 px-3 py-4 text-center text-[12px] text-muted">
-                  Nothing in the next seven days.
-                </p>
+              {needsLook.length === 0 ? (
+                <div className="flex items-center gap-2 rounded-xl bg-white/85 px-3 py-4 ring-1 ring-[#f1e4c9]">
+                  <Check className="h-4 w-4 shrink-0 text-[#0f8a5f]" />
+                  <p className="text-[12px] text-[#4a432f]">All clear. Every hour is priced, every trial has a next step, nothing called off.</p>
+                </div>
               ) : (
                 <ul className="space-y-1">
-                  {ahead.slice(0, 9).map((it) => (
-                    <li key={it.id} className="flex items-start gap-2.5 rounded-xl bg-white/85 px-2.5 py-2 ring-1 ring-[#f1e4c9]">
-                      <span className="w-9 shrink-0 text-center">
-                        <span className="block text-[9px] font-bold uppercase tracking-wide text-[#96702a]">{it.dayLabel}</span>
-                        <span className="block text-[12.5px] font-semibold tabular-nums text-[#3d2f14]">{it.dayNum}</span>
-                      </span>
-                      <span
-                        className="mt-1 h-2 w-2 shrink-0 rounded-full"
-                        style={{ backgroundColor: it.kind === 'note' ? '#d97706' : tones[it.studentId ?? '']?.edge ?? '#2f6bff' }}
-                      />
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-[12px] font-medium leading-snug text-[#2c2618]">{it.label}</span>
-                        <span className="block text-[10.5px] text-[#8a7a58]">{it.sub}</span>
-                      </span>
+                  {needsLook.map((row) => (
+                    <li key={row.id}>
+                      <button
+                        onClick={() => onGo?.(row.go)}
+                        className="flex w-full items-start gap-2.5 rounded-xl bg-white/85 px-2.5 py-2 text-left ring-1 ring-[#f1e4c9] transition-colors hover:bg-white"
+                      >
+                        <span className="mt-[5px] h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: row.tone }} />
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-[12px] font-medium leading-snug text-[#2c2618]">{row.title}</span>
+                          <span className="block truncate text-[10.5px] text-[#8a7a58]">{row.detail}</span>
+                        </span>
+                        <ChevronRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#b59a63]" />
+                      </button>
                     </li>
                   ))}
                 </ul>
-              )}
-              {ahead.length > 9 && (
-                <button
-                  onClick={() => onGo?.('t-schedule')}
-                  className="mt-2 flex w-full items-center justify-center gap-1 rounded-xl border border-[#e8d9b6] py-1.5 text-[11.5px] font-semibold text-[#8a6a2a] transition-colors hover:bg-white"
-                >
-                  {ahead.length - 9} more in the next seven days <ChevronRight className="h-3 w-3" />
-                </button>
               )}
             </CardBody>
           </Card>
