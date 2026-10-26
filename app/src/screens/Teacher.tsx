@@ -553,7 +553,7 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
             <DialogTitle>{student.name}</DialogTitle>
             <DialogDescription>
               {student.status === 'trial' ? 'On trial' : student.status === 'paused' ? 'Paused' : 'Regular student'} ·{' '}
-              {studentSessions(data, student.id).length} hours a week
+              {studentSessions(data, student.id).length} hour{studentSessions(data, student.id).length === 1 ? '' : 's'} a week
             </DialogDescription>
 
             <div className="mt-4 space-y-2.5">
@@ -654,9 +654,11 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
               <Button size="sm" onClick={() => onOpenLesson(student.lessonN ?? 1)}>
                 <Play className="h-3.5 w-3.5" /> Open lesson {student.lessonN ?? 1}
               </Button>
-              <Button size="sm" variant="outline" onClick={() => setData(setStudentStatus(data, student.id, 'active'))}>
-                <GraduationCap className="h-3.5 w-3.5" /> Make regular
-              </Button>
+              {student.status !== 'active' && (
+                <Button size="sm" variant="outline" onClick={() => setData(setStudentStatus(data, student.id, 'active'))}>
+                  <GraduationCap className="h-3.5 w-3.5" /> Make regular
+                </Button>
+              )}
               <Button size="sm" variant="ghost" onClick={() => setData(setStudentStatus(data, student.id, 'paused'))}>
                 <Pause className="h-3.5 w-3.5" /> Pause
               </Button>
@@ -1044,7 +1046,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
           <DialogContent>
             <DialogTitle>{openStudent.name}</DialogTitle>
             <DialogDescription>
-              Mon to Sun · {studentSessions(data, openStudent.id).length} hours a week
+              Mon to Sun · {studentSessions(data, openStudent.id).length} hour{studentSessions(data, openStudent.id).length === 1 ? '' : 's'} a week
             </DialogDescription>
             <ul className="mt-4 space-y-1.5">
               {studentSessions(data, openStudent.id).map((s) => (
