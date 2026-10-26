@@ -742,6 +742,196 @@ function Choose({ items }: { items: PracticeItem[] }) {
   )
 }
 
+const LINK_MARK = /‿/
+
+function ReadCard({ title, lines, pal }: { title: string; lines: string[]; pal: Palette }) {
+  const body = lines.map((l) => l.trim()).filter((l) => l.length > 0 && l.toLowerCase() !== title.trim().toLowerCase())
+  const links = body.filter((l) => LINK_MARK.test(l))
+  if (links.length < 2) return null
+  const prose = body.filter((l) => !LINK_MARK.test(l) && l.length > 90)
+  const head = body.filter((l) => !LINK_MARK.test(l) && l.length <= 90)
+  const heading = head[0] ?? ''
+  const instruction = head.slice(1).find((l) => l.length > 20) ?? ''
+  const footer = head.filter((l) => l !== heading && l !== instruction).pop() ?? ''
+  return (
+    <article className="overflow-hidden rounded-2xl border border-line bg-surface lg:col-span-2">
+      <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
+        <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
+        <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{title}</p>
+      </header>
+
+      <div className="grid gap-2.5 px-3.5 py-3 sm:grid-cols-[1.6fr_1fr]">
+        <div>
+          {heading && <p className="text-[14px] font-bold leading-snug text-ink">{heading}</p>}
+          {instruction && <p className="mt-0.5 text-[11.5px] italic leading-relaxed text-ink/60">{instruction}</p>}
+          <div className="mt-2 space-y-1.5 rounded-xl border border-line/70 px-3 py-2">
+            {prose.map((para, i) => (
+              <p key={i} className="text-[13.5px] leading-[1.75] text-ink/85">
+                {para}
+              </p>
+            ))}
+          </div>
+        </div>
+
+        <div className={cn('rounded-xl border px-2.5 py-2', pal.border, pal.soft)}>
+          <p className={cn('mb-1.5 text-[9.5px] font-bold uppercase tracking-[.12em]', pal.text)}>Link the sounds</p>
+          <div className="space-y-1">
+            {links.map((l, i) => (
+              <p key={i} className={cn('rounded-md px-1.5 py-0.5 font-mono text-[11.5px]', pal.chip)}>
+                {l}
+              </p>
+            ))}
+          </div>
+          {footer && <p className="mt-1.5 text-[11px] italic leading-relaxed text-ink/55">{footer}</p>}
+        </div>
+      </div>
+    </article>
+  )
+}
+
+const NAME_LINE = /^[A-Z][A-Z0-9 .'’&-]{1,22}$/
+
+function parseTalk(title: string, lines: string[]) {
+  const body = lines.map((l) => l.trim()).filter((l) => l.length > 0 && l.toLowerCase() !== title.trim().toLowerCase())
+  const turns: { who: string; text: string }[] = []
+  const notes: string[] = []
+  for (let i = 0; i < body.length; i++) {
+    const name = body[i]
+    const tag = body[i + 1]
+    const text = body[i + 2]
+    if (NAME_LINE.test(name) && /^[A-Z]$/.test(tag ?? '') && text && !NAME_LINE.test(text)) {
+      turns.push({ who: name, text })
+      i += 2
+      continue
+    }
+    notes.push(body[i])
+  }
+  return turns.length >= 4 ? { turns, notes } : null
+}
+
+function TalkCard({ title, lines, pal }: { title: string; lines: string[]; pal: Palette }) {
+  const t = parseTalk(title, lines)
+  if (!t) return null
+  const names = [...new Set(t.turns.map((x) => x.who))]
+  const sub = t.notes.find((l) => !/^NOTICE/i.test(l)) ?? ''
+  const foot = t.notes.filter((l) => /^NOTICE/i.test(l))
+  return (
+    <article className="overflow-hidden rounded-2xl border border-line bg-surface lg:col-span-2">
+      <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
+        <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
+        <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{title}</p>
+        <span className="text-[10.5px] text-muted">{t.turns.length} turns</span>
+      </header>
+
+      {sub && <p className="px-3.5 pt-2 text-[12px] italic leading-relaxed text-ink/60">{sub}</p>}
+
+      <div className="space-y-1.5 px-3.5 py-3">
+        {t.turns.map((turn, i) => {
+          const right = names.indexOf(turn.who) === 1
+          return (
+            <div key={i} className={cn('flex flex-col', right ? 'items-end' : 'items-start')}>
+              <span className="mb-0.5 px-0.5 text-[9.5px] font-bold uppercase tracking-[.12em] text-muted">{turn.who}</span>
+              <p
+                className={cn(
+                  'max-w-[86%] rounded-2xl border px-3 py-1.5 text-[13px] leading-relaxed text-ink',
+                  pal.border,
+                  right ? 'rounded-tr-sm' : 'rounded-tl-sm',
+                  right ? 'bg-surface' : pal.soft,
+                )}
+              >
+                {turn.text}
+              </p>
+            </div>
+          )
+        })}
+      </div>
+
+      {foot.length > 0 && (
+        <p className="border-t border-line/60 px-3.5 py-1.5 text-[11.5px] leading-relaxed text-ink/55">{foot.join(' · ')}</p>
+      )}
+    </article>
+  )
+}
+
+const REFLECT_LEFT = /^(MY NEXT TRY|VIẾT LẠI)$/i
+const REFLECT_RIGHT = /^(PARTNER CHECK|CÙNG HỌC KIỂM TRA)$/i
+const CHECK_LINE = /^(Tôi|Chủ ngữ|Sau |Câu trả lời|Cuộc)/
+
+function parseReflect(title: string, lines: string[]) {
+  const body = lines.map((l) => l.trim()).filter((l) => l.length > 0 && l.toLowerCase() !== title.trim().toLowerCase())
+  if (!body.some((l) => REFLECT_LEFT.test(l)) || !body.some((l) => REFLECT_RIGHT.test(l))) return null
+  const firstLabel = body.findIndex((l) => REFLECT_LEFT.test(l) || REFLECT_RIGHT.test(l))
+  const head = body.slice(0, firstLabel)
+  const rest = body.slice(firstLabel).filter((l) => !REFLECT_LEFT.test(l) && !REFLECT_RIGHT.test(l))
+  const left: string[] = []
+  const right: string[] = []
+  let side: 'left' | 'right' = 'left'
+  for (const line of rest) {
+    if (CHECK_LINE.test(line)) side = 'right'
+    ;(side === 'left' ? left : right).push(line)
+  }
+  return { head, left, right }
+}
+
+function ReflectCard({ title, lines, pal }: { title: string; lines: string[]; pal: Palette }) {
+  const r = parseReflect(title, lines)
+  if (!r) return null
+  const subtitle = r.head[0] ?? ''
+  const instruction = r.head.slice(1).join(' ')
+  const fill = r.left.filter((l) => /_{3,}/.test(l))
+  const leftNotes = r.left.filter((l) => !/_{3,}/.test(l))
+  const rightChecks = r.right.filter((l) => !/^(Lượt|Đổi) /.test(l))
+  const rightNotes = r.right.filter((l) => /^(Lượt|Đổi) /.test(l))
+  return (
+    <article className="overflow-hidden rounded-2xl border border-line bg-surface lg:col-span-2">
+      <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
+        <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
+        <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{title}</p>
+      </header>
+
+      <div className="px-3.5 pt-2.5">
+        {subtitle && <p className="text-[14px] font-bold leading-snug text-ink">{subtitle}</p>}
+        {instruction && <p className="mt-0.5 text-[12px] italic leading-relaxed text-ink/60">{instruction}</p>}
+      </div>
+
+      <div className="mt-2.5 grid gap-2.5 px-3.5 pb-3 sm:grid-cols-2">
+        <div className={cn('rounded-xl border px-2.5 py-2', pal.border, pal.soft)}>
+          <p className={cn('mb-1.5 text-[9.5px] font-bold uppercase tracking-[.12em]', pal.text)}>My next try</p>
+          <div className="space-y-1.5">
+            {fill.map((line, i) => {
+              const [label] = line.split(/_{3,}/)
+              return (
+                <div key={i} className="text-[12.5px] leading-relaxed text-ink/85">
+                  <span className="block text-[11.5px] text-ink/60">{label.trim()}</span>
+                  <span className="mt-0.5 block border-b border-dashed border-ink/35">&nbsp;</span>
+                </div>
+              )
+            })}
+          </div>
+          {leftNotes.length > 0 && (
+            <p className="mt-1.5 text-[11px] italic leading-relaxed text-ink/55">{leftNotes.join(' · ')}</p>
+          )}
+        </div>
+
+        <div className="rounded-xl border border-line/70 px-2.5 py-2">
+          <p className="mb-1.5 text-[9.5px] font-bold uppercase tracking-[.12em] text-muted">Partner check</p>
+          <ul className="space-y-1">
+            {rightChecks.map((line, i) => (
+              <li key={i} className="flex items-start gap-1.5 text-[12.5px] leading-relaxed text-ink/85">
+                <span className="mt-0.5 grid h-3.5 w-3.5 shrink-0 place-items-center rounded border border-ink/25" />
+                <span className="min-w-0 break-words">{line}</span>
+              </li>
+            ))}
+          </ul>
+          {rightNotes.length > 0 && (
+            <p className="mt-1.5 text-[11px] italic leading-relaxed text-ink/55">{rightNotes.join(' · ')}</p>
+          )}
+        </div>
+      </div>
+    </article>
+  )
+}
+
 const SCENE_MARK = /^NOW KEEP IT GOING$/
 
 function parseScene(title: string, lines: string[]) {
@@ -909,6 +1099,20 @@ function Flow({ groups, tone: sectionTone }: { groups: FlowGroup[]; tone?: Tone 
 
               if (body.some((line) => SCENE_MARK.test(line.trim())) && body.some((l) => /^START WITH/i.test(l.trim()))) {
                 return <SceneCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
+              }
+
+              if (slide.lines.filter((l) => LINK_MARK.test(l)).length >= 2) {
+                return <ReadCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
+              }
+
+              const talk = parseTalk(slide.title, slide.lines)
+              if (talk) {
+                return <TalkCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
+              }
+
+              const reflect = parseReflect(slide.title, slide.lines)
+              if (reflect) {
+                return <ReflectCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
               }
 
               return (
