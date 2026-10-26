@@ -30,9 +30,9 @@ export type Slot = {
   kind: 'lesson' | 'trial'
 }
 
-/** 24 slots — the week of 26 Oct 2026 the tutor sent over. */
+/** 24 slots — the week of 26 Oct 2026, Monday first, exactly as it runs. Wednesday is free. */
 export const WEEK: Slot[] = [
-  // Monday
+  // Monday 26
   { studentId: 'chi-hien', weekday: 0, start: 9 * 60, end: 10 * 60, kind: 'lesson' },
   { studentId: 'bee', weekday: 0, start: 15 * 60 + 30, end: 16 * 60 + 30, kind: 'lesson' },
   { studentId: 'doan-thao', weekday: 0, start: 17 * 60, end: 18 * 60, kind: 'lesson' },
@@ -41,26 +41,28 @@ export const WEEK: Slot[] = [
   { studentId: 'phuong-nhi', weekday: 0, start: 20 * 60, end: 21 * 60, kind: 'lesson' },
   { studentId: 'thi-nho', weekday: 0, start: 21 * 60, end: 22 * 60, kind: 'lesson' },
   { studentId: 'vy', weekday: 0, start: 22 * 60, end: 23 * 60, kind: 'lesson' },
-  // Tuesday
+  // Tuesday 27
   { studentId: 'huy', weekday: 1, start: 18 * 60, end: 19 * 60, kind: 'trial' },
   { studentId: 'my-duyen', weekday: 1, start: 19 * 60, end: 20 * 60, kind: 'trial' },
   { studentId: 'ngoc-linh', weekday: 1, start: 21 * 60, end: 22 * 60, kind: 'lesson' },
-  // Wednesday
-  { studentId: 'thu-hien', weekday: 2, start: 11 * 60, end: 12 * 60, kind: 'lesson' },
-  { studentId: 'diem', weekday: 2, start: 16 * 60, end: 17 * 60, kind: 'lesson' },
-  { studentId: 'doan-thao', weekday: 2, start: 17 * 60, end: 18 * 60, kind: 'lesson' },
-  { studentId: 'vy', weekday: 2, start: 22 * 60, end: 23 * 60, kind: 'lesson' },
-  // Thursday
-  { studentId: 'huy', weekday: 3, start: 18 * 60, end: 19 * 60, kind: 'trial' },
-  { studentId: 'my-duyen', weekday: 3, start: 19 * 60, end: 20 * 60, kind: 'trial' },
-  { studentId: 'phuong-nhi', weekday: 3, start: 20 * 60, end: 21 * 60, kind: 'lesson' },
-  { studentId: 'ngoc-linh', weekday: 3, start: 21 * 60, end: 22 * 60, kind: 'lesson' },
-  { studentId: 'thi-nho', weekday: 3, start: 22 * 60, end: 23 * 60, kind: 'lesson' },
-  // Friday
-  { studentId: 'thu-hien', weekday: 4, start: 14 * 60, end: 15 * 60, kind: 'lesson' },
-  { studentId: 'eun-na', weekday: 4, start: 15 * 60, end: 16 * 60, kind: 'lesson' },
+  // Wednesday 28 — nothing booked
+  // Thursday 29
+  { studentId: 'thu-hien', weekday: 3, start: 11 * 60, end: 12 * 60, kind: 'lesson' },
+  { studentId: 'diem', weekday: 3, start: 16 * 60, end: 17 * 60, kind: 'lesson' },
+  { studentId: 'doan-thao', weekday: 3, start: 17 * 60, end: 18 * 60, kind: 'lesson' },
+  { studentId: 'vy', weekday: 3, start: 22 * 60, end: 23 * 60, kind: 'lesson' },
+  // Friday 30
+  { studentId: 'huy', weekday: 4, start: 18 * 60, end: 19 * 60, kind: 'trial' },
   { studentId: 'my-duyen', weekday: 4, start: 19 * 60, end: 20 * 60, kind: 'trial' },
+  { studentId: 'phuong-nhi', weekday: 4, start: 20 * 60, end: 21 * 60, kind: 'lesson' },
   { studentId: 'ngoc-linh', weekday: 4, start: 21 * 60, end: 22 * 60, kind: 'lesson' },
+  { studentId: 'thi-nho', weekday: 4, start: 22 * 60, end: 23 * 60, kind: 'lesson' },
+  // Saturday 31
+  { studentId: 'thu-hien', weekday: 5, start: 14 * 60, end: 15 * 60, kind: 'lesson' },
+  // Sunday 1 Nov
+  { studentId: 'eun-na', weekday: 6, start: 15 * 60, end: 16 * 60, kind: 'lesson' },
+  { studentId: 'my-duyen', weekday: 6, start: 19 * 60, end: 20 * 60, kind: 'trial' },
+  { studentId: 'ngoc-linh', weekday: 6, start: 20 * 60, end: 21 * 60, kind: 'lesson' },
 ]
 
 export const STUDENTS: Student[] = [

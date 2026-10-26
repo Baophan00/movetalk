@@ -21,6 +21,7 @@ export type Assignment = {
 export type Override = { sessionId: string; date: string; cancelled?: boolean; start?: number; end?: number }
 
 export type Teaching = {
+  seed?: number
   students: Student[]
   sessions: Session[]
   assignments: Assignment[]
@@ -30,8 +31,12 @@ export type Teaching = {
 
 const KEY = 'mt2_teaching'
 
+/** Bumped when the weekly template itself is corrected, so a stored copy does not keep the old grid. */
+const SEED_VERSION = 2
+
 function seed(): Teaching {
   return {
+    seed: SEED_VERSION,
     students: STUDENTS.map((s) => ({ ...s })),
     sessions: WEEK.map((s, i) => ({ id: `s${i}`, ...s })),
     assignments: [],
@@ -43,8 +48,9 @@ function seed(): Teaching {
 export function loadTeaching(): Teaching {
   try {
     const raw = localStorage.getItem(KEY)
-    if (!raw) return seed()
+    if (!raw) return saveTeaching(seed())
     const parsed = JSON.parse(raw) as Teaching
+    if ((parsed.seed ?? 1) !== SEED_VERSION) return saveTeaching(migrate(parsed))
     return {
       students: parsed.students ?? seed().students,
       sessions: parsed.sessions ?? seed().sessions,
@@ -54,6 +60,28 @@ export function loadTeaching(): Teaching {
     }
   } catch {
     return seed()
+  }
+}
+
+/** The grid was corrected: rebuild the template, keep what the teacher added themselves. */
+function migrate(old: Teaching): Teaching {
+  const base = seed()
+  const isTemplate = (id: string) => /^s\d+$/.test(id)
+  return {
+    ...base,
+    students: old.students ?? base.students,
+    sessions: [
+      ...base.sessions,
+      ...(old.sessions ?? []).filter(
+        (s) =>
+          !isTemplate(s.id) &&
+          !base.sessions.some(
+            (t) => t.studentId === s.studentId && t.weekday === s.weekday && t.start === s.start && t.end === s.end,
+          ),
+      ),
+    ],
+    assignments: old.assignments ?? [],
+    overrides: (old.overrides ?? []).filter((o) => !isTemplate(o.sessionId)),
   }
 }
 
