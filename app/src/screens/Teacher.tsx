@@ -21,6 +21,9 @@ import {
   setStudentStatus,
   updateStudent,
   hhmmToMin,
+  monthEarnings,
+  monthHours,
+  vnd,
   type Session,
   type Teaching,
 } from '../lib/teaching'
@@ -418,6 +421,7 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
   })
   const [confirmDelete, setConfirmDelete] = useState(false)
   const student = data.students.find((s) => s.id === openId)
+  const now = new Date()
 
   const open = (id: string) => {
     const s = data.students.find((x) => x.id === id)
@@ -426,7 +430,7 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
       name: s.name,
       email: s.email ?? '',
       level: s.level ?? '',
-      rate: s.rate ? String(s.rate) : '',
+      rate: s.rate ? String(Math.round(s.rate / 1000)) : '',
       note: s.note ?? '',
       lessonN: s.lessonN ?? 1,
     })
@@ -456,6 +460,7 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
               <th className="hidden px-4 py-2.5 font-semibold sm:table-cell">Level</th>
               <th className="hidden px-4 py-2.5 font-semibold sm:table-cell">Sessions this week</th>
               <th className="hidden px-4 py-2.5 font-semibold md:table-cell">On lesson</th>
+              <th className="hidden px-4 py-2.5 font-semibold lg:table-cell">This month</th>
               <th className="px-4 py-2.5" />
             </tr>
           </thead>
@@ -483,6 +488,9 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
                   <td className="hidden px-4 py-3 text-[12.5px] text-muted sm:table-cell">{s.level || '—'}</td>
                   <td className="hidden px-4 py-3 text-[12.5px] text-muted sm:table-cell">{mine.length} × 60 min</td>
                   <td className="hidden px-4 py-3 text-[12.5px] text-muted md:table-cell">Lesson {s.lessonN ?? 1}</td>
+                  <td className="hidden px-4 py-3 text-[12.5px] tabular-nums text-muted lg:table-cell">
+                    {s.rate ? vnd(monthHours(data, s.id) * s.rate) : '—'}
+                  </td>
                   <td className="px-4 py-3 text-right">
                     <button
                       aria-label={`Open ${s.name}`}
@@ -525,7 +533,7 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
                     addStudent(data, draft.name, 'trial', {
                       email: draft.email.trim() || undefined,
                       level: draft.level.trim() || undefined,
-                      rate: draft.rate ? Number(draft.rate) : undefined,
+                      rate: draft.rate ? Number(draft.rate) * 1000 : undefined,
                     }),
                   )
                   setDraft({ name: '', email: '', level: '', rate: '' })
@@ -563,8 +571,15 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
                   <Input value={form.level} onChange={(e) => setForm({ ...form, level: e.target.value })} placeholder="A1" />
                 </label>
                 <label className="block">
-                  <span className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-muted">Rate</span>
-                  <Input value={form.rate} onChange={(e) => setForm({ ...form, rate: e.target.value })} placeholder="0" inputMode="numeric" />
+                  <span className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-muted">Rate / hour</span>
+                  <Input
+                    value={form.rate}
+                    onChange={(e) => setForm({ ...form, rate: e.target.value })}
+                    placeholder="180"
+                    inputMode="numeric"
+                    aria-label="Rate per hour in thousands of đồng"
+                  />
+                  <span className="mt-1 block text-[10.5px] text-muted">nghìn ₫ · 180 = 180.000₫</span>
                 </label>
                 <label className="block">
                   <span className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-muted">On lesson</span>
@@ -591,6 +606,14 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
                   className="focus-ring w-full resize-none rounded-xl border border-line bg-surface px-3 py-2 text-[13px]"
                 />
               </label>
+              {student.rate ? (
+                <p className="rounded-xl bg-bg/60 px-3 py-2 text-[12px] text-muted">
+                  {MONTHS[now.getMonth()]}: {monthHours(data, student.id).toFixed(1).replace('.0', '')} hours ×{' '}
+                  {vnd(student.rate)} = <b className="font-semibold text-ink">{vnd(monthHours(data, student.id) * student.rate)}</b>
+                </p>
+              ) : (
+                <p className="text-[11.5px] text-muted">Set a rate to see what this student is worth this month.</p>
+              )}
               <div className="flex justify-end">
                 <Button
                   size="sm"
@@ -600,7 +623,7 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
                         name: form.name.trim() || student.name,
                         email: form.email.trim() || undefined,
                         level: form.level.trim() || undefined,
-                        rate: form.rate ? Number(form.rate) : undefined,
+                        rate: form.rate ? Number(form.rate) * 1000 : undefined,
                         note: form.note.trim(),
                         lessonN: form.lessonN,
                       }),
@@ -694,6 +717,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
   const openStudent = data.students.find((s) => s.id === openId)
 
   const perDay = DAY_NAMES.map((_, d) => data.sessions.filter((s) => s.weekday === d).length)
+  const earnings = useMemo(() => monthEarnings(data), [data])
   const student = (id: string) => data.students.find((s) => s.id === id)
 
   /** The next six hours that actually happen, walking forward from today. */
@@ -759,6 +783,12 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
                 <> and <b className="font-semibold text-[#16233f]">{trials.length} trial{trials.length === 1 ? '' : 's'}</b> waiting</>
               )}
               . {(minutes / 60).toFixed(1)} hours booked this week.
+              {earnings.total > 0 && (
+                <>
+                  {' '}
+                  {MONTHS[now.getMonth()]} is worth <b className="font-semibold text-[#16233f]">{vnd(earnings.total)}</b>.
+                </>
+              )}
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               <Button size="sm" onClick={() => onGo?.('t-schedule')} className="bg-[#2f6bff] text-white hover:bg-[#2559d8]">
@@ -949,6 +979,37 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
               </div>
             </CardBody>
           </Card>
+
+          {earnings.total > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>{MONTHS[now.getMonth()]} earnings</CardTitle>
+                <Badge tone="ok">{vnd(earnings.total)}</Badge>
+              </CardHeader>
+              <CardBody className="pt-1">
+                <ul className="divide-y divide-line/70">
+                  {earnings.rows
+                    .filter((r) => r.amount > 0)
+                    .slice(0, 4)
+                    .map((r) => (
+                      <li key={r.student.id} className="flex items-center justify-between gap-2 py-2">
+                        <span className="min-w-0">
+                          <span className="block truncate text-[12.5px] font-medium">{r.student.name}</span>
+                          <span className="block text-[11px] text-muted">
+                            {r.hours.toFixed(1).replace('.0', '')} h × {vnd(r.student.rate ?? 0)}
+                          </span>
+                        </span>
+                        <span className="shrink-0 text-[12.5px] font-semibold tabular-nums">{vnd(r.amount)}</span>
+                      </li>
+                    ))}
+                </ul>
+                <p className="mt-2 text-[11px] leading-relaxed text-muted">
+                  {earnings.rows.filter((r) => r.student.rate).length} of {data.students.length} students have a rate. Called-off
+                  dates are already taken out.
+                </p>
+              </CardBody>
+            </Card>
+          )}
 
           {/* reminders */}
           <Card>

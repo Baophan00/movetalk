@@ -180,3 +180,43 @@ export function hhmmToMin(value: string): number {
   const [h, m] = value.split(':').map(Number)
   return (h || 0) * 60 + (m || 0)
 }
+
+/** Every date in the month that falls on this weekday. */
+function datesOfWeekday(ref: Date, weekday: number): Date[] {
+  const out: Date[] = []
+  const last = new Date(ref.getFullYear(), ref.getMonth() + 1, 0).getDate()
+  for (let day = 1; day <= last; day++) {
+    const d = new Date(ref.getFullYear(), ref.getMonth(), day)
+    if ((d.getDay() + 6) % 7 === weekday) out.push(d)
+  }
+  return out
+}
+
+/** Hours this student is actually booked for in the month, called-off dates taken out. */
+export function monthHours(t: Teaching, studentId: string, ref: Date = new Date()): number {
+  let minutes = 0
+  for (const s of t.sessions.filter((x) => x.studentId === studentId)) {
+    for (const d of datesOfWeekday(ref, s.weekday)) {
+      const occ = occurrence(t, s, isoDate(d))
+      if (!occ.cancelled) minutes += occ.end - occ.start
+    }
+  }
+  return minutes / 60
+}
+
+/** What the month is worth at each student's own rate; rate is stored in đồng. */
+export function monthEarnings(t: Teaching, ref: Date = new Date()): { total: number; rows: { student: Student; hours: number; amount: number }[] } {
+  const rows = t.students
+    .map((student) => {
+      const hours = monthHours(t, student.id, ref)
+      const amount = Math.round(hours * (student.rate ?? 0))
+      return { student, hours, amount }
+    })
+    .sort((a, b) => b.amount - a.amount)
+  return { total: rows.reduce((n, r) => n + r.amount, 0), rows }
+}
+
+/** 180000 -> "180.000₫" */
+export function vnd(amount: number): string {
+  return `${new Intl.NumberFormat('vi-VN').format(Math.round(amount))}₫`
+}
