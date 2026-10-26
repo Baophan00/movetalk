@@ -742,6 +742,113 @@ function Choose({ items }: { items: PracticeItem[] }) {
   )
 }
 
+const SCENE_MARK = /^NOW KEEP IT GOING$/
+
+function parseScene(title: string, lines: string[]) {
+  const body = lines.map((l) => l.trim()).filter((l) => l.length > 0 && l.toLowerCase() !== title.trim().toLowerCase())
+  const out = { sub: [] as string[], imagine: [] as string[], ideas: [] as string[], opener: [] as string[], keep: [] as { q: string; pattern: string }[], notes: [] as string[] }
+  let mode: 'sub' | 'imagine' | 'ideas' | 'opener' | 'keep' = 'sub'
+  for (const line of body) {
+    if (/^IMAGINE THE MOMENT$/i.test(line)) { mode = 'imagine'; continue }
+    if (/^IDEA PATHS/i.test(line)) { mode = 'ideas'; continue }
+    if (/^START WITH/i.test(line)) { mode = 'opener'; continue }
+    if (SCENE_MARK.test(line)) { mode = 'keep'; continue }
+    if (mode === 'sub') out.sub.push(line)
+    else if (mode === 'imagine') out.imagine.push(line)
+    else if (mode === 'ideas') out.ideas.push(line)
+    else if (mode === 'opener') out.opener.push(line)
+    else if (/^Q\d+$/.test(line)) out.keep.push({ q: line, pattern: '' })
+    else if (out.keep.length > 0 && out.keep[out.keep.length - 1].pattern === '') out.keep[out.keep.length - 1].pattern = line
+    else out.notes.push(line)
+  }
+  return out
+}
+
+function SceneCard({ title, lines, pal }: { title: string; lines: string[]; pal: Palette }) {
+  const sc = parseScene(title, lines)
+  const subtitle = sc.sub[0] ?? ''
+  const setup = sc.sub.slice(1).join(' ')
+  return (
+    <article className="overflow-hidden rounded-2xl border border-line bg-surface lg:col-span-2">
+      <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
+        <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
+        <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{title}</p>
+      </header>
+
+      <div className="px-3.5 pt-2.5">
+        {subtitle && <p className="text-[14px] font-bold leading-snug text-ink">{subtitle}</p>}
+        {setup && <p className="mt-0.5 text-[12px] italic leading-relaxed text-ink/60">{setup}</p>}
+      </div>
+
+      <div className="mt-2.5 grid gap-2.5 px-3.5 pb-3 sm:grid-cols-2">
+        <div className="space-y-2">
+          {sc.imagine.length > 0 && (
+            <div className={cn('rounded-xl border px-2.5 py-2', pal.border, pal.soft)}>
+              <p className={cn('mb-1 text-[9.5px] font-bold uppercase tracking-[.12em]', pal.text)}>Imagine the moment</p>
+              <ol className="space-y-1">
+                {sc.imagine.map((line, i) => (
+                  <li key={`${line}-${i}`} className="flex items-start gap-1.5 text-[12.5px] leading-relaxed text-ink/80">
+                    <span className={cn('mt-[2px] grid h-4 w-4 shrink-0 place-items-center rounded-full text-[9px] font-bold', pal.chip)}>{i + 1}</span>
+                    <span className="min-w-0 break-words">{line}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+
+          {sc.ideas.length > 0 && (
+            <div className="rounded-xl border border-line/70 px-2.5 py-2">
+              <p className="mb-1 text-[9.5px] font-bold uppercase tracking-[.12em] text-muted">Idea paths</p>
+              <div className="flex flex-wrap gap-1">
+                {sc.ideas.map((idea) => (
+                  <span key={idea} className={cn('rounded-full border px-2 py-0.5 text-[11px]', pal.border, pal.chip)}>
+                    {idea}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          {sc.opener.length > 0 && (
+            <div className={cn('rounded-xl border px-2.5 py-2', pal.border)}>
+              <p className={cn('mb-1 text-[9.5px] font-bold uppercase tracking-[.12em]', pal.text)}>Start with</p>
+              {sc.opener.map((line, i) => (
+                <p key={i} className="text-[13px] font-medium leading-snug text-ink">
+                  {line}
+                </p>
+              ))}
+            </div>
+          )}
+
+          {sc.keep.length > 0 && (
+            <div className="rounded-xl border border-line/70 px-2.5 py-2">
+              <p className="mb-1 text-[9.5px] font-bold uppercase tracking-[.12em] text-muted">Keep it going</p>
+              <div className="space-y-1">
+                {sc.keep.map(({ q, pattern }) => {
+                  const [head, ...rest] = pattern.split(/_{3,}/)
+                  return (
+                    <div key={q} className="flex items-baseline gap-1.5 text-[12.5px] text-ink/85">
+                      <span className="w-5 shrink-0 text-[10px] font-bold text-muted">{q}</span>
+                      <span className={cn('shrink-0 rounded px-1 py-0.5 font-mono text-[10.5px]', pal.chip)}>{head.trim()}</span>
+                      {rest.length > 0 && <span className="min-w-0 flex-1 border-b border-dashed border-ink/35">&nbsp;</span>}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {sc.notes.length > 0 && (
+        <p className="border-t border-line/60 px-3.5 py-1.5 text-[11.5px] leading-relaxed text-ink/55">{sc.notes.join(' · ')}</p>
+      )}
+    </article>
+  )
+}
+
 const GENERIC_LABEL = /^[A-Z][A-Z0-9 ,&/'’+…-]{2,30}$/
 
 type Palette = (typeof TONES)[Tone]
@@ -799,6 +906,10 @@ function Flow({ groups, tone: sectionTone }: { groups: FlowGroup[]; tone?: Tone 
               const stepped = labelled.length >= 2
               // Labels written before their items ("MY NEXT TRY", "PARTNER CHECK") stay as a chip row.
               const looseLabels = stepped ? [] : [...new Set(blocks.map((b) => b.label).filter(Boolean) as string[])]
+
+              if (body.some((line) => SCENE_MARK.test(line.trim())) && body.some((l) => /^START WITH/i.test(l.trim()))) {
+                return <SceneCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
+              }
 
               return (
                 <article
