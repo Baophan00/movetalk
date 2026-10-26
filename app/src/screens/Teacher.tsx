@@ -23,6 +23,7 @@ import {
   setStudentStatus,
   updateStudent,
   hhmmToMin,
+  earningsByMonth,
   monthEarnings,
   monthHours,
   vnd,
@@ -782,17 +783,13 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
 
   const perDay = DAY_NAMES.map((_, d) => data.sessions.filter((s) => s.weekday === d).length)
   const earnings = useMemo(() => monthEarnings(data), [data])
+  const monthly = useMemo(() => earningsByMonth(data), [data])
   const [notes, setNotes] = useState<Note[]>(loadNotes)
   const [noteDay, setNoteDay] = useState<number | null>(null)
   const [noteText, setNoteText] = useState('')
+  const todayKey = isoDate(now)
+  const todayNotes = notesOn(notes, todayKey)
 
-  /** Hours still ahead this week, counted from now, not from the start of Monday. */
-  const minutesLeft = data.sessions.reduce((acc, s) => {
-    if (s.weekday < todayIdx) return acc
-    if (s.weekday > todayIdx) return acc + (s.end - s.start)
-    const nowMin = now.getHours() * 60 + now.getMinutes()
-    return acc + Math.max(0, s.end - Math.max(s.start, nowMin))
-  }, 0)
   const student = (id: string) => data.students.find((s) => s.id === id)
 
   /** The next six hours that actually happen, walking forward from today. */
@@ -822,10 +819,10 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
     { icon: Clock, label: 'Hours this week', value: (minutes / 60).toFixed(1), hint: `${data.sessions.length} sessions`, chip: 'bg-[#e6f7ef] text-[#0f8a5f]', bar: 'bg-[#0f8a5f]', values: perDay },
     { icon: Users, label: 'Students', value: String(data.students.length), hint: `${data.students.filter((s) => s.status === 'active').length} regular`, chip: 'bg-[#f0ecff] text-[#6b4ef2]', bar: 'bg-[#6b4ef2]', values: perDay },
     {
-      icon: Clock,
-      label: 'Hours left this week',
-      value: (minutesLeft / 60).toFixed(1),
-      hint: nextUp ? `next ${DAY_NAMES[nextUp.s.weekday]} ${hhmm(nextUp.s.start)}` : 'week is done',
+      icon: GraduationCap,
+      label: 'Expected this month',
+      value: earnings.total ? `${(earnings.total / 1e6).toFixed(1).replace('.', ',')}tr` : '0',
+      hint: `${earnings.rows.filter((r) => r.student.rate).length} of ${data.students.length} priced`,
       chip: 'bg-[#fff3e2] text-[#b57513]',
       bar: 'bg-[#e0a13c]',
       values: perDay,
@@ -834,6 +831,31 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
 
   return (
     <div className="mx-auto max-w-[1180px] space-y-4 px-4 py-6 sm:px-6 lg:px-8">
+      {todayNotes.length > 0 && (
+        <div className="rounded-2xl border border-[#f3c987] bg-[#fff8ec] px-4 py-3">
+          <p className="text-[10.5px] font-bold uppercase tracking-[.14em] text-[#8a4b00]">
+            For today · {now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+          </p>
+          <ul className="mt-1.5 space-y-1">
+            {todayNotes.map((n) => (
+              <li key={n.id} className="flex items-start gap-2">
+                <button
+                  aria-label={n.done ? 'Mark as not done' : 'Mark as done'}
+                  onClick={() => setNotes(toggleNote(notes, n.id))}
+                  className={cn(
+                    'mt-[3px] grid h-4 w-4 shrink-0 place-items-center rounded border text-[9px]',
+                    n.done ? 'border-[#b57513] bg-[#b57513] text-white' : 'border-[#e0be86] bg-white text-transparent',
+                  )}
+                >
+                  ✓
+                </button>
+                <span className={cn('text-[13px] leading-snug text-[#4a3410]', n.done && 'text-[#9a8256] line-through')}>{n.text}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr]">
         {/* greeting */}
         <motion.div
@@ -1096,10 +1118,12 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
                       className={cn(
                         'relative grid h-7 place-items-center rounded-lg text-[11.5px] tabular-nums transition-colors',
                         isToday
-                          ? 'bg-[#2f6bff] font-semibold text-white'
-                          : count
-                            ? 'bg-[#f2f6ff] text-[#26344f] hover:bg-[#e3ecff]'
-                            : 'text-muted hover:bg-bg',
+                          ? 'bg-[#2f6bff] font-semibold text-white ring-2 ring-[#f6c76b]'
+                          : dayNotes.length
+                            ? 'bg-[#fff4e2] font-semibold text-[#8a4b00] ring-1 ring-[#f3c987] hover:bg-[#ffefd6]'
+                            : count
+                              ? 'bg-[#f2f6ff] text-[#26344f] hover:bg-[#e3ecff]'
+                              : 'text-muted hover:bg-bg',
                       )}
                       title={[count ? `${count} hours` : null, dayNotes.length ? `${dayNotes.length} note` : null].filter(Boolean).join(' · ') || 'Add a note'}
                     >
@@ -1116,58 +1140,6 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
                 <span className="flex items-center gap-1"><span className="h-[3px] w-[3px] rounded-full bg-[#2f6bff]" /> teaching day</span>
                 <span className="flex items-center gap-1"><span className="h-[3px] w-[3px] rounded-full bg-[#d97706]" /> note</span>
               </p>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Notes</CardTitle>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => {
-                  setNoteDay(now.getDate())
-                  setNoteText('')
-                }}
-              >
-                <Plus className="h-3.5 w-3.5" /> Add
-              </Button>
-            </CardHeader>
-            <CardBody className="pt-1">
-              {notes.length === 0 ? (
-                <p className="rounded-xl bg-bg/60 px-3 py-4 text-center text-[12px] text-muted">
-                  Tap a day above to keep a note: a call to make, a birthday, a thing to bring.
-                </p>
-              ) : (
-                <ul className="space-y-1">
-                  {[...notes]
-                    .sort((a, b) => a.date.localeCompare(b.date))
-                    .slice(0, 5)
-                    .map((n) => (
-                      <li key={n.id} className="flex items-start gap-2 rounded-xl bg-bg/50 px-2.5 py-1.5">
-                        <button
-                          aria-label={n.done ? 'Mark as not done' : 'Mark as done'}
-                          onClick={() => setNotes(toggleNote(notes, n.id))}
-                          className={cn(
-                            'mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded border text-[9px]',
-                            n.done ? 'border-[#0f8a5f] bg-[#0f8a5f] text-white' : 'border-line text-transparent hover:border-[#0f8a5f]',
-                          )}
-                        >
-                          ✓
-                        </button>
-                        <span className="min-w-0 flex-1">
-                          <span className={cn('block text-[12px] leading-snug', n.done && 'text-muted line-through')}>{n.text}</span>
-                          <span className="block text-[10.5px] text-muted">
-                            {new Date(n.date + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
-                          </span>
-                        </span>
-                        <button onClick={() => setNotes(removeNote(notes, n.id))} aria-label="Delete note" className="text-muted hover:text-warn">
-                          ×
-                        </button>
-                      </li>
-                    ))}
-                </ul>
-              )}
             </CardBody>
           </Card>
 
@@ -1288,6 +1260,52 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
         </div>
       </div>
 
+      <Card>
+        <CardHeader>
+          <div>
+            <CardTitle>Earnings by month</CardTitle>
+            <p className="mt-0.5 text-[11.5px] text-muted">
+              At the rates you set, with the hours the week actually holds. Called-off dates are out.
+            </p>
+          </div>
+          <Badge tone="primary">{vnd(monthly[monthly.length - 1]?.amount ?? 0)}</Badge>
+        </CardHeader>
+        <CardBody className="pt-1">
+          <table className="w-full text-left">
+            <thead className="text-[10px] uppercase tracking-wide text-muted">
+              <tr>
+                <th className="pb-1.5 font-semibold">Month</th>
+                <th className="pb-1.5 text-right font-semibold">Hours</th>
+                <th className="pb-1.5 text-right font-semibold">Earned</th>
+                <th className="hidden w-[38%] pb-1.5 pl-3 font-semibold sm:table-cell"> </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-line/70">
+              {monthly.map((m) => {
+                const max = Math.max(...monthly.map((x) => x.amount), 1)
+                return (
+                  <tr key={m.date.toISOString()} className={cn(m.current && 'bg-[#fff8ec]')}>
+                    <td className="py-2 text-[12.5px] font-medium">
+                      {MONTHS[m.date.getMonth()]} {m.date.getFullYear()}
+                      {m.current && <span className="ml-1.5 rounded-full bg-[#fdece3] px-1.5 py-px text-[9px] font-bold uppercase text-[#b45309]">now</span>}
+                    </td>
+                    <td className="py-2 text-right text-[12.5px] tabular-nums text-muted">{m.hours.toFixed(1).replace('.0', '')}</td>
+                    <td className={cn('py-2 text-right text-[12.5px] font-semibold tabular-nums', m.amount ? '' : 'text-muted')}>
+                      {m.amount ? vnd(m.amount) : '—'}
+                    </td>
+                    <td className="hidden py-2 pl-3 sm:table-cell">
+                      <span className="block h-1.5 w-full overflow-hidden rounded-full bg-bg">
+                        <span className={cn('block h-full rounded-full', m.current ? 'bg-[#b57513]' : 'bg-[#2f6bff]/45')} style={{ width: `${(m.amount / max) * 100}%` }} />
+                      </span>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </CardBody>
+      </Card>
+
       <Dialog open={Boolean(openStudent)} onOpenChange={(v) => !v && setOpenId(null)}>
         {openStudent && (
           <DialogContent>
@@ -1306,9 +1324,11 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
               <Button size="sm" onClick={() => onOpenLesson(openStudent.lessonN ?? 1)}>
                 <Video className="h-3.5 w-3.5" /> Open lesson {openStudent.lessonN ?? 1}
               </Button>
-              <Button size="sm" variant="outline" onClick={() => setData(setStudentStatus(data, openStudent.id, 'active'))}>
-                Make regular
-              </Button>
+              {openStudent.status !== 'active' && (
+                <Button size="sm" variant="outline" onClick={() => setData(setStudentStatus(data, openStudent.id, 'active'))}>
+                  Make regular
+                </Button>
+              )}
             </div>
           </DialogContent>
         )}

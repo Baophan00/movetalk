@@ -248,3 +248,21 @@ export function monthEarnings(t: Teaching, ref: Date = new Date()): { total: num
 export function vnd(amount: number): string {
   return `${new Intl.NumberFormat('vi-VN').format(Math.round(amount))}₫`
 }
+
+/** The last few months at today's rates and today's weekly hours, so the trend is visible. */
+export function earningsByMonth(
+  t: Teaching,
+  months = 6,
+  ref: Date = new Date(),
+): { date: Date; hours: number; amount: number; current: boolean }[] {
+  return Array.from({ length: months }, (_, i) => {
+    const date = new Date(ref.getFullYear(), ref.getMonth() - (months - 1) + i, 1)
+    const month = monthEarnings(t, date)
+    return {
+      date,
+      hours: month.rows.reduce((n, r) => n + r.hours, 0),
+      amount: month.total,
+      current: i === months - 1,
+    }
+  })
+}
