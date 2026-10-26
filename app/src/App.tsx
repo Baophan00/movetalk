@@ -192,7 +192,7 @@ export default function App() {
             />
           )}
           {route === 'library' && <Review initialLesson={quizLesson ?? undefined} autoStart={autoReview} />}
-          {route === 't-overview' && <TeacherOverview onOpenLesson={openLesson} />}
+          {route === 't-overview' && <TeacherOverview onOpenLesson={openLesson} name={profile.name} onGo={go} />}
           {route === 't-schedule' && <TeacherSchedule onOpenLesson={openLesson} />}
           {route === 't-students' && <TeacherStudents onOpenLesson={openLesson} />}
           {route === 't-assignments' && <TeacherAssignments onOpenLesson={openLesson} />}

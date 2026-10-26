@@ -420,87 +420,310 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
   )
 }
 
-export function TeacherOverview({ onOpenLesson }: Shared) {
+type OverviewProps = Shared & { name?: string; onGo?: (route: 't-schedule' | 't-students' | 't-assignments' | 'library') => void }
+
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+const MONTH_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+function greeting(d: Date) {
+  const h = d.getHours()
+  if (h < 11) return 'Good morning'
+  if (h < 18) return 'Good afternoon'
+  return 'Good evening'
+}
+
+function Spark({ values, tone }: { values: number[]; tone: string }) {
+  const max = Math.max(1, ...values)
+  return (
+    <div className="flex h-7 w-[54px] shrink-0 items-end justify-end gap-[3px]" aria-hidden>
+      {values.map((v, i) => (
+        <span key={i} className={cn('w-[5px] rounded-[2px]', tone)} style={{ height: `${Math.max(4, (v / max) * 24)}px`, opacity: v ? 1 : 0.25 }} />
+      ))}
+    </div>
+  )
+}
+
+export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
   const [data, setData] = useTeaching()
-  const todayIdx = (new Date().getDay() + 6) % 7
+  const now = new Date()
+  const todayIdx = (now.getDay() + 6) % 7
   const today = data.sessions.filter((s) => s.weekday === todayIdx).sort((a, b) => a.start - b.start)
   const minutes = data.sessions.reduce((n, s) => n + (s.end - s.start), 0)
   const trials = data.students.filter((s) => s.status === 'trial')
   const [openId, setOpenId] = useState<string | null>(null)
   const openStudent = data.students.find((s) => s.id === openId)
 
-  const stats = [
-    { icon: CalendarDays, label: 'Sessions today', value: String(today.length), hint: today.length ? `from ${hhmm(today[0].start)}` : 'nothing booked' },
-    { icon: Clock, label: 'Hours this week', value: (minutes / 60).toFixed(1), hint: `${data.sessions.length} sessions` },
-    { icon: Users, label: 'Students', value: String(data.students.length), hint: `${trials.length} on trial` },
+  const perDay = DAY_NAMES.map((_, d) => data.sessions.filter((s) => s.weekday === d).length)
+  const student = (id: string) => data.students.find((s) => s.id === id)
+
+  /** The next six hours that actually happen, walking forward from today. */
+  const upcoming = useMemo(() => {
+    const out: { s: Session; date: Date }[] = []
+    for (let step = 0; step < 8 && out.length < 6; step++) {
+      const weekday = (todayIdx + step) % 7
+      const date = addDays(now, step)
+      for (const s of data.sessions.filter((x) => x.weekday === weekday).sort((a, b) => a.start - b.start)) {
+        if (step === 0 && s.end * 60000 < now.getHours() * 3600000 + now.getMinutes() * 60000) continue
+        out.push({ s, date })
+        if (out.length === 6) break
+      }
+    }
+    return out
+  }, [data.sessions, todayIdx])
+
+  const nextUp = upcoming[0]
+  const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+  const monthOffset = (firstOfMonth.getDay() + 6) % 7
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
+  const monthCells = Array.from({ length: monthOffset + daysInMonth }, (_, i) => (i < monthOffset ? null : i - monthOffset + 1))
+  const assignmentsOut = data.assignments.filter((a) => a.status === 'assigned')
+
+  const kpis = [
+    { icon: CalendarDays, label: 'Sessions today', value: String(today.length), hint: today.length ? `${hhmm(today[0].start)} first` : 'nothing booked', chip: 'bg-[#e8f0ff] text-[#2f6bff]', bar: 'bg-[#2f6bff]', values: perDay },
+    { icon: Clock, label: 'Hours this week', value: (minutes / 60).toFixed(1), hint: `${data.sessions.length} sessions`, chip: 'bg-[#e6f7ef] text-[#0f8a5f]', bar: 'bg-[#0f8a5f]', values: perDay },
+    { icon: Users, label: 'Students', value: String(data.students.length), hint: `${data.students.filter((s) => s.status === 'active').length} regular`, chip: 'bg-[#f0ecff] text-[#6b4ef2]', bar: 'bg-[#6b4ef2]', values: perDay },
+    { icon: GraduationCap, label: 'Trials waiting', value: String(trials.length), hint: 'convert after 2nd hour', chip: 'bg-[#fff3e2] text-[#b57513]', bar: 'bg-[#e0a13c]', values: perDay },
   ]
 
   return (
-    <div className="mx-auto max-w-[1180px] space-y-5 px-4 py-6 sm:px-6 lg:px-8">
-      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-        <p className="text-[12px] font-semibold uppercase tracking-[.14em] text-muted">Teacher</p>
-        <h2 className="mt-1 text-[26px] font-semibold tracking-tight sm:text-[30px]">Today is {today.length} lessons</h2>
-        <p className="mt-1 text-[13.5px] text-muted">Everything below comes from your real week, not a demo.</p>
-      </motion.div>
+    <div className="mx-auto max-w-[1180px] space-y-4 px-4 py-6 sm:px-6 lg:px-8">
+      <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr]">
+        {/* greeting */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="relative overflow-hidden rounded-2xl border border-[#dbe7ff] bg-[linear-gradient(120deg,#eef5ff_0%,#f7faff_55%,#eef2ff_100%)] px-5 py-5 shadow-card sm:px-6"
+        >
+          <div className="pointer-events-none absolute -right-10 -top-14 h-44 w-44 rounded-full bg-[#cfe0ff]/50" />
+          <div className="pointer-events-none absolute -bottom-16 right-16 h-32 w-32 rounded-full bg-[#e6dcff]/50" />
+          <div className="relative">
+            <p className="text-[11.5px] font-bold uppercase tracking-[.16em] text-[#4a6fb5]">Teacher dashboard</p>
+            <h2 className="mt-1.5 text-[26px] font-semibold leading-tight tracking-tight text-[#16233f] sm:text-[30px]">
+              {greeting(now)}, {name || 'teacher'}.
+            </h2>
+            <p className="mt-1 max-w-[46ch] text-[13.5px] leading-relaxed text-[#3f5578]">
+              You have <b className="font-semibold text-[#16233f]">{today.length} sessions</b> today
+              {trials.length > 0 && (
+                <> and <b className="font-semibold text-[#16233f]">{trials.length} trial{trials.length === 1 ? '' : 's'}</b> waiting</>
+              )}
+              . {(minutes / 60).toFixed(1)} hours booked this week.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Button size="sm" onClick={() => onGo?.('t-schedule')} className="bg-[#2f6bff] text-white hover:bg-[#2559d8]">
+                <CalendarDays className="h-3.5 w-3.5" /> Open the week
+              </Button>
+              <Button size="sm" variant="outline" onClick={() => onGo?.('t-students')}>
+                <Users className="h-3.5 w-3.5" /> Students
+              </Button>
+              <Button size="sm" variant="ghost" onClick={() => onGo?.('t-assignments')}>
+                Assign work
+              </Button>
+            </div>
+          </div>
+        </motion.div>
 
-      <div className="grid gap-3 sm:grid-cols-3">
-        {stats.map(({ icon: Icon, label, value, hint }, i) => (
-          <div key={label} className={cn('rounded-2xl p-4 shadow-card transition-transform hover:-translate-y-0.5', ['bg-[#dfd7fb]', 'bg-[#fde3c6]', 'bg-[#fbd0ee]'][i % 3])}>
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-white/45 text-ink">
-              <Icon className="h-[17px] w-[17px]" />
-            </span>
-            <p className="mt-3 text-[10.5px] font-bold uppercase tracking-[.12em] text-ink/50">{label}</p>
-            <p className="text-[22px] font-bold leading-tight text-ink">{value}</p>
-            <p className="text-[11px] text-ink/55">{hint}</p>
+        {/* next up */}
+        <Card className="border-[#e4e9f7]">
+          <CardHeader>
+            <CardTitle>Next up</CardTitle>
+            <Badge tone="primary">{today.length ? 'today' : 'none'}</Badge>
+          </CardHeader>
+          <CardBody className="pt-1.5">
+            {nextUp ? (
+              <>
+                <p className="text-[20px] font-semibold leading-tight">{nextUp.date.toLocaleDateString('en-GB', { weekday: 'long' })}</p>
+                <p className="text-[13px] text-muted">
+                  {hhmm(nextUp.s.start)}–{hhmm(nextUp.s.end)} · {student(nextUp.s.studentId)?.name}
+                  {nextUp.s.kind === 'trial' && ' · trial'}
+                </p>
+                <div className="mt-3 flex gap-2">
+                  <Button size="sm" onClick={() => onOpenLesson(1)}>
+                    <Play className="h-3.5 w-3.5" /> Open lesson
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => setOpenId(nextUp.s.studentId)}>
+                    Student
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <p className="py-4 text-[13px] text-muted">Nothing booked ahead yet.</p>
+            )}
+          </CardBody>
+        </Card>
+      </div>
+
+      {/* kpis */}
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        {kpis.map((k) => (
+          <div key={k.label} className="rounded-2xl border border-line bg-surface p-4 shadow-card">
+            <div className="flex items-start justify-between">
+              <span className={cn('grid h-9 w-9 place-items-center rounded-xl', k.chip)}>
+                <k.icon className="h-[17px] w-[17px]" />
+              </span>
+              <Spark values={k.values} tone={k.bar} />
+            </div>
+            <p className="mt-3 text-[10.5px] font-bold uppercase tracking-[.12em] text-muted">{k.label}</p>
+            <p className="text-[24px] font-bold leading-tight tabular-nums">{k.value}</p>
+            <p className="text-[11.5px] text-muted">{k.hint}</p>
           </div>
         ))}
       </div>
 
       <div className="grid items-start gap-4 lg:grid-cols-[1.4fr_1fr]">
-        <Card>
-          <CardHeader>
-            <CardTitle>Today's sessions</CardTitle>
-            <Badge tone="primary">{today.length}</Badge>
-          </CardHeader>
-          <CardBody className="pt-2">
-            {today.length === 0 && <p className="py-6 text-center text-[13px] text-muted">No sessions booked today.</p>}
-            <ul className="divide-y divide-line/70">
-              {today.map((s) => (
-                <li key={s.id} className="flex items-center gap-3 py-2.5">
-                  <span className="w-[86px] shrink-0 text-[12px] tabular-nums text-muted">
-                    {hhmm(s.start)}–{hhmm(s.end)}
-                  </span>
-                  <span className="min-w-0 flex-1 truncate text-[13px] font-medium">{data.students.find((x) => x.id === s.studentId)?.name}</span>
-                  {s.kind === 'trial' && <Badge tone="accent">Trial</Badge>}
-                  <Button size="sm" variant="ghost" onClick={() => setOpenId(s.studentId)}>
-                    Open
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          </CardBody>
-        </Card>
+        <div className="space-y-4">
+          {/* upcoming */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Upcoming</CardTitle>
+              <Button size="sm" variant="ghost" onClick={() => onGo?.('t-schedule')}>
+                See the week <ChevronRight className="h-3.5 w-3.5" />
+              </Button>
+            </CardHeader>
+            <CardBody className="pt-1">
+              <ul className="divide-y divide-line/70">
+                {upcoming.map(({ s, date }) => (
+                  <li key={`${s.id}-${date.toDateString()}`} className="flex items-center gap-3 py-2.5">
+                    <span className="w-11 shrink-0 rounded-lg bg-[#eef3ff] py-1 text-center">
+                      <span className="block text-[9px] font-bold uppercase tracking-wide text-[#4a6fb5]">{MONTH_SHORT[date.getMonth()]}</span>
+                      <span className="block text-[13px] font-semibold leading-tight text-[#16233f]">{date.getDate()}</span>
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-[13px] font-medium">
+                        {student(s.studentId)?.name} {s.kind === 'trial' && <Badge tone="accent">Trial</Badge>}
+                      </span>
+                      <span className="block text-[11.5px] text-muted">
+                        {DAY_NAMES[s.weekday]} {hhmm(s.start)}–{hhmm(s.end)} · 1-1
+                      </span>
+                    </span>
+                    <Button size="sm" variant="ghost" onClick={() => setOpenId(s.studentId)}>
+                      Open
+                    </Button>
+                  </li>
+                ))}
+                {upcoming.length === 0 && <li className="py-5 text-center text-[13px] text-muted">No hours booked.</li>}
+              </ul>
+            </CardBody>
+          </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Trials to convert</CardTitle>
-            <Badge tone="accent">{trials.length}</Badge>
-          </CardHeader>
-          <CardBody className="pt-2">
-            <ul className="space-y-2">
-              {trials.map((s) => (
-                <li key={s.id} className="flex items-center justify-between rounded-xl bg-bg/70 px-3 py-2.5">
-                  <span className="text-[13px] font-medium">{s.name}</span>
-                  <Button size="sm" variant="soft" onClick={() => setData(setStudentStatus(data, s.id, 'active'))}>
-                    Make regular
-                  </Button>
-                </li>
-              ))}
-              {trials.length === 0 && <li className="text-[12.5px] text-muted">No trials waiting.</li>}
-            </ul>
-            <p className="mt-3 text-[11.5px] leading-relaxed text-muted">A trial becomes regular when the second session is booked, or by hand from here.</p>
-          </CardBody>
-        </Card>
+          {/* quick links */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Quick links</CardTitle>
+            </CardHeader>
+            <CardBody className="pt-1">
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {[
+                  { label: 'Schedule', icon: CalendarDays, go: () => onGo?.('t-schedule') },
+                  { label: 'Students', icon: Users, go: () => onGo?.('t-students') },
+                  { label: 'Assignments', icon: GraduationCap, go: () => onGo?.('t-assignments') },
+                  { label: 'Lesson library', icon: Video, go: () => onGo?.('library') },
+                ].map(({ label, icon: Icon, go }) => (
+                  <button
+                    key={label}
+                    onClick={go}
+                    className="flex flex-col items-start gap-2 rounded-xl border border-line bg-bg/50 px-3 py-2.5 text-left transition-colors hover:border-[#c9d9ff] hover:bg-[#f4f8ff]"
+                  >
+                    <span className="grid h-8 w-8 place-items-center rounded-lg bg-white text-[#4a6fb5] shadow-sm">
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <span className="text-[12px] font-semibold">{label}</span>
+                  </button>
+                ))}
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+
+        <div className="space-y-4">
+          {/* today */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Today</CardTitle>
+              <Badge tone="primary">{today.length}</Badge>
+            </CardHeader>
+            <CardBody className="pt-1">
+              {today.length === 0 && <p className="py-5 text-center text-[13px] text-muted">No sessions booked today.</p>}
+              <ul className="divide-y divide-line/70">
+                {today.map((s) => (
+                  <li key={s.id} className="flex items-center gap-2.5 py-2">
+                    <span className="w-[78px] shrink-0 text-[11.5px] tabular-nums text-muted">
+                      {hhmm(s.start)}–{hhmm(s.end)}
+                    </span>
+                    <span className="min-w-0 flex-1 truncate text-[12.5px] font-medium">{student(s.studentId)?.name}</span>
+                    {s.kind === 'trial' && <Badge tone="accent">Trial</Badge>}
+                    <Button size="sm" variant="ghost" onClick={() => setOpenId(s.studentId)}>
+                      Open
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </CardBody>
+          </Card>
+
+          {/* month */}
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                {MONTHS[now.getMonth()]} {now.getFullYear()}
+              </CardTitle>
+            </CardHeader>
+            <CardBody className="pt-1">
+              <div className="grid grid-cols-7 gap-1 text-center">
+                {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((d, i) => (
+                  <span key={`${d}-${i}`} className="text-[9.5px] font-bold uppercase tracking-wide text-muted">
+                    {d}
+                  </span>
+                ))}
+                {monthCells.map((day, i) => {
+                  if (!day) return <span key={`empty-${i}`} />
+                  const weekday = (new Date(now.getFullYear(), now.getMonth(), day).getDay() + 6) % 7
+                  const count = perDay[weekday]
+                  const isToday = day === now.getDate()
+                  return (
+                    <span
+                      key={day}
+                      className={cn(
+                        'relative grid h-7 place-items-center rounded-lg text-[11.5px] tabular-nums',
+                        isToday ? 'bg-[#2f6bff] font-semibold text-white' : count ? 'bg-[#f2f6ff] text-[#26344f]' : 'text-muted',
+                      )}
+                      title={count ? `${count} sessions` : undefined}
+                    >
+                      {day}
+                      {!isToday && count > 0 && <span className="absolute bottom-[3px] h-[3px] w-[3px] rounded-full bg-[#2f6bff]" />}
+                    </span>
+                  )
+                })}
+              </div>
+            </CardBody>
+          </Card>
+
+          {/* reminders */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Reminders</CardTitle>
+            </CardHeader>
+            <CardBody className="space-y-1.5 pt-1">
+              {[
+                nextUp ? { icon: Clock, text: `Next hour ${hhmm(nextUp.s.start)} with ${student(nextUp.s.studentId)?.name}` } : null,
+                trials.length ? { icon: GraduationCap, text: `${trials.length} trial${trials.length > 1 ? 's' : ''} to convert: ${trials.map((t) => t.name).slice(0, 2).join(', ')}` } : null,
+                assignmentsOut.length
+                  ? { icon: Video, text: `${assignmentsOut.length} assignment${assignmentsOut.length > 1 ? 's' : ''} sent this week` }
+                  : { icon: Video, text: 'No assignment sent yet — the library is one click away' },
+              ]
+                .filter(Boolean)
+                .map((item, i) => {
+                  const Icon = (item as { icon: typeof Clock }).icon
+                  return (
+                    <div key={i} className="flex items-start gap-2 rounded-xl bg-bg/60 px-3 py-2">
+                      <Icon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#4a6fb5]" />
+                      <p className="text-[12px] leading-relaxed text-ink/75">{(item as { text: string }).text}</p>
+                    </div>
+                  )
+                })}
+            </CardBody>
+          </Card>
+        </div>
       </div>
 
       <Dialog open={Boolean(openStudent)} onOpenChange={(v) => !v && setOpenId(null)}>
@@ -508,7 +731,7 @@ export function TeacherOverview({ onOpenLesson }: Shared) {
           <DialogContent>
             <DialogTitle>{openStudent.name}</DialogTitle>
             <DialogDescription>
-              {DAY_NAMES[0]} to Sun · {studentSessions(data, openStudent.id).length} hours a week
+              Mon to Sun · {studentSessions(data, openStudent.id).length} hours a week
             </DialogDescription>
             <ul className="mt-4 space-y-1.5">
               {studentSessions(data, openStudent.id).map((s) => (
