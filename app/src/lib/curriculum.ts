@@ -42,6 +42,7 @@ export type QuizItem = {
   prompt: string
   answer: string
   options?: string[]
+  vi?: string
 }
 
 type QuizFile = { n: number; level: string; items: QuizItem[] }
@@ -74,6 +75,11 @@ export const A1: LessonFile[] = Object.entries(lessonFiles)
   .sort((a, b) => a.n - b.n)
 
 const quizFiles = import.meta.glob('../content/a1/L*-quiz.json', { eager: true }) as Record<string, { default: unknown }>
+
+/** Vietnamese gloss for each practice prompt, keyed by the prompt itself so it survives a quiz rebuild. */
+const quizViFiles = import.meta.glob('../content/a1/quiz-vi.json', { eager: true }) as Record<string, { default: unknown }>
+
+export const QUIZ_VI: Record<string, string> = (Object.values(quizViFiles)[0]?.default as Record<string, string>) ?? {}
 
 export const A1_QUIZ: Record<number, QuizItem[]> = Object.fromEntries(
   Object.entries(quizFiles).map(([, mod]) => {
@@ -132,7 +138,7 @@ export function partPlan(lesson: LessonFile): PartPlan[] {
   if (p.grammar.length) push('grammar', 'Grammar')
   if (p.dialogue.length) push('dialogue', 'Dialogue')
   if (p.listenCheck.length) push('check', 'Listening check')
-  if (p.grammarChoose.length) push('choose', 'Practice')
+  if (p.grammarChoose.length || hasChoicePractice(lesson.n)) push('choose', 'Practice')
   for (const g of p.flow) {
     const covered = (g.group === 'Grammar' && p.grammar.length > 0) || (g.group === 'Vocabulary' && p.vocab.length > 0)
     if (!covered) push(`flow-${g.group}`, g.group)
@@ -140,10 +146,15 @@ export function partPlan(lesson: LessonFile): PartPlan[] {
   return plan.sort((a, b) => a.order - b.order).map(({ key, label }) => ({ key, label }))
 }
 
+/** A lesson shows Practice when its quiz has more than one option to choose between. */
+export function hasChoicePractice(n: number): boolean {
+  return (A1_QUIZ[n] ?? []).some((q) => q.kind === 'choice' && (q.options ?? []).length > 1)
+}
+
 /** Parts with material in them — what the lesson screen actually shows. */
 export function partCount(lesson: LessonFile): number {
   const p = lesson.parts
-  const structured = [p.vocab.length, p.grammar.length, p.dialogue.length, p.listenCheck.length, p.grammarChoose.length].filter(Boolean).length
+  const structured = [p.vocab.length, p.grammar.length, p.dialogue.length, p.listenCheck.length, p.grammarChoose.length || (hasChoicePractice(lesson.n) ? 1 : 0)].filter(Boolean).length
   return structured + p.flow.length
 }
 
@@ -152,5 +163,5 @@ export function lessonA1(n: number): LessonFile | undefined {
 }
 
 export function quizFor(n: number): QuizItem[] {
-  return A1_QUIZ[n] ?? []
+  return (A1_QUIZ[n] ?? []).map((q) => ({ ...q, vi: q.vi ?? QUIZ_VI[q.prompt] }))
 }

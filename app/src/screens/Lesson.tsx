@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { ArrowLeft, ArrowRight, Check, ChevronRight, Info, Volume2 } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Progress } from '../components/ui/progress'
-import { A1, lessonA1, partPlan, quizFor, titleOf, type FlowGroup, type LessonFile } from '../lib/curriculum'
+import { A1, hasChoicePractice, lessonA1, partPlan, quizFor, titleOf, type FlowGroup, type LessonFile } from '../lib/curriculum'
 import { speak } from '../lib/audio'
 import { markPart, partsSeen } from '../lib/progress'
 import { pushPart } from '../lib/sync'
@@ -58,7 +58,7 @@ function sectionDefs(lesson: LessonFile): SecDef[] {
 
   const grammarKeys: string[] = []
   if (lesson.parts.grammar.length) grammarKeys.push('grammar')
-  if (lesson.parts.grammarChoose.length) grammarKeys.push('choose')
+  if (lesson.parts.grammarChoose.length || hasChoicePractice(lesson.n)) grammarKeys.push('choose')
   if (has('Grammar')) grammarKeys.push('flow-Grammar')
   if (grammarKeys.length) defs.push({ id: 'grammar', label: 'Grammar', tone: 'lavender', keys: grammarKeys })
 
@@ -680,7 +680,7 @@ function Choose({ items }: { items: PracticeItem[] }) {
   return (
     <div>
       <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2 text-[11.5px] text-muted">
-        <span>Read the Vietnamese, then choose Do or Are. Say the whole question out loud.</span>
+        <span>Read the Vietnamese hint, then choose. Say the whole sentence out loud.</span>
         <span className="tabular-nums">
           {answered} / {items.length} answered · <span className="font-semibold text-ink">{right} right</span>
         </span>
@@ -712,7 +712,7 @@ function Choose({ items }: { items: PracticeItem[] }) {
               </p>
               {it.vi && <p className="mt-1 text-[11.5px] italic text-ink/55">{it.vi}</p>}
               <div className="mt-2 flex items-center gap-1.5">
-                {['Do', 'Are'].map((opt) => {
+                {it.options.map((opt) => {
                   const isRight = opt === it.answer
                   const isPick = opt === pick
                   return (
@@ -733,6 +733,7 @@ function Choose({ items }: { items: PracticeItem[] }) {
                   )
                 })}
                 {chosen && !ok && <span className="ml-1 text-[11.5px] text-[#8a2b22]">It is “{it.answer}”.</span>}
+                {chosen && ok && <span className="ml-1 text-[11.5px] text-[#0f6b4f]">Right.</span>}
               </div>
             </li>
           )
@@ -785,6 +786,385 @@ function ReadCard({ title, lines, pal }: { title: string; lines: string[]; pal: 
           {footer && <p className="mt-1.5 text-[11px] italic leading-relaxed text-ink/55">{footer}</p>}
         </div>
       </div>
+    </article>
+  )
+}
+
+
+const IPA_ONLY = /^\/.*\/\s*$/
+const SOUND_LABEL = /^[A-Z][A-Z0-9 /’'&.…?-]{2,28}$/
+const NOTE_START = /^(Short answers|Trả lời|Câu trả lời|Đổi lượt|Nghe |Nhấn |Chọn |Giữ |Nói |Lượt |Vòng |Tự kiểm tra|Mỗi lần)/
+
+function bodyOf(title: string, lines: string[]) {
+  return lines.map((l) => l.trim()).filter((l) => l.length > 0 && l.toLowerCase() !== title.trim().toLowerCase())
+}
+
+/** The shaded word is the one the speaker leans on, so keep the capitals but make them read as stress. */
+function Emphasis({ text, pal }: { text: string; pal: Palette }) {
+  return (
+    <>
+      {text.split(/(\s+)/).map((word, i) =>
+        /^[A-Z][A-Z’'0-9]{1,}$/.test(word) ? (
+          <b key={i} className={cn('font-bold', pal.text)}>
+            {word}
+          </b>
+        ) : (
+          <span key={i}>{word}</span>
+        ),
+      )}
+    </>
+  )
+}
+
+type SoundRow = { text: string; ipa?: string }
+type SoundGroup = { label: string; rows: SoundRow[] }
+
+function parseSound(title: string, lines: string[]) {
+  if (!/^PRONUNCIATION/i.test(title)) return null
+  const body = bodyOf(title, lines)
+  const head: string[] = []
+  const groups: SoundGroup[] = []
+  const notes: string[] = []
+  for (let i = 0; i < body.length; i++) {
+    const line = body[i]
+    const label = SOUND_LABEL.test(line) && !IPA_ONLY.test(line) && !/[a-z]/.test(line)
+    if (label) {
+      groups.push({ label: line, rows: [] })
+      continue
+    }
+    if (!groups.length) {
+      head.push(line)
+      continue
+    }
+    if (NOTE_START.test(line)) {
+      const next = body[i + 1]
+      if (next && /^(Yes|No)[, ]/.test(next)) {
+        notes.push(`${line} — ${next}`)
+        i += 1
+      } else {
+        notes.push(line)
+      }
+      continue
+    }
+    const group = groups[groups.length - 1]
+    if (IPA_ONLY.test(line)) {
+      const last = group.rows[group.rows.length - 1]
+      if (last && !last.ipa) last.ipa = line.trim()
+      else group.rows.push({ text: '', ipa: line.trim() })
+      continue
+    }
+    group.rows.push({ text: line })
+  }
+  return groups.length ? { head, groups, notes } : null
+}
+
+function SoundCard({ title, lines, pal }: { title: string; lines: string[]; pal: Palette }) {
+  const sound = parseSound(title, lines)
+  if (!sound) return null
+  const sub = sound.head[0] ?? ''
+  const instruction = sound.head[1] ?? ''
+  return (
+    <article className="overflow-hidden rounded-2xl border border-line bg-surface lg:col-span-2">
+      <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
+        <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
+        <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{title}</p>
+
+      </header>
+
+      {(sub || instruction) && (
+        <div className="px-3.5 pt-2">
+          {sub && <p className="text-[13px] font-bold leading-snug text-ink">{sub}</p>}
+          {instruction && <p className="mt-0.5 text-[11.5px] italic leading-relaxed text-ink/60">{instruction}</p>}
+        </div>
+      )}
+
+      <div className="divide-y divide-line/60">
+        {sound.groups.map((group) => (
+          <div key={group.label} className="grid gap-x-3 gap-y-1.5 px-3.5 py-2.5 sm:grid-cols-[7.5rem_1fr]">
+            <p className={cn('text-[9.5px] font-bold uppercase leading-relaxed tracking-[.12em]', pal.text)}>{group.label}</p>
+            <div className="grid gap-x-4 gap-y-1.5 sm:grid-cols-2">
+              {group.rows.map((row, i) => (
+                <div key={`${row.text}-${i}`} className="min-w-0">
+                  {row.text && (
+                    <p className="text-[13px] leading-snug text-ink">
+                      <Emphasis text={row.text} pal={pal} />
+                    </p>
+                  )}
+                  {row.ipa && (
+                    <span className={cn('mt-0.5 inline-flex items-center gap-1 rounded px-1.5 py-0.5 font-mono text-[11px]', pal.chip)}>
+                      <Volume2 className="h-2.5 w-2.5" />
+                      {row.ipa}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {sound.notes.length > 0 && (
+        <ul className="space-y-0.5 border-t border-line/60 px-3.5 py-1.5">
+          {sound.notes.map((note, i) => (
+            <li key={i} className="text-[11.5px] leading-relaxed text-ink/65">
+              {note}
+            </li>
+          ))}
+        </ul>
+      )}
+    </article>
+  )
+}
+
+type DrillRow = { label: string; vi?: string; cue?: string }
+
+function parseScript(title: string, lines: string[]) {
+  const body = bodyOf(title, lines)
+  const start = body.findIndex((l) => /^QUESTION$/i.test(l))
+  if (start < 0) return null
+  const rows: { label: string; text: string }[] = []
+  const notes: string[] = []
+  let current: { label: string; text: string } | null = null
+  for (const line of body.slice(start)) {
+    if (/^(QUESTION|ANSWER|ADD|ASK BACK)$/i.test(line)) {
+      current = { label: line, text: '' }
+      rows.push(current)
+      continue
+    }
+    if (NOTE_START.test(line)) {
+      notes.push(line)
+      continue
+    }
+    if (current) current.text = current.text ? `${current.text} ${line}` : line
+  }
+  return {
+    head: body.slice(0, start),
+    rows: rows.map((r) => ({ ...r, text: r.text.replace(/\s+([?.!,])/g, '$1') })),
+    notes,
+  }
+}
+
+function parseDrill(title: string, lines: string[]) {
+  if (!/^ACTIVATE/i.test(title)) return null
+  const body = bodyOf(title, lines)
+  const head: string[] = []
+  const rows: DrillRow[] = []
+  const notes: string[] = []
+  for (const line of body) {
+    const label = /^[A-Z][A-Z /’'&.-]{0,16}$/.test(line) && !/[a-z]/.test(line)
+    if (label) {
+      rows.push({ label: line })
+      continue
+    }
+    if (!rows.length) {
+      head.push(line)
+      continue
+    }
+    const current = rows[rows.length - 1]
+    if (VI_CHARS.test(line) && !current.vi) {
+      current.vi = line
+      continue
+    }
+    if (!current.cue) {
+      current.cue = line
+      continue
+    }
+    notes.push(line)
+  }
+  return rows.length ? { head, rows, notes } : null
+}
+
+function DrillCard({ title, lines, pal }: { title: string; lines: string[]; pal: Palette }) {
+  const script = parseScript(title, lines)
+  if (script) {
+    return (
+      <article className="overflow-hidden rounded-2xl border border-line bg-surface">
+        <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
+          <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
+          <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{title}</p>
+        </header>
+        <div className="px-3.5 pt-2">
+          {script.head[0] && <p className="text-[13px] font-bold leading-snug text-ink">{script.head[0]}</p>}
+          {script.head[1] && <p className="mt-0.5 text-[11.5px] italic leading-relaxed text-ink/60">{script.head[1]}</p>}
+        </div>
+        <div className="space-y-1 px-3.5 py-2.5">
+          {script.rows.map((row, i) => (
+            <div key={i} className="flex items-start gap-2">
+              <span className={cn('mt-0.5 shrink-0 rounded px-1.5 py-0.5 text-[9.5px] font-bold uppercase tracking-wide', pal.chip)}>
+                {row.label}
+              </span>
+              <p className="min-w-0 flex-1 text-[13px] leading-relaxed text-ink/85">{row.text}</p>
+            </div>
+          ))}
+        </div>
+        {script.notes.length > 0 && (
+          <p className="border-t border-line/60 px-3.5 py-1.5 text-[11.5px] leading-relaxed text-ink/60">{script.notes.join(' ')}</p>
+        )}
+      </article>
+    )
+  }
+
+  const drill = parseDrill(title, lines)
+  if (!drill) return null
+  const pairs = drill.rows.filter((r) => r.cue)
+  return (
+    <article className="overflow-hidden rounded-2xl border border-line bg-surface lg:col-span-2">
+      <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
+        <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
+        <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{title}</p>
+        <span className="text-[10.5px] text-muted">{pairs.length} cues</span>
+      </header>
+
+      <div className="px-3.5 pt-2">
+        {drill.head[0] && <p className="text-[13px] font-bold leading-snug text-ink">{drill.head[0]}</p>}
+        {drill.head[1] && <p className="mt-0.5 text-[11.5px] italic leading-relaxed text-ink/60">{drill.head[1]}</p>}
+      </div>
+
+      <div className="grid gap-1.5 px-3.5 py-2.5 sm:grid-cols-2">
+        {pairs.map((row, i) => (
+          <div key={`${row.label}-${i}`} className={cn('rounded-xl border px-2.5 py-1.5', pal.border, pal.soft)}>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] font-bold text-ink/35">{String(i + 1).padStart(2, '0')}</span>
+              <span className={cn('rounded px-1.5 py-0.5 font-mono text-[10.5px] font-bold', pal.chip)}>{row.label}</span>
+              {row.cue && <span className="min-w-0 flex-1 truncate font-mono text-[11px] text-ink/70">{row.cue}</span>}
+            </div>
+            {row.vi && <p className="mt-0.5 text-[12px] italic leading-snug text-ink/70">{row.vi}</p>}
+          </div>
+        ))}
+      </div>
+
+      {drill.notes.length > 0 && (
+        <ul className="space-y-0.5 border-t border-line/60 px-3.5 py-1.5">
+          {drill.notes.map((note, i) => (
+            <li key={i} className="text-[11.5px] leading-relaxed text-ink/60">
+              {note}
+            </li>
+          ))}
+        </ul>
+      )}
+    </article>
+  )
+}
+
+function DayCard({ title, lines, pal }: { title: string; lines: string[]; pal: Palette }) {
+  if (!/3-DAY PRACTICE/i.test(title)) return null
+  const body = bodyOf(title, lines)
+  const head: string[] = []
+  const days: { label: string; items: string[] }[] = []
+  const strips: string[] = []
+  for (const line of body) {
+    if (/^DAY \d(\s*\/\s*DAY \d)?$/i.test(line)) {
+      days.push({ label: line, items: [] })
+      continue
+    }
+    if (/^(NEXT CLASS|Tự kiểm tra)/i.test(line)) {
+      strips.push(line)
+      continue
+    }
+    if (!days.length) {
+      head.push(line)
+      continue
+    }
+    const items = days[days.length - 1].items
+    const wraps = items.length > 0 && (/^[a-zà-ỹ]/.test(line) || /^(và|hoặc|rồi)\b/.test(line))
+    if (wraps) items[items.length - 1] = `${items[items.length - 1]} ${line}`
+    else items.push(line)
+  }
+  if (!days.length) return null
+  return (
+    <article className="overflow-hidden rounded-2xl border border-line bg-surface lg:col-span-2">
+      <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
+        <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
+        <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{title}</p>
+        <span className="text-[10.5px] text-muted">{days.length} blocks</span>
+      </header>
+
+      <div className="px-3.5 pt-2">
+        {head[0] && <p className="text-[13px] font-bold leading-snug text-ink">{head[0]}</p>}
+        {head[1] && <p className="mt-0.5 text-[11.5px] italic leading-relaxed text-ink/60">{head[1]}</p>}
+      </div>
+
+      <div className={cn('grid gap-2 px-3.5 py-2.5', days.length > 1 && 'sm:grid-cols-2')}>
+        {days.map((day) => (
+          <div key={day.label} className={cn('rounded-xl border px-2.5 py-2', pal.border, pal.soft)}>
+            <p className={cn('mb-1 text-[9.5px] font-bold uppercase tracking-[.12em]', pal.text)}>{day.label}</p>
+            <ul className="space-y-0.5">
+              {day.items.map((item, i) => (
+                <li key={i} className="flex items-start gap-1.5 text-[12.5px] leading-relaxed text-ink/85">
+                  <span className={cn('mt-[7px] h-1 w-1 shrink-0 rounded-full', pal.solid)} />
+                  <span className="min-w-0">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      {strips.length > 0 && (
+        <ul className="space-y-0.5 border-t border-line/60 px-3.5 py-1.5">
+          {strips.map((strip, i) => (
+            <li key={i} className="flex items-start gap-1.5 text-[11.5px] leading-relaxed text-ink/70">
+              <Info className="mt-0.5 h-3 w-3 shrink-0 text-[#7a5a12]" />
+              <span className="min-w-0">{strip}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </article>
+  )
+}
+
+function TaskCard({ title, lines, pal }: { title: string; lines: string[]; pal: Palette }) {
+  if (!/EXTRA LISTENING/i.test(title)) return null
+  const body = bodyOf(title, lines)
+  const head: string[] = []
+  const blocks: { label: string; items: string[] }[] = []
+  const notes: string[] = []
+  for (const line of body) {
+    const label = /^[A-Z][A-Z /’'&.-]{2,26}$/.test(line) && !/[a-z]/.test(line)
+    if (label) {
+      blocks.push({ label: line, items: [] })
+      continue
+    }
+    if (!blocks.length) {
+      head.push(line)
+      continue
+    }
+    if (/\?$/.test(line)) blocks[blocks.length - 1].items.push(line)
+    else notes.push(line)
+  }
+  if (!blocks.length) return null
+  return (
+    <article className="overflow-hidden rounded-2xl border border-line bg-surface">
+      <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
+        <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
+        <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{title}</p>
+      </header>
+      <div className="px-3.5 pt-2">
+        {head.map((line, i) => (
+          <p key={i} className={cn(i === 0 ? 'text-[11px] font-bold uppercase tracking-wide' : 'mt-0.5 text-[11.5px] italic leading-relaxed', i === 0 ? pal.text : 'text-ink/60')}>
+            {line}
+          </p>
+        ))}
+      </div>
+      <div className="space-y-2 px-3.5 py-2.5">
+        {blocks.map((block) => (
+          <div key={block.label} className={cn('rounded-xl border px-2.5 py-2', pal.border, pal.soft)}>
+            <p className={cn('mb-1 text-[9.5px] font-bold uppercase tracking-[.12em]', pal.text)}>{block.label}</p>
+            <ol className="space-y-0.5">
+              {block.items.map((item, i) => (
+                <li key={i} className="flex items-start gap-1.5 text-[12.5px] leading-relaxed text-ink/85">
+                  <span className="text-[10px] font-bold text-ink/30">{i + 1}</span>
+                  <span className="min-w-0">{item}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        ))}
+      </div>
+      {notes.length > 0 && (
+        <p className="border-t border-line/60 px-3.5 py-1.5 text-[11.5px] leading-relaxed text-ink/60">{notes.join(' ')}</p>
+      )}
     </article>
   )
 }
@@ -1105,6 +1485,22 @@ function Flow({ groups, tone: sectionTone }: { groups: FlowGroup[]; tone?: Tone 
                 return <ReadCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
               }
 
+              if (/^PRONUNCIATION/i.test(slide.title)) {
+                return <SoundCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
+              }
+
+              if (/^ACTIVATE/i.test(slide.title)) {
+                return <DrillCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
+              }
+
+              if (/3-DAY PRACTICE/i.test(slide.title)) {
+                return <DayCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
+              }
+
+              if (/EXTRA LISTENING/i.test(slide.title)) {
+                return <TaskCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
+              }
+
               const talk = parseTalk(slide.title, slide.lines)
               if (talk) {
                 return <TalkCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
@@ -1198,7 +1594,7 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
             .slice(0, 10)
             .map((q) => ({
               prompt: q.prompt,
-              vi: lesson.parts.grammarChoose.find((c) => c.prompt === q.prompt)?.vi,
+              vi: q.vi ?? lesson.parts.grammarChoose.find((c) => c.prompt === q.prompt)?.vi,
               options: q.options ?? [],
               answer: q.answer,
             }))}
