@@ -497,7 +497,18 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
         >
           <div className="pointer-events-none absolute -right-10 -top-14 h-44 w-44 rounded-full bg-[#cfe0ff]/50" />
           <div className="pointer-events-none absolute -bottom-16 right-16 h-32 w-32 rounded-full bg-[#e6dcff]/50" />
-          <div className="relative">
+          <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
+            <div className="relative mx-auto shrink-0 sm:mx-0">
+              <img
+                src={`${import.meta.env.BASE_URL}teacher.jpg`}
+                alt=""
+                className="h-36 w-32 rounded-2xl object-cover shadow-[0_14px_34px_rgba(47,107,255,.22)] ring-1 ring-white/70 sm:h-44 sm:w-36"
+              />
+              <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-white px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#2f6bff] shadow-sm">
+                Teacher
+              </span>
+            </div>
+            <div className="min-w-0">
             <p className="text-[11.5px] font-bold uppercase tracking-[.16em] text-[#4a6fb5]">Teacher dashboard</p>
             <h2 className="mt-1.5 text-[26px] font-semibold leading-tight tracking-tight text-[#16233f] sm:text-[30px]">
               {greeting(now)}, {name || 'teacher'}.
@@ -519,6 +530,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
               <Button size="sm" variant="ghost" onClick={() => onGo?.('t-assignments')}>
                 Assign work
               </Button>
+            </div>
             </div>
           </div>
         </motion.div>
