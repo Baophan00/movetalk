@@ -749,6 +749,18 @@ function greeting(d: Date) {
   return 'Good evening'
 }
 
+const SAGE_TONES = [
+  { bg: '#DCE9DE', edge: '#5D7B6F', text: '#33453B', hover: '#CFE0D2' },
+  { bg: '#E3F0E4', edge: '#7FA084', text: '#36513A', hover: '#D7E8D9' },
+  { bg: '#E9F1EC', edge: '#4A6B50', text: '#31463A', hover: '#DDEAE0' },
+  { bg: '#F2F0DF', edge: '#A99359', text: '#4E4526', hover: '#EAE7D0' },
+  { bg: '#DDF1F1', edge: '#4E7C78', text: '#2E4C49', hover: '#CFEAEA' },
+]
+
+function sageTone(index: number) {
+  return SAGE_TONES[index % SAGE_TONES.length]
+}
+
 function initials(name: string) {
   const parts = name.trim().split(/\s+/)
   return (parts.length > 1 ? parts[0][0] + parts[parts.length - 1][0] : name.slice(0, 2)).toUpperCase()
@@ -777,7 +789,6 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
 
   const perDay = DAY_NAMES.map((_, d) => data.sessions.filter((s) => s.weekday === d).length)
   const earnings = useMemo(() => monthEarnings(data), [data])
-  const tones = useMemo(() => toneMap(data.students), [data.students])
   const monthly = useMemo(() => earningsAhead(data), [data])
   const [notes, setNotes] = useState<Note[]>(loadNotes)
   const [noteDay, setNoteDay] = useState<number | null>(null)
@@ -816,7 +827,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
         title: `${openTrials.length} trial${openTrials.length > 1 ? 's' : ''} not regular yet`,
         detail: `${openTrials.map((t) => t.name).slice(0, 3).join(', ')} · ${hours} hour${hours === 1 ? '' : 's'} booked — decide after the next one`,
         go: 't-students',
-        tone: '#6b4ef2',
+        tone: '#4E7C78',
       })
     }
     const unpriced = data.students.filter((st) => !st.rate)
@@ -826,7 +837,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
         title: `${unpriced.length} student${unpriced.length > 1 ? 's' : ''} without a rate`,
         detail: `Set it and the month starts counting — ${unpriced.map((t) => t.name).slice(0, 3).join(', ')}`,
         go: 't-students',
-        tone: '#b57513',
+        tone: '#8A5A22',
       })
     }
     const noEmail = data.students.filter((st) => !st.email)
@@ -836,7 +847,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
         title: `${noEmail.length} without an email`,
         detail: 'No email means no assignment can reach them',
         go: 't-students',
-        tone: '#2f6bff',
+        tone: '#5D7B6F',
       })
     }
     const mondayOfWeek = weekStart(now)
@@ -855,7 +866,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
         title: `${calledOff} hour${calledOff > 1 ? 's' : ''} called off this week`,
         detail: 'Not taught, not paid — move one or let it go',
         go: 't-schedule',
-        tone: '#c2410c',
+        tone: '#B4552F',
       })
     }
     return rows
@@ -867,16 +878,16 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
 
 
   const kpis = [
-    { icon: CalendarDays, label: 'Sessions today', value: String(today.length), hint: today.length ? `${hhmm(today[0].start)} first` : 'nothing booked', chip: 'bg-[#e8f0ff] text-[#2f6bff]', bar: 'bg-[#2f6bff]', values: perDay },
-    { icon: Clock, label: 'Hours this week', value: (minutes / 60).toFixed(1), hint: `${data.sessions.length} sessions`, chip: 'bg-[#e6f7ef] text-[#0f8a5f]', bar: 'bg-[#0f8a5f]', values: perDay },
-    { icon: Users, label: 'Students', value: String(data.students.length), hint: `${data.students.filter((s) => s.status === 'active').length} regular`, chip: 'bg-[#f0ecff] text-[#6b4ef2]', bar: 'bg-[#6b4ef2]', values: perDay },
+    { icon: CalendarDays, label: 'Sessions today', value: String(today.length), hint: today.length ? `${hhmm(today[0].start)} first` : 'nothing booked', chip: 'bg-[#DCEDE3] text-[#5D7B6F]', bar: 'bg-[#5D7B6F]', values: perDay },
+    { icon: Clock, label: 'Hours this week', value: (minutes / 60).toFixed(1), hint: `${data.sessions.length} sessions`, chip: 'bg-[#E3F0E4] text-[#4A6B50]', bar: 'bg-[#4A6B50]', values: perDay },
+    { icon: Users, label: 'Students', value: String(data.students.length), hint: `${data.students.filter((s) => s.status === 'active').length} regular`, chip: 'bg-[#E3EFEE] text-[#4E7C78]', bar: 'bg-[#4E7C78]', values: perDay },
     {
       icon: GraduationCap,
       label: 'Expected this month',
       value: earnings.total ? `${(earnings.total / 1e6).toFixed(1).replace('.', ',')}tr` : '0',
       hint: `${earnings.rows.filter((r) => r.student.rate).length} of ${data.students.length} priced`,
-      chip: 'bg-[#fff3e2] text-[#b57513]',
-      bar: 'bg-[#e0a13c]',
+      chip: 'bg-[#F5EEDC] text-[#8A5A22]',
+      bar: 'bg-[#C08A4A]',
       values: perDay,
     },
   ]
@@ -884,8 +895,8 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
   return (
     <div className="mx-auto max-w-[1180px] space-y-4 px-4 py-6 sm:px-6 lg:px-8">
       {todayNotes.length > 0 && (
-        <div className="rounded-2xl border border-[#f3c987] bg-[#fff8ec] px-4 py-3">
-          <p className="text-[10.5px] font-bold uppercase tracking-[.14em] text-[#8a4b00]">
+        <div className="rounded-2xl border border-[#E2CBA0] bg-[#FAF6EA] px-4 py-3">
+          <p className="text-[10.5px] font-bold uppercase tracking-[.14em] text-[#7A5320]">
             For today · {now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
           </p>
           <ul className="mt-1.5 space-y-1">
@@ -896,12 +907,12 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
                   onClick={() => setNotes(toggleNote(notes, n.id))}
                   className={cn(
                     'mt-[3px] grid h-4 w-4 shrink-0 place-items-center rounded border text-[9px]',
-                    n.done ? 'border-[#b57513] bg-[#b57513] text-white' : 'border-[#e0be86] bg-white text-transparent',
+                    n.done ? 'border-[#8A5A22] bg-[#8A5A22] text-white' : 'border-[#D3B78A] bg-white text-transparent',
                   )}
                 >
                   ✓
                 </button>
-                <span className={cn('text-[13px] leading-snug text-[#4a3410]', n.done && 'text-[#9a8256] line-through')}>{n.text}</span>
+                <span className={cn('text-[13px] leading-snug text-[#443A1E]', n.done && 'text-[#86704A] line-through')}>{n.text}</span>
               </li>
             ))}
           </ul>
@@ -914,41 +925,41 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="relative overflow-hidden rounded-2xl border border-[#dbe7ff] bg-[linear-gradient(120deg,#eef5ff_0%,#f7faff_55%,#eef2ff_100%)] px-5 py-5 shadow-card sm:px-6"
+          className="relative overflow-hidden rounded-2xl border border-[#DCE4D8] bg-[linear-gradient(120deg,#EAE7D6_0%,#F7F5EC_55%,#D7F9FA_100%)] px-5 py-5 shadow-card sm:px-6"
         >
-          <div className="pointer-events-none absolute -right-10 -top-14 h-44 w-44 rounded-full bg-[#cfe0ff]/50" />
-          <div className="pointer-events-none absolute -bottom-16 right-16 h-32 w-32 rounded-full bg-[#e6dcff]/50" />
+          <div className="pointer-events-none absolute -right-10 -top-14 h-44 w-44 rounded-full bg-[#A9C7AE]/45" />
+          <div className="pointer-events-none absolute -bottom-16 right-16 h-32 w-32 rounded-full bg-[#C7DED0]/45" />
           <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
             <div className="relative mx-auto shrink-0 sm:mx-0">
               <img
                 src={`${import.meta.env.BASE_URL}teacher.jpg`}
                 alt=""
-                className="h-36 w-32 rounded-2xl object-cover shadow-[0_14px_34px_rgba(47,107,255,.22)] ring-1 ring-white/70 sm:h-44 sm:w-36"
+                className="h-36 w-32 rounded-2xl object-cover shadow-[0_14px_34px_rgba(93,123,111,.26)] ring-1 ring-white/70 sm:h-44 sm:w-36"
               />
-              <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-white px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#2f6bff] shadow-sm">
+              <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-white px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#5D7B6F] shadow-sm">
                 Teacher
               </span>
             </div>
             <div className="min-w-0">
-            <p className="text-[11.5px] font-bold uppercase tracking-[.16em] text-[#4a6fb5]">Teacher dashboard</p>
-            <h2 className="mt-1.5 text-[26px] font-semibold leading-tight tracking-tight text-[#16233f] sm:text-[30px]">
+            <p className="text-[11.5px] font-bold uppercase tracking-[.16em] text-[#4F6A5C]">Teacher dashboard</p>
+            <h2 className="mt-1.5 text-[26px] font-semibold leading-tight tracking-tight text-[#2B3A31] sm:text-[30px]">
               {greeting(now)}, {name || 'teacher'}.
             </h2>
-            <p className="mt-1 max-w-[46ch] text-[13.5px] leading-relaxed text-[#3f5578]">
-              You have <b className="font-semibold text-[#16233f]">{today.length} sessions</b> today
+            <p className="mt-1 max-w-[46ch] text-[13.5px] leading-relaxed text-[#4C5F55]">
+              You have <b className="font-semibold text-[#2B3A31]">{today.length} sessions</b> today
               {trials.length > 0 && (
-                <> and <b className="font-semibold text-[#16233f]">{trials.length} trial{trials.length === 1 ? '' : 's'}</b> waiting</>
+                <> and <b className="font-semibold text-[#2B3A31]">{trials.length} trial{trials.length === 1 ? '' : 's'}</b> waiting</>
               )}
               . {(minutes / 60).toFixed(1)} hours booked this week.
               {earnings.total > 0 && (
                 <>
                   {' '}
-                  {MONTHS[now.getMonth()]} is worth <b className="font-semibold text-[#16233f]">{vnd(earnings.total)}</b>.
+                  {MONTHS[now.getMonth()]} is worth <b className="font-semibold text-[#2B3A31]">{vnd(earnings.total)}</b>.
                 </>
               )}
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
-              <Button size="sm" onClick={() => onGo?.('t-schedule')} className="bg-[#2f6bff] text-white hover:bg-[#2559d8]">
+              <Button size="sm" onClick={() => onGo?.('t-schedule')} className="bg-[#5D7B6F] text-white hover:bg-[#45604F]">
                 <CalendarDays className="h-3.5 w-3.5" /> Open the week
               </Button>
               <Button size="sm" variant="outline" onClick={() => onGo?.('t-students')}>
@@ -963,7 +974,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
         </motion.div>
 
         {/* next up */}
-        <Card className="border-[#e4e9f7]">
+        <Card className="border-[#E2EAE3]">
           <CardHeader>
             <CardTitle>Next up</CardTitle>
             <Badge tone="primary">{today.length ? 'today' : 'none'}</Badge>
@@ -1023,9 +1034,9 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
               <ul className="divide-y divide-line/70">
                 {upcoming.map(({ s, date }) => (
                   <li key={`${s.id}-${date.toDateString()}`} className="flex items-center gap-3 py-2.5">
-                    <span className="w-11 shrink-0 rounded-lg bg-[#eef3ff] py-1 text-center">
-                      <span className="block text-[9px] font-bold uppercase tracking-wide text-[#4a6fb5]">{MONTH_SHORT[date.getMonth()]}</span>
-                      <span className="block text-[13px] font-semibold leading-tight text-[#16233f]">{date.getDate()}</span>
+                    <span className="w-11 shrink-0 rounded-lg bg-[#EAF2EC] py-1 text-center">
+                      <span className="block text-[9px] font-bold uppercase tracking-wide text-[#4F6A5C]">{MONTH_SHORT[date.getMonth()]}</span>
+                      <span className="block text-[13px] font-semibold leading-tight text-[#2B3A31]">{date.getDate()}</span>
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-[13px] font-medium">
@@ -1061,9 +1072,9 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
                   <button
                     key={label}
                     onClick={go}
-                    className="flex flex-col items-start gap-2 rounded-xl border border-line bg-bg/50 px-3 py-2.5 text-left transition-colors hover:border-[#c9d9ff] hover:bg-[#f4f8ff]"
+                    className="flex flex-col items-start gap-2 rounded-xl border border-line bg-bg/50 px-3 py-2.5 text-left transition-colors hover:border-[#C4D6C8] hover:bg-[#F4F8F2]"
                   >
-                    <span className="grid h-8 w-8 place-items-center rounded-lg bg-white text-[#4a6fb5] shadow-sm">
+                    <span className="grid h-8 w-8 place-items-center rounded-lg bg-white text-[#4F6A5C] shadow-sm">
                       <Icon className="h-4 w-4" />
                     </span>
                     <span className="text-[12px] font-semibold">{label}</span>
@@ -1097,7 +1108,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
               )}
               <ul className="space-y-1">
                 {today.map((s) => {
-                  const t = tones[s.studentId]
+                  const t = sageTone(data.students.findIndex((x) => x.id === s.studentId))
                   const name = student(s.studentId)?.name ?? 'Student'
                   const isPast = s.end <= now.getHours() * 60 + now.getMinutes()
                   return (
@@ -1136,7 +1147,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
               {today.length > 0 && (
                 <button
                   onClick={() => onGo?.('t-schedule')}
-                  className="mt-2 flex w-full items-center justify-center gap-1 rounded-xl border border-line py-1.5 text-[11.5px] font-semibold text-[#4a6fb5] transition-colors hover:bg-[#f4f8ff]"
+                  className="mt-2 flex w-full items-center justify-center gap-1 rounded-xl border border-line py-1.5 text-[11.5px] font-semibold text-[#4F6A5C] transition-colors hover:bg-[#F4F8F2]"
                 >
                   See the whole week <ChevronRight className="h-3 w-3" />
                 </button>
@@ -1175,27 +1186,27 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
                       className={cn(
                         'relative grid h-7 place-items-center rounded-lg text-[11.5px] tabular-nums transition-colors',
                         isToday
-                          ? 'bg-[#2f6bff] font-semibold text-white ring-2 ring-[#f6c76b]'
+                          ? 'bg-[#5D7B6F] font-semibold text-white ring-2 ring-[#E0B96F]'
                           : dayNotes.length
-                            ? 'bg-[#fff4e2] font-semibold text-[#8a4b00] ring-1 ring-[#f3c987] hover:bg-[#ffefd6]'
+                            ? 'bg-[#F7EFD9] font-semibold text-[#7A5320] ring-1 ring-[#E2CBA0] hover:bg-[#F8EED6]'
                             : count
-                              ? 'bg-[#f2f6ff] text-[#26344f] hover:bg-[#e3ecff]'
+                              ? 'bg-[#EFF5EE] text-[#2F3E36] hover:bg-[#E3EFE5]'
                               : 'text-muted hover:bg-bg',
                       )}
                       title={[count ? `${count} hours` : null, dayNotes.length ? `${dayNotes.length} note` : null].filter(Boolean).join(' · ') || 'Add a note'}
                     >
                       {day}
                       <span className="absolute bottom-[2px] flex gap-[2px]">
-                        {count > 0 && <span className={cn('h-[3px] w-[3px] rounded-full', isToday ? 'bg-white' : 'bg-[#2f6bff]')} />}
-                        {dayNotes.length > 0 && <span className="h-[3px] w-[3px] rounded-full bg-[#d97706]" />}
+                        {count > 0 && <span className={cn('h-[3px] w-[3px] rounded-full', isToday ? 'bg-white' : 'bg-[#5D7B6F]')} />}
+                        {dayNotes.length > 0 && <span className="h-[3px] w-[3px] rounded-full bg-[#C08A4A]" />}
                       </span>
                     </button>
                   )
                 })}
               </div>
               <p className="mt-2 flex items-center justify-end gap-3 text-[10.5px] text-muted">
-                <span className="flex items-center gap-1"><span className="h-[3px] w-[3px] rounded-full bg-[#2f6bff]" /> teaching day</span>
-                <span className="flex items-center gap-1"><span className="h-[3px] w-[3px] rounded-full bg-[#d97706]" /> note</span>
+                <span className="flex items-center gap-1"><span className="h-[3px] w-[3px] rounded-full bg-[#5D7B6F]" /> teaching day</span>
+                <span className="flex items-center gap-1"><span className="h-[3px] w-[3px] rounded-full bg-[#C08A4A]" /> note</span>
               </p>
             </CardBody>
           </Card>
@@ -1240,7 +1251,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
                             onClick={() => setNotes(toggleNote(notes, n.id))}
                             className={cn(
                               'mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded border text-[9px]',
-                              n.done ? 'border-[#0f8a5f] bg-[#0f8a5f] text-white' : 'border-line text-transparent',
+                              n.done ? 'border-[#4A6B50] bg-[#4A6B50] text-white' : 'border-line text-transparent',
                             )}
                           >
                             ✓
@@ -1259,7 +1270,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
           </Dialog>
 
           {/* needs a look */}
-          <Card className="border-[#eeddb8] bg-gradient-to-b from-[#fffaf0] to-white shadow-[0_10px_30px_rgba(180,140,60,.10)]">
+          <Card className="border-[#E4D6BC] bg-gradient-to-b from-[#FCF9F0] to-white shadow-[0_10px_30px_rgba(180,140,60,.10)]">
             <CardHeader>
               <div>
                 <CardTitle>Needs a look</CardTitle>
@@ -1269,9 +1280,9 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
             </CardHeader>
             <CardBody className="pt-1">
               {needsLook.length === 0 ? (
-                <div className="flex items-center gap-2 rounded-xl bg-white/85 px-3 py-4 ring-1 ring-[#f1e4c9]">
-                  <Check className="h-4 w-4 shrink-0 text-[#0f8a5f]" />
-                  <p className="text-[12px] text-[#4a432f]">All clear. Every hour is priced, every trial has a next step, nothing called off.</p>
+                <div className="flex items-center gap-2 rounded-xl bg-white/85 px-3 py-4 ring-1 ring-[#EDE2CA]">
+                  <Check className="h-4 w-4 shrink-0 text-[#4A6B50]" />
+                  <p className="text-[12px] text-[#3D3A2E]">All clear. Every hour is priced, every trial has a next step, nothing called off.</p>
                 </div>
               ) : (
                 <ul className="space-y-1">
@@ -1279,14 +1290,14 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
                     <li key={row.id}>
                       <button
                         onClick={() => onGo?.(row.go)}
-                        className="flex w-full items-start gap-2.5 rounded-xl bg-white/85 px-2.5 py-2 text-left ring-1 ring-[#f1e4c9] transition-colors hover:bg-white"
+                        className="flex w-full items-start gap-2.5 rounded-xl bg-white/85 px-2.5 py-2 text-left ring-1 ring-[#EDE2CA] transition-colors hover:bg-white"
                       >
                         <span className="mt-[5px] h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: row.tone }} />
                         <span className="min-w-0 flex-1">
-                          <span className="block text-[12px] font-medium leading-snug text-[#2c2618]">{row.title}</span>
-                          <span className="block truncate text-[10.5px] text-[#8a7a58]">{row.detail}</span>
+                          <span className="block text-[12px] font-medium leading-snug text-[#2B2A22]">{row.title}</span>
+                          <span className="block truncate text-[10.5px] text-[#7A6F53]">{row.detail}</span>
                         </span>
-                        <ChevronRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#b59a63]" />
+                        <ChevronRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#A08A5F]" />
                       </button>
                     </li>
                   ))}
@@ -1322,10 +1333,10 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
               {monthly.map((m) => {
                 const max = Math.max(...monthly.map((x) => x.amount), 1)
                 return (
-                  <tr key={m.date.toISOString()} className={cn(m.current && 'bg-[#fff8ec]')}>
+                  <tr key={m.date.toISOString()} className={cn(m.current && 'bg-[#FAF6EA]')}>
                     <td className="py-2 text-[12.5px] font-medium">
                       {MONTHS[m.date.getMonth()]} {m.date.getFullYear()}
-                      {m.current && <span className="ml-1.5 rounded-full bg-[#fdece3] px-1.5 py-px text-[9px] font-bold uppercase text-[#b45309]">this month</span>}
+                      {m.current && <span className="ml-1.5 rounded-full bg-[#EFE6CE] px-1.5 py-px text-[9px] font-bold uppercase text-[#8A5A22]">this month</span>}
                     </td>
                     <td className="py-2 text-right text-[12.5px] tabular-nums text-muted">{m.hours.toFixed(1).replace('.0', '')}</td>
                     <td className={cn('py-2 text-right text-[12.5px] font-semibold tabular-nums', m.amount ? '' : 'text-muted')}>
@@ -1333,7 +1344,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
                     </td>
                     <td className="hidden py-2 pl-3 sm:table-cell">
                       <span className="block h-1.5 w-full overflow-hidden rounded-full bg-bg">
-                        <span className={cn('block h-full rounded-full', m.current ? 'bg-[#b57513]' : 'bg-[#2f6bff]/45')} style={{ width: `${(m.amount / max) * 100}%` }} />
+                        <span className={cn('block h-full rounded-full', m.current ? 'bg-[#8A5A22]' : 'bg-[#5D7B6F]/45')} style={{ width: `${(m.amount / max) * 100}%` }} />
                       </span>
                     </td>
                   </tr>
