@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'motion/react'
 import { CalendarDays, ChevronLeft, ChevronRight, Clock, GraduationCap, MoreHorizontal, Pause, Play, Plus, Trash2, Users, Video } from 'lucide-react'
 import { Badge } from '../components/ui/badge'
@@ -18,6 +18,7 @@ import {
   removeSession,
   removeStudent,
   setOverride,
+  saveTeaching,
   setStudentStatus,
   updateStudent,
   hhmmToMin,
@@ -41,6 +42,26 @@ type Shared = { onOpenLesson: (n: number) => void }
 function useTeaching() {
   const [data, setData] = useState<Teaching>(loadTeaching)
   return [data, setData] as const
+}
+
+/** A removal can be taken back for a few seconds, before the memory of what it was is gone. */
+function UndoBar({ label, onUndo, onClose }: { label: string; onUndo: () => void; onClose: () => void }) {
+  useEffect(() => {
+    const t = window.setTimeout(onClose, 9000)
+    return () => window.clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [label])
+  return (
+    <div className="fixed bottom-5 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-xl bg-[#1e2438] px-3.5 py-2.5 text-[12.5px] text-white shadow-[0_18px_40px_rgba(16,24,40,.28)]">
+      <span>{label}</span>
+      <button onClick={onUndo} className="font-semibold text-[#b9cdff] underline">
+        Undo
+      </button>
+      <button onClick={onClose} aria-label="Dismiss" className="text-white/50 hover:text-white">
+        ×
+      </button>
+    </div>
+  )
 }
 
 function WeekNav({ monday, onChange }: { monday: Date; onChange: (d: Date) => void }) {
@@ -113,6 +134,7 @@ export function TeacherSchedule({ onOpenLesson }: Shared) {
   const [monday, setMonday] = useState(() => weekStart(new Date()))
   const [picked, setPicked] = useState<{ s: Session; date: Date } | null>(null)
   const [move, setMove] = useState({ start: '', end: '' })
+  const [undo, setUndo] = useState<{ label: string; before: Teaching } | null>(null)
   const [adding, setAdding] = useState(false)
   const [form, setForm] = useState({ studentId: '', weekday: 0, start: '18:00', kind: 'lesson' as 'lesson' | 'trial' })
   const [error, setError] = useState('')
@@ -387,6 +409,7 @@ export function TeacherSchedule({ onOpenLesson }: Shared) {
                   size="sm"
                   variant="ghost"
                   onClick={() => {
+                    setUndo({ label: `Removed ${student?.name ?? 'hour'} · ${DAY_NAMES[s.weekday]} ${hhmm(s.start)}`, before: data })
                     setData(removeSession(data, s.id))
                     setPicked(null)
                   }}
@@ -398,6 +421,11 @@ export function TeacherSchedule({ onOpenLesson }: Shared) {
           )
         })()}
       </Dialog>
+
+      {undo && <UndoBar label={undo.label} onUndo={() => {
+          setData(saveTeaching(undo.before))
+          setUndo(null)
+        }} onClose={() => setUndo(null)} />}
     </div>
   )
 }
@@ -420,6 +448,7 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
     lessonN: 1,
   })
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [undo, setUndo] = useState<{ label: string; before: Teaching } | null>(null)
   const student = data.students.find((s) => s.id === openId)
   const now = new Date()
 
@@ -642,8 +671,14 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
                   <span className="font-medium">
                     {DAY_NAMES[s.weekday]} {hhmm(s.start)}–{hhmm(s.end)}
                   </span>
-                  <button onClick={() => setData(removeSession(data, s.id))} className="text-[11.5px] font-semibold text-warn">
-                    Remove
+                  <button
+                    onClick={() => {
+                      setUndo({ label: `Removed ${DAY_NAMES[s.weekday]} ${hhmm(s.start)}–${hhmm(s.end)}`, before: data })
+                      setData(removeSession(data, s.id))
+                    }}
+                    className="text-[11.5px] font-semibold text-warn"
+                  >
+                    Remove hour
                   </button>
                 </li>
               ))}
@@ -671,6 +706,7 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
                     setConfirmDelete(true)
                     return
                   }
+                  setUndo({ label: `Deleted ${student.name}`, before: data })
                   setData(removeStudent(data, student.id))
                   setOpenId(null)
                 }}
@@ -681,6 +717,11 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
           </DialogContent>
         )}
       </Dialog>
+
+      {undo && <UndoBar label={undo.label} onUndo={() => {
+          setData(saveTeaching(undo.before))
+          setUndo(null)
+        }} onClose={() => setUndo(null)} />}
     </div>
   )
 }
