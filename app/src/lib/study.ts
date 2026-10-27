@@ -117,6 +117,19 @@ export function weakSections(limit = 3): { section: string; wrong: number }[] {
     .slice(0, limit)
 }
 
+/** Raw log, newest last. Used by the progress screen. */
+export function allAttempts(): Attempt[] {
+  return readList<Attempt>(A_KEY)
+}
+
+/** Accuracy per skill, plus how many answers it is based on. */
+export function skillStats(kind: Attempt['kind']): { pct: number; total: number } {
+  const rows = allAttempts().filter((a) => a.kind === kind)
+  if (!rows.length) return { pct: 0, total: 0 }
+  const right = rows.filter((a) => a.correct).length
+  return { pct: Math.round((right / rows.length) * 100), total: rows.length }
+}
+
 /* --------------------------------------------------------------------- cards */
 
 export function listCards(): Card[] {
