@@ -8,6 +8,7 @@ import { Ring } from './ui/progress'
 
 export type Route =
   | 'landing'
+  | 'today'
   | 'dashboard'
   | 'lessons'
   | 'lesson'
@@ -25,7 +26,8 @@ export type Role = 'student' | 'teacher'
 type NavItem = { key: Route; label: string; icon: typeof Home }
 
 const STUDENT_NAV: NavItem[] = [
-  { key: 'dashboard', label: 'Overview', icon: Home },
+  { key: 'today', label: 'Today', icon: Home },
+  { key: 'dashboard', label: 'Overview', icon: Sparkles },
   { key: 'lessons', label: 'Lessons', icon: Compass },
   { key: 'library', label: 'Review', icon: Layers },
   { key: 'homework', label: 'Homework', icon: BookOpen },

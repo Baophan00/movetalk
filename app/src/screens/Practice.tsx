@@ -7,6 +7,7 @@ import { Progress } from '../components/ui/progress'
 import { A1, titleOf } from '../lib/curriculum'
 import { buildersFor, listensFor, pairsFor, quizRound, speakingLines } from '../lib/practice'
 import { speak } from '../lib/audio'
+import { recordAttempt } from '../lib/study'
 import { addVoice, listVoice, removeVoice } from '../lib/voice'
 import { uploadVoice } from '../lib/voiceSync'
 import { cn } from '../lib/utils'
@@ -72,6 +73,7 @@ function QuizGame({ lessonN }: { lessonN: number }) {
     setPicked(opt)
     const right = opt === item.answer
     if (right) setScore((s) => s + 1)
+    recordAttempt({ kind: 'quiz', lesson: lessonN, section: item.section, prompt: item.prompt, correct: right })
     setTimeout(() => {
       if (i + 1 >= items.length) setDone(true)
       else {

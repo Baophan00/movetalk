@@ -5,6 +5,7 @@ import { Button } from '../components/ui/button'
 import { Card } from '../components/ui/card'
 import { A1, quizFor, titleOf, type QuizItem } from '../lib/curriculum'
 import { hasAudio, speak } from '../lib/audio'
+import { recordAttempt, wrongItems } from '../lib/study'
 import { cn } from '../lib/utils'
 
 type Question = {
@@ -60,6 +61,18 @@ function reviewQuestions(n: number): Question[] {
   }))
 }
 
+/** Only the questions whose last answer was wrong, in the order they were missed. */
+function mistakeSession(n: number): Question[] {
+  const byPrompt = new Map<string, Question>()
+  for (const q of [...reviewQuestions(n), ...vocabQuestions(n)]) byPrompt.set(q.prompt, q)
+  const out: Question[] = []
+  for (const miss of wrongItems(n)) {
+    const q = byPrompt.get(miss.prompt)
+    if (q && !out.some((o) => o.prompt === q.prompt)) out.push(q)
+  }
+  return out
+}
+
 function buildSession(n: number): Question[] {
   const mixed = [...reviewQuestions(n), ...vocabQuestions(n)]
   return shuffle(mixed).slice(0, SESSION_SIZE)
@@ -80,7 +93,19 @@ export function Review({ initialLesson, autoStart = 0 }: { initialLesson?: numbe
   const [done, setDone] = useState(false)
 
   const pool = useMemo(() => reviewQuestions(lessonN).length + vocabQuestions(lessonN).length, [lessonN])
+  const misses = useMemo(() => (session ? [] : mistakeSession(lessonN)), [lessonN, session])
   const current = session?.[index]
+
+  const startMistakes = (list: Question[]) => {
+    setSession(list)
+    setIndex(0)
+    setPicked(null)
+    setTyped('')
+    setChecked(false)
+    setScore(0)
+    setWrong([])
+    setDone(false)
+  }
 
   const start = () => {
     setSession(buildSession(lessonN))
@@ -115,6 +140,7 @@ export function Review({ initialLesson, autoStart = 0 }: { initialLesson?: numbe
     const ok = correct
     if (ok) setScore((s) => s + 1)
     else setWrong((w) => [...w, current])
+    recordAttempt({ kind: 'quiz', lesson: lessonN, section: current.section, prompt: current.prompt, correct: ok })
     if (index + 1 >= (session?.length ?? 0)) {
       setDone(true)
       return
@@ -181,6 +207,17 @@ export function Review({ initialLesson, autoStart = 0 }: { initialLesson?: numbe
             )
           })}
         </div>
+
+        {misses.length > 0 && (
+          <Card className="mt-4 flex flex-wrap items-center justify-between gap-3 border-primary/30 bg-primary-soft px-4 py-3.5">
+            <p className="text-[12.5px] font-semibold text-primary">
+              {misses.length} question{misses.length === 1 ? '' : 's'} you got wrong last time
+            </p>
+            <Button size="sm" onClick={() => startMistakes(misses)}>
+              Redo {misses.length} <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Card>
+        )}
 
         <Card className="mt-4 flex flex-wrap items-center justify-between gap-3 px-4 py-3.5">
           <p className="text-[12.5px] text-muted">{Math.min(SESSION_SIZE, pool)} questions from lesson {String(lessonN).padStart(2, '0')}</p>
