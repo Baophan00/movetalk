@@ -1,45 +1,161 @@
 import { useMemo, useState } from 'react'
-import { BookOpen, Headphones, Mic, Pencil, ArrowRight, Volume2, Check, X } from 'lucide-react'
+import { ArrowRight, BookOpen, Check, Headphones, Mic, Pencil, Volume2, X } from 'lucide-react'
 import { Card, CardBody } from '../components/ui/card'
 import { Badge } from '../components/ui/badge'
 import { SpeakRoom } from '../components/SpeakRoom'
 import { A1, quizFor, titleOf, type LessonFile } from '../lib/curriculum'
-import { buildersFor } from '../lib/practice'
 import { checkEnglish, type Miss } from '../lib/grammar'
 import { compare } from '../lib/speech'
 import { addCard, recordAttempt } from '../lib/study'
 import { playLine, speak } from '../lib/audio'
+import { LEVELS, PACKS, packsFor, type Level, type Pack, type Question } from '../content/practice/packs'
 import { cn } from '../lib/utils'
 
 type Room = 'home' | 'listen' | 'speak' | 'read' | 'write'
 
+type Source = {
+  level: Level
+  label: string
+  lines: string[]
+  pool: string[]
+  reading: { title: string; text: string[]; glossary: Record<string, string>; questions: Question[] }
+  build: { en: string; vi: string }[]
+  translate: { vi: string; en: string }[]
+}
+
 const ROOMS = [
   { key: 'listen' as const, title: 'Listening', vi: 'Luyện nghe', icon: Headphones, from: 'from-[#6f7cff] to-[#a78bfa]', hint: 'Hear it, then pick the line' },
   { key: 'speak' as const, title: 'Speaking', vi: 'Luyện nói', icon: Mic, from: 'from-[#ff8fa3] to-[#ff5d8f]', hint: 'Say it, scored on the spot' },
-  { key: 'read' as const, title: 'Reading', vi: 'Luyện đọc', icon: BookOpen, from: 'from-[#48c9b0] to-[#22a699]', hint: 'Tap any word, keep it' },
+  { key: 'read' as const, title: 'Reading', vi: 'Luyện đọc', icon: BookOpen, from: 'from-[#48c9b0] to-[#22a699]', hint: 'Tap any word, then answer' },
   { key: 'write' as const, title: 'Writing', vi: 'Luyện viết', icon: Pencil, from: 'from-[#ffb56b] to-[#f4772e]', hint: 'Build and write sentences' },
 ]
 
-/** Practice your way: same lesson content, four skills, each scored as you go. */
+/* ------------------------------------------------------------- content glue */
+
+const clean = (t: string) => t.replace(/\s+/g, ' ').trim()
+const englishOnly = (t: string) => /^[\x20-\x7E’'",.?!;:-]+$/.test(t)
+
+function usableLine(t: string): boolean {
+  const text = clean(t)
+  const words = text.split(' ').length
+  return words >= 4 && words <= 20 && /[.?!]$/.test(text) && /[a-z]{3}/i.test(t)
+}
+
+function shuffle<T>(list: T[]): T[] {
+  const a = [...list]
+  for (let i = a.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+function lessonNumber(label: string): number {
+  return Number(label.match(/Lesson (\d+)/)?.[1] ?? 0)
+}
+
+function courseGlossary(): Record<string, string> {
+  const out: Record<string, string> = {}
+  for (const l of A1) for (const v of l.parts.vocab) if (v.word && v.vi) out[v.word.toLowerCase()] = v.vi
+  return out
+}
+
+function a1Source(lesson: LessonFile): Source {
+  const dialogue = lesson.parts.dialogue.map((d) => clean(d.line)).filter(englishOnly)
+  const vocabGlossary: Record<string, string> = {}
+  for (const v of lesson.parts.vocab) if (v.word && v.vi) vocabGlossary[v.word.toLowerCase()] = v.vi
+
+  // A1 comprehension: the recap questions the lesson ships, with options borrowed from
+  // other lessons so each one has exactly one right answer without a teacher.
+  const others = A1.filter((l) => l.n !== lesson.n).flatMap((l) => l.parts.listenCheck.map((c) => c.a)).filter(Boolean)
+  const questions: Question[] = lesson.parts.listenCheck.slice(0, 3).map((c, i) => ({
+    q: c.q,
+    options: shuffle([c.a, ...others.slice(i * 3, i * 3 + 3)]),
+    answer: c.a,
+  }))
+
+  return {
+    level: 'A1',
+    label: `Lesson ${lesson.n} · ${titleOf(lesson)}`,
+    lines: dialogue,
+    pool: A1.flatMap((l) => l.parts.dialogue.map((d) => clean(d.line))).filter(usableLine),
+    reading: { title: titleOf(lesson), text: dialogue, glossary: vocabGlossary, questions },
+    build: lesson.parts.vocab
+      .filter((v) => v.example && v.example.split(/\s+/).length >= 4 && v.example.split(/\s+/).length <= 9)
+      .slice(0, 4)
+      .map((v) => ({ en: v.example.replace(/[.?!]+$/, ''), vi: v.vi })),
+    translate: quizFor(lesson.n)
+      .filter((q) => q.kind === 'translate')
+      .map((q) => ({ vi: q.prompt, en: q.answer })),
+  }
+}
+
+function packSource(pack: Pack): Source {
+  return {
+    level: pack.level,
+    label: `${pack.level} · ${pack.title}`,
+    lines: pack.lines,
+    pool: packsFor(pack.level).flatMap((p) => p.lines),
+    reading: {
+      title: pack.reading.title,
+      text: [pack.reading.text],
+      glossary: { ...courseGlossary(), ...pack.reading.glossary },
+      questions: pack.reading.questions,
+    },
+    build: pack.build,
+    translate: pack.translate,
+  }
+}
+
+/* --------------------------------------------------------------------- hub */
+
 export function Study() {
-  const [room, setRoom] = useState<Room>('home')
+  const [level, setLevel] = useState<Level>('A1')
   const [lessonN, setLessonN] = useState(A1[0]?.n ?? 1)
-  const lesson = A1.find((l) => l.n === lessonN) ?? A1[0]
+  const [packId, setPackId] = useState(PACKS.find((p) => p.level === 'A2')?.id ?? '')
+  const [room, setRoom] = useState<Room>('home')
 
-  const back = () => setRoom('home')
+  const source = useMemo<Source>(() => {
+    if (level === 'A1') return a1Source(A1.find((l) => l.n === lessonN) ?? A1[0])
+    const pack = PACKS.find((p) => p.id === packId && p.level === level) ?? packsFor(level)[0]
+    return packSource(pack)
+  }, [level, lessonN, packId])
 
-  if (room === 'listen') return <Listening lesson={lesson} onBack={back} onLesson={setLessonN} />
-  if (room === 'speak') return <Speaking lesson={lesson} onBack={back} onLesson={setLessonN} />
-  if (room === 'read') return <Reading lesson={lesson} onBack={back} onLesson={setLessonN} />
-  if (room === 'write') return <Writing lesson={lesson} onBack={back} onLesson={setLessonN} />
+  const pickLevel = (l: Level) => {
+    setLevel(l)
+    if (l !== 'A1') setPackId(packsFor(l)[0]?.id ?? '')
+  }
+
+  if (room !== 'home') {
+    const back = () => setRoom('home')
+    if (room === 'listen') return <Listening source={source} onBack={back} />
+    if (room === 'speak') return <Speaking source={source} onBack={back} />
+    if (room === 'read') return <Reading source={source} onBack={back} />
+    return <Writing source={source} onBack={back} />
+  }
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6">
       <p className="text-[11px] font-bold uppercase tracking-[.16em] text-primary">Practice your way</p>
-      <h1 className="mt-1 text-[26px] font-semibold tracking-tight">Four skills, ten minutes each</h1>
-      <p className="mt-1 text-[13px] text-muted">Everything here is scored as you go. The teacher only steps in for the lesson work.</p>
+      <h1 className="mt-1 text-[26px] font-semibold tracking-tight">Four skills, scored as you go</h1>
+      <p className="mt-1 text-[13px] text-muted">A1 follows your lessons. A2, B1 and B2 are extra practice you can open any time.</p>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+      <div className="mt-4 grid grid-cols-4 gap-1.5">
+        {LEVELS.map((l) => (
+          <button
+            key={l}
+            onClick={() => pickLevel(l)}
+            className={cn(
+              'rounded-xl border py-2 text-[12.5px] font-bold tracking-wide transition',
+              level === l ? 'border-transparent bg-primary text-white shadow-card' : 'border-line bg-surface text-muted hover:border-primary/30',
+            )}
+          >
+            {l}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-3 grid gap-3 sm:grid-cols-2">
         {ROOMS.map((r) => {
           const Icon = r.icon
           return (
@@ -64,22 +180,50 @@ export function Study() {
 
       <Card className="mt-4">
         <CardBody className="p-4">
-          <p className="text-[13px] font-semibold">Which lesson</p>
-          <p className="mt-0.5 text-[11.5px] text-muted">A1 is ready. A2 arrives when the lessons do.</p>
-          <div className="no-scrollbar mt-2.5 flex gap-1.5 overflow-x-auto pb-1">
-            {A1.map((l) => (
-              <button
-                key={l.n}
-                onClick={() => setLessonN(l.n)}
-                className={cn(
-                  'shrink-0 rounded-xl border px-2.5 py-1.5 text-[12px] font-semibold transition',
-                  l.n === lessonN ? 'border-transparent bg-primary text-white' : 'border-line bg-surface text-muted',
-                )}
-              >
-                {String(l.n).padStart(2, '0')}
-              </button>
-            ))}
-          </div>
+          {level === 'A1' ? (
+            <>
+              <p className="text-[13px] font-semibold">Which lesson</p>
+              <p className="mt-0.5 text-[11.5px] text-muted">Words and dialogues straight from your class.</p>
+              <div className="no-scrollbar mt-2.5 flex gap-1.5 overflow-x-auto pb-1">
+                {A1.map((l) => (
+                  <button
+                    key={l.n}
+                    onClick={() => setLessonN(l.n)}
+                    className={cn(
+                      'shrink-0 rounded-xl border px-2.5 py-1.5 text-[12px] font-semibold transition',
+                      l.n === lessonN ? 'border-transparent bg-primary text-white' : 'border-line bg-surface text-muted',
+                    )}
+                  >
+                    {String(l.n).padStart(2, '0')}
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="text-[13px] font-semibold">Which topic</p>
+              <p className="mt-0.5 text-[11.5px] text-muted">{packsFor(level).length} extra topics at {level}.</p>
+              <div className="mt-2.5 grid gap-2">
+                {packsFor(level).map((p) => (
+                  <button
+                    key={p.id}
+                    onClick={() => setPackId(p.id)}
+                    className={cn(
+                      'flex items-center justify-between rounded-xl border px-3 py-2 text-left transition',
+                      p.id === packId ? 'border-primary/40 bg-primary-soft' : 'border-line bg-surface hover:border-primary/30',
+                    )}
+                  >
+                    <span className="min-w-0">
+                      <span className="block truncate text-[12.5px] font-semibold">{p.title}</span>
+                      <span className="block truncate text-[11px] text-muted">{p.vi}</span>
+                    </span>
+                    <ArrowRight className="h-3.5 w-3.5 shrink-0 text-muted" />
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+          <p className="mt-3 rounded-xl bg-bg/70 px-3 py-2 text-[11.5px] font-medium text-muted">Đang chọn: {source.label}</p>
         </CardBody>
       </Card>
     </div>
@@ -88,24 +232,13 @@ export function Study() {
 
 /* ------------------------------------------------------------------ shared */
 
-function RoomShell({ title, vi, onBack, onLesson, lesson, children }: { title: string; vi: string; onBack: () => void; onLesson: (n: number) => void; lesson: LessonFile; children: React.ReactNode }) {
+function Shell({ title, vi, source, onBack, children }: { title: string; vi: string; source: Source; onBack: () => void; children: React.ReactNode }) {
   return (
     <div className="mx-auto max-w-3xl px-4 py-5 sm:px-6">
       <button onClick={onBack} className="text-[12px] font-semibold text-muted transition hover:text-ink">← Practice your way</button>
-      <div className="mt-2 flex flex-wrap items-end justify-between gap-2">
-        <div>
-          <h1 className="text-[22px] font-semibold tracking-tight">{title}</h1>
-          <p className="text-[12px] text-muted">{vi} · Lesson {String(lesson.n).padStart(2, '0')} {titleOf(lesson)}</p>
-        </div>
-        <select
-          value={lesson.n}
-          onChange={(e) => onLesson(Number(e.target.value))}
-          className="rounded-xl border border-line bg-surface px-2.5 py-1.5 text-[12px] font-semibold"
-        >
-          {A1.map((l) => (
-            <option key={l.n} value={l.n}>Lesson {l.n}</option>
-          ))}
-        </select>
+      <div className="mt-2">
+        <h1 className="text-[22px] font-semibold tracking-tight">{title}</h1>
+        <p className="text-[12px] text-muted">{vi} · {source.label}</p>
       </div>
       <div className="mt-4">{children}</div>
     </div>
@@ -114,52 +247,28 @@ function RoomShell({ title, vi, onBack, onLesson, lesson, children }: { title: s
 
 /* --------------------------------------------------------------- listening */
 
-type ListenItem = { line: string; options: string[] }
+function Listening({ source, onBack }: { source: Source; onBack: () => void }) {
+  const items = useMemo(() => {
+    const lines = source.lines.filter(usableLine).slice(0, 5)
+    const others = source.pool.filter((t) => !lines.includes(t))
+    return lines.map((line, i) => {
+      const near = others.filter((t) => Math.abs(t.length - line.length) <= Math.max(16, line.length * 0.5))
+      const pool = shuffle(near.length >= 3 ? near : others)
+      return { line, options: shuffle([line, ...pool.slice(i * 3, i * 3 + 3)]) }
+    })
+  }, [source])
 
-function englishLines(lesson: LessonFile): string[] {
-  return lesson.parts.dialogue
-    .map((d) => d.line.trim())
-    .filter((t) => /^[\x20-\x7E’'",.?!]+$/.test(t))
-}
-
-function usable(line: string): boolean {
-  const t = line.replace(/\s+/g, ' ').trim()
-  const w = t.split(' ').length
-  return w >= 4 && w <= 20 && /[.?!]$/.test(t) && /[a-z]{3}/i.test(t)
-}
-
-function buildListenItems(lesson: LessonFile, count = 5): ListenItem[] {
-  const mine = englishLines(lesson).map((t) => t.replace(/\s+/g, ' ').trim()).filter(usable).slice(0, count)
-  const others = A1.filter((l) => l.n !== lesson.n).flatMap((l) => englishLines(l).map((t) => t.replace(/\s+/g, ' ').trim())).filter(usable)
-  return mine.map((line) => {
-    const near = others.filter((t) => t !== line && Math.abs(t.length - line.length) <= Math.max(16, line.length * 0.5))
-    const pool = shuffleList(near.length >= 3 ? near : others.filter((t) => t !== line))
-    return { line, options: shuffleList([line, ...pool.slice(0, 3)]) }
-  })
-}
-
-function shuffleList<T>(list: T[]): T[] {
-  const a = [...list]
-  for (let i = a.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[a[i], a[j]] = [a[j], a[i]]
-  }
-  return a
-}
-
-function Listening({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: () => void; onLesson: (n: number) => void }) {
-  const items = useMemo(() => buildListenItems(lesson, 5), [lesson])
   const [i, setI] = useState(0)
   const [picked, setPicked] = useState<string | null>(null)
   const [score, setScore] = useState(0)
-  const [slow, setSlow] = useState(1)
+  const [slow, setSlow] = useState(false)
   const item = items[i]
 
   if (!item) {
     return (
-      <RoomShell title="Listening" vi="Luyện nghe" onBack={onBack} onLesson={onLesson} lesson={lesson}>
-        <p className="text-[13px] text-muted">This lesson has no dialogue to listen to yet.</p>
-      </RoomShell>
+      <Shell title="Listening" vi="Luyện nghe" source={source} onBack={onBack}>
+        <p className="text-[13px] text-muted">No dialogue to listen to here yet.</p>
+      </Shell>
     )
   }
 
@@ -169,11 +278,17 @@ function Listening({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: (
     setPicked(opt)
     const right = opt === item.line
     if (right) setScore((s) => s + 1)
-    recordAttempt({ kind: 'listen', lesson: lesson.n, section: 'Listening', prompt: item.line, correct: right })
+    recordAttempt({
+      kind: 'listen',
+      lesson: source.level === 'A1' ? lessonNumber(source.label) : undefined,
+      section: `Listening ${source.level}`,
+      prompt: item.line,
+      correct: right,
+    })
   }
 
   return (
-    <RoomShell title="Listening" vi="Luyện nghe" onBack={onBack} onLesson={onLesson} lesson={lesson}>
+    <Shell title="Listening" vi="Luyện nghe" source={source} onBack={onBack}>
       <Card>
         <CardBody className="p-5">
           <div className="flex items-center justify-between">
@@ -183,17 +298,14 @@ function Listening({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: (
 
           <div className="mt-4 flex gap-2">
             <button
-              onClick={() => { void playLine(item.line, 1) }}
+              onClick={() => void playLine(item.line, 1)}
               className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-[#6f7cff] to-[#a78bfa] px-4 py-5 text-[14px] font-semibold text-white shadow-card transition active:scale-[.99]"
             >
               <Volume2 className="h-5 w-5" /> Play
             </button>
             <button
-              onClick={() => { setSlow(0.7); void playLine(item.line, 0.7) }}
-              className={cn(
-                'rounded-2xl border px-3 text-[12px] font-semibold transition',
-                slow < 1 ? 'border-transparent bg-primary-soft text-primary' : 'border-line text-muted',
-              )}
+              onClick={() => { setSlow(true); void playLine(item.line, 0.7) }}
+              className={cn('rounded-2xl border px-3 text-[12px] font-semibold transition', slow ? 'border-transparent bg-primary-soft text-primary' : 'border-line text-muted')}
             >
               Slow
             </button>
@@ -229,9 +341,7 @@ function Listening({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: (
             <div className="mt-4 flex items-center justify-between gap-2">
               <p className="text-[12px] text-muted">{picked === item.line ? 'Right.' : 'Listen once more, then continue.'}</p>
               <div className="flex gap-1.5">
-                <button onClick={() => void playLine(item.line, 1)} className="rounded-xl border border-line px-3 py-1.5 text-[12.5px] font-semibold">
-                  Again
-                </button>
+                <button onClick={() => void playLine(item.line, 1)} className="rounded-xl border border-line px-3 py-1.5 text-[12.5px] font-semibold">Again</button>
                 <button
                   onClick={() => {
                     if (last) { setI(0); setPicked(null); setScore(0) } else { setI(i + 1); setPicked(null) }
@@ -245,63 +355,62 @@ function Listening({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: (
           )}
         </CardBody>
       </Card>
-    </RoomShell>
+    </Shell>
   )
 }
 
 /* ---------------------------------------------------------------- speaking */
 
-function Speaking({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: () => void; onLesson: (n: number) => void }) {
+function Speaking({ source, onBack }: { source: Source; onBack: () => void }) {
   const lines = useMemo(() => {
-    const raw = lesson.parts.dialogue.map((d) => d.line).filter((t) => /^[\x20-\x7E’'",.?!]+$/.test(t))
-    const short = raw.filter((s) => {
-      const w = s.split(/\s+/).filter(Boolean).length
+    const short = source.lines.filter((t) => {
+      const w = clean(t).split(' ').filter(Boolean).length
       return w >= 3 && w <= 14
     })
-    return (short.length ? short : raw).slice(0, 4).map((text) => ({ text }))
-  }, [lesson])
+    return (short.length ? short : source.lines).slice(0, 4).map((text) => ({ text: clean(text) }))
+  }, [source])
 
   return (
-    <RoomShell title="Speaking" vi="Luyện nói" onBack={onBack} onLesson={onLesson} lesson={lesson}>
-      <SpeakRoom lessonN={lesson.n} lines={lines} />
-    </RoomShell>
+    <Shell title="Speaking" vi="Luyện nói" source={source} onBack={onBack}>
+      <SpeakRoom lessonN={source.level === 'A1' ? lessonNumber(source.label) : 0} lines={lines} />
+    </Shell>
   )
 }
 
 /* ----------------------------------------------------------------- reading */
 
-function dict(): Record<string, string> {
-  const out: Record<string, string> = {}
-  for (const l of A1) for (const v of l.parts.vocab) if (v.word && v.vi) out[v.word.toLowerCase()] = v.vi
-  return out
-}
-
-function Reading({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: () => void; onLesson: (n: number) => void }) {
-  const text = useMemo(() => lesson.parts.dialogue.map((d) => d.line).filter((t) => /^[\x20-\x7E’'",.?!]+$/.test(t)), [lesson])
-  const meanings = useMemo(dict, [])
+function Reading({ source, onBack }: { source: Source; onBack: () => void }) {
   const [word, setWord] = useState<string | null>(null)
   const [saved, setSaved] = useState<string[]>([])
+  const [answers, setAnswers] = useState<Record<number, string>>({})
 
-  const meaning = word ? meanings[word.toLowerCase()] : undefined
+  const meaning = word ? source.reading.glossary[word.toLowerCase()] : undefined
+
+  const pick = (qIndex: number, q: Question, opt: string) => {
+    if (answers[qIndex]) return
+    setAnswers((a) => ({ ...a, [qIndex]: opt }))
+    recordAttempt({
+      kind: 'read',
+      lesson: source.level === 'A1' ? lessonNumber(source.label) : undefined,
+      section: `Reading ${source.level}`,
+      prompt: q.q,
+      correct: opt === q.answer,
+    })
+  }
 
   return (
-    <RoomShell title="Reading" vi="Luyện đọc" onBack={onBack} onLesson={onLesson} lesson={lesson}>
+    <Shell title="Reading" vi="Luyện đọc" source={source} onBack={onBack}>
       <Card>
         <CardBody className="p-5">
-          <p className="text-[11px] font-bold uppercase tracking-[.14em] text-muted">Tap a word you do not know</p>
-          <div className="mt-3 space-y-2.5">
-            {text.map((line, k) => (
+          <p className="text-[11px] font-bold uppercase tracking-[.14em] text-muted">{source.reading.title}</p>
+          <div className="mt-2.5 space-y-2.5">
+            {source.reading.text.map((line, k) => (
               <p key={k} className="text-[15px] leading-relaxed">
                 {line.split(/(\s+)/).map((tok, j) => {
-                  const clean = tok.replace(/[^A-Za-z’']/g, '').toLowerCase()
-                  const known = clean && meanings[clean]
-                  if (!clean) return <span key={j}>{tok}</span>
+                  const bare = tok.replace(/[^A-Za-z’']/g, '').toLowerCase()
+                  if (!bare) return <span key={j}>{tok}</span>
                   return (
-                    <button
-                      key={j}
-                      onClick={() => setWord(clean)}
-                      className={cn('rounded transition-colors', known ? 'hover:bg-primary-soft' : 'decoration-dotted underline-offset-4 hover:underline')}
-                    >
+                    <button key={j} onClick={() => setWord(bare)} className="rounded transition-colors hover:bg-primary-soft">
                       {tok}
                     </button>
                   )
@@ -313,14 +422,14 @@ function Reading({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: () 
           {word && (
             <div className="mt-4 rounded-2xl bg-bg/70 p-3.5">
               <div className="flex items-start justify-between gap-2">
-                <div>
+                <div className="min-w-0">
                   <p className="text-[14px] font-semibold">{word}</p>
-                  <p className="text-[12.5px] text-muted">{meaning ?? 'Not in the course word list yet. Save it and ask your teacher.'}</p>
+                  <p className="text-[12.5px] text-muted">{meaning ?? 'Not in the word list yet. Save it and ask your teacher.'}</p>
                 </div>
-                <div className="flex gap-1.5">
+                <div className="flex shrink-0 gap-1.5">
                   <button onClick={() => speak(word)} className="rounded-lg border border-line px-2 py-1 text-[11.5px] font-semibold">Hear</button>
                   <button
-                    onClick={() => { addCard(word, meaning, 'A1', 'reading'); setSaved((s) => [...s, word]) }}
+                    onClick={() => { addCard(word, meaning, source.level, 'reading'); setSaved((s) => [...s, word]) }}
                     className="rounded-lg bg-primary px-2 py-1 text-[11.5px] font-semibold text-white"
                   >
                     {saved.includes(word) ? 'Saved' : 'Save'}
@@ -331,20 +440,66 @@ function Reading({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: () 
           )}
         </CardBody>
       </Card>
-    </RoomShell>
+
+      {source.reading.questions.length > 0 && (
+        <Card className="mt-3">
+          <CardBody className="p-5">
+            <p className="text-[13px] font-semibold">Questions</p>
+            <div className="mt-3 space-y-4">
+              {source.reading.questions.map((q, qi) => {
+                const picked = answers[qi]
+                return (
+                  <div key={q.q}>
+                    <p className="text-[13px] font-medium">{qi + 1}. {q.q}</p>
+                    <div className="mt-1.5 grid gap-1.5">
+                      {q.options.map((opt) => {
+                        const right = opt === q.answer
+                        const on = picked === opt
+                        return (
+                          <button
+                            key={opt}
+                            onClick={() => pick(qi, q, opt)}
+                            disabled={Boolean(picked)}
+                            className={cn(
+                              'rounded-xl border px-3 py-2 text-left text-[12.5px] transition',
+                              !picked && 'border-line bg-surface hover:border-primary/40',
+                              picked && right && 'border-transparent bg-mint/15 text-[#0f6b4f]',
+                              picked && on && !right && 'border-transparent bg-warn/10 text-warn',
+                              picked && !on && !right && 'border-line bg-surface opacity-55',
+                            )}
+                          >
+                            {opt}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </CardBody>
+        </Card>
+      )}
+    </Shell>
   )
 }
 
 /* ----------------------------------------------------------------- writing */
 
-function norm(t: string) {
-  return t.toLowerCase().replace(/[^a-z0-9' ]+/g, ' ').replace(/\s+/g, ' ').trim()
-}
+const norm = (t: string) => t.toLowerCase().replace(/[^a-z0-9' ]+/g, ' ').replace(/\s+/g, ' ').trim()
 
-function Writing({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: () => void; onLesson: (n: number) => void }) {
+function Writing({ source, onBack }: { source: Source; onBack: () => void }) {
   const [mode, setMode] = useState<'build' | 'write'>('build')
-  const tasks = useMemo(() => buildersFor(lesson, 5), [lesson])
-  const prompts = useMemo(() => quizFor(lesson.n).filter((q) => q.kind === 'translate'), [lesson.n])
+
+  const builds = useMemo(
+    () =>
+      source.build.map((b) => {
+        const words = b.en.replace(/[.?!]+$/, '').split(/\s+/)
+        return { answer: words.join(' '), tiles: shuffle(words), vi: b.vi }
+      }),
+    [source],
+  )
+  const prompts = source.translate
 
   const [i, setI] = useState(0)
   const [tray, setTray] = useState<string[]>([])
@@ -354,7 +509,7 @@ function Writing({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: () 
   const [checked, setChecked] = useState<{ exact: boolean; misses: Miss[]; failed: boolean; missing: string[]; cover: number } | null>(null)
   const [busy, setBusy] = useState(false)
 
-  const task = tasks[i]
+  const task = builds[i]
   const prompt = prompts[i]
 
   const used = [...tray]
@@ -370,22 +525,22 @@ function Writing({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: () 
     if (!task) return
     const ok = tray.join(' ').toLowerCase() === task.answer.toLowerCase()
     setStatus(ok ? 'ok' : 'no')
-    recordAttempt({ kind: 'write', lesson: lesson.n, section: 'Writing', prompt: task.answer, correct: ok })
+    recordAttempt({ kind: 'write', section: `Writing ${source.level}`, prompt: task.answer, correct: ok })
   }
 
   const checkWrite = async () => {
     if (!prompt) return
     setBusy(true)
-    const exact = norm(written) === norm(prompt.answer)
+    const exact = norm(written) === norm(prompt.en)
     const { matches, failed } = await checkEnglish(written)
-    const diff = compare(prompt.answer, written)
+    const diff = compare(prompt.en, written)
     setChecked({ exact, misses: matches, failed, missing: diff.missing, cover: diff.pct })
-    recordAttempt({ kind: 'write', lesson: lesson.n, section: 'Writing', prompt: prompt.answer, correct: exact || (!failed && matches.length === 0) })
+    recordAttempt({ kind: 'write', section: `Writing ${source.level}`, prompt: prompt.en, correct: exact || (!failed && matches.length === 0) })
     setBusy(false)
   }
 
   return (
-    <RoomShell title="Writing" vi="Luyện viết" onBack={onBack} onLesson={onLesson} lesson={lesson}>
+    <Shell title="Writing" vi="Luyện viết" source={source} onBack={onBack}>
       <div className="grid grid-cols-2 gap-1.5">
         {(['build', 'write'] as const).map((m) => (
           <button
@@ -405,12 +560,12 @@ function Writing({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: () 
         <Card className="mt-3">
           <CardBody className="p-5">
             {!task ? (
-              <p className="text-[13px] text-muted">No writing tasks for this lesson.</p>
+              <p className="text-[13px] text-muted">No sentence-building tasks here.</p>
             ) : (
               <>
-                <div className="flex items-center justify-between">
-                  <Badge tone="primary">{i + 1} / {tasks.length}</Badge>
-                  <span className="text-[11.5px] text-muted">dùng từ: {task.vi}</span>
+                <div className="flex items-center justify-between gap-2">
+                  <Badge tone="primary">{i + 1} / {builds.length}</Badge>
+                  <span className="truncate text-[11.5px] text-muted">{task.vi}</span>
                 </div>
 
                 <div className="mt-4 min-h-[52px] rounded-2xl border border-dashed border-line bg-bg/60 px-3 py-2.5">
@@ -435,18 +590,13 @@ function Writing({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: () 
                   ))}
                 </div>
 
-                <div className="mt-4 flex items-center justify-between">
+                <div className="mt-4 flex items-center justify-between gap-2">
                   <p className={cn('text-[12.5px] font-semibold', status === 'ok' ? 'text-[#0f6b4f]' : status === 'no' ? 'text-warn' : 'text-muted')}>
                     {status === 'ok' ? 'Correct.' : status === 'no' ? 'Not yet.' : `${tray.length} word${tray.length === 1 ? '' : 's'}`}
                   </p>
                   <div className="flex gap-1.5">
                     <button onClick={checkBuild} disabled={!tray.length} className="rounded-xl bg-primary px-3 py-1.5 text-[12.5px] font-semibold text-white disabled:opacity-40">Check</button>
-                    <button
-                      onClick={() => { setI((v) => (v + 1 < tasks.length ? v + 1 : 0)); setTray([]); setStatus('idle') }}
-                      className="rounded-xl border border-line px-3 py-1.5 text-[12.5px] font-semibold"
-                    >
-                      Next
-                    </button>
+                    <button onClick={() => { setI((v) => (v + 1 < builds.length ? v + 1 : 0)); setTray([]); setStatus('idle') }} className="rounded-xl border border-line px-3 py-1.5 text-[12.5px] font-semibold">Next</button>
                   </div>
                 </div>
               </>
@@ -457,7 +607,7 @@ function Writing({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: () 
         <Card className="mt-3">
           <CardBody className="p-5">
             {!prompt ? (
-              <p className="text-[13px] text-muted">No translation prompts for this lesson.</p>
+              <p className="text-[13px] text-muted">No translation prompts here.</p>
             ) : (
               <>
                 <div className="flex items-center justify-between">
@@ -465,7 +615,7 @@ function Writing({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: () 
                   <span className="text-[11.5px] text-muted">viết bằng tiếng Anh</span>
                 </div>
 
-                <p className="mt-3 rounded-2xl bg-bg/70 px-3 py-2.5 text-[14px] font-medium">{prompt.prompt}</p>
+                <p className="mt-3 rounded-2xl bg-bg/70 px-3 py-2.5 text-[14px] font-medium">{prompt.vi}</p>
 
                 <textarea
                   value={written}
@@ -475,18 +625,13 @@ function Writing({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: () 
                   className="mt-3 w-full resize-none rounded-2xl border border-line bg-surface px-3 py-2.5 text-[14px] outline-none focus:border-primary/50"
                 />
 
-                <div className="mt-3 flex items-center justify-between">
+                <div className="mt-3 flex items-center justify-between gap-2">
                   <p className="text-[11.5px] text-muted">{written.trim().split(/\s+/).filter(Boolean).length} words</p>
                   <div className="flex gap-1.5">
                     <button onClick={checkWrite} disabled={busy || !written.trim()} className="rounded-xl bg-primary px-3 py-1.5 text-[12.5px] font-semibold text-white disabled:opacity-40">
                       {busy ? 'Checking…' : 'Check'}
                     </button>
-                    <button
-                      onClick={() => { setI((v) => (v + 1 < prompts.length ? v + 1 : 0)); setWritten(''); setChecked(null) }}
-                      className="rounded-xl border border-line px-3 py-1.5 text-[12.5px] font-semibold"
-                    >
-                      Next
-                    </button>
+                    <button onClick={() => { setI((v) => (v + 1 < prompts.length ? v + 1 : 0)); setWritten(''); setChecked(null) }} className="rounded-xl border border-line px-3 py-1.5 text-[12.5px] font-semibold">Next</button>
                   </div>
                 </div>
 
@@ -501,7 +646,7 @@ function Writing({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: () 
                             ? `${checked.misses.length} thing${checked.misses.length === 1 ? '' : 's'} to fix.`
                             : `No spelling or grammar errors, but ${checked.cover}% of the model.`}
                     </p>
-                    {!checked.exact && checked.missing.length > 0 && !checked.misses.length && (
+                    {!checked.exact && !checked.misses.length && checked.missing.length > 0 && (
                       <p className="mt-1.5 text-[12px] text-ink">The model adds: <span className="font-semibold">{checked.missing.join(', ')}</span></p>
                     )}
                     {checked.misses.slice(0, 4).map((m, k) => (
@@ -510,7 +655,7 @@ function Writing({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: () 
                         {m.better.length > 0 && <span className="font-semibold"> Try: {m.better.join(' / ')}</span>}
                       </p>
                     ))}
-                    <p className="mt-2 text-[11.5px] text-muted">Model answer: <span className="font-medium text-ink">{prompt.answer}</span></p>
+                    <p className="mt-2 text-[11.5px] text-muted">Model answer: <span className="font-medium text-ink">{prompt.en}</span></p>
                   </div>
                 )}
               </>
@@ -518,6 +663,6 @@ function Writing({ lesson, onBack, onLesson }: { lesson: LessonFile; onBack: () 
           </CardBody>
         </Card>
       )}
-    </RoomShell>
+    </Shell>
   )
 }
