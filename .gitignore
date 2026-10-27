@@ -11,3 +11,5 @@ supabase/.temp/
 # React app
 app/node_modules/
 app/dist/
+# Local secrets written by `elevenlabs onboard`
+/.env.local
