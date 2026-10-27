@@ -9,9 +9,10 @@ import { isPracticeOpen } from '../lib/access'
 import { listVoice } from '../lib/voice'
 import { myVoice } from '../lib/voiceSync'
 import { myAssignments, type Assigned } from '../lib/assignments'
+import { dueCards, listCards, readDays, streak } from '../lib/study'
 
 /** The learner's own page: what they have finished, what is waiting, and the way out. */
-export function Profile({ name, email, role, onSignOut }: { name: string; email: string; role: 'student' | 'teacher'; onSignOut: () => void }) {
+export function Profile({ name, email, role, onSignOut, onGo }: { name: string; email: string; role: 'student' | 'teacher'; onSignOut: () => void; onGo?: (r: 'words' | 'study' | 'progress') => void }) {
   const [takes, setTakes] = useState(() => listVoice().length)
   const [waiting, setWaiting] = useState<Assigned[]>([])
 
@@ -39,6 +40,16 @@ export function Profile({ name, email, role, onSignOut }: { name: string; email:
     const practiceOpen = A1.filter((l) => isPracticeOpen(l.n, waiting.map((a) => a.lessonN))).length
     return { totalParts, readParts, lessonsOpened, practiceOpen }
   }, [waiting])
+
+  const mine = useMemo(() => {
+    let writings = 0
+    try {
+      writings = (JSON.parse(localStorage.getItem('mt2_writings') ?? '[]') as unknown[]).length
+    } catch {
+      writings = 0
+    }
+    return { words: listCards().length, due: dueCards().length, run: streak(), writings, days: Object.keys(readDays()).length }
+  }, [])
 
   const initial = (name || email || 'M').trim().charAt(0).toUpperCase()
 
@@ -93,6 +104,40 @@ export function Profile({ name, email, role, onSignOut }: { name: string; email:
             <p className="mt-1 text-[26px] font-semibold tabular-nums leading-none">{takes}</p>
           </CardBody>
         </Card>
+      </div>
+
+      <div className="mt-3 grid grid-cols-3 gap-3">
+        <Card>
+          <CardBody className="p-4">
+            <p className="text-[10.5px] font-bold uppercase tracking-[.08em] text-muted">Streak</p>
+            <p className="mt-1 text-[24px] font-semibold tabular-nums leading-none">{mine.run}</p>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardBody className="p-4">
+            <p className="text-[11px] font-bold uppercase tracking-[.12em] text-muted">Words</p>
+            <p className="mt-1 text-[24px] font-semibold tabular-nums leading-none">{mine.words}</p>
+            <p className="mt-0.5 text-[10.5px] text-muted">{mine.due} due</p>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardBody className="p-4">
+            <p className="text-[11px] font-bold uppercase tracking-[.12em] text-muted">Written</p>
+            <p className="mt-1 text-[24px] font-semibold tabular-nums leading-none">{mine.writings}</p>
+          </CardBody>
+        </Card>
+      </div>
+
+      <div className="mt-3 grid gap-2 sm:grid-cols-3">
+        <button onClick={() => onGo?.('words')} className="rounded-2xl border border-line bg-surface px-3 py-2.5 text-[12.5px] font-semibold transition hover:border-primary/40">
+          My Vocabulary
+        </button>
+        <button onClick={() => onGo?.('study')} className="rounded-2xl border border-line bg-surface px-3 py-2.5 text-[12.5px] font-semibold transition hover:border-primary/40">
+          Practice your way
+        </button>
+        <button onClick={() => onGo?.('progress')} className="rounded-2xl border border-line bg-surface px-3 py-2.5 text-[12.5px] font-semibold transition hover:border-primary/40">
+          Progress
+        </button>
       </div>
 
       <Card className="mt-4">

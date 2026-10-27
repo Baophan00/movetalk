@@ -16,7 +16,7 @@ function iso(d: Date) {
 }
 
 /** What the learner can see about themselves: four skills, the last eight weeks, nothing invented. */
-export function Progress() {
+export function Progress({ onGo }: { onGo?: (route: 'words' | 'study') => void }) {
   const stats = useMemo(() => SKILLS.map((s) => ({ ...s, ...skillStats(s.kind) })), [])
   const days = useMemo(readDays, [])
   const run = streak()
@@ -52,7 +52,9 @@ export function Progress() {
       <div className="mt-4 grid grid-cols-3 gap-2.5">
         <Stat icon={<Flame className="h-4 w-4" />} value={run} label={run === 1 ? 'day in a row' : 'days in a row'} />
         <Stat icon={<RotateCcw className="h-4 w-4" />} value={misses} label="to redo" />
-        <Stat icon={<Layers className="h-4 w-4" />} value={due} label="words due" />
+        <button onClick={() => onGo?.('words')} className="text-left">
+          <Stat icon={<Layers className="h-4 w-4" />} value={due} label="words due" />
+        </button>
       </div>
 
       <Card className="mt-4">

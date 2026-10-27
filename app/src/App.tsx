@@ -15,6 +15,7 @@ import { Profile as ProfileScreen } from './screens/Profile'
 import { Today } from './screens/Today'
 import { Study } from './screens/Study'
 import { Progress } from './screens/Progress'
+import { Vocabulary } from './screens/Vocabulary'
 import { TeacherOverview, TeacherSchedule, TeacherStudents } from './screens/Teacher'
 import { TeacherAssignments } from './screens/TeacherAssignments'
 import { Button } from './components/ui/button'
@@ -163,6 +164,7 @@ export default function App() {
     today: 'Today',
     study: 'Practice your way',
     progress: 'Progress',
+    words: 'My Vocabulary',
     library: 'Review',
     practice: `Lesson ${practiceN} · Practice`,
     profile: 'Profile',
@@ -181,7 +183,7 @@ export default function App() {
         open={menu}
         onClose={() => setMenu(false)}
         user={{ name: profile.name, email: profile.email }}
-        onSignOut={doSignOut}
+        onSignOut={signOut}
         onSwitchRole={switchView}
         canSwitch={profile.role === 'teacher'}
         done={A1.filter((l) => partsSeen(l.n).length > 0).length}
@@ -193,7 +195,7 @@ export default function App() {
           crumb={route === 'lesson' ? 'Level A1' : TEACHER_ROUTES.includes(route) ? 'Teacher' : undefined}
           onMenu={() => setMenu(true)}
           right={
-            !TEACHER_ROUTES.includes(route) && route !== 'lesson' && route !== 'profile' && route !== 'today' && route !== 'study' && route !== 'progress' && (
+            !TEACHER_ROUTES.includes(route) && route !== 'lesson' && route !== 'profile' && route !== 'today' && route !== 'study' && route !== 'progress' && route !== 'words' && (
               <Button variant="soft" size="sm" className="hidden sm:inline-flex" onClick={() => openLesson(lessonN)}>
                 Continue
               </Button>
@@ -215,7 +217,8 @@ export default function App() {
             />
           )}
           {route === 'study' && <Study />}
-          {route === 'progress' && <Progress />}
+          {route === 'progress' && <Progress onGo={(r) => go(r)} />}
+          {route === 'words' && <Vocabulary />}
           {route === 'dashboard' && (
             <Dashboard name={profile.name} onOpenLesson={openPractice} onHomework={() => go('homework')} onLessons={() => go('lessons')} />
           )}
@@ -231,7 +234,7 @@ export default function App() {
           {route === 'library' && <Review initialLesson={quizLesson ?? undefined} autoStart={autoReview} />}
           {route === 'practice' && <Practice lessonN={practiceN} onBack={() => go('lessons')} initialTab={practiceTab} />}
           {route === 'profile' && (
-            <ProfileScreen name={profile.name} email={profile.email} role={profile.role} onSignOut={doSignOut} />
+            <ProfileScreen name={profile.name} email={profile.email} role={profile.role} onSignOut={doSignOut} onGo={(r) => go(r)} />
           )}
           {route === 't-overview' && <TeacherOverview onOpenLesson={openLesson} name={profile.name} onGo={go} />}
           {route === 't-schedule' && <TeacherSchedule onOpenLesson={openLesson} />}

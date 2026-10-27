@@ -7,7 +7,7 @@ import { partsSeen } from '../lib/progress'
 import { dueCards, doneToday, mistakeCount, pullStudy, streak, weakSections } from '../lib/study'
 import { myAssignments } from '../lib/assignments'
 
-type Go = (route: 'lesson' | 'practice' | 'library' | 'homework', lessonN?: number) => void
+type Go = (r: 'lesson' | 'practice' | 'library' | 'homework' | 'words', n?: number) => void
 
 /** One screen, one decision: what to do in the next ten minutes. */
 export function Today({ name, onGo }: { name: string; onGo: Go }) {
@@ -94,7 +94,7 @@ export function Today({ name, onGo }: { name: string; onGo: Go }) {
           label={view.due ? `${view.due} word${view.due === 1 ? '' : 's'} due today` : 'No words due today'}
           hint={view.due ? 'Two minutes, spaced repetition' : 'Tap any word while reading to keep it'}
           disabled={!view.due}
-          onClick={() => onGo('practice', view.lesson.n)}
+          onClick={() => onGo('words')}
         />
         <Row
           icon={<CalendarDays className="h-4 w-4" />}
