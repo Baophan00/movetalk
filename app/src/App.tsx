@@ -17,6 +17,7 @@ import { Study } from './screens/Study'
 import { Progress } from './screens/Progress'
 import { Vocabulary } from './screens/Vocabulary'
 import { Mistakes } from './screens/Mistakes'
+import { TeacherWritings } from './screens/TeacherWritings'
 import { flushLocal } from './lib/writings'
 import { TeacherOverview, TeacherSchedule, TeacherStudents } from './screens/Teacher'
 import { TeacherAssignments } from './screens/TeacherAssignments'
@@ -30,7 +31,7 @@ import { pullUnlocks } from './lib/unlockSync'
 import { supabase } from './lib/supabase'
 import { currentSession, loadProfile, signIn, signOut, signUp, type Profile } from './lib/auth'
 
-const TEACHER_ROUTES: Route[] = ['t-overview', 't-schedule', 't-students', 't-assignments']
+const TEACHER_ROUTES: Route[] = ['t-overview', 't-schedule', 't-students', 't-assignments', 't-writing']
 const FIRST_TEACHER: Route = 't-overview'
 
 /** UX gate only. The authorization is the profiles table plus RLS on the server. */
@@ -195,6 +196,7 @@ export default function App() {
     't-schedule': 'Schedule',
     't-students': 'Students',
     't-assignments': 'Assignments',
+    't-writing': 'Writing',
   }
 
   return (
@@ -279,6 +281,7 @@ export default function App() {
           {route === 't-schedule' && <TeacherSchedule onOpenLesson={openLesson} />}
           {route === 't-students' && <TeacherStudents onOpenLesson={openLesson} />}
           {route === 't-assignments' && <TeacherAssignments onOpenLesson={openLesson} />}
+          {route === 't-writing' && <TeacherWritings />}
         </main>
       </div>
       {view === 'student' && <MobileTabs route={route} onNav={go} />}

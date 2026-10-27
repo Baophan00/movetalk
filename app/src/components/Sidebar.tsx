@@ -1,7 +1,7 @@
 import { motion } from 'motion/react'
 import {
   CalendarDays, ClipboardList, Compass, GraduationCap, Home,
-  Library, LogOut, Sparkles, TrendingUp, UserRound, Users, X,
+  Library, LogOut, PenLine, Sparkles, TrendingUp, UserRound, Users, X,
 } from 'lucide-react'
 import { cn } from '../lib/utils'
 import { Ring } from './ui/progress'
@@ -24,6 +24,7 @@ export type Route =
   | 't-schedule'
   | 't-students'
   | 't-assignments'
+  | 't-writing'
 
 export type Role = 'student' | 'teacher'
 
@@ -42,6 +43,7 @@ const TEACHER_NAV: NavItem[] = [
   { key: 't-schedule', label: 'Schedule', icon: CalendarDays },
   { key: 't-students', label: 'Students', icon: Users },
   { key: 't-assignments', label: 'Assignments', icon: ClipboardList },
+  { key: 't-writing', label: 'Writing', icon: PenLine },
 ]
 
 type Props = {
