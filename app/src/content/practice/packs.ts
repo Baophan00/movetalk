@@ -351,6 +351,336 @@ export const PACKS: Pack[] = [
       { vi: 'Khách hàng thích thời gian giao hàng ngắn hơn.', en: 'Customers prefer the shorter delivery times.' },
     ],
   },
+  {
+    id: 'a2-train',
+    level: 'A2',
+    title: 'At the train station',
+    vi: 'Ở ga tàu',
+    lines: [
+      'Two tickets to Da Nang, please.',
+      'Do you want a window seat?',
+      'The train leaves at half past seven.',
+      'How long does the journey take?',
+      'About four hours, with one stop.',
+      'You need to change at Hue.',
+    ],
+    reading: {
+      title: 'Travel notice',
+      text:
+        'The morning train to Da Nang leaves at half past seven from platform three. The journey takes about four hours and there is one stop at Hue, where passengers must change trains. Tickets cost fifteen dollars and a window seat costs two dollars more. Please arrive fifteen minutes before departure. Food and drinks are sold on the train, but hot meals are only available in the first carriage.',
+      glossary: {
+        platform: 'sân ga',
+        journey: 'chuyến đi',
+        passengers: 'hành khách',
+        departure: 'giờ khởi hành',
+        carriage: 'toa tàu',
+        available: 'có sẵn',
+        change: 'đổi (tàu)',
+        seat: 'chỗ ngồi',
+      },
+      questions: [
+        {
+          q: 'What time does the train leave?',
+          options: ['Seven o’clock', 'Half past seven', 'Half past eight', 'Fifteen minutes later'],
+          answer: 'Half past seven',
+        },
+        {
+          q: 'Where must passengers change trains?',
+          options: ['At Da Nang', 'At Hue', 'At platform three', 'Nowhere'],
+          answer: 'At Hue',
+        },
+        {
+          q: 'Where can you buy a hot meal?',
+          options: ['At the station', 'In the first carriage', 'In every carriage', 'Nowhere on the train'],
+          answer: 'In the first carriage',
+        },
+      ],
+    },
+    build: [
+      { en: 'I would like two tickets to Da Nang.', vi: 'Tôi muốn hai vé đi Đà Nẵng.' },
+      { en: 'The train leaves at half past seven.', vi: 'Tàu khởi hành lúc 7 giờ 30.' },
+      { en: 'How long does the journey take?', vi: 'Chuyến đi mất bao lâu?' },
+    ],
+    translate: [
+      { vi: 'Tôi muốn mua hai vé đi Đà Nẵng.', en: 'I would like two tickets to Da Nang.' },
+      { vi: 'Tôi phải đổi tàu ở đâu?', en: 'Where do I have to change trains?' },
+    ],
+  },
+  {
+    id: 'a2-restaurant',
+    level: 'A2',
+    title: 'Ordering at a restaurant',
+    vi: 'Gọi món ở nhà hàng',
+    lines: [
+      'Could we see the menu, please?',
+      'I would like the chicken soup.',
+      'Does it come with rice?',
+      'Would you like something to drink?',
+      'Just water, thank you.',
+      'Could we have the bill, please?',
+    ],
+    reading: {
+      title: 'Tonight’s menu',
+      text:
+        'The restaurant opens at six in the evening and closes at eleven. Today’s soup is chicken with rice, and the fish is served with potatoes and salad. A small bottle of water costs one dollar. Tea and coffee are free after eight. We do not take cards under ten dollars, so please pay in cash. The kitchen closes at ten thirty, but drinks are served until closing time.',
+      glossary: {
+        menu: 'thực đơn',
+        served: 'được phục vụ',
+        salad: 'rau trộn',
+        free: 'miễn phí',
+        cash: 'tiền mặt',
+        kitchen: 'nhà bếp',
+        bill: 'hoá đơn',
+        order: 'gọi món',
+      },
+      questions: [
+        {
+          q: 'What comes with the fish?',
+          options: ['Rice and soup', 'Potatoes and salad', 'Bread and tea', 'Nothing'],
+          answer: 'Potatoes and salad',
+        },
+        {
+          q: 'When is tea free?',
+          options: ['All evening', 'Before six', 'After eight', 'Never'],
+          answer: 'After eight',
+        },
+        {
+          q: 'How should you pay for a small order?',
+          options: ['By card', 'In cash', 'By phone', 'With a coupon'],
+          answer: 'In cash',
+        },
+      ],
+    },
+    build: [
+      { en: 'Could I have the menu, please?', vi: 'Cho tôi xem thực đơn được không?' },
+      { en: 'I would like the chicken soup.', vi: 'Tôi muốn món súp gà.' },
+      { en: 'Could we have the bill, please?', vi: 'Cho chúng tôi hoá đơn được không?' },
+    ],
+    translate: [
+      { vi: 'Tôi muốn thanh toán.', en: 'I would like to pay.' },
+      { vi: 'Món này có kèm cơm không?', en: 'Does it come with rice?' },
+    ],
+  },
+  {
+    id: 'a2-weekend',
+    level: 'A2',
+    title: 'My last weekend',
+    vi: 'Cuối tuần trước của tôi',
+    lines: [
+      'What did you do at the weekend?',
+      'I went to the beach with my sister.',
+      'We swam and ate seafood.',
+      'Did you take any photos?',
+      'Yes, but my phone got wet.',
+      'That sounds like a good day anyway.',
+    ],
+    reading: {
+      title: 'A message about Saturday',
+      text:
+        'On Saturday my sister and I went to the beach near Vung Tau. We left at six in the morning and arrived two hours later. The water was warm, so we swam for a long time. In the afternoon we ate seafood at a small restaurant and it was cheap. I took a lot of photos, but my phone fell in the water and stopped working. We came home late but very happy.',
+      glossary: {
+        beach: 'bãi biển',
+        arrived: 'đến nơi',
+        swam: 'đã bơi',
+        cheap: 'rẻ',
+        photos: 'ảnh',
+        stopped: 'ngừng hoạt động',
+        late: 'muộn',
+        happy: 'vui',
+      },
+      questions: [
+        {
+          q: 'When did they leave?',
+          options: ['At six in the morning', 'At two in the afternoon', 'At six in the evening', 'At midnight'],
+          answer: 'At six in the morning',
+        },
+        {
+          q: 'What happened to the phone?',
+          options: ['It was stolen', 'It fell in the water', 'It ran out of battery', 'It was left at home'],
+          answer: 'It fell in the water',
+        },
+        {
+          q: 'How was the meal?',
+          options: ['Expensive', 'Cheap', 'Cold', 'Late'],
+          answer: 'Cheap',
+        },
+      ],
+    },
+    build: [
+      { en: 'I went to the beach with my sister.', vi: 'Tôi đã đi biển với chị gái.' },
+      { en: 'We swam and ate seafood.', vi: 'Chúng tôi bơi và ăn hải sản.' },
+      { en: 'Did you take any photos?', vi: 'Bạn có chụp ảnh nào không?' },
+    ],
+    translate: [
+      { vi: 'Cuối tuần trước bạn đã làm gì?', en: 'What did you do at the weekend?' },
+      { vi: 'Tôi đã về nhà muộn.', en: 'I came home late.' },
+    ],
+  },
+  {
+    id: 'a2-plans',
+    level: 'A2',
+    title: 'Plans for next week',
+    vi: 'Kế hoạch tuần sau',
+    lines: [
+      'What are you going to do next week?',
+      'I am going to start a new English class.',
+      'Are you going to study every evening?',
+      'I am going to try, but I work late.',
+      'We could practise together on Saturday.',
+      'That is a good idea.',
+    ],
+    reading: {
+      title: 'Mai’s plan',
+      text:
+        'Mai is going to start a new English class on Monday. The class is on Tuesday and Thursday evenings, from seven to nine. She is going to study for thirty minutes every morning before work. On Saturday she is going to practise speaking with a friend in a coffee shop. She is not going to take a holiday this year, because she wants to save money for a trip to Japan.',
+      glossary: {
+        plan: 'kế hoạch',
+        practise: 'luyện tập',
+        save: 'tiết kiệm',
+        trip: 'chuyến đi',
+        holiday: 'kỳ nghỉ',
+        evenings: 'các buổi tối',
+        together: 'cùng nhau',
+        start: 'bắt đầu',
+      },
+      questions: [
+        {
+          q: 'When is Mai’s class?',
+          options: ['Monday morning', 'Tuesday and Thursday evenings', 'Every morning', 'Saturday afternoon'],
+          answer: 'Tuesday and Thursday evenings',
+        },
+        {
+          q: 'What is she going to do on Saturday?',
+          options: ['Work late', 'Practise speaking with a friend', 'Take a holiday', 'Study grammar alone'],
+          answer: 'Practise speaking with a friend',
+        },
+        {
+          q: 'Why is she not taking a holiday?',
+          options: ['She has no time', 'She wants to save money', 'Her class is expensive', 'She dislikes travel'],
+          answer: 'She wants to save money',
+        },
+      ],
+    },
+    build: [
+      { en: 'I am going to start a new class.', vi: 'Tôi định bắt đầu một lớp mới.' },
+      { en: 'We could practise together on Saturday.', vi: 'Chúng ta có thể luyện cùng nhau vào thứ Bảy.' },
+      { en: 'What are you going to do next week?', vi: 'Tuần sau bạn định làm gì?' },
+    ],
+    translate: [
+      { vi: 'Tôi định học tiếng Anh mỗi tối.', en: 'I am going to study English every evening.' },
+      { vi: 'Chủ nhật tôi sẽ không đi làm.', en: 'I am not going to work on Sunday.' },
+    ],
+  },
+  {
+    id: 'a2-clothes',
+    level: 'A2',
+    title: 'Shopping for clothes',
+    vi: 'Mua quần áo',
+    lines: [
+      'Can I try this jacket on?',
+      'What size are you looking for?',
+      'Do you have it in a smaller size?',
+      'It is a bit too long.',
+      'We have a blue one in medium.',
+      'How much is it?',
+    ],
+    reading: {
+      title: 'Shop information',
+      text:
+        'You can try clothes on in the rooms at the back of the shop. If the size is wrong, please ask a member of staff and we will bring another one. Clothes can be returned within fourteen days if you keep the receipt. Sale items cannot be returned. We accept cards and cash. The shop is open from nine to nine every day except Sunday, when we close at six.',
+      glossary: {
+        size: 'cỡ, kích cỡ',
+        return: 'trả lại',
+        receipt: 'hoá đơn',
+        sale: 'giảm giá',
+        accept: 'chấp nhận',
+        staff: 'nhân viên',
+        except: 'trừ',
+        medium: 'cỡ vừa',
+      },
+      questions: [
+        {
+          q: 'Where can you try clothes on?',
+          options: ['At the front door', 'In the rooms at the back', 'At the cash desk', 'Online only'],
+          answer: 'In the rooms at the back',
+        },
+        {
+          q: 'How long do you have to return something?',
+          options: ['Seven days', 'Fourteen days', 'One month', 'No returns'],
+          answer: 'Fourteen days',
+        },
+        {
+          q: 'What time does the shop close on Sunday?',
+          options: ['At six', 'At nine', 'At noon', 'It stays open'],
+          answer: 'At six',
+        },
+      ],
+    },
+    build: [
+      { en: 'Can I try this jacket on?', vi: 'Tôi có thể thử áo khoác này không?' },
+      { en: 'Do you have it in a smaller size?', vi: 'Có cỡ nhỏ hơn không?' },
+      { en: 'How much is this shirt?', vi: 'Cái áo sơ mi này giá bao nhiêu?' },
+    ],
+    translate: [
+      { vi: 'Cái này hơi dài.', en: 'This is a bit too long.' },
+      { vi: 'Tôi muốn trả lại cái áo này.', en: 'I would like to return this shirt.' },
+    ],
+  },
+  {
+    id: 'a2-appointment',
+    level: 'A2',
+    title: 'Booking a doctor’s appointment',
+    vi: 'Đặt lịch khám',
+    lines: [
+      'I would like to book an appointment.',
+      'Are you free on Thursday morning?',
+      'I have a pain in my back.',
+      'Can you come at ten thirty?',
+      'I will be there at ten fifteen.',
+      'Please bring your insurance card.',
+    ],
+    reading: {
+      title: 'Clinic information',
+      text:
+        'The clinic is open from eight in the morning until six in the evening, Monday to Friday. Appointments are free, but please arrive ten minutes early. Bring your insurance card and a list of your medicines. If you cannot come, call us at least one day before, because other patients are waiting. For emergencies, go to the hospital on the next street, which is open all night.',
+      glossary: {
+        appointment: 'cuộc hẹn khám',
+        clinic: 'phòng khám',
+        insurance: 'bảo hiểm',
+        medicines: 'thuốc',
+        emergencies: 'trường hợp khẩn cấp',
+        patients: 'bệnh nhân',
+        early: 'sớm',
+        hospital: 'bệnh viện',
+      },
+      questions: [
+        {
+          q: 'When does the clinic close?',
+          options: ['At six in the morning', 'At six in the evening', 'At eight', 'It never closes'],
+          answer: 'At six in the evening',
+        },
+        {
+          q: 'What should you bring?',
+          options: ['Money for the appointment', 'Your insurance card', 'A friend', 'Food'],
+          answer: 'Your insurance card',
+        },
+        {
+          q: 'What should you do for an emergency?',
+          options: ['Wait until Monday', 'Call the clinic at six', 'Go to the hospital nearby', 'Book online'],
+          answer: 'Go to the hospital nearby',
+        },
+      ],
+    },
+    build: [
+      { en: 'I would like to book an appointment.', vi: 'Tôi muốn đặt lịch khám.' },
+      { en: 'I have a pain in my back.', vi: 'Tôi bị đau lưng.' },
+      { en: 'Are you free on Thursday morning?', vi: 'Thứ Năm buổi sáng bạn có rảnh không?' },
+    ],
+    translate: [
+      { vi: 'Tôi muốn đổi lịch hẹn.', en: 'I would like to change my appointment.' },
+      { vi: 'Tôi sẽ đến lúc mười giờ mười lăm.', en: 'I will be there at ten fifteen.' },
+    ],
+  },
 ]
 
 export const LEVELS: Level[] = ['A1', 'A2', 'B1', 'B2']

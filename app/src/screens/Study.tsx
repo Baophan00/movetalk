@@ -155,28 +155,11 @@ export function Study() {
         ))}
       </div>
 
-      <div className="mt-3 grid gap-3 sm:grid-cols-2">
-        {ROOMS.map((r) => {
-          const Icon = r.icon
-          return (
-            <button
-              key={r.key}
-              onClick={() => setRoom(r.key)}
-              className="group relative overflow-hidden rounded-3xl border border-line bg-surface p-4 text-left shadow-card transition-all active:scale-[.99] hover:-translate-y-0.5 hover:shadow-lift"
-            >
-              <span className={cn('absolute -right-8 -top-10 h-28 w-28 rounded-full bg-gradient-to-br opacity-20 blur-xl transition-opacity group-hover:opacity-35', r.from)} />
-              <span className={cn('relative grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br text-white shadow-card', r.from)}>
-                <Icon className="h-5 w-5" />
-              </span>
-              <p className="relative mt-3 text-[16px] font-semibold">{r.title}</p>
-              <p className="relative text-[12px] text-muted">{r.vi} · {r.hint}</p>
-              <span className="relative mt-3 inline-flex items-center gap-1 text-[12px] font-semibold text-primary">
-                Start <ArrowRight className="h-3.5 w-3.5" />
-              </span>
-            </button>
-          )
-        })}
-      </div>
+      {level !== 'A1' && level !== 'A2' && (
+        <p className="mt-2 rounded-xl bg-warn/10 px-3 py-2 text-[11.5px] font-medium text-warn">
+          Preview: two topics only. A1 and A2 are the levels being finished first.
+        </p>
+      )}
 
       <Card className="mt-4">
         <CardBody className="p-4">
@@ -202,22 +185,22 @@ export function Study() {
           ) : (
             <>
               <p className="text-[13px] font-semibold">Which topic</p>
-              <p className="mt-0.5 text-[11.5px] text-muted">{packsFor(level).length} extra topics at {level}.</p>
-              <div className="mt-2.5 grid gap-2">
+              <p className="mt-0.5 text-[11.5px] text-muted">
+                {packsFor(level).length} topics at {level}
+                {level === 'A2' ? ' · every topic has all four skills' : ''}
+              </p>
+              <div className="no-scrollbar -mx-1 mt-2.5 flex gap-1.5 overflow-x-auto px-1 pb-1">
                 {packsFor(level).map((p) => (
                   <button
                     key={p.id}
                     onClick={() => setPackId(p.id)}
                     className={cn(
-                      'flex items-center justify-between rounded-xl border px-3 py-2 text-left transition',
-                      p.id === packId ? 'border-primary/40 bg-primary-soft' : 'border-line bg-surface hover:border-primary/30',
+                      'shrink-0 rounded-xl border px-3 py-2 text-left transition',
+                      p.id === packId ? 'border-transparent bg-primary text-white shadow-card' : 'border-line bg-surface text-muted hover:border-primary/30',
                     )}
                   >
-                    <span className="min-w-0">
-                      <span className="block truncate text-[12.5px] font-semibold">{p.title}</span>
-                      <span className="block truncate text-[11px] text-muted">{p.vi}</span>
-                    </span>
-                    <ArrowRight className="h-3.5 w-3.5 shrink-0 text-muted" />
+                    <span className="block text-[12px] font-semibold">{p.vi}</span>
+                    <span className={cn('block text-[10.5px]', p.id === packId ? 'text-white/75' : 'text-muted')}>{p.title}</span>
                   </button>
                 ))}
               </div>
@@ -226,6 +209,29 @@ export function Study() {
           <p className="mt-3 rounded-xl bg-bg/70 px-3 py-2 text-[11.5px] font-medium text-muted">Đang chọn: {source.label}</p>
         </CardBody>
       </Card>
+      <div className="mt-3 grid gap-3 sm:grid-cols-2">
+        {ROOMS.map((r) => {
+          const Icon = r.icon
+          return (
+            <button
+              key={r.key}
+              onClick={() => setRoom(r.key)}
+              className="group relative overflow-hidden rounded-3xl border border-line bg-surface p-4 text-left shadow-card transition-all active:scale-[.99] hover:-translate-y-0.5 hover:shadow-lift"
+            >
+              <span className={cn('absolute -right-8 -top-10 h-28 w-28 rounded-full bg-gradient-to-br opacity-20 blur-xl transition-opacity group-hover:opacity-35', r.from)} />
+              <span className={cn('relative grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br text-white shadow-card', r.from)}>
+                <Icon className="h-5 w-5" />
+              </span>
+              <p className="relative mt-3 text-[16px] font-semibold">{r.title}</p>
+              <p className="relative text-[12px] text-muted">{r.vi} · {r.hint}</p>
+              <span className="relative mt-3 inline-flex items-center gap-1 text-[12px] font-semibold text-primary">
+                Start <ArrowRight className="h-3.5 w-3.5" />
+              </span>
+            </button>
+          )
+        })}
+      </div>
+
     </div>
   )
 }
