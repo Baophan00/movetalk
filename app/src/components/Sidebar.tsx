@@ -1,7 +1,7 @@
 import { motion } from 'motion/react'
 import {
-  BookOpen, CalendarDays, ClipboardList, Compass, GraduationCap, Home, Layers,
-  Library, LogOut, Sparkles, UserRound, Users, X,
+  CalendarDays, ClipboardList, Compass, GraduationCap, Home,
+  Library, LogOut, Sparkles, TrendingUp, UserRound, Users, X,
 } from 'lucide-react'
 import { cn } from '../lib/utils'
 import { Ring } from './ui/progress'
@@ -9,6 +9,8 @@ import { Ring } from './ui/progress'
 export type Route =
   | 'landing'
   | 'today'
+  | 'study'
+  | 'progress'
   | 'dashboard'
   | 'lessons'
   | 'lesson'
@@ -27,10 +29,9 @@ type NavItem = { key: Route; label: string; icon: typeof Home }
 
 const STUDENT_NAV: NavItem[] = [
   { key: 'today', label: 'Today', icon: Home },
-  { key: 'dashboard', label: 'Overview', icon: Sparkles },
-  { key: 'lessons', label: 'Lessons', icon: Compass },
-  { key: 'library', label: 'Review', icon: Layers },
-  { key: 'homework', label: 'Homework', icon: BookOpen },
+  { key: 'lessons', label: 'Course', icon: Compass },
+  { key: 'study', label: 'Practice your way', icon: Sparkles },
+  { key: 'progress', label: 'Progress', icon: TrendingUp },
   { key: 'profile', label: 'Profile', icon: UserRound },
 ]
 

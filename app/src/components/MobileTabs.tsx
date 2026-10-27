@@ -1,12 +1,12 @@
-import { BookOpen, Compass, Home, Layers, UserRound } from 'lucide-react'
+import { Compass, Home, Sparkles, TrendingUp, UserRound } from 'lucide-react'
 import { cn } from '../lib/utils'
 import type { Route } from './Sidebar'
 
 const TABS: { key: Route; label: string; icon: typeof Home }[] = [
   { key: 'today', label: 'Today', icon: Home },
-  { key: 'lessons', label: 'Lessons', icon: Compass },
-  { key: 'library', label: 'Review', icon: Layers },
-  { key: 'homework', label: 'Homework', icon: BookOpen },
+  { key: 'lessons', label: 'Course', icon: Compass },
+  { key: 'study', label: 'Practice', icon: Sparkles },
+  { key: 'progress', label: 'Progress', icon: TrendingUp },
   { key: 'profile', label: 'Profile', icon: UserRound },
 ]
 

@@ -43,6 +43,41 @@ export function speak(text: string, onDone?: () => void) {
   return true
 }
 
+/** Play a line at a chosen speed (0.7 = slow). Same one-voice rule as speak(). */
+export function playLine(text: string, rate = 1): Promise<void> {
+  const src = clipFor(text)
+  if (current) {
+    current.pause()
+    current = null
+  }
+  if (!src) {
+    if (!('speechSynthesis' in window)) return Promise.resolve()
+    window.speechSynthesis.cancel()
+    const utter = new SpeechSynthesisUtterance(text)
+    utter.lang = 'en-US'
+    utter.rate = Math.max(0.5, rate * 0.95)
+    return new Promise((resolve) => {
+      utter.onend = () => resolve()
+      utter.onerror = () => resolve()
+      window.speechSynthesis.speak(utter)
+    })
+  }
+  const el = new Audio(src)
+  el.playbackRate = rate
+  current = el
+  return new Promise((resolve) => {
+    el.onended = () => {
+      current = null
+      resolve()
+    }
+    el.onerror = () => {
+      current = null
+      resolve()
+    }
+    void el.play().catch(() => resolve())
+  })
+}
+
 export function hasAudio(text: string) {
   return Boolean(table[text])
 }

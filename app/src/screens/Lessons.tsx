@@ -21,7 +21,7 @@ function goalOf(l: LessonFile): string {
   return `${l.parts.vocab.length} words to use out loud`
 }
 
-export function Lessons({ onPractice }: { onPractice: (n: number) => void }) {
+export function Lessons({ onPractice, onHomework, onReview }: { onPractice: (n: number) => void; onHomework?: () => void; onReview?: () => void }) {
   const visibleUpTo = Math.max(1, furthestSeen())
 
   return (
@@ -34,7 +34,19 @@ export function Lessons({ onPractice }: { onPractice: (n: number) => void }) {
             A short recap of each lesson you have had, and the practice your teacher opens for it. Nothing to read end to end.
           </p>
         </div>
-        <Badge tone="neutral">{A1.filter((l) => isPracticeOpen(l.n)).length} of {A1.length} practice open</Badge>
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge tone="neutral">{A1.filter((l) => isPracticeOpen(l.n)).length} of {A1.length} practice open</Badge>
+          {onReview && (
+            <button onClick={onReview} className="rounded-xl border border-line bg-surface px-3 py-1.5 text-[12px] font-semibold transition hover:border-primary/40">
+              Redo mistakes
+            </button>
+          )}
+          {onHomework && (
+            <button onClick={onHomework} className="rounded-xl border border-line bg-surface px-3 py-1.5 text-[12px] font-semibold transition hover:border-primary/40">
+              Homework
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="mt-5 space-y-3">

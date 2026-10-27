@@ -13,6 +13,8 @@ import { Review } from './screens/Review'
 import { Practice } from './screens/Practice'
 import { Profile as ProfileScreen } from './screens/Profile'
 import { Today } from './screens/Today'
+import { Study } from './screens/Study'
+import { Progress } from './screens/Progress'
 import { TeacherOverview, TeacherSchedule, TeacherStudents } from './screens/Teacher'
 import { TeacherAssignments } from './screens/TeacherAssignments'
 import { Button } from './components/ui/button'
@@ -159,6 +161,8 @@ export default function App() {
     lesson: `Lesson ${lessonN}`,
     homework: 'Homework',
     today: 'Today',
+    study: 'Practice your way',
+    progress: 'Progress',
     library: 'Review',
     practice: `Lesson ${practiceN} · Practice`,
     profile: 'Profile',
@@ -189,7 +193,7 @@ export default function App() {
           crumb={route === 'lesson' ? 'Level A1' : TEACHER_ROUTES.includes(route) ? 'Teacher' : undefined}
           onMenu={() => setMenu(true)}
           right={
-            !TEACHER_ROUTES.includes(route) && route !== 'lesson' && route !== 'profile' && route !== 'today' && (
+            !TEACHER_ROUTES.includes(route) && route !== 'lesson' && route !== 'profile' && route !== 'today' && route !== 'study' && route !== 'progress' && (
               <Button variant="soft" size="sm" className="hidden sm:inline-flex" onClick={() => openLesson(lessonN)}>
                 Continue
               </Button>
@@ -210,10 +214,12 @@ export default function App() {
               }}
             />
           )}
+          {route === 'study' && <Study />}
+          {route === 'progress' && <Progress />}
           {route === 'dashboard' && (
             <Dashboard name={profile.name} onOpenLesson={openPractice} onHomework={() => go('homework')} onLessons={() => go('lessons')} />
           )}
-          {route === 'lessons' && <Lessons onPractice={openPractice} />}
+          {route === 'lessons' && <Lessons onPractice={openPractice} onReview={() => go('library')} onHomework={() => go('homework')} />}
           {route === 'lesson' && <Lesson lessonN={lessonN} onPickLesson={setLessonN} onBack={() => go('dashboard')} />}
           {route === 'homework' && (
             <Homework
