@@ -9,6 +9,7 @@ import { Lessons } from './screens/Lessons'
 import { Homework } from './screens/Homework'
 import { Review } from './screens/Review'
 import { Practice } from './screens/Practice'
+import { Profile as ProfileScreen } from './screens/Profile'
 import { TeacherOverview, TeacherSchedule, TeacherStudents } from './screens/Teacher'
 import { TeacherAssignments } from './screens/TeacherAssignments'
 import { Button } from './components/ui/button'
@@ -154,6 +155,7 @@ export default function App() {
     homework: 'Homework',
     library: 'Review',
     practice: `Lesson ${practiceN} · Practice`,
+    profile: 'Profile',
     't-overview': 'Overview',
     't-schedule': 'Schedule',
     't-students': 'Students',
@@ -181,7 +183,7 @@ export default function App() {
           crumb={route === 'lesson' ? 'Level A1' : TEACHER_ROUTES.includes(route) ? 'Teacher' : undefined}
           onMenu={() => setMenu(true)}
           right={
-            !TEACHER_ROUTES.includes(route) && route !== 'lesson' && (
+            !TEACHER_ROUTES.includes(route) && route !== 'lesson' && route !== 'profile' && (
               <Button variant="soft" size="sm" className="hidden sm:inline-flex" onClick={() => openLesson(lessonN)}>
                 Continue
               </Button>
@@ -203,6 +205,9 @@ export default function App() {
           )}
           {route === 'library' && <Review initialLesson={quizLesson ?? undefined} autoStart={autoReview} />}
           {route === 'practice' && <Practice lessonN={practiceN} onBack={() => go('lessons')} />}
+          {route === 'profile' && (
+            <ProfileScreen name={profile.name} email={profile.email} role={profile.role} onSignOut={doSignOut} />
+          )}
           {route === 't-overview' && <TeacherOverview onOpenLesson={openLesson} name={profile.name} onGo={go} />}
           {route === 't-schedule' && <TeacherSchedule onOpenLesson={openLesson} />}
           {route === 't-students' && <TeacherStudents onOpenLesson={openLesson} />}

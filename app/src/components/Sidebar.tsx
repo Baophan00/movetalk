@@ -1,7 +1,7 @@
 import { motion } from 'motion/react'
 import {
   BookOpen, CalendarDays, ClipboardList, Compass, GraduationCap, Home, Layers,
-  Library, LogOut, Sparkles, Users, X,
+  Library, LogOut, Sparkles, UserRound, Users, X,
 } from 'lucide-react'
 import { cn } from '../lib/utils'
 import { Ring } from './ui/progress'
@@ -14,6 +14,7 @@ export type Route =
   | 'homework'
   | 'library'
   | 'practice'
+  | 'profile'
   | 't-overview'
   | 't-schedule'
   | 't-students'
@@ -28,6 +29,7 @@ const STUDENT_NAV: NavItem[] = [
   { key: 'lessons', label: 'Lessons', icon: Compass },
   { key: 'library', label: 'Review', icon: Layers },
   { key: 'homework', label: 'Homework', icon: BookOpen },
+  { key: 'profile', label: 'Profile', icon: UserRound },
 ]
 
 const TEACHER_NAV: NavItem[] = [
