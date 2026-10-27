@@ -6,6 +6,7 @@ import { SpeakRoom } from '../components/SpeakRoom'
 import { A1, quizFor, titleOf, type LessonFile } from '../lib/curriculum'
 import { checkEnglish, type Miss } from '../lib/grammar'
 import { compare } from '../lib/speech'
+import { saveWriting } from '../lib/writings'
 import { addCard, recordAttempt } from '../lib/study'
 import { playLine, speak } from '../lib/audio'
 import { LEVELS, PACKS, packsFor, type Level, type Pack, type Question } from '../content/practice/packs'
@@ -671,11 +672,18 @@ function Writing({ source, onBack }: { source: Source; onBack: () => void }) {
                         answer: para.model,
                       })
                       try {
-                        const key = 'mt2_writings'
-                        const rows = JSON.parse(localStorage.getItem(key) ?? '[]') as unknown[]
+                        const rows = JSON.parse(localStorage.getItem('mt2_writings') ?? '[]') as Record<string, unknown>[]
                         rows.push({ at: new Date().toISOString(), level: source.level, label: source.label, text: paraText })
-                        localStorage.setItem(key, JSON.stringify(rows.slice(-40)))
+                        localStorage.setItem('mt2_writings', JSON.stringify(rows.slice(-40)))
                       } catch { /* keep the text on screen even if storage is full */ }
+                      void saveWriting({
+                        level: source.level,
+                        topic: source.label,
+                        prompt: para.prompt,
+                        body: paraText,
+                        words,
+                        issues: failed ? 0 : matches.length,
+                      }).catch(() => undefined)
                       setBusy(false)
                     }}
                     disabled={busy || paraText.trim().length < 10}

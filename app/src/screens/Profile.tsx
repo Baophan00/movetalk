@@ -10,10 +10,12 @@ import { listVoice } from '../lib/voice'
 import { myVoice } from '../lib/voiceSync'
 import { myAssignments, type Assigned } from '../lib/assignments'
 import { dueCards, listCards, readDays, streak } from '../lib/study'
+import { myWritings } from '../lib/writings'
 
 /** The learner's own page: what they have finished, what is waiting, and the way out. */
 export function Profile({ name, email, role, onSignOut, onGo }: { name: string; email: string; role: 'student' | 'teacher'; onSignOut: () => void; onGo?: (r: 'words' | 'study' | 'progress') => void }) {
   const [takes, setTakes] = useState(() => listVoice().length)
+  const [serverWritings, setServerWritings] = useState(0)
   const [waiting, setWaiting] = useState<Assigned[]>([])
 
   useEffect(() => {
@@ -21,6 +23,11 @@ export function Profile({ name, email, role, onSignOut, onGo }: { name: string; 
     void myVoice()
       .then((rows) => {
         if (alive && rows.length) setTakes((n) => Math.max(n, rows.length))
+      })
+      .catch(() => undefined)
+    void myWritings()
+      .then((rows) => {
+        if (alive) setServerWritings(rows.length)
       })
       .catch(() => undefined)
     void myAssignments()
@@ -123,7 +130,7 @@ export function Profile({ name, email, role, onSignOut, onGo }: { name: string; 
         <Card>
           <CardBody className="p-4">
             <p className="text-[11px] font-bold uppercase tracking-[.12em] text-muted">Written</p>
-            <p className="mt-1 text-[24px] font-semibold tabular-nums leading-none">{mine.writings}</p>
+            <p className="mt-1 text-[24px] font-semibold tabular-nums leading-none">{Math.max(mine.writings, serverWritings)}</p>
           </CardBody>
         </Card>
       </div>

@@ -17,6 +17,7 @@ import { Study } from './screens/Study'
 import { Progress } from './screens/Progress'
 import { Vocabulary } from './screens/Vocabulary'
 import { Mistakes } from './screens/Mistakes'
+import { flushLocal } from './lib/writings'
 import { TeacherOverview, TeacherSchedule, TeacherStudents } from './screens/Teacher'
 import { TeacherAssignments } from './screens/TeacherAssignments'
 import { Button } from './components/ui/button'
@@ -89,6 +90,8 @@ export default function App() {
       setProfile(null)
       setBooting(false)
     }, 2500)
+    // Anything written before the table existed goes up once, quietly.
+    void flushLocal().catch(() => undefined)
     currentSession()
       .then(async (session) => {
         if (!alive) return
