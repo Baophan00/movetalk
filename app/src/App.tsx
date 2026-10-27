@@ -16,6 +16,7 @@ import { Today } from './screens/Today'
 import { Study } from './screens/Study'
 import { Progress } from './screens/Progress'
 import { Vocabulary } from './screens/Vocabulary'
+import { Mistakes } from './screens/Mistakes'
 import { TeacherOverview, TeacherSchedule, TeacherStudents } from './screens/Teacher'
 import { TeacherAssignments } from './screens/TeacherAssignments'
 import { Button } from './components/ui/button'
@@ -44,6 +45,8 @@ export default function App() {
   const [lessonN, setLessonN] = useState(1)
   const [quizLesson, setQuizLesson] = useState<number | null>(null)
   const [practiceTab, setPracticeTab] = useState<'quiz' | 'words' | 'build' | 'listen' | 'speak'>('quiz')
+  // Where Practice your way should open when another screen sends the learner there.
+  const [studySeed, setStudySeed] = useState<{ level?: 'A1' | 'A2' | 'B1' | 'B2'; room?: 'listen' | 'read' | 'write' | 'speak'; prompt?: string }>({})
   const [practiceN, setPracticeN] = useState(1)
   const [autoReview, setAutoReview] = useState(0)
   const [menu, setMenu] = useState(false)
@@ -181,6 +184,7 @@ export default function App() {
     study: 'Practice your way',
     progress: 'Progress',
     words: 'My Vocabulary',
+    mistakes: 'To redo',
     library: 'Review',
     practice: `Lesson ${practiceN} · Practice`,
     profile: 'Profile',
@@ -211,7 +215,7 @@ export default function App() {
           crumb={route === 'lesson' ? 'Level A1' : TEACHER_ROUTES.includes(route) ? 'Teacher' : undefined}
           onMenu={() => setMenu(true)}
           right={
-            !TEACHER_ROUTES.includes(route) && route !== 'lesson' && route !== 'profile' && route !== 'today' && route !== 'study' && route !== 'progress' && route !== 'words' && (
+            !TEACHER_ROUTES.includes(route) && route !== 'lesson' && route !== 'profile' && route !== 'today' && route !== 'study' && route !== 'progress' && route !== 'words' && route !== 'mistakes' && (
               <Button variant="soft" size="sm" className="hidden sm:inline-flex" onClick={() => openLesson(lessonN)}>
                 Continue
               </Button>
@@ -232,8 +236,24 @@ export default function App() {
               }}
             />
           )}
-          {route === 'study' && <Study />}
-          {route === 'progress' && <Progress onGo={(r) => go(r)} />}
+          {route === 'study' && <Study seedLevel={studySeed.level} seedRoom={studySeed.room as never} seedPrompt={studySeed.prompt} />}
+          {route === 'mistakes' && (
+            <Mistakes
+              onGo={(room, level, prompt) => {
+                setStudySeed({ room, level: level as never, prompt })
+                go('study')
+              }}
+            />
+          )}
+          {route === 'progress' && (
+            <Progress
+              onWords={() => go('words')}
+              onGo={(room, level) => {
+                setStudySeed({ room, level: level as never })
+                go('study')
+              }}
+            />
+          )}
           {route === 'words' && <Vocabulary />}
           {route === 'dashboard' && (
             <Dashboard name={profile.name} onOpenLesson={openPractice} onHomework={() => go('homework')} onLessons={() => go('lessons')} />

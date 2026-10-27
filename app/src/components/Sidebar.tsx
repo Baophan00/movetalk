@@ -12,6 +12,7 @@ export type Route =
   | 'study'
   | 'progress'
   | 'words'
+  | 'mistakes'
   | 'dashboard'
   | 'lessons'
   | 'lesson'

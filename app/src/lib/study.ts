@@ -13,6 +13,8 @@ export type Attempt = {
   section?: string
   prompt: string
   correct: boolean
+  /** What the right answer was, so a mistake can be shown again later without its lesson. */
+  answer?: string
 }
 
 export type Card = {

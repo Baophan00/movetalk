@@ -7,7 +7,7 @@ import { partsSeen } from '../lib/progress'
 import { dueCards, doneToday, mistakeCount, pullStudy, streak, weakSections } from '../lib/study'
 import { myAssignments } from '../lib/assignments'
 
-type Go = (r: 'lesson' | 'practice' | 'library' | 'homework' | 'words', n?: number) => void
+type Go = (r: 'lesson' | 'practice' | 'library' | 'homework' | 'words' | 'mistakes', n?: number) => void
 
 /** One screen, one decision: what to do in the next ten minutes. */
 export function Today({ name, onGo }: { name: string; onGo: Go }) {
@@ -87,7 +87,7 @@ export function Today({ name, onGo }: { name: string; onGo: Go }) {
           label={view.mistakes ? `${view.mistakes} question${view.mistakes === 1 ? '' : 's'} to redo` : 'No wrong answers waiting'}
           hint={view.weak.length ? view.weak.map((w) => `${w.section} (${w.wrong})`).join(' · ') : 'Answer a quiz and this fills up'}
           disabled={!view.mistakes}
-          onClick={() => onGo('library', view.lesson.n)}
+          onClick={() => onGo('mistakes')}
         />
         <Row
           icon={<Layers className="h-4 w-4" />}

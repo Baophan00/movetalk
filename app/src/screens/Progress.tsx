@@ -1,14 +1,14 @@
 import { useMemo } from 'react'
 import { Flame, Headphones, Layers, Mic, Pencil, BookOpen, RotateCcw } from 'lucide-react'
 import { Card, CardBody } from '../components/ui/card'
-import { dueCards, readDays, skillStats, streak, wrongItems } from '../lib/study'
+import { allAttempts, dueCards, readDays, skillStats, streak, wrongItems } from '../lib/study'
 import { cn } from '../lib/utils'
 
 const SKILLS = [
-  { kind: 'listen' as const, label: 'Listening', vi: 'Nghe', icon: Headphones, bar: 'from-[#6f7cff] to-[#a78bfa]' },
-  { kind: 'speak' as const, label: 'Speaking', vi: 'Nói', icon: Mic, bar: 'from-[#ff8fa3] to-[#ff5d8f]' },
-  { kind: 'read' as const, label: 'Reading', vi: 'Đọc', icon: BookOpen, bar: 'from-[#48c9b0] to-[#22a699]' },
-  { kind: 'write' as const, label: 'Writing', vi: 'Viết', icon: Pencil, bar: 'from-[#ffb56b] to-[#f4772e]' },
+  { kind: 'listen' as const, room: 'listen' as const, label: 'Listening', vi: 'Nghe', icon: Headphones, bar: 'from-[#6f7cff] to-[#a78bfa]' },
+  { kind: 'speak' as const, room: 'speak' as const, label: 'Speaking', vi: 'Nói', icon: Mic, bar: 'from-[#ff8fa3] to-[#ff5d8f]' },
+  { kind: 'read' as const, room: 'read' as const, label: 'Reading', vi: 'Đọc', icon: BookOpen, bar: 'from-[#48c9b0] to-[#22a699]' },
+  { kind: 'write' as const, room: 'write' as const, label: 'Writing', vi: 'Viết', icon: Pencil, bar: 'from-[#ffb56b] to-[#f4772e]' },
 ]
 
 function iso(d: Date) {
@@ -16,8 +16,16 @@ function iso(d: Date) {
 }
 
 /** What the learner can see about themselves: four skills, the last eight weeks, nothing invented. */
-export function Progress({ onGo }: { onGo?: (route: 'words' | 'study') => void }) {
-  const stats = useMemo(() => SKILLS.map((s) => ({ ...s, ...skillStats(s.kind) })), [])
+export function Progress({ onGo, onWords }: { onGo?: (room: 'listen' | 'read' | 'write' | 'speak', level?: string) => void; onWords?: () => void }) {
+  // Which level the learner was last working at, per skill, so "practise" lands where they are.
+  const stats = useMemo(() => {
+    const attempts = allAttempts()
+    return SKILLS.map((s) => {
+      const last = [...attempts].reverse().find((a) => a.kind === s.kind)
+      const level = (last?.section ?? '').match(/\b(A1|A2|B1|B2)\b/)?.[1] ?? 'A1'
+      return { ...s, ...skillStats(s.kind), level }
+    })
+  }, [])
   const days = useMemo(readDays, [])
   const run = streak()
   const misses = wrongItems().length
@@ -52,7 +60,7 @@ export function Progress({ onGo }: { onGo?: (route: 'words' | 'study') => void }
       <div className="mt-4 grid grid-cols-3 gap-2.5">
         <Stat icon={<Flame className="h-4 w-4" />} value={run} label={run === 1 ? 'day in a row' : 'days in a row'} />
         <Stat icon={<RotateCcw className="h-4 w-4" />} value={misses} label="to redo" />
-        <button onClick={() => onGo?.('words')} className="text-left">
+        <button onClick={() => onWords?.()} className="text-left">
           <Stat icon={<Layers className="h-4 w-4" />} value={due} label="words due" />
         </button>
       </div>
@@ -77,6 +85,12 @@ export function Progress({ onGo }: { onGo?: (route: 'words' | 'study') => void }
                   <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-bg">
                     <div className={cn('h-full rounded-full bg-gradient-to-r transition-all', s.bar)} style={{ width: `${empty ? 0 : s.pct}%` }} />
                   </div>
+                  <button
+                    onClick={() => onGo?.(s.room, s.level)}
+                    className="mt-1.5 text-[11.5px] font-semibold text-primary"
+                  >
+                    Practise {s.label.toLowerCase()} {s.level ? `· ${s.level}` : ''}
+                  </button>
                 </div>
               )
             })}

@@ -111,11 +111,17 @@ function packSource(pack: Pack): Source {
 
 /* --------------------------------------------------------------------- hub */
 
-export function Study() {
-  const [level, setLevel] = useState<Level>('A1')
+export function Study({ seedLevel, seedRoom, seedPrompt }: { seedLevel?: Level; seedRoom?: Room; seedPrompt?: string } = {}) {
+  const [level, setLevel] = useState<Level>(seedLevel ?? 'A1')
   const [lessonN, setLessonN] = useState(A1[0]?.n ?? 1)
-  const [packId, setPackId] = useState(PACKS.find((p) => p.level === 'A2')?.id ?? '')
-  const [room, setRoom] = useState<Room>('home')
+  const [packId, setPackId] = useState(() => {
+    const level = seedLevel ?? 'A2'
+    const hit = seedPrompt
+      ? packsFor(level).find((p) => p.reading.questions.some((q) => q.q === seedPrompt) || p.lines.includes(seedPrompt))
+      : undefined
+    return hit?.id ?? PACKS.find((p) => p.level === 'A2')?.id ?? ''
+  })
+  const [room, setRoom] = useState<Room>(seedRoom && seedRoom !== 'home' ? seedRoom : 'home')
 
   const source = useMemo<Source>(() => {
     if (level === 'A1') return a1Source(A1.find((l) => l.n === lessonN) ?? A1[0])
@@ -292,6 +298,7 @@ function Listening({ source, onBack }: { source: Source; onBack: () => void }) {
       section: `Listening ${source.level}`,
       prompt: item.line,
       correct: right,
+      answer: item.line,
     })
   }
 
@@ -403,6 +410,7 @@ function Reading({ source, onBack }: { source: Source; onBack: () => void }) {
       section: `Reading ${source.level}`,
       prompt: q.q,
       correct: opt === q.answer,
+      answer: q.answer,
     })
   }
 
@@ -545,7 +553,7 @@ function Writing({ source, onBack }: { source: Source; onBack: () => void }) {
     if (!task) return
     const ok = tray.join(' ').toLowerCase() === task.answer.toLowerCase()
     setStatus(ok ? 'ok' : 'no')
-    recordAttempt({ kind: 'write', section: `Writing ${source.level}`, prompt: task.answer, correct: ok })
+    recordAttempt({ kind: 'write', section: `Writing ${source.level}`, prompt: task.answer, correct: ok, answer: task.answer })
   }
 
   const checkWrite = async () => {
@@ -555,7 +563,7 @@ function Writing({ source, onBack }: { source: Source; onBack: () => void }) {
     const { matches, failed } = await checkEnglish(written)
     const diff = compare(prompt.en, written)
     setChecked({ exact, misses: matches, failed, missing: diff.missing, cover: diff.pct })
-    recordAttempt({ kind: 'write', section: `Writing ${source.level}`, prompt: prompt.en, correct: exact || (!failed && matches.length === 0) })
+    recordAttempt({ kind: 'write', section: `Writing ${source.level}`, prompt: prompt.vi, correct: exact || (!failed && matches.length === 0), answer: prompt.en })
     setBusy(false)
   }
 
@@ -660,6 +668,7 @@ function Writing({ source, onBack }: { source: Source; onBack: () => void }) {
                         section: `Paragraph ${source.level}`,
                         prompt: para.prompt,
                         correct: !failed && matches.length === 0 && missing.length === 0 && sentences >= 3 && words >= 25,
+                        answer: para.model,
                       })
                       try {
                         const key = 'mt2_writings'
