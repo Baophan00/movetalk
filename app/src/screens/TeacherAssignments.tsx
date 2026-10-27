@@ -7,9 +7,13 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from '../compon
 import { Input } from '../components/ui/input'
 import { A1, partPlan, titleOf } from '../lib/curriculum'
 import { isPracticeOpen, lockLesson, unlockLesson } from '../lib/access'
-import { listVoice, markHeard, removeVoice } from '../lib/voice'
+import { listVoice, removeVoice, setLocalHeard } from '../lib/voice'
+import { allVoice, deleteVoice, setHeard } from '../lib/voiceSync'
+import { pullUnlocks, pushUnlock, removeUnlock } from '../lib/unlockSync'
 import { closeAssignment, createAssignmentFor, listAccounts, teacherAssignments, type Account, type TeacherAssignment } from '../lib/assignments'
 import { cn } from '../lib/utils'
+
+type Take = { id: string; lesson: number; at: number; file: string; heard?: boolean; student?: string }
 
 const DAY = 86400000
 const isoIn = (days: number) => new Date(Date.now() + days * DAY).toISOString().slice(0, 10)
@@ -23,7 +27,7 @@ export function TeacherAssignments({ onOpenLesson }: { onOpenLesson: (n: number)
   const [form, setForm] = useState({ lessonN: 1, due: isoIn(3), title: '', studentIds: [] as string[] })
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
-  const [voices, setVoices] = useState(listVoice)
+  const [voices, setVoices] = useState<Take[]>(listVoice)
   const [unlocked, setUnlocked] = useState<number[]>([])
 
   const refresh = async () => {
@@ -40,6 +44,22 @@ export function TeacherAssignments({ onOpenLesson }: { onOpenLesson: (n: number)
   // Practice access is read after mount: localStorage is not available during the first render pass.
   useEffect(() => {
     setUnlocked(A1.map((l) => l.n).filter((n) => isPracticeOpen(n)))
+  }, [])
+
+  // Takes and unlocks that live on the account arrive after the first paint.
+  useEffect(() => {
+    let alive = true
+    void (async () => {
+      const [server, unlocks] = await Promise.all([allVoice().catch(() => []), pullUnlocks().catch(() => [])])
+      if (!alive) return
+      if (server.length) {
+        setVoices((local) => [...server.map((s) => ({ ...s })), ...local.filter((l) => !server.some((s) => s.id === l.id))])
+      }
+      if (unlocks.length) setUnlocked(A1.map((l) => l.n).filter((n) => isPracticeOpen(n)))
+    })()
+    return () => {
+      alive = false
+    }
   }, [])
 
   const lesson = useMemo(() => A1.find((l) => l.n === form.lessonN) ?? A1[0], [form.lessonN])
@@ -285,7 +305,13 @@ export function TeacherAssignments({ onOpenLesson }: { onOpenLesson: (n: number)
                     variant={on ? 'ghost' : 'outline'}
                     className="h-7 shrink-0 px-2 text-[11px]"
                     onClick={() => {
-                      setUnlocked(on ? lockLesson(l.n) : unlockLesson(l.n))
+                      if (on) {
+                        setUnlocked(lockLesson(l.n))
+                        void removeUnlock(l.n)
+                      } else {
+                        setUnlocked(unlockLesson(l.n))
+                        void pushUnlock(l.n)
+                      }
                     }}
                   >
                     {on ? 'Lock' : 'Unlock'}
@@ -313,16 +339,37 @@ export function TeacherAssignments({ onOpenLesson }: { onOpenLesson: (n: number)
               <li key={v.id} className="rounded-xl bg-bg/60 px-2.5 py-2">
                 <div className="flex items-center justify-between gap-2">
                   <span className="min-w-0 truncate text-[12px] font-medium">
-                    Lesson {v.lesson} · {new Date(v.at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                    Lesson {v.lesson}
+                    {v.student ? ` · ${v.student}` : ''} ·{' '}
+                    {new Date(v.at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
                   </span>
                   <span className="flex shrink-0 items-center gap-1.5">
                     <button
-                      onClick={() => setVoices(markHeard(v.id))}
+                      onClick={() => {
+                        const next = !v.heard
+                        if (v.id.startsWith('v')) {
+                          setVoices(setLocalHeard(v.id, next))
+                        } else {
+                          setVoices((list) => list.map((x) => (x.id === v.id ? { ...x, heard: next } : x)))
+                          void setHeard(v.id, next)
+                        }
+                      }}
                       className={cn('text-[11px] font-semibold', v.heard ? 'text-[#0f8a5f]' : 'text-muted hover:text-ink')}
                     >
                       {v.heard ? 'heard ✓' : 'mark heard'}
                     </button>
-                    <button onClick={() => setVoices(removeVoice(v.id))} className="text-muted hover:text-[#a33a2c]" aria-label="Delete take">
+                    <button
+                      onClick={() => {
+                        if (v.id.startsWith('v')) {
+                          setVoices(removeVoice(v.id))
+                        } else {
+                          setVoices((list) => list.filter((x) => x.id !== v.id))
+                          void deleteVoice(v.id)
+                        }
+                      }}
+                      className="text-muted hover:text-[#a33a2c]"
+                      aria-label="Delete take"
+                    >
                       <X className="h-3.5 w-3.5" />
                     </button>
                   </span>

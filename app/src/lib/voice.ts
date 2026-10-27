@@ -22,6 +22,12 @@ export function addVoice(lesson: number, file: string): Voice[] {
   return next
 }
 
+export function setLocalHeard(id: string, heard: boolean): Voice[] {
+  const next = listVoice().map((v) => (v.id === id ? { ...v, heard } : v))
+  localStorage.setItem(KEY, JSON.stringify(next))
+  return next
+}
+
 export function markHeard(id: string): Voice[] {
   const next = listVoice().map((v) => (v.id === id ? { ...v, heard: !v.heard } : v))
   localStorage.setItem(KEY, JSON.stringify(next))

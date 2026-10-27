@@ -21,6 +21,13 @@ export function unlockLesson(n: number): number[] {
   return next
 }
 
+/** Fold lessons opened on the account into the browser copy, so a new device is not empty. */
+export function mergeUnlocked(list: number[]): number[] {
+  const next = [...new Set([...unlockedLessons(), ...list])].sort((a, b) => a - b)
+  localStorage.setItem(KEY, JSON.stringify(next))
+  return next
+}
+
 export function lockLesson(n: number): number[] {
   const next = unlockedLessons().filter((x) => x !== n)
   localStorage.setItem(KEY, JSON.stringify(next))

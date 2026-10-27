@@ -8,6 +8,7 @@ import { A1, titleOf } from '../lib/curriculum'
 import { buildersFor, listensFor, pairsFor, quizRound, speakingLines } from '../lib/practice'
 import { speak } from '../lib/audio'
 import { addVoice, listVoice, removeVoice } from '../lib/voice'
+import { uploadVoice } from '../lib/voiceSync'
 import { cn } from '../lib/utils'
 
 type Tab = 'quiz' | 'words' | 'build' | 'listen' | 'speak'
@@ -326,6 +327,8 @@ function SpeakLab({ lessonN }: { lessonN: number }) {
   const lines = useMemo(() => speakingLines(lesson, 3), [lesson])
   const [i, setI] = useState(0)
   const [state, setState] = useState<'idle' | 'rec' | 'done'>('idle')
+  const [sent, setSent] = useState<'sending' | 'sent' | 'local' | null>(null)
+  const started = useRef(0)
   const [error, setError] = useState('')
   const [voices, setVoices] = useState(listVoice)
   const rec = useRef<MediaRecorder | null>(null)
@@ -341,7 +344,8 @@ function SpeakLab({ lessonN }: { lessonN: number }) {
       const r = new MediaRecorder(s, { mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '' })
       r.ondataavailable = (e) => e.data.size && chunks.current.push(e.data)
       r.onstop = () => {
-        const blob = new Blob(chunks.current, { type: 'audio/webm' })
+        const type = chunks.current[0]?.type || 'audio/webm'
+        const blob = new Blob(chunks.current, { type })
         const reader = new FileReader()
         reader.onload = () => {
           setVoices(addVoice(lessonN, String(reader.result)))
@@ -349,7 +353,13 @@ function SpeakLab({ lessonN }: { lessonN: number }) {
         }
         reader.readAsDataURL(blob)
         stream.current?.getTracks().forEach((t) => t.stop())
+        const ms = started.current ? Date.now() - started.current : null
+        setSent('sending')
+        uploadVoice(lessonN, blob, ms)
+          .then((row) => setSent(row ? 'sent' : 'local'))
+          .catch(() => setSent('local'))
       }
+      started.current = Date.now()
       r.start()
       rec.current = r
       setState('rec')
@@ -386,7 +396,9 @@ function SpeakLab({ lessonN }: { lessonN: number }) {
           Another line <ChevronRight className="h-3.5 w-3.5" />
         </Button>
         {state === 'rec' && <span className="text-[11.5px] font-semibold text-[#a33a2c]">● recording</span>}
-        {state === 'done' && <span className="text-[11.5px] font-semibold text-[#0f6b4f]">Saved for your teacher</span>}
+        {state === 'done' && sent === 'sending' && <span className="text-[11.5px] font-semibold text-muted">Sending…</span>}
+        {state === 'done' && sent === 'sent' && <span className="text-[11.5px] font-semibold text-[#0f6b4f]">Sent to your teacher</span>}
+        {state === 'done' && sent === 'local' && <span className="text-[11.5px] font-semibold text-[#0f6b4f]">Saved on this device</span>}
       </div>
       {error && <p className="mt-2 text-[12px] text-[#a33a2c]">{error}</p>}
 

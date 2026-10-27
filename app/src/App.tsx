@@ -17,6 +17,7 @@ import { Input } from './components/ui/input'
 import { A1 } from './lib/curriculum'
 import { partsSeen } from './lib/progress'
 import { pullProgress } from './lib/sync'
+import { pullUnlocks } from './lib/unlockSync'
 import { supabase } from './lib/supabase'
 import { currentSession, loadProfile, signIn, signOut, signUp, type Profile } from './lib/auth'
 
@@ -48,6 +49,7 @@ export default function App() {
     }
     const next = await loadProfile(session)
     await pullProgress().catch(() => undefined)
+    await pullUnlocks().catch(() => undefined)
     setProfile(next)
     setView(next.role === 'teacher' ? 'teacher' : 'student')
     setRoute(next.role === 'teacher' ? FIRST_TEACHER : 'dashboard')
