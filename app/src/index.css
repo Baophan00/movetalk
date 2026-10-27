@@ -36,7 +36,21 @@
 
 @layer utilities {
   .flip-3d { transform-style: preserve-3d; }
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
   .backface-hidden { backface-visibility: hidden; }
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { scrollbar-width: none; }
+}
+
+/* Speaking room motion: rings breathe out while recording, bars rise with the voice. */
+@keyframes ripple {
+  0% { transform: scale(0.7); opacity: 0.55; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+@keyframes bar {
+  from { transform: scaleY(0.45); }
+  to { transform: scaleY(1.25); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-\[ripple_1\.8s_ease-out_infinite\] { animation: none; }
 }

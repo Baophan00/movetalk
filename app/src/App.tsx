@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
+import { cn } from './lib/utils'
+import { MobileTabs } from './components/MobileTabs'
 import { Sidebar, type Role, type Route } from './components/Sidebar'
 import { TopBar } from './components/TopBar'
 import { Landing } from './screens/Landing'
@@ -38,6 +40,7 @@ export default function App() {
   const [view, setView] = useState<Role>('student')
   const [lessonN, setLessonN] = useState(1)
   const [quizLesson, setQuizLesson] = useState<number | null>(null)
+  const [practiceTab, setPracticeTab] = useState<'quiz' | 'words' | 'build' | 'listen' | 'speak'>('quiz')
   const [practiceN, setPracticeN] = useState(1)
   const [autoReview, setAutoReview] = useState(0)
   const [menu, setMenu] = useState(false)
@@ -107,6 +110,7 @@ export default function App() {
 
   const openPractice = (n: number) => {
     setPracticeN(n)
+    setPracticeTab('quiz')
     go('practice')
   }
 
@@ -192,13 +196,16 @@ export default function App() {
             )
           }
         />
-        <main key={route + lessonN} className="animate-fade-up">
+        <main key={route + lessonN} className={cn('animate-fade-up', view === 'student' && 'pb-24 lg:pb-0')}>
           {route === 'today' && (
             <Today
               name={profile.name}
               onGo={(r, n) => {
                 if (r === 'lesson' && n) setLessonN(n)
-                if (r === 'practice' && n) setPracticeN(n)
+                if (r === 'practice' && n) {
+                  setPracticeN(n)
+                  setPracticeTab(r === 'practice' ? 'speak' : 'quiz')
+                }
                 go(r)
               }}
             />
@@ -216,7 +223,7 @@ export default function App() {
             />
           )}
           {route === 'library' && <Review initialLesson={quizLesson ?? undefined} autoStart={autoReview} />}
-          {route === 'practice' && <Practice lessonN={practiceN} onBack={() => go('lessons')} />}
+          {route === 'practice' && <Practice lessonN={practiceN} onBack={() => go('lessons')} initialTab={practiceTab} />}
           {route === 'profile' && (
             <ProfileScreen name={profile.name} email={profile.email} role={profile.role} onSignOut={doSignOut} />
           )}
@@ -226,6 +233,7 @@ export default function App() {
           {route === 't-assignments' && <TeacherAssignments onOpenLesson={openLesson} />}
         </main>
       </div>
+      {view === 'student' && <MobileTabs route={route} onNav={go} />}
     </div>
   )
 }

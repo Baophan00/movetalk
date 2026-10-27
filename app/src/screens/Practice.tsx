@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from 'react'
-import { ArrowLeft, Check, ChevronRight, Headphones, Mic, RotateCcw, Square, Star, Volume2, X } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { ArrowLeft, Check, ChevronRight, Headphones, Mic, RotateCcw, Star, Volume2, X } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Card, CardBody } from '../components/ui/card'
 import { Badge } from '../components/ui/badge'
@@ -8,18 +8,17 @@ import { A1, titleOf } from '../lib/curriculum'
 import { buildersFor, listensFor, pairsFor, quizRound, speakingLines } from '../lib/practice'
 import { speak } from '../lib/audio'
 import { recordAttempt } from '../lib/study'
-import { addVoice, listVoice, removeVoice } from '../lib/voice'
-import { uploadVoice } from '../lib/voiceSync'
+import { SpeakRoom } from '../components/SpeakRoom'
 import { cn } from '../lib/utils'
 
 type Tab = 'quiz' | 'words' | 'build' | 'listen' | 'speak'
 
-const TABS: { key: Tab; label: string; icon: typeof Star }[] = [
-  { key: 'quiz', label: 'Quick quiz', icon: Star },
-  { key: 'words', label: 'Word match', icon: RotateCcw },
-  { key: 'build', label: 'Build a sentence', icon: Check },
-  { key: 'listen', label: 'Listen & pick', icon: Headphones },
-  { key: 'speak', label: 'Say it', icon: Mic },
+const TABS: { key: Tab; label: string; short: string; icon: typeof Star }[] = [
+  { key: 'quiz', label: 'Quick quiz', short: 'Quiz', icon: Star },
+  { key: 'words', label: 'Word match', short: 'Words', icon: RotateCcw },
+  { key: 'build', label: 'Build a sentence', short: 'Build', icon: Check },
+  { key: 'listen', label: 'Listen & pick', short: 'Listen', icon: Headphones },
+  { key: 'speak', label: 'Say it', short: 'Speak', icon: Mic },
 ]
 
 function Stars({ score, total }: { score: number; total: number }) {
@@ -322,112 +321,23 @@ function ListenGame({ lessonN }: { lessonN: number }) {
   )
 }
 
-/* ----------------------------------------------------------------- speak */
-
-function SpeakLab({ lessonN }: { lessonN: number }) {
-  const lesson = A1.find((l) => l.n === lessonN)!
-  const lines = useMemo(() => speakingLines(lesson, 3), [lesson])
-  const [i, setI] = useState(0)
-  const [state, setState] = useState<'idle' | 'rec' | 'done'>('idle')
-  const [sent, setSent] = useState<'sending' | 'sent' | 'local' | null>(null)
-  const started = useRef(0)
-  const [error, setError] = useState('')
-  const [voices, setVoices] = useState(listVoice)
-  const rec = useRef<MediaRecorder | null>(null)
-  const chunks = useRef<Blob[]>([])
-  const stream = useRef<MediaStream | null>(null)
-
-  const start = async () => {
-    setError('')
-    try {
-      const s = await navigator.mediaDevices.getUserMedia({ audio: true })
-      stream.current = s
-      chunks.current = []
-      const r = new MediaRecorder(s, { mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '' })
-      r.ondataavailable = (e) => e.data.size && chunks.current.push(e.data)
-      r.onstop = () => {
-        const type = chunks.current[0]?.type || 'audio/webm'
-        const blob = new Blob(chunks.current, { type })
-        const reader = new FileReader()
-        reader.onload = () => {
-          setVoices(addVoice(lessonN, String(reader.result)))
-          setState('done')
-        }
-        reader.readAsDataURL(blob)
-        stream.current?.getTracks().forEach((t) => t.stop())
-        const ms = started.current ? Date.now() - started.current : null
-        setSent('sending')
-        uploadVoice(lessonN, blob, ms)
-          .then((row) => setSent(row ? 'sent' : 'local'))
-          .catch(() => setSent('local'))
-      }
-      started.current = Date.now()
-      r.start()
-      rec.current = r
-      setState('rec')
-    } catch {
-      setError('The browser did not allow the microphone.')
-    }
-  }
-
-  const stop = () => {
-    rec.current?.stop()
-    rec.current = null
-  }
-
-  return (
-    <div>
-      <p className="text-[11.5px] text-muted">Say the line, then your teacher can press play and listen.</p>
-      <div className="mt-3 rounded-2xl bg-[#f7f4ff] px-4 py-5">
-        <p className="text-[17px] font-medium leading-snug text-[#2b2350]">{lines[i]?.text}</p>
-        <button onClick={() => speak(lines[i]?.text ?? '')} className="mt-2 flex items-center gap-1.5 text-[12px] font-semibold text-[#6b4ef2]">
-          <Volume2 className="h-3.5 w-3.5" /> Listen first
-        </button>
-      </div>
-      <div className="mt-3 flex flex-wrap items-center gap-2">
-        {state !== 'rec' ? (
-          <Button size="sm" onClick={start}>
-            <Mic className="h-3.5 w-3.5" /> Record
-          </Button>
-        ) : (
-          <Button size="sm" variant="outline" onClick={stop} className="border-[#eeb4ad] text-[#a33a2c]">
-            <Square className="h-3.5 w-3.5" /> Stop
-          </Button>
-        )}
-        <Button size="sm" variant="ghost" onClick={() => setI((v) => (v + 1 < lines.length ? v + 1 : 0))}>
-          Another line <ChevronRight className="h-3.5 w-3.5" />
-        </Button>
-        {state === 'rec' && <span className="text-[11.5px] font-semibold text-[#a33a2c]">● recording</span>}
-        {state === 'done' && sent === 'sending' && <span className="text-[11.5px] font-semibold text-muted">Sending…</span>}
-        {state === 'done' && sent === 'sent' && <span className="text-[11.5px] font-semibold text-[#0f6b4f]">Sent to your teacher</span>}
-        {state === 'done' && sent === 'local' && <span className="text-[11.5px] font-semibold text-[#0f6b4f]">Saved on this device</span>}
-      </div>
-      {error && <p className="mt-2 text-[12px] text-[#a33a2c]">{error}</p>}
-
-      <div className="mt-5">
-        <p className="text-[11px] font-bold uppercase tracking-[.12em] text-muted">Your takes</p>
-        <ul className="mt-2 space-y-1.5">
-          {voices.filter((v) => v.lesson === lessonN).map((v) => (
-            <li key={v.id} className="flex items-center gap-2 rounded-xl bg-bg/60 px-2.5 py-2">
-              <audio controls src={v.file} className="h-8 w-full max-w-[240px]" />
-              <span className="shrink-0 text-[10.5px] text-muted">{new Date(v.at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span>
-              <button onClick={() => setVoices(removeVoice(v.id))} className="shrink-0 text-muted hover:text-[#a33a2c]" aria-label="Delete take">
-                <X className="h-3.5 w-3.5" />
-              </button>
-            </li>
-          ))}
-          {!voices.some((v) => v.lesson === lessonN) && <li className="text-[12px] text-muted">Nothing recorded yet.</li>}
-        </ul>
-      </div>
-    </div>
-  )
-}
-
 /* ------------------------------------------------------------------ page */
 
-export function Practice({ lessonN, onBack }: { lessonN: number; onBack: () => void }) {
+export function Practice({ lessonN, onBack, initialTab = 'quiz' }: { lessonN: number; onBack: () => void; initialTab?: Tab }) {
   const lesson = A1.find((l) => l.n === lessonN) ?? A1[0]
-  const [tab, setTab] = useState<Tab>('quiz')
+  const [tab, setTab] = useState<Tab>(initialTab)
+
+  // Grading works best on one sentence at a time: split long dialogue turns, keep 3–14 words.
+  const speakLines = useMemo(() => {
+    const raw = speakingLines(lesson, 12).flatMap((l) => l.text.split(/(?<=[.?!])\s+/))
+    const short = raw.map((s) => s.trim()).filter((s) => {
+      const w = s.split(/\s+/).filter(Boolean).length
+      return w >= 3 && w <= 14
+    })
+    const pick = (short.length ? short : raw.map((s) => s.trim())).slice(0, 3)
+    return pick.map((text) => ({ text }))
+  }, [lesson])
+
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6">
@@ -445,7 +355,7 @@ export function Practice({ lessonN, onBack }: { lessonN: number; onBack: () => v
         </Badge>
       </div>
 
-      <div className="mt-4 flex gap-1.5 overflow-x-auto pb-1">
+      <div className="mt-4 grid grid-cols-5 gap-1.5 sm:flex sm:gap-1.5">
         {TABS.map((t) => {
           const Icon = t.icon
           const on = tab === t.key
@@ -453,26 +363,34 @@ export function Practice({ lessonN, onBack }: { lessonN: number; onBack: () => v
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
+              data-tab={t.key}
               className={cn(
-                'flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2 text-[12.5px] font-semibold transition-colors',
-                on ? 'bg-[#16233f] text-white' : 'bg-bg text-[#41506b] hover:bg-[#e8eef8]',
+                'flex flex-col items-center justify-center gap-1 rounded-xl border px-1 py-2 text-[10.5px] font-semibold transition-all active:scale-95 sm:flex-row sm:gap-1.5 sm:px-3 sm:text-[12.5px]',
+                on ? 'border-transparent bg-primary text-white shadow-card' : 'border-line bg-surface text-muted hover:border-primary/30 hover:text-ink',
               )}
             >
-              <Icon className="h-3.5 w-3.5" /> {t.label}
+              <Icon className="h-[15px] w-[15px] sm:h-3.5 sm:w-3.5" strokeWidth={on ? 2.5 : 2} />
+              <span className="sm:hidden">{t.short}</span>
+              <span className="hidden sm:inline">{t.label}</span>
             </button>
           )
         })}
       </div>
 
-      <Card className="mt-3">
-        <CardBody className="p-4 sm:p-5">
-          {tab === 'quiz' && <QuizGame lessonN={lesson.n} />}
-          {tab === 'words' && <WordMatch lessonN={lesson.n} />}
-          {tab === 'build' && <BuildGame lessonN={lesson.n} />}
-          {tab === 'listen' && <ListenGame lessonN={lesson.n} />}
-          {tab === 'speak' && <SpeakLab lessonN={lesson.n} />}
-        </CardBody>
-      </Card>
+      {tab === 'speak' ? (
+        <div className="mt-3">
+          <SpeakRoom lessonN={lesson.n} lines={speakLines} />
+        </div>
+      ) : (
+        <Card className="mt-3">
+          <CardBody className="p-4 sm:p-5">
+            {tab === 'quiz' && <QuizGame lessonN={lesson.n} />}
+            {tab === 'words' && <WordMatch lessonN={lesson.n} />}
+            {tab === 'build' && <BuildGame lessonN={lesson.n} />}
+            {tab === 'listen' && <ListenGame lessonN={lesson.n} />}
+          </CardBody>
+        </Card>
+      )}
     </div>
   )
 }
