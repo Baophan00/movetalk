@@ -77,9 +77,25 @@ export default function App() {
         alive = false
       }
     }
-    currentSession().then((session) => {
-      if (alive) void applySession(session)
-    })
+    // A phone with no signal must not sit on the splash screen: after a short wait we show
+    // the local app instead of waiting for a session that cannot arrive.
+    // The session lives in localStorage, so it arrives instantly even offline; the profile read
+    // behind it does not. The timer therefore runs until the app is actually on screen.
+    const fallback = window.setTimeout(() => {
+      if (!alive) return
+      setProfile(null)
+      setBooting(false)
+    }, 2500)
+    currentSession()
+      .then(async (session) => {
+        if (!alive) return
+        await applySession(session)
+        window.clearTimeout(fallback)
+      })
+      .catch(() => {
+        window.clearTimeout(fallback)
+        if (alive) void applySession(null)
+      })
     const { data } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!alive) return
       // Keep the boot path from overwriting a role read that is already in flight.
