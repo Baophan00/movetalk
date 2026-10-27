@@ -419,7 +419,15 @@ function Reading({ source, onBack }: { source: Source; onBack: () => void }) {
     <Shell title="Reading" vi="Luyện đọc" source={source} onBack={onBack}>
       <Card>
         <CardBody className="p-5">
-          <p className="text-[11px] font-bold uppercase tracking-[.14em] text-muted">{source.reading.title}</p>
+          <div className="flex items-start justify-between gap-2">
+            <p className="text-[11px] font-bold uppercase tracking-[.14em] text-muted">{source.reading.title}</p>
+            <button
+              onClick={() => void playLine(source.reading.text.join(' '), 1)}
+              className="shrink-0 rounded-lg border border-line px-2 py-1 text-[11px] font-semibold"
+            >
+              Hear it
+            </button>
+          </div>
           <div className="mt-2.5 space-y-2.5">
             {source.reading.text.map((line, k) => (
               <p key={k} className="text-[15px] leading-relaxed">
