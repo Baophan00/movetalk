@@ -21,6 +21,7 @@ type Source = {
   reading: { title: string; text: string[]; glossary: Record<string, string>; questions: Question[] }
   build: { en: string; vi: string }[]
   translate: { vi: string; en: string }[]
+  paragraph?: { prompt: string; vi: string; model: string; must: string[] }
 }
 
 const ROOMS = [
@@ -104,6 +105,7 @@ function packSource(pack: Pack): Source {
     },
     build: pack.build,
     translate: pack.translate,
+    paragraph: pack.paragraph,
   }
 }
 
@@ -492,10 +494,22 @@ function Reading({ source, onBack }: { source: Source; onBack: () => void }) {
 
 /* ----------------------------------------------------------------- writing */
 
+function Criterion({ ok, text }: { ok: boolean; text: string }) {
+  return (
+    <span className="flex items-start gap-1.5">
+      {ok ? <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#0f6b4f]" /> : <X className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warn" />}
+      <span className={ok ? 'text-ink' : 'text-warn'}>{text}</span>
+    </span>
+  )
+}
+
 const norm = (t: string) => t.toLowerCase().replace(/[^a-z0-9' ]+/g, ' ').replace(/\s+/g, ' ').trim()
 
 function Writing({ source, onBack }: { source: Source; onBack: () => void }) {
-  const [mode, setMode] = useState<'build' | 'write'>('build')
+  const [mode, setMode] = useState<'build' | 'write' | 'para'>('build')
+  const para = source.paragraph
+  const [paraText, setParaText] = useState('')
+  const [paraCheck, setParaCheck] = useState<{ errors: Miss[]; failed: boolean; sentences: number; words: number; missing: string[] } | null>(null)
 
   const builds = useMemo(
     () =>
@@ -547,17 +561,17 @@ function Writing({ source, onBack }: { source: Source; onBack: () => void }) {
 
   return (
     <Shell title="Writing" vi="Luyện viết" source={source} onBack={onBack}>
-      <div className="grid grid-cols-2 gap-1.5">
-        {(['build', 'write'] as const).map((m) => (
+      <div className={cn('grid gap-1.5', para ? 'grid-cols-3' : 'grid-cols-2')}>
+        {(para ? (['build', 'write', 'para'] as const) : (['build', 'write'] as const)).map((m) => (
           <button
             key={m}
-            onClick={() => { setMode(m); setI(0); setTray([]); setStatus('idle'); setWritten(''); setChecked(null) }}
+            onClick={() => { setMode(m); setI(0); setTray([]); setStatus('idle'); setWritten(''); setChecked(null); setParaCheck(null) }}
             className={cn(
-              'rounded-xl border py-2 text-[12.5px] font-semibold transition',
+              'rounded-xl border py-2 text-[11.5px] font-semibold transition sm:text-[12.5px]',
               mode === m ? 'border-transparent bg-primary text-white shadow-card' : 'border-line bg-surface text-muted',
             )}
           >
-            {m === 'build' ? 'Build a sentence' : 'Write it yourself'}
+            {m === 'build' ? 'Build' : m === 'write' ? 'One sentence' : 'Paragraph'}
           </button>
         ))}
       </div>
@@ -605,6 +619,80 @@ function Writing({ source, onBack }: { source: Source; onBack: () => void }) {
                     <button onClick={() => { setI((v) => (v + 1 < builds.length ? v + 1 : 0)); setTray([]); setStatus('idle') }} className="rounded-xl border border-line px-3 py-1.5 text-[12.5px] font-semibold">Next</button>
                   </div>
                 </div>
+              </>
+            )}
+          </CardBody>
+        </Card>
+      ) : mode === 'para' ? (
+        <Card className="mt-3">
+          <CardBody className="p-5">
+            {!para ? (
+              <p className="text-[13px] text-muted">No paragraph task here.</p>
+            ) : (
+              <>
+                <p className="text-[11px] font-bold uppercase tracking-[.14em] text-muted">Viết đoạn văn</p>
+                <p className="mt-2 rounded-2xl bg-bg/70 px-3 py-2.5 text-[13.5px] leading-relaxed">{para.vi}</p>
+                <p className="mt-1.5 text-[11.5px] text-muted">{para.prompt}</p>
+
+                <textarea
+                  value={paraText}
+                  onChange={(e) => { setParaText(e.target.value); setParaCheck(null) }}
+                  rows={6}
+                  placeholder="Write 3–5 sentences…"
+                  className="mt-3 w-full resize-none rounded-2xl border border-line bg-surface px-3 py-2.5 text-[14px] leading-relaxed outline-none focus:border-primary/50"
+                />
+
+                <div className="mt-2 flex items-center justify-between gap-2 text-[11.5px] text-muted">
+                  <span>
+                    {paraText.trim().split(/\s+/).filter(Boolean).length} words ·{' '}
+                    {paraText.split(/[.?!]+/).filter((s) => s.trim().length > 2).length} sentences
+                  </span>
+                  <button
+                    onClick={async () => {
+                      setBusy(true)
+                      const { matches, failed } = await checkEnglish(paraText)
+                      const words = paraText.trim().split(/\s+/).filter(Boolean).length
+                      const sentences = paraText.split(/[.?!]+/).filter((s) => s.trim().length > 2).length
+                      const missing = para.must.filter((w) => !paraText.toLowerCase().includes(w.toLowerCase()))
+                      setParaCheck({ errors: matches, failed, sentences, words, missing })
+                      recordAttempt({
+                        kind: 'write',
+                        section: `Paragraph ${source.level}`,
+                        prompt: para.prompt,
+                        correct: !failed && matches.length === 0 && missing.length === 0 && sentences >= 3 && words >= 25,
+                      })
+                      try {
+                        const key = 'mt2_writings'
+                        const rows = JSON.parse(localStorage.getItem(key) ?? '[]') as unknown[]
+                        rows.push({ at: new Date().toISOString(), level: source.level, label: source.label, text: paraText })
+                        localStorage.setItem(key, JSON.stringify(rows.slice(-40)))
+                      } catch { /* keep the text on screen even if storage is full */ }
+                      setBusy(false)
+                    }}
+                    disabled={busy || paraText.trim().length < 10}
+                    className="rounded-xl bg-primary px-3 py-1.5 text-[12.5px] font-semibold text-white disabled:opacity-40"
+                  >
+                    {busy ? 'Checking…' : 'Check'}
+                  </button>
+                </div>
+
+                {paraCheck && (
+                  <div className="mt-3 rounded-2xl bg-bg/70 p-3.5">
+                    <div className="grid gap-1 text-[12px]">
+                      <Criterion ok={paraCheck.sentences >= 3} text={`At least 3 sentences (${paraCheck.sentences})`} />
+                      <Criterion ok={paraCheck.words >= 25} text={`At least 25 words (${paraCheck.words})`} />
+                      <Criterion ok={paraCheck.missing.length === 0} text={paraCheck.missing.length ? `Missing words: ${paraCheck.missing.join(', ')}` : 'Used the target words'} />
+                      <Criterion ok={!paraCheck.failed && paraCheck.errors.length === 0} text={paraCheck.failed ? 'Grammar service offline' : paraCheck.errors.length ? `${paraCheck.errors.length} grammar point${paraCheck.errors.length === 1 ? '' : 's'}` : 'No grammar errors found'} />
+                    </div>
+                    {paraCheck.errors.slice(0, 3).map((m, k) => (
+                      <p key={k} className="mt-1.5 text-[12px] text-ink">
+                        <span className="text-muted">{paraText.slice(m.offset, m.offset + m.length) || '…'}</span> → {m.message}
+                        {m.better.length > 0 && <span className="font-semibold"> Try: {m.better.join(' / ')}</span>}
+                      </p>
+                    ))}
+                    <p className="mt-2 text-[11.5px] leading-relaxed text-muted">Model: <span className="text-ink">{para.model}</span></p>
+                  </div>
+                )}
               </>
             )}
           </CardBody>

@@ -18,6 +18,7 @@ export type Pack = {
   reading: { title: string; text: string; glossary: Record<string, string>; questions: Question[] }
   build: { en: string; vi: string }[]
   translate: { vi: string; en: string }[]
+  paragraph?: { prompt: string; vi: string; model: string; must: string[] }
 }
 
 export const PACKS: Pack[] = [
@@ -75,6 +76,12 @@ export const PACKS: Pack[] = [
       { vi: 'Tôi bị đau họng.', en: 'I have a sore throat.' },
       { vi: 'Tôi nên uống thuốc mấy lần một ngày?', en: 'How many times a day should I take the medicine?' },
     ],
+    paragraph: {
+      prompt: 'Write a short message to a friend: you are ill today, what you have, what you should do, and when you will be back at school.',
+      vi: 'Viết tin nhắn cho bạn: hôm nay bạn bị ốm, triệu chứng, bạn nên làm gì và khi nào đi học lại.',
+      model: 'Hi Lan, I am sorry but I cannot come to class today. I have a sore throat and a light fever. The doctor says I should stay home and take one tablet three times a day. I will be back at school on Monday. See you then.',
+      must: ['sore', 'tablet'],
+    },
   },
   {
     id: 'a2-renting',
@@ -130,6 +137,12 @@ export const PACKS: Pack[] = [
       { vi: 'Tôi muốn xem phòng.', en: 'I would like to see the room.' },
       { vi: 'Tiền thuê đã gồm tiền điện chưa?', en: 'Does the rent include electricity?' },
     ],
+    paragraph: {
+      prompt: 'Write a short message to the owner: which room you want, when you can see it, and one question about the rent.',
+      vi: 'Viết tin nhắn cho chủ nhà: bạn muốn phòng nào, khi nào xem được và một câu hỏi về tiền thuê.',
+      model: 'Hello, I am interested in the room near the bus stop. I can come and see it this afternoon after five. Does the rent include the electricity bill? Please let me know. Thank you.',
+      must: ['rent', 'room'],
+    },
   },
   {
     id: 'b1-interview',
@@ -405,6 +418,12 @@ export const PACKS: Pack[] = [
       { vi: 'Tôi muốn mua hai vé đi Đà Nẵng.', en: 'I would like two tickets to Da Nang.' },
       { vi: 'Tôi phải đổi tàu ở đâu?', en: 'Where do I have to change trains?' },
     ],
+    paragraph: {
+      prompt: 'Write a short message to a friend about your train: where you are going, what time it leaves and when you arrive.',
+      vi: 'Viết tin nhắn cho bạn về chuyến tàu: bạn đi đâu, tàu khởi hành lúc mấy giờ và khi nào đến.',
+      model: 'Hi Nam, I am going to Da Nang tomorrow. The train leaves at half past seven from platform three. The journey takes about four hours, so I will arrive before lunch. I will call you when I get there.',
+      must: ['train', 'leaves'],
+    },
   },
   {
     id: 'a2-restaurant',
@@ -460,6 +479,12 @@ export const PACKS: Pack[] = [
       { vi: 'Tôi muốn thanh toán.', en: 'I would like to pay.' },
       { vi: 'Món này có kèm cơm không?', en: 'Does it come with rice?' },
     ],
+    paragraph: {
+      prompt: 'Write a short review of a restaurant: what you ate, how the service was and if you will come back.',
+      vi: 'Viết một đánh giá ngắn về nhà hàng: bạn ăn gì, phục vụ thế nào và có quay lại không.',
+      model: 'I went to a small restaurant near my house last night. I had chicken soup with rice and it was very good. The staff were friendly and the bill was only eight dollars. I will come back next week with my family.',
+      must: ['restaurant', 'bill'],
+    },
   },
   {
     id: 'a2-weekend',
@@ -515,6 +540,12 @@ export const PACKS: Pack[] = [
       { vi: 'Cuối tuần trước bạn đã làm gì?', en: 'What did you do at the weekend?' },
       { vi: 'Tôi đã về nhà muộn.', en: 'I came home late.' },
     ],
+    paragraph: {
+      prompt: 'Write about your last weekend: where you went, what you did and how you felt.',
+      vi: 'Viết về cuối tuần trước: bạn đi đâu, làm gì và cảm thấy thế nào.',
+      model: 'Last Saturday I went to the beach with my sister. We left early in the morning and swam for two hours. In the afternoon we ate seafood at a cheap restaurant. It was a very good day and I felt happy.',
+      must: ['went', 'was'],
+    },
   },
   {
     id: 'a2-plans',
@@ -570,6 +601,12 @@ export const PACKS: Pack[] = [
       { vi: 'Tôi định học tiếng Anh mỗi tối.', en: 'I am going to study English every evening.' },
       { vi: 'Chủ nhật tôi sẽ không đi làm.', en: 'I am not going to work on Sunday.' },
     ],
+    paragraph: {
+      prompt: 'Write about your plans for next week: two things you are going to do and one thing you are not going to do.',
+      vi: 'Viết về kế hoạch tuần sau: hai việc bạn định làm và một việc bạn không định làm.',
+      model: 'Next week I am going to start a new English class on Tuesday evening. I am also going to practise speaking with a friend on Saturday. I am not going to work at the weekend because I need to rest.',
+      must: ['going', 'not'],
+    },
   },
   {
     id: 'a2-clothes',
@@ -625,6 +662,12 @@ export const PACKS: Pack[] = [
       { vi: 'Cái này hơi dài.', en: 'This is a bit too long.' },
       { vi: 'Tôi muốn trả lại cái áo này.', en: 'I would like to return this shirt.' },
     ],
+    paragraph: {
+      prompt: 'Write a short message to a shop: what you bought, what is wrong with it and what you want them to do.',
+      vi: 'Viết tin nhắn cho cửa hàng: bạn mua gì, có vấn đề gì và bạn muốn họ làm gì.',
+      model: 'Hello, I bought a blue jacket in your shop on Monday. The size is wrong and it is a bit too long for me. Can I change it for a smaller size? I still have the receipt. Thank you.',
+      must: ['size', 'receipt'],
+    },
   },
   {
     id: 'a2-appointment',
@@ -680,6 +723,12 @@ export const PACKS: Pack[] = [
       { vi: 'Tôi muốn đổi lịch hẹn.', en: 'I would like to change my appointment.' },
       { vi: 'Tôi sẽ đến lúc mười giờ mười lăm.', en: 'I will be there at ten fifteen.' },
     ],
+    paragraph: {
+      prompt: 'Write a short message to the clinic: why you need an appointment, when you are free and your phone number.',
+      vi: 'Viết tin nhắn cho phòng khám: vì sao bạn cần đặt lịch, khi nào bạn rảnh và số điện thoại.',
+      model: 'Hello, I would like to book an appointment because I have a pain in my back. I am free on Thursday morning or Friday afternoon. My phone number is 0901 234 567. Thank you very much.',
+      must: ['appointment', 'free'],
+    },
   },
 ]
 
