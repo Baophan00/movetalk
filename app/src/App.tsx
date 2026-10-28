@@ -366,7 +366,7 @@ function AuthDialog({
             <span className="mb-1.5 block text-[12px] font-medium text-muted">Password</span>
             <Input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="At least 6 characters" type="password" minLength={6} required />
           </label>
-          {error && <p className="rounded-xl bg-[#fde4e1] px-3 py-2 text-[12px] text-[#8a2b22]">{error}</p>}
+          {error && <p className="rounded-xl bg-[#fde4e1] px-3 py-2 text-[12px] text-[#7A3F35]">{error}</p>}
           <Button className="w-full" type="submit" disabled={busy || !email.includes('@') || password.length < 6}>
             {busy ? 'Working…' : mode === 'signin' ? 'Sign in' : 'Create account'}
           </Button>

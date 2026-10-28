@@ -268,7 +268,7 @@ export function TeacherAssignments({ onOpenLesson }: { onOpenLesson: (n: number)
             <p className="text-[11.5px] text-muted">
               {lesson ? `${partPlan(lesson).length} parts · ${lesson.parts.vocab.length} words in this lesson` : ''}
             </p>
-            {error && <p className="rounded-xl bg-[#fde4e1] px-3 py-2 text-[12px] text-[#8a2b22]">{error}</p>}
+            {error && <p className="rounded-xl bg-[#fde4e1] px-3 py-2 text-[12px] text-[#7A3F35]">{error}</p>}
             <div className="flex justify-end gap-2">
               <Button variant="ghost" size="sm" onClick={() => setCreating(false)}>
                 <X className="h-3.5 w-3.5" /> Cancel
@@ -367,7 +367,7 @@ export function TeacherAssignments({ onOpenLesson }: { onOpenLesson: (n: number)
                           void deleteVoice(v.id)
                         }
                       }}
-                      className="text-muted hover:text-[#a33a2c]"
+                      className="text-muted hover:text-[#7A3F35]"
                       aria-label="Delete take"
                     >
                       <X className="h-3.5 w-3.5" />

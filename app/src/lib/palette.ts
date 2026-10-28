@@ -1,24 +1,24 @@
 /**
- * The pastel palette taken from the macaron reference. Five colours come straight from it, the rest
- * are neighbouring tints of the same five so a roster of twelve never repeats a colour; text and the
- * left edge are always a deeper shade of the same family so a block stays readable.
+ * One colour per student in the timetable. Twelve earthy tints of the same cream-and-sage family the
+ * rest of the app uses, so a roster of twelve never repeats a colour and no block fights the page.
+ * Text and the left edge are always a deeper shade of the same family, so a block stays readable.
  */
 
 export type Tone = { bg: string; edge: string; text: string; hover: string }
 
 export const MACARON: Tone[] = [
-  { bg: '#F2D5DA', edge: '#D98C9E', text: '#7C3A46', hover: '#EBC7CE' }, // pink
-  { bg: '#BFBFE3', edge: '#8C8CCB', text: '#3F3A6E', hover: '#B3B3DC' }, // lavender
-  { bg: '#C4E2E4', edge: '#7FB7BB', text: '#2C5A5E', hover: '#B7DADD' }, // mint
-  { bg: '#F3D2C9', edge: '#DB9C86', text: '#7A4432', hover: '#EDC5BA' }, // peach
-  { bg: '#F8E3D0', edge: '#D9B285', text: '#6F4E2A', hover: '#F2D9C1' }, // cream
-  { bg: '#E7D6EC', edge: '#B38FC9', text: '#5A3A66', hover: '#DEC9E4' }, // rose lilac
-  { bg: '#D6E4D4', edge: '#93B58F', text: '#3D5C3A', hover: '#C9DBC7' }, // sage
-  { bg: '#D3DFF2', edge: '#86A2CE', text: '#33486B', hover: '#C6D5EE' }, // powder blue
-  { bg: '#F6DDC8', edge: '#E0AE86', text: '#7A4B2A', hover: '#EFD2B9' }, // apricot
-  { bg: '#E6D8CE', edge: '#B79C88', text: '#5E4736', hover: '#DDCCC0' }, // taupe
-  { bg: '#F7EBCB', edge: '#DDBE78', text: '#6B5322', hover: '#F1E1B8' }, // butter
-  { bg: '#F2DCE2', edge: '#D6A0AE', text: '#6E3F4A', hover: '#EBD0D8' }, // pink beige
+  { bg: '#DCE7DA', edge: '#8FAE92', text: '#33503C', hover: '#D2DFCF' }, // sage
+  { bg: '#EFDCCB', edge: '#C79A73', text: '#6F4A21', hover: '#E6D1BE' }, // clay
+  { bg: '#D8E6E4', edge: '#86AAA6', text: '#2C504E', hover: '#CCDFDD' }, // sea
+  { bg: '#F3E6C6', edge: '#D6B36A', text: '#6B4E12', hover: '#EDDCB5' }, // honey
+  { bg: '#E7E3D8', edge: '#B3AC98', text: '#4C4535', hover: '#DFDACD' }, // stone
+  { bg: '#EFD5CB', edge: '#C98872', text: '#7A3F2C', hover: '#E8C9BE' }, // terracotta
+  { bg: '#E4E7CE', edge: '#A9AE7C', text: '#4A5327', hover: '#DBDFC1' }, // olive
+  { bg: '#DDE4EC', edge: '#93A8C0', text: '#33455C', hover: '#D2DCE7' }, // powder
+  { bg: '#F0E9D2', edge: '#C9B98A', text: '#5C4E24', hover: '#E9E0C4' }, // wheat
+  { bg: '#ECD8D6', edge: '#C0918C', text: '#6E3A36', hover: '#E4CCCA' }, // rosewood
+  { bg: '#D9E4D6', edge: '#8AA585', text: '#36503A', hover: '#CDDBC9' }, // moss
+  { bg: '#EAE0CE', edge: '#C0AC8B', text: '#55452A', hover: '#E2D6C0' }, // sand
 ]
 
 /** One colour per student, decided by their place in the roster, so it never shifts between screens. */

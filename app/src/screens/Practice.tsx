@@ -6,6 +6,7 @@ import { Badge } from '../components/ui/badge'
 import { Progress } from '../components/ui/progress'
 import { A1, titleOf } from '../lib/curriculum'
 import { buildersFor, listensFor, pairsFor, quizRound, speakingLines } from '../lib/practice'
+import { CHOICE, choiceState } from '../lib/choice'
 import { speak } from '../lib/audio'
 import { recordAttempt } from '../lib/study'
 import { SpeakRoom } from '../components/SpeakRoom'
@@ -55,7 +56,7 @@ function QuizGame({ lessonN }: { lessonN: number }) {
   if (!items.length) return <p className="text-[12.5px] text-muted">No quiz for this lesson yet.</p>
   if (done)
     return (
-      <div className="rounded-2xl bg-[#f4f8ff] px-5 py-8 text-center">
+      <div className="rounded-2xl bg-[#F5F8F1] px-5 py-8 text-center">
         <Stars score={score} total={items.length} />
         <p className="mt-2 text-[20px] font-semibold">
           {score} / {items.length}
@@ -102,9 +103,9 @@ function QuizGame({ lessonN }: { lessonN: number }) {
               onClick={() => choose(opt)}
               className={cn(
                 'flex items-center justify-between rounded-xl border px-3.5 py-3 text-left text-[14px] font-medium transition-all',
-                state === 'idle' && 'border-line bg-surface hover:-translate-y-px hover:border-primary/40 hover:bg-[#f7faff]',
-                state === 'right' && 'border-[#8fd0ae] bg-[#e8f8ee] text-[#0f6b4f]',
-                state === 'wrong' && 'border-[#eeb4ad] bg-[#fdeceb] text-[#a33a2c]',
+                state === 'idle' && 'border-line bg-surface hover:-translate-y-px hover:border-primary/40 hover:bg-[#F5F8F1]',
+                state === 'right' && 'border-[#8FAE92] bg-[#EEF3EA] text-[#2F5D45]',
+                state === 'wrong' && 'border-[#E7D2CD] bg-[#F6ECEA] text-[#7A3F35]',
               )}
             >
               {opt}
@@ -177,9 +178,9 @@ function WordMatch({ lessonN }: { lessonN: number }) {
               className={cn(
                 'grid h-[76px] place-items-center rounded-xl border px-2 text-center text-[12.5px] font-medium transition-all',
                 matched.includes(c.pair)
-                  ? 'border-[#8fd0ae] bg-[#e8f8ee] text-[#0f6b4f]'
+                  ? 'border-[#8FAE92] bg-[#EEF3EA] text-[#2F5D45]'
                   : shown
-                    ? 'border-primary/40 bg-[#f7faff] text-[#16233f]'
+                    ? 'border-primary/40 bg-[#F5F8F1] text-[#16233f]'
                     : 'border-line bg-[#f2f4f8] text-transparent hover:bg-[#eaeff7]',
               )}
             >
@@ -189,7 +190,7 @@ function WordMatch({ lessonN }: { lessonN: number }) {
         })}
       </div>
       {won && (
-        <p className="mt-4 rounded-xl bg-[#e8f8ee] px-3 py-2.5 text-center text-[12.5px] text-[#0f6b4f]">
+        <p className="mt-4 rounded-xl bg-[#EEF3EA] px-3 py-2.5 text-center text-[12.5px] text-[#2F5D45]">
           All {pairs.length} matched in {moves} tries.
         </p>
       )}
@@ -226,7 +227,7 @@ function BuildGame({ lessonN }: { lessonN: number }) {
       <div
         className={cn(
           'mt-3 flex min-h-[64px] flex-wrap items-center gap-1.5 rounded-xl border border-dashed px-3 py-2.5',
-          checked === true ? 'border-[#8fd0ae] bg-[#e8f8ee]' : checked === false ? 'border-[#eeb4ad] bg-[#fdeceb]' : 'border-line bg-bg/50',
+          checked === true ? 'border-[#8FAE92] bg-[#EEF3EA]' : checked === false ? 'border-[#E7D2CD] bg-[#F6ECEA]' : 'border-line bg-bg/50',
         )}
       >
         {picked.length === 0 && <span className="text-[12.5px] text-muted">Tap the words below in order.</span>}
@@ -246,7 +247,7 @@ function BuildGame({ lessonN }: { lessonN: number }) {
             <button
               key={idx}
               onClick={() => setPicked((v) => [...v, idx])}
-              className="rounded-lg border border-line bg-surface px-2.5 py-1.5 text-[13px] font-medium transition-colors hover:bg-[#f4f8ff]"
+              className="rounded-lg border border-line bg-surface px-2.5 py-1.5 text-[13px] font-medium transition-colors hover:bg-[#F5F8F1]"
             >
               {t}
             </button>
@@ -264,8 +265,8 @@ function BuildGame({ lessonN }: { lessonN: number }) {
           <Volume2 className="h-3.5 w-3.5" /> Hear it
         </button>
       </div>
-      {checked === false && <p className="mt-2 text-[12px] text-[#a33a2c]">Correct: {item.answer}</p>}
-      {checked === true && <p className="mt-2 text-[12px] text-[#0f6b4f]">That is the sentence.</p>}
+      {checked === false && <p className="mt-2 text-[12px] text-[#7A3F35]">Correct: {item.answer}</p>}
+      {checked === true && <p className="mt-2 text-[12px] text-[#2F5D45]">That is the sentence.</p>}
     </div>
   )
 }
@@ -292,10 +293,12 @@ function ListenGame({ lessonN }: { lessonN: number }) {
       </button>
       <div className="mt-4 grid gap-2 sm:grid-cols-2">
         {item.options.map((opt) => {
-          const state = !picked ? 'idle' : opt === item.answer ? 'right' : opt === picked ? 'wrong' : 'idle'
+          const isPick = opt === picked
           return (
             <button
               key={opt}
+              disabled={Boolean(picked)}
+              aria-pressed={isPick}
               onClick={() => {
                 if (picked) return
                 setPicked(opt)
@@ -305,10 +308,8 @@ function ListenGame({ lessonN }: { lessonN: number }) {
                 }, 900)
               }}
               className={cn(
-                'rounded-xl border px-3.5 py-3 text-left text-[13.5px] transition-colors',
-                state === 'idle' && 'border-line bg-surface hover:bg-[#f7faff]',
-                state === 'right' && 'border-[#8fd0ae] bg-[#e8f8ee] text-[#0f6b4f]',
-                state === 'wrong' && 'border-[#eeb4ad] bg-[#fdeceb] text-[#a33a2c]',
+                'rounded-xl border px-3.5 py-3 text-left text-[13.5px] transition disabled:cursor-default',
+                CHOICE[choiceState({ isChosen: isPick, isCorrect: opt === item.answer, revealed: Boolean(picked) })],
               )}
             >
               {opt}

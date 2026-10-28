@@ -115,9 +115,12 @@ export function Sidebar({ role, route, onNav, open, onClose, user, onSignOut, on
                 <li key={key}>
                   <button
                     onClick={() => onNav(key)}
+                    aria-current={active ? 'page' : undefined}
                     className={cn(
                       'group flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-[13.5px] font-medium transition-colors',
-                      active ? 'bg-primary-soft text-primary' : 'text-ink/75 hover:bg-ink/[.04] hover:text-ink',
+                      active
+                        ? 'bg-primary-soft font-semibold text-primary shadow-[inset_0_0_0_1px_hsl(var(--primary)/.18)]'
+                        : 'text-ink/75 hover:bg-ink/[.04] hover:text-ink',
                     )}
                   >
                     <Icon className={cn('h-[17px] w-[17px]', active ? 'text-primary' : 'text-muted group-hover:text-ink')} strokeWidth={2.1} />

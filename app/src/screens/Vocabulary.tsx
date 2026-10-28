@@ -109,17 +109,17 @@ export function Vocabulary() {
               value={term}
               onChange={(e) => setTerm(e.target.value)}
               placeholder="English word"
-              className="rounded-xl border border-line bg-surface px-3 py-2 text-[13px] outline-none focus:border-primary/50"
+              className="rounded-xl border border-line bg-surface px-3 py-2 text-[13px] transition focus:border-primary/50"
             />
             <input
               value={meaning}
               onChange={(e) => setMeaning(e.target.value)}
               placeholder="Nghĩa tiếng Việt"
-              className="rounded-xl border border-line bg-surface px-3 py-2 text-[13px] outline-none focus:border-primary/50"
+              className="rounded-xl border border-line bg-surface px-3 py-2 text-[13px] transition focus:border-primary/50"
             />
             <button onClick={save} disabled={!term.trim()} className="rounded-xl bg-primary px-4 py-2 text-[13px] font-semibold text-white disabled:opacity-40">Save</button>
           </div>
-          {added && <p className="mt-2 text-[11.5px] font-semibold text-[#0f6b4f]">Saved “{added}”.</p>}
+          {added && <p className="mt-2 text-[11.5px] font-semibold text-[#2F5D45]">Saved “{added}”.</p>}
         </CardBody>
       </Card>
 
@@ -129,7 +129,7 @@ export function Vocabulary() {
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search your words"
-          className="w-full bg-transparent text-[13px] outline-none"
+          className="w-full rounded bg-transparent text-[13px]"
         />
         {q && <button onClick={() => setQ('')} className="text-[11.5px] font-semibold text-muted">Clear</button>}
       </div>

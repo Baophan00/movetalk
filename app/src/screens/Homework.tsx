@@ -265,7 +265,7 @@ export function Homework({ onPractise, onOpenLesson, onLessons, onReview, hasBac
               onBlur={saveWriting}
               rows={4}
               placeholder="Five sentences with the words above…"
-              className="focus-ring mt-3 w-full resize-y rounded-2xl border border-line bg-surface px-3.5 py-2.5 text-[13px] leading-relaxed outline-none"
+              className="focus-ring mt-3 w-full resize-y rounded-2xl border border-line bg-surface px-3.5 py-2.5 text-[13px] leading-relaxed"
             />
             <div className="mt-2 flex items-center justify-between">
               <p className="flex items-center gap-1.5 text-[11.5px] text-muted">

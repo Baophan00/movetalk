@@ -3,6 +3,7 @@ import { motion } from 'motion/react'
 import { useRef } from 'react'
 import { ArrowLeft, ArrowRight, Check, RotateCcw, Volume2, X } from 'lucide-react'
 import { playCorrect, playFinish, playWrong } from '../lib/sfx'
+import { CHOICE, choiceState } from '../lib/choice'
 import { Button } from '../components/ui/button'
 import { Card } from '../components/ui/card'
 import { A1, quizFor, titleOf, type QuizItem } from '../lib/curriculum'
@@ -252,7 +253,7 @@ export function Review({ initialLesson, autoStart = 0 }: { initialLesson?: numbe
       <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
           <Card className="px-6 py-8 text-center">
-            <span className={cn('mx-auto grid h-16 w-16 place-items-center rounded-full text-[20px] font-bold', pct >= 80 ? 'bg-[#c8f0e0] text-[#0f6b4f]' : 'bg-[#fde3c6] text-[#7a4300]')}>
+            <span className={cn('mx-auto grid h-16 w-16 place-items-center rounded-full text-[20px] font-bold', pct >= 80 ? 'bg-[#c8f0e0] text-[#2F5D45]' : 'bg-[#fde3c6] text-[#7a4300]')}>
               {pct}%
             </span>
             <h3 className="mt-4 text-[20px] font-semibold">
@@ -314,23 +315,21 @@ export function Review({ initialLesson, autoStart = 0 }: { initialLesson?: numbe
             {(current.options ?? []).map((opt) => {
               const isPicked = picked === opt
               const isAnswer = opt === current.answer
-              const state = !answered ? 'idle' : isAnswer ? 'right' : isPicked ? 'wrong' : 'dim'
+              const st = choiceState({ isChosen: isPicked, isCorrect: isAnswer, revealed: answered })
               return (
                 <button
                   key={opt}
                   onClick={() => !answered && setPicked(opt)}
-                  disabled={checked}
+                  disabled={answered}
+                  aria-pressed={isPicked && !answered}
                   className={cn(
-                    'flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left text-[14px] transition-colors',
-                    state === 'idle' && 'border-line bg-surface hover:border-primary/40 hover:bg-primary-soft/50',
-                    state === 'right' && 'border-[#8fdcbd] bg-[#d9f6ea] text-[#0f5f46]',
-                    state === 'wrong' && 'border-[#f3b3ad] bg-[#fde4e1] text-[#8a2b22]',
-                    state === 'dim' && 'border-line bg-surface text-muted',
+                    'flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left text-[14px] transition-colors disabled:cursor-default',
+                    CHOICE[st],
                   )}
                 >
                   <span className="min-w-0 flex-1">{opt}</span>
-                  {state === 'right' && <Check className="h-4 w-4 shrink-0" />}
-                  {state === 'wrong' && <X className="h-4 w-4 shrink-0" />}
+                  {st === 'correct' && <Check className="h-4 w-4 shrink-0 text-ok" aria-hidden />}
+                  {st === 'wrong' && <X className="h-4 w-4 shrink-0 text-danger" aria-hidden />}
                 </button>
               )
             })}
@@ -371,7 +370,7 @@ export function Review({ initialLesson, autoStart = 0 }: { initialLesson?: numbe
               onChange={(e) => setTyped(e.target.value)}
               disabled={checked}
               placeholder="Type your English answer"
-              className="focus-ring w-full rounded-2xl border border-line bg-surface px-4 py-3 text-[15px] outline-none disabled:opacity-70"
+              className="focus-ring w-full rounded-2xl border border-line bg-surface px-4 py-3 text-[15px] disabled:opacity-70"
               autoFocus
             />
           </form>

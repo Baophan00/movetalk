@@ -125,7 +125,7 @@ export function SpeakRoom({ lessonN, lines }: { lessonN: number; lines: Line[] }
             <p className="text-[10.5px] font-bold uppercase tracking-[.16em] text-muted">
               Line {i + 1} of {lines.length}
             </p>
-            <span className={cn('inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-semibold', supported ? 'bg-mint/15 text-[#0f6b4f]' : 'bg-bg text-muted')}>
+            <span className={cn('inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-semibold', supported ? 'bg-mint/15 text-[#2F5D45]' : 'bg-bg text-muted')}>
               {supported ? 'scored on this device' : 'teacher listens only'}
             </span>
           </div>
@@ -190,7 +190,7 @@ export function SpeakRoom({ lessonN, lines }: { lessonN: number; lines: Line[] }
                     <span
                       className={cn(
                         'rounded-full px-2.5 py-1 text-[12px] font-bold tabular-nums',
-                        score.pct >= 70 ? 'bg-mint/20 text-[#0f6b4f]' : 'bg-accent/20 text-[#7a4300]',
+                        score.pct >= 70 ? 'bg-mint/20 text-[#2F5D45]' : 'bg-accent/20 text-[#7a4300]',
                       )}
                     >
                       {score.pct}%
@@ -202,7 +202,7 @@ export function SpeakRoom({ lessonN, lines }: { lessonN: number; lines: Line[] }
                         key={`${h.text}-${k}`}
                         className={cn(
                           'rounded-lg px-2 py-1 text-[12.5px] font-medium',
-                          h.ok ? 'bg-mint/15 text-[#0f6b4f]' : 'bg-warn/10 text-warn underline decoration-warn/40 decoration-2',
+                          h.ok ? 'bg-mint/15 text-[#2F5D45]' : 'bg-warn/10 text-warn underline decoration-warn/40 decoration-2',
                         )}
                       >
                         {h.text}
@@ -229,7 +229,7 @@ export function SpeakRoom({ lessonN, lines }: { lessonN: number; lines: Line[] }
                 </button>
                 {sent === 'sending' && <span className="text-[11.5px] font-medium text-muted">Sending…</span>}
                 {sent === 'sent' && (
-                  <span className="inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#0f6b4f]">
+                  <span className="inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#2F5D45]">
                     <Check className="h-3.5 w-3.5" /> Sent
                   </span>
                 )}

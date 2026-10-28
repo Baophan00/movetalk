@@ -9,12 +9,16 @@ export function SfxToggle({ className }: { className?: string }) {
 
   return (
     <button
+      type="button"
       onClick={() => setOn(toggleSfx())}
+      aria-pressed={on}
       aria-label={on ? 'Turn answer sounds off' : 'Turn answer sounds on'}
       title={on ? 'Answer sounds on' : 'Answer sounds off'}
       className={cn(
-        'grid h-9 w-9 place-items-center rounded-xl border border-line/80 bg-surface/70 text-ink/60 transition hover:text-ink',
-        !on && 'text-muted',
+        'grid h-9 w-9 place-items-center rounded-xl border transition',
+        on
+          ? 'border-primary/30 bg-primary-soft text-primary'
+          : 'border-line/80 bg-surface/70 text-muted hover:text-ink',
         className,
       )}
     >

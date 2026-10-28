@@ -22,12 +22,13 @@ export function MobileTabs({ route, onNav }: { route: Route; onNav: (r: Route) =
             <li key={t.key} className="flex-1">
               <button
                 onClick={() => onNav(t.key)}
+                aria-current={on ? 'page' : undefined}
                 className={cn(
                   'flex w-full flex-col items-center gap-1 px-1 pb-2 pt-2.5 transition active:scale-95',
                   on ? 'text-primary' : 'text-muted',
                 )}
               >
-                <span className={cn('grid h-8 w-12 place-items-center rounded-xl transition', on && 'bg-primary-soft')}>
+                <span className={cn('grid h-8 w-12 place-items-center rounded-xl transition', on ? 'bg-primary-soft shadow-[inset_0_0_0_1px_hsl(var(--primary)/.18)]' : '')}>
                   <Icon className="h-[18px] w-[18px]" strokeWidth={on ? 2.4 : 2} />
                 </span>
                 <span className={cn('text-[10.5px] font-semibold tracking-tight', on ? 'text-primary' : 'text-muted')}>{t.label}</span>

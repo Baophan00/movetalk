@@ -11,6 +11,7 @@ import { A1, titleOf } from '../lib/curriculum'
 import { attemptKind, sessionFor, type Exercise, type Skill } from '../lib/exercises'
 import { addCard, recordAttempt } from '../lib/study'
 import { cn } from '../lib/utils'
+import { CHOICE, choiceState } from '../lib/choice'
 
 const PRAISE = ['Correct!', 'Well done!', 'Excellent!', 'Nice work!']
 
@@ -296,7 +297,8 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
                     <button
                       key={`${w}-${i}`}
                       onClick={() => setBuilt(built.filter((_, j) => j !== i))}
-                      className="rounded-lg bg-primary px-2.5 py-1.5 text-[12.5px] font-medium text-white"
+                      title="Tap to take it out"
+                      className="rounded-lg bg-primary px-2.5 py-1.5 text-[12.5px] font-medium text-white transition hover:bg-primary/90 active:scale-[.98]"
                     >
                       {w}
                     </button>
@@ -317,7 +319,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
                     <button
                       key={`${w}-${i}`}
                       onClick={() => setBuilt([...built, w])}
-                      className="rounded-lg border border-line bg-surface px-2.5 py-1.5 text-[12.5px] transition hover:border-primary/40"
+                      className="rounded-lg border border-line bg-surface px-2.5 py-1.5 text-[12.5px] transition hover:border-primary/45 hover:bg-primary-soft/40 active:scale-[.98]"
                     >
                       {w}
                     </button>
@@ -337,13 +339,10 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
                       key={p.word}
                       disabled={locked}
                       onClick={() => setSelWord(p.word)}
+                      aria-pressed={!locked && selWord === p.word}
                       className={cn(
-                        'w-full rounded-xl border px-3 py-2 text-left text-[13px] transition',
-                        locked
-                          ? 'border-ok/40 bg-ok/10 text-ink/60'
-                          : selWord === p.word
-                            ? 'border-primary bg-primary-soft/60'
-                            : 'border-line hover:border-primary/30',
+                        'w-full rounded-xl border px-3 py-2 text-left text-[13px] transition disabled:cursor-default',
+                        locked ? CHOICE.correct : selWord === p.word ? CHOICE.selected : CHOICE.idle,
                       )}
                     >
                       {p.word}
@@ -361,13 +360,10 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
                       key={vi}
                       disabled={locked}
                       onClick={() => pickMeaning(vi, owner)}
+                      aria-pressed={!locked && selWord === owner}
                       className={cn(
-                        'w-full rounded-xl border px-3 py-2 text-left text-[12.5px] transition',
-                        locked
-                          ? 'border-ok/40 bg-ok/10 text-ink/60'
-                          : bad
-                            ? 'border-danger/50 bg-danger/10'
-                            : 'border-line hover:border-primary/30',
+                        'w-full rounded-xl border px-3 py-2 text-left text-[12.5px] transition disabled:cursor-default',
+                        locked ? CHOICE.correct : bad ? CHOICE.wrong : selWord === owner ? CHOICE.selected : CHOICE.idle,
                       )}
                     >
                       {vi}
@@ -382,25 +378,23 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
             <div className="mt-4 space-y-2">
               {item.options.map((opt) => {
                 const chosen = picked === opt
-                const correct = state !== 'idle' && norm(opt) === norm(item.answer)
+                const revealed = state !== 'idle'
+                const correct = revealed && norm(opt) === norm(item.answer)
+                const st = choiceState({ isChosen: chosen, isCorrect: correct, revealed, locked: revealed })
                 return (
                   <button
                     key={opt}
+                    disabled={revealed}
+                    aria-pressed={chosen && !revealed}
                     onClick={() => state === 'idle' && setPicked(opt)}
                     className={cn(
-                      'flex w-full items-center gap-2 rounded-xl border px-3.5 py-2.5 text-left text-[13.5px] transition',
-                      correct
-                        ? 'border-ok/40 bg-ok/10'
-                        : chosen && state === 'wrong'
-                          ? 'border-danger/40 bg-danger/10'
-                          : chosen
-                            ? 'border-primary/50 bg-primary-soft/60'
-                            : 'border-line hover:border-primary/30',
+                      'flex w-full items-center gap-2 rounded-xl border px-3.5 py-2.5 text-left text-[13.5px] transition disabled:cursor-default',
+                      CHOICE[st],
                     )}
                   >
                     <span className="flex-1">{opt}</span>
-                    {correct && <Check className="h-4 w-4 text-ok" />}
-                    {chosen && state === 'wrong' && <X className="h-4 w-4 text-danger" />}
+                    {correct && <Check className="h-4 w-4 shrink-0 text-ok" aria-hidden />}
+                    {st === 'wrong' && <X className="h-4 w-4 shrink-0 text-danger" aria-hidden />}
                   </button>
                 )
               })}
@@ -413,7 +407,9 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
               onChange={(e) => setTyping(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && state === 'idle' && check()}
               placeholder="Type the English sentence"
-              className="mt-4 w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-[13.5px] outline-none focus:border-primary"
+              aria-label="Your answer in English"
+              disabled={state !== 'idle'}
+              className="mt-4 w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-[13.5px] transition focus:border-primary disabled:cursor-not-allowed disabled:bg-ink/[.03] disabled:text-muted"
             />
           )}
 
@@ -440,7 +436,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
           <div className="mt-4 flex flex-wrap items-center gap-2">
             {state === 'idle' && selfCheck && (
               <>
-                {item.kind !== 'listen' && <SpeakButton text={item.audio ?? item.prompt} label="Play again" />}
+                {item.kind === 'speak' && <SpeakButton text={item.audio ?? item.prompt} label="Play again" />}
                 <Button onClick={reveal}>Show the answer</Button>
               </>
             )}

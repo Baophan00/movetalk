@@ -17,7 +17,9 @@ export function TabsTrigger({ className, ...props }: TabsPrimitive.TabsTriggerPr
     <TabsPrimitive.Trigger
       className={cn(
         'relative whitespace-nowrap rounded-xl px-3.5 py-2 text-[13px] font-semibold text-muted transition-colors',
-        'hover:text-ink data-[state=active]:bg-primary-soft data-[state=active]:text-primary focus-ring',
+        'hover:bg-ink/[.04] hover:text-ink',
+        'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=active]:hover:bg-primary',
+        'focus-ring',
         className,
       )}
       {...props}

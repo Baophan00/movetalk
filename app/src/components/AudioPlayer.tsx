@@ -57,6 +57,30 @@ export function AudioPlayer({ text, label, compact, className, onEnded }: Props)
     }
   }, [text])
 
+  // Load only the metadata on mount so the total length shows before the first press.
+  useEffect(() => {
+    if (!src) return
+    const el = new Audio(src)
+    el.preload = 'metadata'
+    el.playbackRate = speed
+    el.onloadedmetadata = () => setDur(el.duration)
+    el.ontimeupdate = () => setTime(el.currentTime)
+    el.onended = () => {
+      setState('idle')
+      setTime(0)
+      onEnded?.()
+    }
+    audio.current = el
+    return () => {
+      el.pause()
+      el.removeAttribute('src')
+      audio.current = null
+    }
+    // The speed is applied by the effect below; re-creating the element on every speed change would
+    // reload the clip and lose the position.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [src])
+
   useEffect(() => {
     if (audio.current) audio.current.playbackRate = speed
     try {
@@ -152,8 +176,10 @@ export function AudioPlayer({ text, label, compact, className, onEnded }: Props)
       <div className="flex items-center gap-2">
         <button
           onClick={playing ? pause : play}
+          disabled={state === 'loading'}
+          aria-pressed={playing}
           aria-label={playing ? 'Pause audio' : 'Play audio'}
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary text-white transition hover:brightness-110"
+          className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary text-white transition hover:brightness-110 disabled:opacity-70"
         >
           {state === 'loading' ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -213,9 +239,13 @@ export function AudioPlayer({ text, label, compact, className, onEnded }: Props)
             <button
               key={s}
               onClick={() => setSpeed(s)}
+              aria-pressed={speed === s}
+              aria-label={`Playback speed ${s === 1 ? 'normal' : `${s} times`}`}
               className={cn(
                 'rounded-md px-1.5 py-0.5 text-[10.5px] font-semibold transition',
-                speed === s ? 'bg-primary/12 text-primary' : 'text-muted hover:text-ink',
+                speed === s
+                  ? 'bg-primary text-white shadow-sm'
+                  : 'text-muted hover:bg-ink/[.05] hover:text-ink',
               )}
             >
               {s === 1 ? '1x' : `${s}x`}
@@ -230,7 +260,9 @@ export function AudioPlayer({ text, label, compact, className, onEnded }: Props)
       {state === 'error' && (
         <div className="mt-2 flex items-center gap-1.5 rounded-xl bg-danger/10 px-2.5 py-1.5 text-[11px] text-danger">
           <TriangleAlert className="h-3.5 w-3.5 shrink-0" />
-          <span className="flex-1">The audio did not load. Check your connection.</span>
+          <span className="flex-1">
+            {src ? 'The audio did not load. Check your connection.' : 'This device has no English voice installed.'}
+          </span>
           <button onClick={replay} className="font-semibold underline">
             Retry
           </button>

@@ -9,14 +9,15 @@
     --surface: 40 44% 99%;
     --line: 41 34% 87%;
     --ink: 140 17% 19%;
-    --muted: 140 8% 43%;
-    --primary: 155 14% 43%;
+    --muted: 140 9% 40%;
+    --primary: 155 15% 41%;
     --primary-soft: 100 22% 93%;
     --accent: 34 47% 52%;
     --pink: 30 40% 60%;
     --mint: 150 22% 45%;
     --ok: 150 24% 38%;
     --warn: 5 58% 42%;
+    --danger: 4 58% 44%;
   }
 
   html { -webkit-text-size-adjust: 100%; }
@@ -30,8 +31,17 @@
   h1, h2, h3 { letter-spacing: -0.02em; }
   button, a { -webkit-tap-highlight-color: transparent; }
 
+  /* One focus ring for every control, including the plain buttons written inline in screens. */
+  :where(a, button, select, textarea, input, [tabindex]:not([tabindex='-1'])):focus-visible {
+    outline: 2px solid hsl(var(--primary) / .55);
+    outline-offset: 2px;
+    border-radius: 0.5rem;
+  }
+  :where(button, [role='button']):disabled { cursor: not-allowed; }
+  input:disabled, select:disabled, textarea:disabled { @apply cursor-not-allowed bg-ink/[.03] text-muted opacity-70; }
+
   .card-hover { @apply transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift; }
-  .focus-ring { @apply outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg; }
+  .focus-ring:focus-visible { outline: 2px solid hsl(var(--primary) / .55); outline-offset: 2px; }
 }
 
 @layer utilities {

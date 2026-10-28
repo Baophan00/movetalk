@@ -15,6 +15,7 @@ export default {
         mint: 'hsl(var(--mint))',
         ok: 'hsl(var(--ok))',
         warn: 'hsl(var(--warn))',
+        danger: 'hsl(var(--danger))',
       },
       borderRadius: { xl: '14px', '2xl': '18px', '3xl': '24px' },
       fontFamily: { sans: ['Inter', 'Be Vietnam Pro', 'system-ui', 'sans-serif'] },

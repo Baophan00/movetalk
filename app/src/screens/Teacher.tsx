@@ -307,7 +307,7 @@ export function TeacherSchedule({ onOpenLesson }: Shared) {
                 <option value="trial">Trial</option>
               </select>
             </label>
-            {error && <p className="rounded-xl bg-[#fde4e1] px-3 py-2 text-[12px] text-[#8a2b22]">{error}</p>}
+            {error && <p className="rounded-xl bg-[#fde4e1] px-3 py-2 text-[12px] text-[#7A3F35]">{error}</p>}
             <div className="flex justify-end gap-2">
               <Button variant="ghost" size="sm" onClick={() => setAdding(false)}>
                 Cancel
@@ -400,7 +400,7 @@ export function TeacherSchedule({ onOpenLesson }: Shared) {
                 </p>
               </div>
 
-              {error && <p className="mt-3 text-[12px] text-[#8a2b22]">{error}</p>}
+              {error && <p className="mt-3 text-[12px] text-[#7A3F35]">{error}</p>}
 
               <div className="mt-4 flex flex-wrap gap-2">
                 <Button size="sm" onClick={() => onOpenLesson(student?.lessonN ?? 1)}>
@@ -711,7 +711,7 @@ export function TeacherStudents({ onOpenLesson }: Shared) {
               <Button
                 size="sm"
                 variant="ghost"
-                className="ml-auto text-[#8a2b22] hover:bg-[#fbeceb]"
+                className="ml-auto text-[#7A3F35] hover:bg-[#fbeceb]"
                 onClick={() => {
                   if (!confirmDelete) {
                     setConfirmDelete(true)
@@ -925,7 +925,7 @@ export function TeacherOverview({ onOpenLesson, name, onGo }: OverviewProps) {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="relative overflow-hidden rounded-2xl border border-[#DCE4D8] bg-[linear-gradient(120deg,#EAE7D6_0%,#F7F5EC_55%,#D7F9FA_100%)] px-5 py-5 shadow-card sm:px-6"
+          className="relative overflow-hidden rounded-2xl border border-[#DCE4D8] bg-[linear-gradient(120deg,#EAE7D6_0%,#F7F5EC_55%,#F2E8D2_100%)] px-5 py-5 shadow-card sm:px-6"
         >
           <div className="pointer-events-none absolute -right-10 -top-14 h-44 w-44 rounded-full bg-[#A9C7AE]/45" />
           <div className="pointer-events-none absolute -bottom-16 right-16 h-32 w-32 rounded-full bg-[#C7DED0]/45" />

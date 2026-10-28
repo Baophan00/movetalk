@@ -4,6 +4,7 @@ import { Button } from '../components/ui/button'
 import { Progress } from '../components/ui/progress'
 import { A1, hasChoicePractice, lessonA1, partPlan, quizFor, titleOf, type FlowGroup, type LessonFile } from '../lib/curriculum'
 import { playLine, speak } from '../lib/audio'
+import { CHOICE, choiceState } from '../lib/choice'
 import { SpeakButton } from '../components/SpeakButton'
 import { playCorrect, playWrong } from '../lib/sfx'
 import { markPart, partsSeen } from '../lib/progress'
@@ -22,13 +23,13 @@ const VI_CHARS = /[àáảãạăằắẳẵặâầấẩẫậđèéẻẽẹ
 type Tone = 'violet' | 'mint' | 'lavender' | 'sky' | 'peach' | 'rose' | 'amber'
 
 const TONES: Record<Tone, { soft: string; border: string; text: string; solid: string; chip: string }> = {
-  violet: { soft: 'bg-[#F5F8F1]', border: 'border-[#D8E3D4]', text: 'text-[#2B3A31]', solid: 'bg-[#5D7B6F]', chip: 'bg-[#EEF3EA] text-[#2B3A31]' },
-  mint: { soft: 'bg-[#eafaf3]', border: 'border-[#c9eddd]', text: 'text-[#0f6b4f]', solid: 'bg-[#2f9e79]', chip: 'bg-[#d9f4e9] text-[#0f6b4f]' },
-  lavender: { soft: 'bg-[#eff1ff]', border: 'border-[#d7ddfb]', text: 'text-[#3f4c9a]', solid: 'bg-[#5a6ad4]', chip: 'bg-[#e4e8ff] text-[#3f4c9a]' },
-  sky: { soft: 'bg-[#eaf5ff]', border: 'border-[#cbe6fb]', text: 'text-[#1c5a86]', solid: 'bg-[#3793d1]', chip: 'bg-[#dcefff] text-[#1c5a86]' },
-  peach: { soft: 'bg-[#fff3e6]', border: 'border-[#fbddc2]', text: 'text-[#8a5320]', solid: 'bg-[#e08a3c]', chip: 'bg-[#ffe8d2] text-[#8a5320]' },
-  rose: { soft: 'bg-[#fdeef5]', border: 'border-[#f8d8e8]', text: 'text-[#8c3560]', solid: 'bg-[#c9528c]', chip: 'bg-[#fbdfed] text-[#8c3560]' },
-  amber: { soft: 'bg-[#fff8e8]', border: 'border-[#f3e3bd]', text: 'text-[#7a5a12]', solid: 'bg-[#c99a2e]', chip: 'bg-[#fbf0d4] text-[#7a5a12]' },
+  violet: { soft: 'bg-[#EEF3EA]', border: 'border-[#D8E3D4]', text: 'text-[#2B3A31]', solid: 'bg-[#5D7B6F]', chip: 'bg-[#EEF3EA] text-[#2B3A31]' },
+  mint: { soft: 'bg-[#E9F1EC]', border: 'border-[#CBE0D3]', text: 'text-[#2F5D45]', solid: 'bg-[#4E7C78]', chip: 'bg-[#DCEDE3] text-[#2F5D45]' },
+  lavender: { soft: 'bg-[#EDEFEA]', border: 'border-[#D9DED4]', text: 'text-[#3A4A3E]', solid: 'bg-[#6B7B6E]', chip: 'bg-[#E4E8E0] text-[#3A4A3E]' },
+  sky: { soft: 'bg-[#E7F0F0]', border: 'border-[#CBE0E0]', text: 'text-[#2C5654]', solid: 'bg-[#3B6360]', chip: 'bg-[#DCEBEB] text-[#2C5654]' },
+  peach: { soft: 'bg-[#F7EFE6]', border: 'border-[#EBD9C4]', text: 'text-[#6F4A18]', solid: 'bg-[#A9743C]', chip: 'bg-[#F0E3D2] text-[#6F4A18]' },
+  rose: { soft: 'bg-[#F6ECEA]', border: 'border-[#E7D2CD]', text: 'text-[#7A3F35]', solid: 'bg-[#9C5A4A]', chip: 'bg-[#EFDFDB] text-[#7A3F35]' },
+  amber: { soft: 'bg-[#FAF3E2]', border: 'border-[#E9DDBB]', text: 'text-[#6B4E12]', solid: 'bg-[#C08A4A]', chip: 'bg-[#F3E8CE] text-[#6B4E12]' },
 }
 
 /** The sections a lesson shows, in the order the handout runs them. */
@@ -165,7 +166,7 @@ function Vocabulary({ items }: { items: LessonFile['parts']['vocab'] }) {
               key={v.word}
               className={cn(
                 'rounded-2xl border transition-shadow',
-                isOpen ? 'border-[#c9eddd] bg-[#f6fdfa] shadow-card' : 'border-line bg-surface hover:shadow-card',
+                isOpen ? 'border-[#CBE0D3] bg-[#F2F8F3] shadow-card' : 'border-line bg-surface hover:shadow-card',
               )}
             >
               <div
@@ -195,9 +196,9 @@ function Vocabulary({ items }: { items: LessonFile['parts']['vocab'] }) {
               </div>
               {isOpen && (
                 <div className="space-y-1 px-3.5 pb-3">
-                  <p className="text-[13px] font-semibold text-[#0f6b4f]">{v.vi}</p>
+                  <p className="text-[13px] font-semibold text-[#2F5D45]">{v.vi}</p>
                   {v.def && <p className="text-[11.5px] text-muted">{v.def}</p>}
-                  {v.example && <p className="rounded-xl bg-[#eafaf3] px-2.5 py-1.5 text-[12px] italic text-ink/75">{v.example}</p>}
+                  {v.example && <p className="rounded-xl bg-[#E9F1EC] px-2.5 py-1.5 text-[12px] italic text-ink/75">{v.example}</p>}
                   {v.cloze && <p className="text-[11.5px] text-muted">Gap: {v.cloze}</p>}
                 </div>
               )}
@@ -308,10 +309,10 @@ function SubjectMatrix({ cells, answers }: { cells: QCell[]; answers: AnswerRow[
 
   return (
     <div className="overflow-hidden rounded-2xl border border-line">
-      <div className="grid grid-cols-[68px_1fr_1fr] border-b border-line bg-[#fbfaff] text-[10px] font-bold uppercase tracking-[.1em]">
+      <div className="grid grid-cols-[68px_1fr_1fr] border-b border-line bg-[#F5F8F1] text-[10px] font-bold uppercase tracking-[.1em]">
         <div className="px-3 py-1.5 text-muted">Subject</div>
         {hasDo && <div className="border-l border-line/70 px-3 py-1.5 text-[#2B3A31]">Do / Does</div>}
-        {hasBe && <div className="border-l border-line/70 px-3 py-1.5 text-[#1c5a86]">Am / Is / Are</div>}
+        {hasBe && <div className="border-l border-line/70 px-3 py-1.5 text-[#2C5654]">Am / Is / Are</div>}
       </div>
       {rows.map((subject, i) => (
         <div key={subject} className={cn('grid grid-cols-[68px_1fr_1fr] items-stretch text-[13px]', i % 2 === 1 && 'bg-[#fcfbff]')}>
@@ -341,7 +342,7 @@ function SubjectMatrix({ cells, answers }: { cells: QCell[]; answers: AnswerRow[
                 const a = answerFor(subject, true)
                 return c ? (
                   <>
-                    <span className="rounded-md bg-[#dcefff] px-1.5 py-0.5 font-mono text-[12px] font-semibold text-[#1c5a86]">
+                    <span className="rounded-md bg-[#E7F0F0] px-1.5 py-0.5 font-mono text-[12px] font-semibold text-[#2C5654]">
                       {c.verb} {c.subject} …
                     </span>
                     {a && <p className="mt-1 text-[11px] leading-snug text-ink/60">{a.text}</p>}
@@ -382,7 +383,7 @@ function ContrastPairs({ lines }: { lines: string[] }) {
           <div key={i} className="grid grid-cols-[1fr_18px_1fr] items-center gap-1">
             <span className="rounded-lg border border-[#D8E3D4] bg-[#F5F8F1] px-2 py-1.5 font-mono text-[11.5px] text-[#2B3A31]">{r.one ?? '—'}</span>
             <span className="text-center text-[11px] text-muted">↔</span>
-            <span className="rounded-lg border border-[#cbe6fb] bg-[#eff8ff] px-2 py-1.5 font-mono text-[11.5px] text-[#1c5a86]">{r.many ?? '—'}</span>
+            <span className="rounded-lg border border-[#CBE0E0] bg-[#eff8ff] px-2 py-1.5 font-mono text-[11.5px] text-[#2C5654]">{r.many ?? '—'}</span>
           </div>
         ))}
       </div>
@@ -405,12 +406,12 @@ function RepairCards({ lines }: { lines: string[] }) {
   return (
     <ul className="grid gap-2 sm:grid-cols-2">
       {items.map((it, i) => (
-        <li key={`${it.wrong}-${i}`} className="rounded-xl border border-[#f3c9c4] bg-[#fdf5f4] px-3 py-2">
-          <p className="flex items-start gap-1.5 text-[13px] font-medium leading-snug text-[#8a2b22]">
+        <li key={`${it.wrong}-${i}`} className="rounded-xl border border-[#E7D2CD] bg-[#fdf5f4] px-3 py-2">
+          <p className="flex items-start gap-1.5 text-[13px] font-medium leading-snug text-[#7A3F35]">
             <span className="mt-0.5 shrink-0 font-bold">×</span>
             <span className="min-w-0">{it.wrong}</span>
           </p>
-          {it.hint && <p className="mt-1 text-[11px] italic text-[#8a5320]">{it.hint}</p>}
+          {it.hint && <p className="mt-1 text-[11px] italic text-[#6F4A18]">{it.hint}</p>}
           <p className="mt-1 text-[10.5px] font-semibold uppercase tracking-wide text-muted">Say it again, right</p>
         </li>
       ))}
@@ -434,7 +435,7 @@ function QaList({ lines }: { lines: string[] }) {
         {pairs.map((p, i) => (
           <li key={`${p.q}-${i}`} className="rounded-xl border border-line bg-surface px-3 py-2">
             <p className="text-[13px] font-semibold leading-snug text-ink">{p.q}</p>
-            {p.a && <p className="mt-1 border-l-2 border-[#2f9e79]/40 pl-2 text-[12px] text-[#0f6b4f]">{p.a}</p>}
+            {p.a && <p className="mt-1 border-l-2 border-[#2f9e79]/40 pl-2 text-[12px] text-[#2F5D45]">{p.a}</p>}
           </li>
         ))}
       </ul>
@@ -461,7 +462,7 @@ function Grammar({ sections }: { sections: LessonFile['parts']['grammar'] }) {
         void lines
         return (
           <article key={g.section + g.sub} className="overflow-hidden rounded-2xl border border-line bg-surface">
-            <header className="flex flex-wrap items-center gap-2 border-b border-line/60 bg-[#fbfaff] px-4 py-2">
+            <header className="flex flex-wrap items-center gap-2 border-b border-line/60 bg-[#F5F8F1] px-4 py-2">
               <Chip tone="lavender">{g.section}</Chip>
               {g.sub && <p className="min-w-0 flex-1 text-[13.5px] font-semibold leading-snug">{englishSub(g.sub)}</p>}
             </header>
@@ -476,11 +477,11 @@ function Grammar({ sections }: { sections: LessonFile['parts']['grammar'] }) {
                 <>
                   <QaList lines={lines} />
                   {notes.length > 0 && (
-                    <div className="flex items-start gap-2 rounded-xl bg-[#fff8e8] px-3 py-2">
-                      <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#7a5a12]" />
+                    <div className="flex items-start gap-2 rounded-xl bg-[#FAF3E2] px-3 py-2">
+                      <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#6B4E12]" />
                       <div className="min-w-0 space-y-0.5">
                         {notes.map((n, i) => (
-                          <p key={`${n}-${i}`} className="text-[11.5px] leading-relaxed text-[#7a5a12]">
+                          <p key={`${n}-${i}`} className="text-[11.5px] leading-relaxed text-[#6B4E12]">
                             {n}
                           </p>
                         ))}
@@ -536,11 +537,11 @@ function Grammar({ sections }: { sections: LessonFile['parts']['grammar'] }) {
                       ))}
                   </ul>
                   {notes.length > 0 && (
-                    <div className="flex items-start gap-2 rounded-xl bg-[#fff8e8] px-3 py-2">
-                      <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#7a5a12]" />
+                    <div className="flex items-start gap-2 rounded-xl bg-[#FAF3E2] px-3 py-2">
+                      <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#6B4E12]" />
                       <div className="min-w-0 space-y-0.5">
                         {notes.map((n, i) => (
-                          <p key={`${n}-${i}`} className="text-[11.5px] leading-relaxed text-[#7a5a12]">
+                          <p key={`${n}-${i}`} className="text-[11.5px] leading-relaxed text-[#6B4E12]">
                             {n}
                           </p>
                         ))}
@@ -639,17 +640,17 @@ function Checks({ items }: { items: LessonFile['parts']['listenCheck'] }) {
         return (
           <li
             key={c.q}
-            className={cn('rounded-2xl border px-3.5 py-2.5 transition-colors', open ? 'border-[#c9eddd] bg-[#f6fdfa]' : 'border-line bg-surface')}
+            className={cn('rounded-2xl border px-3.5 py-2.5 transition-colors', open ? 'border-[#CBE0D3] bg-[#F2F8F3]' : 'border-line bg-surface')}
           >
             <div className="flex items-start gap-2">
-              <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-md bg-[#dcefff] text-[10px] font-bold text-[#1c5a86]">
+              <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-md bg-[#E7F0F0] text-[10px] font-bold text-[#2C5654]">
                 {i + 1}
               </span>
               <p className="min-w-0 flex-1 text-[13px] font-medium leading-snug">{c.q}</p>
               <SpeakButton text={String(c.a).match(/[“"]([^”"]+)[”"]/)?.[1] ?? c.a} size="sm" label="Hear the answer" />
             </div>
             {open ? (
-              <p className="mt-1.5 border-l-2 border-[#2f9e79]/40 pl-2 text-[12px] text-[#0f6b4f]">{c.a}</p>
+              <p className="mt-1.5 border-l-2 border-[#2f9e79]/40 pl-2 text-[12px] text-[#2F5D45]">{c.a}</p>
             ) : (
               <button onClick={() => setShown((s) => [...s, i])} className="mt-1.5 text-[11.5px] font-semibold text-primary hover:underline">
                 Show the answer
@@ -728,7 +729,7 @@ function Choose({ items }: { items: PracticeItem[] }) {
                 'rounded-2xl border px-4 py-3 transition-colors',
                 !chosen && 'border-[#e7e2f5] bg-[#fbf8ff]',
                 chosen && ok && 'border-[#bfe7d3] bg-[#f1fbf5]',
-                chosen && !ok && 'border-[#f3c9c4] bg-[#fdf3f2]',
+                chosen && !ok && 'border-[#E7D2CD] bg-[#fdf3f2]',
               )}
             >
               <p className="text-[14px] font-medium leading-snug text-ink">
@@ -750,25 +751,23 @@ function Choose({ items }: { items: PracticeItem[] }) {
                     <button
                       key={opt}
                       disabled={chosen}
+                      aria-pressed={isPick && !chosen}
                       onClick={() => {
                         setPicked((p) => ({ ...p, [i]: opt }))
                         if (opt === it.answer) playCorrect()
                         else playWrong()
                       }}
                       className={cn(
-                        'rounded-lg border px-3 py-1 text-[12px] font-semibold transition-colors',
-                        !chosen && 'border-line bg-surface hover:border-primary/40 hover:bg-primary-soft/60',
-                        chosen && isRight && 'border-[#0f6b4f]/30 bg-[#c8f0e0] text-[#0f6b4f]',
-                        chosen && isPick && !isRight && 'border-[#8a2b22]/30 bg-[#fde4e1] text-[#8a2b22]',
-                        chosen && !isRight && !isPick && 'border-line/60 text-muted opacity-60',
+                        'rounded-lg border px-3 py-1 text-[12px] font-semibold transition-colors disabled:cursor-default',
+                        CHOICE[choiceState({ isChosen: isPick, isCorrect: isRight, revealed: chosen })],
                       )}
                     >
                       {opt}
                     </button>
                   )
                 })}
-                {chosen && !ok && <span className="ml-1 text-[11.5px] text-[#8a2b22]">It is “{it.answer}”.</span>}
-                {chosen && ok && <span className="ml-1 text-[11.5px] text-[#0f6b4f]">Correct!</span>}
+                {chosen && !ok && <span className="ml-1 text-[11.5px] text-[#7A3F35]">It is “{it.answer}”.</span>}
+                {chosen && ok && <span className="ml-1 text-[11.5px] text-[#2F5D45]">Correct!</span>}
               </div>
             </li>
           )
@@ -1139,7 +1138,7 @@ function DayCard({ title, lines, pal }: { title: string; lines: string[]; pal: P
         <ul className="space-y-0.5 border-t border-line/60 px-3.5 py-1.5">
           {strips.map((strip, i) => (
             <li key={i} className="flex items-start gap-1.5 text-[11.5px] leading-relaxed text-ink/70">
-              <Info className="mt-0.5 h-3 w-3 shrink-0 text-[#7a5a12]" />
+              <Info className="mt-0.5 h-3 w-3 shrink-0 text-[#6B4E12]" />
               <span className="min-w-0">{strip}</span>
             </li>
           ))}
@@ -1475,7 +1474,7 @@ function LineRow({ line, pal, reading }: { line: string; pal: Palette; reading: 
           reading && vi && 'font-medium',
         )}
       >
-        {teacher && <Info className="mr-1 inline h-3 w-3 text-[#7a5a12]" />}
+        {teacher && <Info className="mr-1 inline h-3 w-3 text-[#6B4E12]" />}
         {line.split(/_{3,}/).map((chunk, ci, arr) => (
           <span key={ci}>
             {chunk}
@@ -1745,10 +1744,17 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
               aria-current={on ? 'step' : undefined}
               className={cn(
                 'flex shrink-0 items-center gap-1.5 rounded-xl border px-3 py-1.5 text-[12.5px] font-semibold transition-colors',
-                on ? cn(t.soft, t.border, t.text) : 'border-line bg-surface text-ink/65 hover:border-ink/15 hover:text-ink',
+                on
+                  ? cn(t.soft, t.border, t.text, 'shadow-[inset_0_0_0_1px_hsl(var(--ink)/.08)]')
+                  : 'border-line bg-surface text-ink/65 hover:border-primary/35 hover:text-ink',
               )}
             >
-              <span className={cn('grid h-4 w-4 shrink-0 place-items-center rounded-[5px] text-[9.5px] font-bold tabular-nums', on ? 'bg-white/75' : t.soft, t.text)}>
+              <span
+                className={cn(
+                  'grid h-4 w-4 shrink-0 place-items-center rounded-[5px] text-[9.5px] font-bold tabular-nums',
+                  on ? cn(t.solid, 'text-white') : cn(t.soft, t.text),
+                )}
+              >
                 {i + 1}
               </span>
               {sec.label}

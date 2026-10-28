@@ -52,7 +52,9 @@ export function Today({ name, onGo }: { name: string; onGo: Go }) {
           <p className="text-[12px] font-semibold uppercase tracking-[.14em] text-muted">
             {new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
           </p>
-          <h1 className="mt-1 text-[26px] font-semibold tracking-tight">Hi {first},</h1>
+          <h1 className="mt-1 truncate text-[26px] font-semibold tracking-tight" title={`Hi ${first},`}>
+            Hi {first},
+          </h1>
         </div>
         <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1.5 text-[12px] font-semibold text-primary">
           <Icon3D name="streak" size={16} /> {run === 0 ? 'Today starts the run' : `${run} day${run === 1 ? '' : 's'}`}
@@ -61,10 +63,7 @@ export function Today({ name, onGo }: { name: string; onGo: Go }) {
 
       <Card className="mt-4 overflow-hidden border-0 bg-primary text-white">
         <CardBody className="p-5">
-          <div className="flex items-start justify-between gap-2">
-            <p className="text-[11px] font-bold uppercase tracking-[.14em] text-white/70">Today's one thing</p>
-            <Icon3D name="rocket" size={46} className="-mt-1" />
-          </div>
+          <p className="text-[11px] font-bold uppercase tracking-[.14em] text-white/70">Today's one thing</p>
           <p className="mt-1.5 text-[20px] font-semibold leading-snug">
             {doneToday() ? 'Done for today. Anything else is a bonus.' : `Part ${view.partNo} of ${view.total} · ${view.part.label}`}
           </p>

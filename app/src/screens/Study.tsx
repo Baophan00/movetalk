@@ -11,6 +11,7 @@ import { addCard, recordAttempt } from '../lib/study'
 import { playLine, speak } from '../lib/audio'
 import { AudioPlayer } from '../components/AudioPlayer'
 import { Icon3D } from '../components/Icon3D'
+import { CHOICE, choiceState } from '../lib/choice'
 import { playCorrect, playWrong } from '../lib/sfx'
 import { LEVELS, PACKS, packsFor, type Level, type Pack, type Question } from '../content/practice/packs'
 import { cn } from '../lib/utils'
@@ -345,17 +346,15 @@ function Listening({ source, onBack }: { source: Source; onBack: () => void }) {
                   key={opt}
                   onClick={() => choose(opt)}
                   disabled={Boolean(picked)}
+                  aria-pressed={on && !picked}
                   className={cn(
-                    'flex items-start justify-between gap-2 rounded-xl border px-3 py-2.5 text-left text-[13px] leading-snug transition',
-                    !picked && 'border-line bg-surface hover:border-primary/40',
-                    picked && right && 'border-transparent bg-mint/15 text-[#0f6b4f]',
-                    picked && on && !right && 'border-transparent bg-warn/10 text-warn',
-                    picked && !on && !right && 'border-line bg-surface opacity-55',
+                    'flex items-start justify-between gap-2 rounded-xl border px-3 py-2.5 text-left text-[13px] leading-snug transition disabled:cursor-default',
+                    CHOICE[choiceState({ isChosen: on, isCorrect: right, revealed: Boolean(picked) })],
                   )}
                 >
                   <span>{opt}</span>
-                  {picked && right && <Check className="mt-0.5 h-4 w-4 shrink-0" />}
-                  {picked && on && !right && <X className="mt-0.5 h-4 w-4 shrink-0" />}
+                  {picked && right && <Check className="mt-0.5 h-4 w-4 shrink-0 text-ok" aria-hidden />}
+                  {picked && on && !right && <X className="mt-0.5 h-4 w-4 shrink-0 text-danger" aria-hidden />}
                 </button>
               )
             })}
@@ -490,12 +489,10 @@ function Reading({ source, onBack }: { source: Source; onBack: () => void }) {
                             key={opt}
                             onClick={() => pick(qi, q, opt)}
                             disabled={Boolean(picked)}
+                            aria-pressed={on && !picked}
                             className={cn(
-                              'rounded-xl border px-3 py-2 text-left text-[12.5px] transition',
-                              !picked && 'border-line bg-surface hover:border-primary/40',
-                              picked && right && 'border-transparent bg-mint/15 text-[#0f6b4f]',
-                              picked && on && !right && 'border-transparent bg-warn/10 text-warn',
-                              picked && !on && !right && 'border-line bg-surface opacity-55',
+                              'rounded-xl border px-3 py-2 text-left text-[12.5px] transition disabled:cursor-default',
+                              CHOICE[choiceState({ isChosen: on, isCorrect: right, revealed: Boolean(picked) })],
                             )}
                           >
                             {opt}
@@ -519,7 +516,7 @@ function Reading({ source, onBack }: { source: Source; onBack: () => void }) {
 function Criterion({ ok, text }: { ok: boolean; text: string }) {
   return (
     <span className="flex items-start gap-1.5">
-      {ok ? <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#0f6b4f]" /> : <X className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warn" />}
+      {ok ? <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#2F5D45]" /> : <X className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warn" />}
       <span className={ok ? 'text-ink' : 'text-warn'}>{text}</span>
     </span>
   )
@@ -637,7 +634,7 @@ function Writing({ source, onBack }: { source: Source; onBack: () => void }) {
                 </div>
 
                 <div className="mt-4 flex items-center justify-between gap-2">
-                  <p className={cn('text-[12.5px] font-semibold', status === 'ok' ? 'text-[#0f6b4f]' : status === 'no' ? 'text-warn' : 'text-muted')}>
+                  <p className={cn('text-[12.5px] font-semibold', status === 'ok' ? 'text-[#2F5D45]' : status === 'no' ? 'text-warn' : 'text-muted')}>
                     {status === 'ok' ? 'Correct.' : status === 'no' ? 'Not yet.' : `${tray.length} word${tray.length === 1 ? '' : 's'}`}
                   </p>
                   <div className="flex gap-1.5">
@@ -665,7 +662,7 @@ function Writing({ source, onBack }: { source: Source; onBack: () => void }) {
                   onChange={(e) => { setParaText(e.target.value); setParaCheck(null) }}
                   rows={6}
                   placeholder="Write 3–5 sentences…"
-                  className="mt-3 w-full resize-none rounded-2xl border border-line bg-surface px-3 py-2.5 text-[14px] leading-relaxed outline-none focus:border-primary/50"
+                  className="mt-3 w-full resize-none rounded-2xl border border-line bg-surface px-3 py-2.5 text-[14px] leading-relaxed transition focus:border-primary/50"
                 />
 
                 <div className="mt-2 flex items-center justify-between gap-2 text-[11.5px] text-muted">
@@ -750,7 +747,7 @@ function Writing({ source, onBack }: { source: Source; onBack: () => void }) {
                   onChange={(e) => { setWritten(e.target.value); setChecked(null) }}
                   rows={3}
                   placeholder="Type your sentence…"
-                  className="mt-3 w-full resize-none rounded-2xl border border-line bg-surface px-3 py-2.5 text-[14px] outline-none focus:border-primary/50"
+                  className="mt-3 w-full resize-none rounded-2xl border border-line bg-surface px-3 py-2.5 text-[14px] transition focus:border-primary/50"
                 />
 
                 <div className="mt-3 flex items-center justify-between gap-2">
@@ -765,7 +762,7 @@ function Writing({ source, onBack }: { source: Source; onBack: () => void }) {
 
                 {checked && (
                   <div className="mt-4 rounded-2xl bg-bg/70 p-3.5">
-                    <p className={cn('text-[12.5px] font-semibold', checked.exact ? 'text-[#0f6b4f]' : 'text-warn')}>
+                    <p className={cn('text-[12.5px] font-semibold', checked.exact ? 'text-[#2F5D45]' : 'text-warn')}>
                       {checked.exact
                         ? 'Same as the model sentence.'
                         : checked.failed
