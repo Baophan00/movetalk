@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
 import { ArrowRight, BookOpen, Headphones, Mic, Sparkles, Volume2 } from 'lucide-react'
 import { Button } from '../components/ui/button'
@@ -12,6 +13,43 @@ const STEPS = [
   { icon: Headphones, title: 'Hear it, then repeat it', body: 'Every line has its own recording. Listen, repeat, listen again and fix the rhythm.' },
   { icon: Mic, title: 'Speak for a reason', body: 'Each lesson ends with a concrete speaking task, not a gap-fill drill.' },
 ]
+
+const HERO = ['/hero/1.jpg', '/hero/2.jpg', '/hero/3.jpg', '/hero/4.jpg']
+
+function LessonPhotos() {
+  const [i, setI] = useState(0)
+  useEffect(() => {
+    const t = setInterval(() => setI((n) => (n + 1) % HERO.length), 4000)
+    return () => clearInterval(t)
+  }, [])
+  return (
+    <div className="relative -mx-5 -mt-5 mb-4 h-48 overflow-hidden rounded-t-[22px] bg-[#e6ddfb]">
+      {HERO.map((src, n) => (
+        <img
+          key={src}
+          src={src}
+          alt=""
+          loading={n === 0 ? 'eager' : 'lazy'}
+          className={cn(
+            'absolute inset-0 h-full w-full object-cover transition-opacity duration-1000',
+            n === i ? 'opacity-100' : 'opacity-0',
+          )}
+        />
+      ))}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#f3efff] to-transparent" />
+      <div className="absolute inset-x-0 bottom-2.5 flex justify-center gap-1.5">
+        {HERO.map((src, n) => (
+          <button
+            key={src}
+            onClick={() => setI(n)}
+            aria-label={`Photo ${n + 1}`}
+            className={cn('h-1.5 rounded-full transition-all', n === i ? 'w-4 bg-primary' : 'w-1.5 bg-primary/30')}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export function Landing({ onStart, onOpenLesson, signedIn, onContinue }: Props) {
   const cards = A1[0]?.parts.vocab.slice(0, 3) ?? []
@@ -60,6 +98,7 @@ export function Landing({ onStart, onOpenLesson, signedIn, onContinue }: Props) 
             transition={{ duration: 0.55, delay: 0.1 }}
             className="rounded-3xl border border-[#d9d0f7] bg-[#f3efff] p-5 shadow-lift"
           >
+            <LessonPhotos />
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-[.14em] text-muted">Lesson 1 · A1</p>
