@@ -32,6 +32,24 @@
   button, a { -webkit-tap-highlight-color: transparent; }
 
   /* One focus ring for every control, including the plain buttons written inline in screens. */
+  /* Sticky headers and the mobile tab bar sit over the page, so a focused field must not scroll
+     up underneath them once the keyboard is open. */
+  html {
+    scroll-padding-top: 5rem;
+    scroll-padding-bottom: 5.5rem;
+  }
+
+  /* iOS Safari zooms the whole page when a field smaller than 16px takes focus, and stays zoomed
+     after the keyboard closes: the layout shifts and the learner loses their place. Only touch
+     devices get the bigger field text; desktop keeps the tighter type. */
+  @media (hover: none) and (pointer: coarse) {
+    input:not([type='range']):not([type='checkbox']):not([type='radio']),
+    textarea,
+    select {
+      font-size: 16px !important;
+    }
+  }
+
   :where(a, button, select, textarea, input, [tabindex]:not([tabindex='-1'])):focus-visible {
     outline: 2px solid hsl(var(--primary) / .55);
     outline-offset: 2px;

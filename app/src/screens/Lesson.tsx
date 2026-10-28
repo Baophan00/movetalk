@@ -14,7 +14,6 @@ import { cn } from '../lib/utils'
 type Props = {
   lessonN: number
   onPickLesson: (n: number) => void
-  onBack: () => void
 }
 
 const PLAY_LABEL = 'Play'
@@ -1607,7 +1606,7 @@ function Flow({ groups, tone: sectionTone }: { groups: FlowGroup[]; tone?: Tone 
   )
 }
 
-export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
+export function Lesson({ lessonN, onPickLesson }: Props) {
   const lesson = lessonA1(lessonN) ?? A1[0]
   const [active, setActive] = useState(0)
   const [seen, setSeen] = useState<number[]>([])
@@ -1660,9 +1659,20 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
 
   useEffect(() => {
     if (!lesson) return
-    setActive(0)
+    // Reopening a lesson returns the learner to the section they left, not to the top.
+    const saved = Number(localStorage.getItem(`mt2_lesson_at_${lesson.n}`) ?? 0)
+    setActive(Number.isFinite(saved) && saved > 0 ? saved : 0)
     setSeen(partsSeen(lesson.n))
   }, [lessonN, lesson])
+
+  useEffect(() => {
+    if (!lesson) return
+    try {
+      localStorage.setItem(`mt2_lesson_at_${lesson.n}`, String(active))
+    } catch {
+      /* private mode */
+    }
+  }, [active, lesson])
 
   const current = sections[active] ?? sections[0]
 
@@ -1690,10 +1700,7 @@ export function Lesson({ lessonN, onPickLesson, onBack }: Props) {
 
   return (
     <div className="w-full px-3 pb-10 pt-3 sm:px-5 lg:px-7">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <button onClick={onBack} className="inline-flex items-center gap-1.5 text-[12.5px] text-muted transition-colors hover:text-ink">
-          <ArrowLeft className="h-3.5 w-3.5" /> All lessons
-        </button>
+      <div className="flex flex-wrap items-center justify-end gap-2">
         <div className="flex items-center gap-1.5">
           <Button variant="outline" size="icon" aria-label="Previous lesson" disabled={!prevLesson} onClick={() => prevLesson && onPickLesson(prevLesson.n)}>
             <ArrowLeft className="h-3.5 w-3.5" />

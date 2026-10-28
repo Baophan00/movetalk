@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ArrowLeft, Check, ChevronRight, Lightbulb, RotateCcw, Sparkles, X } from 'lucide-react'
+import { Check, ChevronRight, Lightbulb, RotateCcw, Sparkles, X } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Badge } from '../components/ui/badge'
 import { Card, CardBody } from '../components/ui/card'
@@ -159,9 +159,6 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
     }
     return (
       <div className="theme-overview mx-auto max-w-2xl bg-bg px-4 pb-28 pt-4 sm:px-6">
-        <button onClick={onExit} className="mb-4 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-muted hover:text-ink">
-          <ArrowLeft className="h-3.5 w-3.5" /> Class practice
-        </button>
         <Card className="overflow-hidden">
           <CardBody className="p-6">
             <div className="flex items-center gap-3">
@@ -274,10 +271,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
 
   return (
     <div className="theme-overview mx-auto max-w-2xl bg-bg px-4 pb-28 pt-4 sm:px-6">
-      <div className="mb-3 flex items-center justify-between">
-        <button onClick={onExit} className="inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-muted hover:text-ink">
-          <ArrowLeft className="h-3.5 w-3.5" /> Class practice
-        </button>
+      <div className="mb-3 flex items-center justify-end">
         <span className="text-[12px] font-semibold text-muted">
           {idx + 1} / {total}
         </span>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { cn } from './lib/utils'
 import { MobileTabs } from './components/MobileTabs'
@@ -26,6 +26,7 @@ import { Button } from './components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from './components/ui/dialog'
 import { Input } from './components/ui/input'
 import { A1 } from './lib/curriculum'
+import { PARENT, hashFor, parseHash } from './lib/nav'
 import { pullProgress } from './lib/sync'
 import { pullUnlocks } from './lib/unlockSync'
 import { supabase } from './lib/supabase'
@@ -50,6 +51,9 @@ export default function App() {
   const [practiceN, setPracticeN] = useState(1)
   const [menu, setMenu] = useState(false)
   const [signInOpen, setSignInOpen] = useState(false)
+  // How many screens deep the learner is inside MOVE. Supabase rewrites the current history entry's
+  // state while it reads the session out of the URL, so this cannot be read back from history.state.
+  const depthRef = useRef(0)
 
   const applySession = useCallback(async (session: Session | null) => {
     if (!session) {
@@ -62,7 +66,12 @@ export default function App() {
     await pullUnlocks().catch(() => undefined)
     setProfile(next)
     setView(next.role === 'teacher' ? 'teacher' : 'student')
-    setRoute(next.role === 'teacher' ? FIRST_TEACHER : 'today')
+    // A refresh or a shared link keeps its place: #/lesson/3 reopens that lesson, not Today.
+    const wanted = parseHash(window.location.hash)
+    const fallback: Route = next.role === 'teacher' ? FIRST_TEACHER : 'today'
+    if (wanted?.lessonN) setLessonN(wanted.lessonN)
+    if (wanted?.practiceN) setPracticeN(wanted.practiceN)
+    setRoute(wanted && allowed(wanted.route, next.role) ? wanted.route : fallback)
     setBooting(false)
   }, [])
 
@@ -73,7 +82,8 @@ export default function App() {
     if (import.meta.env.DEV && localStorage.getItem('mt2_dev_teacher')) {
       setProfile({ id: 'dev', email: 'dev@local', name: 'Dev Teacher', role: 'teacher' })
       setView('teacher')
-      setRoute(FIRST_TEACHER)
+      const wanted = parseHash(window.location.hash)
+      setRoute(wanted?.route ?? FIRST_TEACHER)
       setBooting(false)
       return () => {
         alive = false
@@ -111,6 +121,59 @@ export default function App() {
     }
   }, [applySession])
 
+  // A deep link arrives with nothing behind it, so a parent screen is laid underneath first: the
+  // browser's Back arrow then steps inside MOVE instead of leaving the site.
+  useEffect(() => {
+    if (!profile) return
+    const state = window.history.state as { move?: boolean; depth?: number } | null
+    if (state?.move) {
+      depthRef.current = state.depth ?? 0
+      return
+    }
+    const here = hashFor({ route, lessonN, practiceN })
+    const parent = PARENT[route]
+    if (parent) {
+      window.history.replaceState({ move: true, depth: 0 }, '', hashFor({ route: parent }))
+      window.history.pushState({ move: true, depth: 1 }, '', here)
+    } else {
+      window.history.replaceState({ move: true, depth: 1 }, '', here)
+    }
+    depthRef.current = 1
+    // Once, when the app first has a profile. Later moves are pushed by the effect below.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile])
+
+  // One history entry per screen, so the address bar and the Back arrow agree with what is on screen.
+  useEffect(() => {
+    if (!profile) return
+    const here = hashFor({ route, lessonN, practiceN })
+    if (window.location.hash === here) return
+    depthRef.current += 1
+    window.history.pushState({ move: true, depth: depthRef.current }, '', here)
+  }, [profile, route, lessonN, practiceN])
+
+  useEffect(() => {
+    const onPop = () => {
+      depthRef.current = Math.max(0, depthRef.current - 1)
+      const next = parseHash(window.location.hash)
+      if (!next) {
+        setRoute(profile?.role === 'teacher' ? FIRST_TEACHER : 'today')
+        return
+      }
+      if (profile && !allowed(next.route, profile.role)) {
+        setRoute('today')
+        return
+      }
+      if (next.lessonN) setLessonN(next.lessonN)
+      if (next.practiceN) setPracticeN(next.practiceN)
+      setRoute(next.route)
+      setMenu(false)
+      window.scrollTo({ top: 0 })
+    }
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [profile])
+
   const go = (r: Route) => {
     if (!profile) {
       setSignInOpen(true)
@@ -124,6 +187,16 @@ export default function App() {
     setRoute(r)
     setMenu(false)
     window.scrollTo({ top: 0 })
+  }
+
+  /** In-app Back: unwind the app's own history, or fall back to the screen's parent. */
+  const back = () => {
+    const parent = PARENT[route] ?? 'today'
+    if (depthRef.current > 0) {
+      window.history.back()
+      return
+    }
+    go(parent)
   }
 
   const openLesson = (n: number) => {
@@ -140,6 +213,9 @@ export default function App() {
     await signOut()
     setProfile(null)
     setRoute('landing')
+    // Leave no private screen behind in the address bar or in history.
+    window.history.replaceState({ move: true, depth: 0 }, '', '#/landing')
+    depthRef.current = 0
   }
 
   const switchView = () => {
@@ -214,6 +290,7 @@ export default function App() {
           title={titles[route] || 'MOVE'}
           crumb={route === 'lesson' ? 'Level A1' : TEACHER_ROUTES.includes(route) ? 'Teacher' : undefined}
           onMenu={() => setMenu(true)}
+          onBack={PARENT[route] ? back : undefined}
           right={
             !TEACHER_ROUTES.includes(route) && route !== 'lesson' && route !== 'profile' && route !== 'today' && route !== 'study' && route !== 'progress' && route !== 'words' && route !== 'mistakes' && (
               <Button variant="soft" size="sm" className="hidden sm:inline-flex" onClick={() => openLesson(lessonN)}>
@@ -256,7 +333,7 @@ export default function App() {
             <Dashboard name={profile.name} onOpenLesson={openPractice} onHomework={() => go('homework')} onLessons={() => go('lessons')} />
           )}
           {route === 'lessons' && <Lessons onPractise={openPractice} onReview={() => go('review')} onHomework={() => go('homework')} />}
-          {route === 'lesson' && <Lesson lessonN={lessonN} onPickLesson={setLessonN} onBack={() => go('dashboard')} />}
+          {route === 'lesson' && <Lesson lessonN={lessonN} onPickLesson={setLessonN} />}
           {route === 'homework' && (
             <Homework
               onPractise={openPractice}
@@ -277,7 +354,7 @@ export default function App() {
             />
           )}
           {route === 'practice' && (
-            <Practise lessonN={practiceN} onExit={() => go('lessons')} />
+            <Practise lessonN={practiceN} onExit={back} />
           )}
           {route === 'profile' && (
             <ProfileScreen name={profile.name} email={profile.email} role={profile.role} onSignOut={doSignOut} onGo={(r) => go(r)} />
