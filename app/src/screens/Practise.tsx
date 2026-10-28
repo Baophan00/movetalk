@@ -143,7 +143,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
       bySkill.set(r.item.skill, s)
     }
     return (
-      <div className="mx-auto max-w-2xl px-4 pb-28 pt-4 sm:px-6">
+      <div className="theme-overview mx-auto max-w-2xl bg-bg px-4 pb-28 pt-4 sm:px-6">
         <button onClick={onExit} className="mb-4 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-muted hover:text-ink">
           <ArrowLeft className="h-3.5 w-3.5" /> Class practice
         </button>
@@ -235,7 +235,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
     : []
 
   return (
-    <div className="mx-auto max-w-2xl px-4 pb-28 pt-4 sm:px-6">
+    <div className="theme-overview mx-auto max-w-2xl bg-bg px-4 pb-28 pt-4 sm:px-6">
       <div className="mb-3 flex items-center justify-between">
         <button onClick={onExit} className="inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-muted hover:text-ink">
           <ArrowLeft className="h-3.5 w-3.5" /> Class practice

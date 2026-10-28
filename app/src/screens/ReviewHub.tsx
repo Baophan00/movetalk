@@ -38,7 +38,7 @@ export function ReviewHub({
   })
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
+    <div className="theme-overview mx-auto max-w-4xl bg-bg px-4 py-6 sm:px-6 lg:px-8">
       <p className="text-[12px] font-semibold uppercase tracking-[.14em] text-muted">On your own</p>
       <h2 className="mt-1 text-[24px] font-semibold tracking-tight">Review</h2>
       <p className="mt-1 max-w-[58ch] text-[13px] text-muted">

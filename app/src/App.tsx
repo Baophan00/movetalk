@@ -204,7 +204,12 @@ export default function App() {
         canSwitch={profile.role === 'teacher'}
         total={A1.length}
       />
-      <div className="lg:pl-[264px]">
+      <div
+        className={cn(
+          'lg:pl-[264px]',
+          ['lessons', 'practice', 'homework', 'review'].includes(route) && 'theme-overview min-h-screen bg-bg',
+        )}
+      >
         <TopBar
           title={titles[route] || 'MOVE'}
           crumb={route === 'lesson' ? 'Level A1' : TEACHER_ROUTES.includes(route) ? 'Teacher' : undefined}

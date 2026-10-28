@@ -48,7 +48,7 @@ export function Lessons({
   const [openRead, setOpenRead] = useState<number | null>(null)
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
+    <div className="theme-overview mx-auto max-w-4xl bg-bg px-4 py-6 sm:px-6 lg:px-8">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="text-[12px] font-semibold uppercase tracking-[.14em] text-muted">Level A1</p>

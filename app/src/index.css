@@ -54,3 +54,26 @@
 @media (prefers-reduced-motion: reduce) {
   .animate-\[ripple_1\.8s_ease-out_infinite\] { animation: none; }
 }
+
+/* The practice area borrows the teacher overview palette: cream paper, sage action, amber lines.
+   Scoped to a wrapper so the rest of the student app keeps its lavender skin. */
+.theme-overview {
+  --bg: 44 38% 96%;
+  --surface: 40 44% 99%;
+  --line: 41 34% 87%;
+  --ink: 140 17% 19%;
+  --muted: 140 8% 43%;
+  --primary: 155 14% 43%;
+  --primary-soft: 100 22% 93%;
+  --accent: 34 47% 52%;
+  --ok: 150 24% 38%;
+  --warn: 5 58% 42%;
+}
+.theme-overview .card-paper {
+  background: hsl(40 55% 97%);
+  border-color: hsl(41 43% 79%);
+}
+.theme-overview .chip-sage {
+  background: hsl(104 26% 93%);
+  color: hsl(150 20% 30%);
+}
