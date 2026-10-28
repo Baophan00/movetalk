@@ -150,8 +150,8 @@ export function Study({ seedLevel, seedRoom, seedPrompt }: { seedLevel?: Level; 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6">
       <p className="text-[11px] font-bold uppercase tracking-[.16em] text-primary">Practice your way</p>
-      <h1 className="mt-1 text-[26px] font-semibold tracking-tight">Four skills, scored as you go</h1>
-      <p className="mt-1 text-[13px] text-muted">A1 follows your lessons. A2, B1 and B2 are extra practice you can open any time.</p>
+      <h1 className="mt-1 text-[24px] font-semibold tracking-tight sm:text-[26px]">Four skills, scored as you go</h1>
+      <p className="mt-1 text-[12.5px] text-muted">A1 follows your lessons. A2, B1 and B2 are extra practice.</p>
 
       <div className="mt-4 grid grid-cols-4 gap-1.5">
         {LEVELS.map((l) => (
@@ -219,29 +219,29 @@ export function Study({ seedLevel, seedRoom, seedPrompt }: { seedLevel?: Level; 
               </div>
             </>
           )}
-          <p className="mt-3 rounded-xl bg-bg/70 px-3 py-2 text-[11.5px] font-medium text-muted">Đang chọn: {source.label}</p>
+          <p className="mt-3 rounded-xl bg-bg/70 px-3 py-2 text-[11.5px] font-medium text-muted">Selected: {source.label}</p>
         </CardBody>
       </Card>
-      <div className="mt-3 grid gap-3 sm:grid-cols-2">
-        {ROOMS.map((r) => {
-          return (
-            <button
-              key={r.key}
-              onClick={() => setRoom(r.key)}
-              className="group relative overflow-hidden rounded-3xl border border-line bg-surface p-4 text-left shadow-card transition-all active:scale-[.99] hover:-translate-y-0.5 hover:shadow-lift"
-            >
-              <span className={cn('absolute -right-8 -top-10 h-28 w-28 rounded-full bg-gradient-to-br opacity-20 blur-xl transition-opacity group-hover:opacity-35', r.from)} />
-              <span className="relative grid h-14 w-14 place-items-center rounded-2xl bg-bg/70">
-                <Icon3D name={r.icon3d} size={48} />
+      {/* Four rooms in two rows on a phone, one row once there is room: the choice fits above the fold. */}
+      <div className="mt-3 grid grid-cols-2 gap-2.5 lg:grid-cols-4">
+        {ROOMS.map((r) => (
+          <button
+            key={r.key}
+            onClick={() => setRoom(r.key)}
+            className="group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-surface p-3 text-left shadow-card transition-all active:scale-[.98] hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-lift"
+          >
+            <span className={cn('pointer-events-none absolute -right-6 -top-8 h-20 w-20 rounded-full bg-gradient-to-br opacity-25 blur-xl transition-opacity group-hover:opacity-45', r.from)} />
+            <span className="relative flex items-start justify-between">
+              <span className="grid h-11 w-11 place-items-center rounded-xl bg-bg/70">
+                <Icon3D name={r.icon3d} size={36} />
               </span>
-              <p className="relative mt-3 text-[16px] font-semibold">{r.title}</p>
-              <p className="relative text-[12px] text-muted">{r.vi} · {r.hint}</p>
-              <span className="relative mt-3 inline-flex items-center gap-1 text-[12px] font-semibold text-primary">
-                Start <ArrowRight className="h-3.5 w-3.5" />
-              </span>
-            </button>
-          )
-        })}
+              <ArrowRight className="mt-1 h-4 w-4 text-muted transition group-hover:translate-x-0.5 group-hover:text-primary" />
+            </span>
+            <span className="relative mt-2 text-[14px] font-semibold leading-tight">{r.title}</span>
+            <span className="relative mt-0.5 text-[11px] leading-snug text-muted">{r.vi}</span>
+            <span className="relative mt-1 hidden text-[11px] leading-snug text-muted lg:block">{r.hint}</span>
+          </button>
+        ))}
       </div>
 
     </div>
