@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight, Check, ChevronRight, Info, Volume2 } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Progress } from '../components/ui/progress'
 import { A1, hasChoicePractice, lessonA1, partPlan, quizFor, titleOf, type FlowGroup, type LessonFile } from '../lib/curriculum'
-import { speak } from '../lib/audio'
+import { playLine, speak } from '../lib/audio'
+import { SpeakButton } from '../components/SpeakButton'
 import { playCorrect, playWrong } from '../lib/sfx'
 import { markPart, partsSeen } from '../lib/progress'
 import { pushPart } from '../lib/sync'
@@ -558,7 +559,34 @@ function Grammar({ sections }: { sections: LessonFile['parts']['grammar'] }) {
 
 function Dialogue({ turns }: { turns: LessonFile['parts']['dialogue'] }) {
   const speakers = [...new Set(turns.map((t) => t.who))]
+  const [running, setRunning] = useState(false)
+  const stopRef = useRef(false)
+
+  // Plays the recorded lines one after another so the pair sounds like a conversation.
+  const playAll = async () => {
+    if (running) {
+      stopRef.current = true
+      setRunning(false)
+      return
+    }
+    stopRef.current = false
+    setRunning(true)
+    for (const t of turns) {
+      if (stopRef.current) break
+      await playLine(t.line, 1)
+    }
+    setRunning(false)
+  }
+
   return (
+    <div>
+      <button
+        onClick={() => void playAll()}
+        className="mb-2 inline-flex items-center gap-1.5 rounded-xl border border-line bg-surface px-2.5 py-1.5 text-[11.5px] font-semibold text-primary transition hover:bg-primary-soft"
+      >
+        <Volume2 className="h-3.5 w-3.5" />
+        {running ? 'Stop' : `Play the conversation · ${turns.length} lines`}
+      </button>
     <div className="space-y-1.5">
       {turns.map((t, i) => {
         const mine = speakers.indexOf(t.who) % 2 === 1
@@ -598,6 +626,7 @@ function Dialogue({ turns }: { turns: LessonFile['parts']['dialogue'] }) {
         )
       })}
     </div>
+    </div>
   )
 }
 
@@ -617,6 +646,7 @@ function Checks({ items }: { items: LessonFile['parts']['listenCheck'] }) {
                 {i + 1}
               </span>
               <p className="min-w-0 flex-1 text-[13px] font-medium leading-snug">{c.q}</p>
+              <SpeakButton text={String(c.a).match(/[“"]([^”"]+)[”"]/)?.[1] ?? c.a} size="sm" label="Hear the answer" />
             </div>
             {open ? (
               <p className="mt-1.5 border-l-2 border-[#2f9e79]/40 pl-2 text-[12px] text-[#0f6b4f]">{c.a}</p>

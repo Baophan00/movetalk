@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ArrowRight, BookOpen, Check, Headphones, Mic, Pencil, Volume2, X } from 'lucide-react'
+import { ArrowRight, BookOpen, Check, Headphones, Mic, Pencil, X } from 'lucide-react'
 import { Card, CardBody } from '../components/ui/card'
 import { Badge } from '../components/ui/badge'
 import { SpeakRoom } from '../components/SpeakRoom'
@@ -9,6 +9,7 @@ import { compare } from '../lib/speech'
 import { saveWriting } from '../lib/writings'
 import { addCard, recordAttempt } from '../lib/study'
 import { playLine, speak } from '../lib/audio'
+import { AudioPlayer } from '../components/AudioPlayer'
 import { playCorrect, playWrong } from '../lib/sfx'
 import { LEVELS, PACKS, packsFor, type Level, type Pack, type Question } from '../content/practice/packs'
 import { cn } from '../lib/utils'
@@ -277,7 +278,6 @@ function Listening({ source, onBack }: { source: Source; onBack: () => void }) {
   const [i, setI] = useState(0)
   const [picked, setPicked] = useState<string | null>(null)
   const [score, setScore] = useState(0)
-  const [slow, setSlow] = useState(false)
   const item = items[i]
 
   if (!item) {
@@ -316,20 +316,7 @@ function Listening({ source, onBack }: { source: Source; onBack: () => void }) {
             <span className="text-[12px] font-semibold text-muted">{score} right</span>
           </div>
 
-          <div className="mt-4 flex gap-2">
-            <button
-              onClick={() => void playLine(item.line, 1)}
-              className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-[#5D7B6F] to-[#8FAE92] px-4 py-5 text-[14px] font-semibold text-white shadow-card transition active:scale-[.99]"
-            >
-              <Volume2 className="h-5 w-5" /> Play
-            </button>
-            <button
-              onClick={() => { setSlow(true); void playLine(item.line, 0.7) }}
-              className={cn('rounded-2xl border px-3 text-[12px] font-semibold transition', slow ? 'border-transparent bg-primary-soft text-primary' : 'border-line text-muted')}
-            >
-              Slow
-            </button>
-          </div>
+          <AudioPlayer text={item.line} label="The line you hear" className="mt-4" />
 
           <p className="mt-4 text-[12px] font-semibold text-muted">Which line did you hear?</p>
           <div className="mt-2 grid gap-2">
@@ -427,13 +414,8 @@ function Reading({ source, onBack }: { source: Source; onBack: () => void }) {
         <CardBody className="p-5">
           <div className="flex items-start justify-between gap-2">
             <p className="text-[11px] font-bold uppercase tracking-[.14em] text-muted">{source.reading.title}</p>
-            <button
-              onClick={() => void playLine(source.reading.text.join(' '), 1)}
-              className="shrink-0 rounded-lg border border-line px-2 py-1 text-[11px] font-semibold"
-            >
-              Hear it
-            </button>
           </div>
+          <AudioPlayer text={source.reading.text.join(' ')} label="Read it to me" className="mt-2" />
           <div className="mt-2.5 space-y-2.5">
             {source.reading.text.map((line, k) => (
               <p key={k} className="text-[15px] leading-relaxed">

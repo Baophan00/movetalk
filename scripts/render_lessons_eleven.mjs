@@ -49,6 +49,21 @@ for (const lesson of lessons) {
   if (mode === 'examples' || mode === 'all') {
     for (const v of parts.vocab || []) if (v.example) jobs.push({ text: v.example, speaker: 'B' })
   }
+  if (mode === 'listen' || mode === 'all') {
+    // listenCheck rows are "who / question" notes with the spoken line in quotes: record the line.
+    for (const row of parts.listenCheck || []) {
+      const quoted = String(row.a || '').match(/[“"]([^”"]+)[”"]/)
+      jobs.push({ text: quoted ? quoted[1] : String(row.a || ''), speaker: 'A' })
+    }
+  }
+}
+
+if (mode === 'reading' || mode === 'all') {
+  for (const f of readdirSync(LESSONS).filter((f) => /-reading\.json$/.test(f)).sort()) {
+    const reading = JSON.parse(readFileSync(resolve(LESSONS, f), 'utf8'))
+    const text = Array.isArray(reading.text) ? reading.text.join(' ') : String(reading.text || '')
+    if (text) jobs.push({ text, speaker: 'A' })
+  }
 }
 
 const seen = new Set()

@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ArrowLeft, Check, ChevronRight, Headphones, Lightbulb, RotateCcw, Sparkles, Volume2, X } from 'lucide-react'
+import { ArrowLeft, Check, ChevronRight, Lightbulb, RotateCcw, Sparkles, X } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Badge } from '../components/ui/badge'
 import { Card, CardBody } from '../components/ui/card'
 import { Progress } from '../components/ui/progress'
-import { playLine, speak } from '../lib/audio'
 import { playCorrect, playFinish, playWrong } from '../lib/sfx'
+import { AudioPlayer } from '../components/AudioPlayer'
+import { SpeakButton } from '../components/SpeakButton'
 import { A1, titleOf } from '../lib/curriculum'
 import { attemptKind, sessionFor, type Exercise, type Skill } from '../lib/exercises'
 import { addCard, recordAttempt } from '../lib/study'
@@ -266,6 +267,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
         <Card className="mt-3 border-line/70 bg-bg/50">
           <CardBody className="p-4">
             <p className="text-[12.5px] leading-relaxed text-ink/85">{item.passage}</p>
+            <AudioPlayer text={item.passage} label="Read the text" className="mt-3" />
           </CardBody>
         </Card>
       )}
@@ -276,17 +278,15 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
             <p className={cn('flex-1 font-medium leading-snug', item.kind === 'flash' ? 'text-[26px] tracking-tight' : 'text-[16px]')}>
               {item.prompt}
             </p>
-            {(item.audio || item.kind === 'listen' || item.kind === 'gap') && (
-              <button
-                onClick={() => (item.audio ? playLine(item.audio) : speak(item.prompt))}
-                className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary transition hover:bg-primary/15"
-                aria-label="Play"
-              >
-                {item.kind === 'listen' ? <Headphones className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-              </button>
+            {item.kind !== 'listen' && (item.audio || item.skill === 'vocab') && (
+              <SpeakButton text={item.audio ?? item.prompt} label="Hear the word" />
             )}
           </div>
           {item.vi && <p className="mt-1 text-[12px] text-muted">{item.vi}</p>}
+
+          {item.kind === 'listen' && item.audio && (
+            <AudioPlayer text={item.audio} label="Listen to the line" className="mt-3" />
+          )}
 
           {isOrder && (
             <div className="mt-4">
@@ -440,9 +440,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
           <div className="mt-4 flex flex-wrap items-center gap-2">
             {state === 'idle' && selfCheck && (
               <>
-                <Button variant="soft" onClick={() => (item.audio ? playLine(item.audio) : speak(item.prompt))}>
-                  <Headphones className="h-4 w-4" /> Play again
-                </Button>
+                {item.kind !== 'listen' && <SpeakButton text={item.audio ?? item.prompt} label="Play again" />}
                 <Button onClick={reveal}>Show the answer</Button>
               </>
             )}
