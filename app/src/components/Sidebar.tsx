@@ -32,7 +32,7 @@ type NavItem = { key: Route; label: string; icon: typeof Home }
 
 const STUDENT_NAV: NavItem[] = [
   { key: 'today', label: 'Today', icon: Home },
-  { key: 'lessons', label: 'Course', icon: Compass },
+  { key: 'lessons', label: 'Class practice', icon: Compass },
   { key: 'study', label: 'Practice your way', icon: Sparkles },
   { key: 'progress', label: 'Progress', icon: TrendingUp },
   { key: 'profile', label: 'Profile', icon: UserRound },

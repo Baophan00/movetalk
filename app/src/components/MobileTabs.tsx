@@ -4,7 +4,7 @@ import type { Route } from './Sidebar'
 
 const TABS: { key: Route; label: string; icon: typeof Home }[] = [
   { key: 'today', label: 'Today', icon: Home },
-  { key: 'lessons', label: 'Course', icon: Compass },
+  { key: 'lessons', label: 'Class', icon: Compass },
   { key: 'study', label: 'Practice', icon: Sparkles },
   { key: 'progress', label: 'Progress', icon: TrendingUp },
   { key: 'profile', label: 'Profile', icon: UserRound },
