@@ -83,20 +83,20 @@ export function Today({ name, onGo }: { name: string; onGo: Go }) {
         <p className="relative mt-3.5 text-[12px] font-medium text-white/85">
           Lesson {view.lesson.n} · {view.title}
         </p>
-        <p className="relative text-[11.5px] text-white/78">
+        <p className="relative text-[11.5px] text-white/75">
           {view.read} of {view.total} parts read
         </p>
 
         <div className="relative mt-4 flex items-center gap-2">
           <button
             onClick={() => onGo('lesson', view.lesson.n)}
-            className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-2.5 text-[12px] font-semibold text-[#33503C] shadow-sm transition hover:bg-white/92 active:scale-[.985]"
+            className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-2.5 text-[12px] font-semibold text-[#33503C] shadow-sm transition hover:bg-white/90 active:scale-[.985]"
           >
             <BookOpen className="h-4 w-4" /> Continue lesson
           </button>
           <button
             onClick={() => onGo('practice', view.lesson.n)}
-            className="inline-flex items-center gap-1.5 rounded-full border border-white/45 px-3.5 py-2.5 text-[12px] font-semibold text-white transition hover:bg-white/12 active:scale-[.985]"
+            className="inline-flex items-center gap-1.5 rounded-full border border-white/45 px-3.5 py-2.5 text-[12px] font-semibold text-white transition hover:bg-white/10 active:scale-[.985]"
           >
             <Mic className="h-4 w-4" /> Say one sentence
           </button>

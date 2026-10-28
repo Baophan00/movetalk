@@ -59,6 +59,8 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
   const [done, setDone] = useState(false)
   const [matched, setMatched] = useState<Record<string, string>>({})
   const [selWord, setSelWord] = useState<string | null>(null)
+  // A meaning can be picked before a word, so the pair reads in whichever order the learner prefers.
+  const [selVi, setSelVi] = useState<number | null>(null)
   const [badPair, setBadPair] = useState('')
 
   const item = items[idx]
@@ -71,6 +73,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
     setHint(false)
     setMatched({})
     setSelWord(null)
+    setSelVi(null)
     setBadPair('')
   }, [idx, round])
 
@@ -220,25 +223,47 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
   const selfCheck = item.kind === 'flash' || (!item.options && (item.kind === 'listen' || item.kind === 'speak'))
   const isOrder = item.kind === 'order' || item.kind === 'sequence'
   const pairList = item.pairs ?? []
-  const meanings = shuffled(pairList.map((p) => p.vi), lessonN + idx * 13)
+  // Shuffle indices, not the meanings themselves: two pairs may share a translation, and the index
+  // keeps each tile its own identity.
+  const pairOrder = shuffled(pairList.map((_, i) => String(i)), lessonN + idx * 13).map(Number)
 
-  function pickMeaning(vi: string, owner: string) {
-    if (!selWord) return
-    if (owner === selWord) {
-      const next = { ...matched, [selWord]: vi }
-      setMatched(next)
-      setSelWord(null)
-      setBadPair('')
-      if (Object.keys(next).length === pairList.length) {
-        playCorrect()
-        setState('right')
-        setResults((rs) => [...rs.filter((r) => r.item.id !== item.id), { item, correct: true }])
-        save(item, true)
-      }
-    } else {
-      setBadPair(`${selWord}|${vi}`)
-      window.setTimeout(() => setBadPair(''), 650)
+  function lock(word: string) {
+    const next = { ...matched, [word]: word }
+    setMatched(next)
+    setSelWord(null)
+    setSelVi(null)
+    setBadPair('')
+    if (Object.keys(next).length === pairList.length) {
+      playCorrect()
+      setState('right')
+      setResults((rs) => [...rs.filter((r) => r.item.id !== item.id), { item, correct: true }])
+      save(item, true)
     }
+  }
+
+  function flashBad(a: string, b: string) {
+    setBadPair(`${a}|${b}`)
+    window.setTimeout(() => setBadPair(''), 650)
+  }
+
+  function pickWord(word: string) {
+    if (selVi !== null) {
+      if (pairList[selVi]?.word === word) lock(word)
+      else flashBad(word, pairList[selVi]?.vi ?? '')
+      return
+    }
+    setSelWord((prev) => (prev === word ? null : word))
+  }
+
+  function pickMeaning(i: number) {
+    const pair = pairList[i]
+    if (!pair) return
+    if (selWord) {
+      if (pair.word === selWord) lock(pair.word)
+      else flashBad(selWord, pair.vi)
+      return
+    }
+    setSelVi((prev) => (prev === i ? null : i))
   }
   const chunks = isOrder
     ? shuffled(
@@ -334,15 +359,16 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
               <div className="space-y-2">
                 {pairList.map((p) => {
                   const locked = !!matched[p.word]
+                  const bad = badPair.startsWith(`${p.word}|`)
                   return (
                     <button
                       key={p.word}
                       disabled={locked}
-                      onClick={() => setSelWord(p.word)}
+                      onClick={() => pickWord(p.word)}
                       aria-pressed={!locked && selWord === p.word}
                       className={cn(
                         'w-full rounded-xl border px-3 py-2 text-left text-[13px] transition disabled:cursor-default',
-                        locked ? CHOICE.correct : selWord === p.word ? CHOICE.selected : CHOICE.idle,
+                        locked ? CHOICE.correct : bad ? CHOICE.wrong : selWord === p.word ? CHOICE.selected : CHOICE.idle,
                       )}
                     >
                       {p.word}
@@ -351,22 +377,22 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
                 })}
               </div>
               <div className="space-y-2">
-                {meanings.map((vi) => {
-                  const owner = pairList.find((p) => p.vi === vi)?.word ?? ''
-                  const locked = !!matched[owner]
-                  const bad = badPair.endsWith(`|${vi}`) && badPair.startsWith(`${selWord}|`)
+                {pairOrder.map((i) => {
+                  const pair = pairList[i]
+                  const locked = !!matched[pair.word]
+                  const bad = badPair.endsWith(`|${pair.vi}`)
                   return (
                     <button
-                      key={vi}
+                      key={i}
                       disabled={locked}
-                      onClick={() => pickMeaning(vi, owner)}
-                      aria-pressed={!locked && selWord === owner}
+                      onClick={() => pickMeaning(i)}
+                      aria-pressed={!locked && selVi === i}
                       className={cn(
                         'w-full rounded-xl border px-3 py-2 text-left text-[12.5px] transition disabled:cursor-default',
-                        locked ? CHOICE.correct : bad ? CHOICE.wrong : selWord === owner ? CHOICE.selected : CHOICE.idle,
+                        locked ? CHOICE.correct : bad ? CHOICE.wrong : selVi === i ? CHOICE.selected : CHOICE.idle,
                       )}
                     >
-                      {vi}
+                      {pair.vi}
                     </button>
                   )
                 })}

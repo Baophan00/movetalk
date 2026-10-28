@@ -9,7 +9,7 @@ const ring = 'ring-1 ring-inset'
 export const CHOICE: Record<ChoiceState, string> = {
   idle: 'border-line bg-surface text-ink hover:border-primary/45 hover:bg-primary-soft/40',
   selected: `border-primary bg-primary-soft text-ink ${ring} ring-primary/35`,
-  correct: `border-ok bg-ok/12 text-ink ${ring} ring-ok/35`,
+  correct: `border-ok bg-ok/10 text-ink ${ring} ring-ok/30`,
   wrong: `border-danger bg-danger/10 text-ink ${ring} ring-danger/35`,
   muted: 'border-line bg-surface text-muted opacity-60',
 }
