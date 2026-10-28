@@ -25,7 +25,6 @@ import { Button } from './components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from './components/ui/dialog'
 import { Input } from './components/ui/input'
 import { A1 } from './lib/curriculum'
-import { partsSeen } from './lib/progress'
 import { pullProgress } from './lib/sync'
 import { pullUnlocks } from './lib/unlockSync'
 import { supabase } from './lib/supabase'
@@ -211,7 +210,6 @@ export default function App() {
         onSignOut={signOut}
         onSwitchRole={switchView}
         canSwitch={profile.role === 'teacher'}
-        done={A1.filter((l) => partsSeen(l.n).length > 0).length}
         total={A1.length}
       />
       <div className="lg:pl-[264px]">

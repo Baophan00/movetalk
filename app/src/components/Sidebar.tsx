@@ -4,7 +4,6 @@ import {
   Library, LogOut, PenLine, Sparkles, TrendingUp, UserRound, Users, X,
 } from 'lucide-react'
 import { cn } from '../lib/utils'
-import { Ring } from './ui/progress'
 
 export type Route =
   | 'landing'
@@ -56,11 +55,10 @@ type Props = {
   onSignOut: () => void
   onSwitchRole: () => void
   canSwitch: boolean
-  done: number
   total: number
 }
 
-export function Sidebar({ role, route, onNav, open, onClose, user, onSignOut, onSwitchRole, canSwitch, done, total }: Props) {
+export function Sidebar({ role, route, onNav, open, onClose, user, onSignOut, onSwitchRole, canSwitch, total }: Props) {
   const items = role === 'teacher' ? TEACHER_NAV : STUDENT_NAV
 
   return (
@@ -154,18 +152,6 @@ export function Sidebar({ role, route, onNav, open, onClose, user, onSignOut, on
                 </li>
               </ul>
 
-              <div className="mt-6 rounded-2xl border border-line bg-bg/60 p-3.5">
-                <div className="flex items-center gap-2 text-[11px] font-semibold text-muted">
-                  <Sparkles className="h-3.5 w-3.5 text-accent" /> This week
-                </div>
-                <div className="mt-2 flex items-center gap-3">
-                  <div className="relative grid place-items-center">
-                    <Ring value={(done / Math.max(1, total)) * 100} size={44} stroke={4} />
-                    <span className="absolute text-[10px] font-bold text-ink">{done}/{total}</span>
-                  </div>
-                  <p className="text-[11.5px] leading-snug text-muted">lessons opened. One part a day is enough.</p>
-                </div>
-              </div>
             </>
           )}
 
