@@ -249,13 +249,30 @@ export function Study({ seedLevel, seedRoom, seedPrompt }: { seedLevel?: Level; 
 
 /* ------------------------------------------------------------------ shared */
 
-function Shell({ title, vi, source, onBack, children }: { title: string; vi: string; source: Source; onBack: () => void; children: React.ReactNode }) {
+function Shell({
+  title,
+  vi,
+  source,
+  icon3d,
+  onBack,
+  children,
+}: {
+  title: string
+  vi: string
+  source: Source
+  icon3d?: 'listening' | 'speaking' | 'reading' | 'writing'
+  onBack: () => void
+  children: React.ReactNode
+}) {
   return (
     <div className="mx-auto max-w-3xl px-4 py-5 sm:px-6">
       <button onClick={onBack} className="text-[12px] font-semibold text-muted transition hover:text-ink">← Practice your way</button>
-      <div className="mt-2">
-        <h1 className="text-[22px] font-semibold tracking-tight">{title}</h1>
-        <p className="text-[12px] text-muted">{vi} · {source.label}</p>
+      <div className="mt-2 flex items-center gap-2.5">
+        {icon3d && <Icon3D name={icon3d} size={38} />}
+        <div>
+          <h1 className="text-[22px] font-semibold tracking-tight">{title}</h1>
+          <p className="text-[12px] text-muted">{vi} · {source.label}</p>
+        </div>
       </div>
       <div className="mt-4">{children}</div>
     </div>
@@ -282,7 +299,7 @@ function Listening({ source, onBack }: { source: Source; onBack: () => void }) {
 
   if (!item) {
     return (
-      <Shell title="Listening" vi="Luyện nghe" source={source} onBack={onBack}>
+      <Shell icon3d="listening" title="Listening" vi="Luyện nghe" source={source} onBack={onBack}>
         <p className="text-[13px] text-muted">No dialogue to listen to here yet.</p>
       </Shell>
     )
@@ -308,7 +325,7 @@ function Listening({ source, onBack }: { source: Source; onBack: () => void }) {
   }
 
   return (
-    <Shell title="Listening" vi="Luyện nghe" source={source} onBack={onBack}>
+    <Shell icon3d="listening" title="Listening" vi="Luyện nghe" source={source} onBack={onBack}>
       <Card>
         <CardBody className="p-5">
           <div className="flex items-center justify-between">
@@ -378,7 +395,7 @@ function Speaking({ source, onBack }: { source: Source; onBack: () => void }) {
   }, [source])
 
   return (
-    <Shell title="Speaking" vi="Luyện nói" source={source} onBack={onBack}>
+    <Shell icon3d="speaking" title="Speaking" vi="Luyện nói" source={source} onBack={onBack}>
       <SpeakRoom lessonN={source.level === 'A1' ? lessonNumber(source.label) : 0} lines={lines} />
     </Shell>
   )
@@ -409,7 +426,7 @@ function Reading({ source, onBack }: { source: Source; onBack: () => void }) {
   }
 
   return (
-    <Shell title="Reading" vi="Luyện đọc" source={source} onBack={onBack}>
+    <Shell icon3d="reading" title="Reading" vi="Luyện đọc" source={source} onBack={onBack}>
       <Card>
         <CardBody className="p-5">
           <div className="flex items-start justify-between gap-2">
@@ -569,7 +586,7 @@ function Writing({ source, onBack }: { source: Source; onBack: () => void }) {
   }
 
   return (
-    <Shell title="Writing" vi="Luyện viết" source={source} onBack={onBack}>
+    <Shell icon3d="writing" title="Writing" vi="Luyện viết" source={source} onBack={onBack}>
       <div className={cn('grid gap-1.5', para ? 'grid-cols-3' : 'grid-cols-2')}>
         {(para ? (['build', 'write', 'para'] as const) : (['build', 'write'] as const)).map((m) => (
           <button

@@ -4,6 +4,7 @@ import { Card, CardBody } from '../components/ui/card'
 import { Badge } from '../components/ui/badge'
 import { addCard, dueCards, listCards, reviewCard, type Card as Word } from '../lib/study'
 import { playCorrect, playWrong } from '../lib/sfx'
+import { Icon3D } from '../components/Icon3D'
 import { speak } from '../lib/audio'
 import { cn } from '../lib/utils'
 
@@ -87,7 +88,10 @@ export function Vocabulary() {
       ) : (
         <Card className="mt-4">
           <CardBody className="p-5">
-            <p className="text-[13px] font-semibold">Nothing due right now</p>
+            <div className="flex items-center gap-2.5">
+              <Icon3D name="done" size={38} />
+              <p className="text-[13px] font-semibold">Nothing due right now</p>
+            </div>
             <p className="mt-1 text-[12px] leading-relaxed text-muted">
               {words.length
                 ? 'Every word here has been seen today. Words come back after 1, 3, 7, 16 and 35 days.'

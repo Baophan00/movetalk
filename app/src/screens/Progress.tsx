@@ -1,14 +1,15 @@
 import { useMemo } from 'react'
-import { Flame, Headphones, Layers, Mic, Pencil, BookOpen, RotateCcw } from 'lucide-react'
+import { Flame, Layers, RotateCcw } from 'lucide-react'
+import { Icon3D } from '../components/Icon3D'
 import { Card, CardBody } from '../components/ui/card'
 import { allAttempts, dueCards, readDays, skillStats, streak, wrongItems } from '../lib/study'
 import { cn } from '../lib/utils'
 
 const SKILLS = [
-  { kind: 'listen' as const, room: 'listen' as const, label: 'Listening', vi: 'Nghe', icon: Headphones, bar: 'from-[#5D7B6F] to-[#8FAE92]' },
-  { kind: 'speak' as const, room: 'speak' as const, label: 'Speaking', vi: 'Nói', icon: Mic, bar: 'from-[#C08A4A] to-[#9C6B2E]' },
-  { kind: 'read' as const, room: 'read' as const, label: 'Reading', vi: 'Đọc', icon: BookOpen, bar: 'from-[#4E7C78] to-[#3B6360]' },
-  { kind: 'write' as const, room: 'write' as const, label: 'Writing', vi: 'Viết', icon: Pencil, bar: 'from-[#8A5A22] to-[#6F4A18]' },
+  { kind: 'listen' as const, room: 'listen' as const, label: 'Listening', vi: 'Nghe', icon3d: 'listening' as const, bar: 'from-[#5D7B6F] to-[#8FAE92]' },
+  { kind: 'speak' as const, room: 'speak' as const, label: 'Speaking', vi: 'Nói', icon3d: 'speaking' as const, bar: 'from-[#C08A4A] to-[#9C6B2E]' },
+  { kind: 'read' as const, room: 'read' as const, label: 'Reading', vi: 'Đọc', icon3d: 'reading' as const, bar: 'from-[#4E7C78] to-[#3B6360]' },
+  { kind: 'write' as const, room: 'write' as const, label: 'Writing', vi: 'Viết', icon3d: 'writing' as const, bar: 'from-[#8A5A22] to-[#6F4A18]' },
 ]
 
 function iso(d: Date) {
@@ -70,13 +71,12 @@ export function Progress({ onGo, onWords }: { onGo?: (room: 'listen' | 'read' | 
           <p className="text-[13px] font-semibold">Four skills</p>
           <div className="mt-3 space-y-3">
             {stats.map((s) => {
-              const Icon = s.icon
               const empty = s.total === 0
               return (
                 <div key={s.kind}>
                   <div className="flex items-center justify-between gap-2">
                     <span className="inline-flex items-center gap-1.5 text-[12.5px] font-semibold">
-                      <Icon className="h-3.5 w-3.5 text-muted" /> {s.label} <span className="text-muted">· {s.vi}</span>
+                      <Icon3D name={s.icon3d} size={16} /> {s.label} <span className="text-muted">· {s.vi}</span>
                     </span>
                     <span className={cn('text-[11.5px] font-semibold tabular-nums', empty ? 'text-muted' : 'text-ink')}>
                       {empty ? 'no answers yet' : `${s.pct}% · ${s.total}`}

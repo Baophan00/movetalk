@@ -1,9 +1,10 @@
 import { motion } from 'motion/react'
-import { ArrowRight, BookOpen, CalendarCheck, Flame, Lock, Play, Sparkles, Target } from 'lucide-react'
+import { ArrowRight, BookOpen, Flame, Lock, Play, Sparkles, Target } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Card, CardBody, CardHeader, CardTitle } from '../components/ui/card'
 import { Badge } from '../components/ui/badge'
 import { Progress, Ring } from '../components/ui/progress'
+import { Icon3D } from '../components/Icon3D'
 import { A1, partCount, titleOf } from '../lib/curriculum'
 import { partsSeen } from '../lib/progress'
 import { cn } from '../lib/utils'
@@ -190,8 +191,8 @@ export function Dashboard({ name, onOpenLesson, onHomework, onLessons }: Props) 
 
       <Card>
         <CardBody className="flex flex-wrap items-center gap-4">
-          <span className="grid h-11 w-11 place-items-center rounded-xl bg-bg text-primary">
-            <CalendarCheck className="h-[19px] w-[19px]" />
+          <span className="grid h-11 w-11 place-items-center rounded-xl bg-bg">
+            <Icon3D name="folder" size={32} />
           </span>
           <div className="min-w-0 flex-1">
             <p className="text-[13.5px] font-semibold">Homework from your teacher</p>
