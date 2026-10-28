@@ -5,10 +5,10 @@ import { allAttempts, dueCards, readDays, skillStats, streak, wrongItems } from 
 import { cn } from '../lib/utils'
 
 const SKILLS = [
-  { kind: 'listen' as const, room: 'listen' as const, label: 'Listening', vi: 'Nghe', icon: Headphones, bar: 'from-[#6f7cff] to-[#a78bfa]' },
-  { kind: 'speak' as const, room: 'speak' as const, label: 'Speaking', vi: 'Nói', icon: Mic, bar: 'from-[#ff8fa3] to-[#ff5d8f]' },
-  { kind: 'read' as const, room: 'read' as const, label: 'Reading', vi: 'Đọc', icon: BookOpen, bar: 'from-[#48c9b0] to-[#22a699]' },
-  { kind: 'write' as const, room: 'write' as const, label: 'Writing', vi: 'Viết', icon: Pencil, bar: 'from-[#ffb56b] to-[#f4772e]' },
+  { kind: 'listen' as const, room: 'listen' as const, label: 'Listening', vi: 'Nghe', icon: Headphones, bar: 'from-[#5D7B6F] to-[#8FAE92]' },
+  { kind: 'speak' as const, room: 'speak' as const, label: 'Speaking', vi: 'Nói', icon: Mic, bar: 'from-[#C08A4A] to-[#9C6B2E]' },
+  { kind: 'read' as const, room: 'read' as const, label: 'Reading', vi: 'Đọc', icon: BookOpen, bar: 'from-[#4E7C78] to-[#3B6360]' },
+  { kind: 'write' as const, room: 'write' as const, label: 'Writing', vi: 'Viết', icon: Pencil, bar: 'from-[#8A5A22] to-[#6F4A18]' },
 ]
 
 function iso(d: Date) {

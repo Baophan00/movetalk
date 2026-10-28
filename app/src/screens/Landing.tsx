@@ -93,7 +93,7 @@ export function Landing({ onStart, onOpenLesson, signedIn, onContinue }: Props) 
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.55, delay: 0.1 }}
-            className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-[#d9d0f7] shadow-lift"
+            className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-[#E2CBA0] shadow-lift"
           >
             <LessonPhotos />
           </motion.div>
@@ -120,15 +120,15 @@ export function Landing({ onStart, onOpenLesson, signedIn, onContinue }: Props) 
           ))}
         </section>
 
-        <section className="relative mt-16 overflow-hidden rounded-3xl bg-[#7a5cf0] p-8 text-white sm:p-10">
+        <section className="relative mt-16 overflow-hidden rounded-3xl bg-[#5D7B6F] p-8 text-white sm:p-10">
           <span className="pointer-events-none absolute -right-10 -top-12 h-40 w-40 rounded-full bg-white/15" />
-          <span className="pointer-events-none absolute bottom-6 right-24 h-8 w-8 rounded-full bg-[#f79be0]/70" />
+          <span className="pointer-events-none absolute bottom-6 right-24 h-8 w-8 rounded-full bg-[#C08A4A]/70" />
           <div className="relative flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-lg">
               <p className="text-[12px] font-semibold uppercase tracking-[.16em] text-white/70">Start today</p>
               <p className="mt-2 text-[26px] font-semibold leading-tight tracking-tight sm:text-[32px]">Twenty minutes a day, one lesson a week, speaking within a month.</p>
             </div>
-            <Button size="lg" className="bg-[#1b1735] text-white hover:bg-[#2a2450]" onClick={onStart}>
+            <Button size="lg" className="bg-[#2B3A31] text-white hover:bg-[#3A4A3E]" onClick={onStart}>
               Go to class <ArrowRight className="h-4 w-4" />
             </Button>
           </div>

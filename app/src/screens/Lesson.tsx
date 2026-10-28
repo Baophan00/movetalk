@@ -20,7 +20,7 @@ const VI_CHARS = /[àáảãạăằắẳẵặâầấẩẫậđèéẻẽẹ
 type Tone = 'violet' | 'mint' | 'lavender' | 'sky' | 'peach' | 'rose' | 'amber'
 
 const TONES: Record<Tone, { soft: string; border: string; text: string; solid: string; chip: string }> = {
-  violet: { soft: 'bg-[#f4f0ff]', border: 'border-[#ded4fb]', text: 'text-[#5b45a8]', solid: 'bg-[#7a5cf0]', chip: 'bg-[#ece5ff] text-[#5b45a8]' },
+  violet: { soft: 'bg-[#F5F8F1]', border: 'border-[#D8E3D4]', text: 'text-[#2B3A31]', solid: 'bg-[#5D7B6F]', chip: 'bg-[#EEF3EA] text-[#2B3A31]' },
   mint: { soft: 'bg-[#eafaf3]', border: 'border-[#c9eddd]', text: 'text-[#0f6b4f]', solid: 'bg-[#2f9e79]', chip: 'bg-[#d9f4e9] text-[#0f6b4f]' },
   lavender: { soft: 'bg-[#eff1ff]', border: 'border-[#d7ddfb]', text: 'text-[#3f4c9a]', solid: 'bg-[#5a6ad4]', chip: 'bg-[#e4e8ff] text-[#3f4c9a]' },
   sky: { soft: 'bg-[#eaf5ff]', border: 'border-[#cbe6fb]', text: 'text-[#1c5a86]', solid: 'bg-[#3793d1]', chip: 'bg-[#dcefff] text-[#1c5a86]' },
@@ -308,7 +308,7 @@ function SubjectMatrix({ cells, answers }: { cells: QCell[]; answers: AnswerRow[
     <div className="overflow-hidden rounded-2xl border border-line">
       <div className="grid grid-cols-[68px_1fr_1fr] border-b border-line bg-[#fbfaff] text-[10px] font-bold uppercase tracking-[.1em]">
         <div className="px-3 py-1.5 text-muted">Subject</div>
-        {hasDo && <div className="border-l border-line/70 px-3 py-1.5 text-[#5b45a8]">Do / Does</div>}
+        {hasDo && <div className="border-l border-line/70 px-3 py-1.5 text-[#2B3A31]">Do / Does</div>}
         {hasBe && <div className="border-l border-line/70 px-3 py-1.5 text-[#1c5a86]">Am / Is / Are</div>}
       </div>
       {rows.map((subject, i) => (
@@ -321,7 +321,7 @@ function SubjectMatrix({ cells, answers }: { cells: QCell[]; answers: AnswerRow[
                 const a = answerFor(subject, false)
                 return c ? (
                   <>
-                    <span className="rounded-md bg-[#ece5ff] px-1.5 py-0.5 font-mono text-[12px] font-semibold text-[#5b45a8]">
+                    <span className="rounded-md bg-[#EEF3EA] px-1.5 py-0.5 font-mono text-[12px] font-semibold text-[#2B3A31]">
                       {c.verb} {c.subject} …
                     </span>
                     {a && <p className="mt-1 text-[11px] leading-snug text-ink/60">{a.text}</p>}
@@ -378,7 +378,7 @@ function ContrastPairs({ lines }: { lines: string[] }) {
       <div className="space-y-1.5">
         {rows.map((r, i) => (
           <div key={i} className="grid grid-cols-[1fr_18px_1fr] items-center gap-1">
-            <span className="rounded-lg border border-[#ded4fb] bg-[#f6f2ff] px-2 py-1.5 font-mono text-[11.5px] text-[#5b45a8]">{r.one ?? '—'}</span>
+            <span className="rounded-lg border border-[#D8E3D4] bg-[#F5F8F1] px-2 py-1.5 font-mono text-[11.5px] text-[#2B3A31]">{r.one ?? '—'}</span>
             <span className="text-center text-[11px] text-muted">↔</span>
             <span className="rounded-lg border border-[#cbe6fb] bg-[#eff8ff] px-2 py-1.5 font-mono text-[11.5px] text-[#1c5a86]">{r.many ?? '—'}</span>
           </div>
@@ -638,7 +638,7 @@ function Overview({ lesson, agenda, onStart }: { lesson: LessonFile; agenda: Sec
   const vi = lines.find((l) => VI_CHARS.test(l) && l.length > 8)
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-[#ded4fb] bg-[#f8f5ff] px-5 py-6 sm:px-7 sm:py-8">
+    <div className="relative overflow-hidden rounded-2xl border border-[#D8E3D4] bg-[#FAF7EE] px-5 py-6 sm:px-7 sm:py-8">
       <span aria-hidden className="pointer-events-none absolute right-4 top-1 select-none text-[96px] font-bold leading-none text-primary/[.06]">
         {String(lesson.n).padStart(2, '0')}
       </span>

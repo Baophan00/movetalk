@@ -26,10 +26,10 @@ type Source = {
 }
 
 const ROOMS = [
-  { key: 'listen' as const, title: 'Listening', vi: 'Luyện nghe', icon: Headphones, from: 'from-[#6f7cff] to-[#a78bfa]', hint: 'Hear it, then pick the line' },
-  { key: 'speak' as const, title: 'Speaking', vi: 'Luyện nói', icon: Mic, from: 'from-[#ff8fa3] to-[#ff5d8f]', hint: 'Say it, scored on the spot' },
-  { key: 'read' as const, title: 'Reading', vi: 'Luyện đọc', icon: BookOpen, from: 'from-[#48c9b0] to-[#22a699]', hint: 'Tap any word, then answer' },
-  { key: 'write' as const, title: 'Writing', vi: 'Luyện viết', icon: Pencil, from: 'from-[#ffb56b] to-[#f4772e]', hint: 'Build and write sentences' },
+  { key: 'listen' as const, title: 'Listening', vi: 'Luyện nghe', icon: Headphones, from: 'from-[#5D7B6F] to-[#8FAE92]', hint: 'Hear it, then pick the line' },
+  { key: 'speak' as const, title: 'Speaking', vi: 'Luyện nói', icon: Mic, from: 'from-[#C08A4A] to-[#9C6B2E]', hint: 'Say it, scored on the spot' },
+  { key: 'read' as const, title: 'Reading', vi: 'Luyện đọc', icon: BookOpen, from: 'from-[#4E7C78] to-[#3B6360]', hint: 'Tap any word, then answer' },
+  { key: 'write' as const, title: 'Writing', vi: 'Luyện viết', icon: Pencil, from: 'from-[#8A5A22] to-[#6F4A18]', hint: 'Build and write sentences' },
 ]
 
 /* ------------------------------------------------------------- content glue */
@@ -315,7 +315,7 @@ function Listening({ source, onBack }: { source: Source; onBack: () => void }) {
           <div className="mt-4 flex gap-2">
             <button
               onClick={() => void playLine(item.line, 1)}
-              className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-[#6f7cff] to-[#a78bfa] px-4 py-5 text-[14px] font-semibold text-white shadow-card transition active:scale-[.99]"
+              className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-[#5D7B6F] to-[#8FAE92] px-4 py-5 text-[14px] font-semibold text-white shadow-card transition active:scale-[.99]"
             >
               <Volume2 className="h-5 w-5" /> Play
             </button>

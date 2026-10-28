@@ -43,9 +43,9 @@ export function Dashboard({ name, onOpenLesson, onHomework, onLessons }: Props) 
         <p className="mt-1 text-[13.5px] text-muted">One part a day is enough. You are on lesson {next.n}.</p>
       </motion.div>
 
-      <div className="relative overflow-hidden rounded-3xl bg-[#c3b4f7] px-5 py-6 shadow-card sm:px-7 sm:py-7">
+      <div className="relative overflow-hidden rounded-3xl bg-[#C9DCC8] px-5 py-6 shadow-card sm:px-7 sm:py-7">
         <span className="pointer-events-none absolute -right-8 -top-10 h-32 w-32 rounded-full bg-white/25" />
-        <span className="pointer-events-none absolute right-16 top-14 h-10 w-10 rounded-full bg-[#f79be0]/70" />
+        <span className="pointer-events-none absolute right-16 top-14 h-10 w-10 rounded-full bg-[#C08A4A]/70" />
         <span className="pointer-events-none absolute bottom-4 right-28 hidden h-6 w-6 rounded-full bg-white/40 sm:block" />
         <div className="relative max-w-[430px]">
           <p className="text-[11px] font-bold uppercase tracking-[.16em] text-ink/50">Level A1 · lesson {next.n}</p>
@@ -56,7 +56,7 @@ export function Dashboard({ name, onOpenLesson, onHomework, onLessons }: Props) 
             {read ? `${read} of ${totalParts} parts opened.` : 'Ten minutes gets you the first part.'}
           </p>
           <div className="mt-4 flex flex-wrap items-center gap-2">
-            <Button className="bg-[#1b1735] text-white hover:bg-[#2a2450]" onClick={() => onOpenLesson(next.n)}>
+            <Button className="bg-[#2B3A31] text-white hover:bg-[#3A4A3E]" onClick={() => onOpenLesson(next.n)}>
               <Play className="h-4 w-4" /> {read ? 'Continue lesson' : 'Start lesson'}
             </Button>
             <Button variant="ghost" className="text-ink/70 hover:bg-white/30" onClick={onLessons}>
@@ -115,7 +115,7 @@ export function Dashboard({ name, onOpenLesson, onHomework, onLessons }: Props) 
 
         <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
           {stats.map(({ icon: Icon, label, value, hint }, i) => {
-            const tones = ['bg-[#c3b4f7]', 'bg-[#fbb463]', 'bg-[#f79be0]']
+            const tones = ['bg-[#C9DCC8]', 'bg-[#E0B96F]', 'bg-[#C08A4A]']
             const rat = [percent, Math.round((partsRead / Math.max(1, A1.reduce((n, l) => n + partCount(l), 0))) * 100), Math.round((doneAll / Math.max(1, A1.length)) * 100)]
             return (
               <div key={label} className={cn('rounded-2xl p-4 shadow-card transition-transform hover:-translate-y-0.5', tones[i % 3])}>
@@ -129,7 +129,7 @@ export function Dashboard({ name, onOpenLesson, onHomework, onLessons }: Props) 
                 <p className="text-[22px] font-bold leading-tight text-ink">{value}</p>
                 <p className="text-[11px] text-ink/55">{hint}</p>
                 <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-ink/15">
-                  <div className="h-full rounded-full bg-[#1b1735]" style={{ width: `${Math.min(100, rat[i])}%` }} />
+                  <div className="h-full rounded-full bg-[#2B3A31]" style={{ width: `${Math.min(100, rat[i])}%` }} />
                 </div>
               </div>
             )
