@@ -18,7 +18,11 @@ export default {
         danger: 'hsl(var(--danger))',
       },
       borderRadius: { xl: '14px', '2xl': '18px', '3xl': '24px' },
-      fontFamily: { sans: ['Inter', 'Be Vietnam Pro', 'system-ui', 'sans-serif'] },
+      fontFamily: {
+        sans: ['Inter', 'Be Vietnam Pro', 'system-ui', 'sans-serif'],
+        // Only for the greeting and the one headline on Today: a warm serif, not a second body face.
+        display: ['Fraunces', 'Georgia', 'serif'],
+      },
       boxShadow: {
         card: '0 1px 2px rgba(15,23,42,.04), 0 8px 24px -12px rgba(15,23,42,.12)',
         lift: '0 2px 4px rgba(15,23,42,.05), 0 18px 40px -18px rgba(15,23,42,.24)',
