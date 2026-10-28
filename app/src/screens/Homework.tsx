@@ -8,6 +8,7 @@ import { myAssignments, type Assigned } from '../lib/assignments'
 import { allAttempts } from '../lib/study'
 import { speak } from '../lib/audio'
 import { cn } from '../lib/utils'
+import { Icon3D } from '../components/Icon3D'
 
 const KEY = 'mt2_homework'
 
@@ -169,7 +170,10 @@ export function Homework({ onPractise, onOpenLesson, onLessons, onReview, hasBac
         {!loading && open.length === 0 && (
           <Card>
             <CardBody className="py-6">
-              <p className="text-[14px] font-semibold">Nothing to hand in.</p>
+              <div className="flex items-center gap-3">
+                <Icon3D name="done" size={44} />
+                <p className="text-[14px] font-semibold">Nothing to hand in.</p>
+              </div>
               <p className="mt-1 max-w-[52ch] text-[12.5px] text-muted">
                 Your teacher has not set work right now. You can still practise any lesson, and nothing there counts as homework.
               </p>

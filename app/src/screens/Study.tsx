@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ArrowRight, BookOpen, Check, Headphones, Mic, Pencil, X } from 'lucide-react'
+import { ArrowRight, Check, X } from 'lucide-react'
 import { Card, CardBody } from '../components/ui/card'
 import { Badge } from '../components/ui/badge'
 import { SpeakRoom } from '../components/SpeakRoom'
@@ -10,6 +10,7 @@ import { saveWriting } from '../lib/writings'
 import { addCard, recordAttempt } from '../lib/study'
 import { playLine, speak } from '../lib/audio'
 import { AudioPlayer } from '../components/AudioPlayer'
+import { Icon3D } from '../components/Icon3D'
 import { playCorrect, playWrong } from '../lib/sfx'
 import { LEVELS, PACKS, packsFor, type Level, type Pack, type Question } from '../content/practice/packs'
 import { cn } from '../lib/utils'
@@ -28,10 +29,10 @@ type Source = {
 }
 
 const ROOMS = [
-  { key: 'listen' as const, title: 'Listening', vi: 'Luyện nghe', icon: Headphones, from: 'from-[#5D7B6F] to-[#8FAE92]', hint: 'Hear it, then pick the line' },
-  { key: 'speak' as const, title: 'Speaking', vi: 'Luyện nói', icon: Mic, from: 'from-[#C08A4A] to-[#9C6B2E]', hint: 'Say it, scored on the spot' },
-  { key: 'read' as const, title: 'Reading', vi: 'Luyện đọc', icon: BookOpen, from: 'from-[#4E7C78] to-[#3B6360]', hint: 'Tap any word, then answer' },
-  { key: 'write' as const, title: 'Writing', vi: 'Luyện viết', icon: Pencil, from: 'from-[#8A5A22] to-[#6F4A18]', hint: 'Build and write sentences' },
+  { key: 'listen' as const, title: 'Listening', vi: 'Luyện nghe', icon3d: 'listening' as const, from: 'from-[#5D7B6F] to-[#8FAE92]', hint: 'Hear it, then pick the line' },
+  { key: 'speak' as const, title: 'Speaking', vi: 'Luyện nói', icon3d: 'speaking' as const, from: 'from-[#C08A4A] to-[#9C6B2E]', hint: 'Say it, scored on the spot' },
+  { key: 'read' as const, title: 'Reading', vi: 'Luyện đọc', icon3d: 'reading' as const, from: 'from-[#4E7C78] to-[#3B6360]', hint: 'Tap any word, then answer' },
+  { key: 'write' as const, title: 'Writing', vi: 'Luyện viết', icon3d: 'writing' as const, from: 'from-[#8A5A22] to-[#6F4A18]', hint: 'Build and write sentences' },
 ]
 
 /* ------------------------------------------------------------- content glue */
@@ -222,7 +223,6 @@ export function Study({ seedLevel, seedRoom, seedPrompt }: { seedLevel?: Level; 
       </Card>
       <div className="mt-3 grid gap-3 sm:grid-cols-2">
         {ROOMS.map((r) => {
-          const Icon = r.icon
           return (
             <button
               key={r.key}
@@ -230,8 +230,8 @@ export function Study({ seedLevel, seedRoom, seedPrompt }: { seedLevel?: Level; 
               className="group relative overflow-hidden rounded-3xl border border-line bg-surface p-4 text-left shadow-card transition-all active:scale-[.99] hover:-translate-y-0.5 hover:shadow-lift"
             >
               <span className={cn('absolute -right-8 -top-10 h-28 w-28 rounded-full bg-gradient-to-br opacity-20 blur-xl transition-opacity group-hover:opacity-35', r.from)} />
-              <span className={cn('relative grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br text-white shadow-card', r.from)}>
-                <Icon className="h-5 w-5" />
+              <span className="relative grid h-14 w-14 place-items-center rounded-2xl bg-bg/70">
+                <Icon3D name={r.icon3d} size={48} />
               </span>
               <p className="relative mt-3 text-[16px] font-semibold">{r.title}</p>
               <p className="relative text-[12px] text-muted">{r.vi} · {r.hint}</p>

@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ArrowRight, BookOpen, CalendarDays, Flame, Layers, Mic, RotateCcw } from 'lucide-react'
+import { ArrowRight, BookOpen, CalendarDays, Layers, Mic, RotateCcw } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Card, CardBody } from '../components/ui/card'
 import { A1, partPlan, titleOf } from '../lib/curriculum'
 import { partsSeen } from '../lib/progress'
 import { dueCards, doneToday, mistakeCount, pullStudy, streak, weakSections } from '../lib/study'
 import { myAssignments } from '../lib/assignments'
+import { Icon3D } from '../components/Icon3D'
 
 type Go = (r: 'lesson' | 'practice' | 'library' | 'homework' | 'words' | 'mistakes', n?: number) => void
 
@@ -54,13 +55,16 @@ export function Today({ name, onGo }: { name: string; onGo: Go }) {
           <h1 className="mt-1 text-[26px] font-semibold tracking-tight">Hi {first},</h1>
         </div>
         <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1.5 text-[12px] font-semibold text-primary">
-          <Flame className="h-3.5 w-3.5" /> {run === 0 ? 'Today starts the run' : `${run} day${run === 1 ? '' : 's'}`}
+          <Icon3D name="streak" size={16} /> {run === 0 ? 'Today starts the run' : `${run} day${run === 1 ? '' : 's'}`}
         </span>
       </div>
 
       <Card className="mt-4 overflow-hidden border-0 bg-primary text-white">
         <CardBody className="p-5">
-          <p className="text-[11px] font-bold uppercase tracking-[.14em] text-white/70">Today's one thing</p>
+          <div className="flex items-start justify-between gap-2">
+            <p className="text-[11px] font-bold uppercase tracking-[.14em] text-white/70">Today's one thing</p>
+            <Icon3D name="rocket" size={46} className="-mt-1" />
+          </div>
           <p className="mt-1.5 text-[20px] font-semibold leading-snug">
             {doneToday() ? 'Done for today. Anything else is a bonus.' : `Part ${view.partNo} of ${view.total} · ${view.part.label}`}
           </p>

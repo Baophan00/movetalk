@@ -1,4 +1,5 @@
-import { ArrowRight, ClipboardList, RotateCcw, Sparkles, TriangleAlert, Volume2 } from 'lucide-react'
+import { ArrowRight, RotateCcw, Volume2 } from 'lucide-react'
+import { Icon3D } from '../components/Icon3D'
 import { Button } from '../components/ui/button'
 import { Card, CardBody } from '../components/ui/card'
 import { Badge } from '../components/ui/badge'
@@ -49,7 +50,7 @@ export function ReviewHub({
         <Card>
           <CardBody className="p-4">
             <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[.12em] text-muted">
-              <Sparkles className="h-3.5 w-3.5 text-accent" /> Words due
+              <Icon3D name="audio" size={16} /> Words due
             </div>
             <p className="mt-2 text-[26px] font-semibold leading-none">{due.length}</p>
             <p className="mt-1 text-[11.5px] text-muted">{cards.length} saved in total</p>
@@ -62,7 +63,7 @@ export function ReviewHub({
         <Card>
           <CardBody className="p-4">
             <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[.12em] text-muted">
-              <TriangleAlert className="h-3.5 w-3.5 text-[#8a5a12]" /> Got them wrong
+              <Icon3D name="streak" size={16} /> Got them wrong
             </div>
             <p className="mt-2 text-[26px] font-semibold leading-none">{wrong.length}</p>
             <p className="mt-1 text-[11.5px] text-muted">across {lessonsWithWrong.length} lessons</p>
@@ -75,7 +76,7 @@ export function ReviewHub({
         <Card>
           <CardBody className="p-4">
             <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[.12em] text-muted">
-              <ClipboardList className="h-3.5 w-3.5 text-primary" /> From your teacher
+              <Icon3D name="folder" size={16} /> From your teacher
             </div>
             <p className="mt-2 text-[13px] leading-snug text-ink/80">Homework lives on its own page, with dates and what you sent.</p>
             <Button size="sm" variant="soft" className="mt-3 w-full" onClick={onHomework}>
