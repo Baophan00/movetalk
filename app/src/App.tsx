@@ -45,11 +45,9 @@ export default function App() {
   const [route, setRoute] = useState<Route>('landing')
   const [view, setView] = useState<Role>('student')
   const [lessonN, setLessonN] = useState(1)
-  const [quizLesson, setQuizLesson] = useState<number | null>(null)
   // Where Practice your way should open when another screen sends the learner there.
   const [studySeed, setStudySeed] = useState<{ level?: 'A1' | 'A2' | 'B1' | 'B2'; room?: 'listen' | 'read' | 'write' | 'speak'; prompt?: string }>({})
   const [practiceN, setPracticeN] = useState(1)
-  const [autoReview, setAutoReview] = useState(0)
   const [menu, setMenu] = useState(false)
   const [signInOpen, setSignInOpen] = useState(false)
 
@@ -136,12 +134,6 @@ export default function App() {
   const openPractice = (n: number) => {
     setPracticeN(n)
     go('practice')
-  }
-
-  const openReview = (n: number, auto = false) => {
-    setQuizLesson(n)
-    setAutoReview(auto ? Date.now() : 0)
-    go('library')
   }
 
   const doSignOut = async () => {
@@ -262,12 +254,14 @@ export default function App() {
           {route === 'lesson' && <Lesson lessonN={lessonN} onPickLesson={setLessonN} onBack={() => go('dashboard')} />}
           {route === 'homework' && (
             <Homework
-              onOpenReview={openReview}
-              onOpenLesson={openPractice}
+              onPractise={openPractice}
+              onOpenLesson={openLesson}
+              onLessons={() => go('lessons')}
+              onReview={() => go('review')}
               hasBackend={profile.role === 'teacher'}
             />
           )}
-          {route === 'library' && <Review initialLesson={quizLesson ?? undefined} autoStart={autoReview} />}
+          {route === 'library' && <Review />}
           {route === 'review' && (
             <ReviewHub
               onPractise={openPractice}

@@ -15,7 +15,7 @@ export type Exercise = {
   lessonTitle: string
   skill: Skill
   /** What the screen draws. */
-  kind: 'meaning' | 'cloze' | 'order' | 'listen' | 'gap' | 'sequence' | 'reading' | 'translate' | 'choose' | 'speak'
+  kind: 'meaning' | 'cloze' | 'order' | 'listen' | 'gap' | 'sequence' | 'reading' | 'translate' | 'choose' | 'speak' | 'flash' | 'match'
   prompt: string
   vi?: string
   options?: string[]
@@ -26,6 +26,8 @@ export type Exercise = {
   audio?: string
   /** Reading items carry the passage so the screen can show it above the question. */
   passage?: string
+  /** Matching items carry their four pairs so the screen can draw two columns. */
+  pairs?: { word: string; vi: string }[]
 }
 
 const KEEP_KIND: Record<Skill, 'quiz' | 'listen' | 'build' | 'speak' | 'read'> = {
@@ -169,6 +171,42 @@ function listenChecks(lesson: LessonFile): Exercise[] {
   }))
 }
 
+function flashItems(lesson: LessonFile): Exercise[] {
+  return lesson.parts.vocab.slice(0, 4).map((w) => ({
+    id: `l${lesson.n}-flash-${w.word}`,
+    lesson: lesson.n,
+    lessonTitle: titleOf(lesson),
+    skill: 'vocab' as const,
+    kind: 'flash' as const,
+    prompt: w.word,
+    vi: w.ipa,
+    audio: w.word,
+    answer: `${w.vi} — ${w.example}`,
+    hint: w.def,
+    explain: `${w.word} = ${w.vi}. ${w.example}`,
+  }))
+}
+
+/** Four words and their meanings, matched by tapping: the one type where the learner builds the pairs. */
+function matchItems(lesson: LessonFile): Exercise[] {
+  const words = lesson.parts.vocab.slice(0, 4)
+  if (words.length < 4) return []
+  return [
+    {
+      id: `l${lesson.n}-match`,
+      lesson: lesson.n,
+      lessonTitle: titleOf(lesson),
+      skill: 'vocab' as const,
+      kind: 'match' as const,
+      prompt: 'Match each word with its meaning',
+      answer: words.map((w) => `${w.word} = ${w.vi}`).join(', '),
+      hint: 'Say each word out loud as you match it.',
+      explain: words.map((w) => `${w.word} = ${w.vi}`).join(' · '),
+      pairs: words.map((w) => ({ word: w.word, vi: w.vi })),
+    },
+  ]
+}
+
 function quizItems(lesson: LessonFile): Exercise[] {
   const title = titleOf(lesson)
   const items: QuizItem[] = A1_QUIZ[lesson.n] ?? []
@@ -255,6 +293,8 @@ export function exercisesFor(lessonN: number): Exercise[] {
   }
   const vocab = vocabItems(lesson, lesson.parts.vocab)
   push(vocab.filter((e) => e.kind === 'meaning'), 999)
+  push(flashItems(lesson), 4)
+  push(matchItems(lesson), 1)
   push(vocab.filter((e) => e.kind === 'cloze'), 10)
   push(vocab.filter((e) => e.kind === 'order'), 6)
   push(quizItems(lesson), 999)
@@ -287,7 +327,13 @@ export function sessionFor(lessonN: number, size = 10): Exercise[] {
     bySkill.set(e.skill, list)
   }
   const order: Skill[] = ['vocab', 'grammar', 'listening', 'reading', 'speaking']
+  // One matching round and one flip card per session when the lesson has them: variety the learner
+  // can feel, not another four-option question.
   const picked: Exercise[] = []
+  for (const kind of ['match', 'flash'] as const) {
+    const one = all.find((e) => e.kind === kind)
+    if (one) picked.push(one)
+  }
   let round = 0
   while (picked.length < size && round < 20) {
     for (const skill of order) {
