@@ -4,11 +4,14 @@ import { Button } from '../components/ui/button'
 import { Badge } from '../components/ui/badge'
 import { Card, CardBody } from '../components/ui/card'
 import { Progress } from '../components/ui/progress'
-import { speak, playLine } from '../lib/audio'
+import { playLine, speak } from '../lib/audio'
+import { playCorrect, playFinish, playWrong } from '../lib/sfx'
 import { A1, titleOf } from '../lib/curriculum'
 import { attemptKind, sessionFor, type Exercise, type Skill } from '../lib/exercises'
 import { addCard, recordAttempt } from '../lib/study'
 import { cn } from '../lib/utils'
+
+const PRAISE = ['Correct!', 'Well done!', 'Excellent!', 'Nice work!']
 
 const SKILL_LABEL: Record<Skill, string> = {
   vocab: 'Words',
@@ -106,6 +109,8 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
     if (!given.trim()) return
     const expected = item.kind === 'sequence' ? item.answer.split(' | ').join(' ') : item.answer
     const ok = norm(given) === norm(expected)
+    if (ok) playCorrect()
+    else playWrong()
     setState(ok ? 'right' : 'wrong')
     setResults((rs) => [...rs.filter((r) => r.item.id !== item.id), { item, correct: ok }])
     save(item, ok)
@@ -114,6 +119,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
   function reveal() {
     setState('shown')
     if (selfCheck) return
+    playWrong()
     setResults((rs) => [...rs.filter((r) => r.item.id !== item.id), { item, correct: false }])
     save(item, false)
   }
@@ -131,6 +137,10 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
     setDone(false)
     setRound((r) => r + 1)
   }
+
+  useEffect(() => {
+    if (done) playFinish()
+  }, [done, round])
 
   if (done) {
     const wrong = results.filter((r) => !r.correct)
@@ -218,6 +228,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
       setSelWord(null)
       setBadPair('')
       if (Object.keys(next).length === pairList.length) {
+        playCorrect()
         setState('right')
         setResults((rs) => [...rs.filter((r) => r.item.id !== item.id), { item, correct: true }])
         save(item, true)
@@ -410,13 +421,13 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
 
           {state === 'right' && (
             <div className="mt-4 rounded-xl border border-ok/30 bg-ok/10 px-3.5 py-2.5 text-[12.5px] text-ink/85">
-              <span className="font-semibold text-ok">Right.</span> {item.explain}
+              <span className="font-semibold text-ok">{PRAISE[item.id.length % PRAISE.length]}</span> {item.explain}
             </div>
           )}
           {state === 'wrong' && (
             <div className="mt-4 rounded-xl border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-[12.5px] text-ink/85">
-              <span className="font-semibold text-danger">Not yet.</span>{' '}
-              {hint ? `The answer is “${item.answer}”.` : 'Look again, or ask for a hint.'}
+              <span className="font-semibold text-danger">Not quite. Try again!</span>{' '}
+              {hint ? `The answer is “${item.answer}”. ${item.explain}` : 'Take another go, or ask for a hint.'}
             </div>
           )}
           {state === 'shown' && (
@@ -464,6 +475,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
               <>
                 <Button
                   onClick={() => {
+                    playCorrect()
                     setState('right')
                     setResults((rs) => [...rs.filter((r) => r.item.id !== item.id), { item, correct: true }])
                     save(item, true)
@@ -471,7 +483,13 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
                 >
                   <Check className="h-4 w-4" /> I got it right
                 </Button>
-                <Button variant="ghost" onClick={next}>
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    playWrong()
+                    next()
+                  }}
+                >
                   Not yet
                 </Button>
               </>

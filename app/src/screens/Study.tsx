@@ -9,6 +9,7 @@ import { compare } from '../lib/speech'
 import { saveWriting } from '../lib/writings'
 import { addCard, recordAttempt } from '../lib/study'
 import { playLine, speak } from '../lib/audio'
+import { playCorrect, playWrong } from '../lib/sfx'
 import { LEVELS, PACKS, packsFor, type Level, type Pack, type Question } from '../content/practice/packs'
 import { cn } from '../lib/utils'
 
@@ -292,7 +293,10 @@ function Listening({ source, onBack }: { source: Source; onBack: () => void }) {
     if (picked) return
     setPicked(opt)
     const right = opt === item.line
-    if (right) setScore((s) => s + 1)
+    if (right) {
+      playCorrect()
+      setScore((s) => s + 1)
+    } else playWrong()
     recordAttempt({
       kind: 'listen',
       lesson: source.level === 'A1' ? lessonNumber(source.label) : undefined,
@@ -405,6 +409,8 @@ function Reading({ source, onBack }: { source: Source; onBack: () => void }) {
   const pick = (qIndex: number, q: Question, opt: string) => {
     if (answers[qIndex]) return
     setAnswers((a) => ({ ...a, [qIndex]: opt }))
+    if (opt === q.answer) playCorrect()
+    else playWrong()
     recordAttempt({
       kind: 'read',
       lesson: source.level === 'A1' ? lessonNumber(source.label) : undefined,
@@ -561,6 +567,8 @@ function Writing({ source, onBack }: { source: Source; onBack: () => void }) {
   const checkBuild = () => {
     if (!task) return
     const ok = tray.join(' ').toLowerCase() === task.answer.toLowerCase()
+    if (ok) playCorrect()
+    else playWrong()
     setStatus(ok ? 'ok' : 'no')
     recordAttempt({ kind: 'write', section: `Writing ${source.level}`, prompt: task.answer, correct: ok, answer: task.answer })
   }
@@ -570,6 +578,8 @@ function Writing({ source, onBack }: { source: Source; onBack: () => void }) {
     setBusy(true)
     const exact = norm(written) === norm(prompt.en)
     const { matches, failed } = await checkEnglish(written)
+    if (exact || (!failed && matches.length === 0)) playCorrect()
+    else playWrong()
     const diff = compare(prompt.en, written)
     setChecked({ exact, misses: matches, failed, missing: diff.missing, cover: diff.pct })
     recordAttempt({ kind: 'write', section: `Writing ${source.level}`, prompt: prompt.vi, correct: exact || (!failed && matches.length === 0), answer: prompt.en })

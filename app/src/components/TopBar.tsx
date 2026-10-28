@@ -1,4 +1,5 @@
 import { Menu } from 'lucide-react'
+import { SfxToggle } from './SfxToggle'
 import { cn } from '../lib/utils'
 
 type Props = {
@@ -24,7 +25,10 @@ export function TopBar({ title, crumb, onMenu, right, className }: Props) {
         {crumb && <p className="truncate text-[11px] font-medium uppercase tracking-[.12em] text-muted">{crumb}</p>}
         <h1 className="truncate text-[15px] font-semibold tracking-tight">{title}</h1>
       </div>
-      <div className="ml-auto flex items-center gap-2">{right}</div>
+      <div className="ml-auto flex items-center gap-2">
+        <SfxToggle />
+        {right}
+      </div>
     </header>
   )
 }

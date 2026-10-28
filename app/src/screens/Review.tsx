@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'motion/react'
+import { useRef } from 'react'
 import { ArrowLeft, ArrowRight, Check, RotateCcw, Volume2, X } from 'lucide-react'
+import { playCorrect, playFinish, playWrong } from '../lib/sfx'
 import { Button } from '../components/ui/button'
 import { Card } from '../components/ui/card'
 import { A1, quizFor, titleOf, type QuizItem } from '../lib/curriculum'
@@ -134,6 +136,20 @@ export function Review({ initialLesson, autoStart = 0 }: { initialLesson?: numbe
         ? selfMark !== null
         : checked && typed.trim().length > 0
     : false
+
+  // One sound per answered question, whatever the learner taps afterwards.
+  const sounded = useRef(-1)
+  useEffect(() => {
+    if (!answered || !current) return
+    if (sounded.current === index) return
+    sounded.current = index
+    if (correct) playCorrect()
+    else playWrong()
+  }, [answered, correct, current, index])
+
+  useEffect(() => {
+    if (done) playFinish()
+  }, [done])
 
   const next = () => {
     if (!current) return

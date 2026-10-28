@@ -4,6 +4,7 @@ import { Button } from '../components/ui/button'
 import { Progress } from '../components/ui/progress'
 import { A1, hasChoicePractice, lessonA1, partPlan, quizFor, titleOf, type FlowGroup, type LessonFile } from '../lib/curriculum'
 import { speak } from '../lib/audio'
+import { playCorrect, playWrong } from '../lib/sfx'
 import { markPart, partsSeen } from '../lib/progress'
 import { pushPart } from '../lib/sync'
 import { cn } from '../lib/utils'
@@ -719,7 +720,11 @@ function Choose({ items }: { items: PracticeItem[] }) {
                     <button
                       key={opt}
                       disabled={chosen}
-                      onClick={() => setPicked((p) => ({ ...p, [i]: opt }))}
+                      onClick={() => {
+                        setPicked((p) => ({ ...p, [i]: opt }))
+                        if (opt === it.answer) playCorrect()
+                        else playWrong()
+                      }}
                       className={cn(
                         'rounded-lg border px-3 py-1 text-[12px] font-semibold transition-colors',
                         !chosen && 'border-line bg-surface hover:border-primary/40 hover:bg-primary-soft/60',
@@ -733,7 +738,7 @@ function Choose({ items }: { items: PracticeItem[] }) {
                   )
                 })}
                 {chosen && !ok && <span className="ml-1 text-[11.5px] text-[#8a2b22]">It is “{it.answer}”.</span>}
-                {chosen && ok && <span className="ml-1 text-[11.5px] text-[#0f6b4f]">Right.</span>}
+                {chosen && ok && <span className="ml-1 text-[11.5px] text-[#0f6b4f]">Correct!</span>}
               </div>
             </li>
           )

@@ -3,6 +3,7 @@ import { Check, Plus, RotateCcw, Search, Volume2 } from 'lucide-react'
 import { Card, CardBody } from '../components/ui/card'
 import { Badge } from '../components/ui/badge'
 import { addCard, dueCards, listCards, reviewCard, type Card as Word } from '../lib/study'
+import { playCorrect, playWrong } from '../lib/sfx'
 import { speak } from '../lib/audio'
 import { cn } from '../lib/utils'
 
@@ -29,6 +30,8 @@ export function Vocabulary() {
 
   const grade = (right: boolean) => {
     if (!current) return
+    if (right) playCorrect()
+    else playWrong()
     setWords(reviewCard(current.id, right))
     setShowMeaning(false)
   }
