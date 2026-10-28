@@ -181,7 +181,7 @@ export default function App() {
   const titles: Record<Route, string> = {
     landing: '',
     dashboard: 'Overview',
-    lessons: 'Lessons',
+    lessons: 'Class practice',
     lesson: `Lesson ${lessonN}`,
     homework: 'Homework',
     today: 'Today',
