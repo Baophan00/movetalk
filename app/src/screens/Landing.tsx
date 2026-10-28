@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
-import { ArrowRight, BookOpen, Headphones, Mic, Sparkles, Volume2 } from 'lucide-react'
+import { ArrowRight, BookOpen, Headphones, Mic, Sparkles } from 'lucide-react'
 import { Button } from '../components/ui/button'
-import { A1, titleOf } from '../lib/curriculum'
+import { A1 } from '../lib/curriculum'
 import { cn } from '../lib/utils'
-import { speak } from '../lib/audio'
 
 type Props = { onStart: () => void; onOpenLesson: () => void; signedIn: boolean; onContinue: () => void }
 
@@ -23,7 +22,7 @@ function LessonPhotos() {
     return () => clearInterval(t)
   }, [])
   return (
-    <div className="relative -mx-5 -mt-5 mb-4 h-48 overflow-hidden rounded-t-[22px] bg-[#e6ddfb]">
+    <div className="absolute inset-0 overflow-hidden bg-[#e6ddfb]">
       {HERO.map((src, n) => (
         <img
           key={src}
@@ -52,8 +51,6 @@ function LessonPhotos() {
 }
 
 export function Landing({ onStart, onOpenLesson, signedIn, onContinue }: Props) {
-  const cards = A1[0]?.parts.vocab.slice(0, 3) ?? []
-
   return (
     <div className="min-h-screen bg-bg">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
@@ -96,41 +93,9 @@ export function Landing({ onStart, onOpenLesson, signedIn, onContinue }: Props) 
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.55, delay: 0.1 }}
-            className="rounded-3xl border border-[#d9d0f7] bg-[#f3efff] p-5 shadow-lift"
+            className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-[#d9d0f7] shadow-lift"
           >
             <LessonPhotos />
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-[11px] font-bold uppercase tracking-[.14em] text-muted">Lesson 1 · A1</p>
-                <p className="mt-0.5 text-[15px] font-semibold">{A1[0] ? titleOf(A1[0]) : 'First lesson'}</p>
-                <p className="text-[12px] text-muted">{A1[0]?.parts.vocab.length ?? 0} words · {A1[0]?.parts.grammar.length ?? 0} grammar blocks</p>
-              </div>
-              <span className="rounded-full bg-ok/10 px-2.5 py-1 text-[11px] font-semibold text-ok">open</span>
-            </div>
-
-            <div className="mt-4 space-y-2">
-              {cards.map((c) => (
-                <button
-                  key={c.word}
-                  onClick={() => speak(c.word)}
-                  className="flex w-full items-center gap-3 rounded-xl border border-line bg-bg/50 px-3.5 py-2.5 text-left transition-colors hover:border-primary/30 hover:bg-primary-soft/40"
-                >
-                  <span className="grid h-8 w-8 place-items-center rounded-lg bg-surface text-primary shadow-card">
-                    <Volume2 className="h-3.5 w-3.5" />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-[13.5px] font-semibold">{c.word}</span>
-                    <span className="block truncate text-[11.5px] text-muted">{c.vi}</span>
-                  </span>
-
-                </button>
-              ))}
-            </div>
-
-            <div className="mt-4 rounded-2xl bg-bg/60 p-3.5">
-              <p className="text-[11px] font-bold uppercase tracking-[.14em] text-muted">Final task</p>
-              <p className="mt-1 text-[12.5px] leading-relaxed text-ink/80">Talk about someone you like working with, and one habit you cannot stand.</p>
-            </div>
           </motion.div>
         </section>
 
