@@ -1,0 +1,40 @@
+{
+  "lesson": 10,
+  "title": "A booking mistake",
+  "text": "Mai has just booked a hotel room for Saturday, but she chose the wrong date. She has changed a booking online twice before, so she is not worried. She has already called the hotel, and they have sent her a new email. She has not paid yet, so the change is free. She has been a member since 2022, and she has stayed in this hotel several times. The last time was in June. So far the staff have been very helpful.",
+  "questions": [
+    {
+      "q": "What is Mai's problem?",
+      "options": [
+        "She chose the wrong date",
+        "She lost her card",
+        "The hotel is closed",
+        "She has no email"
+      ],
+      "answer": "She chose the wrong date",
+      "explain": "She chose the wrong date."
+    },
+    {
+      "q": "Has she paid for the room?",
+      "options": [
+        "No, not yet",
+        "Yes, twice",
+        "Yes, in June",
+        "We do not know"
+      ],
+      "answer": "No, not yet",
+      "explain": "She has not paid yet, so the change is free."
+    },
+    {
+      "q": "How long has she been a member?",
+      "options": [
+        "Since 2022",
+        "For two months",
+        "Since June",
+        "For ten years"
+      ],
+      "answer": "Since 2022",
+      "explain": "Since 2022."
+    }
+  ]
+}

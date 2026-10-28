@@ -1,0 +1,38 @@
+{
+  "lesson": 8,
+  "title": "Enough for dinner",
+  "text": "We have a few friends for dinner tonight. There are a few vegetables in the fridge, but very little rice. Most people in our building eat at home on Sunday, so the shop is crowded. I have a little time before six, so I can go now. Do you have any questions about the menu? There are many options, but I have little information about the new dishes. Almost all of us like fish, and both of us can cook it.",
+  "questions": [
+    {
+      "q": "What is missing for dinner?",
+      "options": [
+        "Rice",
+        "Vegetables",
+        "Fish",
+        "Friends"
+      ],
+      "answer": "Rice",
+      "explain": "A few vegetables, but very little rice."
+    },
+    {
+      "q": "Why is the shop crowded?",
+      "options": [
+        "Most people eat at home on Sunday",
+        "It is a new shop",
+        "The prices are low",
+        "There is a sale"
+      ],
+      "answer": "Most people eat at home on Sunday",
+      "explain": "Most people in the building eat at home on Sunday."
+    },
+    {
+      "q": "True or false: the writer has much information about the new dishes.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "answer": "False",
+      "explain": "Little information means not much."
+    }
+  ]
+}

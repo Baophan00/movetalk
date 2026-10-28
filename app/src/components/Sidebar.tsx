@@ -17,6 +17,7 @@ export type Route =
   | 'lesson'
   | 'homework'
   | 'library'
+  | 'review'
   | 'practice'
   | 'profile'
   | 't-overview'

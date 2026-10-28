@@ -1,0 +1,38 @@
+{
+  "lesson": 1,
+  "title": "New at the office",
+  "text": "Mai is new at the office. She works in a small team of four people. She lives near the river, so she walks to work. On Mondays she is very busy, and she is often tired in the evening. She likes her coworkers. She does not cook on weekdays. On Saturdays she is free, and she cooks dinner for her family. She is ready for a new week on Sunday evening.",
+  "questions": [
+    {
+      "q": "Where does Mai work?",
+      "options": [
+        "In a small team of four people",
+        "In a big shop",
+        "At home",
+        "At a café"
+      ],
+      "answer": "In a small team of four people",
+      "explain": "The text says: she works in a small team of four people."
+    },
+    {
+      "q": "Why does she walk to work?",
+      "options": [
+        "She lives near the river",
+        "She has no bus",
+        "She likes rain",
+        "The office is far"
+      ],
+      "answer": "She lives near the river",
+      "explain": "Short distance: she lives near the river."
+    },
+    {
+      "q": "True or false: Mai cooks every weekday.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "answer": "False",
+      "explain": "She does not cook on weekdays, only on Saturdays."
+    }
+  ]
+}

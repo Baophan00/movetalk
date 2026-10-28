@@ -1,115 +1,149 @@
-import { BookOpen, Play, Volume2 } from 'lucide-react'
+import { useState } from 'react'
+import { ArrowRight, BookOpen, ChevronDown, ClipboardList, Play, Sparkles, Volume2 } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Card, CardBody } from '../components/ui/card'
-import { A1, partCount, partPlan, titleOf, type LessonFile } from '../lib/curriculum'
-import { partsSeen } from '../lib/progress'
+import { Progress } from '../components/ui/progress'
+import { A1, readingFor, titleOf, type LessonFile } from '../lib/curriculum'
+import { exercisesFor, skillCounts } from '../lib/exercises'
+import { allAttempts } from '../lib/study'
 import { speak } from '../lib/audio'
 import { cn } from '../lib/utils'
 
-function goalOf(l: LessonFile): string {
-  const g = l.parts.grammar[0]
-  if (g) return `${g.section}${g.sub ? ` · ${g.sub}` : ''}`
-  return `${l.parts.vocab.length} words to use out loud`
+type State = 'new' | 'doing' | 'done' | 'again'
+
+function stateOf(lesson: number): { state: State; pct: number } {
+  const rows = allAttempts().filter((a) => a.lesson === lesson)
+  if (!rows.length) return { state: 'new', pct: 0 }
+  const right = rows.filter((a) => a.correct).length
+  const pct = Math.round((right / rows.length) * 100)
+  const recentWrong = rows.slice(0, 8).filter((a) => !a.correct).length
+  if (rows.length >= 18 && pct >= 80) return { state: 'done', pct }
+  if (recentWrong >= 3) return { state: 'again', pct }
+  return { state: 'doing', pct }
 }
 
-export function Lessons({ onPractice, onHomework, onReview }: { onPractice: (n: number) => void; onHomework?: () => void; onReview?: () => void }) {
+const CHIP: Record<State, { label: string; className: string }> = {
+  new: { label: 'New', className: 'bg-bg text-muted border-line' },
+  doing: { label: 'In progress', className: 'bg-primary-soft text-primary border-primary/20' },
+  done: { label: 'Done', className: 'bg-ok/10 text-ok border-ok/25' },
+  again: { label: 'Needs review', className: 'bg-accent/15 text-[#8a5a12] border-accent/30' },
+}
+
+function countsLine(l: LessonFile): string {
+  const c = skillCounts(l.n)
+  const bits = [`${l.parts.vocab.length} words`, `${c.grammar} grammar`, `${c.listening} listening`]
+  if (c.reading) bits.push(`${c.reading} reading`)
+  return bits.join(' · ')
+}
+
+export function Lessons({
+  onPractise,
+  onHomework,
+  onReview,
+}: {
+  onPractise: (n: number) => void
+  onHomework?: () => void
+  onReview?: () => void
+}) {
+  const [openRead, setOpenRead] = useState<number | null>(null)
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="text-[12px] font-semibold uppercase tracking-[.14em] text-muted">Level A1</p>
-          <h2 className="mt-1 text-[24px] font-semibold tracking-tight">Activate 1 · {A1.length} lessons</h2>
+          <h2 className="mt-1 text-[24px] font-semibold tracking-tight">Class practice</h2>
           <p className="mt-1 max-w-[58ch] text-[13px] text-muted">
-            A short recap of each lesson, plus practice you can do at home. Nothing to read end to end.
+            What your teacher covered in class, with practice for home. Pick a lesson and start.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {onReview && (
-            <button onClick={onReview} className="rounded-xl border border-line bg-surface px-3 py-1.5 text-[12px] font-semibold transition hover:border-primary/40">
-              Redo mistakes
+            <button
+              onClick={onReview}
+              className="rounded-xl border border-line bg-surface px-3 py-1.5 text-[12px] font-semibold transition hover:border-primary/40"
+            >
+              Review
             </button>
           )}
           {onHomework && (
-            <button onClick={onHomework} className="rounded-xl border border-line bg-surface px-3 py-1.5 text-[12px] font-semibold transition hover:border-primary/40">
-              Homework
+            <button
+              onClick={onHomework}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-line bg-surface px-3 py-1.5 text-[12px] font-semibold transition hover:border-primary/40"
+            >
+              <ClipboardList className="h-3.5 w-3.5" /> Homework
             </button>
           )}
         </div>
       </div>
 
-      <div className="mt-5 space-y-3">
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
         {A1.map((l) => {
-          const plan = partPlan(l)
-          const seen = partsSeen(l.n).filter((i) => i < plan.length)
-          const pct = plan.length ? Math.round((seen.length / plan.length) * 100) : 0
-          const phrases = l.parts.vocab.slice(0, 3)
-          const grammar = l.parts.grammar[0]?.lines.slice(0, 2) ?? []
-          const dialogue = l.parts.dialogue.slice(0, 4)
+          const { state, pct } = stateOf(l.n)
+          const chip = CHIP[state]
+          const total = exercisesFor(l.n).length
+          const reading = readingFor(l.n)
+          const words = l.parts.vocab.slice(0, 3)
 
           return (
             <Card key={l.n} className="overflow-hidden">
-              <CardBody className="p-0">
-                <div className="grid gap-0 sm:grid-cols-[1.15fr_1fr]">
-                  <div className="p-4 sm:p-5">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={cn(
-                          'grid h-8 w-8 place-items-center rounded-lg text-[11.5px] font-bold',
-                          pct === 100 ? 'bg-[#c8f0e0] text-[#0f6b4f]' : 'bg-[#e8f0ff] text-[#2f6bff]',
-                        )}
-                      >
-                        {String(l.n).padStart(2, '0')}
-                      </span>
-                      <p className="text-[15px] font-semibold leading-tight">{titleOf(l) || `Lesson ${l.n}`}</p>
-                    </div>
-                    <p className="mt-2 text-[11px] uppercase tracking-[.1em] text-muted">{goalOf(l)}</p>
-
-                    <ul className="mt-3 space-y-1.5">
-                      {phrases.map((v) => (
-                        <li key={v.word} className="flex items-center gap-2 rounded-lg bg-bg/60 px-2.5 py-1.5">
-                          <button onClick={() => speak(v.word)} aria-label={`Hear ${v.word}`} className="text-[#2f6bff] hover:text-[#1b4ddb]">
-                            <Volume2 className="h-3.5 w-3.5" />
-                          </button>
-                          <span className="text-[13px] font-medium">{v.word}</span>
-                          <span className="text-[11px] text-muted">{v.ipa}</span>
-                          <span className="ml-auto truncate text-[11.5px] text-[#5a6a86]">{v.vi}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    {grammar.length > 0 && (
-                      <ul className="mt-3 space-y-1 border-l-2 border-[#e3eaf6] pl-2.5">
-                        {grammar.map((line, i) => (
-                          <li key={i} className="text-[11.5px] leading-relaxed text-[#4a5a75]">
-                            {line}
-                          </li>
-                        ))}
-                      </ul>
+              <CardBody className="flex h-full flex-col p-4">
+                <div className="flex items-start gap-3">
+                  <span
+                    className={cn(
+                      'grid h-9 w-9 shrink-0 place-items-center rounded-xl text-[12px] font-bold',
+                      state === 'done' ? 'bg-ok/15 text-ok' : 'bg-primary-soft text-primary',
                     )}
+                  >
+                    {String(l.n).padStart(2, '0')}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-[14.5px] font-semibold leading-tight">{titleOf(l) || `Lesson ${l.n}`}</p>
+                    <p className="mt-0.5 truncate text-[11.5px] text-muted">{countsLine(l)}</p>
                   </div>
+                  <span className={cn('rounded-full border px-2 py-0.5 text-[10.5px] font-semibold', chip.className)}>{chip.label}</span>
+                </div>
 
-                  <div className="border-t border-line/70 bg-[#fbfcfe] p-4 sm:border-l sm:border-t-0 sm:p-5">
-                    <p className="text-[10.5px] font-bold uppercase tracking-[.12em] text-muted">In the conversation</p>
-                    <ul className="mt-2 space-y-1.5">
-                      {dialogue.map((t, i) => (
-                        <li key={i} className="text-[11.5px] leading-snug">
-                          <span className="font-semibold text-[#26344f]">{t.who}</span>{' '}
-                          <span className="text-[#4a5a75]">{t.line}</span>
-                        </li>
-                      ))}
-                    </ul>
+                <div className="mt-3">
+                  <div className="mb-1 flex items-center justify-between text-[11px] text-muted">
+                    <span>{total} exercises</span>
+                    <span>{pct}% right</span>
+                  </div>
+                  <Progress value={pct} />
+                </div>
 
-                    <div className="mt-3 flex items-center justify-between text-[11px] text-muted">
-                      <span>
-                        {partCount(l)} parts · {pct}% met
+                <div className="mt-3 flex items-center gap-1.5">
+                  {words.map((w) => (
+                    <button
+                      key={w.word}
+                      onClick={() => speak(w.word)}
+                      className="inline-flex items-center gap-1 rounded-lg bg-bg/70 px-2 py-1 text-[11px] text-ink/75 transition hover:bg-primary-soft/60"
+                    >
+                      <Volume2 className="h-3 w-3 text-primary" /> {w.word}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="mt-auto pt-3">
+                  {reading && (
+                    <button
+                      onClick={() => setOpenRead(openRead === l.n ? null : l.n)}
+                      className="mb-2 flex w-full items-center justify-between rounded-xl bg-bg/50 px-2.5 py-1.5 text-[11.5px] font-medium text-ink/75"
+                    >
+                      <span className="inline-flex items-center gap-1.5">
+                        <BookOpen className="h-3.5 w-3.5 text-primary" /> Read: {reading.title}
                       </span>
-                    </div>
-
-                    <Button size="sm" className="mt-2.5 w-full" onClick={() => onPractice(l.n)}>
-                      <Play className="h-3.5 w-3.5" /> Practice this lesson
-                    </Button>
-                  </div>
+                      <ChevronDown className={cn('h-3.5 w-3.5 transition', openRead === l.n && 'rotate-180')} />
+                    </button>
+                  )}
+                  {reading && openRead === l.n && (
+                    <p className="mb-2 rounded-xl border border-line/70 bg-bg/40 px-3 py-2 text-[12px] leading-relaxed text-ink/80">
+                      {reading.text}
+                    </p>
+                  )}
+                  <Button size="sm" className="w-full" onClick={() => onPractise(l.n)}>
+                    <Play className="h-3.5 w-3.5" /> {state === 'new' ? 'Start practice' : 'Practise again'} <ArrowRight className="h-3.5 w-3.5" />
+                  </Button>
                 </div>
               </CardBody>
             </Card>
@@ -117,11 +151,11 @@ export function Lessons({ onPractice, onHomework, onReview }: { onPractice: (n: 
         })}
       </div>
 
-      <div className="mt-6 flex items-start gap-2 rounded-2xl bg-[#f4f8ff] px-4 py-3">
-        <BookOpen className="mt-0.5 h-4 w-4 shrink-0 text-[#2f6bff]" />
-        <p className="text-[12px] leading-relaxed text-[#3d4f6d]">
-          Practice has five rooms: quick quiz, word match, build a sentence, listen and pick, and a recording room where your teacher hears you
-          say the line. Every lesson adds one more set.
+      <div className="mt-6 flex items-start gap-2 rounded-2xl border border-line bg-bg/50 px-4 py-3">
+        <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+        <p className="text-[12px] leading-relaxed text-muted">
+          Ten questions per round, mixed: word meaning, a gap, word order, listening, and one short reading. Wrong answers are kept so you
+          can redo only those.
         </p>
       </div>
     </div>

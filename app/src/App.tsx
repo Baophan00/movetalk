@@ -10,7 +10,8 @@ import { Lesson } from './screens/Lesson'
 import { Lessons } from './screens/Lessons'
 import { Homework } from './screens/Homework'
 import { Review } from './screens/Review'
-import { Practice } from './screens/Practice'
+import { Practise } from './screens/Practise'
+import { ReviewHub } from './screens/ReviewHub'
 import { Profile as ProfileScreen } from './screens/Profile'
 import { Today } from './screens/Today'
 import { Study } from './screens/Study'
@@ -45,7 +46,6 @@ export default function App() {
   const [view, setView] = useState<Role>('student')
   const [lessonN, setLessonN] = useState(1)
   const [quizLesson, setQuizLesson] = useState<number | null>(null)
-  const [practiceTab, setPracticeTab] = useState<'quiz' | 'words' | 'build' | 'listen' | 'speak'>('quiz')
   // Where Practice your way should open when another screen sends the learner there.
   const [studySeed, setStudySeed] = useState<{ level?: 'A1' | 'A2' | 'B1' | 'B2'; room?: 'listen' | 'read' | 'write' | 'speak'; prompt?: string }>({})
   const [practiceN, setPracticeN] = useState(1)
@@ -135,7 +135,6 @@ export default function App() {
 
   const openPractice = (n: number) => {
     setPracticeN(n)
-    setPracticeTab('quiz')
     go('practice')
   }
 
@@ -188,7 +187,8 @@ export default function App() {
     progress: 'Progress',
     words: 'My Vocabulary',
     mistakes: 'To redo',
-    library: 'Review',
+    library: 'Review quiz',
+    review: 'Review',
     practice: `Lesson ${practiceN} · Practice`,
     profile: 'Profile',
     't-overview': 'Overview',
@@ -231,10 +231,7 @@ export default function App() {
               name={profile.name}
               onGo={(r, n) => {
                 if (r === 'lesson' && n) setLessonN(n)
-                if (r === 'practice' && n) {
-                  setPracticeN(n)
-                  setPracticeTab(r === 'practice' ? 'speak' : 'quiz')
-                }
+                if (r === 'practice' && n) setPracticeN(n)
                 go(r)
               }}
             />
@@ -261,7 +258,7 @@ export default function App() {
           {route === 'dashboard' && (
             <Dashboard name={profile.name} onOpenLesson={openPractice} onHomework={() => go('homework')} onLessons={() => go('lessons')} />
           )}
-          {route === 'lessons' && <Lessons onPractice={openPractice} onReview={() => go('library')} onHomework={() => go('homework')} />}
+          {route === 'lessons' && <Lessons onPractise={openPractice} onReview={() => go('review')} onHomework={() => go('homework')} />}
           {route === 'lesson' && <Lesson lessonN={lessonN} onPickLesson={setLessonN} onBack={() => go('dashboard')} />}
           {route === 'homework' && (
             <Homework
@@ -271,7 +268,18 @@ export default function App() {
             />
           )}
           {route === 'library' && <Review initialLesson={quizLesson ?? undefined} autoStart={autoReview} />}
-          {route === 'practice' && <Practice lessonN={practiceN} onBack={() => go('lessons')} initialTab={practiceTab} />}
+          {route === 'review' && (
+            <ReviewHub
+              onPractise={openPractice}
+              onWords={() => go('words')}
+              onRedo={() => go('mistakes')}
+              onReviewQuiz={() => go('library')}
+              onHomework={() => go('homework')}
+            />
+          )}
+          {route === 'practice' && (
+            <Practise lessonN={practiceN} onExit={() => go('lessons')} />
+          )}
           {route === 'profile' && (
             <ProfileScreen name={profile.name} email={profile.email} role={profile.role} onSignOut={doSignOut} onGo={(r) => go(r)} />
           )}

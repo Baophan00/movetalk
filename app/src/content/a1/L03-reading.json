@@ -1,0 +1,40 @@
+{
+  "lesson": 3,
+  "title": "My week",
+  "text": "I usually have breakfast at seven. I walk to work, and I get home early on Tuesdays. On Wednesdays I cook dinner and wash the dishes. My sister lives with me. She is good at cooking, but she does not help with the dishes. On Fridays we go out with friends, and we watch movies. On Sundays we stay at home and spend time with our parents. We never go out on Sunday evening.",
+  "questions": [
+    {
+      "q": "What does the writer do on Wednesdays?",
+      "options": [
+        "Cook dinner and wash the dishes",
+        "Go out with friends",
+        "Watch a movie at the cinema",
+        "Stay at home all day"
+      ],
+      "answer": "Cook dinner and wash the dishes",
+      "explain": "On Wednesdays: cook dinner and wash the dishes."
+    },
+    {
+      "q": "Does the sister help with the dishes?",
+      "options": [
+        "No, she does not",
+        "Yes, she does",
+        "Only on Sundays",
+        "We do not know"
+      ],
+      "answer": "No, she does not",
+      "explain": "She does not help with the dishes."
+    },
+    {
+      "q": "When do they stay at home?",
+      "options": [
+        "Sundays",
+        "Fridays",
+        "Tuesdays",
+        "Every day"
+      ],
+      "answer": "Sundays",
+      "explain": "On Sundays they stay at home."
+    }
+  ]
+}

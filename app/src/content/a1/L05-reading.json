@@ -1,0 +1,40 @@
+{
+  "lesson": 5,
+  "title": "At the counter",
+  "text": "This is our café. The counter is over here, next to the entrance. There is a shelf behind the counter, and the mugs are on it. My notebook and my charger are in front of the socket, near the window. Those seats over there are free. The receipt is on the counter, next to the small plant. Is this your mug? Yes, it is. Are those tables available? No, they are not. They are for the kitchen team.",
+  "questions": [
+    {
+      "q": "Where are the mugs?",
+      "options": [
+        "On the shelf behind the counter",
+        "In front of the socket",
+        "Next to the entrance",
+        "On the window"
+      ],
+      "answer": "On the shelf behind the counter",
+      "explain": "A shelf behind the counter, and the mugs are on it."
+    },
+    {
+      "q": "Where is the receipt?",
+      "options": [
+        "On the counter",
+        "In the notebook",
+        "On the shelf",
+        "Behind the door"
+      ],
+      "answer": "On the counter",
+      "explain": "The receipt is on the counter."
+    },
+    {
+      "q": "Are those tables available?",
+      "options": [
+        "No, they are not",
+        "Yes, they are",
+        "Only in the morning",
+        "We do not know"
+      ],
+      "answer": "No, they are not",
+      "explain": "They are for the kitchen team."
+    }
+  ]
+}

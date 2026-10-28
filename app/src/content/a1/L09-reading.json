@@ -1,0 +1,40 @@
+{
+  "lesson": 9,
+  "title": "Choosing headphones",
+  "text": "A customer is looking for wireless headphones. She is not good at choosing electronics, so she asks the assistant for help. She is interested in a small model, but she is worried about the price. The assistant says the model works with her phone, and it is different from the old one. She is happy with the sound, but she is not ready for the new price. She is excited about the weekend sale, and she waits for Friday.",
+  "questions": [
+    {
+      "q": "What is the customer looking for?",
+      "options": [
+        "Wireless headphones",
+        "A phone",
+        "A charger",
+        "A notebook"
+      ],
+      "answer": "Wireless headphones",
+      "explain": "She is looking for wireless headphones."
+    },
+    {
+      "q": "What is she worried about?",
+      "options": [
+        "The price",
+        "The colour",
+        "The shop",
+        "The weekend"
+      ],
+      "answer": "The price",
+      "explain": "She is worried about the price."
+    },
+    {
+      "q": "Why does she wait for Friday?",
+      "options": [
+        "The weekend sale",
+        "A friend comes",
+        "The shop opens",
+        "She has an appointment"
+      ],
+      "answer": "The weekend sale",
+      "explain": "She is excited about the weekend sale."
+    }
+  ]
+}

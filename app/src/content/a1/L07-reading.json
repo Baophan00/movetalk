@@ -1,0 +1,40 @@
+{
+  "lesson": 7,
+  "title": "A table for two",
+  "text": "Linh has an appointment at the dentist at four. After that she wants to reserve a table at a small restaurant near the station. The restaurant is crowded on Fridays, so she calls first. The man on the phone recommends a quiet corner next to the window. He says a table is available at six. Linh picks up a friend at the entrance at half past five, and they get to the restaurant on foot. They spend time with their old teacher once a week.",
+  "questions": [
+    {
+      "q": "Why does Linh call the restaurant first?",
+      "options": [
+        "It is crowded on Fridays",
+        "It is closed",
+        "She has no money",
+        "She is late"
+      ],
+      "answer": "It is crowded on Fridays",
+      "explain": "The restaurant is crowded on Fridays, so she calls first."
+    },
+    {
+      "q": "What does the man recommend?",
+      "options": [
+        "A quiet corner next to the window",
+        "A table outside",
+        "Another place",
+        "A table at four"
+      ],
+      "answer": "A quiet corner next to the window",
+      "explain": "He recommends a quiet corner next to the window."
+    },
+    {
+      "q": "When is the table available?",
+      "options": [
+        "At six",
+        "At four",
+        "At half past five",
+        "At seven"
+      ],
+      "answer": "At six",
+      "explain": "A table is available at six."
+    }
+  ]
+}

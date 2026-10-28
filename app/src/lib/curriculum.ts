@@ -70,7 +70,7 @@ function asLesson(raw: unknown): LessonFile {
 }
 
 export const A1: LessonFile[] = Object.entries(lessonFiles)
-  .filter(([path]) => !path.includes('-quiz'))
+  .filter(([path]) => !path.includes('-quiz') && !path.includes('-reading'))
   .map(([, mod]) => asLesson(mod.default))
   .sort((a, b) => a.n - b.n)
 
@@ -164,4 +164,21 @@ export function lessonA1(n: number): LessonFile | undefined {
 
 export function quizFor(n: number): QuizItem[] {
   return (A1_QUIZ[n] ?? []).map((q) => ({ ...q, vi: q.vi ?? QUIZ_VI[q.prompt] }))
+}
+
+/** One short reading per lesson, written to reuse that lesson's words and structures. */
+export type ReadingQuestion = { q: string; options: string[]; answer: string; explain?: string }
+export type ReadingFile = { lesson: number; title: string; text: string; questions: ReadingQuestion[] }
+
+const readingFiles = import.meta.glob('../content/a1/L*-reading.json', { eager: true }) as Record<string, { default: unknown }>
+
+export const A1_READING: Record<number, ReadingFile> = Object.fromEntries(
+  Object.entries(readingFiles).map(([, mod]) => {
+    const r = mod.default as ReadingFile
+    return [r.lesson, r]
+  }),
+)
+
+export function readingFor(n: number): ReadingFile | undefined {
+  return A1_READING[n]
 }

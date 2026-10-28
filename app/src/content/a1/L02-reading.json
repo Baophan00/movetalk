@@ -1,0 +1,40 @@
+{
+  "lesson": 2,
+  "title": "A busy family",
+  "text": "Lan has a big family. Her mother is a teacher and her father is a driver. Her sister works in a café near the market. Her brother is a doctor at a small hospital. Lan has two neighbors, and they are also her friends. On Sundays her parents visit her. Her coworker Anna has a brother, but he lives in another city. Anna's brother is a shop assistant in a restaurant.",
+  "questions": [
+    {
+      "q": "What is Lan's mother's job?",
+      "options": [
+        "A teacher",
+        "A driver",
+        "A doctor",
+        "A shop assistant"
+      ],
+      "answer": "A teacher",
+      "explain": "Her mother is a teacher."
+    },
+    {
+      "q": "Where does Lan's brother work?",
+      "options": [
+        "At a small hospital",
+        "In a café",
+        "In a restaurant",
+        "In a market"
+      ],
+      "answer": "At a small hospital",
+      "explain": "Her brother is a doctor at a small hospital."
+    },
+    {
+      "q": "Who visits Lan on Sundays?",
+      "options": [
+        "Her parents",
+        "Her brother",
+        "Anna",
+        "Her neighbors"
+      ],
+      "answer": "Her parents",
+      "explain": "On Sundays her parents visit her."
+    }
+  ]
+}

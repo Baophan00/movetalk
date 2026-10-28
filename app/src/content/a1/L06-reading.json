@@ -1,0 +1,40 @@
+{
+  "lesson": 6,
+  "title": "A short trip",
+  "text": "Last month Mia took a short trip to a small city near the sea. She stayed in a nice hotel, and she ate local food every day. The restaurants were cheap, but the food was amazing. She visited an old building near the market and bought a small bag in a local shop. The price was good. She liked the place, but the city was crowded on Saturday. Her current plan is another trip in May.",
+  "questions": [
+    {
+      "q": "What did Mia think of the food?",
+      "options": [
+        "Cheap and amazing",
+        "Expensive and bad",
+        "Nice but cold",
+        "Too hot"
+      ],
+      "answer": "Cheap and amazing",
+      "explain": "The restaurants were cheap and the food was amazing."
+    },
+    {
+      "q": "When was the city crowded?",
+      "options": [
+        "On Saturday",
+        "On Monday",
+        "In May",
+        "Every day"
+      ],
+      "answer": "On Saturday",
+      "explain": "The city was crowded on Saturday."
+    },
+    {
+      "q": "What is her plan now?",
+      "options": [
+        "Another trip in May",
+        "A new job",
+        "A bigger hotel",
+        "To stay at home"
+      ],
+      "answer": "Another trip in May",
+      "explain": "Her current plan is another trip in May."
+    }
+  ]
+}

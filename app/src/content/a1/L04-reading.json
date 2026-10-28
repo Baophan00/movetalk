@@ -1,0 +1,40 @@
+{
+  "lesson": 4,
+  "title": "Getting to work",
+  "text": "Ben works at a hotel near the river. He leaves home at seven and gets to work at half past seven. The trip takes about thirty minutes by bus. On Mondays the bus is crowded, so he goes on foot. He starts work at eight and finishes at five. He spends about ten dollars a day on lunch. He goes to the gym once a week, and he visits his parents twice a month. He does not work on Sundays.",
+  "questions": [
+    {
+      "q": "How long does the trip take by bus?",
+      "options": [
+        "About thirty minutes",
+        "Ten minutes",
+        "One hour",
+        "Half a day"
+      ],
+      "answer": "About thirty minutes",
+      "explain": "The trip takes about thirty minutes by bus."
+    },
+    {
+      "q": "Why does he go on foot on Mondays?",
+      "options": [
+        "The bus is crowded",
+        "He has no ticket",
+        "The hotel is closed",
+        "He is late"
+      ],
+      "answer": "The bus is crowded",
+      "explain": "On Mondays the bus is crowded."
+    },
+    {
+      "q": "How often does he visit his parents?",
+      "options": [
+        "Twice a month",
+        "Once a week",
+        "Every day",
+        "Never"
+      ],
+      "answer": "Twice a month",
+      "explain": "Twice a month."
+    }
+  ]
+}
