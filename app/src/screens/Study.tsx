@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ArrowRight, Check, X } from 'lucide-react'
+import { ArrowRight, Check, X, Globe, Trophy, Zap, Clock } from 'lucide-react'
 import { Card, CardBody } from '../components/ui/card'
 import { Badge } from '../components/ui/badge'
 import { SpeakRoom } from '../components/SpeakRoom'
@@ -117,6 +117,7 @@ function packSource(pack: Pack): Source {
 /* --------------------------------------------------------------------- hub */
 
 export function Study({ seedLevel, seedRoom, seedPrompt }: { seedLevel?: Level; seedRoom?: Room; seedPrompt?: string } = {}) {
+  const [program, setProgram] = useState<'cefr' | 'toeic' | 'ielts'>('cefr')
   const [level, setLevel] = useState<Level>(seedLevel ?? 'A1')
   const [lessonN, setLessonN] = useState(A1[0]?.n ?? 1)
   const [packId, setPackId] = useState(() => {
@@ -148,8 +149,86 @@ export function Study({ seedLevel, seedRoom, seedPrompt }: { seedLevel?: Level; 
     return <Writing source={source} onBack={back} />
   }
 
+  if (program !== 'cefr') {
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6">
+        <p className="text-[11px] font-bold uppercase tracking-[.16em] text-primary">Practice your way</p>
+        <h1 className="mt-1 text-[24px] font-semibold tracking-tight sm:text-[26px]">Choose your program</h1>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          {[
+            { key: 'cefr' as const, name: 'CEFR', full: 'General English', icon: Globe, color: 'from-primary/15 to-primary/5' },
+            { key: 'toeic' as const, name: 'TOEIC', full: 'TOEIC Preparation', icon: Trophy, color: 'from-accent/15 to-accent/5' },
+            { key: 'ielts' as const, name: 'IELTS', full: 'IELTS Preparation', icon: Zap, color: 'from-mint/15 to-mint/5' },
+          ].map((p) => {
+            const Icon = p.icon
+            const active = program === p.key
+            const available = p.key === 'cefr'
+            return (
+              <button
+                key={p.key}
+                onClick={() => setProgram(p.key)}
+                className={cn(
+                  'rounded-2xl border p-4 text-left transition',
+                  active ? 'border-primary bg-primary-soft shadow-card' : 'border-line bg-surface hover:border-primary/30',
+                  !available && 'opacity-60',
+                )}
+              >
+                <div className={cn('mb-2 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br', p.color)}>
+                  <Icon className="h-4 w-4 text-primary" />
+                </div>
+                <p className="text-[15px] font-semibold">{p.name}</p>
+                <p className="text-[11.5px] text-muted">{p.full}</p>
+                {!available && (
+                  <div className="mt-2 flex items-center gap-1.5 text-[11px] text-muted">
+                    <Clock className="h-3 w-3" /> Coming soon
+                  </div>
+                )}
+              </button>
+            )
+          })}
+        </div>
+        <div className="mt-6 rounded-2xl border border-dashed border-line bg-bg/60 p-6 text-center">
+          <p className="text-[14px] font-semibold text-muted">
+            {program === 'toeic' ? 'TOEIC Preparation' : 'IELTS Preparation'} — coming soon.
+          </p>
+          <p className="mt-1 text-[12px] text-muted">
+            This program will be implemented in a later phase. Switch back to CEFR to practice now.
+          </p>
+          <button
+            onClick={() => setProgram('cefr')}
+            className="mt-3 rounded-xl bg-primary px-4 py-2 text-[12.5px] font-semibold text-white"
+          >
+            Back to CEFR
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6">
+      {/* Program selector */}
+      <div className="mb-4 flex gap-1.5">
+        {[
+          { key: 'cefr' as const, name: 'CEFR', icon: Globe },
+          { key: 'toeic' as const, name: 'TOEIC', icon: Trophy },
+          { key: 'ielts' as const, name: 'IELTS', icon: Zap },
+        ].map((p) => {
+          const Icon = p.icon
+          return (
+            <button
+              key={p.key}
+              onClick={() => setProgram(p.key)}
+              className={cn(
+                'flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-[11.5px] font-semibold transition',
+                program === p.key ? 'border-transparent bg-primary text-white' : 'border-line bg-surface text-muted hover:border-primary/30',
+              )}
+            >
+              <Icon className="h-3 w-3" /> {p.name}
+            </button>
+          )
+        })}
+      </div>
       <p className="text-[11px] font-bold uppercase tracking-[.16em] text-primary">Practice your way</p>
       <h1 className="mt-1 text-[24px] font-semibold tracking-tight sm:text-[26px]">Four skills, scored as you go</h1>
       <p className="mt-1 text-[12.5px] text-muted">A1 follows your lessons. A2, B1 and B2 are extra practice.</p>

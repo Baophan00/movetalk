@@ -729,6 +729,7 @@ export const PACKS: Pack[] = [
       model: 'Hello, I would like to book an appointment because I have a pain in my back. I am free on Thursday morning or Friday afternoon. My phone number is 0901 234 567. Thank you very much.',
       must: ['appointment', 'free'],
     },
+  },
   {
     id: 'a1-cafe',
     level: 'A1',

@@ -4,7 +4,7 @@ import type { Route } from './Sidebar'
 
 const TABS: { key: Route; label: string; icon: typeof Home }[] = [
   { key: 'today', label: 'Today', icon: Home },
-  { key: 'class-practice', label: 'Class', icon: Compass },
+  { key: 'lessons', label: 'Class', icon: Compass },
   { key: 'study', label: 'Practice', icon: Sparkles },
   { key: 'progress', label: 'Progress', icon: TrendingUp },
   { key: 'profile', label: 'Profile', icon: UserRound },
@@ -16,7 +16,7 @@ export function MobileTabs({ route, onNav }: { route: Route; onNav: (r: Route) =
     <nav className="safe-bottom fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface/95 backdrop-blur-md lg:hidden">
       <ul className="mx-auto flex max-w-md items-stretch justify-between px-2">
         {TABS.map((t) => {
-          const on = route === t.key || (t.key === 'class-practice' && (route === 'cefr' || route === 'lessons' || route === 'lesson'))
+          const on = route === t.key || (t.key === 'lessons' && route === 'lesson')
           const Icon = t.icon
           return (
             <li key={t.key} className="min-w-0 flex-1">
