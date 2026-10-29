@@ -1,6 +1,6 @@
 const fs=require('fs');
 const src=fs.readFileSync(require('path').join(__dirname,'..','index.html'),'utf8');
-const js=src.match(/<script>([\s\S]*?)<\/script>\s*<\/body>/)[1];
+const js=require('./_app_js.js')().js;
 
 const store={},els={};
 function mkEl(id){
@@ -28,7 +28,7 @@ const fn=new Function('document','window','addEventListener','IntersectionObserv
      'VOCAB,vocabIndex,vocabSaved,vocabToggleSave,vocabFiltered,vocabDisplay,vocabCard,vocabSearch,trackGrid,trackProgress,trackNextLesson,' +
      'dashCourseGroups,dashCourseCard,homeCourseCard,renderHome,' +
      'openCourse,renderCourse,courseTab,courseInfo,courseDM,COURSE,' +
-     'TC,tcSessionsInRange,tcSessionState,tcSessionEnd,tcOverdueRows,tcRenderDash,tcDashRange,tcDashDayLabel};');
+     'TC,tcRenderOverview};');
 const api=fn(global.document,global.window,global.addEventListener,global.IntersectionObserver,global.localStorage,global.location,global.setInterval,global.clearInterval,global.setTimeout,null);
 
 let fail=0,pass=0;
@@ -201,39 +201,34 @@ check('a saved word on the dashboard opens the word, it does not just toggle it'
 (() => {
   const d = new Date();
   const at = (off, h, m) => { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate() + off); x.setHours(h, m, 0, 0); return x.toISOString(); };
-  api.TC.sessions = [
-    { id: 'later', starts_at: at(0, 23, 30), duration_min: 60, status: 'scheduled' },
-    { id: 'yesterday', starts_at: at(-1, 10, 0), duration_min: 60, status: 'scheduled' },
-    { id: 'tomorrow', starts_at: at(1, 10, 0), duration_min: 60, status: 'scheduled' },
-    { id: 'off', starts_at: at(0, 9, 0), duration_min: 60, status: 'cancelled' }
-  ];
-  check('the day view carries today only, the week view adds the next six days',
-    api.tcSessionsInRange('today').map(s => s.id).join(',') === 'off,later' &&
-    api.tcSessionsInRange('week').map(s => s.id).join(',') === 'off,later,tomorrow');
-  check('a cancelled session is never called upcoming',
-    api.tcSessionState({ starts_at: at(0, 23, 30), duration_min: 60, status: 'cancelled' }).k === 'off');
-  check('a session that has not started is upcoming',
-    api.tcSessionState({ starts_at: at(1, 10, 0), duration_min: 60, status: 'scheduled' }).k === 'soon');
-  check('a session inside its window is live',
-    api.tcSessionState({ starts_at: new Date(Date.now() - 10 * 60000).toISOString(), duration_min: 90, status: 'scheduled' }).k === 'live');
-  check('a finished session reads as past, never as taught',
-    api.tcSessionState({ starts_at: at(-2, 10, 0), duration_min: 60, status: 'scheduled' }).k === 'past');
+  // The schedule was removed on purpose (commit 0088b92, "dashboard without the
+  // schedule"), so the session-range and session-state checks went with it.
+  // `at()` stays: the overdue checks below still need it.
 
   api.TC.students = [{ id: 'st1', status: 'active' }, { id: 'st2', status: 'active' }];
   api.TC.recipients = [{ assignment_id: 'as1', student_id: 'st1' }, { assignment_id: 'as1', student_id: 'st2' }];
-  api.TC.submissions = [{ assignment_id: 'as1', student_id: 'st1', status: 'graded' }];
+  api.TC.submissions = [{ assignment_id: 'as1', student_id: 'st1', status: 'graded' },
+    { assignment_id: 'as1', student_id: 'st2', status: 'submitted' }];
   api.TC.assignments = [
     { id: 'as1', status: 'published', due_at: at(-3, 0, 0) },
     { id: 'as2', status: 'published', due_at: at(2, 0, 0) },
     { id: 'as3', status: 'draft', due_at: at(-3, 0, 0) }
   ];
-  check('an overdue assignment counts only the students who have not handed it in',
-    api.tcOverdueRows().length === 1 && api.tcOverdueRows()[0].missing === 1);
-  check('a draft or a future deadline is never overdue',
-    api.tcOverdueRows().every(r => r.a.id === 'as1'));
-  api.tcRenderDash();
-  check('the dashboard shows five counters, all from rows',
-    (global.document.getElementById('tc-stats').innerHTML.match(/class="stat"/g) || []).length === 5);
+  api.tcRenderOverview();
+  const kpi = global.document.getElementById('tc-panel-overview').innerHTML;
+  const kpiValue = label => {
+    const i = kpi.indexOf('>' + label + '</span>');
+    if (i < 0) return null;
+    const m = kpi.slice(i).match(/stat-value">([^<]+)</);
+    return m ? m[1] : null;
+  };
+  check('the overview counts accepted students, not waiting ones',
+    kpiValue('Students') === '2', String(kpiValue('Students')));
+  check('the overview counts work to review and work published, both from rows',
+    kpiValue('To review') === '1' && kpiValue('Published work') === '2',
+    kpiValue('To review') + '/' + kpiValue('Published work'));
+  check('a draft is never counted as published work',
+    /1 still in draft/.test(kpi), (kpi.match(/\d+ still in draft/) || [''])[0]);
 })();
 
 console.log('\n'+pass+' passed, '+fail+' failed');

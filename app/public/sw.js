@@ -2,7 +2,7 @@
  * Keeps the app usable on a phone with a bad connection: the shell and the lesson audio
  * are cached, pages themselves always try the network first so a deploy is never stale.
  */
-const VERSION = 'move-v3'
+const VERSION = 'move-v4'
 const SHELL = ['/', '/manifest.webmanifest', '/icon-192.png', '/icon-512.png']
 
 /** Cache the shell and the JS/CSS the current page actually points at, so the app opens offline. */

@@ -16,7 +16,7 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
 const src = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-const js = src.match(/<script>([\s\S]*?)<\/script>\s*<\/body>/)[1];
+const js = require('./_app_js.js')().js;
 
 let pass = 0, fail = 0;
 function t(name, cond, extra = '') {
@@ -35,6 +35,7 @@ const RETURNS = 'return {TRACKS,TRACK_PARTS,LESSON_DATA,AUDIO_MAP,go,trackGo,tra
   'tcStudentWork,tcWorkLine,tcWorkBadges,tcStudentByTrack,tcOpenStudent,tcStudentProfileRow,tcPartLine,tcTotalParts,' +
   'tcSaveSession,tcRenderSchedule,tcSessionBuckets,tcWhen,tcCancelSession,tcNextSession,' +
   'hwForgotPassword,hwRecordProgress,hwLoadProgress,doAuth,setRole,showAuth,' +
+  'hwSetAnswer,hwFlushAnswers,hwPending:()=>HW_PENDING,' +
   'setUser:(u)=>{USER=u},getUser:()=>USER,' +
   'uiConfirm,uiConfirmClose,' +
   'setAuthMode:(m)=>{AUTH_MODE=m},getAuthMode:()=>AUTH_MODE,' +
@@ -331,18 +332,19 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
 
   const list = ONLINE.els['hw-list'].innerHTML;
   t('the homework list renders the assigned lesson', list.includes('Homework: Build the Message'));
-  t('the list shows it is an existing-lesson reference', /Bài A1 3/.test(list));
+  t('the list shows it is an existing-lesson reference', /A1 lesson 3/.test(list));
   t('the list shows a custom exercise', list.includes('Custom drill'));
-  t('the list shows the submitted status', /Đã chấm/.test(list));
+  t('the list shows the submitted status', /Graded/.test(list));
   t('the list shows a server-computed score', /6\/6/.test(list));
-  t('the list shows overdue for the untouched past-due one', /Quá hạn/.test(list));
+  t('the list shows overdue for the untouched past-due one', /Overdue/.test(list));
   t('the list is task cards, not one stack of rows', /class="hw-task/.test(list));
   t('the work is grouped by what to do and what is handed in',
-    /hw-group-head[^>]*><span>Cần làm<\/span>/.test(list) && /hw-group-head[^>]*><span>Đã nộp<\/span>/.test(list));
-  t('the first thing to do is flagged as next', /hw-task next/.test(list) && /hw-flag">Tiếp/.test(list));
-  t('each card names the next action', /Bắt đầu bài này|Làm tiếp chỗ đang dở|Đã quá hạn/.test(list));
-  t('a card that has been marked tells the student to read it', /Xem điểm và nhận xét/.test(list));
-  t('an overdue card is marked in the due badge', /badge-err">hạn /.test(list));
+    /hw-group-head[^>]*><span>To do<\/span>/.test(list) && /hw-group-head[^>]*><span>Handed in<\/span>/.test(list));
+  t('the first thing to do is flagged as next', /hw-task next/.test(list) && /hw-flag">Next/.test(list));
+  t('each card names the next action',
+    /Start this now|Continue where you stopped|Past the due date/.test(list));
+  t('a card that has been marked tells the student to read it', /Read your mark and comment/.test(list));
+  t('an overdue card is marked in the due badge', /badge-err">due /.test(list));
   t('the signed-in student sees the homework body', ONLINE.els['hw-body'].classList.contains('hidden') === false);
   t('the header names the student', /Stu/.test(ONLINE.els['hw-sub'].textContent));
 
@@ -361,6 +363,21 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   t('the written answer shows the points the teacher gave', /3 \/ 3 point\(s\)/.test(det));
   t('no submit button once the work is submitted', !/Submit work/.test(det));
   t('no answer key is exposed in the rendered page', !/answer_key|correct_answer/.test(det));
+
+  /* regression 2026-10-20: one shared debounce timer meant that two answers
+     typed back to back only ever wrote the last one, so the mcq was never
+     saved and submit_assignment scored it 0. */
+  await sa.hwOpen('a2');
+  sa.hwSetAnswer('q1', 0, 'mcq');
+  sa.hwSetAnswer('q2', 'reliable', 'fill');
+  t('two quick answers both wait for their own save',
+    Object.keys(sa.hwPending()).length === 2, Object.keys(sa.hwPending()).join(','));
+  STUDENT_TABLES.__calls = [];
+  await sa.hwFlushAnswers(sa.HW.assignments.filter(x => x.id === 'a2')[0]);
+  const ups = (STUDENT_TABLES.__calls || []).filter(c => c[0] === 'upsert' && c[1] === 'submission_answers');
+  t('flushing writes every pending answer, not just the last one', ups.length === 2,
+    JSON.stringify(ups.map(u => u[2].question_id)));
+  t('a flush leaves nothing pending', Object.keys(sa.hwPending()).length === 0);
 
   /* teacher area refused for a student account, with a real render */
   sa.go('teacher');
@@ -599,6 +616,18 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   t('with nobody accepted the builder says so',
     /no accepted students yet/i.test(TEACH.els['tc-panel-assignments'].innerHTML));
 
+  /* regression 2026-10-20: "Submissions" filled TC.resultsHtml into the
+     assignments panel, then the closed-builder guard emptied that panel, so the
+     grade inputs never reached the DOM. */
+  ta.TC.builderOpen = false;
+  ta.TC.openSubs = 'as1';
+  ta.TC.resultsHtml = '<div id="g_s1_q3"></div>';
+  ta.tcRenderAssignments();
+  const subsHtml = TEACH.els['tc-panel-assignments'].innerHTML;
+  t('the submissions reader renders even with the builder closed',
+    /id="g_s1_q3"/.test(subsHtml) && /Submissions/.test(subsHtml));
+  ta.TC.openSubs = null; ta.TC.resultsHtml = ''; ta.TC.builderOpen = true;
+
   /* ---------- overview: only real rows, never invented numbers ---------- */
   t('the workspace opens on Dashboard, with the counters at the top',
     /data-tc-nav="dashboard"/.test(src) && /id="tc-panel-dashboard"/.test(src) && /id="tc-stats"/.test(src));
@@ -620,11 +649,11 @@ t('with a config the module goes online', sa.HW_ON === true && !!sa.HB);
   t('the study workspace marks today from the lesson data and saves it on the device',
     /function studyTick/.test(src) && /mt_study_today_/.test(src) && /parts\.grammar/.test(src));
   t('the assignment library lists the same rows the builder writes',
-    /id="tc-panel-homework"/.test(src) && /function tcWorkRows/.test(src) &&
-    /TC\.recipients/.test(src) && /tcWorkPeople/.test(src));
-  t('Dạy is the programme list, and the dashboard is its own panel',
-    /id="tc-panel-teach"/.test(src) && /function tcRenderDashboard|function tcRenderDash/.test(js) &&
-    /tc-panel-teach', area === 'teach'/.test(src));
+    /id="tc-panel-assignments"/.test(src) && /function tcRenderAssignments/.test(js) &&
+    /TC\.recipients/.test(js) && /tcWorkLine/.test(js));
+  t('the Dạy workspace is the dashboard, and the student list is its own panel',
+    /hwShow\('tc-panel-dashboard', area === 'teach'\)/.test(src) &&
+    /hwShow\('tc-panel-students', area === 'students'\)/.test(src));
   t('the dashboard counts from rows the teacher can open, not from estimates',
     /function tcRenderStats/.test(js) && /duration_min/.test(js) && /status === 'submitted'/.test(js));
 

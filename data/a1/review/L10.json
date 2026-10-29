@@ -1,0 +1,531 @@
+{
+ "source": "doc_02a4e98a52a9_MOVE_ACTIVATE_1_L10_REVIEW.docx",
+ "blocks": [
+  {
+   "t": "heading",
+   "text": "MOVE ACTIVATE 1 L10",
+   "style": "Title"
+  },
+  {
+   "t": "p",
+   "text": "Review Past Simple and Present Perfect",
+   "style": "Subtitle"
+  },
+  {
+   "t": "p",
+   "text": "Ôn cách kể một lần trong quá khứ và nói trải nghiệm, kết quả hoặc khoảng thời gian tính đến hiện tại. Mục tiêu: mở chuyện bằng HAVE YOU EVER, rồi hỏi chi tiết bằng WHEN DID YOU.",
+   "style": ""
+  },
+  {
+   "t": "heading",
+   "text": "01 Bảng so sánh nhanh",
+   "style": "Heading1"
+  },
+  {
+   "t": "table",
+   "rows": [
+    [
+     "Điểm so sánh",
+     "Quá khứ đơn",
+     "Hiện tại hoàn thành"
+    ],
+    [
+     "Góc nhìn",
+     "Một mốc hoặc giai đoạn đã khép lại. Mốc có thể đã rõ trong ngữ cảnh.",
+     "Tính đến hiện tại; trải nghiệm hoặc kết quả còn liên hệ hiện tại."
+    ],
+    [
+     "Trải nghiệm và kết quả",
+     "I booked the room yesterday.yesterday, last week, in 2024, … ago",
+     "I’ve already booked the room.ever, never, before, already, yet"
+    ],
+    [
+     "Kéo dài từ trước đây",
+     "I lived there for two years.Khoảng sống ở đó đã kết thúc.",
+     "I’ve lived here since 2020.since + mốc; for + độ dài"
+    ],
+    [
+     "Vừa mới và gần đây",
+     "I sent it ten minutes ago.Nêu thời điểm đã xảy ra.",
+     "I’ve just sent it.just = vừa mới; recently/lately = gần đây"
+    ],
+    [
+     "Số lần",
+     "I went there twice last year.Đếm trong khoảng đã khép lại.",
+     "I’ve been there twice so far.once, twice, several times; so far, up to now"
+    ]
+   ]
+  },
+  {
+   "t": "heading",
+   "text": "02 Khung câu phải bật được",
+   "style": "Heading1"
+  },
+  {
+   "t": "table",
+   "rows": [
+    [
+     "Dạng",
+     "Quá khứ đơn",
+     "Hiện tại hoàn thành"
+    ],
+    [
+     "Khẳng định",
+     "S + V2 / V-edBE: S + was/were + …",
+     "S + have/has + V3BE: S + have/has been + …"
+    ],
+    [
+     "Phủ định",
+     "S + didn’t + VS + wasn’t/weren’t + …",
+     "S + haven’t/hasn’t + V3S + haven’t/hasn’t been + …"
+    ],
+    [
+     "Câu hỏi",
+     "Did + S + V…?Was/Were + S + …?",
+     "Have/Has + S + V3…?Have/Has + S + been…?"
+    ]
+   ]
+  },
+  {
+   "t": "p",
+   "text": "I/you/we/they dùng HAVE; he/she/it dùng HAS. Sau DID là V nguyên mẫu; sau HAVE/HAS là V3. WH: When did she buy it? / How many times has she used it?",
+   "style": ""
+  },
+  {
+   "t": "p",
+   "text": "Cần nhớ: hiện tại hoàn thành có thể nói việc đã xong: I’ve paid. Recently dùng được với quá khứ đơn; lately không đồng nghĩa just. For và số lần không tự quyết định thì. Today/this week dùng thì nào còn tùy góc nhìn.",
+   "style": ""
+  },
+  {
+   "t": "heading",
+   "text": "03 V1 V2 V3 và cách đọc cả cụm",
+   "style": "Heading1"
+  },
+  {
+   "t": "p",
+   "text": "Che cột V3 để gọi lại. Nói một câu về lần đã qua, rồi một câu về trải nghiệm hoặc kết quả đến hiện tại.",
+   "style": ""
+  },
+  {
+   "t": "table",
+   "rows": [
+    [
+     "V1",
+     "V2",
+     "V3",
+     "Nghĩa"
+    ],
+    [
+     "be",
+     "was / were",
+     "been",
+     "là, ở, trong trạng thái"
+    ],
+    [
+     "go",
+     "went",
+     "gone",
+     "đi"
+    ],
+    [
+     "buy",
+     "bought",
+     "bought",
+     "mua"
+    ],
+    [
+     "take",
+     "took",
+     "taken",
+     "lấy, đi, chụp tùy cụm"
+    ],
+    [
+     "see",
+     "saw",
+     "seen",
+     "thấy, gặp"
+    ],
+    [
+     "do",
+     "did",
+     "done",
+     "làm"
+    ],
+    [
+     "write",
+     "wrote",
+     "written",
+     "viết"
+    ],
+    [
+     "send",
+     "sent",
+     "sent",
+     "gửi"
+    ],
+    [
+     "make",
+     "made",
+     "made",
+     "làm, tạo, đưa ra"
+    ],
+    [
+     "lose",
+     "lost",
+     "lost",
+     "làm mất"
+    ],
+    [
+     "try",
+     "tried",
+     "tried",
+     "thử"
+    ],
+    [
+     "book",
+     "booked",
+     "booked",
+     "đặt trước"
+    ],
+    [
+     "get",
+     "got",
+     "got / gotten",
+     "nhận, có được"
+    ],
+    [
+     "know",
+     "knew",
+     "known",
+     "biết, quen"
+    ],
+    [
+     "hear",
+     "heard",
+     "heard",
+     "nghe, nhận tin"
+    ],
+    [
+     "keep",
+     "kept",
+     "kept",
+     "giữ"
+    ],
+    [
+     "change",
+     "changed",
+     "changed",
+     "thay đổi"
+    ],
+    [
+     "miss",
+     "missed",
+     "missed",
+     "lỡ, bỏ lỡ"
+    ],
+    [
+     "solve",
+     "solved",
+     "solved",
+     "giải quyết"
+    ]
+   ]
+  },
+  {
+   "t": "p",
+   "text": "GET: got là V3 thông dụng trong Anh Anh; gotten thường dùng trong Anh Mỹ với nghĩa nhận hoặc có được. Chấp nhận cả hai trong ngữ cảnh phù hợp.",
+   "style": ""
+  },
+  {
+   "t": "heading",
+   "text": "Been và gone",
+   "style": "Heading1"
+  },
+  {
+   "t": "p",
+   "text": "I’ve been to Hue twice = đã đến và đã về. She’s gone to the bank = cô ấy đã đi ngân hàng, chưa về lúc nói. Trạng thái: I’ve been interested in it for years. Quá khứ: I was interested in it when I was younger.",
+   "style": ""
+  },
+  {
+   "t": "heading",
+   "text": "Phát âm và dạng rút gọn",
+   "style": "Heading1"
+  },
+  {
+   "t": "p",
+   "text": "I have → I’ve /aɪv/; we have → we’ve /wiːv/; she has → she’s /ʃiːz/. She’s cũng có thể là she is: She’s ready. Nhìn phần sau để hiểu. Đọc liền: Have_you_ever…? /həv jə ˈevər/; Has_she sent_it_yet?; I’ve just_arrived.",
+   "style": ""
+  },
+  {
+   "t": "heading",
+   "text": "04 Language Bank 1",
+   "style": "Heading1"
+  },
+  {
+   "t": "p",
+   "text": "adv = trạng từ; prep = giới từ; conj = liên từ; phr = cụm; v = động từ. Che tiếng Anh để gọi lại, rồi nói ví dụ thật.",
+   "style": ""
+  },
+  {
+   "t": "table",
+   "rows": [
+    [
+     "Từ hoặc cụm",
+     "Từ loại",
+     "Nghĩa",
+     "Ví dụ"
+    ],
+    [
+     "ever/ˈevər/",
+     "adv",
+     "đã từng, bao giờ",
+     "Have you ever lost your keys?"
+    ],
+    [
+     "never/ˈnevər/",
+     "adv",
+     "chưa từng, không bao giờ",
+     "I’ve never missed a flight."
+    ],
+    [
+     "already/ɔːlˈredi/",
+     "adv",
+     "đã rồi",
+     "I’ve already booked the room."
+    ],
+    [
+     "yet/jet/",
+     "adv",
+     "chưa; cho đến lúc này",
+     "Have you checked the address yet?"
+    ],
+    [
+     "just/dʒʌst/",
+     "adv",
+     "vừa mới",
+     "She’s just sent the message."
+    ],
+    [
+     "recently/ˈriːsəntli/",
+     "adv",
+     "gần đây",
+     "Have you bought anything useful recently?"
+    ],
+    [
+     "lately/ˈleɪtli/",
+     "adv",
+     "dạo gần đây",
+     "I haven’t seen my neighbors lately."
+    ],
+    [
+     "so far/soʊ fɑːr/",
+     "adv phr",
+     "tính đến giờ",
+     "We’ve visited two places so far."
+    ],
+    [
+     "up to now/ʌp tə naʊ/",
+     "adv phr",
+     "cho đến hiện tại",
+     "Up to now, I’ve had no problems."
+    ],
+    [
+     "since/sɪns/",
+     "prep/conj",
+     "từ một mốc thời gian",
+     "I’ve lived here since 2020."
+    ],
+    [
+     "for/fər/",
+     "prep",
+     "trong một khoảng thời gian",
+     "I’ve known her for five years."
+    ],
+    [
+     "twice/twaɪs/",
+     "adv",
+     "hai lần",
+     "I’ve been there twice."
+    ]
+   ]
+  },
+  {
+   "t": "heading",
+   "text": "04 Language Bank 2",
+   "style": "Heading1"
+  },
+  {
+   "t": "p",
+   "text": "adv = trạng từ; prep = giới từ; conj = liên từ; phr = cụm; v = động từ. Che tiếng Anh để gọi lại, rồi nói ví dụ thật.",
+   "style": ""
+  },
+  {
+   "t": "table",
+   "rows": [
+    [
+     "Từ hoặc cụm",
+     "Từ loại",
+     "Nghĩa",
+     "Ví dụ"
+    ],
+    [
+     "several times/ˈsevrəl taɪmz/",
+     "adv phr",
+     "vài lần",
+     "We’ve used this service several times."
+    ],
+    [
+     "the last time/ðə læst taɪm/",
+     "n phrase",
+     "lần gần nhất",
+     "When was the last time you went there?"
+    ],
+    [
+     "try something new/traɪ ˌsʌmθɪŋ ˈnuː/",
+     "v",
+     "thử điều mới",
+     "Have you tried something new lately?"
+    ],
+    [
+     "book online/bʊk ˌɑːnˈlaɪn/",
+     "v",
+     "đặt qua mạng",
+     "I booked online last night."
+    ],
+    [
+     "change a booking/tʃeɪndʒ ə ˈbʊkɪŋ/",
+     "v",
+     "đổi lịch đặt",
+     "I’ve changed a booking once."
+    ],
+    [
+     "get a refund/ɡet ə ˈriːfʌnd/",
+     "v",
+     "được hoàn tiền",
+     "Have you got a refund yet?"
+    ],
+    [
+     "lose my keys/luːz maɪ kiːz/",
+     "v",
+     "làm mất chìa khóa",
+     "I lost my keys yesterday."
+    ],
+    [
+     "miss a flight/mɪs ə flaɪt/",
+     "v",
+     "lỡ chuyến bay",
+     "I’ve never missed a flight."
+    ],
+    [
+     "keep in touch/kiːp ɪn tʌtʃ/",
+     "v",
+     "giữ liên lạc",
+     "We’ve kept in touch since school."
+    ],
+    [
+     "hear from someone/hɪr frəm ˈsʌmwʌn/",
+     "v",
+     "nhận tin từ ai",
+     "Have you heard from the hotel yet?"
+    ],
+    [
+     "make a decision/meɪk ə dɪˈsɪʒən/",
+     "v",
+     "đưa ra quyết định",
+     "We haven’t made a decision yet."
+    ],
+    [
+     "solve a problem/sɑːlv ə ˈprɑːbləm/",
+     "v",
+     "giải quyết vấn đề",
+     "She solved the problem yesterday."
+    ]
+   ]
+  },
+  {
+   "t": "heading",
+   "text": "05 Bật khung và tự kiểm tra",
+   "style": "Heading1"
+  },
+  {
+   "t": "p",
+   "text": "Bật khung trước, tự thêm nội dung sau. Với câu “đã” ở đây, phân biệt trải nghiệm đến nay và một mốc quá khứ đã khép lại.",
+   "style": ""
+  },
+  {
+   "t": "p",
+   "text": "1. Bạn đã từng … chưa?",
+   "style": ""
+  },
+  {
+   "t": "p",
+   "text": "2. Cô ấy chưa … (việc mong đợi đến hiện tại)",
+   "style": ""
+  },
+  {
+   "t": "p",
+   "text": "3. Họ vừa mới …",
+   "style": ""
+  },
+  {
+   "t": "p",
+   "text": "4. Bạn đã … khi nào? (một lần cụ thể)",
+   "style": ""
+  },
+  {
+   "t": "p",
+   "text": "5. Anh ấy đã … được bao lâu rồi? (vẫn còn đúng)",
+   "style": ""
+  },
+  {
+   "t": "p",
+   "text": "6. Bạn của bạn đã … mấy lần tính đến nay?",
+   "style": ""
+  },
+  {
+   "t": "p",
+   "text": "7. Sửa: I have bought it yesterday.",
+   "style": ""
+  },
+  {
+   "t": "p",
+   "text": "8. Sửa: I’ve known her since five years.",
+   "style": ""
+  },
+  {
+   "t": "heading",
+   "text": "Đáp án tham khảo",
+   "style": "Heading1"
+  },
+  {
+   "t": "p",
+   "text": "1 Have you ever + V3…?2 She hasn’t + V3 + … yet.3 They’ve just + V3…4 When did you + V…?5 How long has he + V3…? / How long has he been + …?6 How many times has your friend + V3…?7 I bought it yesterday.8 I’ve known her for five years.",
+   "style": ""
+  },
+  {
+   "t": "heading",
+   "text": "06 Hỏi chuyện thật và chuyển thì",
+   "style": "Heading1"
+  },
+  {
+   "t": "p",
+   "text": "Have you ever lost something important? → What did you lose? Did you find it?Have you bought anything useful recently? → What did you buy? Why did you choose it?How many times have you visited Hue? → When did you last go?How long have you known your closest friend? → Where did you meet?",
+   "style": ""
+  },
+  {
+   "t": "p",
+   "text": "Nếu chưa từng, nói No, I haven’t rồi chọn chuyện khác. Nếu đã từng, trả lời bằng HAVE/HAS trước; kể một lần cụ thể bằng quá khứ đơn. Hỏi thêm một câu dựa vào điều người kia vừa nói.",
+   "style": ""
+  },
+  {
+   "t": "heading",
+   "text": "Daily Mission",
+   "style": "Heading1"
+  },
+  {
+   "t": "p",
+   "text": "Ghi âm 60 giây: một trải nghiệm đến nay, số lần, một lần cụ thể và một việc vừa làm hoặc chưa làm. Thêm một câu với since/for nếu phù hợp. Nghe lại, sửa DID + V hoặc HAVE/HAS + V3, rồi ghi lần hai.",
+   "style": ""
+  }
+ ]
+}

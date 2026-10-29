@@ -1115,6 +1115,13 @@ body.studio-mode .e2-part{min-height:74px}
 
 /* ---------- public landing shell ---------- */
 body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on .main-content{display:none !important}
+/* The app shell is part of the markup, so a visitor at "/" used to see the
+   sidebar and a workspace view while the 600 KB document was still being
+   parsed, and only then did the routing code at the end of the body swap in the
+   landing. lp-boot is set in <head>, before the body exists, so the first paint
+   on a public route is already the landing. Routing clears it. */
+html.lp-boot .sidebar,html.lp-boot .mobile-topbar,html.lp-boot .bottom-nav,html.lp-boot .main-content{display:none !important}
+html.lp-boot #public-landing{display:block !important}
 .lp{position:relative;z-index:10;min-height:100vh;background:var(--bg);color:var(--text)}
 .lp-wrap{max-width:var(--lp-max);margin:0 auto;padding:0 24px}
 .lp-head{position:sticky;top:0;z-index:40;background:var(--header-bg);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
@@ -1766,6 +1773,17 @@ body.lp-on .sidebar,body.lp-on .mobile-topbar,body.lp-on .bottom-nav,body.lp-on 
   .hw-chip-submitted::before{animation:none}
 }
 </style>
+<script>
+/* Public routes follow from the hash alone, so the landing can be chosen before
+   the body is parsed instead of after the routing code 600 KB further down.
+   lpHide()/lpShow() clear the flag as soon as routing has decided. */
+(function(){
+  try{
+    var h=(location.hash||'').replace(/^#/,'').replace(/^\/+/,'');
+    if(h===''||h==='landing'||h==='login')document.documentElement.className+=' lp-boot';
+  }catch(e){}
+})();
+</script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -2968,6 +2986,7 @@ function go(v){
 /* ---------- public landing ---------- */
 function lpHide(){
   /* the test harness has a stub document with no body — never assume */
+  if(document.documentElement&&document.documentElement.classList)document.documentElement.classList.remove('lp-boot');
   if(document.body&&document.body.classList)document.body.classList.remove('lp-on');
   const l=document.getElementById('public-landing');
   if(l)l.classList.add('hidden');
@@ -2975,6 +2994,7 @@ function lpHide(){
 function lpShow(){
   const l=document.getElementById('public-landing');
   if(!l)return;
+  if(document.documentElement&&document.documentElement.classList)document.documentElement.classList.remove('lp-boot');
   if(document.body&&document.body.classList)document.body.classList.add('lp-on');
   l.classList.remove('hidden');
   document.querySelectorAll('.view').forEach(e=>e.classList.add('hidden'));
@@ -4938,10 +4958,7 @@ function hwPill(kind, text) {
 }
 function hwDate(d) {
   if (!d) return '—';
-  /* dd/mm/yyyy everywhere: toLocaleDateString() gave 10/14/2026 in this browser */
-  const v = String(d).slice(0, 10);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(v)) return String(d);
-  return v.slice(8, 10) + '/' + v.slice(5, 7) + '/' + v.slice(0, 4);
+  try { return new Date(d + 'T00:00:00').toLocaleDateString(); } catch (e) { return d; }
 }
 function hwIsOverdue(a) {
   if (!a.due_at) return false;
@@ -4952,13 +4969,13 @@ function hwIsOverdue(a) {
    rest come from their own submission row. */
 function hwStatus(a, sub) {
   if (sub) {
-    if (sub.status === 'graded') return { k: 'graded', label: 'Đã chấm' };
-    if (sub.status === 'submitted') return { k: 'submitted', label: 'Đã nộp' };
-    if (sub.status === 'returned') return { k: 'returned', label: 'Làm lại' };
-    return { k: 'in_progress', label: 'Đang làm' };
+    if (sub.status === 'graded') return { k: 'graded', label: 'Graded' };
+    if (sub.status === 'submitted') return { k: 'submitted', label: 'Submitted' };
+    if (sub.status === 'returned') return { k: 'returned', label: 'Try again' };
+    return { k: 'in_progress', label: 'In progress' };
   }
-  if (hwIsOverdue(a)) return { k: 'overdue', label: 'Quá hạn' };
-  return { k: 'not_started', label: 'Chưa làm' };
+  if (hwIsOverdue(a)) return { k: 'overdue', label: 'Overdue' };
+  return { k: 'not_started', label: 'Not started' };
 }
 
 /* Which screen a workspace should show. Pure decision so it can be tested
@@ -5042,7 +5059,7 @@ function renderHomework() {
   gate.classList.add('hidden'); body.classList.remove('hidden');
   const sub = document.getElementById('hw-sub');
   if (sub) {
-    sub.textContent = 'Đang đăng nhập: ' + (USER.name || USER.full_name || USER.email || '');
+    sub.textContent = 'Signed in as ' + USER.name;
   }
   hwRenderList();
   hwRenderDetail();
@@ -5150,25 +5167,25 @@ function hwRenderList() {
   if (!HW.assignments.length) {
     el.innerHTML = '<div class="empty">' +
       '<div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg></div>' +
-      '<div class="empty-title">Chưa có bài nào được giao</div>' +
-      '<div class="empty-text">Khi giáo viên giao bài, bài sẽ hiện ở đây. ' +
-      'Trong lúc chờ, bạn vẫn mở được bài học ở cột bên trái.</div></div>';
+      '<div class="empty-title">Nothing assigned yet</div>' +
+      '<div class="empty-text">When a teacher assigns a lesson or an exercise, it shows up here. ' +
+      'In the meantime you can open any lesson from the left.</div></div>';
     return;
   }
   const nextMove = {
-    not_started: 'Bắt đầu bài này',
-    in_progress: 'Làm tiếp chỗ đang dở',
-    overdue: 'Đã quá hạn. Nộp khi bạn có thể.',
-    submitted: 'Đang chờ giáo viên chấm',
-    returned: 'Đọc nhận xét rồi làm lại',
-    graded: 'Xem điểm và nhận xét'
+    not_started: 'Start this now',
+    in_progress: 'Continue where you stopped',
+    overdue: 'Past the due date. Hand it in when you can.',
+    submitted: 'Waiting for your teacher',
+    returned: 'Read the comment and try again',
+    graded: 'Read your mark and comment'
   };
   function card(a, isNext) {
     const sub = HW.subs[a.id];
     const st = hwStatus(a, sub);
     const ref = a.kind === 'lesson'
-      ? 'Bài ' + hwEsc(String(a.lesson_track || '').toUpperCase()) + ' ' + hwEsc(a.lesson_no)
-      : 'Bài tự soạn';
+      ? hwEsc(String(a.lesson_track || '').toUpperCase()) + ' lesson ' + hwEsc(a.lesson_no)
+      : 'Custom exercise';
     const score = sub && sub.score != null ? sub.score + '/' + sub.max_score : '';
     const late = st.k === 'overdue';
     return '<button class="hw-task' + (isNext ? ' next' : '') + '" onclick="hwOpen(\'' + a.id + '\')">' +
@@ -5176,13 +5193,13 @@ function hwRenderList() {
       '<span class="row-title">' + hwEsc(a.title) + '</span>' +
       '<span class="chip-row" style="margin-top:8px">' +
       '<span class="badge">' + ref + '</span>' +
-      (a.due_at ? '<span class="badge' + (late ? ' badge-err' : '') + '">hạn ' + hwEsc(hwDate(a.due_at)) + '</span>' : '<span class="badge">không hạn</span>') +
+      '<span class="badge' + (late ? ' badge-err' : '') + '">due ' + hwEsc(hwDate(a.due_at)) + '</span>' +
       (score ? '<span class="badge badge-ok">' + hwEsc(score) + '</span>' : '') +
       '</span>' +
-      '<span class="cell-meta">' + hwEsc(nextMove[st.k] || 'Mở bài') + '</span>' +
+      '<span class="cell-meta">' + hwEsc(nextMove[st.k] || 'Open it') + '</span>' +
       '</span>' +
       '<span class="hw-task-side">' + hwPill(st.k, st.label) +
-      (isNext ? '<span class="hw-flag">Tiếp</span>' : '') + '</span>' +
+      (isNext ? '<span class="hw-flag">Next</span>' : '') + '</span>' +
       '</button>';
   }
   const open = [], done = [];
@@ -5201,12 +5218,12 @@ function hwRenderList() {
   });
   let html = '';
   if (open.length) {
-    html += '<div class="hw-group"><div class="hw-group-head"><span>Cần làm</span>' +
-      '<span class="faint">' + open.length + ' bài</span></div>' +
+    html += '<div class="hw-group"><div class="hw-group-head"><span>To do</span>' +
+      '<span class="faint">' + open.length + (open.length === 1 ? ' assignment' : ' assignments') + '</span></div>' +
       open.map(function (a, i) { return card(a, i === 0); }).join('') + '</div>';
   }
   if (done.length) {
-    html += '<div class="hw-group"><div class="hw-group-head"><span>Đã nộp</span>' +
+    html += '<div class="hw-group"><div class="hw-group-head"><span>Handed in</span>' +
       '<span class="faint">' + done.length + '</span></div>' +
       done.map(function (a) { return card(a, false); }).join('') + '</div>';
   }
@@ -5341,24 +5358,38 @@ async function hwEnsureSubmission(a) {
   return sub;
 }
 
-var HW_SAVE_T = null;
-async function hwSetAnswer(qid, value, qtype) {
-  if (!HW_ON || !USER || !HW.detailId) return;
-  const a = HW.assignments.filter(function (x) { return x.id === HW.detailId; })[0];
-  if (!a) return;
-  let payload = value;
-  if (qtype === 'mcq') payload = Number(value);
-  HW.answers[qid] = { question_id: qid, answer: payload };
+var HW_SAVE_T = {};      /* one timer per question: a single shared timer dropped earlier answers */
+var HW_PENDING = {};
 
-  clearTimeout(HW_SAVE_T);
-  HW_SAVE_T = setTimeout(async function () {
+/* Write every answer still waiting on a debounce. Called by the timers and,
+   before submitting, so nothing the student typed is left behind. */
+async function hwFlushAnswers(a, onlyQid) {
+  const ids = onlyQid ? [onlyQid] : Object.keys(HW_PENDING);
+  for (var i = 0; i < ids.length; i++) {
+    const qid = ids[i];
+    if (!(qid in HW_PENDING)) continue;
+    clearTimeout(HW_SAVE_T[qid]);
+    delete HW_SAVE_T[qid];
+    const payload = HW_PENDING[qid];
+    delete HW_PENDING[qid];
     const sub = await hwEnsureSubmission(a);
     if (!sub) return;
     const r = await HB.from('submission_answers')
       .upsert({ submission_id: sub.id, question_id: qid, answer: payload },
               { onConflict: 'submission_id,question_id' });
     if (r.error) hwErr(r.error, 'Could not save that answer');
-  }, 600);
+  }
+}
+
+async function hwSetAnswer(qid, value, qtype) {
+  if (!HW_ON || !USER || !HW.detailId) return;
+  const a = HW.assignments.filter(function (x) { return x.id === HW.detailId; })[0];
+  if (!a) return;
+  const payload = qtype === 'mcq' ? Number(value) : value;
+  HW.answers[qid] = { question_id: qid, answer: payload };
+  HW_PENDING[qid] = payload;
+  clearTimeout(HW_SAVE_T[qid]);
+  HW_SAVE_T[qid] = setTimeout(function () { hwFlushAnswers(a, qid); }, 600);
 }
 
 async function hwSubmit() {
@@ -5366,8 +5397,9 @@ async function hwSubmit() {
   const a = HW.assignments.filter(function (x) { return x.id === HW.detailId; })[0];
   if (!a) return;
   const btn = document.getElementById('hw-submit-btn');
-  if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
   try {
+    await hwFlushAnswers(a);          /* whatever is still on a debounce goes first */
+    if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
     const sub = await hwEnsureSubmission(a);
     if (!sub) return;
     const r = await HB.rpc('submit_assignment', { p_assignment: a.id });
@@ -5423,7 +5455,7 @@ function renderTeacher() {
 
   gate.classList.add('hidden'); body.classList.remove('hidden');
   const sub = document.getElementById('tc-sub');
-  if (sub) sub.textContent = 'Đang đăng nhập: ' + (USER.name || USER.full_name || USER.email || '');
+  if (sub) sub.textContent = 'Signed in as ' + USER.name;
   tcTab(TC.tab, true);
   /* Paint the skeletons now, not when the last query returns: an empty
      workspace with no loading state reads as "broken", not "loading". */
@@ -5494,267 +5526,29 @@ async function tcRefresh() {
   await tcLoad();
 }
 
-/* ---------- Dashboard (teacher home) ----------
-   Every number is counted from the rows tcLoad already read. A session has
-   only scheduled/cancelled, so a past one is "Đã qua", never "đã dạy": the
-   product knows the time passed, not that the class happened. */
-function tcDayStart(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
-/* ---------- Bài tập: one library of work ----------
-   The same rows the builder writes (assignments, assignment_recipients,
-   submissions). Nothing here invents a second pipeline: when a teacher gives
-   this work out from a student profile, it shows up here, and vice versa. */
-function tcWorkQuery(v) { TC.workQ = String(v || '').trim().toLowerCase(); tcRenderWork(); }
-function tcWorkFilter(f) { TC.workF = f || 'all'; tcRenderWork(); }
-function tcWorkToggle(id) { TC.workOpen = TC.workOpen === id ? null : id; tcRenderWork(); }
-function tcWorkStatus(a) {
-  if (a.status === 'draft') return { k: 'draft', label: 'Nháp' };
-  if (a.status === 'closed') return { k: 'closed', label: 'Đã đóng' };
-  return { k: 'open', label: 'Đang mở' };
-}
-function tcWorkRows() {
-  const state = {};
-  (TC.submissions || []).forEach(function (s) {
-    (state[s.assignment_id] = state[s.assignment_id] || {})[s.student_id] = s.status;
-  });
-  const rec = {};
-  (TC.recipients || []).forEach(function (r) {
-    (rec[r.assignment_id] = rec[r.assignment_id] || []).push(r.student_id);
-  });
-  const active = (TC.students || []).filter(function (s) { return s.status === 'active'; }).map(function (s) { return s.id; });
-  return (TC.assignments || []).map(function (a) {
-    const who = (rec[a.id] && rec[a.id].length) ? rec[a.id] : active;
-    const done = who.filter(function (id) {
-      const st = state[a.id] && state[a.id][id];
-      return st === 'submitted' || st === 'graded';
-    }).length;
-    return { a: a, who: who, done: done };
-  });
-}
-function tcRenderWork() {
-  const el = document.getElementById('tc-work-list');
-  if (!el) return;
-  const f = TC.workF || 'all', q = TC.workQ || '';
-  document.querySelectorAll('.hw-tab').forEach(function (b) { b.classList.toggle('on', b.dataset.f === f); });
-  const rows = tcWorkRows().filter(function (r) {
-    if (f !== 'all' && tcWorkStatus(r.a).k !== f) return false;
-    if (!q) return true;
-    const hay = (r.a.title || '') + ' ' + (r.a.lesson_track || '') + ' ' + (r.a.lesson_no || '');
-    return hay.toLowerCase().indexOf(q) >= 0;
-  });
-  if (!rows.length) {
-    el.innerHTML = '<div class="card card-pad"><div class="tc-empty">' +
-      ((TC.assignments || []).length ? 'Không có bài nào khớp bộ lọc.' : 'Chưa giao bài nào.') +
-      '<br><button type="button" class="btn-primary btn-sm" style="margin-top:10px" onclick="tcNewAssignment()">Giao bài</button></div></div>';
-    return;
-  }
-  el.innerHTML = rows.map(function (r) {
-    const a = r.a, st = tcWorkStatus(a), open = TC.workOpen === a.id;
-    const ref = a.lesson_track
-      ? String(a.lesson_track).toUpperCase() + (a.lesson_no ? ' · Bài ' + a.lesson_no : '')
-      : 'Bài tự soạn';
-    const due = a.due_at ? 'Hạn ' + courseDM(a.due_at) : 'Không đặt hạn';
-    const pct = r.who.length ? Math.round(r.done / r.who.length * 100) : 0;
-    return '<article class="hw-item' + (open ? ' is-open' : '') + '">' +
-      '<button type="button" class="hw-row" onclick="tcWorkToggle(\'' + a.id + '\')" aria-expanded="' + (open ? 'true' : 'false') + '">' +
-      '<span class="hw-row-main"><span class="hw-row-title">' + hwEsc(a.title || 'Bài tập') + '</span>' +
-      '<span class="hw-row-sub">' + hwEsc(ref) + ' · ' + due + ' · ' + r.who.length + ' học viên</span></span>' +
-      '<span class="hw-row-bar"><span class="hw-row-track"><span style="width:' + pct + '%"></span></span>' +
-      '<span class="hw-row-num">' + r.done + '/' + r.who.length + ' nộp</span></span>' +
-      '<span class="hw-chip st-' + st.k + '">' + st.label + '</span>' +
-      '<svg class="ico ico-sm hw-caret" aria-hidden="true"><use href="#i-chevron"></use></svg>' +
-      '</button>' +
-      (open ? '<div class="hw-more">' + tcWorkPeople(r) + '</div>' : '') +
-      '</article>';
-  }).join('');
-}
-function tcWorkPeople(r) {
-  if (!r.who.length) return '<p class="faint" style="padding:10px 0">Bài này chưa có người nhận.</p>';
-  const by = {};
-  (TC.submissions || []).forEach(function (s) { if (s.assignment_id === r.a.id) by[s.student_id] = s.status; });
-  return '<div class="hw-people">' + r.who.map(function (id) {
-    const s = (TC.students || []).filter(function (x) { return x.id === id; })[0];
-    if (!s) return '';
-    const st = by[id];
-    const label = st === 'graded' ? 'Đã chấm' : st === 'submitted' ? 'Đã nộp' : 'Chưa nộp';
-    const tone = st === 'graded' ? 'done' : st === 'submitted' ? 'sent' : 'wait';
-    return '<div class="hw-person"><span class="hw-ava">' + hwEsc((s.full_name || '?').slice(0, 1).toUpperCase()) + '</span>' +
-      '<span class="hw-person-main"><b>' + hwEsc(s.full_name || s.email || 'Học viên') + '</b>' +
-      '<span class="hw-chip st-' + tone + '">' + label + '</span></span>' +
-      '<button type="button" class="btn-quiet btn-sm" onclick="tcOpenStudent(\'' + id + '\')">Mở hồ sơ</button></div>';
-  }).join('') + '</div>';
-}
-
-function tcHM(d) { return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
-function tcSessionEnd(s) {
-  const t = new Date(s.starts_at);
-  return new Date(t.getTime() + (Number(s.duration_min) || 60) * 60000);
-}
-function tcSessionState(s) {
-  if (s.status === 'cancelled') return { k: 'off', label: 'Đã huỷ' };
-  const now = new Date(), t = new Date(s.starts_at), e = tcSessionEnd(s);
-  if (now >= t && now < e) return { k: 'live', label: 'Đang diễn ra' };
-  if (now < t) return { k: 'soon', label: 'Sắp diễn ra' };
-  return { k: 'past', label: 'Đã qua' };
-}
-function tcSessionsInRange(range) {
-  const start = tcDayStart(new Date());
-  const end = new Date(start); end.setDate(end.getDate() + (range === 'week' ? 7 : 1));
-  return (TC.sessions || []).filter(function (s) {
-    const t = new Date(s.starts_at);
-    return !isNaN(t.getTime()) && t >= start && t < end;
-  }).sort(function (a, b) { return new Date(a.starts_at) - new Date(b.starts_at); });
-}
-/* An assignment is overdue when its deadline has passed and at least one
-   student it was given to has no submitted or graded row. */
-function tcOverdueRows() {
-  const done = {};
-  (TC.submissions || []).forEach(function (s) {
-    if (s.status === 'submitted' || s.status === 'graded') done[s.assignment_id + '|' + s.student_id] = 1;
-  });
-  const rec = {};
-  (TC.recipients || []).forEach(function (r) {
-    (rec[r.assignment_id] = rec[r.assignment_id] || []).push(r.student_id);
-  });
-  const active = (TC.students || []).filter(function (s) { return s.status === 'active'; })
-    .map(function (s) { return s.id; });
-  const now = Date.now(), rows = [];
-  (TC.assignments || []).forEach(function (a) {
-    if (a.status !== 'published' || !a.due_at) return;
-    const due = new Date(a.due_at);
-    if (isNaN(due.getTime()) || (due.getTime() + 864e5) >= now) return;
-    const who = (rec[a.id] && rec[a.id].length) ? rec[a.id] : active;
-    const missing = who.filter(function (id) { return !done[a.id + '|' + id]; });
-    if (missing.length) rows.push({ a: a, missing: missing.length });
-  });
-  return rows;
-}
-function tcDashStat(label, value, hint, icon, tone) {
-  return '<div class="stat"><div class="stat-top"><span class="stat-label">' + hwEsc(label) + '</span>' +
-    '<span class="stat-ico ' + tone + '"><svg class="ico" aria-hidden="true"><use href="#i-' + icon + '"></use></svg></span></div>' +
-    '<span class="stat-value">' + hwEsc(String(value)) + '</span>' +
-    (hint ? '<span class="stat-hint">' + hwEsc(hint) + '</span>' : '') + '</div>';
-}
-function tcDashDayLabel(d) {
-  const days = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
-  return days[d.getDay()] + ' ' + ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2);
-}
-function tcDashRange(r) {
-  TC.dashRange = r === 'week' ? 'week' : 'today';
-  tcRenderDash();
-}
-function tcDashAddSession() {
-  tcTab('teach');
-  setTimeout(function () { tcScrollToSchedule(); }, 80);
-}
-function tcRenderDash() {
-  const now = new Date(), range = TC.dashRange === 'week' ? 'week' : 'today';
-  const today = tcSessionsInRange('today'), week = tcSessionsInRange('week');
-  const live = today.filter(function (s) { return tcSessionState(s).k === 'live'; }).length;
-  const activeStudents = (TC.students || []).filter(function (s) { return s.status === 'active'; }).length;
-  const toMark = (TC.submissions || []).filter(function (s) { return s.status === 'submitted'; }).length;
-  const overdue = tcOverdueRows();
-  const overdueN = overdue.reduce(function (n, r) { return n + r.missing; }, 0);
-
-  const stats = document.getElementById('tc-stats');
-  if (stats) {
-    const published = (TC.assignments || []).filter(function (a) { return a.status === 'published'; }).length;
-    const waitingStudents = (TC.students || []).filter(function (s) { return s.status === 'pending'; }).length;
-    stats.innerHTML =
-      tcDashStat('Học viên', activeStudents, 'đang học với bạn', 'users', 'lav') +
-      tcDashStat('Bài đã giao', published, published ? 'đang mở cho học viên' : 'chưa giao bài nào', 'book', 'pending') +
-      tcDashStat('Bài chờ chấm', toMark, toMark ? 'mở học viên để chấm' : 'không còn bài nào', 'check', 'mint') +
-      tcDashStat('Bài quá hạn', overdueN, overdueN ? 'học viên chưa nộp' : 'không có bài quá hạn', 'clock', 'warn') +
-      tcDashStat('Chờ duyệt', waitingStudents, waitingStudents ? 'học viên mới đăng ký' : 'không có ai chờ', 'users', 'pending');
-  }
-
-  const label = document.getElementById('tc-dash-range-label');
-  if (label) label.textContent = range === 'week' ? 'Bảy ngày tính từ hôm nay' : 'Hôm nay, theo giờ máy bạn';
-  document.querySelectorAll('.tc-seg-btn').forEach(function (b) {
-    b.classList.toggle('on', b.dataset.range === range);
-  });
-
-  const list = document.getElementById('tc-dash-list');
-  if (list) {
-    const rows = range === 'week' ? week : today;
-    if (!rows.length) {
-      list.innerHTML = '<div class="tc-empty">Không có buổi nào trong khoảng này.' +
-        '<br><button class="btn-primary btn-sm" style="margin-top:10px" onclick="tcDashAddSession()">Thêm lịch dạy</button></div>';
-    } else {
-      let lastDay = '';
-      const next = rows.filter(function (s) { return tcSessionState(s).k === 'soon'; })[0];
-      list.innerHTML = rows.map(function (s) {
-        const st = tcSessionState(s);
-        const t = new Date(s.starts_at), e = tcSessionEnd(s);
-        const dayKey = tcDayKey(t);
-        const head = dayKey !== lastDay ? '<div class="tc-day-date">' + tcDashDayLabel(t) + '</div>' : '';
-        lastDay = dayKey;
-        const ref = s.lesson_track
-          ? String(s.lesson_track).toUpperCase() + (s.lesson_no ? ' · Bài ' + s.lesson_no : '')
-          : 'Chưa gắn bài học';
-        return head + '<div class="tc-day' + (next && next.id === s.id ? ' is-next' : '') + '">' +
-          '<button class="tc-day-row" onclick="tcSessOpen(\'' + s.id + '\')">' +
-          '<span class="tc-day-time"><b>' + tcHM(t) + '</b><small>' + tcHM(e) + '</small></span>' +
-          '<span class="tc-day-main"><span class="tc-day-title">' + hwEsc(s.title || 'Buổi học') + '</span>' +
-          '<span class="tc-day-sub">' + hwEsc(ref) + '</span></span>' +
-          '<span class="tc-day-state"><span class="tc-chip ' + st.k + '">' + st.label + '</span></span>' +
-          '</button></div>';
-      }).join('');
-    }
-  }
-
-  const todo = document.getElementById('tc-dash-todo');
-  if (todo) {
-    const items = [];
-    if (overdueN) items.push({ n: overdueN, label: 'bài quá hạn, học viên chưa nộp', act: "tcTab('students')" });
-    if (toMark) items.push({ n: toMark, label: 'bài đã nộp, chờ bạn chấm', act: "tcTab('students')" });
-    const waiting = (TC.students || []).filter(function (s) { return s.status === 'pending'; }).length;
-    if (waiting) items.push({ n: waiting, label: 'học viên chờ duyệt', act: "tcTab('students')" });
-    const noLesson = (TC.sessions || []).filter(function (s) {
-      return s.status !== 'cancelled' && new Date(s.starts_at) > now && !s.lesson_track;
-    }).length;
-    if (noLesson) items.push({ n: noLesson, label: 'buổi sắp tới chưa gắn bài học', act: "tcTab('teach')" });
-    todo.innerHTML = items.length
-      ? '<div class="tc-todo">' + items.map(function (i) {
-          return '<button class="tc-todo-row" onclick="' + i.act + '"><span class="tc-todo-n">' + i.n + '</span>' +
-            '<span class="tc-todo-label">' + hwEsc(i.label) + '</span><span class="tc-todo-arrow">→</span></button>';
-        }).join('') + '</div>'
-      : '<div class="tc-empty" style="padding:16px 0">Không có việc nào đang chờ.</div>';
-  }
-}
-
 function tcTab(name, silent) {
-  /* Four areas: Dashboard, Dạy, Học viên, and Tài liệu, which is its own page
-     from the sidebar. Old callers (courses, overview, chat, materials) still
-     land on Dạy instead of breaking. */
-  const AREA = { dashboard: 'dashboard', teach: 'teach', courses: 'teach', overview: 'teach',
-                 chat: 'teach', materials: 'teach', students: 'students', homework: 'homework' };
-  const area = AREA[name] || 'dashboard';
+  /* Two areas only: Dạy (the teaching workspace) and Quản lý học viên.
+     The old five tabs map onto these, so every existing caller keeps working. */
+  const AREA = { dashboard: 'teach', courses: 'teach', materials: 'teach', chat: 'teach',
+                 overview: 'teach', teach: 'teach', students: 'students' };
+  const area = AREA[name] || 'teach';
+  const sub = AREA[name] ? name : 'teach';
   TC.tab = area;
   document.querySelectorAll('[data-tc-tab]').forEach(function (b) {
-    b.classList.toggle('on', b.dataset.tcTab === name);
+    b.classList.toggle('on', b.dataset.tcTab === sub);
   });
-  const bnKey = { dashboard: 'teacher', teach: 'teacher', students: 'teacher-students', homework: 'teacher-work' }[area];
-  if (bnKey) {
-    document.querySelectorAll('.bottom-nav button').forEach(function (b) {
-      b.classList.toggle('on', b.dataset.bn === bnKey);
-    });
-  }
   document.querySelectorAll('[data-tc-nav]').forEach(function (b) {
     b.classList.toggle('active', b.dataset.tcNav === area);
   });
-  hwShow('tc-panel-dashboard', area === 'dashboard');
-  hwShow('tc-panel-teach', area === 'teach');
+  hwShow('tc-panel-dashboard', area === 'teach');
   hwShow('tc-panel-students', area === 'students');
-  hwShow('tc-panel-homework', area === 'homework');
   ['courses', 'materials', 'chat'].forEach(function (k) { hwShow('tc-panel-' + k, false); });
   /* The builder belongs to the student you are giving work to, so it is only
      on screen while a draft is open. */
   hwShow('tc-panel-assignments', area === 'students' && !!TC.builderOpen);
-  const titles = { dashboard: 'Dashboard', teach: 'Dạy', students: 'Học viên', homework: 'Bài tập' };
-  const subs = { dashboard: 'Bài tập, học viên và những việc đang chờ bạn.',
-                 teach: 'Các khóa học và bài học có sẵn để mở và dạy.',
-                 students: 'Danh sách, hồ sơ và tiến độ từng học viên.',
-                 homework: 'Bài đã giao, hạn nộp và trạng thái từng học viên.' };
+  const titles = { teach: 'Dạy', students: 'Quản lý học viên' };
+  const subs = { teach: 'Buổi học, thời khoá biểu và bài chờ chấm.',
+                 students: 'Danh sách, hồ sơ và tiến độ từng học viên.' };
   const t = document.getElementById('tc-title');
   if (t) t.textContent = titles[area];
   const s = document.getElementById('tc-sub');
@@ -5777,8 +5571,7 @@ function tcWaitingStudents() {
 }
 
 function tcRender() {
-  tcRenderDash();
-  tcRenderWork();
+  tcRenderStats();
   tcRenderTeachHero();
   tcRenderPending();
   tcRenderTodo();
@@ -6795,7 +6588,21 @@ function tcRenderAssignments() {
   if (!el) return;
   /* the builder is closed until the teacher opens it: an always-open form at
      the bottom of the students list reads as a page, not as an action */
-  if (!TC.builderOpen || !TC.builder) { el.innerHTML = ''; return; }
+  if (!TC.builderOpen || !TC.builder) {
+    /* The submissions reader is not the builder. It used to be wiped by this
+       guard, so "Submissions" filled TC.resultsHtml into a panel that was then
+       emptied: the grade inputs never reached the DOM. */
+    if (TC.openSubs) {
+      el.innerHTML = '<div id="tc-subs" class="card p-6 space-y-4">' +
+        '<div class="flex items-center justify-between gap-3"><p class="font-semibold">Submissions</p>' +
+        '<button class="btn-secondary" onclick="tcCloseSubmissions()">Hide</button></div>' +
+        (TC.resultsHtml || '<div class="sk sk-card"></div>') + '</div>';
+      hwShow('tc-panel-assignments', true);
+    } else {
+      el.innerHTML = '';
+    }
+    return;
+  }
   const b = TC.builder;
   const tracks = Object.keys(TRACKS || {});
   const lessonTitle = (TRACKS[b.track] && TRACKS[b.track].lessons && TRACKS[b.track].lessons[b.no])
@@ -7004,7 +6811,10 @@ async function tcSaveAssignment(publish, btn) {
     lesson_track: b.kind === 'lesson' ? b.track : null,
     lesson_no: b.kind === 'lesson' ? (parseInt(b.no, 10) || 1) : null,
     due_at: b.due || null,
-    status: publish === 'published' ? 'published' : 'draft'
+    // Written as a draft on purpose: a trigger (aq_draft_only) refuses new
+    // questions while the assignment is not a draft, so the publish happens
+    // after the questions and recipients exist. See tools/build_homework.py.
+    status: 'draft'
   };
 
   try {
@@ -7038,6 +6848,11 @@ async function tcSaveAssignment(publish, btn) {
       const r = await HB.from('assignment_recipients')
         .insert({ assignment_id: id, student_id: targets[k2] });
       if (r.error && String(r.error.message || '').indexOf('duplicate') < 0) throw r.error;
+    }
+
+    if (publish === 'published') {
+      const p = await HB.from('assignments').update({ status: 'published' }).eq('id', id);
+      if (p.error) throw p.error;
     }
 
     toast(publish === 'published' ? 'Published' : 'Draft saved', 'ok');
@@ -7083,6 +6898,14 @@ async function tcOpenSubmissions(assignmentId) {
     const questions = qs.data || [];
 
     if (!rows.length) { TC.resultsHtml = '<p class="faint text-sm">Nobody has started this yet.</p>'; tcRenderAssignments(); return; }
+
+    /* Keep the rows the dashboard counts from in sync: grading used to leave
+       TC.submissions stale, so "To review" kept counting marked work. */
+    TC.submissions = TC.submissions || [];
+    rows.forEach(function (r) {
+      const at = TC.submissions.findIndex(function (x) { return x.id === r.id; });
+      if (at >= 0) TC.submissions[at] = r; else TC.submissions.push(r);
+    });
 
     let html = '';
     for (var i = 0; i < rows.length; i++) {
@@ -7137,7 +6960,11 @@ function tcStudentName(id) {
   return hit ? hit.name : 'Student ' + String(id).slice(0, 6);
 }
 
-function tcCloseSubmissions() { TC.openSubs = null; TC.resultsHtml = ''; tcRenderAssignments(); }
+function tcCloseSubmissions() {
+  TC.openSubs = null; TC.resultsHtml = '';
+  if (!TC.builderOpen) hwShow('tc-panel-assignments', false);
+  tcRenderAssignments();
+}
 
 async function tcGrade(submissionId, status, btn) {
   const qs = document.querySelectorAll('[id^="g_' + submissionId + '_"]');
@@ -7158,6 +6985,7 @@ async function tcGrade(submissionId, status, btn) {
   if (r.error) { hwErr(r.error, 'Could not save the grade'); return; }
   toast(status === 'graded' ? 'Grade saved' : 'Sent back for another try', 'ok');
   if (TC.openSubs) await tcOpenSubmissions(TC.openSubs);
+  tcRenderOverview();      /* "To review" drops as soon as the mark is saved */
 }
 
 /* ============================================================

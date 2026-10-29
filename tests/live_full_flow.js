@@ -63,7 +63,7 @@ const t=(n,c,x='')=>{console.log((c?'PASS':'FAIL')+' | '+n+(x?' | '+x:''));c?PAS
     tcQAdd(); tcQSet(0,'qtype','mcq'); tcQSet(0,'prompt','She ___ a teacher.');
     tcQSet(0,'optionsRaw','is|are|am'); tcQSet(0,'keyRaw','0'); tcQSet(0,'points',1);
     tcQAdd(); tcQSet(1,'qtype','text'); tcQSet(1,'prompt','Write one sentence about your family.'); tcQSet(1,'points',2);
-    await tcSaveAssignment(true);
+    await tcSaveAssignment('published');
     await new Promise(r=>setTimeout(r,1500));
     const a=(TC.assignments||[]).filter(x=>x.title===${JSON.stringify(TITLE)})[0];
     return JSON.stringify({assignment:a||null,recipients:(TC.recipients||[]).filter(r=>a&&r.assignment_id===a.id).length,

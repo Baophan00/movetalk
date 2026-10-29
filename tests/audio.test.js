@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const src = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-const js = src.match(/<script>([\s\S]*?)<\/script>\s*<\/body>/)[1];
+const js = require('./_app_js.js')().js;
 
 let pass = 0, fail = 0;
 const t = (n, c, x = '') => { if (c) pass++; else { fail++; console.log('FAIL | ' + n + (x ? ' | ' + x : '')); } };

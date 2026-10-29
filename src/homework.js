@@ -504,24 +504,38 @@ async function hwEnsureSubmission(a) {
   return sub;
 }
 
-var HW_SAVE_T = null;
-async function hwSetAnswer(qid, value, qtype) {
-  if (!HW_ON || !USER || !HW.detailId) return;
-  const a = HW.assignments.filter(function (x) { return x.id === HW.detailId; })[0];
-  if (!a) return;
-  let payload = value;
-  if (qtype === 'mcq') payload = Number(value);
-  HW.answers[qid] = { question_id: qid, answer: payload };
+var HW_SAVE_T = {};      /* one timer per question: a single shared timer dropped earlier answers */
+var HW_PENDING = {};
 
-  clearTimeout(HW_SAVE_T);
-  HW_SAVE_T = setTimeout(async function () {
+/* Write every answer still waiting on a debounce. Called by the timers and,
+   before submitting, so nothing the student typed is left behind. */
+async function hwFlushAnswers(a, onlyQid) {
+  const ids = onlyQid ? [onlyQid] : Object.keys(HW_PENDING);
+  for (var i = 0; i < ids.length; i++) {
+    const qid = ids[i];
+    if (!(qid in HW_PENDING)) continue;
+    clearTimeout(HW_SAVE_T[qid]);
+    delete HW_SAVE_T[qid];
+    const payload = HW_PENDING[qid];
+    delete HW_PENDING[qid];
     const sub = await hwEnsureSubmission(a);
     if (!sub) return;
     const r = await HB.from('submission_answers')
       .upsert({ submission_id: sub.id, question_id: qid, answer: payload },
               { onConflict: 'submission_id,question_id' });
     if (r.error) hwErr(r.error, 'Could not save that answer');
-  }, 600);
+  }
+}
+
+async function hwSetAnswer(qid, value, qtype) {
+  if (!HW_ON || !USER || !HW.detailId) return;
+  const a = HW.assignments.filter(function (x) { return x.id === HW.detailId; })[0];
+  if (!a) return;
+  const payload = qtype === 'mcq' ? Number(value) : value;
+  HW.answers[qid] = { question_id: qid, answer: payload };
+  HW_PENDING[qid] = payload;
+  clearTimeout(HW_SAVE_T[qid]);
+  HW_SAVE_T[qid] = setTimeout(function () { hwFlushAnswers(a, qid); }, 600);
 }
 
 async function hwSubmit() {
@@ -529,8 +543,9 @@ async function hwSubmit() {
   const a = HW.assignments.filter(function (x) { return x.id === HW.detailId; })[0];
   if (!a) return;
   const btn = document.getElementById('hw-submit-btn');
-  if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
   try {
+    await hwFlushAnswers(a);          /* whatever is still on a debounce goes first */
+    if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
     const sub = await hwEnsureSubmission(a);
     if (!sub) return;
     const r = await HB.rpc('submit_assignment', { p_assignment: a.id });
@@ -1719,7 +1734,21 @@ function tcRenderAssignments() {
   if (!el) return;
   /* the builder is closed until the teacher opens it: an always-open form at
      the bottom of the students list reads as a page, not as an action */
-  if (!TC.builderOpen || !TC.builder) { el.innerHTML = ''; return; }
+  if (!TC.builderOpen || !TC.builder) {
+    /* The submissions reader is not the builder. It used to be wiped by this
+       guard, so "Submissions" filled TC.resultsHtml into a panel that was then
+       emptied: the grade inputs never reached the DOM. */
+    if (TC.openSubs) {
+      el.innerHTML = '<div id="tc-subs" class="card p-6 space-y-4">' +
+        '<div class="flex items-center justify-between gap-3"><p class="font-semibold">Submissions</p>' +
+        '<button class="btn-secondary" onclick="tcCloseSubmissions()">Hide</button></div>' +
+        (TC.resultsHtml || '<div class="sk sk-card"></div>') + '</div>';
+      hwShow('tc-panel-assignments', true);
+    } else {
+      el.innerHTML = '';
+    }
+    return;
+  }
   const b = TC.builder;
   const tracks = Object.keys(TRACKS || {});
   const lessonTitle = (TRACKS[b.track] && TRACKS[b.track].lessons && TRACKS[b.track].lessons[b.no])
@@ -1928,7 +1957,10 @@ async function tcSaveAssignment(publish, btn) {
     lesson_track: b.kind === 'lesson' ? b.track : null,
     lesson_no: b.kind === 'lesson' ? (parseInt(b.no, 10) || 1) : null,
     due_at: b.due || null,
-    status: publish === 'published' ? 'published' : 'draft'
+    // Written as a draft on purpose: a trigger (aq_draft_only) refuses new
+    // questions while the assignment is not a draft, so the publish happens
+    // after the questions and recipients exist. See tools/build_homework.py.
+    status: 'draft'
   };
 
   try {
@@ -1962,6 +1994,11 @@ async function tcSaveAssignment(publish, btn) {
       const r = await HB.from('assignment_recipients')
         .insert({ assignment_id: id, student_id: targets[k2] });
       if (r.error && String(r.error.message || '').indexOf('duplicate') < 0) throw r.error;
+    }
+
+    if (publish === 'published') {
+      const p = await HB.from('assignments').update({ status: 'published' }).eq('id', id);
+      if (p.error) throw p.error;
     }
 
     toast(publish === 'published' ? 'Published' : 'Draft saved', 'ok');
@@ -2007,6 +2044,14 @@ async function tcOpenSubmissions(assignmentId) {
     const questions = qs.data || [];
 
     if (!rows.length) { TC.resultsHtml = '<p class="faint text-sm">Nobody has started this yet.</p>'; tcRenderAssignments(); return; }
+
+    /* Keep the rows the dashboard counts from in sync: grading used to leave
+       TC.submissions stale, so "To review" kept counting marked work. */
+    TC.submissions = TC.submissions || [];
+    rows.forEach(function (r) {
+      const at = TC.submissions.findIndex(function (x) { return x.id === r.id; });
+      if (at >= 0) TC.submissions[at] = r; else TC.submissions.push(r);
+    });
 
     let html = '';
     for (var i = 0; i < rows.length; i++) {
@@ -2061,7 +2106,11 @@ function tcStudentName(id) {
   return hit ? hit.name : 'Student ' + String(id).slice(0, 6);
 }
 
-function tcCloseSubmissions() { TC.openSubs = null; TC.resultsHtml = ''; tcRenderAssignments(); }
+function tcCloseSubmissions() {
+  TC.openSubs = null; TC.resultsHtml = '';
+  if (!TC.builderOpen) hwShow('tc-panel-assignments', false);
+  tcRenderAssignments();
+}
 
 async function tcGrade(submissionId, status, btn) {
   const qs = document.querySelectorAll('[id^="g_' + submissionId + '_"]');
@@ -2082,6 +2131,7 @@ async function tcGrade(submissionId, status, btn) {
   if (r.error) { hwErr(r.error, 'Could not save the grade'); return; }
   toast(status === 'graded' ? 'Grade saved' : 'Sent back for another try', 'ok');
   if (TC.openSubs) await tcOpenSubmissions(TC.openSubs);
+  tcRenderOverview();      /* "To review" drops as soon as the mark is saved */
 }
 
 /* ============================================================
