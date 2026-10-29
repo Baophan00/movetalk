@@ -126,13 +126,14 @@ export function Study({ seedLevel, seedRoom, seedPrompt }: { seedLevel?: Level; 
       : undefined
     return hit?.id ?? PACKS.find((p) => p.level === 'A2')?.id ?? ''
   })
+  const [usePack, setUsePack] = useState(false)
   const [room, setRoom] = useState<Room>(seedRoom && seedRoom !== 'home' ? seedRoom : 'home')
 
   const source = useMemo<Source>(() => {
-    if (level === 'A1') return a1Source(A1.find((l) => l.n === lessonN) ?? A1[0])
+    if (level === 'A1' && !usePack) return a1Source(A1.find((l) => l.n === lessonN) ?? A1[0])
     const pack = PACKS.find((p) => p.id === packId && p.level === level) ?? packsFor(level)[0]
     return packSource(pack)
-  }, [level, lessonN, packId])
+  }, [level, lessonN, packId, usePack])
 
   const pickLevel = (l: Level) => {
     setLevel(l)
@@ -178,22 +179,71 @@ export function Study({ seedLevel, seedRoom, seedPrompt }: { seedLevel?: Level; 
         <CardBody className="p-4">
           {level === 'A1' ? (
             <>
-              <p className="text-[13px] font-semibold">Which lesson</p>
-              <p className="mt-0.5 text-[11.5px] text-muted">Words and dialogues straight from your class.</p>
-              <div className="no-scrollbar mt-2.5 flex gap-1.5 overflow-x-auto pb-1">
-                {A1.map((l) => (
-                  <button
-                    key={l.n}
-                    onClick={() => setLessonN(l.n)}
-                    className={cn(
-                      'shrink-0 rounded-xl border px-2.5 py-1.5 text-[12px] font-semibold transition',
-                      l.n === lessonN ? 'border-transparent bg-primary text-white' : 'border-line bg-surface text-muted',
-                    )}
-                  >
-                    {String(l.n).padStart(2, '0')}
-                  </button>
-                ))}
+              <div className="mb-3 flex gap-1.5">
+                <button
+                  onClick={() => setUsePack(false)}
+                  className={cn(
+                    'rounded-lg border px-2.5 py-1 text-[11.5px] font-semibold transition',
+                    !usePack ? 'border-transparent bg-primary text-white' : 'border-line bg-surface text-muted',
+                  )}
+                >
+                  By lesson
+                </button>
+                <button
+                  onClick={() => {
+                    setUsePack(true)
+                    if (!packId || !packsFor('A1').some((p) => p.id === packId)) {
+                      setPackId(packsFor('A1')[0]?.id ?? '')
+                    }
+                  }}
+                  className={cn(
+                    'rounded-lg border px-2.5 py-1 text-[11.5px] font-semibold transition',
+                    usePack ? 'border-transparent bg-primary text-white' : 'border-line bg-surface text-muted',
+                  )}
+                >
+                  Daily life topics
+                </button>
               </div>
+              {!usePack ? (
+                <>
+                  <p className="text-[13px] font-semibold">Which lesson</p>
+                  <p className="mt-0.5 text-[11.5px] text-muted">Words and dialogues straight from your class.</p>
+                  <div className="no-scrollbar mt-2.5 flex gap-1.5 overflow-x-auto pb-1">
+                    {A1.map((l) => (
+                      <button
+                        key={l.n}
+                        onClick={() => setLessonN(l.n)}
+                        className={cn(
+                          'shrink-0 rounded-xl border px-2.5 py-1.5 text-[12px] font-semibold transition',
+                          l.n === lessonN ? 'border-transparent bg-primary text-white' : 'border-line bg-surface text-muted',
+                        )}
+                      >
+                        {String(l.n).padStart(2, '0')}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="text-[13px] font-semibold">Which topic</p>
+                  <p className="mt-0.5 text-[11.5px] text-muted">{packsFor('A1').length} daily life topics</p>
+                  <div className="no-scrollbar -mx-1 mt-2.5 flex gap-1.5 overflow-x-auto px-1 pb-1">
+                    {packsFor('A1').map((p) => (
+                      <button
+                        key={p.id}
+                        onClick={() => setPackId(p.id)}
+                        className={cn(
+                          'shrink-0 rounded-xl border px-3 py-2 text-left transition',
+                          p.id === packId ? 'border-transparent bg-primary text-white shadow-card' : 'border-line bg-surface text-muted hover:border-primary/30',
+                        )}
+                      >
+                        <span className="block text-[12px] font-semibold">{p.vi}</span>
+                        <span className={cn('block text-[10.5px]', p.id === packId ? 'text-white/75' : 'text-muted')}>{p.title}</span>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
             </>
           ) : (
             <>

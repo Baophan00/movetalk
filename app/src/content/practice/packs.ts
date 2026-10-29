@@ -729,6 +729,167 @@ export const PACKS: Pack[] = [
       model: 'Hello, I would like to book an appointment because I have a pain in my back. I am free on Thursday morning or Friday afternoon. My phone number is 0901 234 567. Thank you very much.',
       must: ['appointment', 'free'],
     },
+  {
+    id: 'a1-cafe',
+    level: 'A1',
+    title: 'At the café',
+    vi: 'Ở quán cà phê',
+    lines: [
+      'Good morning. What can I get you?',
+      'I would like a coffee, please.',
+      'Do you want milk and sugar?',
+      'Yes, please. And a glass of water.',
+      'That is three dollars and fifty cents.',
+      'Here you are. Have a nice day.',
+    ],
+    reading: {
+      title: 'A morning at the café',
+      text:
+        'Tom goes to a café every morning. He likes coffee with milk and sugar. The waiter asks what he wants. Tom says he would like a coffee and a glass of water. The coffee costs three dollars and fifty cents. Tom pays and says thank you. The waiter says have a nice day.',
+      glossary: {
+        café: 'quán cà phê',
+        waiter: 'nhân viên phục vụ',
+        milk: 'sữa',
+        sugar: 'đường',
+        costs: 'giá',
+        pays: 'trả tiền',
+      },
+      questions: [
+        { q: 'What does Tom order?', options: ['Tea and juice', 'Coffee and water', 'Milk and bread', 'Soup and rice'], answer: 'Coffee and water' },
+        { q: 'How much is the coffee?', options: ['Two dollars', 'Three dollars and fifty cents', 'Five dollars', 'One dollar'], answer: 'Three dollars and fifty cents' },
+        { q: 'Who works at the café?', options: ['A doctor', 'A teacher', 'A waiter', 'A driver'], answer: 'A waiter' },
+      ],
+    },
+    build: [
+      { en: 'I would like a coffee, please.', vi: 'Tôi muốn một ly cà phê, làm ơn.' },
+      { en: 'How much is it?', vi: 'Cái này giá bao nhiêu?' },
+      { en: 'Here you are.', vi: 'Đây ạ.' },
+    ],
+    translate: [
+      { vi: 'Tôi muốn một ly cà phê.', en: 'I would like a coffee.' },
+      { vi: 'Bao nhiêu tiền?', en: 'How much is it?' },
+    ],
+  },
+  {
+    id: 'a1-grocery',
+    level: 'A1',
+    title: 'At the grocery store',
+    vi: 'Ở cửa hàng tạp hoá',
+    lines: [
+      'Excuse me, where is the milk?',
+      'It is in aisle three, on the left.',
+      'How much are these apples?',
+      'They are two dollars a kilo.',
+      'I will take three kilos, please.',
+      'Anything else today?',
+    ],
+    reading: {
+      title: 'Shopping for dinner',
+      text:
+        'Lan goes to the grocery store. She needs milk and apples. The shop assistant tells her the milk is in aisle three. The apples cost two dollars a kilo. Lan takes three kilos of apples and some milk. The assistant asks if she needs anything else. Lan says no and pays at the counter.',
+      glossary: {
+        grocery: 'tạp hoá',
+        aisle: 'lối đi',
+        kilo: 'kilôgam',
+        assistant: 'nhân viên',
+        counter: 'quầy thanh toán',
+      },
+      questions: [
+        { q: 'Where is the milk?', options: ['Aisle one', 'Aisle two', 'Aisle three', 'At the door'], answer: 'Aisle three' },
+        { q: 'How much are the apples?', options: ['One dollar a kilo', 'Two dollars a kilo', 'Three dollars a kilo', 'Five dollars a kilo'], answer: 'Two dollars a kilo' },
+        { q: 'How many kilos does Lan buy?', options: ['One', 'Two', 'Three', 'Four'], answer: 'Three' },
+      ],
+    },
+    build: [
+      { en: 'Where is the milk?', vi: 'Sữa ở đâu?' },
+      { en: 'How much are these apples?', vi: 'Táo này bao nhiêu tiền?' },
+      { en: 'I will take three kilos.', vi: 'Tôi lấy ba kilô.' },
+    ],
+    translate: [
+      { vi: 'Sữa ở đâu?', en: 'Where is the milk?' },
+      { vi: 'Táo này giá bao nhiêu?', en: 'How much are these apples?' },
+    ],
+  },
+  {
+    id: 'a1-work',
+    level: 'A1',
+    title: 'At work',
+    vi: 'Ở nơi làm việc',
+    lines: [
+      'Good morning. Are you new here?',
+      'Yes, I started today.',
+      'Welcome. What department are you in?',
+      'I work in customer service.',
+      'The break room is on the second floor.',
+      'Thank you. See you later.',
+    ],
+    reading: {
+      title: 'First day at work',
+      text:
+        'Mai starts a new job today. She works in customer service. Her colleague Nam welcomes her and shows her around. The break room is on the second floor. Mai thanks him and goes to her desk. She is happy to start her new job.',
+      glossary: {
+        department: 'phòng ban',
+        customer: 'khách hàng',
+        service: 'dịch vụ',
+        colleague: 'đồng nghiệp',
+        welcome: 'chào mừng',
+        break: 'nghỉ giải lao',
+      },
+      questions: [
+        { q: 'What department does Mai work in?', options: ['Sales', 'Customer service', 'Finance', 'Marketing'], answer: 'Customer service' },
+        { q: 'Where is the break room?', options: ['First floor', 'Second floor', 'Third floor', 'Basement'], answer: 'Second floor' },
+        { q: 'Who shows Mai around?', options: ['Her boss', 'Her colleague Nam', 'A customer', 'Her teacher'], answer: 'Her colleague Nam' },
+      ],
+    },
+    build: [
+      { en: 'Are you new here?', vi: 'Bạn mới đến đây à?' },
+      { en: 'I started today.', vi: 'Hôm nay tôi mới bắt đầu.' },
+      { en: 'Welcome to our team.', vi: 'Chào mừng đến với nhóm của chúng tôi.' },
+    ],
+    translate: [
+      { vi: 'Bạn mới đến đây à?', en: 'Are you new here?' },
+      { vi: 'Tôi làm ở bộ phận dịch vụ khách hàng.', en: 'I work in customer service.' },
+    ],
+  },
+  {
+    id: 'a1-hotel',
+    level: 'A1',
+    title: 'At the hotel',
+    vi: 'Ở khách sạn',
+    lines: [
+      'Good evening. I have a reservation.',
+      'What is your name, please?',
+      'My name is Nguyen. I booked a room for two nights.',
+      'Here is your key. Breakfast is from seven to nine.',
+      'Is there Wi-Fi in the room?',
+      'Yes, the password is on the card.',
+    ],
+    reading: {
+      title: 'Checking in',
+      text:
+        'Lan arrives at a hotel in the evening. She has a reservation for two nights. The receptionist gives her a key and tells her breakfast is from seven to nine. Lan asks about Wi-Fi. The receptionist says the password is on the card in the room. Lan thanks him and goes to her room.',
+      glossary: {
+        reservation: 'đặt phòng',
+        receptionist: 'lễ tân',
+        key: 'chìa khoá',
+        breakfast: 'bữa sáng',
+        password: 'mật khẩu',
+      },
+      questions: [
+        { q: 'How many nights did Lan book?', options: ['One night', 'Two nights', 'Three nights', 'One week'], answer: 'Two nights' },
+        { q: 'When is breakfast?', options: ['Six to eight', 'Seven to nine', 'Eight to ten', 'Nine to eleven'], answer: 'Seven to nine' },
+        { q: 'Where is the Wi-Fi password?', options: ['On the door', 'On the card', 'At the desk', 'In the elevator'], answer: 'On the card' },
+      ],
+    },
+    build: [
+      { en: 'I have a reservation.', vi: 'Tôi có đặt phòng.' },
+      { en: 'Here is your key.', vi: 'Đây là chìa khoá của bạn.' },
+      { en: 'Breakfast is from seven to nine.', vi: 'Bữa sáng từ bảy đến chín giờ.' },
+    ],
+    translate: [
+      { vi: 'Tôi có đặt phòng.', en: 'I have a reservation.' },
+      { vi: 'Mật khẩu Wi-Fi ở đâu?', en: 'Where is the Wi-Fi password?' },
+    ],
   },
 ]
 
