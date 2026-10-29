@@ -28,7 +28,7 @@ const KIND_INSTRUCTION: Record<string, string> = {
   meaning: 'Choose the meaning of the word.',
   cloze: 'Fill in the missing word.',
   order: 'Put the words in the right order.',
-  listen: 'Listen to the audio, then reveal the answer.',
+  listen: 'Listen to the audio, then type your answer.',
   gap: 'Listen to the line, then choose the missing word.',
   sequence: 'Put the conversation lines in order.',
   reading: 'Read the passage, then answer.',
@@ -145,6 +145,20 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
     if (!given.trim()) return
     const expected = item.kind === 'sequence' ? item.answer.split(' | ').join(' ') : item.answer
     const ok = norm(given) === norm(expected)
+    if (ok) playCorrect()
+    else playWrong()
+    setState(ok ? 'right' : 'wrong')
+    setResults((rs) => [...rs.filter((r) => r.item.id !== item.id), { item, correct: ok }])
+    save(item, ok)
+  }
+
+  function checkListen() {
+    if (!typing.trim()) return
+    // Extract the expected answer: prefer the quoted phrase, else the whole answer.
+    const raw = item.answer
+    const quoted = raw.match(/'([^']+)'/)
+    const expected = (quoted ? quoted[1] : raw).trim()
+    const ok = norm(typing).includes(norm(expected)) || norm(expected).includes(norm(typing))
     if (ok) playCorrect()
     else playWrong()
     setState(ok ? 'right' : 'wrong')
@@ -532,6 +546,18 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
             />
           )}
 
+          {item.kind === 'listen' && (
+            <input
+              value={typing}
+              onChange={(e) => setTyping(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && state === 'idle' && checkListen()}
+              placeholder="Type your answer in English"
+              aria-label="Your answer"
+              disabled={state !== 'idle'}
+              className="mt-4 w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-[13.5px] transition focus:border-primary disabled:cursor-not-allowed disabled:bg-ink/[.03] disabled:text-muted"
+            />
+          )}
+
           {hint && <p className="mt-3 rounded-xl bg-accent/10 px-3 py-2 text-[12px] text-ink/80">{item.hint}</p>}
 
           {state === 'right' && (
@@ -556,7 +582,10 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
             {state === 'idle' && selfCheck && (
               <>
                 {item.kind === 'speak' && <SpeakButton text={item.audio ?? item.prompt} label="Play again" />}
-                <Button onClick={reveal}>Show the answer</Button>
+                {item.kind === 'listen' && (
+                  <Button onClick={checkListen} disabled={!typing.trim()}>Check</Button>
+                )}
+                <Button onClick={reveal} variant="ghost">Show the answer</Button>
               </>
             )}
             {state === 'idle' && !selfCheck && item.kind !== 'match' && (
