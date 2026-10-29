@@ -248,19 +248,40 @@ function readingItems(lesson: LessonFile): Exercise[] {
 
 function speakItems(lesson: LessonFile): Exercise[] {
   const title = titleOf(lesson)
-  return lesson.parts.vocab.slice(0, 4).map((w) => ({
-    id: `l${lesson.n}-speak-${w.word}`,
-    lesson: lesson.n,
-    lessonTitle: title,
-    skill: 'speaking' as const,
-    kind: 'speak' as const,
-    prompt: w.example,
-    vi: w.vi,
-    audio: w.example,
-    answer: w.example,
-    hint: 'Say it out loud, then record it for your teacher.',
-    explain: w.example,
-  }))
+  const out: Exercise[] = []
+  // Vocab example sentences (existing)
+  for (const w of lesson.parts.vocab.slice(0, 4)) {
+    out.push({
+      id: `l${lesson.n}-speak-${w.word}`,
+      lesson: lesson.n,
+      lessonTitle: title,
+      skill: 'speaking' as const,
+      kind: 'speak' as const,
+      prompt: w.example,
+      vi: w.vi,
+      audio: w.example,
+      answer: w.example,
+      hint: 'Say it out loud, then record it for your teacher.',
+      explain: w.example,
+    })
+  }
+  // Real-life speak prompts (new)
+  const prompts = lesson.parts.speakPrompts ?? []
+  for (const [i, p] of prompts.entries()) {
+    out.push({
+      id: `l${lesson.n}-speak-p-${i}`,
+      lesson: lesson.n,
+      lessonTitle: title,
+      skill: 'speaking' as const,
+      kind: 'speak' as const,
+      prompt: p,
+      audio: p,
+      answer: p,
+      hint: 'Say it out loud, then record it for your teacher.',
+      explain: p,
+    })
+  }
+  return out
 }
 
 function normKey(e: Exercise): string {

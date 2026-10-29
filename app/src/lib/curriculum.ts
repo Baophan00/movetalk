@@ -33,6 +33,7 @@ export type LessonFile = {
     dialogue: Turn[]
     listenCheck: Check[]
     flow: FlowGroup[]
+    speakPrompts?: string[]
   }
 }
 
@@ -65,6 +66,7 @@ function asLesson(raw: unknown): LessonFile {
       dialogue: parts.dialogue ?? [],
       listenCheck: parts.listenCheck ?? [],
       flow: parts.flow ?? [],
+      speakPrompts: parts.speakPrompts ?? [],
     },
   }
 }

@@ -296,15 +296,19 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
         <CardBody className="p-5">
           <div className="flex items-start gap-2">
             <p className={cn('flex-1 font-medium leading-snug', item.kind === 'flash' ? 'text-[26px] tracking-tight' : 'text-[16px]')}>
-              {item.prompt}
+              {item.kind === 'gap' ? 'Listen to the line, then choose the missing word.' : item.prompt}
             </p>
-            {item.kind !== 'listen' && (item.audio || item.skill === 'vocab') && (
+            {item.kind !== 'listen' && item.kind !== 'gap' && (item.audio || item.skill === 'vocab') && (
               <SpeakButton text={item.audio ?? item.prompt} label="Hear the word" />
             )}
           </div>
           {item.vi && <p className="mt-1 text-[12px] text-muted">{item.vi}</p>}
 
           {item.kind === 'listen' && item.audio && (
+            <AudioPlayer text={item.audio} label="Listen to the line" className="mt-3" />
+          )}
+
+          {item.kind === 'gap' && item.audio && (
             <AudioPlayer text={item.audio} label="Listen to the line" className="mt-3" />
           )}
 
