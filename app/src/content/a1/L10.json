@@ -1,1008 +1,194 @@
 {
   "n": 10,
   "level": "A1",
-  "deck": "doc_e52cb29f180a_MOVE_ACTIVATE_1_L10_PAST_SIMPLE_PRESENT_PERFECT_VIP .pptx",
+  "unit": "Travel & Holidays",
+  "unitVi": "Du lịch & kỳ nghỉ",
+  "topic": "Talking about travel, holidays, and past experiences",
+  "topicVi": "Nói về du lịch, kỳ nghỉ và trải nghiệm trong quá khứ",
+  "objectives": [
+    "Can talk about travel and holidays",
+    "Can use past simple (was/were, regular verbs)",
+    "Can ask and answer about past experiences",
+    "Can describe a holiday or trip"
+  ],
+  "objectivesVi": [
+    "Có thể nói về du lịch và kỳ nghỉ",
+    "Có thể dùng thì quá khứ đơn (was/were, động từ có quy tắc)",
+    "Có thể hỏi và trả lời về trải nghiệm trong quá khứ",
+    "Có thể mô tả một kỳ nghỉ hoặc chuyến đi"
+  ],
+  "estimatedMinutes": 50,
   "parts": {
     "vocab": [
-      {
-        "word": "ever",
-        "pos": "adv",
-        "ipa": "/ˈevər/",
-        "def": "",
-        "example": "Have you ever lost your keys?",
-        "vi": "đã từng, bao giờ",
-        "cloze": "Have you ____ lost your keys?"
-      },
-      {
-        "word": "never",
-        "pos": "adv",
-        "ipa": "/ˈnevər/",
-        "def": "",
-        "example": "I’ve never missed a flight.",
-        "vi": "chưa từng, không bao giờ",
-        "cloze": "I’ve ____ missed a flight."
-      },
-      {
-        "word": "already",
-        "pos": "adv",
-        "ipa": "/ɔːlˈredi/",
-        "def": "",
-        "example": "I’ve already booked the room.",
-        "vi": "đã rồi",
-        "cloze": "I’ve ____ booked the room."
-      },
-      {
-        "word": "yet",
-        "pos": "adv",
-        "ipa": "/jet/",
-        "def": "",
-        "example": "Have you checked the address yet?",
-        "vi": "chưa; cho đến lúc này",
-        "cloze": "Have you checked the address ____?"
-      },
-      {
-        "word": "just",
-        "pos": "adv",
-        "ipa": "/dʒʌst/",
-        "def": "",
-        "example": "She’s just sent the message.",
-        "vi": "vừa mới",
-        "cloze": "She’s ____ sent the message."
-      },
-      {
-        "word": "recently",
-        "pos": "adv",
-        "ipa": "/ˈriːsəntli/",
-        "def": "",
-        "example": "Have you bought anything useful recently?",
-        "vi": "gần đây",
-        "cloze": "Have you bought anything useful ____?"
-      },
-      {
-        "word": "lately",
-        "pos": "adv",
-        "ipa": "/ˈleɪtli/",
-        "def": "",
-        "example": "I haven’t seen my neighbors lately.",
-        "vi": "dạo gần đây",
-        "cloze": "I haven’t seen my neighbors ____."
-      },
-      {
-        "word": "so far",
-        "pos": "adv phr",
-        "ipa": "/soʊ fɑːr/",
-        "def": "",
-        "example": "We’ve visited two places so far.",
-        "vi": "tính đến giờ",
-        "cloze": "We’ve visited two places ____ ____."
-      },
-      {
-        "word": "up to now",
-        "pos": "adv phr",
-        "ipa": "/ʌp tə naʊ/",
-        "def": "",
-        "example": "Up to now, I’ve had no problems.",
-        "vi": "cho đến hiện tại",
-        "cloze": "____ ____ ____, I’ve had no problems."
-      },
-      {
-        "word": "since",
-        "pos": "prep/conj",
-        "ipa": "/sɪns/",
-        "def": "",
-        "example": "I’ve lived here since 2020.",
-        "vi": "từ một mốc thời gian",
-        "cloze": "I’ve lived here ____ 2020."
-      },
-      {
-        "word": "for",
-        "pos": "prep",
-        "ipa": "/fər/",
-        "def": "",
-        "example": "I’ve known her for five years.",
-        "vi": "trong một khoảng thời gian",
-        "cloze": "I’ve known her ____ five years."
-      },
-      {
-        "word": "twice",
-        "pos": "adv",
-        "ipa": "/twaɪs/",
-        "def": "",
-        "example": "I’ve been there twice.",
-        "vi": "hai lần",
-        "cloze": "I’ve been there ____."
-      },
-      {
-        "word": "several times",
-        "pos": "adv phr",
-        "ipa": "/ˈsevrəl taɪmz/",
-        "def": "",
-        "example": "We’ve used this service several times.",
-        "vi": "vài lần",
-        "cloze": "We’ve used this service ____ ____."
-      },
-      {
-        "word": "the last time",
-        "pos": "n phrase",
-        "ipa": "/ðə læst taɪm/",
-        "def": "",
-        "example": "When was the last time you went there?",
-        "vi": "lần gần nhất",
-        "cloze": "When was ____ ____ ____ you went there?"
-      },
-      {
-        "word": "try something new",
-        "pos": "v",
-        "ipa": "/traɪ ˌsʌmθɪŋ ˈnuː/",
-        "def": "",
-        "example": "Have you tried something new lately?",
-        "vi": "thử điều mới",
-        "cloze": "Have you ____ something new lately?"
-      },
-      {
-        "word": "book online",
-        "pos": "v",
-        "ipa": "/bʊk ˌɑːnˈlaɪn/",
-        "def": "",
-        "example": "I booked online last night.",
-        "vi": "đặt qua mạng",
-        "cloze": "I ____ ____ last night."
-      },
-      {
-        "word": "change a booking",
-        "pos": "v",
-        "ipa": "/tʃeɪndʒ ə ˈbʊkɪŋ/",
-        "def": "",
-        "example": "I’ve changed a booking once.",
-        "vi": "đổi lịch đặt",
-        "cloze": "I’ve ____ a booking once."
-      },
-      {
-        "word": "get a refund",
-        "pos": "v",
-        "ipa": "/ɡet ə ˈriːfʌnd/",
-        "def": "",
-        "example": "Have you got a refund yet?",
-        "vi": "được hoàn tiền",
-        "cloze": "Have you ____ a refund yet?"
-      },
-      {
-        "word": "lose my keys",
-        "pos": "v",
-        "ipa": "/luːz maɪ kiːz/",
-        "def": "",
-        "example": "I lost my keys yesterday.",
-        "vi": "làm mất chìa khóa",
-        "cloze": "I ____ my keys yesterday."
-      },
-      {
-        "word": "miss a flight",
-        "pos": "v",
-        "ipa": "/mɪs ə flaɪt/",
-        "def": "",
-        "example": "I’ve never missed a flight.",
-        "vi": "lỡ chuyến bay",
-        "cloze": "I’ve never ____ a flight."
-      },
-      {
-        "word": "keep in touch",
-        "pos": "v",
-        "ipa": "/kiːp ɪn tʌtʃ/",
-        "def": "",
-        "example": "We’ve kept in touch since school.",
-        "vi": "giữ liên lạc",
-        "cloze": "We’ve ____ in touch since school."
-      },
-      {
-        "word": "hear from someone",
-        "pos": "v",
-        "ipa": "/hɪr frəm ˈsʌmwʌn/",
-        "def": "",
-        "example": "Have you heard from the hotel yet?",
-        "vi": "nhận tin từ ai",
-        "cloze": "Have you ____ from the hotel yet?"
-      },
-      {
-        "word": "make a decision",
-        "pos": "v",
-        "ipa": "/meɪk ə dɪˈsɪʒən/",
-        "def": "",
-        "example": "We haven’t made a decision yet.",
-        "vi": "đưa ra quyết định",
-        "cloze": "We haven’t ____ a decision yet."
-      },
-      {
-        "word": "solve a problem",
-        "pos": "v",
-        "ipa": "/sɑːlv ə ˈprɑːbləm/",
-        "def": "",
-        "example": "She solved the problem yesterday.",
-        "vi": "giải quyết vấn đề",
-        "cloze": "She ____ the problem yesterday."
-      }
+      { "word": "holiday", "pos": "n", "ipa": "/ˈhɑːlədeɪ/", "def": "a period of time for rest and travel", "example": "I'm going on holiday next week.", "vi": "kỳ nghỉ, ngày lễ", "cloze": "I'm going on ___.", "collocations": ["go on holiday", "summer holiday", "holiday destination"], "register": "neutral" },
+      { "word": "trip", "pos": "n", "ipa": "/trɪp/", "def": "a journey to a place", "example": "We had a great trip.", "vi": "chuyến đi", "cloze": "We had a great ___.", "collocations": ["business trip", "day trip", "go on a trip"], "register": "neutral" },
+      { "word": "hotel", "pos": "n", "ipa": "/hoʊˈtel/", "def": "a building where travelers stay", "example": "We stayed at a hotel.", "vi": "khách sạn", "cloze": "We stayed at a ___.", "collocations": ["stay at a hotel", "hotel room", "book a hotel"], "register": "neutral" },
+      { "word": "airport", "pos": "n", "ipa": "/ˈeərpɔːrt/", "def": "a place where planes land and take off", "example": "We went to the airport.", "vi": "sân bay", "cloze": "We went to the ___.", "collocations": ["at the airport", "airport bus", "go to the airport"], "register": "neutral" },
+      { "word": "beach", "pos": "n", "ipa": "/biːtʃ/", "def": "a sandy area by the sea", "example": "We went to the beach.", "vi": "bãi biển", "cloze": "We went to the ___.", "collocations": ["go to the beach", "sandy beach", "beach holiday"], "register": "neutral" },
+      { "word": "mountain", "pos": "n", "ipa": "/ˈmaʊntən/", "def": "a very high hill", "example": "We climbed a mountain.", "vi": "núi", "cloze": "We climbed a ___.", "collocations": ["climb a mountain", "mountain view", "in the mountains"], "register": "neutral" },
+      { "word": "city", "pos": "n", "ipa": "/ˈsɪti/", "def": "a large town", "example": "We visited a new city.", "vi": "thành phố", "cloze": "We visited a new ___.", "collocations": ["in the city", "city center", "big city"], "register": "neutral" },
+      { "word": "country", "pos": "n", "ipa": "/ˈkʌntri/", "def": "a nation; an area of land", "example": "I want to visit another country.", "vi": "quốc gia, đất nước", "cloze": "I want to visit another ___.", "collocations": ["visit a country", "foreign country", "my country"], "register": "neutral" },
+      { "word": "passport", "pos": "n", "ipa": "/ˈpæspɔːrt/", "def": "an official document for travel", "example": "I need my passport.", "vi": "hộ chiếu", "cloze": "Don't forget your ___.", "collocations": ["passport control", "show your passport", "passport photo"], "register": "neutral" },
+      { "word": "ticket", "pos": "n", "ipa": "/ˈtɪkɪt/", "def": "a card or paper that allows you to travel", "example": "I bought a ticket.", "vi": "vé", "cloze": "I bought a ___.", "collocations": ["buy a ticket", "plane ticket", "train ticket"], "register": "neutral" },
+      { "word": "luggage", "pos": "n (u)", "ipa": "/ˈlʌɡɪdʒ/", "def": "bags and suitcases for travel", "example": "I packed my luggage.", "vi": "hành lý", "cloze": "I packed my ___.", "collocations": ["pack luggage", "carry luggage", "luggage allowance"], "register": "neutral" },
+      { "word": "souvenir", "pos": "n", "ipa": "/ˌsuːvəˈnɪr/", "def": "something you buy to remember a place", "example": "I bought a souvenir.", "vi": "quà lưu niệm", "cloze": "I bought a ___.", "collocations": ["buy a souvenir", "souvenir shop", "souvenir from"], "register": "neutral" }
     ],
-    "grammarChoose": [],
     "grammar": [
       {
-        "section": "GRAMMAR IN USE · REACTIVATE",
-        "sub": "Quá khứ đơn và hiện tại hoàn thành",
+        "section": "GRAMMAR IN USE · PAST SIMPLE (WAS/WERE)",
+        "sub": "Past tense of 'to be'",
+        "explanation": "Was = là/có (số ít: I/he/she/it). Were = là/có (số nhiều: you/we/they). Phủ định: wasn't / weren't. Câu hỏi: Was...? / Were...? Dùng để nói về quá khứ.",
+        "explanationVi": "Was = là/có (số ít: I/he/she/it). Were = là/có (số nhiều: you/we/they). Phủ định: wasn't / weren't. Câu hỏi: Was...? / Were...? Dùng để nói về quá khứ.",
         "lines": [
-          "Chọn góc nhìn trước, rồi chọn đầu câu và dạng động từ.",
-          "SO SÁNH",
-          "PAST SIMPLE",
-          "PRESENT PERFECT",
-          "Góc nhìn",
-          "-Một mốc / giai đoạn đã qua và chấm dứt. - Có thời gian cụ thể",
-          "-Kéo dài đến hiện tại; liên hệ hiện tại-Không có thời gian cụ thể",
-          "Hành động thường",
-          "S + V2 / V-ed",
-          "Did + S + V…?",
-          "S + have/has + V3",
-          "Have/Has + S + V3…?",
-          "BE",
-          "was / were",
-          "Was/Were + S…?",
-          "have / has been",
-          "Have/Has + S + been…?",
-          "Ví dụ",
-          "I lost my keys yesterday.",
-          "Kể việc hôm qua.",
-          "I’ve lost my keys.",
-          "Bây giờ tôi chưa có chìa khóa.",
-          "Tín hiệu thường gặp",
-          "yesterday / last week",
-          "in 2024 / two days ago",
-          "ever / never / already / yet",
-          "so far / since / for",
-          "Việc trong hiện tại hoàn thành có thể đã xong: I’ve paid. Kết quả còn quan trọng lúc nói."
+          "I was in Da Nang last week.",
+          "She was happy on holiday.",
+          "We were at the beach.",
+          "They were tired after the trip.",
+          "Was the hotel good? — Yes, it was.",
+          "Were you at home? — No, I wasn't."
+        ],
+        "commonMistakes": [
+          "Sai: 'I were in Da Nang.' → Đúng: 'I was in Da Nang.'",
+          "Sai: 'They was tired.' → Đúng: 'They were tired.'",
+          "Sai: 'I was not at home.' (đúng) vs 'I wasn't at home.' (cũng đúng)"
+        ],
+        "practice": [
+          "I ___ in Paris last summer.",
+          "They ___ at the beach.",
+          "___ the hotel good?",
+          "She ___ not happy."
         ]
       },
       {
-        "section": "GRAMMAR IN USE · QUICK COMPARISON",
-        "sub": "Quá khứ đơn và hiện tại hoàn thành",
+        "section": "GRAMMAR IN USE · PAST SIMPLE (REGULAR VERBS)",
+        "sub": "Regular verbs: verb + ed",
+        "explanation": "Quá khứ đơn với động từ có quy tắc: thêm 'ed' vào động từ (visit → visited, stay → stayed). Phủ định: didn't + nguyên mẫu. Câu hỏi: Did + chủ ngữ + nguyên mẫu?",
+        "explanationVi": "Quá khứ đơn với động từ có quy tắc: thêm 'ed' vào động từ (visit → visited, stay → stayed). Phủ định: didn't + nguyên mẫu. Câu hỏi: Did + chủ ngữ + nguyên mẫu?",
         "lines": [
-          "Một lần / giai đoạn đã qua, hay trải nghiệm và kết quả tính đến hiện tại?",
-          "ĐIỂM SO SÁNH",
-          "PAST SIMPLE · QUÁ KHỨ ĐƠN",
-          "PRESENT PERFECT · HIỆN TẠI HOÀN THÀNH",
-          "Góc nhìn",
-          "và cấu trúc",
-          "Mốc / giai đoạn đã kết thúc",
-          "S + V2 / V-ed; BE: was / were",
-          "Did + S + V…? / Was, Were + S…?",
-          "Tính đến hiện tại; còn liên hệ hiện tại",
-          "S + have / has + V3 (BE: been)",
-          "Have / Has + S + V3…?",
-          "Trải nghiệm",
-          "và kết quả",
-          "I booked the room yesterday.",
-          "Kể việc ở một mốc đã qua.",
-          "yesterday / last week / in 2024 / … ago",
-          "I’ve already booked the room.",
-          "Đã đặt rồi; kết quả quan trọng bây giờ.",
-          "already / yet / ever / never / before",
-          "Kéo dài",
-          "từ trước đây",
-          "I lived there for two years.",
-          "Khoảng sống ở đó đã kết thúc.",
-          "I’ve lived here since 2020.",
-          "Vẫn sống ở đây đến hiện tại.",
-          "since + mốc; for + khoảng thời gian",
-          "Vừa mới",
-          "và gần đây",
-          "I sent the message ten minutes ago.",
-          "Nêu thời điểm của việc đã xảy ra.",
-          "I’ve just sent the message.",
-          "JUST = vừa mới",
-          "RECENTLY / LATELY = gần đây",
-          "Số lần",
-          "I went there twice last year.",
-          "Đếm trong khoảng đã khép lại.",
-          "I’ve been there twice so far.",
-          "once / twice / three times / several times",
-          "so far / up to now / over the years",
-          "Dấu hiệu chỉ là gợi ý. RECENTLY dùng được với quá khứ đơn; LATELY không đồng nghĩa JUST.",
-          "Việc trong hiện tại hoàn thành có thể đã xong. Khác biệt chính là góc nhìn thời gian và liên hệ hiện tại."
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · TWO SYSTEMS",
-        "sub": "DID + V và HAVE / HAS + V3",
-        "lines": [
-          "Không gắn HAVE vào trước V2 một cách máy móc.",
-          "PAST SIMPLE",
-          "Did she buy it yesterday?",
-          "She bought it yesterday.",
-          "She didn’t buy it yesterday.",
-          "BE: Was she here yesterday?",
-          "She wasn’t here.",
-          "PRESENT PERFECT",
-          "Has she bought it yet?",
-          "She has bought it.",
-          "She hasn’t bought it yet.",
-          "BE: Has she been here before?",
-          "She’s never been here.",
-          "WH: When did she buy it? / What has she bought so far?"
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · FOUR USES",
-        "sub": "Bốn ý thường gặp với hiện tại hoàn thành",
-        "lines": [
-          "Nhìn ý nghĩa, không chỉ tìm từ khóa.",
-          "TRẢI NGHIỆM · tính đến bây giờ",
-          "I’ve never travelled alone.",
-          "SỐ LẦN · trong khoảng đến hiện tại",
-          "I’ve been there three times.",
-          "KẾT QUẢ / VỪA MỚI",
-          "I’ve just sent the message.",
-          "KÉO DÀI ĐẾN HIỆN TẠI",
-          "I’ve known her for five years.",
-          "VIỆC XONG, KẾT QUẢ BÂY GIỜ",
-          "I’ve paid. Here’s the receipt.",
-          "MỐC ĐÃ QUA · đổi sang quá khứ đơn",
-          "I paid at ten this morning.",
-          "I’ve paid ≠ đang trả tiền. “Chưa xong” không phải điều kiện của hiện tại hoàn thành."
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · TIME SIGNALS",
-        "sub": "Mốc đã khép lại hay tính đến hiện tại?",
-        "lines": [
-          "Đọc cả cụm thời gian rồi nói một câu.",
-          "YESTERDAY / LAST WEEK / … AGO",
-          "I bought it two days ago.",
-          "EVER / NEVER · trải nghiệm đến nay",
-          "Have you ever changed a booking?",
-          "SO FAR / UP TO NOW · đến lúc nói",
-          "We’ve visited three places so far.",
-          "TODAY / THIS WEEK · tùy góc nhìn",
-          "I’ve sent three messages today.",
-          "RECENTLY · không độc quyền một thì",
-          "I bought it recently. / I’ve bought one recently.",
-          "Không dùng I have bought it yesterday trong mẫu chuẩn đang luyện."
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · TWO SYSTEMS",
-        "sub": "EVER / NEVER: mở một trải nghiệm",
-        "lines": [
-          "Khi chuyển sang hỏi lần cụ thể, đổi sang DID hoặc WAS / WERE.",
-          "TRẢI NGHIỆM",
-          "Have you ever travelled alone?",
-          "Yes, I have.",
-          "I’ve travelled alone twice.",
-          "No, I haven’t.",
-          "I’ve never travelled alone.",
-          "CHI TIẾT LẦN CỤ THỂ",
-          "When did you travel alone?",
-          "I went to Hue last summer.",
-          "I stayed for two nights.",
-          "Who did you meet?",
-          "Was the trip enjoyable?",
-          "NEVER đã mang nghĩa phủ định: I’ve never… Không dùng I haven’t never…"
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · TWO SYSTEMS",
-        "sub": "SỐ LẦN: khoảng đếm quyết định thì",
-        "lines": [
-          "ONCE / TWICE / THREE TIMES không tự quyết định hiện tại hoàn thành.",
-          "TÍNH ĐẾN BÂY GIỜ",
-          "I’ve been there three times.",
-          "How many times have you been there?",
-          "I’ve used this app twice so far.",
-          "Đếm trải nghiệm trong khoảng",
-          "chưa khép lại đến hiện tại.",
-          "KHOẢNG ĐÃ KẾT THÚC",
-          "I went there three times last year.",
-          "How many times did you go last year?",
-          "I used the app twice yesterday.",
-          "Có thể cùng là ba lần,",
-          "nhưng mốc đếm đã khép lại.",
-          "Lần gần nhất: When did you last go there? / When was the last time you went there?"
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · TWO SYSTEMS",
-        "sub": "JUST và ALREADY / YET",
-        "lines": [
-          "Vừa mới, đã rồi, hay vẫn chưa? Nói rõ điều người nghe cần biết.",
-          "JUST / ALREADY",
-          "I’ve just sent the message.",
-          "JUST: vừa mới gửi.",
-          "I’ve already sent the message.",
-          "ALREADY: đã gửi rồi.",
-          "HAVE/HAS + JUST/ALREADY + V3",
-          "YET",
-          "Have you sent the message yet?",
-          "Yes, I have. / Not yet.",
-          "I haven’t sent it yet.",
-          "YET thường ở cuối câu hỏi",
-          "hoặc câu phủ định.",
-          "Hỏi chi tiết: When did you send it? / Who did you send it to?"
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · TWO SYSTEMS",
-        "sub": "SINCE / FOR: mốc hay độ dài?",
-        "lines": [
-          "Nói một trạng thái bắt đầu trước đây và còn đúng lúc nói.",
-          "SINCE + MỐC",
-          "I’ve lived here since 2020.",
-          "since Monday / since last summer",
-          "since I moved here",
-          "How long have you lived here?",
-          "Since 2020.",
-          "FOR + KHOẢNG",
-          "I’ve lived here for six years.",
-          "for two weeks / for a long time",
-          "I’ve known her for five years.",
-          "How long have you known her?",
-          "For five years.",
-          "Khoảng đã kết thúc: I lived there for two years, then I moved. FOR không tự buộc dùng HAVE."
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · RECENT TIME",
-        "sub": "RECENTLY / LATELY: nói chuyện dạo gần đây",
-        "lines": [
-          "Trả lời thật rồi chuyển sang một lần cụ thể để hỏi chi tiết.",
-          "Have you bought anything useful recently?",
-          "I’ve bought a small camera.",
-          "Have you tried anything new lately?",
-          "I’ve tried a pottery workshop.",
-          "Have you heard from an old friend lately?",
-          "No, I haven’t heard from her lately.",
-          "Have you had any problems recently?",
-          "I’ve had a problem with my booking.",
-          "RECENTLY dùng được với quá khứ đơn. LATELY thường nhìn khoảng gần đây đến hiện tại."
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · REACTIVATE",
-        "sub": "V1 · V2 · V3: nhìn sự thay đổi",
-        "lines": [
-          "Sau DID: V1. Sau HAVE / HAS: V3. Che cột cuối để gọi lại.",
-          "V1",
-          "V2",
-          "V3",
-          "go / be",
-          "went / was, were",
-          "gone / been",
-          "buy / take",
-          "bought / took",
-          "bought / taken",
-          "see / do",
-          "saw / did",
-          "seen / done",
-          "write / send",
-          "wrote / sent",
-          "written / sent",
-          "make / lose",
-          "made / lost",
-          "made / lost",
-          "try / book",
-          "tried / booked",
-          "tried / booked",
-          "Thêm: get → got → got/gotten; know → knew → known; hear → heard → heard."
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · TWO SYSTEMS",
-        "sub": "WAS / WERE · BEEN · GONE",
-        "lines": [
-          "Phân biệt trạng thái quá khứ, trải nghiệm và người hiện đang vắng mặt.",
-          "WAS / WERE và BEEN",
-          "Were you in Hue last weekend?",
-          "Have you been to Hue before?",
-          "I’ve been there twice.",
-          "WAS/WERE: BE quá khứ.",
-          "BEEN: sau HAVE/HAS.",
-          "BEEN TO và GONE TO",
-          "She’s been to the bank.",
-          "Đã đến và đã về.",
-          "She’s gone to the bank.",
-          "Đã đi đến ngân hàng,",
-          "chưa về lúc nói.",
-          "I was interested… / I’ve been interested in it for years. Trạng thái vẫn có thể dùng HAVE BEEN."
+          "I visited my friend.",
+          "She stayed at a hotel.",
+          "We walked to the beach.",
+          "They traveled to Japan.",
+          "Did you enjoy the trip?",
+          "I didn't go to the party."
+        ],
+        "commonMistakes": [
+          "Sai: 'I visit my friend yesterday.' → Đúng: 'I visited my friend yesterday.'",
+          "Sai: 'She didn't stayed.' → Đúng: 'She didn't stay.'",
+          "Sai: 'Did you went?' → Đúng: 'Did you go?'"
+        ],
+        "practice": [
+          "I ___ (visit) Paris last year.",
+          "She ___ (stay) at a hotel.",
+          "Did you ___ (enjoy) the trip?",
+          "We didn't ___ (go) to the beach."
         ]
       }
     ],
-    "flow": [
-      {
-        "group": "Overview",
-        "slides": [
-          {
-            "title": "MOVE.",
-            "lines": [
-              "MOVE.",
-              "ACTIVATE 1",
-              "L10 · THEN & UP TO NOW",
-              "Kể trải nghiệm. Hỏi chi tiết.",
-              "Kết nối quá khứ với hiện tại.",
-              "PAST SIMPLE",
-              "and",
-              "PRESENT PERFECT",
-              "ASK → TELL → CONNECT",
-              "EVER · YET · JUST · SINCE · FOR"
-            ]
-          },
-          {
-            "title": "RECONNECT · L09",
-            "lines": [
-              "RECONNECT · L09",
-              "Gọi lại V2 trước khi mở V3",
-              "Nói câu hỏi, rồi trả lời ngắn. Chưa xem đáp án trong Notes.",
-              "___ you buy it yesterday?",
-              "Hỏi hành động ở mốc đã qua.",
-              "___ she happy with the room?",
-              "Hỏi trạng thái trong quá khứ.",
-              "go → ___ / buy → ___",
-              "Gọi lại hai dạng quá khứ.",
-              "I didn’t ___ for it.",
-              "PAY hay PAID?",
-              "They ___ at the station last night.",
-              "WAS hay WERE?",
-              "Tell me one thing you did yesterday.",
-              "Một việc thật + một chi tiết.",
-              "Hôm qua là một mốc đã kết thúc. Bài này thêm góc nhìn tính đến hiện tại."
-            ]
-          }
-        ]
-      },
-      {
-        "group": "Before you listen",
-        "slides": [
-          {
-            "title": "LISTEN & DISCOVER · BEFORE LISTENING",
-            "lines": [
-              "LISTEN & DISCOVER · BEFORE LISTENING",
-              "TRAVEL · A booking mistake · Before you listen",
-              "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
-              "TALK FIRST",
-              "Have you ever booked a room online?",
-              "What can go wrong with a booking?",
-              "Who do you ask for help?",
-              "LISTENING MISSION",
-              "WHAT has Mai just done wrong?",
-              "WHAT did Ben do last month?",
-              "WHAT has Mai not done yet?",
-              "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
-            ]
-          },
-          {
-            "title": "LISTEN & DISCOVER · BEFORE LISTENING",
-            "lines": [
-              "LISTEN & DISCOVER · BEFORE LISTENING",
-              "WORK LIFE · An updated price list · Before you listen",
-              "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
-              "TALK FIRST",
-              "Do you often wait for a reply?",
-              "What do you check before sending a file?",
-              "Who helps when a delivery is late?",
-              "LISTENING MISSION",
-              "WHAT has Adam already done?",
-              "WHEN did the supplier send a message?",
-              "WHAT hasn’t Linh done yet?",
-              "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
-            ]
-          },
-          {
-            "title": "LISTEN & DISCOVER · BEFORE LISTENING",
-            "lines": [
-              "LISTEN & DISCOVER · BEFORE LISTENING",
-              "COMMUNITY · Trying pottery again · Before you listen",
-              "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
-              "TALK FIRST",
-              "Have you ever joined a creative workshop?",
-              "What did you make or do?",
-              "What would you like to try next?",
-              "LISTENING MISSION",
-              "HOW MANY times has the guest tried pottery?",
-              "WHEN did the guest first try it?",
-              "HOW LONG has the host taught here?",
-              "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
-            ]
-          }
-        ]
-      },
-      {
-        "group": "Pronunciation",
-        "slides": [
-          {
-            "title": "PRONUNCIATION · CONTRACTIONS",
-            "lines": [
-              "PRONUNCIATION · CONTRACTIONS",
-              "I’VE / SHE’S: nghe cả cụm sau chủ ngữ",
-              "Đọc đầy đủ rồi đọc dạng rút gọn. Không chèn nguyên âm sau /v/ hoặc /z/.",
-              "I have → I’ve /aɪv/",
-              "I’ve already booked it.",
-              "We have → We’ve /wiːv/",
-              "We’ve been there twice.",
-              "She has → She’s /ʃiːz/",
-              "She’s just sent the message.",
-              "She is → She’s /ʃiːz/",
-              "She’s ready for the trip.",
-              "SHE’S có thể là SHE IS hoặc SHE HAS. Nhìn phần theo sau để hiểu."
-            ]
-          },
-          {
-            "title": "PRONUNCIATION · CONNECTED SPEECH",
-            "lines": [
-              "PRONUNCIATION · CONNECTED SPEECH",
-              "HAVE YOU EVER · HAS SHE … YET",
-              "Nói liền cụm câu hỏi, nhấn trải nghiệm hoặc kết quả cần kiểm tra.",
-              "Have_you_ever…?",
-              "/həv jə ˈevər/",
-              "Have_you been there before?",
-              "Đọc YOU nhẹ, giữ BEEN rõ.",
-              "Has_she sent_it_yet?",
-              "Nối SENT_IT, nhấn YET khi cần.",
-              "I’ve just_arrived.",
-              "Giữ JUST + ARRIVED trong một nhịp.",
-              "Hỏi tiếp: WHEN did you go? / WHAT happened? Nhấn thông tin bạn thực sự muốn biết."
-            ]
-          }
-        ]
-      },
-      {
-        "group": "Activate",
-        "slides": [
-          {
-            "title": "ACTIVATE · TEMPLATE REFLEX",
-            "lines": [
-              "ACTIVATE · TEMPLATE REFLEX",
-              "Chỉ bật khung câu trước",
-              "Không cần điền động từ ở lượt đầu. Chọn DID hay HAVE / HAS.",
-              "Bạn đã từng … chưa?",
-              "Trải nghiệm tính đến nay.",
-              "Cô ấy chưa …",
-              "Việc mong đợi, tính đến hiện tại.",
-              "Họ vừa mới …",
-              "Một kết quả rất gần hiện tại.",
-              "Bạn đã … khi nào?",
-              "Hỏi thời điểm của lần đã xảy ra.",
-              "Anh ấy đã … được bao lâu rồi?",
-              "Trạng thái còn đúng đến hiện tại.",
-              "Bạn của bạn đã … mấy lần?",
-              "Đếm trải nghiệm tính đến nay.",
-              "Vòng sau: đổi chủ ngữ thành HE / SHE / THEY / YOUR FRIEND."
-            ]
-          },
-          {
-            "title": "ACTIVATE · TEMPLATE KEY",
-            "lines": [
-              "ACTIVATE · TEMPLATE KEY",
-              "Đáp án khung câu",
-              "V = nguyên mẫu. V3 = quá khứ phân từ, gồm cả BEEN khi cần.",
-              "Have you ever + V3…?",
-              "Yes, I have. / No, I haven’t.",
-              "She hasn’t + V3 + … yet.",
-              "Không dùng SHE DOESN’T HAVE + V3.",
-              "They’ve just + V3 + …",
-              "JUST thường giữa HAVE và V3.",
-              "When did you + V…?",
-              "Về lần cụ thể đã xảy ra.",
-              "How long has he + V3…?",
-              "Hoặc HAS HE BEEN + trạng thái…?",
-              "How many times has your friend + V3…?",
-              "Hỏi xong, hỏi lần gần nhất bằng DID.",
-              "Không dịch mọi chữ “đã” thành HAVE. Nhìn ý và mốc thời gian trước."
-            ]
-          },
-          {
-            "title": "ACTIVATE · VIETNAMESE TO ENGLISH",
-            "lines": [
-              "ACTIVATE · VIETNAMESE TO ENGLISH",
-              "Cùng một chuyện, hai góc nhìn",
-              "Nói trước khi mở slide mẫu. Giữ mốc thời gian và giới từ.",
-              "Tôi chưa từng đi du lịch một mình.",
-              "Trải nghiệm đến nay.",
-              "Tôi đi Huế một mình năm ngoái.",
-              "Một lần ở năm đã qua.",
-              "Cô ấy vừa gửi địa chỉ cho tôi.",
-              "Kết quả vừa mới.",
-              "Họ chưa đưa ra quyết định.",
-              "Tính đến giờ.",
-              "Chúng tôi dùng dịch vụ này ba lần rồi.",
-              "Đếm đến hiện tại.",
-              "Tôi quen anh ấy từ năm 2020.",
-              "Vẫn còn quen biết.",
-              "Nói thêm một câu hoặc đặt một câu hỏi tiếp sau mỗi ý."
-            ]
-          },
-          {
-            "title": "ACTIVATE · MODEL & NOTICE",
-            "lines": [
-              "ACTIVATE · MODEL & NOTICE",
-              "Mẫu để đối chiếu sau khi nói",
-              "Đổi người, địa điểm hoặc số lần để tạo câu mới.",
-              "I’ve never travelled alone.",
-              "Have you ever travelled alone?",
-              "I went to Hue alone last year.",
-              "Who did you meet there?",
-              "She’s just sent me the address.",
-              "When did she send it?",
-              "They haven’t made a decision yet.",
-              "What are their options?",
-              "We’ve used this service three times.",
-              "When did you last use it?",
-              "I’ve known him since 2020.",
-              "How did you meet?",
-              "HAVE KNOWN + khoảng đến hiện tại. DID MEET + lần bắt đầu cụ thể."
-            ]
-          },
-          {
-            "title": "ACTIVATE · PERSONAL EXPERIENCE",
-            "lines": [
-              "ACTIVATE · PERSONAL EXPERIENCE",
-              "Trải nghiệm của bạn: hỏi rồi đào sâu",
-              "Nếu chưa từng: nói NO rồi chuyển sang trải nghiệm khác, không cần bịa.",
-              "Have you ever travelled alone?",
-              "When did you go? Who did you meet?",
-              "Have you ever lost something important?",
-              "What did you lose? Did you find it?",
-              "Have you ever asked a stranger for help?",
-              "What happened? Was the person helpful?",
-              "Have you ever changed a booking?",
-              "Why did you change it? Was it easy?",
-              "Have you ever tried an unusual activity?",
-              "Where did you try it? How did you feel?",
-              "Trả lời mở đầu bằng HAVE. Kể lần cụ thể bằng quá khứ đơn."
-            ]
-          },
-          {
-            "title": "ACTIVATE · TIMES & LAST TIME",
-            "lines": [
-              "ACTIVATE · TIMES & LAST TIME",
-              "Đếm trải nghiệm, kể lần gần nhất",
-              "Nói số thật hoặc “never”. Partner không hỏi theo thứ tự có sẵn.",
-              "How many times have you visited Hue?",
-              "When did you last go?",
-              "How many times have you moved home?",
-              "Why did you leave your last place?",
-              "How many times have you flown this year?",
-              "Where did you go on your last flight?",
-              "How many times have you used a delivery app this week?",
-              "What did you order last time?",
-              "THIS YEAR / THIS WEEK: ở đây tính đến hiện tại. LAST YEAR / LAST WEEK: đã khép lại."
-            ]
-          },
-          {
-            "title": "ACTIVATE · RECENT LIFE",
-            "lines": [
-              "ACTIVATE · RECENT LIFE",
-              "Dạo gần đây có gì mới?",
-              "Mỗi câu trả lời có kết quả hoặc trải nghiệm, rồi kể một chi tiết quá khứ.",
-              "Have you bought anything useful recently?",
-              "What did you buy? Why did you choose it?",
-              "Have you tried anything new lately?",
-              "When did you try it? Did you enjoy it?",
-              "Have you heard from an old friend lately?",
-              "What did they say?",
-              "Have you had any problems recently?",
-              "What happened? How did you deal with it?",
-              "Có thể trả lời: Not really. / No, I haven’t. Sau đó hỏi lại partner."
-            ]
-          },
-          {
-            "title": "ACTIVATE · HOW LONG",
-            "lines": [
-              "ACTIVATE · HOW LONG",
-              "Từ lúc bắt đầu đến bây giờ",
-              "Trả lời SINCE hoặc FOR, rồi hỏi sự kiện bắt đầu bằng quá khứ đơn.",
-              "How long have you lived in your current city?",
-              "When did you move here?",
-              "How long have you had your current phone?",
-              "When did you buy it?",
-              "How long have you known your closest friend?",
-              "Where did you meet?",
-              "How long have you been interested in your hobby?",
-              "What made you try it?",
-              "I’ve had this phone FOR… / SINCE… Không nói I have this phone since…"
-            ]
-          },
-          {
-            "title": "ACTIVATE · REPAIR & EXPLAIN",
-            "lines": [
-              "ACTIVATE · REPAIR & EXPLAIN",
-              "Sửa hệ thống, không chỉ sửa một từ",
-              "Nói lại cả câu. Sau đó giải thích vì sao chọn đầu câu hoặc dạng từ đó.",
-              "I have bought it yesterday.",
-              "Mốc quá khứ đã kết thúc.",
-              "Has she went there before?",
-              "Sau HAS dùng V3.",
-              "Did you ever been there?",
-              "Trải nghiệm đến hiện tại: HAVE + BEEN.",
-              "I’ve known her since five years.",
-              "Mốc hay độ dài?",
-              "She haven’t sent it yet.",
-              "HAVE hay HAS theo chủ ngữ?",
-              "I’ve been there twice last year.",
-              "Khoảng đếm đã khép lại.",
-              "Đáp án trong Notes. Cho một ví dụ khác sau khi sửa."
-            ]
-          }
-        ]
-      },
-      {
-        "group": "Real talk",
-        "slides": [
-          {
-            "title": "REAL TALK · OPEN CONVERSATION",
-            "lines": [
-              "REAL TALK · OPEN CONVERSATION",
-              "Chọn chuyện của bạn, nói thành hội thoại",
-              "Mỗi chủ đề: hỏi trải nghiệm / hiện tại, rồi hỏi ít nhất hai chi tiết quá khứ.",
-              "A PURCHASE",
-              "Something you’ve bought recently.",
-              "A SMALL PROBLEM",
-              "Something you’ve lost or needed help with.",
-              "A NEW EXPERIENCE",
-              "An activity you’ve tried for the first time.",
-              "A PLACE",
-              "A place you’ve visited more than once.",
-              "A PERSON",
-              "Someone you’ve known for a long time.",
-              "A RECENT TASK",
-              "Something you’ve already done or haven’t done yet.",
-              "Không cần nhét đủ từ signal. Chọn thì để người nghe hiểu đúng chuyện."
-            ]
-          },
-          {
-            "title": "REAL TALK · FOLLOW-UP ROUTE",
-            "lines": [
-              "REAL TALK · FOLLOW-UP ROUTE",
-              "Giữ câu chuyện đi tiếp",
-              "Chọn câu hỏi theo điều người kia vừa nói, không đọc như bảng kiểm.",
-              "I’ve never tried it.",
-              "What would you like to try?",
-              "I’ve done it twice.",
-              "When did you last do it?",
-              "I’ve just bought one.",
-              "Where did you buy it?",
-              "I’ve known her for years.",
-              "How did you meet?",
-              "I haven’t finished it yet.",
-              "What do you still need to do?",
-              "Hỏi tiếp một câu chưa có trên slide, dựa vào câu trả lời thật."
-            ]
-          }
-        ]
-      },
-      {
-        "group": "Reflect",
-        "slides": [
-          {
-            "title": "REFLECT & RETRY · SELF CHECK",
-            "lines": [
-              "REFLECT & RETRY · SELF CHECK",
-              "Bạn đang nhìn thời gian theo cách nào?",
-              "Chọn một câu vừa nói, kiểm tra rồi nói lại.",
-              "MỐC ĐÃ KẾT THÚC?",
-              "YESTERDAY / LAST… / …AGO → kể bằng V2 / DID.",
-              "TÍNH ĐẾN HIỆN TẠI?",
-              "Trải nghiệm / số lần / kết quả / kéo dài.",
-              "ĐỘNG TỪ ĐÚNG DẠNG?",
-              "DID + V; HAVE / HAS + V3.",
-              "TRẠNG THÁI CÓ BEEN?",
-              "Have you been…? / I’ve been…",
-              "SINCE / FOR ĐÚNG Ý?",
-              "Mốc bắt đầu / độ dài.",
-              "ĐÃ HỎI TIẾP CHƯA?",
-              "Have you ever…? rồi When did you…?",
-              "Lượt 2: giữ đúng ý trước, rồi mới tăng tốc."
-            ]
-          }
-        ]
-      },
-      {
-        "group": "Mission",
-        "slides": [
-          {
-            "title": "DAILY MISSION · THREE ROUNDS",
-            "lines": [
-              "DAILY MISSION · THREE ROUNDS",
-              "Mỗi ngày 5 phút, ghi âm 60 giây",
-              "Nói trước, nghe lại, sửa một lỗi rồi ghi lần hai.",
-              "DAY 1 · EXPERIENCE",
-              "Một việc từng / chưa từng làm.",
-              "DAY 1 · DETAILS",
-              "Kể một lần: WHEN / WHERE / WHO.",
-              "DAY 2 · RECENT LIFE",
-              "JUST / ALREADY / YET: 3 việc thật.",
-              "DAY 2 · HOW LONG",
-              "Một người / nơi / món đồ: SINCE / FOR.",
-              "DAY 3 · COUNT & CONNECT",
-              "Số lần đến nay + lần gần nhất.",
-              "DAY 3 · PARTNER",
-              "Hỏi tự do 5 câu, mỗi câu hỏi tiếp 1–2 lần.",
-              "Không cần tất cả câu đều hiện tại hoàn thành. Đổi sang quá khứ đơn khi kể một lần cụ thể."
-            ]
-          },
-          {
-            "title": "DAILY MISSION · READ & RETELL",
-            "lines": [
-              "DAILY MISSION · READ & RETELL",
-              "A new interest, from then to now",
-              "Đọc theo cụm, sau đó đổi trải nghiệm và kể chuyện của bạn.",
-              "I’ve been interested in photography since I bought my first camera.",
-              "I bought it last year, after a friend showed me some of her pictures.",
-              "Since then, I’ve joined two photo walks, but I’ve never taken a night photography class.",
-              "I went on my last photo walk in August. We explored a local market and talked to the sellers.",
-              "Recently, I’ve tried taking portraits, and I’ve just shared my first set of photos with my friends.",
-              "I haven’t received much feedback yet, but I’ve already noticed a few things I want to improve.",
-              "How about you? Have you tried anything new lately? When did you last do it?",
-              "Lần 2: một trải nghiệm đến nay + một lần cụ thể + một điều mới gần đây."
-            ]
-          }
-        ]
-      }
+    "grammarChoose": [
+      { "prompt": "I ___ in Paris last summer.", "vi": "Tôi ở Paris mùa hè năm ngoái." },
+      { "prompt": "They ___ at the beach.", "vi": "Họ ở bãi biển." },
+      { "prompt": "I ___ (visit) London.", "vi": "Tôi đã đến thăm London." },
+      { "prompt": "She ___ (stay) at a hotel.", "vi": "Cô ấy đã ở khách sạn." },
+      { "prompt": "Did you ___ (enjoy) the trip?", "vi": "Bạn có thích chuyến đi không?" },
+      { "prompt": "We didn't ___ (go) to the party.", "vi": "Chúng tôi không đi bữa tiệc." }
     ],
     "dialogue": [
-      {
-        "who": "Mai",
-        "line": "Have you ever changed a hotel booking online? I’ve just booked a room for Saturday, but I chose the wrong date."
-      },
-      {
-        "who": "Ben",
-        "line": "Yes, I have. I changed one last month. Have you contacted the hotel yet?"
-      },
-      {
-        "who": "Mai",
-        "line": "Not yet. I’ve already checked the website, but I haven’t found the right page. What did you do last time?"
-      },
-      {
-        "who": "Ben",
-        "line": "I called the hotel and explained the problem. The receptionist changed the date in a few minutes."
-      },
-      {
-        "who": "Mai",
-        "line": "Did you have to pay extra? I’ve never changed a booking before, so I’m not sure how it works."
-      }
+      { "who": "Mai", "line": "Did you go on holiday this year?" },
+      { "who": "Nam", "line": "Yes, I went to Da Nang." },
+      { "who": "Mai", "line": "How was it?" },
+      { "who": "Nam", "line": "It was great. The weather was sunny and warm." },
+      { "who": "Mai", "line": "Where did you stay?" },
+      { "who": "Nam", "line": "We stayed at a hotel near the beach." },
+      { "who": "Mai", "line": "Did you go to the beach every day?" },
+      { "who": "Nam", "line": "Yes, we did. We swam and walked on the sand." },
+      { "who": "Mai", "line": "Did you buy any souvenirs?" },
+      { "who": "Nam", "line": "Yes, I bought a small painting for my mom." },
+      { "who": "Mai", "line": "That sounds wonderful. I want to go there too." },
+      { "who": "Nam", "line": "You should! It's a beautiful city." }
+    ],
+    "dialogueContext": "Mai and Nam talk about a holiday in Da Nang.",
+    "dialogueContextVi": "Mai và Nam nói về kỳ nghỉ ở Đà Nẵng.",
+    "keyPhrases": [
+      "Did you go on holiday?",
+      "How was it?",
+      "Where did you stay?",
+      "It was great/wonderful.",
+      "You should go there!"
     ],
     "listenCheck": [
-      {
-        "q": "Mai: Have you ever changed a booking?",
-        "a": "Yes, I have."
-      },
-      {
-        "q": "Ben: Have you contacted the hotel?",
-        "a": "Not yet."
-      },
-      {
-        "q": "Mai: Is the room available?",
-        "a": "Let me check."
-      },
-      {
-        "q": "Ben: Can I get a refund?",
-        "a": "Yes, if you cancel early."
-      },
-      {
-        "q": "Mai: What’s the check-in time?",
-        "a": "From 2 PM."
-      },
-      {
-        "q": "Ben: Is breakfast included?",
-        "a": "Yes, it is."
-      },
-      {
-        "q": "Mai: Can I extend my stay?",
-        "a": "Yes, if rooms are free."
-      },
-      {
-        "q": "Ben: Do you need a late checkout?",
-        "a": "Yes, please."
-      }
+      { "q": "Where did Nam go on holiday?", "a": "Da Nang" },
+      { "q": "How was the weather?", "a": "Sunny and warm" },
+      { "q": "Where did Nam stay?", "a": "At a hotel near the beach" },
+      { "q": "What did Nam do at the beach?", "a": "Swam and walked on the sand" },
+      { "q": "What did Nam buy?", "a": "A small painting for his mom" }
+    ],
+    "listenGapFill": [
+      { "line": "I went to ___.", "answer": "Da Nang" },
+      { "line": "The weather was ___ and warm.", "answer": "sunny" },
+      { "line": "We stayed at a hotel near the ___.", "answer": "beach" },
+      { "line": "We ___ and walked on the sand.", "answer": "swam" },
+      { "line": "I bought a small ___ for my mom.", "answer": "painting" }
     ],
     "speakPrompts": [
-      "I'd like to change my booking, please.",
-      "What's the check-in time?",
-      "Is breakfast included in the price?",
-      "Can I get a late checkout?",
-      "I'd like to extend my stay by one night."
-    ]
-  },
-  "slides": 56
+      "Did you go on holiday this year?",
+      "Yes, I went to Da Nang.",
+      "It was great. The weather was sunny.",
+      "We stayed at a hotel near the beach.",
+      "You should go there!"
+    ],
+    "shadowing": [
+      "Did you go on holiday this year?",
+      "It was great. The weather was sunny.",
+      "You should go there!"
+    ],
+    "rolePlay": {
+      "context": "Talk about a holiday you went on.",
+      "contextVi": "Nói về một kỳ nghỉ bạn đã đi.",
+      "roles": ["You (talk about your holiday)", "Partner (ask questions)"],
+      "scenario": "Use: Did you go on holiday? / Where did you go? / How was it? / Where did you stay? / What did you do?"
+    },
+    "reading": {
+      "title": "My Trip to Hoi An",
+      "titleVi": "Chuyến đi Hội An của tôi",
+      "text": "Last summer, I went to Hoi An with my family. We traveled by car. The trip took three hours. We stayed at a small hotel in the old town. The hotel was clean and comfortable. On the first day, we walked around the old town. We saw many old houses and bridges. On the second day, we went to the beach. The beach was beautiful. We swam and played in the sand. In the evening, we ate delicious food at a local restaurant. I bought a lantern as a souvenir. I really enjoyed the trip. I want to go back next year.",
+      "glossary": {
+        "traveled": "đã đi",
+        "old town": "phố cổ",
+        "lantern": "đèn lồng",
+        "souvenir": "quà lưu niệm",
+        "enjoyed": "đã thích, đã tận hưởng"
+      },
+      "questions": [
+        { "q": "How did they travel to Hoi An?", "options": ["By plane", "By train", "By car", "By bus"], "answer": "By car" },
+        { "q": "Where did they stay?", "options": ["At a big hotel", "At a small hotel in the old town", "At a friend's house", "At a resort"], "answer": "At a small hotel in the old town" },
+        { "q": "What did they do on the first day?", "options": ["Went to the beach", "Walked around the old town", "Ate at a restaurant", "Bought souvenirs"], "answer": "Walked around the old town" },
+        { "q": "What did the person buy as a souvenir?", "options": ["A painting", "A lantern", "A T-shirt", "A hat"], "answer": "A lantern" }
+      ]
+    },
+    "writing": {
+      "prompt": "Write 4 sentences about a holiday or trip you went on.",
+      "promptVi": "Viết 4 câu về một kỳ nghỉ hoặc chuyến đi bạn đã đi.",
+      "template": "Last year, I went to ___. I traveled by ___. I stayed at ___. I enjoyed it because ___.",
+      "mustUse": ["went", "traveled", "stayed", "enjoyed"],
+      "checklist": [
+        "Did you mention where you went?",
+        "Did you mention how you traveled?",
+        "Did you mention where you stayed?",
+        "Did you use past tense correctly?"
+      ]
+    },
+    "review": {
+      "summary": "In this unit, you learned to talk about travel and holidays using past simple. Key phrases: 'Did you go on holiday?', 'Where did you go?', 'How was it?', 'Where did you stay?', 'It was great/wonderful.'",
+      "summaryVi": "Trong unit này, bạn đã học cách nói về du lịch và kỳ nghỉ dùng thì quá khứ đơn. Cụm từ quan trọng: 'Did you go on holiday?', 'Where did you go?', 'How was it?', 'Where did you stay?', 'It was great/wonderful.'",
+      "quickQuiz": [
+        { "q": "Complete: 'I ___ in Paris last summer.'", "options": ["am", "was", "were", "is"], "answer": "was" },
+        { "q": "Complete: 'I ___ (visit) London.'", "options": ["visit", "visited", "visiting", "visits"], "answer": "visited" },
+        { "q": "Complete: 'Did you ___ (enjoy) the trip?'", "options": ["enjoyed", "enjoy", "enjoying", "enjoys"], "answer": "enjoy" },
+        { "q": "How do you say 'hộ chiếu' in English?", "options": ["ticket", "passport", "visa", "luggage"], "answer": "passport" },
+        { "q": "How do you ask about someone's holiday?", "options": ["Where do you go?", "Did you go on holiday?", "Where will you go?", "Are you going?"], "answer": "Did you go on holiday?" }
+      ]
+    },
+    "flow": []
+  }
 }

@@ -34,6 +34,15 @@ export type LessonFile = {
     listenCheck: Check[]
     flow: FlowGroup[]
     speakPrompts?: string[]
+    reading?: { title: string; titleVi?: string; text: string; glossary: Record<string, string>; questions: { q: string; options: string[]; answer: string }[] }
+    writing?: { prompt: string; promptVi?: string; template: string; mustUse: string[]; checklist: string[] }
+    review?: { summary: string; summaryVi?: string; quickQuiz: { q: string; options: string[]; answer: string }[] }
+    listenGapFill?: { line: string; answer: string }[]
+    shadowing?: string[]
+    rolePlay?: { context: string; contextVi?: string; roles: string[]; scenario: string }
+    dialogueContext?: string
+    dialogueContextVi?: string
+    keyPhrases?: string[]
   }
 }
 

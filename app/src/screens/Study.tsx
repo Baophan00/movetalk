@@ -71,21 +71,39 @@ function a1Source(lesson: LessonFile): Source {
   const vocabGlossary: Record<string, string> = {}
   for (const v of lesson.parts.vocab) if (v.word && v.vi) vocabGlossary[v.word.toLowerCase()] = v.vi
 
-  // A1 comprehension: the recap questions the lesson ships, with options borrowed from
-  // other lessons so each one has exactly one right answer without a teacher.
-  const others = A1.filter((l) => l.n !== lesson.n).flatMap((l) => l.parts.listenCheck.map((c) => c.a)).filter(Boolean)
-  const questions: Question[] = lesson.parts.listenCheck.slice(0, 3).map((c, i) => ({
-    q: c.q,
-    options: shuffle([c.a, ...others.slice(i * 3, i * 3 + 3)]),
-    answer: c.a,
-  }))
+  const readingData = (lesson.parts as any).reading
+  let readingTitle: string
+  let readingText: string[]
+  let readingGlossary: Record<string, string>
+  let readingQuestions: Question[]
+
+  if (readingData && readingData.text) {
+    readingTitle = readingData.title || titleOf(lesson)
+    readingText = [readingData.text]
+    readingGlossary = { ...vocabGlossary, ...(readingData.glossary || {}) }
+    readingQuestions = (readingData.questions || []).map((q: any) => ({
+      q: q.q,
+      options: q.options,
+      answer: q.answer,
+    }))
+  } else {
+    const others = A1.filter((l) => l.n !== lesson.n).flatMap((l) => l.parts.listenCheck.map((c) => c.a)).filter(Boolean)
+    readingQuestions = lesson.parts.listenCheck.slice(0, 3).map((c, i) => ({
+      q: c.q,
+      options: shuffle([c.a, ...others.slice(i * 3, i * 3 + 3)]),
+      answer: c.a,
+    }))
+    readingTitle = titleOf(lesson)
+    readingText = dialogue
+    readingGlossary = vocabGlossary
+  }
 
   return {
     level: 'A1',
     label: `Lesson ${lesson.n} · ${titleOf(lesson)}`,
     lines: dialogue,
     pool: A1.flatMap((l) => l.parts.dialogue.map((d) => clean(d.line))).filter(usableLine),
-    reading: { title: titleOf(lesson), text: dialogue, glossary: vocabGlossary, questions },
+    reading: { title: readingTitle, text: readingText, glossary: readingGlossary, questions: readingQuestions },
     build: lesson.parts.vocab
       .filter((v) => v.example && v.example.split(/\s+/).length >= 4 && v.example.split(/\s+/).length <= 9)
       .slice(0, 4)

@@ -1,0 +1,1511 @@
+{
+  "n": 7,
+  "level": "A1",
+  "deck": "doc_f7a72a1c9a89_MOVE_ACTIVATE_1_L07_REVISION FROM L01-L06_VIP  -  Repaired.pptx",
+  "parts": {
+    "vocab": [
+      {
+        "word": "appointment",
+        "pos": "n",
+        "ipa": "/əˈpɔɪntmənt/",
+        "def": "",
+        "example": "What time is your appointment?",
+        "vi": "cuộc hẹn",
+        "cloze": "What time is your ____?"
+      },
+      {
+        "word": "available",
+        "pos": "adj",
+        "ipa": "/əˈveɪləbəl/",
+        "def": "",
+        "example": "Is this table available?",
+        "vi": "còn trống / rảnh",
+        "cloze": "Is this table ____?"
+      },
+      {
+        "word": "crowded",
+        "pos": "adj",
+        "ipa": "/ˈkraʊdɪd/",
+        "def": "",
+        "example": "Is the café crowded?",
+        "vi": "đông người",
+        "cloze": "Is the café ____?"
+      },
+      {
+        "word": "recommend",
+        "pos": "v",
+        "ipa": "/ˌrekəˈmend/",
+        "def": "",
+        "example": "Which café do you recommend?",
+        "vi": "gợi ý / đề xuất",
+        "cloze": "Which café do you ____?"
+      },
+      {
+        "word": "reserve a table",
+        "pos": "v",
+        "ipa": "/rɪˈzɜːrv ə ˈteɪbəl/",
+        "def": "",
+        "example": "Can I reserve a table?",
+        "vi": "đặt trước bàn",
+        "cloze": "Can I ____ a ____?"
+      },
+      {
+        "word": "entrance",
+        "pos": "n",
+        "ipa": "/ˈentrəns/",
+        "def": "",
+        "example": "Where is the entrance?",
+        "vi": "lối vào",
+        "cloze": "Where is the ____?"
+      },
+      {
+        "word": "a quiet corner",
+        "pos": "n",
+        "ipa": "/ə ˈkwaɪət ˈkɔːrnɚ/",
+        "def": "",
+        "example": "We need a quiet corner.",
+        "vi": "góc yên tĩnh",
+        "cloze": "We need a ____ ____."
+      },
+      {
+        "word": "pick up a friend",
+        "pos": "v",
+        "ipa": "/pɪk ʌp ə frend/",
+        "def": "",
+        "example": "I pick up a friend after work.",
+        "vi": "đón một người bạn",
+        "cloze": "I ____ ____ a friend after work."
+      },
+      {
+        "word": "get to work",
+        "pos": "v",
+        "ipa": "/ɡet tə wɝːk/",
+        "def": "",
+        "example": "How do you get to work?",
+        "vi": "đến nơi làm việc",
+        "cloze": "How do you ____ ____ ____?"
+      },
+      {
+        "word": "spend time with",
+        "pos": "v",
+        "ipa": "/spend taɪm wɪð/",
+        "def": "",
+        "example": "She spends time with her family.",
+        "vi": "dành thời gian với",
+        "cloze": "She ____ ____ ____ her family."
+      },
+      {
+        "word": "wash the dishes",
+        "pos": "v",
+        "ipa": "/wɑːʃ ðə ˈdɪʃɪz/",
+        "def": "",
+        "example": "He washes the dishes.",
+        "vi": "rửa chén",
+        "cloze": "He washes the ____."
+      },
+      {
+        "word": "once a week",
+        "pos": "phrase",
+        "ipa": "/wʌns ə wiːk/",
+        "def": "",
+        "example": "We eat out once a week.",
+        "vi": "mỗi tuần một lần",
+        "cloze": "We eat out ____ a week."
+      },
+      {
+        "word": "another place",
+        "pos": "n",
+        "ipa": "/əˈnʌðɚ pleɪs/",
+        "def": "",
+        "example": "Do you know another place?",
+        "vi": "một nơi khác",
+        "cloze": "Do you know ____ ____?"
+      },
+      {
+        "word": "our current plan",
+        "pos": "n",
+        "ipa": "/aʊɚ ˈkɜːrənt plæn/",
+        "def": "",
+        "example": "Is this our current plan?",
+        "vi": "kế hoạch hiện tại",
+        "cloze": "Is this our ____ ____?"
+      },
+      {
+        "word": "local food",
+        "pos": "n",
+        "ipa": "/ˈloʊkəl fuːd/",
+        "def": "",
+        "example": "Does it serve local food?",
+        "vi": "đồ ăn địa phương",
+        "cloze": "Does it serve ____ ____?"
+      },
+      {
+        "word": "across the street",
+        "pos": "prep",
+        "ipa": "/əˈkrɔːs ðə striːt/",
+        "def": "",
+        "example": "The entrance is across the street.",
+        "vi": "bên kia đường",
+        "cloze": "The entrance is ____ the ____."
+      },
+      {
+        "word": "How’s it going?",
+        "pos": "",
+        "ipa": "/haʊz ɪt ˈɡoʊɪŋ/",
+        "def": "",
+        "example": "How’s it going? — Pretty good.",
+        "vi": "Dạo này thế nào?",
+        "cloze": "How’s it ____?"
+      },
+      {
+        "word": "Pretty good.",
+        "pos": "",
+        "ipa": "/ˈprɪti ɡʊd/",
+        "def": "",
+        "example": "Pretty good. How about you?",
+        "vi": "Khá ổn.",
+        "cloze": "____ good. How about you?"
+      },
+      {
+        "word": "Not really.",
+        "pos": "",
+        "ipa": "/nɑːt ˈrɪəli/",
+        "def": "",
+        "example": "Are you busy? — Not really.",
+        "vi": "Không hẳn.",
+        "cloze": "Are you busy? — Not ____."
+      },
+      {
+        "word": "That sounds good.",
+        "pos": "",
+        "ipa": "/ðæt saʊndz ɡʊd/",
+        "def": "",
+        "example": "Coffee at three? — That sounds good.",
+        "vi": "Nghe hay đấy.",
+        "cloze": "Coffee at three? — That ____ ____."
+      },
+      {
+        "word": "Are you serious?",
+        "pos": "",
+        "ipa": "/ɑr ju ˈsɪriəs/",
+        "def": "",
+        "example": "The tickets are free. — Are you serious?",
+        "vi": "Thật hả?",
+        "cloze": "Free tickets? — Are you ____?"
+      },
+      {
+        "word": "No worries.",
+        "pos": "",
+        "ipa": "/noʊ ˈwɜːriz/",
+        "def": "",
+        "example": "Sorry I’m late. — No worries.",
+        "vi": "Không sao đâu.",
+        "cloze": "Sorry I’m late. — No ____."
+      },
+      {
+        "word": "Do you need a hand?",
+        "pos": "",
+        "ipa": "/də ju niːd ə hænd/",
+        "def": "",
+        "example": "Do you need a hand with the report?",
+        "vi": "Cần giúp không?",
+        "cloze": "Do you need a ____?"
+      },
+      {
+        "word": "Sounds like a plan.",
+        "pos": "",
+        "ipa": "/saʊndz laɪk ə plæn/",
+        "def": "",
+        "example": "Let’s meet at six. — Sounds like a plan.",
+        "vi": "Vậy chốt nhé.",
+        "cloze": "Six o’clock? — Sounds like a ____."
+      },
+      {
+        "word": "What are you up to?",
+        "pos": "",
+        "ipa": "/wʌt ɑr ju ʌp tə/",
+        "def": "",
+        "example": "What are you up to? — Just cooking.",
+        "vi": "Đang làm gì đấy?",
+        "cloze": "What are you ____ ____?"
+      },
+      {
+        "word": "I’m on my way.",
+        "pos": "",
+        "ipa": "/aɪm ɑːn maɪ weɪ/",
+        "def": "",
+        "example": "I’m on my way to your place.",
+        "vi": "Đang trên đường.",
+        "cloze": "I’m on my ____."
+      },
+      {
+        "word": "Give me a minute.",
+        "pos": "",
+        "ipa": "/ɡɪv mi ə ˈmɪnɪt/",
+        "def": "",
+        "example": "Give me a minute. I’m almost ready.",
+        "vi": "Chờ tôi một chút.",
+        "cloze": "Give me a ____."
+      },
+      {
+        "word": "I’ll let you know.",
+        "pos": "",
+        "ipa": "/aɪl let ju noʊ/",
+        "def": "",
+        "example": "I’ll let you know if I need help.",
+        "vi": "Tôi sẽ báo bạn.",
+        "cloze": "I’ll ____ you ____."
+      },
+      {
+        "word": "Fair enough.",
+        "pos": "",
+        "ipa": "/fer ɪˈnʌf/",
+        "def": "",
+        "example": "I’m too tired to go out. — Fair enough.",
+        "vi": "Ừ, cũng hợp lý.",
+        "cloze": "I’m tired. — ____ enough."
+      },
+      {
+        "word": "Thanks anyway.",
+        "pos": "",
+        "ipa": "/θæŋks ˈeniweɪ/",
+        "def": "",
+        "example": "No tables left? Thanks anyway.",
+        "vi": "Dù sao cũng cảm ơn.",
+        "cloze": "No tables? — Thanks ____."
+      },
+      {
+        "word": "I’m just looking.",
+        "pos": "",
+        "ipa": "/aɪm dʒʌst ˈlʊkɪŋ/",
+        "def": "",
+        "example": "Can I help you? — I’m just looking.",
+        "vi": "Tôi chỉ xem thôi.",
+        "cloze": "Can I help? — I’m just ____."
+      },
+      {
+        "word": "See you in a bit.",
+        "pos": "",
+        "ipa": "/siː ju ɪn ə bɪt/",
+        "def": "",
+        "example": "I’m on my way. See you in a bit.",
+        "vi": "Lát nữa gặp nhé.",
+        "cloze": "See you in a ____."
+      }
+    ],
+    "grammarChoose": [],
+    "grammar": [],
+    "flow": [
+      {
+        "group": "Overview",
+        "slides": [
+          {
+            "title": "MOVE.",
+            "lines": [
+              "MOVE.",
+              "ACTIVATE 1",
+              "L06 · CONNECT & RESPOND",
+              "Hỏi, nghe và phản hồi.",
+              "Dùng lại kiến thức L01–L05.",
+              "TRY & NOTICE",
+              "then",
+              "REPAIR & RETRY",
+              "LISTEN → SPEAK → TRY AGAIN",
+              "DO / BE · NOUN PHRASES · WH QUESTIONS"
+            ]
+          },
+          {
+            "title": "RECALL & CONNECT · FIRST TRY",
+            "lines": [
+              "RECALL & CONNECT · FIRST TRY",
+              "Bạn còn gọi lại được gì?",
+              "Không nhìn mẫu. Với mỗi ý, nói câu hỏi và một câu trả lời thật.",
+              "Bạn làm nghề gì?",
+              "Nói thêm một chi tiết.",
+              "Chị/em gái bạn làm việc ở đâu?",
+              "Trả lời bằng nơi chốn.",
+              "Những cửa hàng kia có mở cửa không?",
+              "Trả lời ngắn rồi thêm ý.",
+              "Đi đến nơi làm việc mất bao lâu?",
+              "Trả lời bằng thời gian.",
+              "Một nhà hàng địa phương khác",
+              "Nói thành một cụm danh từ.",
+              "Bao lâu bạn ăn ngoài một lần?",
+              "Trả lời bằng tần suất.",
+              "Giữ lại một câu bạn chưa chắc để thử lại cuối buổi."
+            ]
+          },
+          {
+            "title": "RECALL & CONNECT",
+            "lines": [
+              "RECALL & CONNECT",
+              "Giữ cấu trúc, mở rộng danh từ",
+              "Chọn IS / ARE / DO / DOES, hỏi rồi thêm một thông tin thật.",
+              "___ your coworker friendly?",
+              "Đồng nghiệp của bạn thân thiện không?",
+              "___ your friends work nearby?",
+              "Bạn bè của bạn làm gần đây không?",
+              "___ this restaurant open?",
+              "Nhà hàng này đang mở không?",
+              "___ your sister like local food?",
+              "Chị/em gái bạn thích đồ ăn địa phương không?",
+              "___ those shops busy?",
+              "Những cửa hàng kia đông không?",
+              "___ your brother live in Hue?",
+              "Anh/em trai bạn sống ở Huế không?",
+              "Chú ý danh từ chính: coworker / friends / restaurant / shops."
+            ]
+          },
+          {
+            "title": "RECALL & CONNECT · EXPAND",
+            "lines": [
+              "RECALL & CONNECT · EXPAND",
+              "Từ đại từ đến cụm danh từ",
+              "Giữ ý muốn hỏi. Thay he / she / it / they bằng cụm rõ nghĩa hơn.",
+              "PRONOUN",
+              "NOUN PHRASE",
+              "Is she friendly?",
+              "Does she work here?",
+              "Are they open?",
+              "Do they sell food?",
+              "Is it cheap?",
+              "Is your new coworker friendly?",
+              "Does your new coworker work here?",
+              "Are those small shops open?",
+              "Do those small shops sell food?",
+              "Is this local restaurant cheap?",
+              "Tên gọi dài hơn, cơ chế BE / DO vẫn như L04–L03."
+            ]
+          }
+        ]
+      },
+      {
+        "group": "Before you listen",
+        "slides": [
+          {
+            "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+            "lines": [
+              "LISTEN & DISCOVER · BEFORE LISTENING",
+              "CASUAL 1 · At the supermarket · Before you listen",
+              "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
+              "TALK FIRST",
+              "Where do you usually buy groceries?",
+              "Do you cook at home?",
+              "What do you usually buy?",
+              "LISTENING MISSION",
+              "HOW OFTEN does Tom shop here?",
+              "WHO is cooking dinner?",
+              "WHAT is their plan after shopping?",
+              "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
+            ]
+          },
+          {
+            "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+            "lines": [
+              "LISTEN & DISCOVER · BEFORE LISTENING",
+              "CASUAL 2 · A coffee plan · Before you listen",
+              "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
+              "TALK FIRST",
+              "Are you free after work today?",
+              "Which café do you recommend?",
+              "How do you usually make plans with friends?",
+              "LISTENING MISSION",
+              "WHY isn’t Ben free now?",
+              "WHERE will they get coffee?",
+              "WHEN will they meet?",
+              "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
+            ]
+          },
+          {
+            "title": "LISTEN & DISCOVER · BEFORE LISTENING",
+            "lines": [
+              "LISTEN & DISCOVER · BEFORE LISTENING",
+              "CASUAL 3 · A busy afternoon · Before you listen",
+              "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
+              "TALK FIRST",
+              "Are you busy at work today?",
+              "Do you ever help a coworker?",
+              "What do you say when you need help?",
+              "LISTENING MISSION",
+              "WHAT does Leo need to do?",
+              "WHAT does Anna check?",
+              "WHY can’t Anna have lunch with Leo?",
+              "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
+            ]
+          }
+        ]
+      },
+      {
+        "group": "Pronunciation",
+        "slides": [
+          {
+            "title": "PRONUNCIATION · ENDINGS",
+            "lines": [
+              "PRONUNCIATION · ENDINGS",
+              "Đọc đuôi trong câu có ý nghĩa",
+              "Đọc câu, xác định /s/ /z/ /ɪz/, rồi đổi chủ ngữ theo cue.",
+              "She cooks dinner.",
+              "COOKS → THEY",
+              "He lives nearby.",
+              "LIVES → WE",
+              "She washes the dishes.",
+              "WASHES → I",
+              "Those shops sell gifts.",
+              "SHOPS: đọc rõ số nhiều.",
+              "These buildings are tall.",
+              "BUILDINGS: nối sang ARE.",
+              "Do you know other places?",
+              "PLACES: giữ đủ âm tiết.",
+              "Đừng thêm âm “ờ” sau mọi phụ âm cuối."
+            ]
+          },
+          {
+            "title": "PRONUNCIATION · QUESTION CHUNKS",
+            "lines": [
+              "PRONUNCIATION · QUESTION CHUNKS",
+              "Nói rõ, rồi nói liền cụm",
+              "Nghe mẫu của giáo viên. Nhấn thông tin chính, không ép rút gọn.",
+              "WHAT do you LIKE?",
+              "I like LOCAL FOOD.",
+              "WHAT’S your favorite PLACE?",
+              "The café near the PARK.",
+              "WHAT are you GOOD at?",
+              "I’m good at COOKING.",
+              "HOW LONG does it TAKE?",
+              "About FIFTEEN MINUTES.",
+              "Vòng 2: thay câu trả lời và hỏi lại bằng nhịp tự nhiên."
+            ]
+          },
+          {
+            "title": "PRONUNCIATION · LISTEN & IDENTIFY",
+            "lines": [
+              "PRONUNCIATION · LISTEN & IDENTIFY",
+              "Nghe rõ số lượng và hệ câu",
+              "Nghe giáo viên. Nói A hoặc B, rồi đọc lại nguyên câu đã nghe.",
+              "A this shop / B these shops",
+              "Giáo viên đọc cụm số 1.",
+              "A fifteen / B fifty",
+              "Giáo viên đọc cụm số 2.",
+              "A Does she work? / B Is she at work?",
+              "Giáo viên đọc câu số 3.",
+              "A once a month / B twice a month",
+              "Giáo viên đọc cụm số 4.",
+              "A he works / B he work",
+              "Giáo viên đọc cụm số 5.",
+              "A How far? / B How long?",
+              "Giáo viên đọc câu số 6.",
+              "Nói lại giúp xác nhận bạn nghe gì, không chỉ chọn chữ cái."
+            ]
+          },
+          {
+            "title": "PRONUNCIATION · READ WITH INTENTION",
+            "lines": [
+              "PRONUNCIATION · READ WITH INTENTION",
+              "Đọc để người nghe hiểu mục đích",
+              "Lượt 1 đọc rõ. Lượt 2 đổi vai và nói tự nhiên, không nhìn xuống từng từ.",
+              "A",
+              "Is this table available?",
+              "B",
+              "Yes, it is. Is it just for you?",
+              "A",
+              "No, it’s for my new coworker and me.",
+              "B",
+              "What time do you need it?",
+              "A",
+              "At twelve thirty. Is there a quiet corner?",
+              "B",
+              "Yes. The table near the window is quiet.",
+              "YES/NO: ngữ điệu có thể đi lên. WH trung tính: thường đi xuống. Nhấn TABLE / TIME / QUIET."
+            ]
+          },
+          {
+            "title": "PRONUNCIATION · READ & RETELL",
+            "lines": [
+              "PRONUNCIATION · READ & RETELL",
+              "Một lịch trình, nhiều cụm quen thuộc",
+              "Đọc cả đoạn. Sau đó đóng mẫu và kể lại ba thông tin.",
+              "My new coworker lives across the street from a small café.",
+              "She usually gets to work by motorbike. It takes about twenty minutes.",
+              "She likes her job, but she doesn’t work on Sundays.",
+              "After work, she picks up her son and cooks dinner.",
+              "On Fridays, we sometimes have lunch together.",
+              "We like local food, so we usually choose a quiet restaurant.",
+              "Before we go, I ask, “Is a table available? How much does lunch cost?”",
+              "Partner hỏi 2 câu WH. Người kể trả lời bằng trí nhớ, không đọc lại."
+            ]
+          },
+          {
+            "title": "PRONUNCIATION · CHANGE THE FOCUS",
+            "lines": [
+              "PRONUNCIATION · CHANGE THE FOCUS",
+              "Cùng một câu, đổi thông tin cần nhấn",
+              "Đọc câu sao cho người nghe nhận ra bạn đang sửa thông tin nào.",
+              "MY new coworker works in sales.",
+              "Đồng nghiệp của TÔI, không phải của bạn.",
+              "My NEW coworker works in sales.",
+              "Đồng nghiệp MỚI, không phải người cũ.",
+              "My new coworker works in SALES.",
+              "Bộ phận SALES, không phải marketing.",
+              "Partner nghe rồi nói lại bằng tiếng Việt: bạn vừa nhấn điều gì?"
+            ]
+          }
+        ]
+      },
+      {
+        "group": "Real talk",
+        "slides": [
+          {
+            "title": "REAL TALK · INFORMATION GAP",
+            "lines": [
+              "REAL TALK · INFORMATION GAP",
+              "Gọi để đặt một bàn phù hợp",
+              "Bạn cần đặt bàn ăn trưa cho nhóm. Giáo viên đóng vai nhân viên nhà hàng.",
+              "YOU NEED",
+              "Four people / Friday lunch",
+              "A quiet table",
+              "Local food",
+              "A clear price",
+              "Directions to the entrance",
+              "YOUR TASK",
+              "Hỏi ít nhất 5 câu.",
+              "Xác nhận lại giờ và số người.",
+              "Nói tên để đặt bàn.",
+              "Xin nhắc lại khi cần: Could you say that again, please?"
+            ]
+          },
+          {
+            "title": "REAL TALK · CHANGE THE PLAN",
+            "lines": [
+              "REAL TALK · CHANGE THE PLAN",
+              "Quán đã chọn đông quá. Chọn nơi khác.",
+              "Dùng thông tin để hỏi, so sánh và thống nhất một phương án.",
+              "RIVER CAFÉ",
+              "Crowded at lunchtime",
+              "Local food / $6 per person",
+              "10 minutes by bus",
+              "No quiet tables",
+              "GARDEN CAFÉ",
+              "A quiet corner available",
+              "Local food / $8 per person",
+              "15 minutes by bus",
+              "Reserve a table by phone",
+              "GOAL: nói lựa chọn + lý do, hỏi thêm giờ mở cửa và cách đặt bàn."
+            ]
+          },
+          {
+            "title": "REAL TALK · INTERVIEW & REPORT",
+            "lines": [
+              "REAL TALK · INTERVIEW & REPORT",
+              "Phỏng vấn một người, kể lại cho người khác",
+              "Hỏi 5 câu để biết lịch trình thật. Sau đó báo lại bằng HE / SHE.",
+              "ASK",
+              "Work / home",
+              "Transport / journey time",
+              "After-work routine",
+              "A favorite place",
+              "How often they go there",
+              "REPORT",
+              "This is my…",
+              "He / She works…",
+              "It takes him / her…",
+              "He / She usually…",
+              "He / She doesn’t…",
+              "Người nghe hỏi thêm 2 câu. Người kể trả lời đúng thông tin đã ghi."
+            ]
+          }
+        ]
+      },
+      {
+        "group": "Reflect",
+        "slides": [
+          {
+            "title": "REFLECT & RETRY · FEEDBACK",
+            "lines": [
+              "REFLECT & RETRY · FEEDBACK",
+              "Bạn đã làm được gì, cần sửa gì?",
+              "Giáo viên chọn 2 điểm mạnh và tối đa 2 điểm cần sửa.",
+              "STRUCTURE",
+              "Chọn BE/DO đúng, giữ V1 sau DOES.",
+              "QUESTION & ANSWER",
+              "Hỏi đúng thông tin, trả lời đúng loại.",
+              "VOCABULARY",
+              "Dùng cụm danh từ và cụm mới đúng ý.",
+              "SPEECH & REPAIR",
+              "Nói rõ, biết hỏi lại và tự sửa.",
+              "Ghi một câu trước sửa và một câu sau sửa. Dùng ngay trong lượt tiếp theo."
+            ]
+          },
+          {
+            "title": "REFLECT & RETRY · SECOND TRY",
+            "lines": [
+              "REFLECT & RETRY · SECOND TRY",
+              "Thử lại với thông tin mới",
+              "Không nhìn câu cũ. Dùng hai điểm vừa sửa.",
+              "Bạn thường làm gì vào Chủ nhật?",
+              "Hỏi rồi trả lời.",
+              "Anh/em trai bạn làm việc ở đâu?",
+              "Đổi chủ ngữ.",
+              "Những bàn kia còn trống không?",
+              "Dùng cụm danh từ số nhiều.",
+              "Đi đến nhà hàng mất bao lâu?",
+              "Dùng HOW LONG.",
+              "Một quán cà phê yên tĩnh khác",
+              "Nói cả cụm rồi đặt câu hỏi.",
+              "Bao lâu cô ấy thăm bố mẹ một lần?",
+              "Dùng HOW OFTEN.",
+              "So với lượt đầu: bạn chọn hệ nhanh hơn và có cần ít gợi ý hơn không?"
+            ]
+          }
+        ]
+      },
+      {
+        "group": "Mission",
+        "slides": [
+          {
+            "title": "REVIEW MISSION",
+            "lines": [
+              "REVIEW MISSION",
+              "Thử trước, sửa sau, rồi thử lại",
+              "Nói thành tiếng. Câu ngắn nhưng đúng ý là một câu trả lời có ích.",
+              "ROUND 1 · TRY",
+              "Tự nói, chưa nhìn đáp án.",
+              "ROUND 2 · REPAIR",
+              "Chọn một lỗi, sửa và dùng lại.",
+              "ROUND 3 · TRANSFER",
+              "Đổi người / nơi / thời gian, nói lại.",
+              "WHEN YOU NEED HELP",
+              "Could you say that again, please?",
+              "Mục tiêu: hỏi để lấy thông tin, nghe đúng ý và tiếp tục cuộc trò chuyện."
+            ]
+          },
+          {
+            "title": "DAILY MISSION · 3-DAY PRACTICE",
+            "lines": [
+              "DAILY MISSION · 3-DAY PRACTICE",
+              "Ba ngày để giữ lại điều đã sửa",
+              "Mỗi ngày 5–7 phút. Dùng từ cũ và ít nhất hai cụm mới.",
+              "DAY 1 · ASK",
+              "Tự hỏi và đáp 6 câu WH / Yes-No.",
+              "DAY 1 · SWITCH",
+              "Đổi I/you thành he/she trong 3 câu.",
+              "DAY 2 · LISTEN",
+              "Nhờ người đọc một tin nhắn trong Notes.",
+              "DAY 2 · CONFIRM",
+              "Ghi 5 chi tiết, rồi hỏi lại để xác nhận.",
+              "DAY 3 · REAL TALK",
+              "Đặt bàn hoặc lên kế hoạch với partner.",
+              "DAY 3 · RETRY",
+              "Ghi âm lại đoạn cuối bằng ý của bạn.",
+              "Gửi cô: bản ghi âm + 1 câu trước sửa và sau sửa."
+            ]
+          },
+          {
+            "title": "DAILY MISSION · READ & RECORD",
+            "lines": [
+              "DAILY MISSION · READ & RECORD",
+              "A lunch plan with my team",
+              "Đọc theo cụm, rồi đổi người, giờ, nơi và giá để ghi âm phiên bản của bạn.",
+              "My new coworker is friendly, and we often have lunch together.",
+              "She likes local food, but she doesn’t like crowded places.",
+              "Our current plan is to meet at a quiet café on Friday.",
+              "It’s across the street from the park. It takes fifteen minutes to get there.",
+              "Before we go, I ask, “Is a table for four available?”",
+              "“What time does the café open? How much does lunch cost?”",
+              "I also ask how to reserve a table near the window.",
+              "Then I confirm the time, pick up my friend, and enjoy our lunch.",
+              "RECORD → LISTEN → REPAIR: sửa một điểm, ghi âm lần hai rồi gửi cả hai bản."
+            ]
+          }
+        ]
+      },
+      {
+        "group": "Speaking",
+        "slides": [
+          {
+            "title": "SPEAKING · VIETNAMESE TO ENGLISH",
+            "lines": [
+              "SPEAKING · VIETNAMESE TO ENGLISH",
+              "Vòng 1 · Hỏi và trả lời nhanh",
+              "Mỗi ý: 5 giây chuẩn bị, rồi hỏi và tự trả lời. Không dịch từng từ.",
+              "Hôm nay bạn có rảnh không?",
+              "Trả lời và thêm thời điểm rảnh.",
+              "Bạn có sống cùng bố mẹ không?",
+              "Trả lời và thêm một chi tiết.",
+              "Anh ấy có đi làm bằng xe buýt không?",
+              "Trả lời về một người thật.",
+              "Cô ấy không nấu ăn mỗi ngày.",
+              "Nói thêm cô ấy thường làm gì.",
+              "Đồng nghiệp mới của bạn thân thiện không?",
+              "Giữ đúng trật tự cụm danh từ.",
+              "Những cửa hàng kia bán đồ ăn địa phương.",
+              "Đọc rõ âm cuối của shops.",
+              "Nói xong mới nhận góp ý. Mỗi lần chỉ sửa một lỗi trọng tâm."
+            ]
+          },
+          {
+            "title": "SPEAKING · VIETNAMESE TO ENGLISH",
+            "lines": [
+              "SPEAKING · VIETNAMESE TO ENGLISH",
+              "Vòng 2 · Hỏi thêm chi tiết",
+              "Chọn từ hỏi và hệ DO/BE. Partner trả lời đúng loại thông tin.",
+              "Lối vào ở đâu?",
+              "Trả lời bằng nơi chốn.",
+              "Bạn có cuộc hẹn lúc mấy giờ?",
+              "Trả lời bằng giờ.",
+              "Bạn đề xuất loại nhà hàng nào?",
+              "Trả lời bằng loại nhà hàng.",
+              "Đi đến đó mất bao lâu?",
+              "Trả lời bằng phút.",
+              "Nơi đó cách đây bao xa?",
+              "Trả lời bằng khoảng cách.",
+              "Bao lâu cô ấy gặp bạn bè một lần?",
+              "Trả lời bằng tần suất.",
+              "Thêm HOW MUCH nếu bạn muốn hỏi giá."
+            ]
+          },
+          {
+            "title": "SPEAKING · ENGLISH TO VIETNAMESE",
+            "lines": [
+              "SPEAKING · ENGLISH TO VIETNAMESE",
+              "Hiểu đúng ý, không chỉ nhận ra từ",
+              "Nói nghĩa tự nhiên bằng tiếng Việt. Sau đó trả lời câu hỏi bằng tiếng Anh.",
+              "What do you do?",
+              "Câu này hỏi thông tin gì?",
+              "What do you do after work?",
+              "Khác câu trước ở đâu?",
+              "How long does it take?",
+              "Thời gian hay tần suất?",
+              "How often are you late?",
+              "Giữ đúng nghĩa của HOW OFTEN.",
+              "Do you know another quiet place?",
+              "Chú ý another + adjective + noun.",
+              "Can you show me how to reserve a table?",
+              "Đây là yêu cầu giúp làm gì?",
+              "Bước 2: đổi một chi tiết trong câu và hỏi lại."
+            ]
+          },
+          {
+            "title": "SPEAKING · BUILD THE SENTENCE",
+            "lines": [
+              "SPEAKING · BUILD THE SENTENCE",
+              "Sắp xếp rồi nói thành câu",
+              "Đọc câu hoàn chỉnh. Với câu hỏi, partner phải trả lời.",
+              "does / where / your sister / work",
+              "Hỏi nơi làm việc.",
+              "those / are / available / tables",
+              "Hỏi bàn còn trống không.",
+              "she / dinner / usually / cooks",
+              "Kể một thói quen.",
+              "cheap / another / restaurant",
+              "Nói thành một cụm danh từ.",
+              "it / how much / cost / does",
+              "Hỏi giá.",
+              "our / is / current plan / this",
+              "Kiểm tra kế hoạch.",
+              "Nói theo cụm ý, không đọc từng từ rời."
+            ]
+          },
+          {
+            "title": "SPEAKING · REPAIR & RESPOND",
+            "lines": [
+              "SPEAKING · REPAIR & RESPOND",
+              "Bắt lỗi và cứu cuộc trò chuyện",
+              "Sửa câu, rồi trả lời hoặc thêm một thông tin.",
+              "Where are you work?",
+              "Sửa đúng hệ.",
+              "Does she lives near here?",
+              "Sau DOES dùng dạng nào?",
+              "He don’t wash the dishes.",
+              "Đổi từ phủ định.",
+              "This shops are crowded.",
+              "Khớp từ chỉ định và danh từ.",
+              "Do you know other quiet café?",
+              "Sửa số lượng / từ hạn định.",
+              "How far does it take?",
+              "Người kia muốn biết số phút.",
+              "Một câu có thể có nhiều cách sửa đúng. Giữ ý người nói."
+            ]
+          },
+          {
+            "title": "SPEAKING · ANSWER TO QUESTION",
+            "lines": [
+              "SPEAKING · ANSWER TO QUESTION",
+              "Nghe câu trả lời, tự đặt câu hỏi",
+              "Ngữ cảnh nằm dưới đáp án. Đặt câu hỏi lấy đúng thông tin.",
+              "At a hotel near the river.",
+              "Hỏi nơi làm việc của tôi.",
+              "Twice a month.",
+              "Hỏi tần suất tôi gặp bạn bè.",
+              "About fifteen minutes.",
+              "Hỏi thời gian đi đến quán.",
+              "It’s my sister’s bag.",
+              "Hỏi chiếc túi này của ai.",
+              "Because it’s quiet.",
+              "Hỏi lý do tôi thích quán này.",
+              "My father does.",
+              "Hỏi ai nấu bữa tối ở nhà tôi.",
+              "Partner trả lời thật rồi thêm một chi tiết."
+            ]
+          },
+          {
+            "title": "SPEAKING · CHOOSE THE FOLLOW-UP",
+            "lines": [
+              "SPEAKING · CHOOSE THE FOLLOW-UP",
+              "Hỏi tiếp để hiểu đúng",
+              "Chọn một câu hỏi tiếp phù hợp, rồi diễn lại cả hai lượt.",
+              "A: I go to work by bus.",
+              "Bạn muốn biết thời gian đi lại.",
+              "A: I like that local restaurant.",
+              "Bạn muốn biết lý do.",
+              "A: My class starts at seven.",
+              "Bạn muốn biết thời lượng lớp.",
+              "A: We eat out twice a week.",
+              "Bạn muốn biết loại đồ ăn họ thích.",
+              "Không lặp lại thông tin người kia vừa nói."
+            ]
+          },
+          {
+            "title": "SPEAKING · ONE PHRASE THREE MOVES",
+            "lines": [
+              "SPEAKING · ONE PHRASE THREE MOVES",
+              "Một cụm danh từ, ba cách dùng",
+              "Mỗi cụm: nói một câu kể, một câu hỏi Yes/No và một câu WH.",
+              "your new coworker",
+              "WHO / WHERE / WHAT…?",
+              "those small shops",
+              "WHAT / WHERE / WHEN…?",
+              "her local restaurant",
+              "WHAT / WHERE / HOW MUCH…?",
+              "our next trip",
+              "WHEN / WHERE / HOW LONG…?",
+              "another quiet café",
+              "WHERE / WHICH…?",
+              "your usual routine",
+              "WHAT / HOW OFTEN…?",
+              "Giữ danh từ chính. Đổi cấu trúc để lấy thông tin khác nhau."
+            ]
+          },
+          {
+            "title": "SPEAKING · SWITCH THE SUBJECT",
+            "lines": [
+              "SPEAKING · SWITCH THE SUBJECT",
+              "Giữ ý, đổi người nói đến",
+              "Bắt đầu bằng câu hoàn chỉnh, rồi đổi chủ ngữ theo cue.",
+              "I work near here. → SHE",
+              "Khẳng định.",
+              "They don’t cook every day. → HE",
+              "Phủ định.",
+              "Are you busy? → YOUR PARENTS",
+              "Câu hỏi BE.",
+              "Do they live nearby? → YOUR FRIEND",
+              "Câu hỏi động từ thường.",
+              "My next trip is in June. → OUR TRIPS",
+              "Đổi số ít thành số nhiều.",
+              "She studies English at night. → WE",
+              "Giữ thông tin thời gian.",
+              "Lượt 2: partner đặt một câu WH cho mỗi câu kể."
+            ]
+          },
+          {
+            "title": "SPEAKING · 30-SECOND MESSAGE",
+            "lines": [
+              "SPEAKING · 30-SECOND MESSAGE",
+              "Kể về một người thật trong 30 giây",
+              "Chọn một người thân hoặc đồng nghiệp. Nói thành một đoạn, không đọc danh sách.",
+              "YOUR CONTENT",
+              "Who is this person?",
+              "Where do they work / live?",
+              "What do they usually do?",
+              "What don’t they do?",
+              "How often do you meet?",
+              "PARTNER’S JOB",
+              "Ghi 3 thông tin.",
+              "Hỏi 2 câu để biết thêm.",
+              "Kể lại bằng HE / SHE.",
+              "Lần hai: thay người và nói lại, giữ cấu trúc đã sửa."
+            ]
+          }
+        ]
+      },
+      {
+        "group": "Everyday scenes",
+        "slides": [
+          {
+            "title": "EVERYDAY SCENES · VIETNAMESE TO ENGLISH",
+            "lines": [
+              "EVERYDAY SCENES · VIETNAMESE TO ENGLISH",
+              "Dịch theo vai, giữ cuộc trò chuyện tự nhiên",
+              "Mỗi người một vai. Thử nói trước khi mở mẫu, xin gợi ý nếu gặp cấu trúc chưa học.",
+              "1 · ĐI MUA ĐỒ Ở SIÊU THỊ",
+              "A: Chào bạn, hôm nay bạn muốn mua gì?",
+              "B: Tôi muốn mua ít rau và trái cây.",
+              "A: Bạn có cần thêm gì nữa không?",
+              "B: Vâng, tôi cũng cần một chai sữa.",
+              "2 · ĐI UỐNG CÀ PHÊ",
+              "A: Chào bạn, hôm nay bạn có rảnh không?",
+              "B: Có, tôi rảnh. Tại sao vậy?",
+              "A: Tôi muốn mời bạn đi uống cà phê.",
+              "B: Tuyệt, mấy giờ chúng ta gặp nhau?",
+              "MỞ RỘNG có mẫu: đang làm / hôm qua / I’d like / I’ll. Ôn chính: BE–DO, cụm danh từ và WH."
+            ]
+          },
+          {
+            "title": "EVERYDAY SCENES · MODEL & RETRY",
+            "lines": [
+              "EVERYDAY SCENES · MODEL & RETRY",
+              "Đối chiếu, rồi diễn lại bằng ý thật",
+              "Đây là một cách diễn đạt. Thay một chi tiết, rồi đóng mẫu và nói lại.",
+              "1 · ĐI MUA ĐỒ Ở SIÊU THỊ",
+              "A: Hi! What would you like to buy today?",
+              "B: I’d like some vegetables and fruit.",
+              "A: Do you need anything else?",
+              "B: Yes, I also need a bottle of milk.",
+              "2 · ĐI UỐNG CÀ PHÊ",
+              "A: Hey, are you free today?",
+              "B: Yes, I am. Why?",
+              "A: I’d like to invite you out for coffee.",
+              "B: Great! What time should we meet?",
+              "MỞ RỘNG có mẫu: đang làm / hôm qua / I’d like / I’ll. Ôn chính: BE–DO, cụm danh từ và WH."
+            ]
+          },
+          {
+            "title": "EVERYDAY SCENES · VIETNAMESE TO ENGLISH",
+            "lines": [
+              "EVERYDAY SCENES · VIETNAMESE TO ENGLISH",
+              "Dịch theo vai, giữ cuộc trò chuyện tự nhiên",
+              "Mỗi người một vai. Thử nói trước khi mở mẫu, xin gợi ý nếu gặp cấu trúc chưa học.",
+              "3 · Ở NƠI LÀM VIỆC",
+              "A: Hôm nay bạn có nhiều việc không?",
+              "B: Có, tôi rất bận. Tôi phải nộp báo cáo cho sếp.",
+              "A: Bạn cần tôi giúp gì không?",
+              "B: Cảm ơn, nếu có gì khó tôi sẽ nhờ bạn.",
+              "4 · GỌI ĐIỆN THOẠI",
+              "A: Alo, bạn đang làm gì đó?",
+              "B: Tôi đang nấu cơm. Bạn thì sao?",
+              "A: Tôi đang trên đường đến nhà bạn.",
+              "B: Ok, lát nữa gặp nhé.",
+              "MỞ RỘNG có mẫu: đang làm / hôm qua / I’d like / I’ll. Ôn chính: BE–DO, cụm danh từ và WH."
+            ]
+          },
+          {
+            "title": "EVERYDAY SCENES · MODEL & RETRY",
+            "lines": [
+              "EVERYDAY SCENES · MODEL & RETRY",
+              "Đối chiếu, rồi diễn lại bằng ý thật",
+              "Đây là một cách diễn đạt. Thay một chi tiết, rồi đóng mẫu và nói lại.",
+              "3 · Ở NƠI LÀM VIỆC",
+              "A: Do you have a lot to do today?",
+              "B: Yes, I’m really busy. I need to send my boss a report.",
+              "A: Do you need a hand with anything?",
+              "B: Thanks. I’ll ask you if I get stuck.",
+              "4 · GỌI ĐIỆN THOẠI",
+              "A: Hey, what are you up to?",
+              "B: I’m cooking. What about you?",
+              "A: I’m on my way to your place.",
+              "B: Okay. See you in a bit.",
+              "MỞ RỘNG có mẫu: đang làm / hôm qua / I’d like / I’ll. Ôn chính: BE–DO, cụm danh từ và WH."
+            ]
+          },
+          {
+            "title": "EVERYDAY SCENES · VIETNAMESE TO ENGLISH",
+            "lines": [
+              "EVERYDAY SCENES · VIETNAMESE TO ENGLISH",
+              "Dịch theo vai, giữ cuộc trò chuyện tự nhiên",
+              "Mỗi người một vai. Thử nói trước khi mở mẫu, xin gợi ý nếu gặp cấu trúc chưa học.",
+              "5 · KỂ VỀ HÔM QUA",
+              "A: Hôm qua bạn đã làm gì?",
+              "B: Tôi đi làm cả ngày. Buổi tối tôi xem phim.",
+              "A: Phim có hay không?",
+              "B: Rất hay, tôi thích lắm.",
+              "6 · ĐI XE BUÝT",
+              "A: Bạn đi làm bằng gì?",
+              "B: Tôi thường đi bằng xe buýt.",
+              "A: Có mất nhiều thời gian không?",
+              "B: Khoảng 30 phút thôi.",
+              "MỞ RỘNG có mẫu: đang làm / hôm qua / I’d like / I’ll. Ôn chính: BE–DO, cụm danh từ và WH."
+            ]
+          },
+          {
+            "title": "EVERYDAY SCENES · MODEL & RETRY",
+            "lines": [
+              "EVERYDAY SCENES · MODEL & RETRY",
+              "Đối chiếu, rồi diễn lại bằng ý thật",
+              "Đây là một cách diễn đạt. Thay một chi tiết, rồi đóng mẫu và nói lại.",
+              "5 · KỂ VỀ HÔM QUA",
+              "A: What did you do yesterday?",
+              "B: I worked all day. In the evening, I watched a movie.",
+              "A: Was it good?",
+              "B: It was great. I really enjoyed it.",
+              "6 · ĐI XE BUÝT",
+              "A: How do you get to work?",
+              "B: I usually take the bus.",
+              "A: Does it take long?",
+              "B: Only about thirty minutes.",
+              "MỞ RỘNG có mẫu: đang làm / hôm qua / I’d like / I’ll. Ôn chính: BE–DO, cụm danh từ và WH."
+            ]
+          },
+          {
+            "title": "EVERYDAY SCENES · VIETNAMESE TO ENGLISH",
+            "lines": [
+              "EVERYDAY SCENES · VIETNAMESE TO ENGLISH",
+              "Dịch theo vai, giữ cuộc trò chuyện tự nhiên",
+              "Mỗi người một vai. Thử nói trước khi mở mẫu, xin gợi ý nếu gặp cấu trúc chưa học.",
+              "7 · Ở NHÀ HÀNG",
+              "A: Xin chào, tôi muốn gọi món.",
+              "B: Bạn muốn ăn gì?",
+              "A: Cho tôi một tô phở và một ly nước cam.",
+              "B: Vâng, vui lòng chờ một chút.",
+              "8 · ĐI DU LỊCH",
+              "A: Bạn có thường đi du lịch không?",
+              "B: Có, tôi thường đi vào mùa hè.",
+              "A: Bạn thích đi đâu nhất?",
+              "B: Tôi thích đi Đà Nẵng vì biển rất đẹp.",
+              "MỞ RỘNG có mẫu: đang làm / hôm qua / I’d like / I’ll. Ôn chính: BE–DO, cụm danh từ và WH."
+            ]
+          },
+          {
+            "title": "EVERYDAY SCENES · MODEL & RETRY",
+            "lines": [
+              "EVERYDAY SCENES · MODEL & RETRY",
+              "Đối chiếu, rồi diễn lại bằng ý thật",
+              "Đây là một cách diễn đạt. Thay một chi tiết, rồi đóng mẫu và nói lại.",
+              "7 · Ở NHÀ HÀNG",
+              "A: Hi, I’d like to order, please.",
+              "B: What would you like?",
+              "A: I’d like a bowl of pho and a glass of orange juice.",
+              "B: Sure. Just a moment, please.",
+              "8 · ĐI DU LỊCH",
+              "A: Do you travel often?",
+              "B: Yes, I usually travel in the summer.",
+              "A: Where’s your favorite place to go?",
+              "B: I like going to Da Nang because the beaches are beautiful.",
+              "MỞ RỘNG có mẫu: đang làm / hôm qua / I’d like / I’ll. Ôn chính: BE–DO, cụm danh từ và WH."
+            ]
+          },
+          {
+            "title": "EVERYDAY SCENES · VIETNAMESE TO ENGLISH",
+            "lines": [
+              "EVERYDAY SCENES · VIETNAMESE TO ENGLISH",
+              "Dịch theo vai, giữ cuộc trò chuyện tự nhiên",
+              "Mỗi người một vai. Thử nói trước khi mở mẫu, xin gợi ý nếu gặp cấu trúc chưa học.",
+              "9 · NÓI VỀ SỞ THÍCH",
+              "A: Bạn thích làm gì vào cuối tuần?",
+              "B: Tôi thích đọc sách và nghe nhạc.",
+              "A: Bạn thích loại nhạc nào?",
+              "B: Tôi thích nhạc nhẹ, vì nó thư giãn.",
+              "10 · HẸN GẶP BẠN BÈ",
+              "A: Cuối tuần này bạn có bận không?",
+              "B: Không, tôi rảnh.",
+              "A: Chúng ta đi xem phim nhé?",
+              "B: Ý hay đấy, tôi sẽ mua vé.",
+              "MỞ RỘNG có mẫu: đang làm / hôm qua / I’d like / I’ll. Ôn chính: BE–DO, cụm danh từ và WH."
+            ]
+          },
+          {
+            "title": "EVERYDAY SCENES · MODEL & RETRY",
+            "lines": [
+              "EVERYDAY SCENES · MODEL & RETRY",
+              "Đối chiếu, rồi diễn lại bằng ý thật",
+              "Đây là một cách diễn đạt. Thay một chi tiết, rồi đóng mẫu và nói lại.",
+              "9 · NÓI VỀ SỞ THÍCH",
+              "A: What do you like to do on weekends?",
+              "B: I like reading books and listening to music.",
+              "A: What kind of music do you like?",
+              "B: I like soft music because it’s relaxing.",
+              "10 · HẸN GẶP BẠN BÈ",
+              "A: Are you busy this weekend?",
+              "B: No, I’m free.",
+              "A: Do you want to go to the movies?",
+              "B: That sounds good. I’ll get the tickets.",
+              "MỞ RỘNG có mẫu: đang làm / hôm qua / I’d like / I’ll. Ôn chính: BE–DO, cụm danh từ và WH."
+            ]
+          }
+        ]
+      },
+      {
+        "group": "Listening",
+        "slides": [
+          {
+            "title": "LISTENING 1 · BEFORE YOU LISTEN",
+            "lines": [
+              "LISTENING 1 · BEFORE YOU LISTEN",
+              "Lên kế hoạch gặp ở quán cà phê",
+              "Nghe giáo viên hai lượt. Lượt đầu nắm ý, lượt hai điền thông tin.",
+              "TALK FIRST",
+              "Do you prefer a quiet",
+              "or a crowded café?",
+              "How do you get to",
+              "your favorite café?",
+              "LISTEN FOR",
+              "Place",
+              "Travel time / transport",
+              "Opening time",
+              "Price / frequency",
+              "Không cần chép mọi từ. Giữ lại số và từ khóa."
+            ]
+          },
+          {
+            "title": "LISTENING 1 · GAP FILL",
+            "lines": [
+              "LISTENING 1 · GAP FILL",
+              "Nghe và hoàn thành kế hoạch",
+              "Mỗi chỗ trống điền 1–3 từ hoặc một con số. Không có ngân hàng đáp án.",
+              "We’re meeting at (1) __________ Café.",
+              "It’s across the street from the (2) __________.",
+              "The journey takes (3) __________ minutes by bus.",
+              "The café opens at (4) __________.",
+              "Breakfast costs about (5) __________ dollars per person.",
+              "Ben visits the café (6) __________ a month.",
+              "NÓI LẠI: dùng thông tin vừa nghe để giới thiệu kế hoạch trong 20 giây."
+            ]
+          },
+          {
+            "title": "LISTENING 2 · BEFORE YOU LISTEN",
+            "lines": [
+              "LISTENING 2 · BEFORE YOU LISTEN",
+              "Tìm hiểu đồng nghiệp mới",
+              "Nghe một cuộc trao đổi ở công ty. Chuẩn bị ghi từ khóa.",
+              "TALK FIRST",
+              "What do you usually ask",
+              "a new coworker?",
+              "Do you have lunch",
+              "with your team?",
+              "LISTEN FOR",
+              "Job / transport",
+              "Distance / journey time",
+              "After-work routine",
+              "Lunch plan"
+            ]
+          },
+          {
+            "title": "LISTENING 2 · ANSWER THE QUESTIONS",
+            "lines": [
+              "LISTENING 2 · ANSWER THE QUESTIONS",
+              "Nghe rồi trả lời bằng tiếng Anh",
+              "Trả lời ngắn hoặc đầy đủ. Thông tin phải đúng với bài nghe.",
+              "What kind of work does Linh do?",
+              "Job",
+              "How does she get to work?",
+              "Transport",
+              "How far does she live from work?",
+              "Distance",
+              "How long does the journey take?",
+              "Time",
+              "What does she usually do after work?",
+              "Two activities",
+              "Why is she available for lunch on Friday?",
+              "Meeting time",
+              "Sau khi trả lời, hỏi partner một câu tương tự về người thật."
+            ]
+          },
+          {
+            "title": "LISTENING 3 · TAKE A MESSAGE",
+            "lines": [
+              "LISTENING 3 · TAKE A MESSAGE",
+              "Nghe tin nhắn, xác nhận đúng thông tin",
+              "Bạn nhận cuộc gọi từ nhà hàng. Ghi từ khóa rồi gọi lại xác nhận.",
+              "PEOPLE",
+              "________________________",
+              "DAY & TIME",
+              "________________________",
+              "NAME",
+              "________________________",
+              "ENTRANCE",
+              "________________________",
+              "PRICE",
+              "________________________",
+              "SPECIAL REQUEST",
+              "________________________",
+              "XÁC NHẬN: Is the table for four? / Is the entrance next to the supermarket?"
+            ]
+          }
+        ]
+      },
+      {
+        "group": "Grammar",
+        "slides": [
+          {
+            "title": "NOUN PHRASES · BUILD & USE",
+            "lines": [
+              "NOUN PHRASES · BUILD & USE",
+              "Ghép cụm, dùng ngay trong câu",
+              "Nói cụm đúng trật tự, rồi nói một câu thật hoặc đặt câu hỏi.",
+              "colleague / helpful / my / new",
+              "Đồng nghiệp mới hay giúp đỡ của tôi.",
+              "restaurants / those / local",
+              "Những nhà hàng địa phương kia.",
+              "quiet / another / café",
+              "Một quán cà phê yên tĩnh khác.",
+              "current / our / plan",
+              "Kế hoạch hiện tại của chúng tôi.",
+              "other / places / interesting",
+              "Những địa điểm thú vị khác.",
+              "small / her / shop",
+              "Cửa hàng nhỏ của cô ấy.",
+              "TỪ HẠN ĐỊNH + TÍNH TỪ + DANH TỪ. Đọc cả cụm, không đọc từng từ."
+            ]
+          },
+          {
+            "title": "NOUN PHRASES · SWITCH & RESPOND",
+            "lines": [
+              "NOUN PHRASES · SWITCH & RESPOND",
+              "Giữ ý, đổi một thành phần",
+              "Nói cụm mới rồi sửa động từ hoặc danh từ trong câu nếu cần.",
+              "this quiet café → XA",
+              "This quiet café is open.",
+              "that small shop → NHIỀU",
+              "That small shop sells local food.",
+              "my new coworker → CỦA CÔ ẤY",
+              "My new coworker is friendly.",
+              "another local restaurant → NHIỀU",
+              "I know another local restaurant.",
+              "our next trip → CỦA HỌ",
+              "Our next trip is in June.",
+              "these cheap places → MỘT NƠI GẦN",
+              "These cheap places are busy.",
+              "Đổi cả câu: this/that/another + số ít; these/those/other + số nhiều."
+            ]
+          },
+          {
+            "title": "NOUN PHRASES · REPAIR",
+            "lines": [
+              "NOUN PHRASES · REPAIR",
+              "Sửa cụm, rồi nói lại cả câu",
+              "Tìm một lỗi trong cụm danh từ hoặc sự hòa hợp của câu.",
+              "I like a my new job.",
+              "Từ sở hữu có đứng cùng a không?",
+              "Those small shop are open.",
+              "Nhìn từ chỉ định và số lượng.",
+              "Do you know other quiet café?",
+              "Một nơi khác hay nhiều nơi khác?",
+              "This restaurant local is nice.",
+              "Tính từ đứng trước hay sau danh từ?",
+              "Her new coworker are helpful.",
+              "Danh từ chính là số ít hay số nhiều?",
+              "We have two cafés. Another café is closed.",
+              "Muốn nói quán còn lại trong hai quán.",
+              "Giải thích ngắn bằng tiếng Việt, rồi dùng câu đúng để hỏi partner."
+            ]
+          },
+          {
+            "title": "NOUN PHRASES · ASK FOR DETAILS",
+            "lines": [
+              "NOUN PHRASES · ASK FOR DETAILS",
+              "Một cụm danh từ, hai hệ câu hỏi",
+              "Dùng cụm in đậm để hỏi một câu BE và một câu DO/DOES.",
+              "your new coworker",
+              "BE: friendly? / DO: work near here?",
+              "those small shops",
+              "BE: open? / DO: sell local food?",
+              "her local restaurant",
+              "BE: crowded? / DO: serve breakfast?",
+              "your next trip",
+              "BE: in June? / DO: take two days?",
+              "Hỏi thêm một câu WH sau câu trả lời ngắn."
+            ]
+          },
+          {
+            "title": "NOUN PHRASES · LISTEN & CHOOSE",
+            "lines": [
+              "NOUN PHRASES · LISTEN & CHOOSE",
+              "Nghe phân biệt từ đứng đầu và số lượng",
+              "Nghe giáo viên. Chọn A hoặc B, rồi đọc lại cả cụm.",
+              "A my new colleague / B her new colleague",
+              "Nghe người sở hữu.",
+              "A this quiet café / B these quiet cafés",
+              "Nghe số ít hoặc số nhiều.",
+              "A another local shop / B other local shops",
+              "Nghe một nơi khác hoặc nhiều nơi khác.",
+              "A our current plan / B their current plan",
+              "Nghe người sở hữu.",
+              "A those cheap places / B these cheap places",
+              "Nghe xa hoặc gần.",
+              "A a quiet restaurant / B the quiet restaurant",
+              "Nghe a hoặc the.",
+              "Không chỉ chọn chữ cái. Ghi lại cả cụm bạn vừa nghe."
+            ]
+          },
+          {
+            "title": "NOUN PHRASES · LISTEN & WRITE",
+            "lines": [
+              "NOUN PHRASES · LISTEN & WRITE",
+              "Nghe và ghi lại cả cụm danh từ",
+              "Giáo viên đọc 6 câu. Mỗi câu chỉ ghi cụm chỉ người / vật mục tiêu.",
+              "1 · Cụm chỉ người",
+              "________________________",
+              "2 · Cụm chỉ nơi",
+              "________________________",
+              "3 · Cụm chỉ kế hoạch",
+              "________________________",
+              "4 · Cụm chỉ cửa hàng",
+              "________________________",
+              "5 · Cụm chỉ đồ vật",
+              "________________________",
+              "6 · Cụm chỉ quán còn lại",
+              "________________________",
+              "Sau nghe: khoanh từ hạn định, gạch chân danh từ chính và đặt một câu hỏi."
+            ]
+          },
+          {
+            "title": "NOUN PHRASES · LISTEN & COMPLETE",
+            "lines": [
+              "NOUN PHRASES · LISTEN & COMPLETE",
+              "Nghe một kế hoạch, khôi phục cả cụm",
+              "Mỗi chỗ trống điền 2–3 từ. Không chỉ ghi một từ hạn định.",
+              "(1) __________, Mai, wants to have lunch with us.",
+              "She likes (2) __________.",
+              "(3) __________ is to try (4) __________ near the park.",
+              "There are two local restaurants on the list.",
+              "The first one is crowded. (5) __________ has a quiet corner.",
+              "(6) __________ across the street sell drinks.",
+              "NÓI LẠI: chọn nơi phù hợp cho Mai và giải thích bằng thông tin vừa nghe."
+            ]
+          },
+          {
+            "title": "NOUN PHRASES · INFORMATION GAP",
+            "lines": [
+              "NOUN PHRASES · INFORMATION GAP",
+              "Nói đủ rõ để chọn đúng nơi",
+              "Bạn muốn tìm quán cho đồng nghiệp. Giáo viên có thông tin chi tiết trong Notes.",
+              "WHAT YOU NEED",
+              "A quiet local restaurant",
+              "A table for four",
+              "A place near work",
+              "A price your group accepts",
+              "YOUR TASK",
+              "Hỏi ít nhất 4 câu.",
+              "Dùng this/that/these/those,",
+              "một cụm sở hữu và another.",
+              "Chốt một nơi và giải thích.",
+              "Hỏi lại khi chưa rõ: Do you mean this restaurant or that one?"
+            ]
+          },
+          {
+            "title": "NOUN PHRASES · LISTEN RETELL SWITCH",
+            "lines": [
+              "NOUN PHRASES · LISTEN RETELL SWITCH",
+              "Nghe, kể lại, rồi đổi người sở hữu",
+              "Không nhìn đoạn mẫu. Nghe giáo viên, ghi 3 cụm rồi kể lại.",
+              "ROUND 1 · LISTEN",
+              "Ghi cụm chỉ:",
+              "1. Người",
+              "2. Chuyến đi",
+              "3. Địa điểm",
+              "ROUND 2 · REPORT",
+              "Kể lại bằng SHE.",
+              "my → her",
+              "our → their",
+              "Giữ nguyên đặc điểm của nơi.",
+              "Partner đặt 2 câu WH để kiểm tra thông tin bạn vừa kể."
+            ]
+          },
+          {
+            "title": "NOUN PHRASES · RETRY",
+            "lines": [
+              "NOUN PHRASES · RETRY",
+              "Thử lại không nhìn mẫu",
+              "Nói cả cụm rồi dùng trong một câu. Partner phải hỏi thêm.",
+              "Đồng nghiệp mới của cô ấy",
+              "Sở hữu + mô tả + người.",
+              "Những quán cà phê yên tĩnh kia",
+              "Xa + nhiều + mô tả + nơi.",
+              "Một nhà hàng địa phương khác",
+              "Một lựa chọn khác.",
+              "Những địa điểm thú vị khác",
+              "Nhiều lựa chọn khác.",
+              "Kế hoạch hiện tại của chúng ta",
+              "Sở hữu + mô tả + ý tưởng.",
+              "Nhà hàng còn lại trong hai nhà hàng",
+              "Đối tượng còn lại đã xác định.",
+              "Tự kiểm: từ hạn định đúng chưa? Danh từ đúng số chưa? BE/DO theo danh từ chính chưa?"
+            ]
+          }
+        ]
+      }
+    ],
+    "dialogue": [
+      {
+        "who": "Linh",
+        "line": "Hey, how’s it going?"
+      },
+      {
+        "who": "Tom",
+        "line": "Pretty good, thanks. What are you buying?"
+      },
+      {
+        "who": "Linh",
+        "line": "Just some vegetables and fruit. Do you shop here often?"
+      },
+      {
+        "who": "Tom",
+        "line": "Once a week. I usually come here on Saturdays."
+      },
+      {
+        "who": "Linh",
+        "line": "Are you cooking dinner tonight?"
+      },
+      {
+        "who": "Tom",
+        "line": "Not really. My sister is cooking, so I just need some milk."
+      },
+      {
+        "who": "Linh",
+        "line": "The café next door has free coffee today."
+      },
+      {
+        "who": "Tom",
+        "line": "Are you serious? Let’s go after we pay."
+      },
+      {
+        "who": "Linh",
+        "line": "That sounds good. Give me a minute to finish shopping."
+      },
+      {
+        "who": "Tom",
+        "line": "No worries. I’ll meet you by the entrance."
+      }
+    ],
+    "listenCheck": [
+      {
+        "q": "Linh: What are you buying?",
+        "a": "Vegetables and fruit."
+      },
+      {
+        "q": "Tom: Do you shop here often?",
+        "a": "Once a week."
+      },
+      {
+        "q": "Linh: When do you usually come?",
+        "a": "On Saturdays."
+      },
+      {
+        "q": "Tom: Is the market open on Sunday?",
+        "a": "Yes, until noon."
+      },
+      {
+        "q": "Linh: How much are these apples?",
+        "a": "Three dollars a kilo."
+      },
+      {
+        "q": "Tom: Do you need a bag?",
+        "a": "Yes, please."
+      },
+      {
+        "q": "Linh: Is this fresh?",
+        "a": "Yes, picked today."
+      },
+      {
+        "q": "Tom: Do you have change?",
+        "a": "Let me check."
+      }
+    ],
+    "speakPrompts": [
+      "How much are these apples per kilo?",
+      "Do you have a bag I can use?",
+      "Is this fresh? When was it picked?",
+      "I need change for twenty dollars.",
+      "Do you have anything cheaper?"
+    ]
+  },
+  "slides": 80
+}

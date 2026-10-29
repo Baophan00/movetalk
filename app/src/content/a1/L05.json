@@ -1,993 +1,194 @@
 {
   "n": 5,
   "level": "A1",
-  "deck": "doc_efcb7c4fed74_MOVE_ACTIVATE_1_L05_THIS,_THAT_THESE,_THOSE_,_THERE_+BE_VIP_Repaired.pptx",
+  "unit": "Home & Furniture",
+  "unitVi": "Nhà ở & đồ nội thất",
+  "topic": "Describing your home, rooms, and furniture",
+  "topicVi": "Mô tả nhà ở, phòng và đồ nội thất",
+  "objectives": [
+    "Can describe your home and rooms",
+    "Can use there is/there are",
+    "Can use prepositions of place (in, on, under, next to, between)",
+    "Can talk about where things are"
+  ],
+  "objectivesVi": [
+    "Có thể mô tả nhà ở và các phòng",
+    "Có thể dùng there is/there are",
+    "Có thể dùng giới từ vị trí (in, on, under, next to, between)",
+    "Có thể nói vị trí của đồ vật"
+  ],
+  "estimatedMinutes": 45,
   "parts": {
     "vocab": [
-      {
-        "word": "mug",
-        "pos": "n",
-        "ipa": "/mʌɡ/",
-        "def": "",
-        "example": "Is this your mug?",
-        "vi": "cốc có quai",
-        "cloze": "Is this your ____?"
-      },
-      {
-        "word": "notebook",
-        "pos": "n",
-        "ipa": "/ˈnoʊtbʊk/",
-        "def": "",
-        "example": "Are these your notebooks?",
-        "vi": "sổ tay",
-        "cloze": "Are these your ____?"
-      },
-      {
-        "word": "charger",
-        "pos": "n",
-        "ipa": "/ˈtʃɑːrdʒər/",
-        "def": "",
-        "example": "Is that your charger?",
-        "vi": "bộ sạc",
-        "cloze": "Is that your ____?"
-      },
-      {
-        "word": "receipt",
-        "pos": "n",
-        "ipa": "/rɪˈsiːt/",
-        "def": "",
-        "example": "Is this your receipt?",
-        "vi": "hóa đơn, biên lai",
-        "cloze": "Is this your ____?"
-      },
-      {
-        "word": "counter",
-        "pos": "n",
-        "ipa": "/ˈkaʊntər/",
-        "def": "",
-        "example": "There is a bag by the counter.",
-        "vi": "quầy",
-        "cloze": "There is a bag by the ____."
-      },
-      {
-        "word": "shelf",
-        "pos": "n",
-        "ipa": "/ʃelf/",
-        "def": "",
-        "example": "Are those cups on the shelf?",
-        "vi": "kệ",
-        "cloze": "Are those cups on the ____?"
-      },
-      {
-        "word": "socket",
-        "pos": "n",
-        "ipa": "/ˈsɑːkɪt/",
-        "def": "",
-        "example": "Is there a socket near this table?",
-        "vi": "ổ cắm điện",
-        "cloze": "Is there a ____ near this table?"
-      },
-      {
-        "word": "entrance",
-        "pos": "n",
-        "ipa": "/ˈentrəns/",
-        "def": "",
-        "example": "There are two chairs by the entrance.",
-        "vi": "lối vào",
-        "cloze": "There are two chairs by the ____."
-      },
-      {
-        "word": "over here",
-        "pos": "adv.phr",
-        "ipa": "/ˌoʊvər ˈhɪr/",
-        "def": "",
-        "example": "These seats over here are free.",
-        "vi": "ở đằng này",
-        "cloze": "These seats ____ ____ are free."
-      },
-      {
-        "word": "over there",
-        "pos": "adv.phr",
-        "ipa": "/ˌoʊvər ˈðer/",
-        "def": "",
-        "example": "That bag over there is mine.",
-        "vi": "ở đằng kia",
-        "cloze": "That bag ____ ____ is mine."
-      },
-      {
-        "word": "next to",
-        "pos": "prep.phr",
-        "ipa": "/ˈnekst tə/",
-        "def": "",
-        "example": "There is a plant next to the desk.",
-        "vi": "bên cạnh",
-        "cloze": "There is a plant ____ ____ the desk."
-      },
-      {
-        "word": "in front of",
-        "pos": "prep.phr",
-        "ipa": "/ɪn ˈfrʌnt əv/",
-        "def": "",
-        "example": "There are two chairs in front of the desk.",
-        "vi": "phía trước",
-        "cloze": "There are two chairs ____ ____ ____ the desk."
-      },
-      {
-        "word": "behind",
-        "pos": "prep",
-        "ipa": "/bɪˈhaɪnd/",
-        "def": "phía sau",
-        "example": "The printer is behind you.",
-        "vi": "phía sau",
-        "cloze": "The printer is ____ you."
-      },
-      {
-        "word": "available",
-        "pos": "adj",
-        "ipa": "/əˈveɪləbəl/",
-        "def": "",
-        "example": "Are those seats available?",
-        "vi": "còn trống, có thể dùng",
-        "cloze": "Are those seats ____?"
-      },
-      {
-        "word": "the one",
-        "pos": "NP",
-        "ipa": "/ðə wʌn/",
-        "def": "",
-        "example": "The one by the window is mine.",
-        "vi": "cái đó, cái được nhắc đến",
-        "cloze": "The ____ by the window is mine."
-      },
-      {
-        "word": "the ones",
-        "pos": "NP",
-        "ipa": "/ðə wʌnz/",
-        "def": "",
-        "example": "The ones on the shelf are clean.",
-        "vi": "những cái được nhắc đến",
-        "cloze": "The ____ on the shelf are clean."
-      },
-      {
-        "word": "experience",
-        "pos": "n",
-        "ipa": "/ɪkˈspɪriəns/",
-        "def": "",
-        "example": "This is my first experience of pottery.",
-        "vi": "trải nghiệm",
-        "cloze": "This is my first ____ of pottery."
-      },
-      {
-        "word": "first time",
-        "pos": "NP",
-        "ipa": "/ˌfɜːrst ˈtaɪm/",
-        "def": "",
-        "example": "This is my first time making pottery.",
-        "vi": "lần đầu tiên",
-        "cloze": "This is my ____ ____ making pottery."
-      },
-      {
-        "word": "second visit",
-        "pos": "NP",
-        "ipa": "/ˌsekənd ˈvɪzɪt/",
-        "def": "",
-        "example": "This is my second visit to Hoi An.",
-        "vi": "lần ghé thăm thứ hai",
-        "cloze": "This is my ____ ____ to Hoi An."
-      },
-      {
-        "word": "business trip",
-        "pos": "NP",
-        "ipa": "/ˈbɪznəs trɪp/",
-        "def": "",
-        "example": "Is that your first business trip?",
-        "vi": "chuyến công tác",
-        "cloze": "Is that your first ____ ____?"
-      },
-      {
-        "word": "first choice",
-        "pos": "NP",
-        "ipa": "/ˌfɜːrst ˈtʃɔɪs/",
-        "def": "",
-        "example": "Is that your first choice?",
-        "vi": "lựa chọn số một",
-        "cloze": "Is that your ____ ____?"
-      },
-      {
-        "word": "favorite place",
-        "pos": "NP",
-        "ipa": "/ˈfeɪvərɪt pleɪs/",
-        "def": "",
-        "example": "This is my favorite place in town.",
-        "vi": "nơi yêu thích",
-        "cloze": "This is my ____ ____ in town."
-      },
-      {
-        "word": "once a year",
-        "pos": "adv.phr",
-        "ipa": "/ˌwʌns ə ˈjɪr/",
-        "def": "",
-        "example": "We take a trip together once a year.",
-        "vi": "mỗi năm một lần",
-        "cloze": "We take a trip together ____ ____ ____."
-      },
-      {
-        "word": "twice a month",
-        "pos": "adv.phr",
-        "ipa": "/ˌtwaɪs ə ˈmʌnθ/",
-        "def": "",
-        "example": "I come here twice a month.",
-        "vi": "mỗi tháng hai lần",
-        "cloze": "I come here ____ ____ ____."
-      }
+      { "word": "kitchen", "pos": "n", "ipa": "/ˈkɪtʃɪn/", "def": "a room where food is cooked", "example": "The kitchen is next to the living room.", "vi": "nhà bếp", "cloze": "I cook in the ___.", "collocations": ["kitchen table", "in the kitchen", "modern kitchen"], "register": "neutral" },
+      { "word": "bedroom", "pos": "n", "ipa": "/ˈbedruːm/", "def": "a room for sleeping", "example": "My bedroom is on the second floor.", "vi": "phòng ngủ", "cloze": "There are two ___ in the house.", "collocations": ["master bedroom", "small bedroom", "bedroom window"], "register": "neutral" },
+      { "word": "living room", "pos": "n", "ipa": "/ˈlɪvɪŋ ruːm/", "def": "a room for relaxing and socializing", "example": "We watch TV in the living room.", "vi": "phòng khách", "cloze": "The sofa is in the ___.", "collocations": ["in the living room", "spacious living room", "living room furniture"], "register": "neutral" },
+      { "word": "bathroom", "pos": "n", "ipa": "/ˈbæθruːm/", "def": "a room with a bath or shower", "example": "The bathroom is upstairs.", "vi": "phòng tắm", "cloze": "There is a shower in the ___.", "collocations": ["in the bathroom", "bathroom mirror", "clean bathroom"], "register": "neutral" },
+      { "word": "table", "pos": "n", "ipa": "/ˈteɪbəl/", "def": "a flat surface with legs", "example": "The books are on the table.", "vi": "bàn", "cloze": "The lamp is on the ___.", "collocations": ["on the table", "dining table", "coffee table"], "register": "neutral" },
+      { "word": "chair", "pos": "n", "ipa": "/tʃeər/", "def": "a seat for one person", "example": "There are four chairs in the kitchen.", "vi": "ghế", "cloze": "The ___ is next to the desk.", "collocations": ["sit on a chair", "comfortable chair", "chair and table"], "register": "neutral" },
+      { "word": "bed", "pos": "n", "ipa": "/bed/", "def": "a piece of furniture for sleeping", "example": "The bed is in the bedroom.", "vi": "giường", "cloze": "There is a ___ in the room.", "collocations": ["make the bed", "double bed", "bed and pillow"], "register": "neutral" },
+      { "word": "sofa", "pos": "n", "ipa": "/ˈsoʊfə/", "def": "a long comfortable seat", "example": "We sit on the sofa to watch TV.", "vi": "ghế sofa", "cloze": "The ___ is in the living room.", "collocations": ["on the sofa", "comfortable sofa", "sofa and armchair"], "register": "neutral" },
+      { "word": "lamp", "pos": "n", "ipa": "/læmp/", "def": "a device that gives light", "example": "There is a lamp on the table.", "vi": "đèn", "cloze": "The ___ is next to the bed.", "collocations": ["table lamp", "floor lamp", "turn on the lamp"], "register": "neutral" },
+      { "word": "window", "pos": "n", "ipa": "/ˈwɪndoʊ/", "def": "an opening in a wall with glass", "example": "The window is open.", "vi": "cửa sổ", "cloze": "There is a ___ in the bedroom.", "collocations": ["open the window", "close the window", "by the window"], "register": "neutral" },
+      { "word": "door", "pos": "n", "ipa": "/dɔːr/", "def": "a movable barrier at an entrance", "example": "The door is closed.", "vi": "cửa", "cloze": "Close the ___.", "collocations": ["open the door", "front door", "door handle"], "register": "neutral" },
+      { "word": "floor", "pos": "n", "ipa": "/flɔːr/", "def": "the surface you walk on", "example": "The carpet is on the floor.", "vi": "sàn nhà", "cloze": "The shoes are on the ___.", "collocations": ["on the floor", "first floor", "floor lamp"], "register": "neutral" }
     ],
-    "grammarChoose": [],
     "grammar": [
       {
-        "section": "GRAMMAR IN USE · VISUAL MAP",
-        "sub": "THIS / THAT / THESE / THOSE",
+        "section": "GRAMMAR IN USE · THERE IS / THERE ARE",
+        "sub": "Describing what exists in a place",
+        "explanation": "There is = có (số ít). There are = có (số nhiều). Dùng để mô tả đồ vật trong phòng. Phủ định: There isn't / There aren't. Câu hỏi: Is there...? / Are there...?",
+        "explanationVi": "There is = có (số ít). There are = có (số nhiều). Dùng để mô tả đồ vật trong phòng. Phủ định: There isn't / There aren't. Câu hỏi: Is there...? / Are there...?",
         "lines": [
-          "Khoảng cách tính từ người đang nói. Nhìn số lượng, rồi nhìn gần hay xa.",
-          "THIS · gần · một",
-          "YOU",
-          "IS",
-          "THAT · xa · một",
-          "YOU",
-          "IS",
-          "THESE · gần · nhiều",
-          "YOU",
-          "ARE",
-          "THOSE · xa · nhiều",
-          "YOU",
-          "ARE",
-          "This is a mug. / That is a mug. / These are mugs. / Those are mugs."
+          "There is a table in the kitchen.",
+          "There are four chairs in the living room.",
+          "There isn't a TV in the bedroom.",
+          "There aren't any windows in the bathroom.",
+          "Is there a lamp on the table?",
+          "Are there any books on the shelf?"
+        ],
+        "commonMistakes": [
+          "Sai: 'There are a table.' → Đúng: 'There is a table.'",
+          "Sai: 'There is four chairs.' → Đúng: 'There are four chairs.'",
+          "Sai: 'Is there any chairs?' → Đúng: 'Are there any chairs?'"
+        ],
+        "practice": [
+          "There ___ a sofa in the living room.",
+          "There ___ two bedrooms in the house.",
+          "___ there a kitchen on the first floor?",
+          "There ___ any lamps in the bedroom."
         ]
       },
       {
-        "section": "GRAMMAR IN USE · TWO SYSTEMS",
-        "sub": "THIS IS… và THIS + NOUN IS…",
+        "section": "GRAMMAR IN USE · PREPOSITIONS OF PLACE",
+        "sub": "in, on, under, next to, between, in front of, behind",
+        "explanation": "In = trong (phòng, hộp). On = trên (bàn, tường). Under = dưới. Next to = bên cạnh. Between = giữa. In front of = phía trước. Behind = phía sau.",
+        "explanationVi": "In = trong (phòng, hộp). On = trên (bàn, tường). Under = dưới. Next to = bên cạnh. Between = giữa. In front of = phía trước. Behind = phía sau.",
         "lines": [
-          "Hai cách chỉ cùng một vật. Khi thêm danh từ, cả cụm làm chủ ngữ.",
-          "THIS / THAT + BE",
-          "This is my bag.",
-          "That is a new charger.",
-          "That’s my charger.",
-          "THIS / THAT thay cho vật",
-          "đang được chỉ.",
-          "THIS / THAT + NOUN + BE",
-          "This bag is mine.",
-          "That charger is new.",
-          "This blue bag is mine.",
-          "THIS BAG là cụm danh từ.",
-          "Danh từ chính vẫn số ít.",
-          "Không nói This my bag is… Trong THIS IS MY BAG, MY đi với BAG, không đi với THIS."
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · TWO SYSTEMS",
-        "sub": "THESE / THOSE luôn đi với ARE ở bài này",
-        "lines": [
-          "Nhớ đổi cả danh từ và động từ khi chuyển từ một sang nhiều.",
-          "ONE · THIS / THAT IS",
-          "This is a notebook.",
-          "That bag is new.",
-          "Is that your bag?",
-          "Yes, it is. / No, it isn’t.",
-          "THESE / THOSE ARE",
-          "These are notebooks.",
-          "Those bags are new.",
-          "Are those your bags?",
-          "Yes, they are. / No, they aren’t.",
-          "Không viết these’re / those’re trong bài học. THAT IS thường rút thành THAT’S."
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · QUESTIONS",
-        "sub": "Đổi BE lên trước để hỏi",
-        "lines": [
-          "Hỏi bằng IS / ARE. Trả lời bằng IT / THEY cho đồ vật.",
-          "Is this your mug?",
-          "Yes, it is. / No, it isn’t.",
-          "Is that a charger?",
-          "Yes, it is. / No, it isn’t.",
-          "Are these your notebooks?",
-          "Yes, they are. / No, they aren’t.",
-          "Are those seats available?",
-          "Yes, they are. / No, they aren’t.",
-          "Khẳng định ngắn: Yes, it is. Không dừng ở Yes, it’s."
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · WH QUESTIONS",
-        "sub": "Hỏi tên, chủ sở hữu, giá và lựa chọn",
-        "lines": [
-          "Nhìn vật, chọn loại thông tin cần hỏi.",
-          "What’s this / that?",
-          "It’s a charger.",
-          "What are these / those?",
-          "They’re receipts.",
-          "Whose bag is this?",
-          "It’s Mai’s. / It’s my bag.",
-          "How much are those mugs?",
-          "They’re $5 each.",
-          "Which one is yours?",
-          "The one by the window.",
-          "Which ones are clean?",
-          "The ones on the shelf.",
-          "WHAT nhận diện. WHOSE hỏi sở hữu. WHICH chọn trong nhóm đã rõ."
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · TWO SYSTEMS",
-        "sub": "THERE IS / THERE ARE: giới thiệu có gì",
-        "lines": [
-          "THERE trong cấu trúc này không có nghĩa là “ở đằng kia”.",
-          "THERE IS",
-          "There is a socket here.",
-          "There’s some water on the table.",
-          "There isn’t any milk.",
-          "Is there a socket?",
-          "Yes, there is. / No, there isn’t.",
-          "THERE ARE",
-          "There are two sockets here.",
-          "There are some cups on the shelf.",
-          "There aren’t any free seats.",
-          "Are there any cups?",
-          "Yes, there are. / No, there aren’t.",
-          "Không trả lời Yes, it is cho IS THERE…? Không dừng ở Yes, there’s."
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · TWO SYSTEMS",
-        "sub": "THERE IS / ARE và HAVE / HAS",
-        "lines": [
-          "Cùng nói “có”, nhưng chủ ngữ và điểm bắt đầu của câu khác nhau.",
-          "THERE IS / ARE",
-          "Có gì ở một nơi?",
-          "There are two windows in this room.",
-          "Are there any windows in this room?",
-          "THERE + BE + vật/người + nơi",
-          "Đồ vật quyết định IS / ARE.",
-          "SUBJECT + HAVE / HAS",
-          "Ai / nơi nào có gì?",
-          "This room has two windows.",
-          "Does this room have any windows?",
-          "I / you / we / they HAVE",
-          "He / she / it / this room HAS",
-          "Phòng cũng có thể HAVE / HAS đặc điểm, không chỉ người mới có."
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · TWO QUESTION ENGINES",
-        "sub": "IS THERE…? hay DOES IT HAVE…?",
-        "lines": [
-          "Giữ nguyên ý. Đổi điểm bắt đầu của câu.",
-          "Is there a balcony in this room?",
-          "Does this room have a balcony?",
-          "Are there any sockets in this café?",
-          "Does this café have any sockets?",
-          "Is there a charger in your bag?",
-          "Do you have a charger in your bag?",
-          "There is a meeting room in our office.",
-          "Our office has a meeting room.",
-          "Sau DOES dùng HAVE. Không nói Does this room has…?"
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · TWO SYSTEMS",
-        "sub": "THAT’S A… và THERE’S A…",
-        "lines": [
-          "THAT chỉ vật đã được nhắc hoặc chỉ vào. THERE’S giới thiệu sự hiện diện.",
-          "THAT’S A NICE CAFÉ.",
-          "Đó là một quán đẹp.",
-          "Is that your office?",
-          "Those are my coworkers.",
-          "THIS / THAT / THESE / THOSE",
-          "Nhận diện hoặc mô tả đối tượng.",
-          "THERE’S A NICE CAFÉ NEARBY.",
-          "Có một quán đẹp gần đây.",
-          "Is there a café near your office?",
-          "There are two cafés on this street.",
-          "THERE IS / ARE",
-          "Nói có gì, thường kèm nơi chốn.",
-          "There’s a bag over there. THERE’S = có; OVER THERE = ở đằng kia."
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · QUICK CHECK",
-        "sub": "Chọn cả cụm chủ ngữ và động từ",
-        "lines": [
-          "Nói đầy đủ, rồi chuyển sang câu hỏi.",
-          "___ are my notebooks, here in my hand.",
-          "This / These",
-          "___ is your bag, across the room.",
-          "That / Those",
-          "There ___ some water on the table.",
-          "is / are",
-          "There ___ two empty seats.",
-          "is / are",
-          "This room ___ two windows.",
-          "have / has",
-          "Does this café ___ Wi-Fi?",
-          "have / has",
-          "KEY: These; That; is; are; has; have."
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · TWO SYSTEMS",
-        "sub": "FIRST TIME và FIRST EXPERIENCE",
-        "lines": [
-          "Nói lần đầu thử hoạt động: FIRST TIME là mẫu giao tiếp dễ dùng.",
-          "THIS IS MY FIRST TIME…",
-          "This is my first time here.",
-          "This is my first time making pottery.",
-          "Is this your first time here?",
-          "first time + V-ing",
-          "first time + here / in Hoi An",
-          "FIRST EXPERIENCE OF…",
-          "This is my first experience of pottery.",
-          "That’s a new experience for me.",
-          "Is this your first experience of kayaking?",
-          "experience of + N / V-ing",
-          "Nói rõ trải nghiệm gì khi cần.",
-          "This is my first experience có thể đủ khi ngữ cảnh đã rõ; thêm OF… giúp người nghe hiểu ngay."
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · TWO SYSTEMS",
-        "sub": "THIS IS MY SECOND VISIT: số thứ tự và tần suất",
-        "lines": [
-          "Lần thứ mấy của chuyến này khác với bao lâu làm một lần.",
-          "LẦN THỨ MẤY?",
-          "Is this your first visit to Hoi An?",
-          "No, it’s my second visit.",
-          "This is my third trip to Da Nang.",
-          "first / second / third + visit / trip",
-          "visit / trip TO + nơi",
-          "BAO LÂU MỘT LẦN?",
-          "How often do you come here?",
-          "I come here twice a month.",
-          "We travel together once a year.",
-          "once / twice / three times + a…",
-          "Hỏi bằng HOW OFTEN + DO.",
-          "Không dùng How often is this your visit? Đặt đúng câu hỏi theo loại thông tin."
-        ]
-      },
-      {
-        "section": "GRAMMAR IN USE · TWO SYSTEMS",
-        "sub": "Hai người, hai góc nhìn",
-        "lines": [
-          "A đứng cạnh bàn. B đứng cách bàn vài bước. Cùng nói về một cốc.",
-          "A · GẦN CỐC",
-          "Is this your mug?",
-          "This mug is blue.",
-          "These notebooks are mine.",
-          "Chỉ vật trước, rồi nói.",
-          "B · XA CỐC",
-          "Yes, that’s my mug.",
-          "That mug is blue.",
-          "Those notebooks are yours.",
-          "Đổi người nói, đổi từ chỉ định.",
-          "Không có khoảng cách theo mét cố định. Gần–xa phụ thuộc góc nhìn và ngữ cảnh."
+          "The book is on the table.",
+          "The cat is under the chair.",
+          "The lamp is next to the bed.",
+          "The kitchen is between the living room and the bedroom.",
+          "The TV is in front of the sofa.",
+          "The garden is behind the house."
+        ],
+        "commonMistakes": [
+          "Sai: 'The book is in the table.' → Đúng: 'The book is on the table.'",
+          "Sai: 'The cat is on the chair.' (dưới ghế) → Đúng: 'The cat is under the chair.'",
+          "Sai: 'The lamp is between the bed.' → Đúng: 'The lamp is next to the bed.'"
+        ],
+        "practice": [
+          "The keys are ___ the table.",
+          "The shoes are ___ the bed.",
+          "The picture is ___ the wall.",
+          "The chair is ___ the desk and the window."
         ]
       }
     ],
-    "flow": [
-      {
-        "group": "Overview",
-        "slides": [
-          {
-            "title": "MOVE.",
-            "lines": [
-              "MOVE.",
-              "ACTIVATE 1",
-              "L08 · POINT & DESCRIBE",
-              "Chỉ đúng vật.",
-              "Mô tả nơi bạn đang ở.",
-              "THIS / THAT",
-              "and",
-              "THERE IS / ARE",
-              "POINT → ASK → RESPOND",
-              "NEAR / FAR · ONE / MANY"
-            ]
-          },
-          {
-            "title": "RECALL & CONNECT · FIRST TRY",
-            "lines": [
-              "RECALL & CONNECT · FIRST TRY",
-              "Bạn còn gọi lại được gì?",
-              "Không nhìn mẫu. Với mỗi ý, nói câu hỏi và một câu trả lời thật.",
-              "Nó mất bao lâu ?",
-              "Bao lâu bạn mới gọi cho gia đình ?",
-              "Nó tốn nhiêu ?",
-              "Làm sao để nấu món này ?",
-              "Nó bao xa?",
-              "Bạn thích loại nước nào ?",
-              "Giữ lại một câu bạn chưa chắc để thử lại cuối buổi."
-            ]
-          }
-        ]
-      },
-      {
-        "group": "Before you listen",
-        "slides": [
-          {
-            "title": "LISTEN & DISCOVER · BEFORE LISTENING",
-            "lines": [
-              "LISTEN & DISCOVER · BEFORE LISTENING",
-              "DAILY LIFE · Choosing a table · Before you listen",
-              "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
-              "TALK FIRST",
-              "Do you work in cafés?",
-              "Do you need a socket?",
-              "Which seat do you usually choose?",
-              "LISTENING MISSION",
-              "WHICH seats are free?",
-              "WHERE is the socket?",
-              "WHAT does Mai own?",
-              "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
-            ]
-          },
-          {
-            "title": "LISTEN & DISCOVER · BEFORE LISTENING",
-            "lines": [
-              "LISTEN & DISCOVER · BEFORE LISTENING",
-              "WORK LIFE · A new desk · Before you listen",
-              "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
-              "TALK FIRST",
-              "What is on your desk?",
-              "Does your workplace have a meeting room?",
-              "Do you share office supplies?",
-              "LISTENING MISSION",
-              "WHO uses the desk by the window?",
-              "HOW MANY sockets are there?",
-              "WHAT is in the big box?",
-              "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
-            ]
-          },
-          {
-            "title": "LISTEN & DISCOVER · BEFORE LISTENING",
-            "lines": [
-              "LISTEN & DISCOVER · BEFORE LISTENING",
-              "TRAVEL · Checking a room · Before you listen",
-              "Trả lời về bạn trước. Nghe hai lượt, chưa mở lời thoại.",
-              "TALK FIRST",
-              "What do you check first in a hotel room?",
-              "Do you need a fridge?",
-              "Do you prefer a room with a balcony?",
-              "LISTENING MISSION",
-              "WHERE is the balcony?",
-              "DOES the room have a fridge?",
-              "WHAT is next to the bed?",
-              "Lượt 1: hiểu tình huống. Lượt 2: ghi câu hỏi và loại thông tin trong câu trả lời."
-            ]
-          }
-        ]
-      },
-      {
-        "group": "Pronunciation",
-        "slides": [
-          {
-            "title": "PRONUNCIATION · THIS IS A",
-            "lines": [
-              "PRONUNCIATION · THIS IS A",
-              "THIS_IS_A: ba từ, một cụm liền",
-              "Mẫu đọc chậm rõ. Dấu _ chỉ chỗ nối, không thêm âm mới.",
-              "this_is_a mug",
-              "/ðɪs ɪz ə mʌɡ/",
-              "this_is_an old charger",
-              "/ðɪs ɪz ən oʊld ˈtʃɑːrdʒər/",
-              "that_is_a bag",
-              "/ðæt ɪz ə bæɡ/",
-              "that’s_a bag",
-              "/ðæts ə bæɡ/",
-              "THIS kết thúc /s/, IS kết thúc /z/. THAT’S có cụm /ts/, không đọc thành /ðæz/."
-            ]
-          },
-          {
-            "title": "PRONUNCIATION · THERE IS",
-            "lines": [
-              "PRONUNCIATION · THERE IS",
-              "THERE’S_A_LOT_OF: nối cả cụm",
-              "THERE IS có thể rút thành THERE’S. LOT OF giữ nghĩa một lượng nhiều.",
-              "there_is_a socket",
-              "/ðer ɪz ə ˈsɑːkɪt/",
-              "there’s_a lot_of light",
-              "/ðerz ə lɑːt əv laɪt/",
-              "there_are two chairs",
-              "/ðer ər tuː tʃerz/",
-              "there_are_a lot_of people",
-              "/ðer ər ə lɑːt əv ˈpiːpəl/",
-              "LOT + OF: /t/ nối với /ə/. Trong giọng Mỹ nhanh, /t/ có thể thành [ɾ]."
-            ]
-          },
-          {
-            "title": "PRONUNCIATION · THESE / THOSE",
-            "lines": [
-              "PRONUNCIATION · THESE / THOSE",
-              "THESE_ARE / THOSE_ARE: giữ rõ âm /z/",
-              "Nối /z/ với ARE. So sánh nguyên âm trước khi tăng tốc.",
-              "these_are my keys",
-              "/ðiːz ər maɪ kiːz/",
-              "those_are clean cups",
-              "/ðoʊz ər kliːn kʌps/",
-              "is_this your mug?",
-              "/ɪz ðɪs jər mʌɡ/",
-              "are_those seats free?",
-              "/ər ðoʊz siːts friː/",
-              "THIS /ðɪs/ và THESE /ðiːz/: khác cả nguyên âm và âm cuối. Không chỉ kéo dài âm."
-            ]
-          },
-          {
-            "title": "PRONUNCIATION · HEAR & REBUILD",
-            "lines": [
-              "PRONUNCIATION · HEAR & REBUILD",
-              "Nghe cụm, chọn hình rồi nói cả câu",
-              "Giáo viên đọc từ Notes. Học viên chưa xem câu mẫu.",
-              "1 · Một cốc gần tay",
-              "This is a… / These are…",
-              "2 · Nhiều cốc ở xa",
-              "That’s a… / Those are…",
-              "3 · Có nhiều ánh sáng",
-              "There’s a lot of…",
-              "4 · Có hai ghế",
-              "There are…",
-              "5 · Hỏi bộ sạc gần tay",
-              "Is this…?",
-              "6 · Hỏi ghế ở xa còn trống",
-              "Are those…?",
-              "Lượt 2: đổi vật và vị trí, không học thuộc một đáp án."
-            ]
-          },
-          {
-            "title": "PRONUNCIATION · EXPERIENCE CHUNKS",
-            "lines": [
-              "PRONUNCIATION · EXPERIENCE CHUNKS",
-              "THIS IS MY FIRST…: nói liền nhưng giữ âm cuối",
-              "FIRST kết thúc /st/. Nói chậm rõ trước, rồi đọc theo cụm.",
-              "this_is_my first_experience",
-              "/ðɪs ɪz maɪ fɜːrst ɪkˈspɪriəns/",
-              "is_that_your first choice?",
-              "/ɪz ðæt jər fɜːrst tʃɔɪs/",
-              "this_is_my second_visit",
-              "/ðɪs ɪz maɪ ˈsekənd ˈvɪzɪt/",
-              "once_a_year / twice_a_month",
-              "/wʌns ə jɪr/ /twaɪs ə mʌnθ/",
-              "FIRST EXPERIENCE: nối /t/ với nguyên âm sau. FIRST CHOICE: không thêm “tờ” giữa hai từ."
-            ]
-          }
-        ]
-      },
-      {
-        "group": "Activate",
-        "slides": [
-          {
-            "title": "ACTIVATE · QUESTION CHOICES",
-            "lines": [
-              "ACTIVATE · QUESTION CHOICES",
-              "Câu trả lời cho biết cần hỏi kiểu gì",
-              "Nhìn phần thông tin mới, rồi đặt câu hỏi tương ứng.",
-              "Yes, it is. That’s my first choice.",
-              "Is that your first choice?",
-              "No, it isn’t. This is my second visit.",
-              "Is this your first visit?",
-              "I come here twice a month.",
-              "How often do you come here?",
-              "That one by the window is my favorite.",
-              "Which one is your favorite?",
-              "Those are photos from our last trip.",
-              "What are those?",
-              "Chấp nhận câu hỏi khác nếu khớp câu trả lời và hợp ngữ cảnh."
-            ]
-          },
-          {
-            "title": "ACTIVATE · RAPID QUESTIONS",
-            "lines": [
-              "ACTIVATE · RAPID QUESTIONS",
-              "Một vật thật, bốn kiểu câu hỏi",
-              "Dùng đồ vật trong lớp. Giáo viên chỉ gần hoặc xa, học viên hỏi ngay.",
-              "THIS · your phone",
-              "Is this your phone?",
-              "THAT · a charger",
-              "Is that a charger?",
-              "THESE · your keys",
-              "Are these your keys?",
-              "THOSE · available seats",
-              "Are those seats available?",
-              "THIS · owner",
-              "Whose notebook is this?",
-              "THOSE · price",
-              "How much are those mugs?",
-              "Lượt 1 có mẫu. Lượt 2 che mẫu. Lượt 3 đổi người hỏi."
-            ]
-          },
-          {
-            "title": "ACTIVATE · VIETNAMESE TO ENGLISH",
-            "lines": [
-              "ACTIVATE · VIETNAMESE TO ENGLISH",
-              "Phản xạ từ ý muốn nói",
-              "Không dịch mỗi từ. Chọn THIS / THAT hoặc THERE trước.",
-              "Đây là bộ sạc của bạn à?",
-              "Gần tay, một bộ.",
-              "Những cái kia là hóa đơn của tôi.",
-              "Xa, nhiều cái.",
-              "Có ổ cắm gần bàn này không?",
-              "Hỏi sự hiện diện.",
-              "Quán này có Wi-Fi không?",
-              "Bắt đầu bằng THIS CAFÉ.",
-              "Có nhiều ánh sáng ở đây.",
-              "LIGHT không đếm được.",
-              "Những ghế kia còn trống không?",
-              "Xa, nhiều ghế.",
-              "KEY trong Notes. Sau câu trả lời hãy thêm một câu hỏi tiếp."
-            ]
-          },
-          {
-            "title": "ACTIVATE · REPAIR",
-            "lines": [
-              "ACTIVATE · REPAIR",
-              "Nghe lỗi, sửa rồi nói lại",
-              "Sửa cả câu và giải thích bằng một ý ngắn.",
-              "These is my bag.",
-              "Một cái gần tay.",
-              "Are that your keys?",
-              "Nhiều chìa khóa ở xa.",
-              "There have two chairs.",
-              "Giới thiệu có hai ghế.",
-              "This room have a balcony.",
-              "Phòng này có ban công.",
-              "Does this café has Wi-Fi?",
-              "Sau DOES dùng dạng nào?",
-              "Is there any free seats?",
-              "SEATS số nhiều.",
-              "Sửa một lỗi, rồi đổi danh từ và nói lại."
-            ]
-          },
-          {
-            "title": "ACTIVATE · SAME MEANING",
-            "lines": [
-              "ACTIVATE · SAME MEANING",
-              "Một ý, đổi cấu trúc",
-              "Nói câu bên phải trước khi mở đáp án.",
-              "There is a balcony in this room.",
-              "This room has a balcony.",
-              "This café has two entrances.",
-              "There are two entrances to this café.",
-              "Are there any meeting rooms in this office?",
-              "Does this office have any meeting rooms?",
-              "Do you have a charger in your bag?",
-              "Is there a charger in your bag?",
-              "Cả hai cách có thể đúng. Chọn theo điểm bắt đầu bạn muốn nhấn."
-            ]
-          }
-        ]
-      },
-      {
-        "group": "Real talk",
-        "slides": [
-          {
-            "title": "REAL TALK · FIND THE OBJECT",
-            "lines": [
-              "REAL TALK · FIND THE OBJECT",
-              "Tôi đang nói đến vật nào?",
-              "Một người mô tả, người kia chỉ đúng vật và hỏi xác nhận.",
-              "A · Chọn đồ vật bí mật",
-              "Dùng màu + vị trí; chưa nói tên.",
-              "B · Hỏi một hay nhiều",
-              "Is it…? / Are they…?",
-              "B · Chỉ và xác nhận",
-              "Do you mean this one / those ones?",
-              "A · Phản hồi",
-              "Yes, that one. / No, the other one.",
-              "Đổi vai",
-              "Chọn vật ở xa hơn hoặc đổi nhóm đồ.",
-              "Mục tiêu",
-              "4 câu hỏi + 2 câu mô tả với THERE.",
-              "Có thể dùng THESE / THOSE ONE(S). Trong ví dụ này: this one / those ones."
-            ]
-          },
-          {
-            "title": "REAL TALK · YOUR EXPERIENCE",
-            "lines": [
-              "REAL TALK · YOUR EXPERIENCE",
-              "Từ câu mẫu sang trải nghiệm thật",
-              "Chọn một hoạt động hoặc ảnh trên điện thoại. Hỏi và đáp, không cần dùng thì mới.",
-              "Một lần đầu",
-              "Is this your first time…?",
-              "Một chuyến đi",
-              "Is that your first trip to…?",
-              "Một lựa chọn",
-              "Is that your first choice?",
-              "Một kỷ niệm qua ảnh",
-              "What are those? / Which photo…?",
-              "Tần suất",
-              "How often do you…?",
-              "Đổi câu trả lời",
-              "No, it isn’t. This is my second…",
-              "Nếu chỉ xem ảnh cũ, có thể nói THAT để nhắc chuyến đi trong ảnh. Chọn góc nhìn rõ trước khi hỏi."
-            ]
-          }
-        ]
-      },
-      {
-        "group": "Reflect",
-        "slides": [
-          {
-            "title": "REFLECT & RETRY · SELF CHECK",
-            "lines": [
-              "REFLECT & RETRY · SELF CHECK",
-              "Tôi cần sửa bước nào?",
-              "Chọn một dòng và nói lại bằng đồ vật thật.",
-              "GẦN / XA",
-              "this / these ↔ that / those",
-              "MỘT / NHIỀU",
-              "this is ↔ these are",
-              "CHỈ VẬT / GIỚI THIỆU CÓ GÌ",
-              "That’s a café. ↔ There’s a café nearby.",
-              "BE / HAVE",
-              "Is there…? ↔ Does this room have…?",
-              "NỐI ÂM",
-              "this_is_a / that’s_a / there’s_a_lot_of",
-              "Nói lại lần 2: đổi một vật, một vị trí và một người sở hữu."
-            ]
-          }
-        ]
-      },
-      {
-        "group": "Mission",
-        "slides": [
-          {
-            "title": "DAILY MISSION · 3 DAYS",
-            "lines": [
-              "DAILY MISSION · 3 DAYS",
-              "Chỉ vật và mô tả nơi thật",
-              "Mỗi ngày 5–7 phút. Nói trước, kiểm tra sau.",
-              "DAY 1 · POINT",
-              "Chỉ 4 vật: this / that / these / those.",
-              "DAY 1 · ASK",
-              "Hỏi 4 câu IS / ARE và trả lời đầy đủ.",
-              "DAY 2 · DESCRIBE",
-              "Quay góc làm việc: 4 câu THERE IS / ARE.",
-              "DAY 2 · SWITCH",
-              "Đổi 2 câu sang nơi / người + HAVE / HAS.",
-              "DAY 3 · CONNECT",
-              "Ghi âm this is a / that’s a / there’s a lot of.",
-              "DAY 3 · RETRY",
-              "Nghe lại, sửa một lỗi và ghi âm lần hai.",
-              "Dùng vật thật. Không đọc danh sách câu mà không biết mình đang chỉ gì."
-            ]
-          },
-          {
-            "title": "DAILY MISSION · READ & RECORD",
-            "lines": [
-              "DAILY MISSION · READ & RECORD",
-              "A place to work",
-              "Đọc theo cụm. Sau đó đổi thông tin để giới thiệu góc làm việc của bạn.",
-              "This is a small café near my office. That’s my favorite table by the window.",
-              "These are my notebooks, and those are my friends’ bags by the door.",
-              "There’s a lot of natural light here. There are two sockets under this table.",
-              "This café has free Wi-Fi, but it doesn’t have a meeting room.",
-              "Is there any water on the counter? Yes, there is. Those cups are clean.",
-              "Is this seat free? Yes, it is. Sit here, and I’ll get you a drink.",
-              "Lần 2: nhìn quanh, chỉ vật thật và nói lại trong 45–60 giây."
-            ]
-          }
-        ]
-      },
-      {
-        "group": "Point & say",
-        "slides": [
-          {
-            "title": "POINT & SAY · CAFÉ",
-            "lines": [
-              "POINT & SAY · CAFÉ",
-              "Nhìn tranh và chỉ vật",
-              "Người nói ở bàn phía trước. Dùng THIS / THESE cho vật gần tay, THAT / THOSE cho vật ở xa.",
-              "Is this your mug?",
-              "Are these your notebooks?",
-              "What’s that?",
-              "What are those?",
-              "Is there a plant?"
-            ]
-          },
-          {
-            "title": "POINT & SAY · OFFICE",
-            "lines": [
-              "POINT & SAY · OFFICE",
-              "Mô tả bàn làm việc trong tranh",
-              "Chọn một vật để chỉ. Sau đó giới thiệu có gì bằng THERE IS / ARE.",
-              "This is… / These are…",
-              "That’s… / Those are…",
-              "There is… / There are…",
-              "This desk has…"
-            ]
-          }
-        ]
-      }
+    "grammarChoose": [
+      { "prompt": "There ___ a sofa in the living room.", "vi": "Có một chiếc sofa trong phòng khách." },
+      { "prompt": "There ___ two bedrooms in the house.", "vi": "Có hai phòng ngủ trong nhà." },
+      { "prompt": "The book is ___ the table.", "vi": "Quyển sách ở trên bàn." },
+      { "prompt": "The cat is ___ the chair.", "vi": "Con mèo ở dưới ghế." },
+      { "prompt": "The lamp is ___ to the bed.", "vi": "Cái đèn ở bên cạnh giường." },
+      { "prompt": "___ there a kitchen on the first floor?", "vi": "Có nhà bếp ở tầng một không?" }
     ],
     "dialogue": [
-      {
-        "who": "Mai",
-        "line": "Is this your mug?"
-      },
-      {
-        "who": "Ben",
-        "line": "Yes, it is. Thanks. Are those seats by the window free?"
-      },
-      {
-        "who": "Mai",
-        "line": "I think so. There are two empty seats over there."
-      },
-      {
-        "who": "Ben",
-        "line": "Great. Is there a socket near that table?"
-      },
-      {
-        "who": "Mai",
-        "line": "Yes, there is. It’s under the table."
-      },
-      {
-        "who": "Ben",
-        "line": "Perfect. This café has free Wi-Fi too, right?"
-      },
-      {
-        "who": "Mai",
-        "line": "Yes. And there’s a lot of natural light by the window."
-      },
-      {
-        "who": "Ben",
-        "line": "Are these your notebooks?"
-      },
-      {
-        "who": "Mai",
-        "line": "Yes, they are. That yellow bag by the counter is mine too."
-      },
-      {
-        "who": "Ben",
-        "line": "Okay. I’ll get our drinks, then we can sit down."
-      }
+      { "who": "Agent", "line": "Welcome. Let me show you the apartment." },
+      { "who": "Nam", "line": "Thank you. How many rooms are there?" },
+      { "who": "Agent", "line": "There are two bedrooms, a living room, a kitchen, and a bathroom." },
+      { "who": "Nam", "line": "Is there a balcony?" },
+      { "who": "Agent", "line": "Yes, there is. It's next to the living room." },
+      { "who": "Nam", "line": "Where is the kitchen?" },
+      { "who": "Agent", "line": "The kitchen is between the living room and the bathroom." },
+      { "who": "Nam", "line": "Is there a table in the kitchen?" },
+      { "who": "Agent", "line": "Yes, there is a table and four chairs." },
+      { "who": "Nam", "line": "What about the bedroom?" },
+      { "who": "Agent", "line": "There is a double bed and a wardrobe. There's also a window." },
+      { "who": "Nam", "line": "Great. I like it. How much is the rent?" }
+    ],
+    "dialogueContext": "Nam views an apartment with a real estate agent.",
+    "dialogueContextVi": "Nam xem căn hộ với nhân viên bất động sản.",
+    "keyPhrases": [
+      "How many rooms are there?",
+      "There is/There are...",
+      "Is there a...?",
+      "Where is the...?",
+      "There's also..."
     ],
     "listenCheck": [
-      {
-        "q": "Mai: Is this your mug?",
-        "a": "Yes, it is."
-      },
-      {
-        "q": "Ben: Are those seats free?",
-        "a": "Yes, they are."
-      },
-      {
-        "q": "Mai: Is there a socket near the table?",
-        "a": "Yes, by the wall."
-      },
-      {
-        "q": "Ben: Can I have the Wi-Fi password?",
-        "a": "It’s on the receipt."
-      },
-      {
-        "q": "Mai: Do you want another coffee?",
-        "a": "No, thanks."
-      },
-      {
-        "q": "Ben: Is the Wi-Fi fast here?",
-        "a": "Pretty good."
-      },
-      {
-        "q": "Mai: How much is a latte?",
-        "a": "Four dollars."
-      },
-      {
-        "q": "Ben: Can I pay by card?",
-        "a": "Yes, of course."
-      }
+      { "q": "How many bedrooms are there?", "a": "Two" },
+      { "q": "Is there a balcony?", "a": "Yes" },
+      { "q": "Where is the kitchen?", "a": "Between the living room and the bathroom" },
+      { "q": "How many chairs are in the kitchen?", "a": "Four" },
+      { "q": "What is in the bedroom?", "a": "A double bed and a wardrobe" }
+    ],
+    "listenGapFill": [
+      { "line": "There ___ two bedrooms.", "answer": "are" },
+      { "line": "There ___ a balcony.", "answer": "is" },
+      { "line": "The kitchen is ___ the living room and the bathroom.", "answer": "between" },
+      { "line": "There is a table and four ___.", "answer": "chairs" },
+      { "line": "There's also a ___.", "answer": "window" }
     ],
     "speakPrompts": [
-      "Excuse me, is this seat free?",
-      "Can I have the Wi-Fi password, please?",
-      "How much is a latte?",
-      "Can I pay by card?",
-      "I'd like another coffee, please."
-    ]
-  },
-  "slides": 61
+      "There is a sofa in the living room.",
+      "There are two bedrooms.",
+      "The book is on the table.",
+      "The cat is under the chair.",
+      "Is there a lamp on the table?"
+    ],
+    "shadowing": [
+      "There is a sofa in the living room.",
+      "The book is on the table.",
+      "Is there a lamp on the table?"
+    ],
+    "rolePlay": {
+      "context": "Describe your home to a friend.",
+      "contextVi": "Mô tả nhà bạn cho bạn bè.",
+      "roles": ["You (describe your home)", "Partner (ask questions)"],
+      "scenario": "Use: There is/There are... / The ___ is in/on/under/next to... / Is there a...?"
+    },
+    "reading": {
+      "title": "My New Apartment",
+      "titleVi": "Căn hộ mới của tôi",
+      "text": "I moved to a new apartment last month. It is small but nice. There are two rooms: a bedroom and a living room. There is a kitchen and a bathroom. In the bedroom, there is a bed and a wardrobe. There is also a small desk next to the window. In the living room, there is a sofa and a TV. The kitchen has a table and two chairs. There is a lamp on the table. The bathroom is small but clean. I like my new apartment. It is cozy and comfortable.",
+      "glossary": {
+        "moved": "đã chuyển đến",
+        "small": "nhỏ",
+        "wardrobe": "tủ quần áo",
+        "cozy": "ấm cúng",
+        "clean": "sạch sẽ"
+      },
+      "questions": [
+        { "q": "How many rooms are there in the apartment?", "options": ["One", "Two", "Three", "Four"], "answer": "Two" },
+        { "q": "What is in the bedroom?", "options": ["A bed and a wardrobe", "A sofa and a TV", "A table and chairs", "A lamp and a desk"], "answer": "A bed and a wardrobe" },
+        { "q": "Where is the desk?", "options": ["Next to the bed", "Next to the window", "In the kitchen", "In the bathroom"], "answer": "Next to the window" },
+        { "q": "How does the person feel about the apartment?", "options": ["They don't like it", "They think it's too big", "They like it, it's cozy", "They want to move again"], "answer": "They like it, it's cozy" }
+      ]
+    },
+    "writing": {
+      "prompt": "Write 4 sentences describing your room or home.",
+      "promptVi": "Viết 4 câu mô tả phòng hoặc nhà của bạn.",
+      "template": "There is a ___ in my room. There are ___ in the ___. The ___ is on/under/next to the ___. I like my room because ___.",
+      "mustUse": ["there is", "there are", "in/on/under/next to"],
+      "checklist": [
+        "Did you mention at least 3 pieces of furniture?",
+        "Did you use there is/there are correctly?",
+        "Did you use prepositions of place?",
+        "Did you mention where things are?"
+      ]
+    },
+    "review": {
+      "summary": "In this unit, you learned to describe your home using there is/there are and prepositions of place. Key phrases: 'There is a...', 'There are...', 'Is there a...?', 'Where is the...?', 'next to, between, under, on.'",
+      "summaryVi": "Trong unit này, bạn đã học cách mô tả nhà ở dùng there is/there are và giới từ vị trí. Cụm từ quan trọng: 'There is a...', 'There are...', 'Is there a...?', 'Where is the...?', 'next to, between, under, on.'",
+      "quickQuiz": [
+        { "q": "Complete: 'There ___ a sofa in the living room.'", "options": ["is", "are", "has", "have"], "answer": "is" },
+        { "q": "Complete: 'The book is ___ the table.'", "options": ["in", "on", "under", "between"], "answer": "on" },
+        { "q": "Complete: 'There ___ two bedrooms.'", "options": ["is", "are", "has", "have"], "answer": "are" },
+        { "q": "How do you say 'phòng khách' in English?", "options": ["bedroom", "kitchen", "living room", "bathroom"], "answer": "living room" },
+        { "q": "Complete: 'The lamp is ___ to the bed.'", "options": ["in", "on", "under", "next"], "answer": "next" }
+      ]
+    },
+    "flow": []
+  }
 }
