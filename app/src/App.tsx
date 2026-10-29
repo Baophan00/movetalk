@@ -8,6 +8,8 @@ import { Landing } from './screens/Landing'
 import { Dashboard } from './screens/Dashboard'
 import { Lesson } from './screens/Lesson'
 import { Lessons } from './screens/Lessons'
+import { ClassPractice } from './screens/ClassPractice'
+import { CEFRLevels } from './screens/CEFRLevels'
 import { Homework } from './screens/Homework'
 import { Review } from './screens/Review'
 import { Practise } from './screens/Practise'
@@ -247,7 +249,9 @@ export default function App() {
   const titles: Record<Route, string> = {
     landing: '',
     dashboard: 'Overview',
-    lessons: 'Class practice',
+    'class-practice': 'Class practice',
+    cefr: 'CEFR — General English',
+    lessons: 'A1 lessons',
     lesson: `Lesson ${lessonN}`,
     homework: 'Homework',
     today: 'Today',
@@ -283,7 +287,7 @@ export default function App() {
       <div
         className={cn(
           'lg:pl-[264px]',
-          ['lessons', 'practice', 'homework', 'review'].includes(route) && 'theme-overview min-h-screen bg-bg',
+          ['class-practice', 'cefr', 'lessons', 'practice', 'homework', 'review'].includes(route) && 'theme-overview min-h-screen bg-bg',
         )}
       >
         <TopBar
@@ -330,7 +334,22 @@ export default function App() {
           )}
           {route === 'words' && <Vocabulary />}
           {route === 'dashboard' && (
-            <Dashboard name={profile.name} onOpenLesson={openPractice} onHomework={() => go('homework')} onLessons={() => go('lessons')} />
+            <Dashboard name={profile.name} onOpenLesson={openPractice} onHomework={() => go('homework')} onLessons={() => go('class-practice')} />
+          )}
+          {route === 'class-practice' && (
+            <ClassPractice
+              onSelectProgram={(p) => {
+                if (p === 'cefr') go('cefr')
+              }}
+            />
+          )}
+          {route === 'cefr' && (
+            <CEFRLevels
+              onSelectLevel={(lv) => {
+                if (lv === 'A1') go('lessons')
+              }}
+              onBack={() => go('class-practice')}
+            />
           )}
           {route === 'lessons' && <Lessons onPractise={openPractice} onReview={() => go('review')} onHomework={() => go('homework')} />}
           {route === 'lesson' && <Lesson lessonN={lessonN} onPickLesson={setLessonN} />}
@@ -338,7 +357,7 @@ export default function App() {
             <Homework
               onPractise={openPractice}
               onOpenLesson={openLesson}
-              onLessons={() => go('lessons')}
+              onLessons={() => go('class-practice')}
               onReview={() => go('review')}
               hasBackend={profile.role === 'teacher'}
             />
