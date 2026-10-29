@@ -144,7 +144,7 @@ function dialogueItems(lesson: LessonFile): Exercise[] {
       id: `l${lesson.n}-seq-${i}`,
       lesson: lesson.n,
       lessonTitle: title,
-      skill: 'listening',
+      skill: 'reading',
       kind: 'sequence',
       prompt: 'Put the conversation back in order',
       answer: block.map((b) => b.line).join(' | '),

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Check, ChevronRight, Lightbulb, RotateCcw, Sparkles, X } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Badge } from '../components/ui/badge'
@@ -12,6 +12,7 @@ import { attemptKind, sessionFor, type Exercise, type Skill } from '../lib/exerc
 import { addCard, recordAttempt } from '../lib/study'
 import { cn } from '../lib/utils'
 import { CHOICE, choiceState } from '../lib/choice'
+import { canListen, compare, listen, type Score } from '../lib/speech'
 
 const PRAISE = ['Correct!', 'Well done!', 'Excellent!', 'Nice work!']
 
@@ -21,6 +22,21 @@ const SKILL_LABEL: Record<Skill, string> = {
   listening: 'Listening',
   reading: 'Reading',
   speaking: 'Speaking',
+}
+
+const KIND_INSTRUCTION: Record<string, string> = {
+  meaning: 'Choose the meaning of the word.',
+  cloze: 'Fill in the missing word.',
+  order: 'Put the words in the right order.',
+  listen: 'Listen to the audio, then reveal the answer.',
+  gap: 'Listen to the line, then choose the missing word.',
+  sequence: 'Put the conversation lines in order.',
+  reading: 'Read the passage, then answer.',
+  translate: 'Type the English sentence.',
+  choose: 'Choose the correct answer.',
+  speak: 'Say it out loud, then check.',
+  flash: 'Flip the card and say the word.',
+  match: 'Match each word with its meaning.',
 }
 
 const norm = (s: string) =>
@@ -62,6 +78,12 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
   // A meaning can be picked before a word, so the pair reads in whichever order the learner prefers.
   const [selVi, setSelVi] = useState<number | null>(null)
   const [badPair, setBadPair] = useState('')
+  // Speaking state
+  const [speakPhase, setSpeakPhase] = useState<'idle' | 'rec' | 'done'>('idle')
+  const [speakScore, setSpeakScore] = useState<Score | null>(null)
+  const [speakHeard, setSpeakHeard] = useState('')
+  const [speakInterim, setSpeakInterim] = useState('')
+  const speakListener = useRef<ReturnType<typeof listen>>(null)
 
   const item = items[idx]
 
@@ -75,6 +97,15 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
     setSelWord(null)
     setSelVi(null)
     setBadPair('')
+    // Reset speaking state
+    setSpeakPhase('idle')
+    setSpeakScore(null)
+    setSpeakHeard('')
+    setSpeakInterim('')
+    if (speakListener.current) {
+      speakListener.current.stop()
+      speakListener.current = null
+    }
   }, [idx, round])
 
   if (!items.length) {
@@ -132,6 +163,30 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
   function next() {
     if (idx + 1 >= total) setDone(true)
     else setIdx(idx + 1)
+  }
+
+  function startSpeak() {
+    const L = listen({ lang: 'en-US', onInterim: setSpeakInterim })
+    if (!L) return
+    speakListener.current = L
+    setSpeakPhase('rec')
+    setSpeakInterim('')
+    L.text.then((said) => {
+      setSpeakHeard(said)
+      if (said.trim()) {
+        const result = compare(item.audio ?? item.prompt, said)
+        setSpeakScore(result)
+        setSpeakPhase('done')
+        recordAttempt({ kind: 'speak', lesson: lessonN, section: 'Speaking', prompt: item.audio ?? item.prompt, correct: result.pct >= 70 })
+      } else {
+        setSpeakPhase('done')
+      }
+    })
+  }
+
+  function stopSpeak() {
+    speakListener.current?.stop()
+    speakListener.current = null
   }
 
   function again(mistakesOnly: boolean) {
@@ -282,6 +337,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
         <Badge tone="neutral">{SKILL_LABEL[item.skill]}</Badge>
         <span className="text-[11.5px] text-muted">Lesson {lessonN}</span>
       </div>
+      <p className="mt-1 text-[12px] text-muted">{KIND_INSTRUCTION[item.kind] ?? ''}</p>
 
       {item.passage && (
         <Card className="mt-3 border-line/70 bg-bg/50">
@@ -296,13 +352,52 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
         <CardBody className="p-5">
           <div className="flex items-start gap-2">
             <p className={cn('flex-1 font-medium leading-snug', item.kind === 'flash' ? 'text-[26px] tracking-tight' : 'text-[16px]')}>
-              {item.kind === 'gap' ? 'Listen to the line, then choose the missing word.' : item.prompt}
+              {item.kind === 'gap' ? 'Listen to the line, then choose the missing word.' : item.kind === 'listen' ? 'Listen to the question, then reveal the answer.' : item.prompt}
             </p>
             {item.kind !== 'listen' && item.kind !== 'gap' && (item.audio || item.skill === 'vocab') && (
               <SpeakButton text={item.audio ?? item.prompt} label="Hear the word" />
             )}
           </div>
           {item.vi && <p className="mt-1 text-[12px] text-muted">{item.vi}</p>}
+
+          {item.kind === 'speak' && (
+            <div className="mt-4 rounded-2xl border border-line bg-bg/60 p-4">
+              <p className="text-[12.5px] font-medium text-ink/85">
+                {canListen() ? 'Tap record, say the sentence, then tap stop.' : 'This browser cannot score speech. Say it out loud, then check.'}
+              </p>
+              {canListen() && (
+                <>
+                  <div className="mt-3 flex items-center gap-2">
+                    <Button
+                      onClick={speakPhase === 'rec' ? stopSpeak : startSpeak}
+                      variant={speakPhase === 'rec' ? 'danger' : 'default'}
+                    >
+                      {speakPhase === 'rec' ? 'Stop' : speakPhase === 'done' ? 'Record again' : 'Record'}
+                    </Button>
+                    {speakPhase === 'rec' && speakInterim && (
+                      <span className="text-[12px] italic text-muted line-clamp-1">“{speakInterim}”</span>
+                    )}
+                  </div>
+                  {speakPhase === 'done' && speakScore && (
+                    <div className="mt-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[13px] font-semibold">
+                          {speakScore.pct >= 90 ? 'Clean.' : speakScore.pct >= 70 ? 'Close enough.' : 'Say it again slowly.'}
+                        </span>
+                        <span className={cn('rounded-full px-2.5 py-1 text-[12px] font-bold tabular-nums', speakScore.pct >= 70 ? 'bg-mint/20 text-[#2F5D45]' : 'bg-accent/20 text-[#7a4300]')}>
+                          {speakScore.pct}%
+                        </span>
+                      </div>
+                      {speakHeard && <p className="mt-1 text-[11.5px] text-muted">The browser heard: “{speakHeard}”</p>}
+                    </div>
+                  )}
+                  {speakPhase === 'done' && !speakScore && (
+                    <p className="mt-2 text-[12px] text-muted">Nothing was heard. Try again a little closer to the mic.</p>
+                  )}
+                </>
+              )}
+            </div>
+          )}
 
           {item.kind === 'listen' && item.audio && (
             <AudioPlayer text={item.audio} label="Listen to the line" className="mt-3" />
