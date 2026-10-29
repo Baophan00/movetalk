@@ -4,12 +4,12 @@ import { Card, CardBody } from '../components/ui/card'
 import { cn } from '../lib/utils'
 
 const LEVELS = [
-  { key: 'A1', name: 'A1 — Beginner', desc: 'Basic phrases, simple conversations, everyday topics.', available: true },
-  { key: 'A2', name: 'A2 — Elementary', desc: 'Routine tasks, simple descriptions, familiar situations.', available: false },
-  { key: 'B1', name: 'B1 — Intermediate', desc: 'Main points of clear speech, travel situations, opinions.', available: false },
-  { key: 'B2', name: 'B2 — Upper-Intermediate', desc: 'Complex texts, fluent interaction, detailed arguments.', available: false },
-  { key: 'C1', name: 'C1 — Advanced', desc: 'Demanding texts, flexible language use, nuanced expression.', available: false },
-  { key: 'C2', name: 'C2 — Proficiency', desc: 'Near-native comprehension and expression in any situation.', available: false },
+  { key: 'A1', name: 'A1 — Beginner', desc: 'Understand and use familiar everyday expressions. Introduce yourself, ask and answer simple questions.', available: true },
+  { key: 'A2', name: 'A2 — Elementary', desc: 'Understand single sentences on familiar topics. Communicate in simple routine tasks.', available: false },
+  { key: 'B1', name: 'B1 — Intermediate', desc: 'Understand main points of clear standard speech. Handle travel situations. Describe experiences.', available: false },
+  { key: 'B2', name: 'B2 — Upper-Intermediate', desc: 'Understand complex texts. Interact fluently. Express viewpoints clearly.', available: false },
+  { key: 'C1', name: 'C1 — Advanced', desc: 'Understand demanding texts. Express fluently and flexibly. Use language for academic and professional purposes.', available: false },
+  { key: 'C2', name: 'C2 — Proficiency', desc: 'Understand virtually everything. Summarize from different sources. Express precisely with fine nuances.', available: false },
 ]
 
 export function CEFRLevels({ onSelectLevel, onBack }: { onSelectLevel: (level: string) => void; onBack: () => void }) {
