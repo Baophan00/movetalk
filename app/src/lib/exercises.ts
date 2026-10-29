@@ -347,14 +347,12 @@ export function sessionFor(lessonN: number, size = 10): Exercise[] {
     list.push(e)
     bySkill.set(e.skill, list)
   }
-  const order: Skill[] = ['vocab', 'grammar', 'listening', 'reading', 'speaking']
+  // Listening and speaking come first: the learner practises the skills they came for
+  // before the usual vocab/grammar/reading mix.
+  const order: Skill[] = ['listening', 'speaking', 'vocab', 'grammar', 'reading']
   // One matching round and one flip card per session when the lesson has them: variety the learner
-  // can feel, not another four-option question.
+  // can feel, not another four-option question. Pushed last so listening/speaking lead.
   const picked: Exercise[] = []
-  for (const kind of ['match', 'flash'] as const) {
-    const one = all.find((e) => e.kind === kind)
-    if (one) picked.push(one)
-  }
   let round = 0
   while (picked.length < size && round < 20) {
     for (const skill of order) {
@@ -365,6 +363,10 @@ export function sessionFor(lessonN: number, size = 10): Exercise[] {
       if (picked.length >= size) break
     }
     round += 1
+  }
+  for (const kind of ['match', 'flash'] as const) {
+    const one = all.find((e) => e.kind === kind)
+    if (one && !picked.find((p) => p.id === one.id) && picked.length < size) picked.push(one)
   }
   return picked
 }
