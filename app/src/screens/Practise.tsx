@@ -28,7 +28,7 @@ const KIND_INSTRUCTION: Record<string, string> = {
   meaning: 'Choose the meaning of the word.',
   cloze: 'Fill in the missing word.',
   order: 'Put the words in the right order.',
-  listen: 'Listen to the audio, then type your answer.',
+  listen: 'Listen to the question, then record your answer.',
   gap: 'Listen to the line, then choose the missing word.',
   sequence: 'Put the conversation lines in order.',
   reading: 'Read the passage, then answer.',
@@ -152,20 +152,6 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
     save(item, ok)
   }
 
-  function checkListen() {
-    if (!typing.trim()) return
-    // Extract the expected answer: prefer the quoted phrase, else the whole answer.
-    const raw = item.answer
-    const quoted = raw.match(/'([^']+)'/)
-    const expected = (quoted ? quoted[1] : raw).trim()
-    const ok = norm(typing).includes(norm(expected)) || norm(expected).includes(norm(typing))
-    if (ok) playCorrect()
-    else playWrong()
-    setState(ok ? 'right' : 'wrong')
-    setResults((rs) => [...rs.filter((r) => r.item.id !== item.id), { item, correct: ok }])
-    save(item, ok)
-  }
-
   function reveal() {
     setState('shown')
     if (selfCheck) return
@@ -180,6 +166,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
   }
 
   function startSpeak() {
+    const expected = item.kind === 'listen' ? item.answer : (item.audio ?? item.prompt)
     const L = listen({ lang: 'en-US', onInterim: setSpeakInterim })
     if (!L) return
     speakListener.current = L
@@ -188,10 +175,16 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
     L.text.then((said) => {
       setSpeakHeard(said)
       if (said.trim()) {
-        const result = compare(item.audio ?? item.prompt, said)
+        const result = compare(expected, said)
         setSpeakScore(result)
         setSpeakPhase('done')
-        recordAttempt({ kind: 'speak', lesson: lessonN, section: 'Speaking', prompt: item.audio ?? item.prompt, correct: result.pct >= 70 })
+        const correct = result.pct >= 70
+        if (item.kind === 'listen') {
+          setResults((rs) => [...rs.filter((r) => r.item.id !== item.id), { item, correct }])
+          save(item, correct)
+        } else {
+          recordAttempt({ kind: 'speak', lesson: lessonN, section: 'Speaking', prompt: expected, correct })
+        }
       } else {
         setSpeakPhase('done')
       }
@@ -374,10 +367,14 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
           </div>
           {item.vi && <p className="mt-1 text-[12px] text-muted">{item.vi}</p>}
 
-          {item.kind === 'speak' && (
+          {(item.kind === 'speak' || item.kind === 'listen') && (
             <div className="mt-4 rounded-2xl border border-line bg-bg/60 p-4">
               <p className="text-[12.5px] font-medium text-ink/85">
-                {canListen() ? 'Tap record, say the sentence, then tap stop.' : 'This browser cannot score speech. Say it out loud, then check.'}
+                {!canListen()
+                  ? 'This browser cannot score speech. Say it out loud, then check.'
+                  : item.kind === 'listen'
+                    ? 'Listen to the question, then tap record and say your answer.'
+                    : 'Tap record, say the sentence, then tap stop.'}
               </p>
               {canListen() && (
                 <>
@@ -396,7 +393,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
                     <div className="mt-3">
                       <div className="flex items-center justify-between">
                         <span className="text-[13px] font-semibold">
-                          {speakScore.pct >= 90 ? 'Clean.' : speakScore.pct >= 70 ? 'Close enough.' : 'Say it again slowly.'}
+                          {speakScore.pct >= 90 ? 'Clean.' : speakScore.pct >= 70 ? 'Close enough.' : 'Say it again.'}
                         </span>
                         <span className={cn('rounded-full px-2.5 py-1 text-[12px] font-bold tabular-nums', speakScore.pct >= 70 ? 'bg-mint/20 text-[#2F5D45]' : 'bg-accent/20 text-[#7a4300]')}>
                           {speakScore.pct}%
@@ -546,18 +543,6 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
             />
           )}
 
-          {item.kind === 'listen' && (
-            <input
-              value={typing}
-              onChange={(e) => setTyping(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && state === 'idle' && checkListen()}
-              placeholder="Type your answer in English"
-              aria-label="Your answer"
-              disabled={state !== 'idle'}
-              className="mt-4 w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-[13.5px] transition focus:border-primary disabled:cursor-not-allowed disabled:bg-ink/[.03] disabled:text-muted"
-            />
-          )}
-
           {hint && <p className="mt-3 rounded-xl bg-accent/10 px-3 py-2 text-[12px] text-ink/80">{item.hint}</p>}
 
           {state === 'right' && (
@@ -582,10 +567,12 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
             {state === 'idle' && selfCheck && (
               <>
                 {item.kind === 'speak' && <SpeakButton text={item.audio ?? item.prompt} label="Play again" />}
-                {item.kind === 'listen' && (
-                  <Button onClick={checkListen} disabled={!typing.trim()}>Check</Button>
+                {item.kind === 'listen' && !canListen() && (
+                  <Button onClick={reveal}>Show the answer</Button>
                 )}
-                <Button onClick={reveal} variant="ghost">Show the answer</Button>
+                {item.kind !== 'listen' && (
+                  <Button onClick={reveal} variant="ghost">Show the answer</Button>
+                )}
               </>
             )}
             {state === 'idle' && !selfCheck && item.kind !== 'match' && (
