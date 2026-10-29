@@ -111,7 +111,7 @@ export function compare(target: string, heard: string): Score {
 }
 
 /** One shot: start listening, resolve with the transcript when the learner stops. */
-export function listen(opts: { lang?: string; onInterim?: (t: string) => void } = {}): Listener | null {
+export function listen(opts: { lang?: string; onInterim?: (t: string) => void; onError?: (e: string) => void } = {}): Listener | null {
   const C = ctor()
   if (!C) return null
   const rec = new C()
@@ -126,6 +126,8 @@ export function listen(opts: { lang?: string; onInterim?: (t: string) => void } 
     settle = resolve
   })
 
+  let stoppedByUser = false
+
   rec.onresult = (e: any) => {
     let interim = ''
     for (let k = e.resultIndex; k < e.results.length; k += 1) {
@@ -135,8 +137,20 @@ export function listen(opts: { lang?: string; onInterim?: (t: string) => void } 
     }
     opts.onInterim?.((final + interim).trim())
   }
-  rec.onerror = () => undefined
-  rec.onend = () => settle(final.trim())
+  rec.onerror = (e: any) => {
+    opts.onError?.(e?.error ?? 'unknown')
+  }
+  rec.onend = () => {
+    if (!stoppedByUser) {
+      try {
+        rec.start()
+        return
+      } catch {
+        // fall through
+      }
+    }
+    settle(final.trim())
+  }
 
   try {
     rec.start()
@@ -146,6 +160,7 @@ export function listen(opts: { lang?: string; onInterim?: (t: string) => void } 
 
   return {
     stop: () => {
+      stoppedByUser = true
       try {
         rec.stop()
       } catch {

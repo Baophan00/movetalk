@@ -83,6 +83,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
   const [speakScore, setSpeakScore] = useState<Score | null>(null)
   const [speakHeard, setSpeakHeard] = useState('')
   const [speakInterim, setSpeakInterim] = useState('')
+  const [speakError, setSpeakError] = useState('')
   const speakListener = useRef<ReturnType<typeof listen>>(null)
 
   const item = items[idx]
@@ -102,6 +103,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
     setSpeakScore(null)
     setSpeakHeard('')
     setSpeakInterim('')
+    setSpeakError('')
     if (speakListener.current) {
       speakListener.current.stop()
       speakListener.current = null
@@ -167,11 +169,13 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
 
   function startSpeak() {
     const expected = item.kind === 'listen' ? item.answer : (item.audio ?? item.prompt)
-    const L = listen({ lang: 'en-US', onInterim: setSpeakInterim })
+    const L = listen({ lang: 'en-US', onInterim: setSpeakInterim, onError: setSpeakError })
     if (!L) return
     speakListener.current = L
     setSpeakPhase('rec')
     setSpeakInterim('')
+    setSpeakError('')
+    setSpeakScore(null)
     L.text.then((said) => {
       setSpeakHeard(said)
       if (said.trim()) {
@@ -376,12 +380,16 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
                     ? 'Listen to the question, then tap record and say your answer.'
                     : 'Tap record, say the sentence, then tap stop.'}
               </p>
+              <p className="mt-1 text-[11px] text-muted">
+                Works best on Chrome desktop. On phone: speak clearly, keep the mic close.
+              </p>
               {canListen() && (
                 <>
                   <div className="mt-3 flex items-center gap-2">
                     <Button
                       onClick={speakPhase === 'rec' ? stopSpeak : startSpeak}
                       variant={speakPhase === 'rec' ? 'danger' : 'default'}
+                      className="min-h-[48px] flex-1 text-[15px]"
                     >
                       {speakPhase === 'rec' ? 'Stop' : speakPhase === 'done' ? 'Record again' : 'Record'}
                     </Button>
@@ -389,6 +397,11 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
                       <span className="text-[12px] italic text-muted line-clamp-1">“{speakInterim}”</span>
                     )}
                   </div>
+                  {speakError && speakPhase === 'done' && (
+                    <p className="mt-2 text-[12px] text-danger">
+                      Speech error: {speakError}. Try Chrome on desktop, or check microphone permission.
+                    </p>
+                  )}
                   {speakPhase === 'done' && speakScore && (
                     <div className="mt-3">
                       <div className="flex items-center justify-between">
