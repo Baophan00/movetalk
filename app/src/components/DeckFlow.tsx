@@ -56,7 +56,7 @@ function palette(c?: string | null) {
   return '#173F50'
 }
 
-const pxSize = (pt: number) => (pt >= 24 ? 26 : pt >= 20 ? 20.5 : pt >= 17 ? 17.5 : pt >= 14 ? 15.5 : pt >= 12 ? 14 : 12.5)
+const pxSize = (pt: number) => (pt >= 24 ? 26 : pt >= 20 ? 19 : pt >= 17 ? 16.5 : pt >= 14 ? 15.5 : pt >= 12 ? 13.5 : 12.5)
 function isVeryLight(c?: string | null) {
   if (!c) return false
   const m = /^#([0-9a-f]{6})$/i.exec(c)
@@ -73,9 +73,14 @@ function isDark(c?: string | null) {
   return 0.299 * ((n >> 16) & 255) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255) < 130
 }
 
+const accentOf = (c?: string | null) => {
+  const p = palette(c)
+  return p === '#2D7894' ? { bg: '#FFFFFF', border: '#E7DED2', bar: '#2D7894' } : p === '#B86C4C' ? { bg: '#FFFFFF', border: '#E7DED2', bar: '#B86C4C' } : { bg: '#FFFFFF', border: '#E7DED2', bar: '#CFC5B6' }
+}
+
 const isNearWhite = (c?: string | null) => !c || /^#(F[0-9A-F]|E[F8])/i.test(c)
 
-function RunText({ paras, size, light }: { paras: Para[]; size: number; light?: boolean }) {
+function RunText({ paras, size, light, plain }: { paras: Para[]; size: number; light?: boolean; plain?: boolean }) {
   return (
     <>
       {paras.map((p, i) => (
@@ -84,8 +89,8 @@ function RunText({ paras, size, light }: { paras: Para[]; size: number; light?: 
             <span
               key={k}
               style={{
-                fontSize: pxSize(r.sz || p.defSz || size),
-                color: light ? '#FFFFFF' : palette(isVeryLight(r.color) ? null : r.color),
+                fontSize: plain ? 16 : pxSize(r.sz || p.defSz || size),
+                color: light ? '#FFFFFF' : plain ? 'rgba(23,63,80,0.9)' : palette(isVeryLight(r.color) ? null : r.color),
                 fontWeight: r.b ? 700 : 400,
                 fontStyle: r.i ? 'italic' : 'normal',
               }}
@@ -114,7 +119,7 @@ function TableBlock({ s }: { s: Shape }) {
                   className="border border-line/70 p-2.5 align-top"
                   style={{ background: isDark(cell.fill) ? cell.fill! : cell.fill && !isNearWhite(cell.fill) ? cell.fill : undefined }}
                 >
-                  <RunText light={isDark(cell.fill)} paras={cell.paras} size={12} />
+                  <RunText light={isDark(cell.fill)} plain={!isDark(cell.fill)} paras={cell.paras} size={12} />
                 </td>
               ))}
             </tr>
@@ -125,7 +130,7 @@ function TableBlock({ s }: { s: Shape }) {
   )
 }
 
-export function DeckFlow({ lesson, num, edits = [] }: { lesson: number; num: number; edits?: { from: string; to: string }[] }) {
+export function DeckFlow({ lesson, num, edits = [] }: { lesson: number; num: number; edits?: { from: string; to: string; i?: number }[] }) {
   const [deck, setDeck] = useState<Deck | null>(null)
   const host = useRef<HTMLDivElement | null>(null)
 
@@ -149,20 +154,29 @@ export function DeckFlow({ lesson, num, edits = [] }: { lesson: number; num: num
       }
     }
     const norm = (t: string) => t.replace(/\s+/g, ' ').trim().toLowerCase()
+    const flat = items.flatMap((it) => it.paras)
+    const taken = new Set<Para>()
     for (const e of edits) {
       const want = norm(e.from)
-      let hit = false
+      let target: Para | null = null
       for (const it of items) {
         for (const para of it.paras) {
+          if (taken.has(para)) continue
           const pt = norm(para.runs.map((r) => r.t).join(''))
-          if (!pt || !(pt === want || pt.includes(want) || want.includes(pt))) continue
-          const first = para.runs[0]
-          para.runs = [{ t: e.to, sz: first?.sz ?? it.sz, b: first?.b, i: first?.i, color: first?.color }]
-          hit = true
+          if (pt && (pt === want || pt.includes(want) || want.includes(pt))) { target = para; break }
         }
-        if (hit) { it.text = it.paras.map((pp) => pp.runs.map((r) => r.t).join('')).join(' '); break }
+        if (target) break
       }
+      if (!target && typeof e.i === 'number') {
+        const cand = flat[e.i]
+        if (cand && !taken.has(cand)) target = cand
+      }
+      if (!target) continue
+      const first = target.runs[0]
+      target.runs = [{ t: e.to, sz: first?.sz, b: first?.b, i: first?.i, color: first?.color }]
+      taken.add(target)
     }
+    for (const it of items) it.text = it.paras.map((pp) => pp.runs.map((r) => r.t).join('')).join(' ')
 
     // deck chrome
     const label = items.filter((i) => i.y < 55 && i.text === i.text.toUpperCase() && i.text.length < 60).sort((a, b) => a.y - b.y)[0]
@@ -234,13 +248,6 @@ export function DeckFlow({ lesson, num, edits = [] }: { lesson: number; num: num
 
   return (
     <div ref={host} className="space-y-5">
-      {(model.label || model.title) && (
-        <header className="space-y-2">
-          {model.label && <div className="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">{model.label.text}</div>}
-          {model.title && <h2 className="text-[26px] font-extrabold leading-[1.15] tracking-tight text-ink">{model.title.text}</h2>}
-          {model.subtitle && <p className="max-w-4xl text-[14.5px] leading-relaxed text-muted">{model.subtitle.text}</p>}
-        </header>
-      )}
 
       {model.blocks.map((b, i) => {
         if (b.kind === 'image' && b.shape) {
@@ -267,15 +274,27 @@ export function DeckFlow({ lesson, num, edits = [] }: { lesson: number; num: num
             <section key={i} className="grid gap-3" style={{ gridTemplateColumns: `repeat(auto-fit, minmax(${row.length > 2 ? 220 : 280}px, 1fr))` }}>
               {row.map((pb, k) => {
                 const { box, items } = pb
-                const light = isDark(box.fill)
-                const head = items.find((it) => it.sz >= 16 || it.text === it.text.toUpperCase())
+                const head = items.find((it) => it.text === it.text.toUpperCase() && it.text.length < 70 && !it.text.includes('?') && !it.text.includes('___'))
                 const bodyItems = items.filter((it) => it !== head)
-                return (
-                  <div key={k} className={isDark(box.fill) ? 'rounded-xl border border-ink/80 bg-ink p-4 text-white' : 'rounded-xl border border-line bg-surface p-4'}>
-                    {head && <h4 className="mb-1 text-[16.5px] font-bold leading-snug" style={{ color: light ? '#fff' : '#173F50' }}><RunText light={light} paras={head.paras} size={head.sz} /></h4>}
-                    <div className="space-y-0.5">
-                      {bodyItems.map((it, j) => <p key={j} className="leading-relaxed"><RunText light={light} paras={it.paras} size={it.sz} /></p>)}
+                const accent = accentOf(head?.paras[0]?.runs[0]?.color || bodyItems[0]?.paras[0]?.runs[0]?.color || items[0]?.paras[0]?.runs[0]?.color)
+                const note = box.h < 74 && !isDark(box.fill)
+                if (note) {
+                  return (
+                    <div key={k} className="rounded-xl border border-primary/20 bg-primary-soft/50 px-4 py-3">
+                      {items.map((it, j) => <p key={j} className="text-[14.5px] leading-relaxed text-ink/80"><RunText plain paras={it.paras} size={14.5} /></p>)}
                     </div>
+                  )
+                }
+                return (
+                  <div key={k} className="rounded-2xl border border-line bg-surface p-5">
+                    {head && <p className="text-[14.5px] font-extrabold uppercase tracking-wide" style={{ color: accent.bar }}>{head.text}</p>}
+                    <ul className="mt-3 space-y-2">
+                      {bodyItems.map((it, j) => (
+                        <li key={j} className="break-words border-l-2 pl-3 text-[16px] leading-relaxed text-ink/90" style={{ borderColor: accent.bar + '66' }}>
+                          <RunText plain paras={it.paras} size={it.sz} />
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 )
               })}
@@ -297,8 +316,8 @@ export function DeckFlow({ lesson, num, edits = [] }: { lesson: number; num: num
           return (
             <section key={i} className="grid gap-4 sm:grid-cols-2 sm:gap-8">
               {cols.map((col, k) => (
-                <div key={k} className="space-y-1.5">
-                  {col.sort((x, y) => x.y - y.y).map((it, j) => <p key={j} className="leading-relaxed"><RunText paras={it.paras} size={it.sz} /></p>)}
+                <div key={k} className="space-y-2">
+                  {col.sort((x, y) => x.y - y.y).map((it, j) => <p key={j} className="text-[16px] leading-relaxed text-ink/90"><RunText plain paras={it.paras} size={16} /></p>)}
                 </div>
               ))}
             </section>
@@ -314,7 +333,7 @@ export function DeckFlow({ lesson, num, edits = [] }: { lesson: number; num: num
                   {prev && gap > 55 && Math.abs(it.y - prev.y) < 30 && (
                     <span className="inline-block w-16 border-b-2 border-ink/25 align-baseline" />
                   )}
-                  <span className="leading-relaxed"><RunText paras={it.paras} size={it.sz} /></span>
+                  <span className="text-[16px] leading-relaxed text-ink/90"><RunText plain paras={it.paras} size={16} /></span>
                 </span>
               )
             })}

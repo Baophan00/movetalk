@@ -551,7 +551,7 @@ function SlideBody({
   const edits = [
     ...(shapeTitle && shapeTitle !== slide.title ? [{ from: slide.title, to: shapeTitle }] : []),
     ...(shape.instruction && shape.instruction !== slide.instruction ? [{ from: slide.instruction, to: shape.instruction }] : []),
-    ...displayLines.map((to, i) => ({ from: baseLines[i] ?? '', to })).filter((e) => e.from && e.to && e.to !== e.from),
+    ...displayLines.map((to, i) => ({ from: baseLines[i] ?? '', to, i })).filter((e) => e.from && e.to && e.to !== e.from),
   ]
   if (lesson > 1 && !audioOk) return <DeckFlow lesson={lesson} num={slide.num} edits={edits} />
   if (/OPTIONAL CHECK/i.test(slide.kind) && displayLines.length >= 2) return <CheckBoard lines={displayLines} />
@@ -961,6 +961,7 @@ function SlideCard({
   const [draftTitle, setDraftTitle] = useState('')
   const [draftInstruction, setDraftInstruction] = useState('')
   const [model, setModel] = useState<EditModel>({ kind: 'rows', rows: [] })
+  const [snapshot, setSnapshot] = useState('')
 
   const title = edit?.title ?? slide.title
   const instruction = edit?.instruction ?? slide.instruction
@@ -978,7 +979,9 @@ function SlideCard({
   const startEdit = () => {
     setDraftTitle(title)
     setDraftInstruction(instruction)
-    setModel(buildModel(slide, lines, dialogue))
+    const next = buildModel(slide, lines, dialogue)
+    setModel(next)
+    setSnapshot(JSON.stringify({ t: title, i: instruction, m: next }))
     setStatus('')
     setEditing(true)
   }
@@ -1032,18 +1035,21 @@ function SlideCard({
     }
   }
 
-  const canvasOnly = lesson > 1 && !(AUDIO_SCENES[lesson] ?? []).includes(slide.num)
+  const canvasOnly = false
 
   return (
     <article className="min-w-0 break-words rounded-2xl border border-line bg-surface p-5 shadow-card sm:p-7">
       <header className="mb-2 flex flex-wrap items-center gap-2.5">
-        {!canvasOnly && (
-          <span className={cn('rounded-md border px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide', tone.chip)}>
-            {slide.kind || 'Part'}
-          </span>
-        )}
+        <span className={cn('rounded-md border px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide', tone.chip)}>
+          {slide.kind || slide.section}
+        </span>
         <button
-          onClick={editing ? () => setEditing(false) : startEdit}
+          onClick={() => {
+            if (!editing) { startEdit(); return }
+            const dirty = JSON.stringify({ t: draftTitle, i: draftInstruction, m: model }) !== snapshot
+            if (dirty) void save()
+            else setEditing(false)
+          }}
           className={cn(
             'ml-auto inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[12.5px] font-semibold transition',
             editing ? 'border-primary/40 bg-primary-soft/60 text-primary' : 'border-line bg-surface text-muted hover:border-primary/30 hover:text-ink',
