@@ -1026,6 +1026,7 @@ function SlideCard({
       await onResetEdit()
       setStatus('Đã trả về bản gốc của giáo trình.')
       setEditing(false)
+      setTimeout(() => window.location.reload(), 500)
     } finally {
       setBusy(false)
     }
