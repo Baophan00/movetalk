@@ -10,8 +10,9 @@ type Para = {
   defSz?: number | null
   runs: Run[]
 }
+type Cell = { paras: Para[]; fill?: string | null; span?: number }
 type Shape = {
-  type: 'text' | 'image' | 'box'
+  type: 'text' | 'image' | 'box' | 'table'
   x: number; y: number; w: number; h: number; rot?: number
   anchor?: string | null
   ins?: { lIns: number; rIns: number; tIns: number; bIns: number }
@@ -21,6 +22,9 @@ type Shape = {
   scale?: number
   src?: string
   radius?: number
+  rows?: { h: number; cells: Cell[] }[]
+  cols?: number[]
+  border?: string
 }
 type Slide = { bg?: string | null; shapes: Shape[] }
 type Deck = { w: number; h: number; slides: Record<string, Slide> }
@@ -36,6 +40,45 @@ function load(lesson: number): Promise<Deck> {
 }
 
 const PT = 96 / 72
+
+function Paras({ paras, scale = 1 }: { paras: Para[]; scale?: number }) {
+  return (
+    <>
+      {paras.map((p, j) => {
+        const space = p.space || {}
+        return (
+          <p
+            key={j}
+            style={{
+              margin: `${(space.before || 0) * PT}px 0 ${(space.after || 0) * PT}px`,
+              paddingLeft: p.marL ? p.marL : undefined,
+              textIndent: p.indent ? p.indent : undefined,
+              textAlign: (p.algn as 'left' | 'center' | 'right' | 'justify') || 'left',
+              lineHeight: space.line || 1.2,
+              whiteSpace: 'pre-wrap',
+              fontSize: 18 * PT,
+            }}
+          >
+            {p.bullet && <span style={{ marginRight: 6 }}>{p.bullet === 'auto' ? '•' : p.bullet}</span>}
+            {p.runs.map((r, k) => (
+              <span
+                key={k}
+                style={{
+                  fontSize: (r.sz || p.defSz || 18) * PT * scale,
+                  color: r.color || '#173F50',
+                  fontWeight: r.b ? 700 : 400,
+                  fontStyle: r.i ? 'italic' : 'normal',
+                }}
+              >
+                {r.t}
+              </span>
+            ))}
+          </p>
+        )
+      })}
+    </>
+  )
+}
 
 export function DeckCanvas({ lesson, num }: { lesson: number; num: number }) {
   const [deck, setDeck] = useState<Deck | null>(null)
@@ -72,6 +115,24 @@ export function DeckCanvas({ lesson, num }: { lesson: number; num: number }) {
                 }} />
               )
             }
+            if (s.type === 'table') {
+              return (
+                <table key={i} style={{ position: 'absolute', left: s.x, top: s.y, width: s.w, borderCollapse: 'collapse', tableLayout: 'fixed' }}>
+                  <colgroup>{(s.cols || []).map((c, ci) => <col key={ci} style={{ width: c }} />)}</colgroup>
+                  <tbody>
+                    {(s.rows || []).map((row, ri) => (
+                      <tr key={ri} style={{ height: row.h }}>
+                        {row.cells.map((cell, ci) => (
+                          <td key={ci} colSpan={cell.span || 1} style={{ border: `1px solid ${s.border || '#D8CEC0'}`, background: cell.fill || undefined, verticalAlign: 'top', padding: 4 }}>
+                            <Paras paras={cell.paras} scale={s.scale} />
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )
+            }
             if (s.type === 'image') {
               return <img key={i} src={s.src} alt="" style={{ position: 'absolute', left: s.x, top: s.y, width: s.w, height: s.h, objectFit: 'fill' }} />
             }
@@ -89,38 +150,7 @@ export function DeckCanvas({ lesson, num }: { lesson: number; num: number }) {
                   overflow: 'visible',
                 }}
               >
-                {(s.paras || []).map((p, j) => {
-                  const space = p.space || {}
-                  return (
-                    <p
-                      key={j}
-                      style={{
-                        margin: `${(space.before || 0) * PT}px 0 ${(space.after || 0) * PT}px`,
-                        paddingLeft: p.marL ? p.marL : undefined,
-                        textIndent: p.indent ? p.indent : undefined,
-                        textAlign: (p.algn as 'left' | 'center' | 'right' | 'justify') || 'left',
-                        lineHeight: space.line || 1.2,
-                        whiteSpace: 'pre-wrap',
-                        fontSize: 18 * PT,
-                      }}
-                    >
-                      {p.bullet && <span style={{ marginRight: 6 }}>{p.bullet === 'auto' ? '•' : p.bullet}</span>}
-                      {p.runs.map((r, k) => (
-                        <span
-                          key={k}
-                          style={{
-                            fontSize: (r.sz || p.defSz || 18) * PT * (s.scale || 1),
-                            color: r.color || '#173F50',
-                            fontWeight: r.b ? 700 : 400,
-                            fontStyle: r.i ? 'italic' : 'normal',
-                          }}
-                        >
-                          {r.t}
-                        </span>
-                      ))}
-                    </p>
-                  )
-                })}
+                <Paras paras={s.paras || []} scale={s.scale} />
               </div>
             )
           })}

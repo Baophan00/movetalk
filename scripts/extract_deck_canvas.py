@@ -291,6 +291,31 @@ def main():
                                                    "w": round(x["w"] * sx, 2), "h": round(x["h"] * sy, 2),
                                                    "fill": fill, "line": line, "radius": 10 if geom is not None and geom.get("prst") == "roundRect" else 0,
                                                    "alpha": None})
+                    elif tag == "graphicFrame":
+                        gx = child.find("p:xfrm", NS)
+                        tbl = child.find(".//a:tbl", NS)
+                        if gx is not None and tbl is not None:
+                            off, ext = gx.find("a:off", NS), gx.find("a:ext", NS)
+                            if off is not None and ext is not None:
+                                rows = []
+                                for tr in tbl.findall("a:tr", NS):
+                                    cells = []
+                                    for tc in tr.findall("a:tc", NS):
+                                        body = tc.find("a:txBody", NS)
+                                        paras = []
+                                        if body is not None:
+                                            for pp in body.findall("a:p", NS):
+                                                dd = para_data(pp)
+                                                if dd:
+                                                    paras.append(dd)
+                                        fill = color_of(tc.find("a:tcPr/a:solidFill", NS))
+                                        span = int(tc.get("gridSpan", "1"))
+                                        cells.append({"paras": paras, "fill": fill, "span": span})
+                                    rows.append({"h": round(int(tr.get("h", "0")) / 9525, 2), "cells": cells})
+                                cols = [round(int(g.get("w")) / 9525, 2) for g in tbl.findall("a:tblGrid/a:gridCol", NS)]
+                                shapes.append({"type": "table", "x": round(int(off.get("x")) / 9525, 2), "y": round(int(off.get("y")) / 9525, 2),
+                                               "w": round(int(ext.get("cx")) / 9525, 2), "h": round(int(ext.get("cy")) / 9525, 2),
+                                               "rows": rows, "cols": cols, "border": "#D8CEC0"})
                     elif tag == "pic":
                         x = xfrm_of(child)
                         blip = child.find(".//a:blip", NS)
