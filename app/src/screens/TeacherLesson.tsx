@@ -4,6 +4,7 @@ import {
 } from 'lucide-react'
 import { SpeakButton } from '../components/SpeakButton'
 import { CheckBoard, LessonBlocks } from '../components/LessonContent'
+import { DeckCanvas } from '../components/DeckCanvas'
 import { AnswerRows, ExchangeBlocks, FocusList, FrameColumns, MissionDays, ReferencePanels, ReflectionBoard, RhythmRows, RoleBriefs } from '../components/DeckBlocks'
 import { cn } from '../lib/utils'
 import { TEACH_LESSONS } from '../data/teacherLessons'
@@ -544,6 +545,8 @@ function SlideBody({
   const shapeLines = normalizeScript(shape.lines)
   const shapeTitle = shape.title
   const audioOk = (AUDIO_SCENES[lesson] ?? []).includes(slide.num)
+  const editedNow = shapeLines.join('\u0001') !== displayLines.join('\u0001')
+  if (lesson > 1 && !audioOk && !editedNow) return <DeckCanvas lesson={lesson} num={slide.num} />
   if (/OPTIONAL CHECK/i.test(slide.kind) && displayLines.length >= 2) return <CheckBoard lines={displayLines} />
 
   // ── Real Talk briefs, reflection board, daily plan, reference ─────────
@@ -1021,6 +1024,8 @@ function SlideCard({
     }
   }
 
+  const canvasOnly = lesson > 1 && !(AUDIO_SCENES[lesson] ?? []).includes(slide.num) && !(edit?.lines && edit.lines.length)
+
   return (
     <article className="min-w-0 break-words rounded-2xl border border-line bg-surface p-5 shadow-card sm:p-7">
       <header className="mb-2 flex flex-wrap items-center gap-2.5">
@@ -1102,8 +1107,8 @@ function SlideCard({
         </div>
       ) : (
         <>
-          <h3 className="break-words text-[19px] font-bold leading-snug tracking-tight text-ink">{title}</h3>
-          {instruction && (
+          {!canvasOnly && <h3 className="break-words text-[19px] font-bold leading-snug tracking-tight text-ink">{title}</h3>}
+          {!canvasOnly && instruction && (
             <p className="mt-2 flex items-start gap-2 text-[14px] leading-relaxed text-muted">
               <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
               <span>{instruction}</span>
