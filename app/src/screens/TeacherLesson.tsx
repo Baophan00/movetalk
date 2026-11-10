@@ -4,6 +4,7 @@ import {
 } from 'lucide-react'
 import { SpeakButton } from '../components/SpeakButton'
 import { LessonBlocks } from '../components/LessonContent'
+import { AnswerRows, ExchangeBlocks, FocusList, FrameColumns, RhythmRows } from '../components/DeckBlocks'
 import { cn } from '../lib/utils'
 import { TEACH_LESSONS } from '../data/teacherLessons'
 import { LESSON_INTROS } from '../data/teacherLessons/intros'
@@ -422,7 +423,7 @@ function PreListen({ lines }: { lines: string[] }) {
   for (const line of lines) {
     const t = line.trim()
     if (!t) continue
-    if (/^Lượt\b/.test(t)) { footer.push(t); continue }
+    if (/^Lượt\b|^Mục tiêu|^Sau khi|^Ghi chú|^Lưu ý/i.test(t)) { footer.push(t); continue }
     if (/^[A-Z][A-Z ’'&/-]{2,24}$/.test(t)) {
       if (cur.label || cur.items.length) groups.push(cur)
       cur = { label: t, items: [] }
@@ -434,20 +435,25 @@ function PreListen({ lines }: { lines: string[] }) {
 
   return (
     <div className="space-y-3">
-      <div className={cn('grid gap-3', labelled.length > 1 ? 'sm:grid-cols-2' : '')}>
-        {labelled.map((g, i) => (
-          <div key={i} className="rounded-xl border border-line bg-bg/40 p-4">
-            <p className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-primary">{g.label}</p>
-            <ul className="mt-2.5 space-y-2">
-              {g.items.map((it, j) => (
-                <li key={j} className="border-l-2 border-primary/25 pl-3 text-[14.5px] leading-relaxed text-ink/90">{it}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
+      <div className={cn('grid gap-4', labelled.length > 1 ? 'sm:grid-cols-2' : '')}>
+        {labelled.map((g, i) => {
+          const color = i % 2 === 0 ? '#2D7894' : '#B86C4C'
+          return (
+            <div key={i} className="rounded-2xl border border-line bg-surface p-5">
+              <p className="text-[14.5px] font-extrabold uppercase tracking-wide" style={{ color }}>{g.label}</p>
+              <ul className="mt-3 space-y-2">
+                {g.items.map((it, j) => (
+                  <li key={j} className="border-l-2 pl-3 text-[16px] leading-relaxed text-ink/90" style={{ borderColor: `${color}66` }}>{it}</li>
+                ))}
+              </ul>
+            </div>
+          )
+        })}
       </div>
       {tail.length > 0 && (
-        <p className="rounded-lg bg-bg/60 px-3.5 py-2.5 text-[12.5px] leading-relaxed text-muted">{tail.join(' ')}</p>
+        <p className="rounded-lg border-l-[3px] bg-[#2D7894]/[0.07] px-4 py-3 text-[14px] font-semibold leading-relaxed text-[#2D7894]">
+          {tail.join(' ')}
+        </p>
       )}
     </div>
   )
@@ -533,8 +539,24 @@ function SlideBody({
 }) {
   // Layout decisions use the original slide. Only the text comes from the edit.
   const displayLines = normalizeScript(slide.lines)
+  const sectionKey = slide.section.toUpperCase()
   const shapeLines = normalizeScript(shape.lines)
   const shapeTitle = shape.title
+  // ── deck-faithful layouts (slide 16–26) ──────────────────────────────
+  if (sectionKey.includes('PRONUNCIATION') && displayLines.length >= 4) {
+    if (/rhythm of a question/i.test(shapeTitle)) return <RhythmRows lines={displayLines} />
+    if (/short answers/i.test(shapeTitle)) return <AnswerRows lines={displayLines} />
+  }
+
+  if (sectionKey.includes('ACTIVATION') && displayLines.length >= 2) {
+    if (/six cues/i.test(shapeTitle)) return <FocusList items={displayLines} variant="cue" />
+    if (/which frame helps/i.test(shapeTitle)) return <FrameColumns lines={displayLines} />
+    if (/questions you want to ask/i.test(shapeTitle)) return <FocusList items={displayLines} variant="vi" />
+    if (/missing replies/i.test(shapeTitle)) return <ExchangeBlocks lines={displayLines} mode="missing" />
+    if (/new details/i.test(shapeTitle)) return <ExchangeBlocks lines={displayLines} mode="full" />
+    if (/your question, then their answer/i.test(shapeTitle)) return <FocusList items={displayLines} variant="question" />
+  }
+
   const vocab = parseVocab(displayLines)
   const isBack = /·\s*BACK\s*$/i.test(shapeTitle) || /BACK/i.test(slide.kind)
 
@@ -982,7 +1004,7 @@ function SlideCard({
   }
 
   return (
-    <article className="min-w-0 break-words rounded-2xl border border-line bg-surface p-4 shadow-card sm:p-6">
+    <article className="min-w-0 break-words rounded-2xl border border-line bg-surface p-5 shadow-card sm:p-7">
       <header className="mb-2 flex flex-wrap items-center gap-2.5">
         <span className={cn('rounded-md border px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide', tone.chip)}>
           {slide.kind || 'Part'}
@@ -1070,7 +1092,7 @@ function SlideCard({
             </p>
           )}
           {status && <p className="mt-2 text-[12px] text-muted">{status}</p>}
-          <div className="mt-4">
+          <div className="mt-5">
             <SlideBody lesson={lesson} slide={bodySlide} shape={{ lines: slide.lines, title: slide.title, hasDialogue: Boolean(slide.dialogue) }} />
           </div>
         </>
