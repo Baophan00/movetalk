@@ -83,6 +83,16 @@
   .animate-\[ripple_1\.8s_ease-out_infinite\] { animation: none; }
 }
 
+/* Conversation player: sound bars rise while the recording plays. */
+@keyframes voice-wave {
+  0%, 100% { height: 4px; opacity: 0.75; }
+  50% { height: 15px; opacity: 1; }
+}
+.wave-bar { height: 4px; animation: voice-wave 0.9s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .wave-bar { animation: none; height: 11px; }
+}
+
 /* The practice area borrows the teacher overview palette: cream paper, sage action, amber lines.
    Scoped to a wrapper so the rest of the student app keeps its lavender skin. */
 .theme-overview {
