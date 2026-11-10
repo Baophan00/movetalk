@@ -282,7 +282,17 @@ function StoryReader({ slide }: { lesson: number; slide: TeachSlide }) {
   const [playing, setPlaying] = useState(false)
   const [time, setTime] = useState(0)
   const [duration, setDuration] = useState(26)
+  const [wordTimes, setWordTimes] = useState<{ w: string; s: number; e: number }[] | null>(null)
   const src = `/audio/teach/l01/scene_${slide.num}.mp3`
+
+  useEffect(() => {
+    let alive = true
+    fetch(`/audio/teach/l01/scene_${slide.num}.json`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (alive && Array.isArray(d?.words) && d.words.length) setWordTimes(d.words) })
+      .catch(() => {})
+    return () => { alive = false }
+  }, [slide.num])
 
   const labelAt = slide.lines.findIndex((l) => /^[\p{Lu}0-9][\p{Lu}0-9 ·&/-]{3,}$/u.test(l.trim()))
   const storyPart = labelAt < 0 ? slide.lines : slide.lines.slice(0, labelAt)
@@ -296,7 +306,26 @@ function StoryReader({ slide }: { lesson: number; slide: TeachSlide }) {
     acc += Math.max(12, text.length)
     return { text, start, end: (acc / total) * duration }
   })
+  const storyText = sentences.join(' ')
+  const tokens = storyText.split(/\s+/).filter(Boolean)
+  const wordTimed = wordTimes && wordTimes.length === tokens.length
+    ? tokens.map((t, i) => ({ t, s: wordTimes[i].s, e: wordTimes[i].e }))
+    : null
+  let activeWord = -1
+  if (wordTimed) wordTimed.forEach((x, i) => { if (time >= x.s) activeWord = i })
   const active = timed.findIndex((x) => time >= x.start && time < x.end)
+
+  useEffect(() => {
+    if (!playing) return
+    let raf = 0
+    const tick = () => {
+      const el = audioRef.current
+      if (el) setTime(el.currentTime)
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [playing])
 
   const toggle = () => {
     const el = audioRef.current
@@ -322,12 +351,19 @@ function StoryReader({ slide }: { lesson: number; slide: TeachSlide }) {
       />
       <div className="order-2 lg:order-1">
         <p className="text-[16.5px] leading-[1.95] text-ink/90">
-          {timed.map((x, i) => (
-            <span
-              key={i}
-              className={cn('rounded px-0.5 transition-colors duration-150', active === i && 'bg-primary/20 font-semibold text-ink shadow-[inset_0_-2px_0_rgba(46,110,101,0.45)]')}
-            >{x.text} </span>
-          ))}
+          {wordTimed
+            ? wordTimed.map((x, i) => (
+                <span
+                  key={i}
+                  className={cn('rounded px-0.5 transition-colors duration-150', activeWord === i && 'bg-primary/25 font-semibold text-ink shadow-[inset_0_-2px_0_rgba(46,110,101,0.45)]')}
+                >{x.t}{' '}</span>
+              ))
+            : timed.map((x, i) => (
+                <span
+                  key={i}
+                  className={cn('rounded px-0.5 transition-colors duration-150', active === i && 'bg-primary/20 font-semibold text-ink shadow-[inset_0_-2px_0_rgba(46,110,101,0.45)]')}
+                >{x.text}{' '}</span>
+              ))}
         </p>
         {followPart.length > 0 && (
           <div className="mt-4 rounded-xl border border-line bg-bg/40 p-4">
@@ -345,9 +381,9 @@ function StoryReader({ slide }: { lesson: number; slide: TeachSlide }) {
       <div className="order-1 lg:order-2 lg:sticky lg:top-24">
         <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
           <button onClick={toggle} className="group relative block w-full text-left" aria-label={playing ? 'Pause the story' : 'Play the story'}>
-            <div className="relative h-56 w-full sm:h-64">
+            <div className="relative aspect-[4/3] w-full">
               {slide.images[0] ? (
-                <img src={slide.images[0]} alt={slide.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
+                <img src={slide.images[0]} alt={slide.title} className="h-full w-full object-cover object-top transition duration-500 group-hover:scale-[1.03]" />
               ) : (
                 <div className="h-full w-full bg-gradient-to-br from-[#E7F0F0] to-[#CBE0E0]" />
               )}
