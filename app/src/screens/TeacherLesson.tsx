@@ -4,11 +4,12 @@ import {
 } from 'lucide-react'
 import { SpeakButton } from '../components/SpeakButton'
 import { CheckBoard, LessonBlocks } from '../components/LessonContent'
-import { DeckCanvas } from '../components/DeckCanvas'
+import { DeckFlow } from '../components/DeckFlow'
 import { AnswerRows, ExchangeBlocks, FocusList, FrameColumns, MissionDays, ReferencePanels, ReflectionBoard, RhythmRows, RoleBriefs } from '../components/DeckBlocks'
 import { cn } from '../lib/utils'
 import { TEACH_LESSONS } from '../data/teacherLessons'
 import { AUDIO_SCENES } from '../data/teacherLessons/audioManifest'
+import { DECK_IMAGES } from '../data/teacherLessons/deckImages'
 import { LESSON_INTROS } from '../data/teacherLessons/intros'
 import { supabase } from '../lib/supabase'
 import type { TeachSlide } from '../data/teacherLessons'
@@ -147,6 +148,7 @@ function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }
   const [open, setOpen] = useState(false)
   const base = `/audio/teach/l${String(lesson).padStart(2, '0')}`
   const src = `${base}/scene_${slide.num}.mp3?v=2`
+  const deckPic = DECK_IMAGES[lesson]?.[slide.num]
 
   useEffect(() => {
     fetch(`${base}/scene_${slide.num}.json?v=2`)
@@ -223,8 +225,8 @@ function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }
         <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
           <button onClick={hasAudio ? toggle : undefined} disabled={!hasAudio} className="group relative block min-h-[260px] w-full flex-1 text-left" aria-label={playing ? 'Pause conversation' : 'Play conversation'}>
             <div className="absolute inset-0 overflow-hidden bg-[#EDE7DC]">
-              {slide.images[0] ? (
-                <img src={slide.images[0]} alt={slide.title} className="h-full w-full object-cover object-top" />
+              {deckPic || slide.images[0] ? (
+                <img src={deckPic || slide.images[0]} alt={slide.title} className="h-full w-full object-cover object-top" />
               ) : (
                 <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#E7F0F0] to-[#CBE0E0]">
                   <span className="text-6xl">💬</span>
@@ -546,7 +548,7 @@ function SlideBody({
   const shapeTitle = shape.title
   const audioOk = (AUDIO_SCENES[lesson] ?? []).includes(slide.num)
   const editedNow = shapeLines.join('\u0001') !== displayLines.join('\u0001')
-  if (lesson > 1 && !audioOk && !editedNow) return <DeckCanvas lesson={lesson} num={slide.num} />
+  if (lesson > 1 && !audioOk && !editedNow) return <DeckFlow lesson={lesson} num={slide.num} />
   if (/OPTIONAL CHECK/i.test(slide.kind) && displayLines.length >= 2) return <CheckBoard lines={displayLines} />
 
   // ── Real Talk briefs, reflection board, daily plan, reference ─────────
@@ -1029,9 +1031,11 @@ function SlideCard({
   return (
     <article className="min-w-0 break-words rounded-2xl border border-line bg-surface p-5 shadow-card sm:p-7">
       <header className="mb-2 flex flex-wrap items-center gap-2.5">
-        <span className={cn('rounded-md border px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide', tone.chip)}>
-          {slide.kind || 'Part'}
-        </span>
+        {!canvasOnly && (
+          <span className={cn('rounded-md border px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide', tone.chip)}>
+            {slide.kind || 'Part'}
+          </span>
+        )}
         <button
           onClick={editing ? () => setEditing(false) : startEdit}
           className={cn(
