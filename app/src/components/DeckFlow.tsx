@@ -45,6 +45,17 @@ function sizeOf(p: Para[]) {
   return m
 }
 
+function palette(c?: string | null) {
+  if (!c) return '#173F50'
+  const m = /^#([0-9a-f]{6})$/i.exec(c)
+  if (!m) return c
+  const n = parseInt(m[1], 16)
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255
+  if (b > r + 18 && b > g - 10) return '#2D7894'
+  if (r > b + 30 && r > g + 10) return '#B86C4C'
+  return '#173F50'
+}
+
 const pxSize = (pt: number) => (pt >= 24 ? 26 : pt >= 20 ? 20.5 : pt >= 17 ? 17.5 : pt >= 14 ? 15.5 : pt >= 12 ? 14 : 12.5)
 function isVeryLight(c?: string | null) {
   if (!c) return false
@@ -74,7 +85,7 @@ function RunText({ paras, size, light }: { paras: Para[]; size: number; light?: 
               key={k}
               style={{
                 fontSize: pxSize(r.sz || p.defSz || size),
-                color: light ? '#FFFFFF' : !r.color || isVeryLight(r.color) ? '#173F50' : r.color,
+                color: light ? '#FFFFFF' : palette(isVeryLight(r.color) ? null : r.color),
                 fontWeight: r.b ? 700 : 400,
                 fontStyle: r.i ? 'italic' : 'normal',
               }}
@@ -114,7 +125,7 @@ function TableBlock({ s }: { s: Shape }) {
   )
 }
 
-export function DeckFlow({ lesson, num }: { lesson: number; num: number }) {
+export function DeckFlow({ lesson, num, edits = [] }: { lesson: number; num: number; edits?: { from: string; to: string }[] }) {
   const [deck, setDeck] = useState<Deck | null>(null)
   const host = useRef<HTMLDivElement | null>(null)
 
@@ -137,6 +148,22 @@ export function DeckFlow({ lesson, num }: { lesson: number; num: number }) {
         items.push({ x: sh.x, y: sh.y, w: sh.w, h: sh.h, paras: sh.paras || [], sz: sizeOf(sh.paras || []), text, align: (sh.paras?.[0]?.algn as string) || 'left' })
       }
     }
+    const norm = (t: string) => t.replace(/\s+/g, ' ').trim().toLowerCase()
+    for (const e of edits) {
+      const want = norm(e.from)
+      let hit = false
+      for (const it of items) {
+        for (const para of it.paras) {
+          const pt = norm(para.runs.map((r) => r.t).join(''))
+          if (!pt || !(pt === want || pt.includes(want) || want.includes(pt))) continue
+          const first = para.runs[0]
+          para.runs = [{ t: e.to, sz: first?.sz ?? it.sz, b: first?.b, i: first?.i, color: first?.color }]
+          hit = true
+        }
+        if (hit) { it.text = it.paras.map((pp) => pp.runs.map((r) => r.t).join('')).join(' '); break }
+      }
+    }
+
     // deck chrome
     const label = items.filter((i) => i.y < 55 && i.text === i.text.toUpperCase() && i.text.length < 60).sort((a, b) => a.y - b.y)[0]
     const rest = items.filter((i) => i !== label)
@@ -244,7 +271,7 @@ export function DeckFlow({ lesson, num }: { lesson: number; num: number }) {
                 const head = items.find((it) => it.sz >= 16 || it.text === it.text.toUpperCase())
                 const bodyItems = items.filter((it) => it !== head)
                 return (
-                  <div key={k} className="rounded-xl border p-4" style={{ background: isNearWhite(box.fill) ? 'rgba(255,253,252,0.7)' : box.fill || undefined, borderColor: box.line?.color || '#E7DED2' }}>
+                  <div key={k} className={isDark(box.fill) ? 'rounded-xl border border-ink/80 bg-ink p-4 text-white' : 'rounded-xl border border-line bg-surface p-4'}>
                     {head && <h4 className="mb-1 text-[16.5px] font-bold leading-snug" style={{ color: light ? '#fff' : '#173F50' }}><RunText light={light} paras={head.paras} size={head.sz} /></h4>}
                     <div className="space-y-0.5">
                       {bodyItems.map((it, j) => <p key={j} className="leading-relaxed"><RunText light={light} paras={it.paras} size={it.sz} /></p>)}

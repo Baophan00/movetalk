@@ -539,7 +539,7 @@ function SlideBody({
 }: {
   lesson: number
   slide: TeachSlide
-  shape: { lines: string[]; title: string; hasDialogue: boolean }
+  shape: { lines: string[]; title: string; instruction?: string; hasDialogue: boolean }
 }) {
   // Layout decisions use the original slide. Only the text comes from the edit.
   const displayLines = normalizeScript(slide.lines)
@@ -547,8 +547,13 @@ function SlideBody({
   const shapeLines = normalizeScript(shape.lines)
   const shapeTitle = shape.title
   const audioOk = (AUDIO_SCENES[lesson] ?? []).includes(slide.num)
-  const editedNow = shapeLines.join('\u0001') !== displayLines.join('\u0001')
-  if (lesson > 1 && !audioOk && !editedNow) return <DeckFlow lesson={lesson} num={slide.num} />
+  const baseLines = normalizeScript(shape.lines)
+  const edits = [
+    ...(shapeTitle && shapeTitle !== slide.title ? [{ from: slide.title, to: shapeTitle }] : []),
+    ...(shape.instruction && shape.instruction !== slide.instruction ? [{ from: slide.instruction, to: shape.instruction }] : []),
+    ...displayLines.map((to, i) => ({ from: baseLines[i] ?? '', to })).filter((e) => e.from && e.to && e.to !== e.from),
+  ]
+  if (lesson > 1 && !audioOk) return <DeckFlow lesson={lesson} num={slide.num} edits={edits} />
   if (/OPTIONAL CHECK/i.test(slide.kind) && displayLines.length >= 2) return <CheckBoard lines={displayLines} />
 
   // ── Real Talk briefs, reflection board, daily plan, reference ─────────
@@ -1026,7 +1031,7 @@ function SlideCard({
     }
   }
 
-  const canvasOnly = lesson > 1 && !(AUDIO_SCENES[lesson] ?? []).includes(slide.num) && !(edit?.lines && edit.lines.length)
+  const canvasOnly = lesson > 1 && !(AUDIO_SCENES[lesson] ?? []).includes(slide.num)
 
   return (
     <article className="min-w-0 break-words rounded-2xl border border-line bg-surface p-5 shadow-card sm:p-7">
@@ -1120,7 +1125,7 @@ function SlideCard({
           )}
           {status && <p className="mt-2 text-[12px] text-muted">{status}</p>}
           <div className="mt-5">
-            <SlideBody lesson={lesson} slide={bodySlide} shape={{ lines: slide.lines, title: slide.title, hasDialogue: Boolean(slide.dialogue) }} />
+            <SlideBody lesson={lesson} slide={bodySlide} shape={{ lines: slide.lines, title, instruction, hasDialogue: Boolean(slide.dialogue) }} />
           </div>
         </>
       )}
