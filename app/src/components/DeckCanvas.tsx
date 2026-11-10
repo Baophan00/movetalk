@@ -33,7 +33,7 @@ const cache = new Map<number, Promise<Deck>>()
 
 function load(lesson: number): Promise<Deck> {
   if (!cache.has(lesson)) {
-    const url = `/teach/l${String(lesson).padStart(2, '0')}/canvas.json`
+    const url = `/teach/l${String(lesson).padStart(2, '0')}/canvas.json?v=3`
     cache.set(lesson, fetch(url).then((r) => (r.ok ? r.json() : { w: 1280, h: 720, slides: {} })).catch(() => ({ w: 1280, h: 720, slides: {} })))
   }
   return cache.get(lesson)!
@@ -123,7 +123,7 @@ export function DeckCanvas({ lesson, num }: { lesson: number; num: number }) {
                     {(s.rows || []).map((row, ri) => (
                       <tr key={ri} style={{ height: row.h }}>
                         {row.cells.map((cell, ci) => (
-                          <td key={ci} colSpan={cell.span || 1} style={{ border: `1px solid ${s.border || '#D8CEC0'}`, background: cell.fill || undefined, verticalAlign: 'top', padding: 4 }}>
+                          <td key={ci} colSpan={cell.span || 1} style={{ border: `1px solid ${s.border || '#D8CEC0'}`, background: cell.fill || undefined, verticalAlign: 'top', padding: 3, overflow: 'hidden' }}>
                             <Paras paras={cell.paras} scale={s.scale} />
                           </td>
                         ))}
