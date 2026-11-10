@@ -1,1 +1,64 @@
-{"lines": [{"s": "SAM", "t": "Is he your brother in this photo?", "start": 0.0, "end": 2.52}, {"s": "LAN", "t": "Yes, he is. His name is Minh.", "start": 2.94, "end": 6.2}, {"s": "SAM", "t": "Does he live near you?", "start": 6.62, "end": 8.64}, {"s": "LAN", "t": "No, he doesn’t. He lives with our parents.", "start": 9.06, "end": 12.9}, {"s": "SAM", "t": "Are they in Da Nang?", "start": 13.32, "end": 15.6}, {"s": "LAN", "t": "Yes, they are. Their house is near the river.", "start": 16.02, "end": 19.79}, {"s": "SAM", "t": "Do they cook at home?", "start": 20.21, "end": 22.3}, {"s": "LAN", "t": "Yes, they do. My father is a good cook.", "start": 22.72, "end": 26.56}, {"s": "SAM", "t": "Does Minh help with dinner?", "start": 26.98, "end": 29.06}, {"s": "LAN", "t": "Yes, he does. He washes the dishes.", "start": 29.48, "end": 33.11}]}
+{
+ "lines": [
+  {
+   "s": "",
+   "t": "Is he your brother in this photo?",
+   "start": 0,
+   "end": 1.5
+  },
+  {
+   "s": "",
+   "t": "Yes, he is. His name is Minh.",
+   "start": 1.9,
+   "end": 4.02
+  },
+  {
+   "s": "",
+   "t": "Does he live near you?",
+   "start": 4.44,
+   "end": 5.42
+  },
+  {
+   "s": "",
+   "t": "No, he doesn’t. He lives with our parents.",
+   "start": 5.7,
+   "end": 8.12
+  },
+  {
+   "s": "",
+   "t": "Are they in Da Nang?",
+   "start": 8.68,
+   "end": 9.52
+  },
+  {
+   "s": "",
+   "t": "Yes, they are. Their house is near the river.",
+   "start": 9.82,
+   "end": 12.3
+  },
+  {
+   "s": "",
+   "t": "Do they cook at home?",
+   "start": 12.8,
+   "end": 13.72
+  },
+  {
+   "s": "",
+   "t": "Yes, they do. My father is a good cook.",
+   "start": 14.06,
+   "end": 16.9
+  },
+  {
+   "s": "",
+   "t": "Does Minh help with dinner?",
+   "start": 17.36,
+   "end": 18.58
+  },
+  {
+   "s": "",
+   "t": "Yes, he does. He washes the dishes.",
+   "start": 18.94,
+   "end": 21.2
+  }
+ ]
+}

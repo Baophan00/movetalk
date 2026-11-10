@@ -1,1 +1,64 @@
-{"lines": [{"s": "MAI", "t": "Have you ever changed a hotel booking online? I’ve just booked a room for Saturday, but I chose the wrong date.", "start": 0.0, "end": 7.13}, {"s": "BEN", "t": "Yes, I have. I changed one last month. Have you contacted the hotel yet?", "start": 7.55, "end": 14.92}, {"s": "MAI", "t": "Not yet. I’ve already checked the website, but I haven’t found the right page. What did you do last time?", "start": 15.34, "end": 22.8}, {"s": "BEN", "t": "I called the hotel and explained the problem. The receptionist changed the date in a few minutes.", "start": 23.22, "end": 29.63}, {"s": "MAI", "t": "Did you have to pay extra? I’ve never changed a booking before, so I’m not sure how it works.", "start": 30.05, "end": 36.17}, {"s": "BEN", "t": "No, I didn’t. But every hotel has different rules. Have you read the conditions in your email?", "start": 36.59, "end": 44.41}, {"s": "MAI", "t": "Yes. It says I can change the date until Friday. I’ve just found the phone number as well.", "start": 44.83, "end": 51.43}, {"s": "BEN", "t": "Great. Call them now and ask. I’ve used that hotel twice, and the staff have been helpful both times.", "start": 51.85, "end": 60.44}, {"s": "MAI", "t": "Okay. When did you last stay there? Was the room quiet?", "start": 60.86, "end": 65.71}, {"s": "BEN", "t": "I stayed there in June. My room faced the garden, so it was quiet. Ask for that side if you can.", "start": 66.13, "end": 74.2}]}
+{
+ "lines": [
+  {
+   "s": "",
+   "t": "Have you ever changed a hotel booking online? I’ve just booked a room for Saturday, but I chose the wrong date.",
+   "start": 0,
+   "end": 6.16
+  },
+  {
+   "s": "",
+   "t": "Yes, I have. I changed one last month. Have you contacted the hotel yet?",
+   "start": 6.58,
+   "end": 11.12
+  },
+  {
+   "s": "",
+   "t": "Not yet. I’ve already checked the website, but I haven’t found the right page. What did you do last time?",
+   "start": 11.44,
+   "end": 17.22
+  },
+  {
+   "s": "",
+   "t": "I called the hotel and explained the problem. The receptionist changed the date in a few minutes.",
+   "start": 17.56,
+   "end": 22.04
+  },
+  {
+   "s": "",
+   "t": "Did you have to pay extra? I’ve never changed a booking before, so I’m not sure how it works.",
+   "start": 22.44,
+   "end": 27.46
+  },
+  {
+   "s": "",
+   "t": "No, I didn’t. But every hotel has different rules. Have you read the conditions in your email?",
+   "start": 27.48,
+   "end": 33.1
+  },
+  {
+   "s": "",
+   "t": "Yes. It says I can change the date until Friday. I’ve just found the phone number as well.",
+   "start": 33.46,
+   "end": 38.36
+  },
+  {
+   "s": "",
+   "t": "Great. Call them now and ask. I’ve used that hotel twice, and the staff have been helpful both times.",
+   "start": 38.64,
+   "end": 44.18
+  },
+  {
+   "s": "",
+   "t": "Okay. When did you last stay there? Was the room quiet?",
+   "start": 44.52,
+   "end": 47.72
+  },
+  {
+   "s": "",
+   "t": "I stayed there in June. My room faced the garden, so it was quiet. Ask for that side if you can.",
+   "start": 48.08,
+   "end": 53.56
+  }
+ ]
+}

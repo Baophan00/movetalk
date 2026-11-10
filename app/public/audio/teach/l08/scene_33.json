@@ -1,1 +1,64 @@
-{"lines": [{"s": "MAI", "t": "Do we have enough food for dinner?", "start": 0.0, "end": 2.33}, {"s": "BEN", "t": "We have a few vegetables, but very little rice.", "start": 2.75, "end": 6.52}, {"s": "MAI", "t": "Is there any milk left?", "start": 6.94, "end": 8.95}, {"s": "BEN", "t": "Yes, a little. Most of the milk is for breakfast, though.", "start": 9.37, "end": 14.53}, {"s": "MAI", "t": "How many people are coming tonight?", "start": 14.95, "end": 17.4}, {"s": "BEN", "t": "Six. Almost all of them eat vegetables, but two don’t eat meat.", "start": 17.82, "end": 23.32}, {"s": "MAI", "t": "Okay. We need some more rice and a few other things.", "start": 23.74, "end": 27.7}, {"s": "BEN", "t": "I can go shopping. Do you need any fruit?", "start": 28.12, "end": 32.15}, {"s": "MAI", "t": "Yes. Both of my parents like oranges. Get a few, please.", "start": 32.57, "end": 37.82}, {"s": "BEN", "t": "No problem. I’ll buy some oranges and a small bag of rice.", "start": 38.24, "end": 43.48}]}
+{
+ "lines": [
+  {
+   "s": "",
+   "t": "Do we have enough food for dinner?",
+   "start": 0,
+   "end": 1.56
+  },
+  {
+   "s": "",
+   "t": "We have a few vegetables, but very little rice.",
+   "start": 2.14,
+   "end": 5.08
+  },
+  {
+   "s": "",
+   "t": "Is there any milk left?",
+   "start": 5.68,
+   "end": 6.68
+  },
+  {
+   "s": "",
+   "t": "Yes, a little. Most of the milk is for breakfast, though.",
+   "start": 7.22,
+   "end": 10.5
+  },
+  {
+   "s": "",
+   "t": "How many people are coming tonight?",
+   "start": 10.92,
+   "end": 12.38
+  },
+  {
+   "s": "",
+   "t": "Six. Almost all of them eat vegetables, but two don’t eat meat.",
+   "start": 12.86,
+   "end": 17.12
+  },
+  {
+   "s": "",
+   "t": "Okay. We need some more rice and a few other things.",
+   "start": 17.6,
+   "end": 20.96
+  },
+  {
+   "s": "",
+   "t": "I can go shopping. Do you need any fruit?",
+   "start": 21.44,
+   "end": 23.48
+  },
+  {
+   "s": "",
+   "t": "Yes. Both of my parents like oranges. Get a few, please.",
+   "start": 23.9,
+   "end": 27.68
+  },
+  {
+   "s": "",
+   "t": "No problem. I’ll buy some oranges and a small bag of rice.",
+   "start": 27.7,
+   "end": 31.34
+  }
+ ]
+}

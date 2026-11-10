@@ -1,1 +1,64 @@
-{"lines": [{"s": "MIA", "t": "Do you usually go out on Sundays, Ben?", "start": 0.0, "end": 3.07}, {"s": "BEN", "t": "Not usually. I don’t go out much. I stay at home and rest.", "start": 3.49, "end": 9.4}, {"s": "MIA", "t": "Does your sister live with you?", "start": 9.82, "end": 11.93}, {"s": "BEN", "t": "No, she doesn’t. She lives with our parents.", "start": 12.35, "end": 17.08}, {"s": "MIA", "t": "Is she good at cooking?", "start": 17.5, "end": 19.37}, {"s": "BEN", "t": "Yes, she is. She usually cooks dinner on Sundays.", "start": 19.79, "end": 24.92}, {"s": "MIA", "t": "Do you help with dinner?", "start": 25.34, "end": 27.22}, {"s": "BEN", "t": "Yes, I do. I wash the dishes. Then we go for a walk.", "start": 27.64, "end": 33.97}, {"s": "MIA", "t": "Nice. My father watches movies after dinner.", "start": 34.39, "end": 38.21}, {"s": "BEN", "t": "My sister does too. But she doesn’t watch TV every day.", "start": 38.63, "end": 43.72}]}
+{
+ "lines": [
+  {
+   "s": "",
+   "t": "Do you usually go out on Sundays, Ben?",
+   "start": 0,
+   "end": 2.2
+  },
+  {
+   "s": "",
+   "t": "Not usually. I don’t go out much. I stay at home and rest.",
+   "start": 2.76,
+   "end": 6.76
+  },
+  {
+   "s": "",
+   "t": "Does your sister live with you?",
+   "start": 7.22,
+   "end": 8.56
+  },
+  {
+   "s": "",
+   "t": "No, she doesn’t. She lives with our parents.",
+   "start": 8.96,
+   "end": 11.48
+  },
+  {
+   "s": "",
+   "t": "Is she good at cooking?",
+   "start": 12.0,
+   "end": 12.86
+  },
+  {
+   "s": "",
+   "t": "Yes, she is. She usually cooks dinner on Sundays.",
+   "start": 13.28,
+   "end": 16.34
+  },
+  {
+   "s": "",
+   "t": "Do you help with dinner?",
+   "start": 16.94,
+   "end": 17.92
+  },
+  {
+   "s": "",
+   "t": "Yes, I do. I wash the dishes. Then we go for a walk.",
+   "start": 18.32,
+   "end": 21.94
+  },
+  {
+   "s": "",
+   "t": "Nice. My father watches movies after dinner.",
+   "start": 22.36,
+   "end": 25.18
+  },
+  {
+   "s": "",
+   "t": "My sister does too. But she doesn’t watch TV every day.",
+   "start": 25.56,
+   "end": 29.0
+  }
+ ]
+}

@@ -1,1 +1,64 @@
-{"lines": [{"s": "MAI", "t": "Is this your mug?", "start": 0.0, "end": 1.87}, {"s": "BEN", "t": "Yes, it is. Thanks. Are those seats by the window free?", "start": 2.29, "end": 8.63}, {"s": "MAI", "t": "I think so. There are two empty seats over there.", "start": 9.05, "end": 12.62}, {"s": "BEN", "t": "Great. Is there a socket near that table?", "start": 13.04, "end": 17.1}, {"s": "MAI", "t": "Yes, there is. It’s under the table.", "start": 17.52, "end": 20.93}, {"s": "BEN", "t": "Perfect. This café has free Wi-Fi too, right?", "start": 21.35, "end": 26.48}, {"s": "MAI", "t": "Yes. And there’s a lot of natural light by the window.", "start": 26.9, "end": 30.74}, {"s": "BEN", "t": "Are these your notebooks?", "start": 31.16, "end": 33.4}, {"s": "MAI", "t": "Yes, they are. That yellow bag by the counter is mine too.", "start": 33.82, "end": 38.57}, {"s": "BEN", "t": "Okay. I’ll get our drinks, then we can sit down.", "start": 38.99, "end": 43.84}]}
+{
+ "lines": [
+  {
+   "s": "",
+   "t": "Is this your mug?",
+   "start": 0,
+   "end": 0.94
+  },
+  {
+   "s": "",
+   "t": "Yes, it is. Thanks. Are those seats by the window free?",
+   "start": 1.38,
+   "end": 5.14
+  },
+  {
+   "s": "",
+   "t": "I think so. There are two empty seats over there.",
+   "start": 5.54,
+   "end": 8.54
+  },
+  {
+   "s": "",
+   "t": "Great. Is there a socket near that table?",
+   "start": 8.88,
+   "end": 11.16
+  },
+  {
+   "s": "",
+   "t": "Yes, there is. It’s under the table.",
+   "start": 11.5,
+   "end": 13.62
+  },
+  {
+   "s": "",
+   "t": "Perfect. This café has free Wi-Fi too, right?",
+   "start": 14.02,
+   "end": 17.06
+  },
+  {
+   "s": "",
+   "t": "Yes. And there’s a lot of natural light by the window.",
+   "start": 17.4,
+   "end": 20.32
+  },
+  {
+   "s": "",
+   "t": "Are these your notebooks?",
+   "start": 20.82,
+   "end": 21.64
+  },
+  {
+   "s": "",
+   "t": "Yes, they are. That yellow bag by the counter is mine too.",
+   "start": 22.16,
+   "end": 25.5
+  },
+  {
+   "s": "",
+   "t": "Okay. I’ll get our drinks, then we can sit down.",
+   "start": 25.9,
+   "end": 28.38
+  }
+ ]
+}

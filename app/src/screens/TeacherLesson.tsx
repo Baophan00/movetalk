@@ -7,6 +7,7 @@ import { CheckBoard, LessonBlocks } from '../components/LessonContent'
 import { AnswerRows, ExchangeBlocks, FocusList, FrameColumns, MissionDays, ReferencePanels, ReflectionBoard, RhythmRows, RoleBriefs } from '../components/DeckBlocks'
 import { cn } from '../lib/utils'
 import { TEACH_LESSONS } from '../data/teacherLessons'
+import { AUDIO_SCENES } from '../data/teacherLessons/audioManifest'
 import { LESSON_INTROS } from '../data/teacherLessons/intros'
 import { supabase } from '../lib/supabase'
 import type { TeachSlide } from '../data/teacherLessons'
@@ -136,6 +137,7 @@ function EyeToggle({ open, onClick }: { open: boolean; onClick: () => void }) {
 
 function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }) {
   const d = slide.dialogue!
+  const hasAudio = (AUDIO_SCENES[lesson] ?? []).includes(slide.num)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const [playing, setPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -218,7 +220,7 @@ function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }
 
       <div className="order-1 flex lg:order-2">
         <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
-          <button onClick={toggle} className="group relative block min-h-[260px] w-full flex-1 text-left" aria-label={playing ? 'Pause conversation' : 'Play conversation'}>
+          <button onClick={hasAudio ? toggle : undefined} disabled={!hasAudio} className="group relative block min-h-[260px] w-full flex-1 text-left" aria-label={playing ? 'Pause conversation' : 'Play conversation'}>
             <div className="absolute inset-0 overflow-hidden bg-[#EDE7DC]">
               {slide.images[0] ? (
                 <img src={slide.images[0]} alt={slide.title} className="h-full w-full object-cover object-top" />
@@ -234,14 +236,16 @@ function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }
                   <span className="pointer-events-none absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 animate-ping rounded-full bg-white/10" style={{ animationDelay: '0.45s' }} />
                 </>
               )}
-              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                <span className={cn(
-                  'grid h-16 w-16 place-items-center rounded-full bg-white text-primary shadow-lift transition group-hover:scale-105',
-                  playing && 'scale-105',
-                )}>
-                  {playing ? <Pause className="h-7 w-7" /> : <Play className="ml-1 h-7 w-7" />}
+              {hasAudio && (
+                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                  <span className={cn(
+                    'grid h-16 w-16 place-items-center rounded-full bg-white text-primary shadow-lift transition group-hover:scale-105',
+                    playing && 'scale-105',
+                  )}>
+                    {playing ? <Pause className="h-7 w-7" /> : <Play className="ml-1 h-7 w-7" />}
+                  </span>
                 </span>
-              </span>
+              )}
               {playing && (
                 <span className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-gradient-to-t from-ink/80 via-ink/35 to-transparent px-4 pb-3 pt-12">
                   <SoundWave bars={34} />
@@ -255,7 +259,7 @@ function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }
           <div className="h-1.5 w-full bg-line/60">
             <div className="h-full bg-primary transition-all" style={{ width: `${progress * 100}%` }} />
           </div>
-          <p className="px-4 py-2 text-[11.5px] text-muted">Nhấn ảnh để nghe cả đoạn hội thoại.</p>
+          {hasAudio && <p className="px-4 py-2 text-[11.5px] text-muted">Nhấn ảnh để nghe cả đoạn hội thoại.</p>}
         </div>
       </div>
     </div>
@@ -302,12 +306,12 @@ function StoryQuestions({ lines }: { lines: string[] }) {
   )
 }
 
-function StoryReader({ slide, mode = 'story' }: { lesson: number; slide: TeachSlide; mode?: 'story' | 'reading' }) {
+function StoryReader({ lesson, slide, mode = 'story' }: { lesson: number; slide: TeachSlide; mode?: 'story' | 'reading' }) {
   const [open, setOpen] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const [playing, setPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
-  const src = `/audio/teach/l01/scene_${slide.num}.mp3?v=2`
+  const src = `/audio/teach/l${String(lesson).padStart(2, '0')}/scene_${slide.num}.mp3?v=2`
 
   useEffect(() => () => { audioRef.current?.pause(); audioRef.current = null }, [])
 
@@ -319,9 +323,15 @@ function StoryReader({ slide, mode = 'story' }: { lesson: number; slide: TeachSl
     el.play().then(() => setPlaying(true)).catch(() => setPlaying(false))
   }
 
+  const vn = /[ăâđêôơưĂÂĐÊÔƠƯáàảãạấầẩẫậắằẳẵặéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/i
   const labelAt = slide.lines.findIndex((l) => /^[\p{Lu}0-9][\p{Lu}0-9 ·&/-]{3,}$/u.test(l.trim()))
-  const body = mode === 'reading' ? (slide.lines[0] ?? '') : slide.lines.slice(0, labelAt < 0 ? slide.lines.length : labelAt).join(' ')
-  const follow = mode === 'reading' ? slide.lines.slice(1) : labelAt < 0 ? [] : slide.lines.slice(labelAt)
+  const english = slide.lines.filter((l) => l.trim().length > 60 && !vn.test(l))
+  const body = mode === 'reading'
+    ? (english.length ? english.join(' ') : slide.lines[0] ?? '')
+    : slide.lines.slice(0, labelAt < 0 ? slide.lines.length : labelAt).join(' ')
+  const follow = mode === 'reading'
+    ? slide.lines.filter((l) => !english.includes(l))
+    : labelAt < 0 ? [] : slide.lines.slice(labelAt)
   const image = mode === 'story' ? slide.images[0] : undefined
 
   const text = open ? (
@@ -533,6 +543,7 @@ function SlideBody({
   const sectionKey = slide.section.toUpperCase()
   const shapeLines = normalizeScript(shape.lines)
   const shapeTitle = shape.title
+  const audioOk = (AUDIO_SCENES[lesson] ?? []).includes(slide.num)
   if (/OPTIONAL CHECK/i.test(slide.kind) && displayLines.length >= 2) return <CheckBoard lines={displayLines} />
 
   // ── Real Talk briefs, reflection board, daily plan, reference ─────────
@@ -628,11 +639,11 @@ function SlideBody({
     return <StoryQuestions lines={displayLines} />
   }
 
-  if (/^SCRIPT & FOLLOW-UP$/i.test(slide.kind) && displayLines.length >= 2) {
+  if (audioOk && /^SCRIPT & FOLLOW-UP$/i.test(slide.kind) && displayLines.length >= 2) {
     return <StoryReader lesson={lesson} slide={slide} mode="story" />
   }
 
-  if (/READ & PERSONALIZE/i.test(slide.kind) && displayLines.length >= 1) {
+  if (audioOk && /READ & PERSONALIZE|READ & RECORD|READ & RETELL|READ WITH INTENTION|READ & SWITCH/i.test(slide.kind) && displayLines.length >= 1) {
     return <StoryReader lesson={lesson} slide={slide} mode="reading" />
   }
 

@@ -1,1 +1,64 @@
-{"lines": [{"s": "MAI", "t": "Where do you work now?", "start": 0.0, "end": 1.87}, {"s": "BEN", "t": "At a hotel near the river. I work at the front desk.", "start": 2.29, "end": 6.97}, {"s": "MAI", "t": "How do you get to work, and how far is it from your home?", "start": 7.39, "end": 11.02}, {"s": "BEN", "t": "By bus. It’s about five kilometers.", "start": 11.44, "end": 15.73}, {"s": "MAI", "t": "How long does it take you to get there?", "start": 16.15, "end": 18.67}, {"s": "BEN", "t": "About twenty minutes. I leave home at seven.", "start": 19.09, "end": 23.39}, {"s": "MAI", "t": "What time do you start work?", "start": 23.81, "end": 26.02}, {"s": "BEN", "t": "At eight. I like to get there early and have breakfast.", "start": 26.44, "end": 31.04}, {"s": "MAI", "t": "How often do you work on weekends?", "start": 31.46, "end": 34.03}, {"s": "BEN", "t": "Twice a month. What about you? Do you work on Saturdays?", "start": 34.45, "end": 40.38}]}
+{
+ "lines": [
+  {
+   "s": "",
+   "t": "Where do you work now?",
+   "start": 0,
+   "end": 1.02
+  },
+  {
+   "s": "",
+   "t": "At a hotel near the river. I work at the front desk.",
+   "start": 1.54,
+   "end": 4.52
+  },
+  {
+   "s": "",
+   "t": "How do you get to work, and how far is it from your home?",
+   "start": 4.94,
+   "end": 8.16
+  },
+  {
+   "s": "",
+   "t": "By bus. It’s about five kilometers.",
+   "start": 8.58,
+   "end": 10.64
+  },
+  {
+   "s": "",
+   "t": "How long does it take you to get there?",
+   "start": 11.3,
+   "end": 12.84
+  },
+  {
+   "s": "",
+   "t": "About twenty minutes. I leave home at seven.",
+   "start": 13.22,
+   "end": 15.64
+  },
+  {
+   "s": "",
+   "t": "What time do you start work?",
+   "start": 16.08,
+   "end": 17.34
+  },
+  {
+   "s": "",
+   "t": "At eight. I like to get there early and have breakfast.",
+   "start": 17.78,
+   "end": 20.46
+  },
+  {
+   "s": "",
+   "t": "How often do you work on weekends?",
+   "start": 21.02,
+   "end": 22.52
+  },
+  {
+   "s": "",
+   "t": "Twice a month. What about you? Do you work on Saturdays?",
+   "start": 23.18,
+   "end": 26.56
+  }
+ ]
+}
