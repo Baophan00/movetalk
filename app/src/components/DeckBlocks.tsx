@@ -204,11 +204,13 @@ const FOOTER_LINE = /^(Hết lượt|Kết quả cần đạt|Mục tiêu|Ghi ch
 export function RoleBriefs({ lines }: { lines: string[] }) {
   const roles: { label: string; items: string[]; open: string }[] = []
   const footers: string[] = []
+  const hints: string[] = []
   for (const raw of lines) {
     const t = raw.trim()
     if (!t) continue
     if (ROLE_LABEL.test(t)) roles.push({ label: t, items: [], open: '' })
     else if (FOOTER_LINE.test(t)) footers.push(t)
+    else if (/^(Trả lời|Đưa ra câu trả lời)/i.test(t)) hints.push(t)
     else if (/^Mở lời\s*:/i.test(t) && roles.length) roles[roles.length - 1].open = t.replace(/^Mở lời\s*:\s*/i, '')
     else if (roles.length) roles[roles.length - 1].items.push(t)
   }
@@ -240,6 +242,9 @@ export function RoleBriefs({ lines }: { lines: string[] }) {
           )
         })}
       </div>
+      {hints.map((h, i) => (
+        <p key={i} className="pl-1 text-[13px] italic leading-relaxed text-muted">{h}</p>
+      ))}
       {footers.map((f, i) => (
         <p key={i} className="rounded-lg border-l-[3px] px-4 py-2.5 text-[14.5px] font-semibold" style={{ color: TEAL, backgroundColor: `${TEAL}0F`, borderColor: TEAL }}>{f}</p>
       ))}
@@ -349,10 +354,10 @@ export function ReferencePanels({ lines }: { lines: string[] }) {
         const color = i === 0 ? TEAL : CLAY
         return (
           <div key={i} className="rounded-2xl border border-line bg-surface p-5">
-            <p className="text-[13px] font-extrabold uppercase tracking-[0.12em]" style={{ color }}>{p.head}</p>
-            <ul className="mt-3 space-y-2">
+            <p className="text-[17.5px] font-extrabold uppercase tracking-[0.06em]" style={{ color }}>{p.head}</p>
+            <ul className="mt-4 space-y-3">
               {p.items.map((it, j) => (
-                <li key={j} className="text-[15.5px] leading-relaxed text-ink/90">
+                <li key={j} className="text-[16.5px] leading-[1.85] text-ink">
                   {it.split(/(Do you \+ V1…\?|Are you \+ …\?|Yes, I do\. \/ No, I don’t\.|Yes, I am\. \/ No, I’m not\.|What about you\? \/ And you\?)/).map((part, k) =>
                     k % 2 === 1 ? <strong key={k} className="font-semibold" style={{ color }}>{part}</strong> : <span key={k}>{part}</span>,
                   )}

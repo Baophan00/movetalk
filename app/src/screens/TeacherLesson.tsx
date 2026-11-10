@@ -3,7 +3,7 @@ import {
   AudioLines, BookOpen, ChevronLeft, ChevronRight, Lightbulb, Pause, Pencil, Play,
 } from 'lucide-react'
 import { SpeakButton } from '../components/SpeakButton'
-import { LessonBlocks } from '../components/LessonContent'
+import { CheckBoard, LessonBlocks } from '../components/LessonContent'
 import { AnswerRows, ExchangeBlocks, FocusList, FrameColumns, MissionDays, ReferencePanels, ReflectionBoard, RhythmRows, RoleBriefs } from '../components/DeckBlocks'
 import { cn } from '../lib/utils'
 import { TEACH_LESSONS } from '../data/teacherLessons'
@@ -127,6 +127,7 @@ function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }
   const [progress, setProgress] = useState(0)
   const [activeIdx, setActiveIdx] = useState(-1)
   const [timeline, setTimeline] = useState<{ s: string; t: string; start: number; end: number }[] | null>(null)
+  const [open, setOpen] = useState(false)
   const base = `/audio/teach/l${String(lesson).padStart(2, '0')}`
   const src = `${base}/scene_${slide.num}.mp3?v=2`
 
@@ -167,6 +168,19 @@ function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }
   const colorOf = (name: string) => {
     const i = d.speakers.indexOf(name)
     return SPEAKER_COLORS[Math.max(0, i) % SPEAKER_COLORS.length]
+  }
+
+  if (!open) {
+    return (
+      <div className="rounded-2xl border border-dashed border-line bg-bg/40 px-6 py-8 text-center">
+        <p className="text-3xl">💬</p>
+        <p className="mt-2 text-[16px] font-semibold text-ink">Hội thoại đang ẩn</p>
+        <p className="mt-1 text-[13.5px] leading-relaxed text-muted">Mở khi học viên đã nghe và thử trả lời trước.</p>
+        <button onClick={() => setOpen(true)} className="mt-4 rounded-lg bg-primary px-4 py-2.5 text-[14px] font-semibold text-white transition hover:bg-primary/90">
+          Mở hội thoại
+        </button>
+      </div>
+    )
   }
 
   return (
@@ -278,56 +292,16 @@ function StoryQuestions({ lines }: { lines: string[] }) {
   )
 }
 
-function StoryReader({ slide }: { lesson: number; slide: TeachSlide }) {
+function StoryReader({ slide, mode = 'story' }: { lesson: number; slide: TeachSlide; mode?: 'story' | 'reading' }) {
+  const [open, setOpen] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const [playing, setPlaying] = useState(false)
-  const [time, setTime] = useState(0)
-  const [duration, setDuration] = useState(26)
-  const [wordTimes, setWordTimes] = useState<{ w: string; s: number; e: number }[] | null>(null)
+  const [progress, setProgress] = useState(0)
   const src = `/audio/teach/l01/scene_${slide.num}.mp3?v=2`
 
-  useEffect(() => {
-    let alive = true
-    fetch(`/audio/teach/l01/scene_${slide.num}.json?v=2`)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d) => { if (alive && Array.isArray(d?.words) && d.words.length) setWordTimes(d.words) })
-      .catch(() => {})
-    return () => { alive = false }
-  }, [slide.num])
+  useEffect(() => () => { audioRef.current?.pause(); audioRef.current = null }, [])
 
-  const labelAt = slide.lines.findIndex((l) => /^[\p{Lu}0-9][\p{Lu}0-9 ·&/-]{3,}$/u.test(l.trim()))
-  const storyPart = labelAt < 0 ? slide.lines : slide.lines.slice(0, labelAt)
-  const followPart = labelAt < 0 ? [] : slide.lines.slice(labelAt)
-  const sentences = storyPart.join(' ').split(/(?<=[.!?])\s+/).filter(Boolean)
-  const weights = sentences.map((x) => Math.max(12, x.length))
-  const total = weights.reduce((a, b) => a + b, 0)
-  let acc = 0
-  const timed = sentences.map((text) => {
-    const start = (acc / total) * duration
-    acc += Math.max(12, text.length)
-    return { text, start, end: (acc / total) * duration }
-  })
-  const storyText = sentences.join(' ')
-  const tokens = storyText.split(/\s+/).filter(Boolean)
-  const wordTimed = wordTimes && wordTimes.length === tokens.length
-    ? tokens.map((t, i) => ({ t, s: wordTimes[i].s, e: wordTimes[i].e }))
-    : null
-  let activeWord = -1
-  if (wordTimed) wordTimed.forEach((x, i) => { if (time >= x.s) activeWord = i })
-  const active = timed.findIndex((x) => time >= x.start && time < x.end)
-
-  useEffect(() => {
-    if (!playing) return
-    let raf = 0
-    const tick = () => {
-      const el = audioRef.current
-      if (el) setTime(el.currentTime)
-      raf = requestAnimationFrame(tick)
-    }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
-  }, [playing])
-
+  const stop = () => { audioRef.current?.pause(); setPlaying(false); setProgress(0) }
   const toggle = () => {
     const el = audioRef.current
     if (!el) return
@@ -335,81 +309,106 @@ function StoryReader({ slide }: { lesson: number; slide: TeachSlide }) {
     el.play().then(() => setPlaying(true)).catch(() => setPlaying(false))
   }
 
+  const labelAt = slide.lines.findIndex((l) => /^[\p{Lu}0-9][\p{Lu}0-9 ·&/-]{3,}$/u.test(l.trim()))
+  const body = mode === 'reading' ? (slide.lines[0] ?? '') : slide.lines.slice(0, labelAt < 0 ? slide.lines.length : labelAt).join(' ')
+  const follow = mode === 'reading' ? slide.lines.slice(1) : labelAt < 0 ? [] : slide.lines.slice(labelAt)
+  const image = mode === 'story' ? slide.images[0] : undefined
+
+  if (!open) {
+    return (
+      <div className="rounded-2xl border border-dashed border-line bg-bg/40 px-6 py-8 text-center">
+        <p className="text-3xl">{mode === 'reading' ? '📖' : '🎧'}</p>
+        <p className="mt-2 text-[16px] font-semibold text-ink">{mode === 'reading' ? 'Bài đọc đang ẩn' : 'Bài đọc đang ẩn'}</p>
+        <p className="mt-1 text-[13.5px] leading-relaxed text-muted">Mở khi học viên đã thử đoán hoặc trả lời trước.</p>
+        <button onClick={() => setOpen(true)} className="mt-4 rounded-lg bg-primary px-4 py-2.5 text-[14px] font-semibold text-white transition hover:bg-primary/90">
+          Mở bài đọc
+        </button>
+      </div>
+    )
+  }
+
+  const audioBar = (
+    <div className="flex items-center gap-3 rounded-xl border border-line bg-surface px-4 py-3">
+      <button onClick={toggle} className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary text-white" aria-label={playing ? 'Tạm dừng' : 'Nghe bài đọc'}>
+        {playing ? <Pause className="h-5 w-5" /> : <Play className="ml-0.5 h-5 w-5" />}
+      </button>
+      <div className="min-w-0 flex-1">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-line/70">
+          <div className="h-full bg-primary transition-all" style={{ width: `${progress * 100}%` }} />
+        </div>
+        <p className="mt-1.5 text-[11.5px] text-muted">Nghe bài đọc</p>
+      </div>
+      {playing && <SoundWave bars={18} />}
+      <button onClick={stop} className="text-[11.5px] font-semibold text-muted underline underline-offset-2">Dừng</button>
+    </div>
+  )
+
+  const textBlock = (
+    <>
+      <p className="text-[16.5px] leading-[1.95] text-ink/90">{body}</p>
+      {follow.length > 0 && (
+        <div className="mt-4 rounded-xl border border-line bg-bg/40 p-4">
+          {follow.map((l, i) =>
+            /^[\p{Lu}0-9][\p{Lu}0-9 ·&/-]{3,}$/u.test(l.trim()) ? (
+              <p key={i} className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary">{l}</p>
+            ) : (
+              <p key={i} className="mt-1.5 text-[14.5px] leading-relaxed text-ink/85">{l}</p>
+            ),
+          )}
+        </div>
+      )}
+    </>
+  )
+
   return (
-    <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,340px)] lg:items-start">
+    <div className="space-y-3">
       <audio
         ref={audioRef}
         src={src}
         preload="auto"
-        onLoadedMetadata={(e) => {
-          const d = e.currentTarget.duration
-          if (Number.isFinite(d) && d > 1) setDuration(d)
-        }}
-        onTimeUpdate={(e) => setTime(e.currentTarget.currentTime)}
-        onEnded={() => { setPlaying(false); setTime(0) }}
+        onTimeUpdate={(e) => { const el = e.currentTarget; setProgress(el.duration ? el.currentTime / el.duration : 0) }}
+        onEnded={() => { setPlaying(false); setProgress(0) }}
         onPause={() => setPlaying(false)}
         className="hidden"
       />
-      <div className="order-2 lg:order-1">
-        <p className="text-[16.5px] leading-[1.95] text-ink/90">
-          {wordTimed
-            ? wordTimed.map((x, i) => (
-                <span
-                  key={i}
-                  className={cn('rounded px-0.5 transition-colors duration-150', activeWord === i && 'bg-primary/25 font-semibold text-ink shadow-[inset_0_-2px_0_rgba(46,110,101,0.45)]')}
-                >{x.t}{' '}</span>
-              ))
-            : timed.map((x, i) => (
-                <span
-                  key={i}
-                  className={cn('rounded px-0.5 transition-colors duration-150', active === i && 'bg-primary/20 font-semibold text-ink shadow-[inset_0_-2px_0_rgba(46,110,101,0.45)]')}
-                >{x.text}{' '}</span>
-              ))}
-        </p>
-        {followPart.length > 0 && (
-          <div className="mt-4 rounded-xl border border-line bg-bg/40 p-4">
-            {followPart.map((l, i) =>
-              /^[\p{Lu}0-9][\p{Lu}0-9 ·&/-]{3,}$/u.test(l.trim()) ? (
-                <p key={i} className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary">{l}</p>
-              ) : (
-                <p key={i} className="mt-1.5 text-[14.5px] leading-relaxed text-ink/85">{l}</p>
-              ),
-            )}
-          </div>
-        )}
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted">{mode === 'reading' ? 'Bài đọc' : 'Bài đọc'}</p>
+        <button onClick={() => { stop(); setOpen(false) }} className="text-[12px] font-semibold text-muted underline underline-offset-2 hover:text-ink">Ẩn</button>
       </div>
 
-      <div className="order-1 lg:order-2 lg:sticky lg:top-24">
-        <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
-          <button onClick={toggle} className="group relative block w-full text-left" aria-label={playing ? 'Pause the story' : 'Play the story'}>
-            <div className="relative aspect-[4/3] w-full">
-              {slide.images[0] ? (
-                <img src={slide.images[0]} alt={slide.title} className="h-full w-full object-cover object-top transition duration-500 group-hover:scale-[1.03]" />
-              ) : (
-                <div className="h-full w-full bg-gradient-to-br from-[#E7F0F0] to-[#CBE0E0]" />
-              )}
-              <span className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
-              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                <span className="grid h-16 w-16 place-items-center rounded-full bg-white text-primary shadow-lift transition group-hover:scale-105">
-                  {playing ? <Pause className="h-7 w-7" /> : <Play className="ml-1 h-7 w-7" />}
-                </span>
-              </span>
-              {playing && (
-                <span className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-gradient-to-t from-ink/80 via-ink/35 to-transparent px-4 pb-3 pt-12">
-                  <SoundWave bars={26} />
-                  <span className="mb-0.5 shrink-0 rounded-full bg-white/15 px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.12em] text-white backdrop-blur">
-                    Đang phát
+      {image ? (
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,340px)] lg:items-start">
+          <div>{textBlock}</div>
+          <div className="sticky top-24 overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
+            <button onClick={toggle} className="group relative block w-full text-left" aria-label={playing ? 'Tạm dừng' : 'Nghe bài đọc'}>
+              <div className="relative aspect-[4/3] w-full">
+                <img src={image} alt={slide.title} className="h-full w-full object-cover object-top transition duration-500 group-hover:scale-[1.03]" />
+                <span className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
+                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                  <span className="grid h-16 w-16 place-items-center rounded-full bg-white text-primary shadow-lift transition group-hover:scale-105">
+                    {playing ? <Pause className="h-7 w-7" /> : <Play className="ml-1 h-7 w-7" />}
                   </span>
                 </span>
-              )}
+                {playing && (
+                  <span className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-gradient-to-t from-ink/80 via-ink/35 to-transparent px-4 pb-3 pt-12">
+                    <SoundWave bars={26} />
+                    <span className="mb-0.5 shrink-0 rounded-full bg-white/15 px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.12em] text-white backdrop-blur">Đang phát</span>
+                  </span>
+                )}
+              </div>
+            </button>
+            <div className="h-1.5 w-full bg-line/60">
+              <div className="h-full bg-primary transition-all" style={{ width: `${progress * 100}%` }} />
             </div>
-          </button>
-          <div className="h-1.5 w-full bg-line/60">
-            <div className="h-full bg-primary transition-all" style={{ width: `${duration ? (time / duration) * 100 : 0}%` }} />
+            <p className="px-4 py-2 text-[11.5px] text-muted">Nhấn ảnh để nghe bài đọc.</p>
           </div>
-          <p className="px-4 py-2 text-[11.5px] text-muted">Nhấn ảnh để nghe bài đọc.</p>
         </div>
-      </div>
+      ) : (
+        <div className="space-y-4">
+          {audioBar}
+          {textBlock}
+        </div>
+      )}
     </div>
   )
 }
@@ -542,6 +541,8 @@ function SlideBody({
   const sectionKey = slide.section.toUpperCase()
   const shapeLines = normalizeScript(shape.lines)
   const shapeTitle = shape.title
+  if (/OPTIONAL CHECK/i.test(slide.kind) && displayLines.length >= 2) return <CheckBoard lines={displayLines} />
+
   // ── Real Talk briefs, reflection board, daily plan, reference ─────────
   if (sectionKey.includes('REAL TALK') && displayLines.some((l) => /^Mở lời\s*:/i.test(l))) {
     return <RoleBriefs lines={displayLines} />
@@ -636,7 +637,11 @@ function SlideBody({
   }
 
   if (/^SCRIPT & FOLLOW-UP$/i.test(slide.kind) && displayLines.length >= 2) {
-    return <StoryReader lesson={lesson} slide={slide} />
+    return <StoryReader lesson={lesson} slide={slide} mode="story" />
+  }
+
+  if (/READ & PERSONALIZE/i.test(slide.kind) && displayLines.length >= 1) {
+    return <StoryReader lesson={lesson} slide={slide} mode="reading" />
   }
 
   if (/BEFORE LISTENING|TRANSFER INPUT|OPTIONAL HOME LISTENING/i.test(slide.kind) && displayLines.length >= 3) {

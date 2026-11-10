@@ -713,7 +713,7 @@ function Emph({ text }: { text: string }) {
   )
 }
 
-function CheckBoard({ lines }: { lines: string[] }) {
+export function CheckBoard({ lines }: { lines: string[] }) {
   const items: { q: string; a: string[] }[] = []
   for (const line of lines) {
     const t = line.trim()
