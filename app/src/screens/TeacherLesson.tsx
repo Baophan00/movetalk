@@ -225,14 +225,154 @@ function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }
   )
 }
 
+// ── story screens ────────────────────────────────────────────────────────
+
+function StoryQuestions({ lines }: { lines: string[] }) {
+  const groups: { label: string; items: string[] }[] = []
+  const notes: string[] = []
+  for (const line of lines) {
+    const t = line.trim()
+    if (!t) continue
+    if (/^[\p{Lu}0-9][\p{Lu}0-9 ·&/-]{3,}$/u.test(t)) groups.push({ label: t, items: [] })
+    else if (!groups.length) groups.push({ label: '', items: [t] })
+    else {
+      const g = groups[groups.length - 1]
+      const last = g.items[g.items.length - 1]
+      if (/^(Sau khi|Mục tiêu|Ghi chú|Lưu ý)\b/i.test(t)) notes.push(t)
+      else if (/^\d+[.)]\s*/.test(t) || !last) g.items.push(t)
+      else g.items[g.items.length - 1] += ` ${t}`
+    }
+  }
+  return (
+    <div className="space-y-3">
+    <div className="grid gap-3 sm:grid-cols-2">
+      {groups.map((g, i) => (
+        <div key={i} className="rounded-2xl border border-line bg-surface p-5">
+          {g.label && <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary">{g.label}</p>}
+          <ol className="mt-3 space-y-2.5">
+            {g.items.map((it, j) => (
+              <li key={j} className="flex gap-2.5 text-[15px] leading-relaxed text-ink/90">
+                <span className="mt-[3px] grid h-5 w-5 shrink-0 place-items-center rounded-full bg-primary-soft text-[10.5px] font-bold text-primary">{j + 1}</span>
+                <span>{it.replace(/^\d+\.\s*/, '')}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))}
+    </div>
+      {notes.length > 0 && <p className="rounded-lg bg-bg/60 px-3.5 py-2.5 text-[12.5px] leading-relaxed text-muted">{notes.join(' ')}</p>}
+    </div>
+  )
+}
+
+function StoryReader({ slide }: { lesson: number; slide: TeachSlide }) {
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const [playing, setPlaying] = useState(false)
+  const [time, setTime] = useState(0)
+  const [duration, setDuration] = useState(26)
+  const src = `/audio/teach/l01/scene_${slide.num}.mp3`
+
+  const labelAt = slide.lines.findIndex((l) => /^[\p{Lu}0-9][\p{Lu}0-9 ·&/-]{3,}$/u.test(l.trim()))
+  const storyPart = labelAt < 0 ? slide.lines : slide.lines.slice(0, labelAt)
+  const followPart = labelAt < 0 ? [] : slide.lines.slice(labelAt)
+  const sentences = storyPart.join(' ').split(/(?<=[.!?])\s+/).filter(Boolean)
+  const weights = sentences.map((x) => Math.max(12, x.length))
+  const total = weights.reduce((a, b) => a + b, 0)
+  let acc = 0
+  const timed = sentences.map((text) => {
+    const start = (acc / total) * duration
+    acc += Math.max(12, text.length)
+    return { text, start, end: (acc / total) * duration }
+  })
+  const active = timed.findIndex((x) => time >= x.start && time < x.end)
+
+  const toggle = () => {
+    const el = audioRef.current
+    if (!el) return
+    if (!el.paused) { el.pause(); setPlaying(false); return }
+    el.play().then(() => setPlaying(true)).catch(() => setPlaying(false))
+  }
+
+  return (
+    <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,340px)] lg:items-start">
+      <audio
+        ref={audioRef}
+        src={src}
+        preload="auto"
+        onLoadedMetadata={(e) => {
+          const d = e.currentTarget.duration
+          if (Number.isFinite(d) && d > 1) setDuration(d)
+        }}
+        onTimeUpdate={(e) => setTime(e.currentTarget.currentTime)}
+        onEnded={() => { setPlaying(false); setTime(0) }}
+        onPause={() => setPlaying(false)}
+        className="hidden"
+      />
+      <div className="order-2 lg:order-1">
+        <p className="text-[16.5px] leading-[1.95] text-ink/90">
+          {timed.map((x, i) => (
+            <span
+              key={i}
+              className={cn('rounded px-0.5 transition-colors duration-150', active === i && 'bg-primary/20 font-semibold text-ink shadow-[inset_0_-2px_0_rgba(46,110,101,0.45)]')}
+            >{x.text} </span>
+          ))}
+        </p>
+        {followPart.length > 0 && (
+          <div className="mt-4 rounded-xl border border-line bg-bg/40 p-4">
+            {followPart.map((l, i) =>
+              /^[\p{Lu}0-9][\p{Lu}0-9 ·&/-]{3,}$/u.test(l.trim()) ? (
+                <p key={i} className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary">{l}</p>
+              ) : (
+                <p key={i} className="mt-1.5 text-[14.5px] leading-relaxed text-ink/85">{l}</p>
+              ),
+            )}
+          </div>
+        )}
+      </div>
+
+      <div className="order-1 lg:order-2 lg:sticky lg:top-24">
+        <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
+          <button onClick={toggle} className="group relative block w-full text-left" aria-label={playing ? 'Pause the story' : 'Play the story'}>
+            <div className="relative h-56 w-full sm:h-64">
+              {slide.images[0] ? (
+                <img src={slide.images[0]} alt={slide.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
+              ) : (
+                <div className="h-full w-full bg-gradient-to-br from-[#E7F0F0] to-[#CBE0E0]" />
+              )}
+              <span className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
+              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                <span className="grid h-16 w-16 place-items-center rounded-full bg-white text-primary shadow-lift transition group-hover:scale-105">
+                  {playing ? <Pause className="h-7 w-7" /> : <Play className="ml-1 h-7 w-7" />}
+                </span>
+              </span>
+              {playing && (
+                <span className="absolute bottom-3 left-3 flex items-center gap-2 rounded-full bg-ink/70 px-3 py-1.5 text-white backdrop-blur">
+                  <WaveBars />
+                  <span className="text-[11px] font-semibold">Reading…</span>
+                </span>
+              )}
+            </div>
+          </button>
+          <div className="h-1.5 w-full bg-line/60">
+            <div className="h-full bg-primary transition-all" style={{ width: `${duration ? (time / duration) * 100 : 0}%` }} />
+          </div>
+          <p className="px-4 py-2 text-[11.5px] text-muted">Nhấn ảnh để nghe bài đọc.</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ── pre-listening brief ──────────────────────────────────────────────────
 
 function PreListen({ lines }: { lines: string[] }) {
   const groups: { label: string; items: string[] }[] = []
+  const footer: string[] = []
   let cur: { label: string; items: string[] } = { label: '', items: [] }
   for (const line of lines) {
     const t = line.trim()
     if (!t) continue
+    if (/^Lượt\b/.test(t)) { footer.push(t); continue }
     if (/^[A-Z][A-Z ’'&/-]{2,24}$/.test(t)) {
       if (cur.label || cur.items.length) groups.push(cur)
       cur = { label: t, items: [] }
@@ -240,7 +380,7 @@ function PreListen({ lines }: { lines: string[] }) {
   }
   if (cur.label || cur.items.length) groups.push(cur)
   const labelled = groups.filter((g) => g.label)
-  const tail = groups.filter((g) => !g.label).flatMap((g) => g.items)
+  const tail = [...groups.filter((g) => !g.label).flatMap((g) => g.items), ...footer]
 
   return (
     <div className="space-y-3">
@@ -407,6 +547,14 @@ function SlideBody({
 
   if (shape.hasDialogue && slide.dialogue && slide.dialogue.lines.length >= 3) {
     return <DialoguePlayer lesson={lesson} slide={slide} />
+  }
+
+  if (/^A SHORT STORY$/i.test(slide.kind) && displayLines.length >= 2) {
+    return <StoryQuestions lines={displayLines} />
+  }
+
+  if (/^SCRIPT & FOLLOW-UP$/i.test(slide.kind) && displayLines.length >= 2) {
+    return <StoryReader lesson={lesson} slide={slide} />
   }
 
   if (/BEFORE LISTENING|TRANSFER INPUT|OPTIONAL HOME LISTENING/i.test(slide.kind) && displayLines.length >= 3) {
