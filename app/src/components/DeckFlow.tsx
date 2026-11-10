@@ -90,7 +90,7 @@ function RunText({ paras, size, light, plain }: { paras: Para[]; size: number; l
               key={k}
               style={{
                 fontSize: plain ? 16 : pxSize(r.sz || p.defSz || size),
-                color: light ? '#FFFFFF' : plain ? 'rgba(23,63,80,0.9)' : palette(isVeryLight(r.color) ? null : r.color),
+                color: light ? '#FFFFFF' : plain ? 'inherit' : palette(isVeryLight(r.color) ? null : r.color),
                 fontWeight: r.b ? 700 : 400,
                 fontStyle: r.i ? 'italic' : 'normal',
               }}
