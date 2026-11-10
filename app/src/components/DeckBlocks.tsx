@@ -356,13 +356,20 @@ export function ReferencePanels({ lines }: { lines: string[] }) {
           <div key={i} className="rounded-2xl border border-line bg-surface p-5">
             <p className="text-[17.5px] font-extrabold uppercase tracking-[0.06em]" style={{ color }}>{p.head}</p>
             <ul className="mt-4 space-y-3">
-              {p.items.map((it, j) => (
-                <li key={j} className="text-[16.5px] leading-[1.85] text-ink">
-                  {it.split(/(Do you \+ V1…\?|Are you \+ …\?|Yes, I do\. \/ No, I don’t\.|Yes, I am\. \/ No, I’m not\.|What about you\? \/ And you\?)/).map((part, k) =>
-                    k % 2 === 1 ? <strong key={k} className="font-semibold" style={{ color }}>{part}</strong> : <span key={k}>{part}</span>,
-                  )}
-                </li>
-              ))}
+              {p.items.map((it, j) => {
+                const accent = i === 0 ? /^(Do you|Are you) \+/.test(it) : /^(What about you|Do you|Are you)/.test(it)
+                const split = i === 1 ? it.match(/^(.*?)(Do you like tea\?|Are you free later\?)$/) : null
+                return (
+                  <li key={j} className={cn('text-[16.5px] leading-[1.85]', accent ? 'font-bold' : 'text-ink')} style={accent ? { color } : undefined}>
+                    {split ? (
+                      <>
+                        <span>{split[1]}</span>
+                        <strong className="font-bold" style={{ color }}>{split[2]}</strong>
+                      </>
+                    ) : it}
+                  </li>
+                )
+              })}
             </ul>
           </div>
         )
