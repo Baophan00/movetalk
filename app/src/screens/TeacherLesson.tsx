@@ -162,17 +162,17 @@ function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }
   }
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,360px)] lg:items-start">
-      <div className="order-2 space-y-2.5 lg:order-1">
+    <div className="grid gap-5 lg:grid-cols-[minmax(0,560px)_minmax(0,360px)] lg:items-stretch lg:justify-between">
+      <div className="order-2 space-y-1.5 lg:order-1">
         {d.lines.map((t, i) => {
           const mine = t.s !== d.speakers[0]
           return (
-            <div key={i} className={cn('flex items-end gap-2.5', mine && 'flex-row-reverse')}>
-              <span className={cn('grid h-8 w-8 shrink-0 place-items-center rounded-full text-[12px] font-bold text-white', colorOf(t.s))}>
+            <div key={i} className={cn('flex items-end gap-2', mine && 'flex-row-reverse')}>
+              <span className={cn('grid h-7 w-7 shrink-0 place-items-center rounded-full text-[10.5px] font-bold text-white', colorOf(t.s))}>
                 {t.s.slice(0, 1)}
               </span>
               <div className={cn(
-                'max-w-[86%] break-words rounded-2xl border px-3.5 py-2.5 transition-all duration-200',
+                'max-w-[84%] break-words rounded-2xl border px-3 py-2 transition-all duration-200',
                 mine ? 'rounded-br-md border-line bg-bg' : 'rounded-bl-md border-line bg-surface',
                 activeIdx === i && 'border-primary/40 bg-primary-soft/70 ring-2 ring-primary/30',
               )}>
@@ -184,10 +184,10 @@ function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }
         })}
       </div>
 
-      <div className="order-1 lg:order-2 lg:sticky lg:top-24">
-        <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
-          <button onClick={toggle} className="group relative block w-full text-left" aria-label={playing ? 'Pause conversation' : 'Play conversation'}>
-            <div className="relative h-52 w-full sm:h-60">
+      <div className="order-1 flex lg:order-2">
+        <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
+          <button onClick={toggle} className="group relative block min-h-[260px] w-full flex-1 text-left" aria-label={playing ? 'Pause conversation' : 'Play conversation'}>
+            <div className="absolute inset-0 overflow-hidden">
               {slide.images[0] ? (
                 <img src={slide.images[0]} alt={slide.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
               ) : (
@@ -210,9 +210,6 @@ function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }
                   <span className="text-[11px] font-semibold">Listening…</span>
                 </span>
               )}
-              <span className="absolute bottom-3 right-3 max-w-[62%] text-right text-[13px] font-semibold text-white drop-shadow">
-                {slide.title}
-              </span>
             </div>
           </button>
           <div className="h-1.5 w-full bg-line/60">
