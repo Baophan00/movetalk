@@ -162,8 +162,8 @@ function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }
   }
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[minmax(0,560px)_minmax(0,360px)] lg:items-stretch lg:justify-between">
-      <div className="order-2 space-y-1.5 lg:order-1">
+    <div className="grid gap-4 lg:grid-cols-[minmax(0,540px)_minmax(300px,1fr)] lg:items-stretch lg:gap-6">
+      <div className="order-2 space-y-1 lg:order-1">
         {d.lines.map((t, i) => {
           const mine = t.s !== d.speakers[0]
           return (
@@ -172,7 +172,7 @@ function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }
                 {t.s.slice(0, 1)}
               </span>
               <div className={cn(
-                'max-w-[84%] break-words rounded-2xl border px-3 py-2 transition-all duration-200',
+                'max-w-[80%] break-words rounded-2xl border px-3 py-1.5 transition-all duration-200',
                 mine ? 'rounded-br-md border-line bg-bg' : 'rounded-bl-md border-line bg-surface',
                 activeIdx === i && 'border-primary/40 bg-primary-soft/70 ring-2 ring-primary/30',
               )}>
