@@ -19,8 +19,6 @@ export const TEACH_L01 = {
     { key: 'REAL TALK', label: 'Real Talk', icon: '💬', blurb: 'Hội thoại trong tình huống thực tế.' },
     { key: 'REFLECTION & RETRY', label: 'Reflection & Retry', icon: '🔁', blurb: 'Sửa một điểm và thử lại.' },
     { key: 'DAILY MISSION', label: 'Daily Mission', icon: '🎯', blurb: 'Luyện ngắn mỗi ngày.' },
-    { key: 'OPTIONAL', label: 'Optional home listening', icon: '🏠', blurb: 'Nghe ở nhà hoặc buổi sau.' },
-    { key: 'REFERENCE', label: 'Reference', icon: '📌', blurb: '' },
   ] as TeachSection[],
   slides: [
     {
@@ -288,7 +286,7 @@ export const TEACH_L01 = {
       images: [],
     },
     {
-      num: 35, section: 'OPTIONAL', kind: 'OPTIONAL HOME LISTENING',
+      num: 35, section: 'DAILY MISSION', kind: 'OPTIONAL HOME LISTENING',
       title: 'Before an English class', instruction: 'Nghe ở nhà hoặc ở buổi sau. Chưa mở transcript.',
       lines: ['ABOUT YOU', 'Are you tired today?', 'Do you practice English at home?', 'LISTEN FOR', 'Is Ben new here?', 'Does he live nearby?', 'Is he ready for class?'],
       dialogue: null,
@@ -296,7 +294,7 @@ export const TEACH_L01 = {
       images: [],
     },
     {
-      num: 36, section: 'OPTIONAL', kind: 'TRANSCRIPT',
+      num: 36, section: 'DAILY MISSION', kind: 'TRANSCRIPT',
       title: 'Before class · Anna & Ben', instruction: 'Mở sau khi đã nghe và thử trả lời. Đọc theo vai, chú ý DO / ARE.',
       lines: ['ANNA', 'Hi, I’m Anna. Are you new here?', 'BEN', 'Yes, I am. I’m a little nervous.', 'ANNA', 'Me too. Do you live near here?', 'BEN', 'No, I don’t. I live near the beach.', 'ANNA', 'Do you work on Saturdays?', 'BEN', 'Yes, I do. I work in a shop.', 'ANNA', 'Do you practice English at home?', 'BEN', 'Yes, I do. I practice after work.', 'ANNA', 'Are you ready for class?', 'BEN', 'Yes, I am. Let’s go.'],
       dialogue: { speakers: ['ANNA', 'BEN'], lines: [{ s: 'ANNA', t: 'Hi, I’m Anna. Are you new here?' }, { s: 'BEN', t: 'Yes, I am. I’m a little nervous.' }, { s: 'ANNA', t: 'Me too. Do you live near here?' }, { s: 'BEN', t: 'No, I don’t. I live near the beach.' }, { s: 'ANNA', t: 'Do you work on Saturdays?' }, { s: 'BEN', t: 'Yes, I do. I work in a shop.' }, { s: 'ANNA', t: 'Do you practice English at home?' }, { s: 'BEN', t: 'Yes, I do. I practice after work.' }, { s: 'ANNA', t: 'Are you ready for class?' }, { s: 'BEN', t: 'Yes, I am. Let’s go.' }] },
@@ -304,7 +302,7 @@ export const TEACH_L01 = {
       images: ['/teach/l01/media/anna_ben_2.jpg'],
     },
     {
-      num: 38, section: 'OPTIONAL', kind: 'OPTIONAL CHECK',
+      num: 38, section: 'DAILY MISSION', kind: 'OPTIONAL CHECK',
       title: 'The person you heard about', instruction: 'Đối chiếu sau khi tự trả lời. Sau đó nói ba câu về bạn.',
       lines: ['New here?', 'Yes. He is a little nervous.', 'Live nearby?', 'No. He lives near the beach.', 'Practice English at home?', 'Yes. After work.', 'Ready for class?', 'Yes.'],
       dialogue: null,
@@ -312,7 +310,7 @@ export const TEACH_L01 = {
       images: [],
     },
     {
-      num: 39, section: 'REFERENCE', kind: 'OPEN WHEN NEEDED',
+      num: 39, section: 'DAILY MISSION', kind: 'OPEN WHEN NEEDED',
       title: 'Your quick reference', instruction: 'Tra khi cần rồi quay lại nhiệm vụ đang làm.',
       lines: ['QUESTION & ANSWER', 'Do you + V1…?', 'Yes, I do. / No, I don’t.', 'Are you + …?', 'Yes, I am. / No, I’m not.', 'I + V… / I’m + …', 'KEEP IT GOING', 'Thêm một chi tiết thật.', 'What about you? / And you?', 'Bám điều vừa nghe:', 'No coffee? Do you like tea?', 'Not free now? Are you free later?'],
       dialogue: null,

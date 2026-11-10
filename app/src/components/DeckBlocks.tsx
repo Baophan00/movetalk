@@ -26,11 +26,11 @@ function Upper({ text }: { text: string }) {
 }
 
 function Aux({ text }: { text: string }) {
-  const parts = text.split(/(\bDO\b|\bDON’T\b|\bDON'T\b|\bAM\b|\bNOT\b)/g)
+  const parts = text.split(/(\bDO\b|\bDON’T\b|\bDON'T\b|\bAM\b|\bNOT\b|\bI’m\b|\bI'm\b|\bYou’re\b|\bYou're\b)/g)
   return (
     <>
       {parts.map((p, i) =>
-        /^(DO|DON’T|DON'T|AM|NOT)$/.test(p) ? (
+        /^(DO|DON’T|DON'T|AM|NOT|I’m|I'm|You’re|You're)$/.test(p) ? (
           <strong key={i} className="font-extrabold" style={{ color: TEAL }}>{p}</strong>
         ) : (
           <span key={i}>{p}</span>
@@ -192,6 +192,176 @@ export function ExchangeBlocks({ lines, mode }: { lines: string[]; mode: 'missin
           </div>
         </div>
       ))}
+    </div>
+  )
+}
+
+// ── Real Talk: role briefs with the opening line pulled out ──────────────
+
+const ROLE_LABEL = /^(YOUR ROLE|YOUR PARTNER|PERSON [AB]|BẠN [AB])$/i
+const FOOTER_LINE = /^(Hết lượt|Kết quả cần đạt|Mục tiêu|Ghi chú|Lưu ý)\s*:/i
+
+export function RoleBriefs({ lines }: { lines: string[] }) {
+  const roles: { label: string; items: string[]; open: string }[] = []
+  const footers: string[] = []
+  for (const raw of lines) {
+    const t = raw.trim()
+    if (!t) continue
+    if (ROLE_LABEL.test(t)) roles.push({ label: t, items: [], open: '' })
+    else if (FOOTER_LINE.test(t)) footers.push(t)
+    else if (/^Mở lời\s*:/i.test(t) && roles.length) roles[roles.length - 1].open = t.replace(/^Mở lời\s*:\s*/i, '')
+    else if (roles.length) roles[roles.length - 1].items.push(t)
+  }
+  return (
+    <div className="space-y-3">
+      <div className="grid gap-4 sm:grid-cols-2">
+        {roles.slice(0, 2).map((r, i) => {
+          const color = i === 0 ? TEAL : CLAY
+          return (
+            <div key={i} className="flex flex-col rounded-2xl border border-line bg-surface p-5">
+              <p className="text-[13px] font-extrabold uppercase tracking-[0.12em]" style={{ color }}>{r.label}</p>
+              <ul className="mt-3 space-y-2">
+                {r.items.map((it, j) => (
+                  <li key={j} className="flex items-start gap-2.5 text-[15.5px] leading-[1.65] text-ink/90">
+                    <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: `${color}99` }} />
+                    <span className="min-w-0">{it}</span>
+                  </li>
+                ))}
+              </ul>
+              {r.open && (
+                <div className="mt-auto pt-4">
+                  <p className="rounded-xl px-4 py-3 text-[15.5px] font-semibold leading-relaxed text-ink" style={{ backgroundColor: `${color}12`, borderLeft: `3px solid ${color}` }}>
+                    <span className="mr-2 text-[11px] font-extrabold uppercase tracking-[0.12em]" style={{ color }}>Mở lời</span>
+                    {r.open}
+                  </p>
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+      {footers.map((f, i) => (
+        <p key={i} className="rounded-lg border-l-[3px] px-4 py-2.5 text-[14.5px] font-semibold" style={{ color: TEAL, backgroundColor: `${TEAL}0F`, borderColor: TEAL }}>{f}</p>
+      ))}
+    </div>
+  )
+}
+
+// ── Reflection & Retry: two panels, hints below ──────────────────────────
+
+export function ReflectionBoard({ lines }: { lines: string[] }) {
+  const fields: string[] = []
+  const checks: string[] = []
+  const notes: string[] = []
+  let zone: 'try' | 'check' | 'none' = 'none'
+  for (const raw of lines) {
+    const t = raw.trim()
+    if (!t) continue
+    if (/^MY NEXT TRY$/i.test(t)) { zone = 'try'; continue }
+    if (/^MY CHECK$/i.test(t)) { zone = 'check'; continue }
+    if (/^(Lượt|Đổi|Thử lại|So với)\b/i.test(t)) { notes.push(t); continue }
+    if (zone === 'try') fields.push(t)
+    else if (zone === 'check') checks.push(t)
+  }
+  return (
+    <div className="space-y-3">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="rounded-2xl border border-line bg-surface p-5">
+          <p className="text-[13px] font-extrabold uppercase tracking-[0.12em]" style={{ color: TEAL }}>MY NEXT TRY</p>
+          <div className="mt-3 space-y-3">
+            {fields.map((f, i) => {
+              const [head, ...rest] = f.split(':')
+              const gap = /_{2,}/.test(rest.join(':'))
+              return (
+                <div key={i}>
+                  <p className="text-[14.5px] font-semibold text-ink">{head}</p>
+                  <p className="mt-1 min-w-0 border-b border-dashed pb-1.5 text-[14px] leading-relaxed text-muted" style={{ borderColor: `${TEAL}55` }}>
+                    {gap ? <span className="text-transparent">.</span> : rest.join(':')}
+                  </p>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+        <div className="rounded-2xl border border-line bg-surface p-5">
+          <p className="text-[13px] font-extrabold uppercase tracking-[0.12em]" style={{ color: CLAY }}>MY CHECK</p>
+          <ul className="mt-3 space-y-2.5">
+            {checks.map((c, i) => (
+              <li key={i} className="flex items-start gap-2.5 text-[15.5px] leading-[1.6] text-ink/90">
+                <span className="mt-1 grid h-4 w-4 shrink-0 place-items-center rounded-[4px] border" style={{ borderColor: `${CLAY}80` }} />
+                <span className="min-w-0">
+                  {c.split(/(Do you \/ Are you)/).map((p, j) =>
+                    p === 'Do you / Are you' ? <strong key={j} className="font-bold" style={{ color: TEAL }}>{p}</strong> : <span key={j}>{p}</span>,
+                  )}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      {notes.map((n, i) => (
+        <p key={i} className="rounded-lg border-l-[3px] px-4 py-2.5 text-[14.5px] font-semibold" style={{ color: TEAL, backgroundColor: `${TEAL}0F`, borderColor: TEAL }}>{n}</p>
+      ))}
+    </div>
+  )
+}
+
+// ── Daily mission: four practice blocks, nothing dropped ─────────────────
+
+export function MissionDays({ lines }: { lines: string[] }) {
+  const blocks: { tag: string; title: string; body: string; next?: boolean }[] = []
+  for (let i = 0; i + 1 < lines.length; i += 2) {
+    const head = (lines[i] ?? '').trim()
+    const body = (lines[i + 1] ?? '').trim()
+    if (!head || /[?？]$/.test(head)) break
+    const m = head.match(/^(DAY\s*\d+|NEXT CLASS)\s*[·-]\s*(.+)$/i)
+    blocks.push(m ? { tag: m[1].toUpperCase(), title: m[2], body, next: /^NEXT/i.test(m[1]) } : { tag: '', title: head, body })
+  }
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {blocks.map((b, i) => {
+        const color = b.next ? CLAY : TEAL
+        return (
+          <div key={i} className="flex flex-col rounded-2xl border border-line bg-surface p-5">
+            <p className="text-[12px] font-extrabold uppercase tracking-[0.14em]" style={{ color }}>{b.tag || `BƯỚC ${i + 1}`}</p>
+            <p className="mt-1.5 text-[17px] font-bold leading-snug text-ink">{b.title}</p>
+            <p className="mt-2 text-[14.5px] leading-relaxed text-ink/75">{b.body}</p>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+// ── Reference: two panels ────────────────────────────────────────────────
+
+export function ReferencePanels({ lines }: { lines: string[] }) {
+  const panels: { head: string; items: string[] }[] = []
+  for (const raw of lines) {
+    const t = raw.trim()
+    if (!t) continue
+    if (/^[A-ZĐ][A-ZĐ ’'&/-]{3,}$/.test(t)) panels.push({ head: t, items: [] })
+    else if (panels.length) panels[panels.length - 1].items.push(t)
+  }
+  return (
+    <div className="grid gap-4 sm:grid-cols-2">
+      {panels.map((p, i) => {
+        const color = i === 0 ? TEAL : CLAY
+        return (
+          <div key={i} className="rounded-2xl border border-line bg-surface p-5">
+            <p className="text-[13px] font-extrabold uppercase tracking-[0.12em]" style={{ color }}>{p.head}</p>
+            <ul className="mt-3 space-y-2">
+              {p.items.map((it, j) => (
+                <li key={j} className="text-[15.5px] leading-relaxed text-ink/90">
+                  {it.split(/(Do you \+ V1…\?|Are you \+ …\?|Yes, I do\. \/ No, I don’t\.|Yes, I am\. \/ No, I’m not\.|What about you\? \/ And you\?)/).map((part, k) =>
+                    k % 2 === 1 ? <strong key={k} className="font-semibold" style={{ color }}>{part}</strong> : <span key={k}>{part}</span>,
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      })}
     </div>
   )
 }

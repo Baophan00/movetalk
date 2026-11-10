@@ -4,7 +4,7 @@ import {
 } from 'lucide-react'
 import { SpeakButton } from '../components/SpeakButton'
 import { LessonBlocks } from '../components/LessonContent'
-import { AnswerRows, ExchangeBlocks, FocusList, FrameColumns, RhythmRows } from '../components/DeckBlocks'
+import { AnswerRows, ExchangeBlocks, FocusList, FrameColumns, MissionDays, ReferencePanels, ReflectionBoard, RhythmRows, RoleBriefs } from '../components/DeckBlocks'
 import { cn } from '../lib/utils'
 import { TEACH_LESSONS } from '../data/teacherLessons'
 import { LESSON_INTROS } from '../data/teacherLessons/intros'
@@ -542,6 +542,16 @@ function SlideBody({
   const sectionKey = slide.section.toUpperCase()
   const shapeLines = normalizeScript(shape.lines)
   const shapeTitle = shape.title
+  // ── Real Talk briefs, reflection board, daily plan, reference ─────────
+  if (sectionKey.includes('REAL TALK') && displayLines.some((l) => /^Mở lời\s*:/i.test(l))) {
+    return <RoleBriefs lines={displayLines} />
+  }
+  if (sectionKey.includes('REFLECTION') && displayLines.some((l) => /^MY NEXT TRY/i.test(l))) {
+    return <ReflectionBoard lines={displayLines} />
+  }
+  if (/practice days|three short/i.test(shapeTitle)) return <MissionDays lines={displayLines} />
+  if (/quick reference/i.test(shapeTitle)) return <ReferencePanels lines={displayLines} />
+
   // ── deck-faithful layouts (slide 16–26) ──────────────────────────────
   if (sectionKey.includes('PRONUNCIATION') && displayLines.length >= 4) {
     if (/rhythm of a question/i.test(shapeTitle)) return <RhythmRows lines={displayLines} />
