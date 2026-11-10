@@ -89,6 +89,11 @@
   50% { height: 15px; opacity: 1; }
 }
 .wave-bar { height: 4px; animation: voice-wave 0.9s ease-in-out infinite; }
+@keyframes sound-wave {
+  0%   { transform: scaleY(0.3); opacity: 0.7; }
+  55%  { transform: scaleY(1);   opacity: 1; }
+  100% { transform: scaleY(0.45); opacity: 0.85; }
+}
 @media (prefers-reduced-motion: reduce) {
   .wave-bar { animation: none; height: 11px; }
 }

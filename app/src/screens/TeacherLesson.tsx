@@ -102,11 +102,18 @@ function isStorySlide(kind: string): boolean {
 
 // ── dialogue player ──────────────────────────────────────────────────────
 
-function WaveBars() {
+function SoundWave({ bars = 30 }: { bars?: number }) {
   return (
-    <span className="flex h-4 items-end gap-[3px]" aria-hidden>
-      {[0, 1, 2, 3, 4].map((i) => (
-        <span key={i} className="wave-bar w-[3px] rounded-full bg-white" style={{ animationDelay: `${i * 0.12}s` }} />
+    <span className="flex h-9 items-end gap-[3px]" aria-hidden="true">
+      {Array.from({ length: bars }).map((_, i) => (
+        <span
+          key={i}
+          className="w-[3.5px] shrink-0 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.45)]"
+          style={{
+            height: `${9 + ((i * 53) % 23)}px`,
+            animation: `sound-wave ${0.72 + (i % 6) * 0.12}s ease-in-out ${(i % 9) * 0.07}s infinite`, transformOrigin: 'bottom',
+          }}
+        />
       ))}
     </span>
   )
@@ -187,15 +194,21 @@ function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }
       <div className="order-1 flex lg:order-2">
         <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
           <button onClick={toggle} className="group relative block min-h-[260px] w-full flex-1 text-left" aria-label={playing ? 'Pause conversation' : 'Play conversation'}>
-            <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 overflow-hidden bg-[#EDE7DC]">
               {slide.images[0] ? (
-                <img src={slide.images[0]} alt={slide.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
+                <img src={slide.images[0]} alt={slide.title} className="h-full w-full object-cover object-top" />
               ) : (
                 <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#E7F0F0] to-[#CBE0E0]">
                   <span className="text-6xl">💬</span>
                 </div>
               )}
               <span className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/15 to-transparent" />
+              {playing && (
+                <>
+                  <span className="pointer-events-none absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 animate-ping rounded-full bg-white/20" />
+                  <span className="pointer-events-none absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 animate-ping rounded-full bg-white/10" style={{ animationDelay: '0.45s' }} />
+                </>
+              )}
               <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
                 <span className={cn(
                   'grid h-16 w-16 place-items-center rounded-full bg-white text-primary shadow-lift transition group-hover:scale-105',
@@ -205,9 +218,11 @@ function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }
                 </span>
               </span>
               {playing && (
-                <span className="absolute bottom-3 left-3 flex items-center gap-2 rounded-full bg-ink/70 px-3 py-1.5 text-white backdrop-blur">
-                  <WaveBars />
-                  <span className="text-[11px] font-semibold">Listening…</span>
+                <span className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-gradient-to-t from-ink/80 via-ink/35 to-transparent px-4 pb-3 pt-12">
+                  <SoundWave bars={34} />
+                  <span className="mb-0.5 shrink-0 rounded-full bg-white/15 px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.12em] text-white backdrop-blur">
+                    Đang phát
+                  </span>
                 </span>
               )}
             </div>
@@ -343,9 +358,11 @@ function StoryReader({ slide }: { lesson: number; slide: TeachSlide }) {
                 </span>
               </span>
               {playing && (
-                <span className="absolute bottom-3 left-3 flex items-center gap-2 rounded-full bg-ink/70 px-3 py-1.5 text-white backdrop-blur">
-                  <WaveBars />
-                  <span className="text-[11px] font-semibold">Reading…</span>
+                <span className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-gradient-to-t from-ink/80 via-ink/35 to-transparent px-4 pb-3 pt-12">
+                  <SoundWave bars={26} />
+                  <span className="mb-0.5 shrink-0 rounded-full bg-white/15 px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.12em] text-white backdrop-blur">
+                    Đang phát
+                  </span>
                 </span>
               )}
             </div>

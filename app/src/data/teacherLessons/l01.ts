@@ -109,7 +109,7 @@ export const TEACH_L01 = {
       lines: ['MAI', 'Hi, I’m Mai. Are you new here?', 'NAM', 'Yes, I am. Do you come here often?', 'MAI', 'No, I don’t. Do you work nearby?', 'NAM', 'Yes, I do. I work in sales.', 'MAI', 'Are you busy after work?', 'NAM', 'Sometimes. I’m usually free after six.', 'MAI', 'Do you like coffee?', 'NAM', 'Yes, I do. What about you?'],
       dialogue: { speakers: ['MAI', 'NAM'], lines: [{ s: 'MAI', t: 'Hi, I’m Mai. Are you new here?' }, { s: 'NAM', t: 'Yes, I am. Do you come here often?' }, { s: 'MAI', t: 'No, I don’t. Do you work nearby?' }, { s: 'NAM', t: 'Yes, I do. I work in sales.' }, { s: 'MAI', t: 'Are you busy after work?' }, { s: 'NAM', t: 'Sometimes. I’m usually free after six.' }, { s: 'MAI', t: 'Do you like coffee?' }, { s: 'NAM', t: 'Yes, I do. What about you?' }] },
       notes: '{ "activity_id": "L01-12", "section": "Discover · transcript", "source_slides": [ 12 ], "stage": "model", "web_behavior": "Transcript hidden on first listening. Reuse the same audio and script record. Allow later replay by turn.", "teacher_script": "MAI: Hi, I’m Mai. Are you new here?\\nNAM: Yes, I am. Do you come here often?\\nMAI: No, I don’t. Do you work nearby?\\nNAM: Yes, I do. I work in sales.\\nMAI: Are you busy after work?\\nNAM: Sometimes. I’m usually free after six.\\nMAI: Do you like coffee?\\nNAM: Yes, I do. What about you?" }',
-      images: ['/teach/l01/media/mai_nam.jpg'],
+      images: ['/teach/l01/media/mai_nam_2.jpg'],
     },
     {
       num: 14, section: 'LISTENING', kind: 'CHECK',
@@ -133,7 +133,7 @@ export const TEACH_L01 = {
       lines: ['Hi, I’m Nam. I live in Da Nang.', 'I work at a small café near my home.', 'I like my job, but I’m usually tired after work.', 'I don’t cook at home. I usually eat out with a friend.', 'I’m busy tonight, but I’m free tomorrow after six.', 'FOLLOW-UP · TRẢ LỜI VỀ BẠN', 'Do you work near your home? Are you tired after work?', 'Do you usually eat out? Are you free tomorrow after six?', 'Trả lời ngắn rồi thêm một chi tiết. Sau đó hỏi lại: What about you?'],
       dialogue: null,
       notes: 'Optional support: usually = thường; eat out = ăn ngoài; after work = sau giờ làm; tomorrow after six = ngày mai sau sáu giờ. Accept 4 correct ideas when retelling in Nam’s first-person voice. After checking, close the script and let the student retell again from remembered ideas.',
-      images: ['/teach/l01/media/nam_story.jpg'],
+      images: ['/teach/l01/media/nam_story_2.jpg'],
     },
     {
       num: 15, section: 'LISTENING', kind: 'READ & PERSONALIZE',
@@ -237,7 +237,7 @@ export const TEACH_L01 = {
       lines: ['TOM', 'Hi, Linh. Are you busy now?', 'LINH', 'Yes, I am. I’m busy until three.', 'TOM', 'Are you free after three?', 'LINH', 'Yes, I am. Do you need help?', 'TOM', 'No, I don’t. Do you want some coffee?', 'LINH', 'Yes, please. I’m a little tired.', 'TOM', 'Do you like the cafe near the office?', 'LINH', 'Yes, I do. I like the coffee there.', 'TOM', 'Great. Do you need milk?', 'LINH', 'No, thanks. Black coffee is fine.'],
       dialogue: { speakers: ['TOM', 'LINH'], lines: [{ s: 'TOM', t: 'Hi, Linh. Are you busy now?' }, { s: 'LINH', t: 'Yes, I am. I’m busy until three.' }, { s: 'TOM', t: 'Are you free after three?' }, { s: 'LINH', t: 'Yes, I am. Do you need help?' }, { s: 'TOM', t: 'No, I don’t. Do you want some coffee?' }, { s: 'LINH', t: 'Yes, please. I’m a little tired.' }, { s: 'TOM', t: 'Do you like the cafe near the office?' }, { s: 'LINH', t: 'Yes, I do. I like the coffee there.' }, { s: 'TOM', t: 'Great. Do you need milk?' }, { s: 'LINH', t: 'No, thanks. Black coffee is fine.' }] },
       notes: '{ "activity_id": "L01-27", "section": "Discover · transcript", "source_slides": [ 23 ], "stage": "model", "web_behavior": "Transcript hidden on first listening. Reuse the same audio and script record. Allow later replay by turn.", "teacher_script": "TOM: Hi, Linh. Are you busy now?\\nLINH: Yes, I am. I’m busy until three.\\nTOM: Are you free after three?\\nLINH: Yes, I am. Do you need help?\\nTOM: No, I don’t. Do you want some coffee?\\nLINH: Yes, please. I’m a little tired.\\nTOM: Do you like the cafe near the office?\\nLINH: Yes, I do. I like the coffee there.\\nTOM: Great. Do you need milk?\\nLINH: No, thanks. Black coffee is fine." }',
-      images: ['/teach/l01/media/tom_linh.jpg'],
+      images: ['/teach/l01/media/tom_linh_2.jpg'],
     },
     {
       num: 29, section: 'ACTIVATION', kind: 'CHECK',
@@ -301,7 +301,7 @@ export const TEACH_L01 = {
       lines: ['ANNA', 'Hi, I’m Anna. Are you new here?', 'BEN', 'Yes, I am. I’m a little nervous.', 'ANNA', 'Me too. Do you live near here?', 'BEN', 'No, I don’t. I live near the beach.', 'ANNA', 'Do you work on Saturdays?', 'BEN', 'Yes, I do. I work in a shop.', 'ANNA', 'Do you practice English at home?', 'BEN', 'Yes, I do. I practice after work.', 'ANNA', 'Are you ready for class?', 'BEN', 'Yes, I am. Let’s go.'],
       dialogue: { speakers: ['ANNA', 'BEN'], lines: [{ s: 'ANNA', t: 'Hi, I’m Anna. Are you new here?' }, { s: 'BEN', t: 'Yes, I am. I’m a little nervous.' }, { s: 'ANNA', t: 'Me too. Do you live near here?' }, { s: 'BEN', t: 'No, I don’t. I live near the beach.' }, { s: 'ANNA', t: 'Do you work on Saturdays?' }, { s: 'BEN', t: 'Yes, I do. I work in a shop.' }, { s: 'ANNA', t: 'Do you practice English at home?' }, { s: 'BEN', t: 'Yes, I do. I practice after work.' }, { s: 'ANNA', t: 'Are you ready for class?' }, { s: 'BEN', t: 'Yes, I am. Let’s go.' }] },
       notes: '{ "activity_id": "L01-36", "section": "Discover · transcript", "source_slides": [ 35 ], "stage": "model", "web_behavior": "Transcript hidden on first listening. Reuse the same audio and script record. Allow later replay by turn.", "teacher_script": "ANNA: Hi, I’m Anna. Are you new here?\\nBEN: Yes, I am. I’m a little nervous.\\nANNA: Me too. Do you live near here?\\nBEN: No, I don’t. I live near the beach.\\nANNA: Do you work on Saturdays?\\nBEN: Yes, I do. I work in a shop.\\nANNA: Do you practice English at home?\\nBEN: Yes, I do. I practice after work.\\nANNA: Are you ready for class?\\nBEN: Yes, I am. Let’s go." }',
-      images: ['/teach/l01/media/anna_ben.jpg'],
+      images: ['/teach/l01/media/anna_ben_2.jpg'],
     },
     {
       num: 38, section: 'OPTIONAL', kind: 'OPTIONAL CHECK',
