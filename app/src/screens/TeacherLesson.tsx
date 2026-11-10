@@ -409,7 +409,7 @@ function SlideBody({
     return <DialoguePlayer lesson={lesson} slide={slide} />
   }
 
-  if (/BEFORE LISTENING|TRANSFER INPUT/i.test(slide.kind) && displayLines.length >= 3) {
+  if (/BEFORE LISTENING|TRANSFER INPUT|OPTIONAL HOME LISTENING/i.test(slide.kind) && displayLines.length >= 3) {
     return <PreListen lines={displayLines} />
   }
 
