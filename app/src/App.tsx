@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { cn } from './lib/utils'
+import { unlockAudio } from './lib/audioUnlock'
 import { MobileTabs } from './components/MobileTabs'
 import { Sidebar, type Role, type Route } from './components/Sidebar'
 import { TopBar } from './components/TopBar'
@@ -8,6 +9,19 @@ import { Landing } from './screens/Landing'
 import { Dashboard } from './screens/Dashboard'
 import { Lesson } from './screens/Lesson'
 import { Lessons } from './screens/Lessons'
+import { LessonL01 } from './screens/LessonL01'
+import { SpeakLessonL01 } from './screens/SpeakLessonL01'
+import { LessonL02 } from './screens/LessonL02'
+import { LessonL03 } from './screens/LessonL03'
+import { LessonL04 } from './screens/LessonL04'
+import { LessonL05 } from './screens/LessonL05'
+import { LessonL06 } from './screens/LessonL06'
+import { LessonL07 } from './screens/LessonL07'
+import { LessonL08 } from './screens/LessonL08'
+import { LessonL09 } from './screens/LessonL09'
+import { LessonL10 } from './screens/LessonL10'
+import { Season1 } from './screens/Season1'
+import { Speaking30Days } from './screens/Speaking30Days'
 import { ClassPractice } from './screens/ClassPractice'
 import { CEFRLevels } from './screens/CEFRLevels'
 import { Homework } from './screens/Homework'
@@ -21,6 +35,8 @@ import { Progress } from './screens/Progress'
 import { Vocabulary } from './screens/Vocabulary'
 import { Mistakes } from './screens/Mistakes'
 import { TeacherWritings } from './screens/TeacherWritings'
+import { TeacherSpeaking } from './screens/TeacherSpeaking'
+import { TeacherLesson } from './screens/TeacherLesson'
 import { flushLocal } from './lib/writings'
 import { TeacherOverview, TeacherSchedule, TeacherStudents } from './screens/Teacher'
 import { TeacherAssignments } from './screens/TeacherAssignments'
@@ -34,7 +50,7 @@ import { pullUnlocks } from './lib/unlockSync'
 import { supabase } from './lib/supabase'
 import { currentSession, loadProfile, signIn, signOut, signUp, type Profile } from './lib/auth'
 
-const TEACHER_ROUTES: Route[] = ['t-overview', 't-schedule', 't-students', 't-assignments', 't-writing']
+const TEACHER_ROUTES: Route[] = ['t-overview', 't-lesson', 't-schedule', 't-students', 't-assignments', 't-writing', 't-speaking']
 const FIRST_TEACHER: Route = 't-overview'
 
 /** UX gate only. The authorization is the profiles table plus RLS on the server. */
@@ -43,6 +59,15 @@ function allowed(route: Route, role: Role): boolean {
 }
 
 export default function App() {
+  useEffect(() => {
+    const handler = () => { unlockAudio() }
+    window.addEventListener('touchstart', handler, { once: true })
+    window.addEventListener('click', handler, { once: true })
+    return () => {
+      window.removeEventListener('touchstart', handler)
+      window.removeEventListener('click', handler)
+    }
+  }, [])
   const [profile, setProfile] = useState<Profile | null>(null)
   const [booting, setBooting] = useState(true)
   const [route, setRoute] = useState<Route>('landing')
@@ -51,7 +76,20 @@ export default function App() {
   // Where Practice your way should open when another screen sends the learner there.
   const [studySeed, setStudySeed] = useState<{ level?: 'A1' | 'A2' | 'B1' | 'B2'; room?: 'listen' | 'read' | 'write' | 'speak'; prompt?: string }>({})
   const [practiceN, setPracticeN] = useState(1)
+  const [lessonLevel, setLessonLevel] = useState<1 | 2>(1)
   const [menu, setMenu] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    try { return localStorage.getItem('sidebar-collapsed') === 'true' } catch { return false }
+  })
+
+  // Persist sidebar state
+  const toggleSidebar = useCallback(() => {
+    setSidebarCollapsed((prev) => {
+      const next = !prev
+      try { localStorage.setItem('sidebar-collapsed', String(next)) } catch {}
+      return next
+    })
+  }, [])
   const [signInOpen, setSignInOpen] = useState(false)
   // How many screens deep the learner is inside MOVE. Supabase rewrites the current history entry's
   // state while it reads the session out of the URL, so this cannot be read back from history.state.
@@ -250,8 +288,21 @@ export default function App() {
     landing: '',
     dashboard: 'Overview',
     'class-practice': 'Class practice',
+    'speaking30': '30 Days Speaking',
+    'season1': 'Season 1 · Lesson 1',
     cefr: 'CEFR — General English',
-    lessons: 'A1 lessons',
+    'lessons': 'A1 lessons',
+    'lesson-l01': 'L01 — Build a Yes-No Question',
+    'lesson-l02': 'L02 — Expand the Subject',
+    'lesson-l03': 'L03 — Build the Message',
+    'lesson-l04': 'L04 — Wh-Question',
+    'lesson-l05': 'L05 — This That These Those + To Be',
+    'lesson-l06': 'L06 — Noun Phrases',
+    'lesson-l07': 'L07 — Review L01-L06',
+    'lesson-l08': 'L08 — Confusing Quantity and Choice',
+    'lesson-l09': 'L09 — Basic Tenses',
+    'lesson-l10': 'L10 — Past and Present Perfect Tense',
+    'speak-l01': 'L01 — Nói câu (Speak)',
     lesson: `Lesson ${lessonN}`,
     homework: 'Homework',
     today: 'Today',
@@ -264,10 +315,12 @@ export default function App() {
     practice: `Lesson ${practiceN} · Practice`,
     profile: 'Profile',
     't-overview': 'Overview',
+    't-lesson': 'Lesson',
     't-schedule': 'Schedule',
     't-students': 'Students',
     't-assignments': 'Assignments',
     't-writing': 'Writing',
+    't-speaking': 'Speaking',
   }
 
   return (
@@ -283,10 +336,13 @@ export default function App() {
         onSwitchRole={switchView}
         canSwitch={profile.role === 'teacher'}
         total={A1.length}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={toggleSidebar}
       />
       <div
         className={cn(
-          'lg:pl-[264px]',
+          'transition-all duration-300 ease-in-out',
+          sidebarCollapsed ? 'lg:pl-[80px]' : 'lg:pl-[264px]',
           ['class-practice', 'cefr', 'lessons', 'practice', 'homework', 'review'].includes(route) && 'theme-overview min-h-screen bg-bg',
         )}
       >
@@ -295,6 +351,8 @@ export default function App() {
           crumb={route === 'lesson' ? 'Level A1' : TEACHER_ROUTES.includes(route) ? 'Teacher' : undefined}
           onMenu={() => setMenu(true)}
           onBack={PARENT[route] ? back : undefined}
+          onToggleSidebar={toggleSidebar}
+          sidebarCollapsed={sidebarCollapsed}
           right={
             !TEACHER_ROUTES.includes(route) && route !== 'lesson' && route !== 'profile' && route !== 'today' && route !== 'study' && route !== 'progress' && route !== 'words' && route !== 'mistakes' && (
               <Button variant="soft" size="sm" className="hidden sm:inline-flex" onClick={() => openLesson(lessonN)}>
@@ -336,6 +394,8 @@ export default function App() {
           {route === 'dashboard' && (
             <Dashboard name={profile.name} onOpenLesson={openPractice} onHomework={() => go('homework')} onLessons={() => go('class-practice')} />
           )}
+          {route === 'season1' && <Season1 onBack={() => go('lessons')} />}
+          {route === 'speaking30' && <Speaking30Days onBack={() => go('today')} />}
           {route === 'class-practice' && (
             <ClassPractice
               onSelectProgram={(p) => {
@@ -351,7 +411,18 @@ export default function App() {
               onBack={() => go('class-practice')}
             />
           )}
-          {route === 'lessons' && <Lessons onPractise={openPractice} onReview={() => go('review')} onHomework={() => go('homework')} />}
+          {route === 'lessons' && <Lessons onPractise={openPractice} onOpenLesson={(n, lvl) => { setLessonLevel(lvl || 1); if (n === 1) go('lesson-l01'); else if (n === 2) go('lesson-l02'); else if (n === 3) go('lesson-l03'); else if (n === 4) go('lesson-l04'); else if (n === 5) go('lesson-l05'); else if (n === 6) go('lesson-l06'); else if (n === 7) go('lesson-l07'); else if (n === 8) go('lesson-l08'); else if (n === 9) go('lesson-l09'); else if (n === 10) go('lesson-l10'); else openPractice(n) }} onReview={() => go('review')} onHomework={() => go('homework')} onSeason1={() => go('season1')} onOpenSpeak={() => go('speak-l01')} />}
+          {route === 'lesson-l01' && <LessonL01 onBack={() => go('lessons')} initialLevel={lessonLevel} />}
+{route === 'speak-l01' && <SpeakLessonL01 onBack={() => go('lessons')} />}
+          {route === 'lesson-l02' && <LessonL02 onBack={() => go('lessons')} initialLevel={lessonLevel} />}
+          {route === 'lesson-l03' && <LessonL03 onBack={() => go('lessons')} initialLevel={lessonLevel} />}
+          {route === 'lesson-l04' && <LessonL04 onBack={() => go('lessons')} initialLevel={lessonLevel} />}
+          {route === 'lesson-l05' && <LessonL05 onBack={() => go('lessons')} initialLevel={lessonLevel} />}
+          {route === 'lesson-l06' && <LessonL06 onBack={() => go('lessons')} initialLevel={lessonLevel} />}
+          {route === 'lesson-l07' && <LessonL07 onBack={() => go('lessons')} initialLevel={lessonLevel} />}
+          {route === 'lesson-l08' && <LessonL08 onBack={() => go('lessons')} initialLevel={lessonLevel} />}
+          {route === 'lesson-l09' && <LessonL09 onBack={() => go('lessons')} initialLevel={lessonLevel} />}
+          {route === 'lesson-l10' && <LessonL10 onBack={() => go('lessons')} initialLevel={lessonLevel} />}
           {route === 'lesson' && <Lesson lessonN={lessonN} onPickLesson={setLessonN} />}
           {route === 'homework' && (
             <Homework
@@ -379,10 +450,12 @@ export default function App() {
             <ProfileScreen name={profile.name} email={profile.email} role={profile.role} onSignOut={doSignOut} onGo={(r) => go(r)} />
           )}
           {route === 't-overview' && <TeacherOverview onOpenLesson={openLesson} name={profile.name} onGo={go} />}
+          {route === 't-lesson' && <TeacherLesson />}
           {route === 't-schedule' && <TeacherSchedule onOpenLesson={openLesson} />}
           {route === 't-students' && <TeacherStudents onOpenLesson={openLesson} />}
           {route === 't-assignments' && <TeacherAssignments onOpenLesson={openLesson} />}
           {route === 't-writing' && <TeacherWritings />}
+          {route === 't-speaking' && <TeacherSpeaking />}
         </main>
       </div>
       {view === 'student' && <MobileTabs route={route} onNav={go} />}

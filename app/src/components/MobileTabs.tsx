@@ -1,12 +1,11 @@
-import { Compass, Home, Sparkles, TrendingUp, UserRound } from 'lucide-react'
+import { BookOpen, Home, Mic, UserRound } from 'lucide-react'
 import { cn } from '../lib/utils'
 import type { Route } from './Sidebar'
 
 const TABS: { key: Route; label: string; icon: typeof Home }[] = [
   { key: 'today', label: 'Today', icon: Home },
-  { key: 'lessons', label: 'Class', icon: Compass },
-  { key: 'study', label: 'Practice', icon: Sparkles },
-  { key: 'progress', label: 'Progress', icon: TrendingUp },
+  { key: 'lessons', label: 'Class', icon: BookOpen },
+  { key: 'speaking30', label: '30 Days', icon: Mic },
   { key: 'profile', label: 'Profile', icon: UserRound },
 ]
 
@@ -16,7 +15,7 @@ export function MobileTabs({ route, onNav }: { route: Route; onNav: (r: Route) =
     <nav className="safe-bottom fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface/95 backdrop-blur-md lg:hidden">
       <ul className="mx-auto flex max-w-md items-stretch justify-between px-2">
         {TABS.map((t) => {
-          const on = route === t.key || (t.key === 'lessons' && route === 'lesson')
+          const on = route === t.key || (t.key === 'lessons' && (route === 'lesson' || route === 'lesson-l01' || route === 'lesson-l02' || route === 'lesson-l03' || route === 'lesson-l04' || route === 'lesson-l05' || route === 'lesson-l06' || route === 'lesson-l07' || route === 'lesson-l08' || route === 'lesson-l09' || route === 'lesson-l10'))
           const Icon = t.icon
           return (
             <li key={t.key} className="min-w-0 flex-1">

@@ -61,6 +61,8 @@ export function AudioPlayer({ text, label, compact, className, onEnded }: Props)
   useEffect(() => {
     if (!src) return
     const el = new Audio(src)
+    el.setAttribute('playsinline', '')
+    el.volume = 1
     el.preload = 'metadata'
     el.playbackRate = speed
     el.onloadedmetadata = () => setDur(el.duration)
@@ -118,6 +120,8 @@ export function AudioPlayer({ text, label, compact, className, onEnded }: Props)
     if (!audio.current) {
       setState('loading')
       const el = new Audio(src)
+      el.setAttribute('playsinline', '')
+      el.volume = 1
       el.preload = 'auto'
       el.playbackRate = speed
       el.onloadedmetadata = () => setDur(el.duration)

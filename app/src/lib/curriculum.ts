@@ -101,8 +101,16 @@ export const A1_QUIZ: Record<number, QuizItem[]> = Object.fromEntries(
 
 /** 'doc_ab12_MOVE_ACTIVATE_1_L01_BUILD YES-NO QUESTION _VIP.pptx' -> 'BUILD YES-NO QUESTION' */
 const TITLE_FIX: Record<number, string> = {
-  5: 'This, That, These, Those, There + be',
-  7: 'Revision: Lessons 1-6',
+  1: 'New at the office',
+  2: 'A busy family',
+  3: 'My week',
+  4: 'Getting to work',
+  5: 'At the counter',
+  6: 'A short trip',
+  7: 'A table for two',
+  8: 'Enough for dinner',
+  9: 'Choosing headphones',
+  10: 'A booking mistake',
 }
 
 export function titleOf(lesson: LessonFile): string {
@@ -150,6 +158,14 @@ export function partPlan(lesson: LessonFile): PartPlan[] {
   if (p.dialogue.length) push('dialogue', 'Dialogue')
   if (p.listenCheck.length) push('check', 'Listening check')
   if (p.grammarChoose.length || hasChoicePractice(lesson.n)) push('choose', 'Practice')
+  if (p.keyPhrases?.length) push('keyPhrases', 'Key phrases')
+  if (p.listenGapFill?.length) push('listenGapFill', 'Listen & fill')
+  if (p.speakPrompts?.length) push('speakPrompts', 'Speak')
+  if (p.shadowing?.length) push('shadowing', 'Shadowing')
+  if (p.rolePlay) push('rolePlay', 'Role play')
+  if (p.reading) push('reading', 'Reading')
+  if (p.writing) push('writing', 'Writing')
+  if (p.review) push('review', 'Review')
   for (const g of p.flow) {
     const covered = (g.group === 'Grammar' && p.grammar.length > 0) || (g.group === 'Vocabulary' && p.vocab.length > 0)
     if (!covered) push(`flow-${g.group}`, g.group)

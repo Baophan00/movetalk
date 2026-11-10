@@ -12,7 +12,9 @@ import { attemptKind, sessionFor, type Exercise, type Skill } from '../lib/exerc
 import { addCard, recordAttempt } from '../lib/study'
 import { cn } from '../lib/utils'
 import { CHOICE, choiceState } from '../lib/choice'
-import { canListen, compare, listen, type Score } from '../lib/speech'
+import { canListen, listen } from '../lib/speech'
+import { scoreAttempt, type PronResult } from '../lib/pronScore'
+import { PronScoreCard } from '../components/PronScoreCard'
 
 const PRAISE = ['Correct!', 'Well done!', 'Excellent!', 'Nice work!']
 
@@ -80,8 +82,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
   const [badPair, setBadPair] = useState('')
   // Speaking state
   const [speakPhase, setSpeakPhase] = useState<'idle' | 'rec' | 'done'>('idle')
-  const [speakScore, setSpeakScore] = useState<Score | null>(null)
-  const [speakHeard, setSpeakHeard] = useState('')
+  const [speakScore, setSpeakScore] = useState<PronResult | null>(null)
   const [speakInterim, setSpeakInterim] = useState('')
   const [speakError, setSpeakError] = useState('')
   const speakListener = useRef<ReturnType<typeof listen>>(null)
@@ -101,7 +102,6 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
     // Reset speaking state
     setSpeakPhase('idle')
     setSpeakScore(null)
-    setSpeakHeard('')
     setSpeakInterim('')
     setSpeakError('')
     if (speakListener.current) {
@@ -169,6 +169,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
 
   function startSpeak() {
     const expected = item.kind === 'listen' ? item.answer : (item.audio ?? item.prompt)
+    const startedAt = performance.now()
     const L = listen({ lang: 'en-US', onInterim: setSpeakInterim, onError: setSpeakError })
     if (!L) return
     speakListener.current = L
@@ -177,12 +178,12 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
     setSpeakError('')
     setSpeakScore(null)
     L.text.then((said) => {
-      setSpeakHeard(said)
       if (said.trim()) {
-        const result = compare(expected, said)
+        const seconds = (performance.now() - startedAt) / 1000
+        const result = scoreAttempt(expected, said, seconds)
         setSpeakScore(result)
         setSpeakPhase('done')
-        const correct = result.pct >= 70
+        const correct = result.overall >= 70
         if (item.kind === 'listen') {
           setResults((rs) => [...rs.filter((r) => r.item.id !== item.id), { item, correct }])
           save(item, correct)
@@ -403,17 +404,7 @@ export function Practise({ lessonN, onExit }: { lessonN: number; onExit: () => v
                     </p>
                   )}
                   {speakPhase === 'done' && speakScore && (
-                    <div className="mt-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[13px] font-semibold">
-                          {speakScore.pct >= 90 ? 'Clean.' : speakScore.pct >= 70 ? 'Close enough.' : 'Say it again.'}
-                        </span>
-                        <span className={cn('rounded-full px-2.5 py-1 text-[12px] font-bold tabular-nums', speakScore.pct >= 70 ? 'bg-mint/20 text-[#2F5D45]' : 'bg-accent/20 text-[#7a4300]')}>
-                          {speakScore.pct}%
-                        </span>
-                      </div>
-                      {speakHeard && <p className="mt-1 text-[11.5px] text-muted">The browser heard: “{speakHeard}”</p>}
-                    </div>
+                    <PronScoreCard result={speakScore} className="mt-3" />
                   )}
                   {speakPhase === 'done' && !speakScore && (
                     <p className="mt-2 text-[12px] text-muted">Nothing was heard. Try again a little closer to the mic.</p>

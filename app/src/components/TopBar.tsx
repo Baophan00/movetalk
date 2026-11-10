@@ -11,9 +11,11 @@ type Props = {
   backTo?: string
   right?: React.ReactNode
   className?: string
+  onToggleSidebar?: () => void
+  sidebarCollapsed?: boolean
 }
 
-export function TopBar({ title, crumb, onMenu, onBack, backTo, right, className }: Props) {
+export function TopBar({ title, crumb, onMenu, onBack, backTo, right, className, onToggleSidebar, sidebarCollapsed }: Props) {
   return (
     <header
       className={cn(
@@ -21,6 +23,16 @@ export function TopBar({ title, crumb, onMenu, onBack, backTo, right, className 
         className,
       )}
     >
+      {/* Collapse sidebar button - desktop only */}
+      {onToggleSidebar && (
+        <button
+          onClick={onToggleSidebar}
+          className="hidden rounded-lg p-2 text-ink/70 hover:bg-ink/5 lg:block"
+          aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        >
+          <span className="text-[16px]">{sidebarCollapsed ? '☰' : '◀'}</span>
+        </button>
+      )}
       {/* A nested screen leads with Back; the drawer stays one tap away behind the menu. */}
       {onBack ? (
         <BackButton onClick={onBack} to={backTo} />

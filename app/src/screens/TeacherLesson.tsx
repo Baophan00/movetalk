@@ -924,6 +924,26 @@ function OverviewPanel({ lesson, onPick }: { lesson: LessonData; onPick: (key: s
         </div>
       </div>
 
+      {(() => {
+        const overview = lesson.slides.find((x) => x.section === 'OVERVIEW')
+        const idx = overview ? overview.lines.findIndex((l) => /YOUR FINAL TASK/i.test(l)) : -1
+        if (!overview || idx < 0) return null
+        const criteria = overview.lines.slice(idx + 1).filter((l) => l.trim() && !/^Bắt đầu với/i.test(l))
+        return (
+          <div className="rounded-2xl border border-line bg-surface p-5 shadow-card sm:p-6">
+            <p className="text-[12px] font-bold uppercase tracking-wide text-muted">Nhiệm vụ cuối bài</p>
+            <ul className="mt-3 space-y-2">
+              {criteria.map((c, i) => (
+                <li key={i} className="flex items-start gap-2.5 text-[15px] leading-relaxed text-ink/90">
+                  <span className="mt-[3px] grid h-5 w-5 shrink-0 place-items-center rounded-full bg-primary-soft text-[10.5px] font-bold text-primary">{i + 1}</span>
+                  {c}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      })()}
+
       <div className="rounded-2xl border border-line bg-surface p-5 shadow-card sm:p-6">
         <p className="text-[12px] font-bold uppercase tracking-wide text-muted">Các phần trong bài</p>
         <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2">

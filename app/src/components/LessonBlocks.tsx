@@ -34,11 +34,13 @@ function Deck({ items }: { items: Flashcard[] }) {
   const [i, setI] = useState(0)
   const [flipped, setFlipped] = useState(false)
   const [known, setKnown] = useState<number[]>([])
+  const [showEx, setShowEx] = useState(false)
   const card = items[i]
   if (!card) return null
 
   const go = (dir: 1 | -1) => {
     setFlipped(false)
+    setShowEx(false)
     setI((v) => (v + dir + items.length) % items.length)
   }
 
@@ -88,13 +90,18 @@ function Deck({ items }: { items: Flashcard[] }) {
               {card.def && <p className="mt-2 text-[13px] leading-relaxed text-ink/80">{card.def}</p>}
             </div>
             <ul className="space-y-2">
-              {card.examples?.slice(0, 2).map((ex) => (
+              {showEx && card.examples?.slice(0, 2).map((ex) => (
                 <li key={ex.text} className="flex items-start gap-2 text-[12.5px] leading-snug text-ink/85">
                   <SpeakButton text={ex.text} size="sm" />
                   <span>{ex.text}</span>
                 </li>
               ))}
             </ul>
+            {card.examples?.length ? (
+              <button onClick={() => setShowEx((s) => !s)} className="mt-2 text-[11px] font-semibold text-primary">
+                {showEx ? 'Ẩn ví dụ' : 'Xem ví dụ'}
+              </button>
+            ) : null}
           </div>
         </motion.div>
       </div>

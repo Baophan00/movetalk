@@ -34,12 +34,14 @@ export function speak(text: string, onDone?: () => void) {
     current = null
   }
   const el = new Audio(src)
+  el.setAttribute('playsinline', '')
+  el.volume = 1
   current = el
   el.onended = () => {
     current = null
     onDone?.()
   }
-  void el.play()
+  void el.play().catch(() => { current = null })
   return true
 }
 
@@ -63,6 +65,8 @@ export function playLine(text: string, rate = 1): Promise<void> {
     })
   }
   const el = new Audio(src)
+  el.setAttribute('playsinline', '')
+  el.volume = 1
   el.playbackRate = rate
   current = el
   return new Promise((resolve) => {

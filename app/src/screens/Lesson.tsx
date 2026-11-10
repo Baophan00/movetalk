@@ -1,1823 +1,558 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowLeft, ArrowRight, Check, ChevronRight, Info, Volume2 } from 'lucide-react'
+import { useState, useMemo, useCallback } from 'react'
+import { ArrowLeft, ArrowRight, Maximize2, Minimize2 } from 'lucide-react'
 import { Button } from '../components/ui/button'
-import { Progress } from '../components/ui/progress'
-import { A1, hasChoicePractice, lessonA1, partPlan, quizFor, titleOf, type FlowGroup, type LessonFile } from '../lib/curriculum'
-import { playLine, speak } from '../lib/audio'
-import { CHOICE, choiceState } from '../lib/choice'
 import { SpeakButton } from '../components/SpeakButton'
-import { playCorrect, playWrong } from '../lib/sfx'
-import { markPart, partsSeen } from '../lib/progress'
-import { pushPart } from '../lib/sync'
 import { cn } from '../lib/utils'
+import { A1, titleOf } from '../lib/curriculum'
+import { season1Slides, SEASON1_SECTIONS } from '../data/season1Slides'
 
-type Props = {
-  lessonN: number
-  onPickLesson: (n: number) => void
+const SECTION_META: Record<string, { label: string; color: string; bg: string; border: string; accent: string; icon: string; gradient: string }> = {
+  RECONNECTION: { label: 'Reconnection', color: 'text-[#2B3A31]', bg: 'bg-[#EEF3EA]', border: 'border-[#D8E3D4]', accent: 'bg-[#5D7B6F]', icon: '🔄', gradient: 'from-[#EEF3EA] to-[#D8E3D4]' },
+  VOCABULARY: { label: 'Vocabulary', color: 'text-[#2F5D45]', bg: 'bg-[#E9F1EC]', border: 'border-[#CBE0D3]', accent: 'bg-[#4E7C78]', icon: '📖', gradient: 'from-[#E9F1EC] to-[#CBE0D3]' },
+  GRAMMAR: { label: 'Grammar', color: 'text-[#3A4A3E]', bg: 'bg-[#EDEFEA]', border: 'border-[#D9DED4]', accent: 'bg-[#6B7B6E]', icon: '📐', gradient: 'from-[#EDEFEA] to-[#D9DED4]' },
+  LISTENING: { label: 'Listening', color: 'text-[#2C5654]', bg: 'bg-[#E7F0F0]', border: 'border-[#CBE0E0]', accent: 'bg-[#3B6360]', icon: '🎧', gradient: 'from-[#E7F0F0] to-[#CBE0E0]' },
+  PRONUNCIATION: { label: 'Pronunciation', color: 'text-[#6F4A18]', bg: 'bg-[#F7EFE6]', border: 'border-[#EBD9C4]', accent: 'bg-[#A9743C]', icon: '🗣️', gradient: 'from-[#F7EFE6] to-[#EBD9C4]' },
+  ACTIVATION: { label: 'Activation', color: 'text-[#7A3F35]', bg: 'bg-[#F6ECEA]', border: 'border-[#E7D2CD]', accent: 'bg-[#9C5A4A]', icon: '⚡', gradient: 'from-[#F6ECEA] to-[#E7D2CD]' },
+  'Real Talk': { label: 'Real Talk', color: 'text-[#6B4E12]', bg: 'bg-[#FAF3E2]', border: 'border-[#E9DDBB]', accent: 'bg-[#C08A4A]', icon: '💬', gradient: 'from-[#FAF3E2] to-[#E9DDBB]' },
+  'Reflection & Retry': { label: 'Reflection', color: 'text-[#2B3A31]', bg: 'bg-[#EEF3EA]', border: 'border-[#D8E3D4]', accent: 'bg-[#5D7B6F]', icon: '🔁', gradient: 'from-[#EEF3EA] to-[#D8E3D4]' },
 }
 
-const PLAY_LABEL = 'Play'
-const VI_CHARS = /[àáảãạăằắẳẵặâầấẩẫậđèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵ]/i
+// ── Parsers ──────────────────────────────────────────────────────────
 
-type Tone = 'violet' | 'mint' | 'lavender' | 'sky' | 'peach' | 'rose' | 'amber'
-
-const TONES: Record<Tone, { soft: string; border: string; text: string; solid: string; chip: string }> = {
-  violet: { soft: 'bg-[#EEF3EA]', border: 'border-[#D8E3D4]', text: 'text-[#2B3A31]', solid: 'bg-[#5D7B6F]', chip: 'bg-[#EEF3EA] text-[#2B3A31]' },
-  mint: { soft: 'bg-[#E9F1EC]', border: 'border-[#CBE0D3]', text: 'text-[#2F5D45]', solid: 'bg-[#4E7C78]', chip: 'bg-[#DCEDE3] text-[#2F5D45]' },
-  lavender: { soft: 'bg-[#EDEFEA]', border: 'border-[#D9DED4]', text: 'text-[#3A4A3E]', solid: 'bg-[#6B7B6E]', chip: 'bg-[#E4E8E0] text-[#3A4A3E]' },
-  sky: { soft: 'bg-[#E7F0F0]', border: 'border-[#CBE0E0]', text: 'text-[#2C5654]', solid: 'bg-[#3B6360]', chip: 'bg-[#DCEBEB] text-[#2C5654]' },
-  peach: { soft: 'bg-[#F7EFE6]', border: 'border-[#EBD9C4]', text: 'text-[#6F4A18]', solid: 'bg-[#A9743C]', chip: 'bg-[#F0E3D2] text-[#6F4A18]' },
-  rose: { soft: 'bg-[#F6ECEA]', border: 'border-[#E7D2CD]', text: 'text-[#7A3F35]', solid: 'bg-[#9C5A4A]', chip: 'bg-[#EFDFDB] text-[#7A3F35]' },
-  amber: { soft: 'bg-[#FAF3E2]', border: 'border-[#E9DDBB]', text: 'text-[#6B4E12]', solid: 'bg-[#C08A4A]', chip: 'bg-[#F3E8CE] text-[#6B4E12]' },
-}
-
-/** The sections a lesson shows, in the order the handout runs them. */
-const FLOW_LABEL: Record<string, string> = {
-  Pronunciation: 'Pronunciation',
-  Activate: 'Activate',
-  'Real talk': 'Real talk',
-  Reflect: 'Reflect & Retry',
-  Mission: 'Daily mission',
-  Work: 'Work',
-  Notes: 'Notes',
-  'Point & say': 'Point & say',
-  Speaking: 'Speaking',
-  'Everyday scenes': 'Everyday scenes',
-  Listening: 'Listening',
-  'Before you listen': 'Before you listen',
-}
-
-const TONE_CYCLE: Tone[] = ['peach', 'rose', 'mint', 'amber', 'lavender', 'sky', 'violet']
-
-type SecDef = { id: string; label: string; tone: Tone; keys: string[] }
-
-function sectionDefs(lesson: LessonFile): SecDef[] {
-  const groups = lesson.parts.flow.map((g) => g.group)
-  const has = (g: string) => groups.includes(g)
-  const defs: SecDef[] = [{ id: 'overview', label: 'Overview', tone: 'violet', keys: ['flow-Overview'] }]
-
-  if (lesson.parts.vocab.length) defs.push({ id: 'words', label: 'Words', tone: 'mint', keys: ['vocab'] })
-
-  const grammarKeys: string[] = []
-  if (lesson.parts.grammar.length) grammarKeys.push('grammar')
-  if (lesson.parts.grammarChoose.length || hasChoicePractice(lesson.n)) grammarKeys.push('choose')
-  if (has('Grammar')) grammarKeys.push('flow-Grammar')
-  if (grammarKeys.length) defs.push({ id: 'grammar', label: 'Grammar', tone: 'lavender', keys: grammarKeys })
-
-  const listenKeys = ['flow-Before you listen', 'dialogue', 'check'].filter(
-    (k) => (k === 'dialogue' ? lesson.parts.dialogue.length > 0 : k === 'check' ? lesson.parts.listenCheck.length > 0 : has('Before you listen')),
-  )
-  if (listenKeys.length) defs.push({ id: 'listen', label: 'Listen & discover', tone: 'sky', keys: listenKeys })
-
-  const rest = groups.filter((g) => g !== 'Overview' && g !== 'Before you listen' && g !== 'Grammar')
-  rest.forEach((g, i) => {
-    defs.push({
-      id: `flow-${g}`,
-      label: FLOW_LABEL[g] ?? g,
-      tone: FLOW_TONE[g] ?? TONE_CYCLE[i % TONE_CYCLE.length],
-      keys: [`flow-${g}`],
-    })
-  })
-
-  return defs
-}
-
-const FLOW_TONE: Record<string, Tone> = {
-  Overview: 'violet',
-  'Before you listen': 'sky',
-  Pronunciation: 'peach',
-  Activate: 'lavender',
-  'Real talk': 'rose',
-  Reflect: 'mint',
-  Mission: 'mint',
-  Work: 'sky',
-  'Point & say': 'amber',
-  'Everyday scenes': 'rose',
-  Speaking: 'peach',
-  Listening: 'sky',
-  Notes: 'amber',
-}
-
-const POS_TONE: Record<string, Tone> = { v: 'peach', n: 'mint', adj: 'sky', adv: 'rose', prep: 'lavender' }
-
-function PlayButton({ text, small }: { text: string; small?: boolean }) {
-  return (
-    <Button
-      variant="outline"
-      size="icon"
-      aria-label={PLAY_LABEL}
-      onClick={() => speak(text)}
-      className={cn(small ? 'h-7 w-7' : 'h-8 w-8', 'shrink-0')}
-    >
-      <Volume2 className={small ? 'h-3 w-3' : 'h-3.5 w-3.5'} />
-    </Button>
-  )
-}
-
-function Chip({ children, tone = 'violet' }: { children: React.ReactNode; tone?: Tone }) {
-  return (
-    <span className={cn('rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide', TONES[tone].chip)}>
-      {children}
-    </span>
-  )
-}
-
-function isPattern(line: string) {
-  return !VI_CHARS.test(line) && (/\+/.test(line) || /^[A-Z0-9 …?.,'/-]{4,}$/.test(line))
-}
-
-/** "Chọn Do hay Are" reads as an instruction, so show it in English; the note lines stay Vietnamese. */
-function englishSub(sub: string) {
-  const m = sub.match(/^Chọn\s+(.+?)\s+hay\s+(.+)$/i)
-  if (m) return `${m[1].trim()} or ${m[2].trim()}?`
-  return sub.replace(/\shay\s/gi, ' or ')
-}
-
-/** Bold the word that carries the meaning: the first word after "you". */
-function Highlight({ text }: { text: string }) {
-  const m = text.match(/^(.*?\byou\s+)(\S+)(.*)$/i)
-  if (!m) return <>{text}</>
-  return (
-    <>
-      {m[1]}
-      <span className="font-bold text-[#c8352a]">{m[2]}</span>
-      {m[3]}
-    </>
-  )
-}
-
-function Vocabulary({ items }: { items: LessonFile['parts']['vocab'] }) {
-  const [open, setOpen] = useState<string[]>([])
-  const toggle = (w: string) => setOpen((o) => (o.includes(w) ? o.filter((x) => x !== w) : [...o, w]))
-
-  return (
-    <div>
-      <div className="mb-2.5 flex items-center justify-between text-[11.5px] text-muted">
-        <span>Tap a word for the meaning, the example and the gap.</span>
-        <span>{items.length} words</span>
-      </div>
-      <ul className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
-        {items.map((v) => {
-          const isOpen = open.includes(v.word)
-          const pos = (v.pos ?? '').toLowerCase().slice(0, 3)
-          return (
-            <li
-              key={v.word}
-              className={cn(
-                'rounded-2xl border transition-shadow',
-                isOpen ? 'border-[#CBE0D3] bg-[#F2F8F3] shadow-card' : 'border-line bg-surface hover:shadow-card',
-              )}
-            >
-              <div
-                role="button"
-                tabIndex={0}
-                aria-expanded={isOpen}
-                onClick={() => toggle(v.word)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault()
-                    toggle(v.word)
-                  }
-                }}
-                className="flex cursor-pointer items-center gap-2 px-3.5 py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
-              >
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-[16px] font-semibold leading-tight text-ink">{v.word}</p>
-                  <div className="mt-0.5 flex items-baseline gap-1.5">
-                    {v.ipa && <span className="truncate font-mono text-[11px] text-muted">{v.ipa}</span>}
-                    {v.pos && <Chip tone={POS_TONE[pos] ?? 'lavender'}>{v.pos}</Chip>}
-                  </div>
-                </div>
-                <span onClick={(e) => e.stopPropagation()}>
-                  <PlayButton text={v.word} small />
-                </span>
-                <ChevronRight className={cn('h-4 w-4 shrink-0 text-muted transition-transform', isOpen && 'rotate-90')} />
-              </div>
-              {isOpen && (
-                <div className="space-y-1 px-3.5 pb-3">
-                  <p className="text-[13px] font-semibold text-[#2F5D45]">{v.vi}</p>
-                  {v.def && <p className="text-[11.5px] text-muted">{v.def}</p>}
-                  {v.example && <p className="rounded-xl bg-[#E9F1EC] px-2.5 py-1.5 text-[12px] italic text-ink/75">{v.example}</p>}
-                  {v.cloze && <p className="text-[11.5px] text-muted">Gap: {v.cloze}</p>}
-                </div>
-              )}
-            </li>
-          )
-        })}
-      </ul>
-    </div>
-  )
-}
-
-const STAGES: Record<string, Tone> = {
-  QUESTION: 'violet',
-  ANSWER: 'mint',
-  'ASK BACK': 'sky',
-  ADD: 'peach',
-  'ASK & RESPOND': 'sky',
-  'LISTEN & FOLLOW': 'mint',
-  'MISSION COMPLETE WHEN…': 'rose',
-}
-
-type Block = { label?: string; lines: string[] }
-
-/** Split a slide's lines into stages (QUESTION / ANSWER / ASK BACK) so a template reads as a table, not a list. */
-function intoBlocks(lines: string[]): Block[] {
-  const blocks: Block[] = [{ lines: [] }]
-  for (const line of lines) {
-    const key = line.trim().toUpperCase()
-    if (STAGES[key]) {
-      blocks.push({ label: key, lines: [] })
-      continue
-    }
-    blocks[blocks.length - 1].lines.push(line)
+function parseVocab(lines: string[]): { word: string; pos: string; ipa: string; meaning: string; example: string }[] {
+  const items: { word: string; pos: string; ipa: string; meaning: string; example: string }[] = []
+  let i = 0
+  while (i < lines.length) {
+    const line = lines[i]
+    if (line.includes('·') && i + 3 < lines.length && lines[i + 1].startsWith('/') && lines[i + 1].endsWith('/')) {
+      const [word, pos] = line.split('·').map((s) => s.trim())
+      items.push({ word, pos: pos || '', ipa: lines[i + 1], meaning: lines[i + 2], example: lines[i + 3] })
+      i += 4
+    } else { i++ }
   }
-  return blocks.filter((b) => b.lines.length > 0)
+  return items
 }
 
-const SUBJECTS = ['I', 'you', 'we', 'they', 'he', 'she', 'it'] as const
-type Subj = (typeof SUBJECTS)[number]
-
-type QCell = { verb: string; subject: Subj }
-type AnswerRow = { subject: Subj; be: boolean; text: string }
-
-/** "Do I …?" / "Is she …?" lines turn into a subject table: one column for DO/DOES, one for BE. */
-
-const BE_FOR: Record<Subj, string> = { I: 'am', you: 'are', we: 'are', they: 'are', he: 'is', she: 'is', it: 'is' }
-const DO_FOR: Record<Subj, string> = { I: 'do', you: 'do', we: 'do', they: 'do', he: 'does', she: 'does', it: 'does' }
-
-/** One deck line can carry two short answers ("Yes, they do. / No, they don't. Yes, she does."). */
-function parseAnswers(line: string): AnswerRow[] {
-  const out: AnswerRow[] = []
-  for (const seg of line.split(/(?<=\.)\s*(?=Yes|No)/)) {
-    const m = seg.match(/\b(I|you|we|they|he|she|it)\s+(do|does|am|is|are)\b/i)
-    if (!m) continue
-    const subject = m[1] as Subj
-    const verb = m[2].toLowerCase()
-    const be = ['am', 'is', 'are'].includes(verb)
-    const correct = be ? BE_FOR[subject] : DO_FOR[subject]
-    let text = seg.trim()
-    if (verb !== correct) {
-      let swapped = false
-      text = text.replace(be ? /\b(am|is|are)\b/i : /\b(do|does)\b/i, (hit) => {
-        if (swapped) return hit
-        swapped = true
-        return correct
-      })
-    }
-    out.push({ subject, be, text })
+function parseRecall(lines: string[]): { meaning: string; frame: string }[] {
+  const items: { meaning: string; frame: string }[] = []
+  let i = 0
+  while (i < lines.length) {
+    if (i + 1 < lines.length) { items.push({ meaning: lines[i], frame: lines[i + 1] }); i += 2 } else { i++ }
   }
-  return out
+  return items
 }
 
-function readSubjectGroups(lines: string[]) {
-  const cells: QCell[] = []
-  const answers: AnswerRow[] = []
-  const rest: string[] = []
-  for (const raw of lines) {
-    const line = raw.trim()
-    const q = line.match(/^(Do|Does|Am|Is|Are)\s+(I|you|we|they|he|she|it)\s*(?:\.\.\.|…)\s*\?$/)
-    if (q) {
-      cells.push({ verb: q[1], subject: q[2] as Subj })
-      continue
-    }
-    if (/^(?:Yes|No)\b/i.test(line)) {
-      answers.push(...parseAnswers(line))
-      continue
-    }
-    rest.push(raw)
+function parseChunks(lines: string[]): { chunk: string; meaning: string }[] {
+  const items: { chunk: string; meaning: string }[] = []
+  let i = 0
+  while (i < lines.length) {
+    if (i + 1 < lines.length && lines[i + 1].startsWith('·')) {
+      items.push({ chunk: lines[i], meaning: lines[i + 1].replace(/^·\s*/, '') }); i += 2
+    } else { i++ }
   }
-  const seen = new Set<string>()
-  const unique = answers.filter((a) => {
-    const k = `${a.subject}-${a.be}`
-    if (seen.has(k)) return false
-    seen.add(k)
-    return true
-  })
-  return { cells, answers: unique, rest }
+  return items
 }
 
-function SubjectMatrix({ cells, answers }: { cells: QCell[]; answers: AnswerRow[] }) {
-  const hasDo = cells.some((c) => !['am', 'is', 'are'].includes(c.verb.toLowerCase()))
-  const hasBe = cells.some((c) => ['am', 'is', 'are'].includes(c.verb.toLowerCase()))
-  const rows = [...new Set(cells.map((c) => c.subject))]
-
-  const cellFor = (subject: Subj, be: boolean) =>
-    cells.find((c) => c.subject === subject && ['am', 'is', 'are'].includes(c.verb.toLowerCase()) === be)
-  const answerFor = (subject: Subj, be: boolean) => answers.find((a) => a.subject === subject && a.be === be)
-
-  return (
-    <div className="overflow-hidden rounded-2xl border border-line">
-      <div className="grid grid-cols-[68px_1fr_1fr] border-b border-line bg-[#F5F8F1] text-[10px] font-bold uppercase tracking-[.1em]">
-        <div className="px-3 py-1.5 text-muted">Subject</div>
-        {hasDo && <div className="border-l border-line/70 px-3 py-1.5 text-[#2B3A31]">Do / Does</div>}
-        {hasBe && <div className="border-l border-line/70 px-3 py-1.5 text-[#2C5654]">Am / Is / Are</div>}
-      </div>
-      {rows.map((subject, i) => (
-        <div key={subject} className={cn('grid grid-cols-[68px_1fr_1fr] items-stretch text-[13px]', i % 2 === 1 && 'bg-[#fcfbff]')}>
-          <div className="px-3 py-2 font-semibold text-ink">{subject}</div>
-          {hasDo && (
-            <div className="border-l border-line/70 px-3 py-2">
-              {(() => {
-                const c = cellFor(subject, false)
-                const a = answerFor(subject, false)
-                return c ? (
-                  <>
-                    <span className="rounded-md bg-[#EEF3EA] px-1.5 py-0.5 font-mono text-[12px] font-semibold text-[#2B3A31]">
-                      {c.verb} {c.subject} …
-                    </span>
-                    {a && <p className="mt-1 text-[11px] leading-snug text-ink/60">{a.text}</p>}
-                  </>
-                ) : (
-                  <span className="text-muted">—</span>
-                )
-              })()}
-            </div>
-          )}
-          {hasBe && (
-            <div className="border-l border-line/70 px-3 py-2">
-              {(() => {
-                const c = cellFor(subject, true)
-                const a = answerFor(subject, true)
-                return c ? (
-                  <>
-                    <span className="rounded-md bg-[#E7F0F0] px-1.5 py-0.5 font-mono text-[12px] font-semibold text-[#2C5654]">
-                      {c.verb} {c.subject} …
-                    </span>
-                    {a && <p className="mt-1 text-[11px] leading-snug text-ink/60">{a.text}</p>}
-                  </>
-                ) : (
-                  <span className="text-muted">—</span>
-                )
-              })()}
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
-  )
+function isVocabSlide(slide: { title: string; blocks: { content: string[] }[] }): boolean {
+  const lines = slide.blocks.flatMap((b) => b.content)
+  return lines.some((l) => l.includes('·') && l.match(/\w+\s*·\s*(v|adj|n|adv)/) !== null) && lines.some((l) => l.startsWith('/') && l.endsWith('/'))
 }
 
+function isRecallSlide(slide: { title: string }): boolean {
+  return slide.title.toLowerCase().includes('recall')
+}
 
-const SINGULAR = /^(Is|Does|Was)\b/i
+function isChunksSlide(slide: { title: string }): boolean {
+  const t = slide.title.toLowerCase()
+  return t.includes('chunks') || t.includes('useful') || t.includes('more than one word') || t.includes('little more')
+}
 
-/** The deck compares one person with a group; show the two forms side by side. */
-function ContrastPairs({ lines }: { lines: string[] }) {
-  const questions = lines.filter((l) => /\?$/.test(l.trim()))
-  const rest = lines.filter((l) => !/\?$/.test(l.trim()))
-  const rows: { one?: string; many?: string }[] = []
-  for (const q of questions) {
-    if (SINGULAR.test(q) || !rows.length || rows[rows.length - 1].many) rows.push({ one: q })
-    else rows[rows.length - 1].many = q
-  }
-  return (
-    <div className="space-y-2">
-      <div className="grid grid-cols-[1fr_18px_1fr] items-center gap-1 text-[9.5px] font-bold uppercase tracking-[.1em] text-muted">
-        <span>One person</span>
-        <span />
-        <span>A group</span>
-      </div>
-      <div className="space-y-1.5">
-        {rows.map((r, i) => (
-          <div key={i} className="grid grid-cols-[1fr_18px_1fr] items-center gap-1">
-            <span className="rounded-lg border border-[#D8E3D4] bg-[#F5F8F1] px-2 py-1.5 font-mono text-[11.5px] text-[#2B3A31]">{r.one ?? '—'}</span>
-            <span className="text-center text-[11px] text-muted">↔</span>
-            <span className="rounded-lg border border-[#CBE0E0] bg-[#eff8ff] px-2 py-1.5 font-mono text-[11.5px] text-[#2C5654]">{r.many ?? '—'}</span>
+// Detect if a line is a speaker label (ALL CAPS, short)
+function isSpeaker(line: string): boolean {
+  return /^[A-Z][A-Z\s·']+$/.test(line.trim()) && line.trim().length < 30 && line.trim().length > 1
+}
+
+// Detect section header (ALL CAPS with · or short ALL CAPS label)
+function isSectionHeader(line: string): boolean {
+  return line.includes('·') && /^[A-Z]/.test(line) && line === line.toUpperCase() || /^(ABOUT YOU|FIRST LISTEN|LISTEN FOR|MỤC TIÊU|LẦN 1|LẦN 2|FOLLOW-UP|MY NEXT TRY|MY CHECK|YOUR ROLE|YOUR PARTNER|PERSON A|PERSON B|MỞ LỜI|KẾT QUẢ|CHỌN MỘT CÂU|ĐIỀN|ĐÓNG|MỞ|TRA KHI|CUỘC TRAO ĐỔI)/i.test(line)
+}
+
+// Detect cue (short, no punctuation)
+function isCue(line: string): boolean {
+  return line.length < 30 && !/[.?!:;…]/.test(line) && !line.startsWith('/') && !line.includes('·') && !isSpeaker(line) && !isSectionHeader(line)
+}
+
+// ── Smart text renderer ─────────────────────────────────────────────
+
+function SmartSlideBody({ lines, presentMode, meta }: { lines: string[]; presentMode: boolean; meta: typeof SECTION_META[string] }) {
+  // Detect "Do or Are?" pattern: groups of 3 lines (___ you, keyword, suffix?)
+  const isDoOrAre = lines.length >= 6 && lines.filter((_, i) => i % 3 === 0).every((l) => l.trim() === '___ you')
+  if (isDoOrAre) {
+    const questions: { prefix: string; keyword: string; suffix: string }[] = []
+    for (let i = 0; i < lines.length; i += 3) {
+      questions.push({ prefix: lines[i], keyword: lines[i + 1], suffix: lines[i + 2] })
+    }
+    return (
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        {questions.map((q, i) => (
+          <div key={i} className={cn('rounded-2xl border p-4 transition-all hover:shadow-md', presentMode ? 'border-white/10 bg-white/5' : cn(meta.border, 'bg-white'))}>
+            <p className={cn('text-[18px] font-bold leading-tight', presentMode ? 'text-white' : meta.color)}>
+              <span className={presentMode ? 'text-white/50' : 'text-muted'}>___ you</span>{' '}
+              <span className={cn('underline decoration-2 underline-offset-4', presentMode ? 'text-white' : 'text-ink')}>{q.keyword}</span>{' '}
+              <span>{q.suffix}</span>
+            </p>
           </div>
         ))}
       </div>
-      {rest.length > 0 && <p className="text-[11px] italic text-ink/55">{rest.join(' · ')}</p>}
-    </div>
-  )
-}
+    )
+  }
 
-/** "Does she works here?" + a Vietnamese nudge: read them as mistakes to repair, not as examples. */
-function RepairCards({ lines }: { lines: string[] }) {
-  const items: { wrong: string; hint?: string }[] = []
-  const HINT = /^(Sau|Động|Một|Câu|Có|HE |THEY |Nhóm|Chọn|Nói|Số |Danh)\b/
-  for (const line of lines) {
-    if (VI_CHARS.test(line) || HINT.test(line)) {
-      if (items.length) items[items.length - 1].hint = line
-      continue
+  // Detect Q&A + detail pattern: groups of 3 where first ends with ?
+  const isQADetail = lines.length >= 3 && lines.filter((_, i) => i % 3 === 0).every((l) => l.trim().endsWith('?'))
+  if (isQADetail) {
+    const cards: { q: string; a: string; detail: string }[] = []
+    for (let i = 0; i + 2 < lines.length; i += 3) {
+      cards.push({ q: lines[i], a: lines[i + 1], detail: lines[i + 2] })
     }
-    items.push({ wrong: line })
+    if (cards.length >= 2) {
+      return (
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {cards.map((c, i) => (
+            <div key={i} className={cn('rounded-2xl border p-4 space-y-2', presentMode ? 'border-white/10 bg-white/5' : cn(meta.border, 'bg-white'))}>
+              <p className={cn('text-[15px] font-semibold', presentMode ? 'text-white' : meta.color)}>{c.q}</p>
+              <p className={cn('text-[14px] font-bold', presentMode ? 'text-white/80' : 'text-primary')}>{c.a}</p>
+              <p className={cn('text-[13px] italic', presentMode ? 'text-white/60' : 'text-ink/70')}>{c.detail}</p>
+            </div>
+          ))}
+        </div>
+      )
+    }
   }
-  return (
-    <ul className="grid gap-2 sm:grid-cols-2">
-      {items.map((it, i) => (
-        <li key={`${it.wrong}-${i}`} className="rounded-xl border border-[#E7D2CD] bg-[#fdf5f4] px-3 py-2">
-          <p className="flex items-start gap-1.5 text-[13px] font-medium leading-snug text-[#7A3F35]">
-            <span className="mt-0.5 shrink-0 font-bold">×</span>
-            <span className="min-w-0">{it.wrong}</span>
-          </p>
-          {it.hint && <p className="mt-1 text-[11px] italic text-[#6F4A18]">{it.hint}</p>}
-          <p className="mt-1 text-[10.5px] font-semibold uppercase tracking-wide text-muted">Say it again, right</p>
-        </li>
-      ))}
-    </ul>
-  )
-}
 
-
-/** Question + short answer pairs read as a drill: the question, then what you say back. */
-function QaList({ lines }: { lines: string[] }) {
-  const pairs: { q: string; a?: string }[] = []
-  for (const raw of lines) {
-    const line = raw.trim()
-    if (/\?$/.test(line)) pairs.push({ q: line })
-    else if (pairs.length && !pairs[pairs.length - 1].a) pairs[pairs.length - 1].a = line
+  // Detect "Do you…? / Are you…?" pattern: two sections with DO YOU and ARE YOU
+  const hasDoYou = lines.some((l) => l.toUpperCase().includes('DO YOU') && l.includes('…'))
+  const hasAreYou = lines.some((l) => l.toUpperCase().includes('ARE YOU') && l.includes('…'))
+  if (hasDoYou && hasAreYou) {
+    // Split into two sections
+    const doIdx = lines.findIndex((l) => l.toUpperCase().includes('DO YOU') && l.includes('…'))
+    const areIdx = lines.findIndex((l) => l.toUpperCase().includes('ARE YOU') && l.includes('…'))
+    const doSection = lines.slice(doIdx, areIdx)
+    const areSection = lines.slice(areIdx)
+    const renderSection = (section: string[]) => (
+      <div className="space-y-3">
+        <div className={cn('rounded-xl px-4 py-2.5 font-mono text-[14px] font-bold', presentMode ? 'bg-white/8 text-white/90' : cn(meta.bg, meta.color))}>
+          {section[0]}
+        </div>
+        {section.slice(1).map((l, i) => {
+          const isShortAnswer = l === 'Yes,' || l === 'No,' || l === 'I do' || l === 'I don’t' || l === 'I am' || l === "I'm not" || l === '.' || l === "I don't" || l === "I'm not."
+          if (isShortAnswer || l === '.') {
+            return <span key={i} className={cn('inline-block mr-1 text-[14px] font-bold', presentMode ? 'text-white/80' : 'text-primary')}>{l === '.' ? '' : l} </span>
+          }
+          if (l.endsWith('?')) {
+            return <div key={i} className={cn('rounded-xl border px-4 py-2.5', presentMode ? 'border-white/10 bg-white/5' : cn(meta.border, 'bg-white'))}><p className={cn('text-[15px] font-medium', presentMode ? 'text-white/90' : 'text-ink')}>{l}</p></div>
+          }
+          return null
+        })}
+      </div>
+    )
+    return (
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className={cn('rounded-2xl border p-4', presentMode ? 'border-white/10 bg-white/5' : cn(meta.border, 'bg-white'))}>
+          {renderSection(doSection)}
+        </div>
+        <div className={cn('rounded-2xl border p-4', presentMode ? 'border-white/10 bg-white/5' : cn(meta.border, 'bg-white'))}>
+          {renderSection(areSection)}
+        </div>
+      </div>
+    )
   }
-  const leftover = lines.filter((l) => !VI_CHARS.test(l) && !pairs.some((p) => p.q === l.trim() || p.a === l.trim()))
-  return (
-    <div className="space-y-2">
-      <ul className="grid gap-2 sm:grid-cols-2">
-        {pairs.map((p, i) => (
-          <li key={`${p.q}-${i}`} className="rounded-xl border border-line bg-surface px-3 py-2">
-            <p className="text-[13px] font-semibold leading-snug text-ink">{p.q}</p>
-            {p.a && <p className="mt-1 border-l-2 border-[#2f9e79]/40 pl-2 text-[12px] text-[#2F5D45]">{p.a}</p>}
-          </li>
-        ))}
-      </ul>
-      {leftover.length > 0 && <p className="text-[11px] italic text-ink/55">{leftover.join(' · ')}</p>}
-    </div>
-  )
-}
 
-function Grammar({ sections }: { sections: LessonFile['parts']['grammar'] }) {
-  return (
-    <div className="space-y-3">
-      {sections.map((g) => {
-        const groups = readSubjectGroups(g.lines)
-        const matrix = groups.cells.length >= 4
-        const questions = g.lines.filter((l) => /\?$/.test(l.trim()) && !/\.\.\.|…/.test(l)).length
-        const isQa = !matrix && questions >= 3 && !/REPAIR|CONTRAST/i.test(g.section)
-        const isContrast = /CONTRAST/i.test(g.section)
-        const isRepair = /REPAIR/i.test(g.section)
-        const NOISE = /^(WHO ARE YOU|ASKING ABOUT\?|DO\s*\/\s*DOES|AM\s*\/\s*IS\s*\/\s*ARE)$/i
-        const lines = matrix ? groups.rest.filter((l) => !NOISE.test(l.trim())) : g.lines
-        const blocks = intoBlocks(lines)
-        const staged = blocks.filter((b) => b.label).length >= 2
-        const notes = blocks.flatMap((b) => b.lines).filter((l) => VI_CHARS.test(l))
-        void lines
-        return (
-          <article key={g.section + g.sub} className="overflow-hidden rounded-2xl border border-line bg-surface">
-            <header className="flex flex-wrap items-center gap-2 border-b border-line/60 bg-[#F5F8F1] px-4 py-2">
-              <Chip tone="lavender">{g.section}</Chip>
-              {g.sub && <p className="min-w-0 flex-1 text-[13.5px] font-semibold leading-snug">{englishSub(g.sub)}</p>}
-            </header>
+  // Detect A:/B: guided conversation pattern
+  const hasABPattern = lines.some((l) => /^[AB]:/.test(l.trim()))
+  if (hasABPattern) {
+    return (
+      <div className="space-y-2">
+        {lines.map((l, i) => {
+          const isA = l.trim().startsWith('A:')
+          const isB = l.trim().startsWith('B:')
+          if (isA || isB) {
+            return (
+              <div key={i} className={cn('rounded-xl px-4 py-3', isA ? (presentMode ? 'bg-white/8' : 'bg-bg') : (presentMode ? 'bg-white/5' : 'bg-surface'))}>
+                <span className={cn('mr-2 text-[12px] font-bold uppercase', isA ? (presentMode ? 'text-white/70' : meta.color) : (presentMode ? 'text-white/50' : 'text-muted'))}>
+                  {l.trim().slice(0, 2)}
+                </span>
+                <span className={cn('text-[14px] leading-relaxed', presentMode ? 'text-white/90' : 'text-ink')}>
+                  {l.trim().slice(2).trim()}
+                </span>
+              </div>
+            )
+          }
+          return (
+            <p key={i} className={cn('text-[14px] leading-relaxed pl-4', presentMode ? 'text-white/70' : 'text-ink/70')}>{l}</p>
+          )
+        })}
+      </div>
+    )
+  }
+  type Block = { type: string; lines: string[] }
+  const blocks: Block[] = []
+  let current: Block = { type: 'text', lines: [] }
 
-            <div className="space-y-3 px-4 py-3">
-              {matrix && <SubjectMatrix cells={groups.cells} answers={groups.answers} />}
-              {isRepair ? (
-                <RepairCards lines={g.lines} />
-              ) : isContrast ? (
-                <ContrastPairs lines={g.lines} />
-              ) : isQa ? (
-                <>
-                  <QaList lines={lines} />
-                  {notes.length > 0 && (
-                    <div className="flex items-start gap-2 rounded-xl bg-[#FAF3E2] px-3 py-2">
-                      <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#6B4E12]" />
-                      <div className="min-w-0 space-y-0.5">
-                        {notes.map((n, i) => (
-                          <p key={`${n}-${i}`} className="text-[11.5px] leading-relaxed text-[#6B4E12]">
-                            {n}
-                          </p>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </>
-              ) : staged ? (
-                <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
-                  {blocks.map((b, bi) => {
-                    const t = b.label ? TONES[STAGES[b.label] ?? 'lavender'] : TONES.amber
+  const flush = () => { if (current.lines.length > 0) { blocks.push({ ...current }); current = { type: 'text', lines: [] } } }
+
+  for (const line of lines) {
+    const trimmed = line.trim()
+    if (!trimmed) continue
+
+    if (isSpeaker(trimmed)) {
+      flush()
+      current = { type: 'speaker', lines: [trimmed] }
+    } else if (isSectionHeader(trimmed)) {
+      flush()
+      current = { type: 'header', lines: [trimmed] }
+    } else if (isCue(trimmed) && current.type !== 'cues') {
+      flush()
+      current = { type: 'cues', lines: [trimmed] }
+    } else if (isCue(trimmed) && current.type === 'cues') {
+      current.lines.push(trimmed)
+    } else {
+      if (current.type === 'cues' || current.type === 'speaker' || current.type === 'header') {
+        flush()
+        current = { type: 'text', lines: [trimmed] }
+      } else {
+        current.lines.push(trimmed)
+      }
+    }
+  }
+  flush()
+
+  return (
+    <div className="space-y-4">
+      {blocks.map((block, bi) => {
+        switch (block.type) {
+          case 'speaker': {
+            const fullText = block.lines.slice(1).join(' ').replace(/\s+/g, ' ').trim()
+            return (
+              <div key={bi} className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className={cn('rounded-lg px-2.5 py-1 text-[11px] font-bold uppercase tracking-[.12em]', presentMode ? 'bg-white/10 text-white/80' : cn(meta.bg, meta.color))}>
+                    {block.lines[0]}
+                  </span>
+                  {fullText && <SpeakButton text={fullText} size="sm" label={`Listen to ${block.lines[0]}`} />}
+                </div>
+                <div className={cn('ml-2 space-y-1.5 border-l-2 pl-4', presentMode ? 'border-white/10' : 'border-line')}>
+                  {block.lines.slice(1).map((l, li) => {
+                    const isComplete = l.trim().endsWith('.') || l.trim().endsWith('?') || l.trim().endsWith('!')
                     return (
-                      <div key={`${b.label}-${bi}`} className={cn('rounded-xl border px-3 py-2', t.border, t.soft)}>
-                        <p className={cn('mb-1 text-[10px] font-bold uppercase tracking-[.12em]', t.text)}>{b.label ?? 'Note'}</p>
-                        <ul className="space-y-1">
-                          {b.lines.map((line, i) => {
-                            const vi = VI_CHARS.test(line)
-                            return (
-                              <li
-                                key={`${line}-${i}`}
-                                className={cn(
-                                  'break-words text-[12.5px] leading-snug',
-                                  vi ? 'italic text-ink/60' : isPattern(line) ? 'font-mono text-[11.5px] font-semibold text-ink' : 'text-ink/85',
-                                )}
-                              >
-                                {line}
-                              </li>
-                            )
-                          })}
-                        </ul>
+                      <div key={li} className="flex items-start gap-2">
+                        <p className={cn('flex-1 text-[15px] leading-relaxed', presentMode ? 'text-white/90' : 'text-ink')}>{l}</p>
+                        {isComplete && <SpeakButton text={l.trim()} size="sm" label="Listen to line" />}
                       </div>
                     )
                   })}
                 </div>
-              ) : (
-                <>
-                  <ul className="space-y-1">
-                    {lines
-                      .filter((l) => !VI_CHARS.test(l))
-                      .map((line, i) => (
-                        <li key={`${line}-${i}`} className="flex items-start gap-2 text-[13px] leading-relaxed text-ink/85">
-                          {isPattern(line) ? (
-                            <span className={cn('rounded-md px-1.5 py-0.5 font-mono text-[11px]', /ARE/.test(line) ? TONES.sky.chip : TONES.violet.chip)}>
-                              {line}
-                            </span>
-                          ) : (
-                            <>
-                              <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-primary/50" />
-                              <span className="min-w-0 flex-1 break-words">{line}</span>
-                            </>
-                          )}
-                        </li>
-                      ))}
-                  </ul>
-                  {notes.length > 0 && (
-                    <div className="flex items-start gap-2 rounded-xl bg-[#FAF3E2] px-3 py-2">
-                      <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#6B4E12]" />
-                      <div className="min-w-0 space-y-0.5">
-                        {notes.map((n, i) => (
-                          <p key={`${n}-${i}`} className="text-[11.5px] leading-relaxed text-[#6B4E12]">
-                            {n}
-                          </p>
-                        ))}
+              </div>
+            )
+          }
+          case 'header':
+            return (
+              <div key={bi} className={cn('rounded-xl px-4 py-2.5', presentMode ? 'bg-white/8' : 'bg-bg')}>
+                <p className={cn('text-[12px] font-bold uppercase tracking-[.14em]', presentMode ? 'text-white/70' : meta.color)}>
+                  {block.lines[0]}
+                </p>
+                {block.lines.slice(1).map((l, li) => (
+                  <p key={li} className={cn('mt-1 text-[14px] leading-relaxed', presentMode ? 'text-white/80' : 'text-ink/80')}>
+                    {l}
+                  </p>
+                ))}
+              </div>
+            )
+          case 'cues':
+            return (
+              <div key={bi} className="flex flex-wrap gap-2">
+                {block.lines.map((l, li) => (
+                  <span
+                    key={li}
+                    className={cn(
+                      'rounded-xl border px-3 py-2 text-[13px] font-semibold shadow-sm transition hover:shadow-md',
+                      presentMode ? 'border-white/10 bg-white/8 text-white/90' : cn(meta.border, 'bg-white text-ink'),
+                    )}
+                  >
+                    {l}
+                  </span>
+                ))}
+              </div>
+            )
+          default:
+            return (
+              <div key={bi} className="space-y-2">
+                {block.lines.map((l, li) => {
+                  const isQ = l.endsWith('?')
+                  const isIPA = l.startsWith('/') && l.endsWith('/')
+                  const isFormula = l.includes('…') || l.includes('+ V') || l.includes('DO YOU') || l.includes('ARE YOU')
+                  if (isIPA) {
+                    return (
+                      <p key={li} className={cn('font-mono text-[13px] tracking-wide', presentMode ? 'text-white/50' : 'text-muted')}>
+                        {l}
+                      </p>
+                    )
+                  }
+                  if (isFormula) {
+                    return (
+                      <div key={li} className={cn('rounded-xl px-4 py-2.5 font-mono text-[14px] font-semibold', presentMode ? 'bg-white/8 text-white/90' : cn(meta.bg, meta.color))}>
+                        {l}
                       </div>
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-          </article>
-        )
-      })}
-    </div>
-  )
-}
-
-function Dialogue({ turns }: { turns: LessonFile['parts']['dialogue'] }) {
-  const speakers = [...new Set(turns.map((t) => t.who))]
-  const [running, setRunning] = useState(false)
-  const stopRef = useRef(false)
-
-  // Plays the recorded lines one after another so the pair sounds like a conversation.
-  const playAll = async () => {
-    if (running) {
-      stopRef.current = true
-      setRunning(false)
-      return
-    }
-    stopRef.current = false
-    setRunning(true)
-    for (const t of turns) {
-      if (stopRef.current) break
-      await playLine(t.line, 1)
-    }
-    setRunning(false)
-  }
-
-  return (
-    <div>
-      <button
-        onClick={() => void playAll()}
-        className="mb-2 inline-flex items-center gap-1.5 rounded-xl border border-line bg-surface px-2.5 py-1.5 text-[11.5px] font-semibold text-primary transition hover:bg-primary-soft"
-      >
-        <Volume2 className="h-3.5 w-3.5" />
-        {running ? 'Stop' : `Play the conversation · ${turns.length} lines`}
-      </button>
-    <div className="space-y-1.5">
-      {turns.map((t, i) => {
-        const mine = speakers.indexOf(t.who) % 2 === 1
-        return (
-          <div key={`${t.who}-${i}`} className={cn('flex items-end gap-2', mine && 'flex-row-reverse')}>
-            <span
-              className={cn(
-                'grid h-6 w-6 shrink-0 place-items-center rounded-full text-[10px] font-bold',
-                mine ? TONES.sky.chip : TONES.violet.chip,
-              )}
-            >
-              {t.who.slice(0, 1)}
-            </span>
-            <div className={cn('max-w-[82%]', mine ? 'items-end text-right' : 'items-start')}>
-              {turns[i - 1]?.who !== t.who && (
-                <p className={cn('mb-0.5 px-1 text-[10px] font-semibold uppercase tracking-wide text-muted', mine && 'text-right')}>
-                  {t.who}
-                </p>
-              )}
-              <div
-                className={cn(
-                  'group inline-flex items-start gap-2 rounded-2xl px-3 py-2 text-left',
-                  mine ? 'rounded-br-md bg-[#3793d1] text-white' : 'rounded-bl-md bg-[#f1ecff] text-ink',
-                )}
-              >
-                <p className="min-w-0 text-[13px] leading-snug">{t.line}</p>
-                <button
-                  onClick={() => speak(t.line)}
-                  className={cn('mt-0.5 shrink-0 opacity-60 transition-opacity hover:opacity-100', mine ? 'text-white' : 'text-primary')}
-                  aria-label={PLAY_LABEL}
-                >
-                  <Volume2 className="h-3.5 w-3.5" />
-                </button>
-              </div>
-            </div>
-          </div>
-        )
-      })}
-    </div>
-    </div>
-  )
-}
-
-function Checks({ items }: { items: LessonFile['parts']['listenCheck'] }) {
-  const [shown, setShown] = useState<number[]>([])
-  return (
-    <ul className="grid gap-2 sm:grid-cols-2">
-      {items.map((c, i) => {
-        const open = shown.includes(i)
-        return (
-          <li
-            key={c.q}
-            className={cn('rounded-2xl border px-3.5 py-2.5 transition-colors', open ? 'border-[#CBE0D3] bg-[#F2F8F3]' : 'border-line bg-surface')}
-          >
-            <div className="flex items-start gap-2">
-              <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-md bg-[#E7F0F0] text-[10px] font-bold text-[#2C5654]">
-                {i + 1}
-              </span>
-              <p className="min-w-0 flex-1 text-[13px] font-medium leading-snug">{c.q}</p>
-              <SpeakButton text={String(c.a).match(/[“"]([^”"]+)[”"]/)?.[1] ?? c.a} size="sm" label="Hear the answer" />
-            </div>
-            {open ? (
-              <p className="mt-1.5 border-l-2 border-[#2f9e79]/40 pl-2 text-[12px] text-[#2F5D45]">{c.a}</p>
-            ) : (
-              <button onClick={() => setShown((s) => [...s, i])} className="mt-1.5 text-[11.5px] font-semibold text-primary hover:underline">
-                Show the answer
-              </button>
-            )}
-          </li>
-        )
-      })}
-    </ul>
-  )
-}
-
-/** The deck opens on a title slide; show it as a cover, not as a wall of slide lines. */
-function Overview({ lesson, agenda, onStart }: { lesson: LessonFile; agenda: SecDef[]; onStart: () => void }) {
-  const g = lesson.parts.flow.find((x) => x.group === 'Overview')
-  const lines = g?.slides?.[0]?.lines ?? []
-  const vi = lines.find((l) => VI_CHARS.test(l) && l.length > 8)
-
-  return (
-    <div className="relative overflow-hidden rounded-2xl border border-[#D8E3D4] bg-[#FAF7EE] px-5 py-6 sm:px-7 sm:py-8">
-      <span aria-hidden className="pointer-events-none absolute right-4 top-1 select-none text-[96px] font-bold leading-none text-primary/[.06]">
-        {String(lesson.n).padStart(2, '0')}
-      </span>
-      <p className="text-[10.5px] font-bold uppercase tracking-[.16em] text-primary">A1 · Lesson {lesson.n}</p>
-      <h3 className="mt-1.5 max-w-[22ch] text-[26px] font-semibold leading-[1.15] tracking-tight sm:text-[30px]">
-        {titleOf(lesson) || `Lesson ${lesson.n}`}
-      </h3>
-      {vi && <p className="mt-2 max-w-[46ch] text-[13.5px] leading-relaxed text-ink/70">{vi}</p>}
-
-      <div className="mt-4 flex flex-wrap gap-1.5">
-        <Chip tone="mint">{lesson.parts.vocab.length} words</Chip>
-        <Chip tone="lavender">{agenda.length} sections</Chip>
-        {lesson.parts.dialogue.length > 0 && <Chip tone="sky">{lesson.parts.dialogue.length} dialogue lines</Chip>}
-        {lesson.parts.listenCheck.length > 0 && <Chip tone="sky">{lesson.parts.listenCheck.length} listening checks</Chip>}
-        {lesson.parts.grammarChoose.length > 0 && <Chip tone="peach">{lesson.parts.grammarChoose.length} sentences to choose</Chip>}
-      </div>
-
-      <div className="mt-5 flex items-center gap-3">
-        <Button size="sm" onClick={onStart}>
-          Start the lesson <ArrowRight className="h-3.5 w-3.5" />
-        </Button>
-        <p className="hidden text-[11.5px] text-muted sm:block">Title slide of the handout. Next section opens Words.</p>
-      </div>
-    </div>
-  )
-}
-
-type PracticeItem = { prompt: string; vi?: string; options: string[]; answer: string }
-
-/** The handout's choose exercise, laid out like the slide: two columns of cards, meaning under each. */
-function Choose({ items }: { items: PracticeItem[] }) {
-  const [picked, setPicked] = useState<Record<number, string>>({})
-
-  if (items.length === 0) return null
-
-  const right = items.filter((it, i) => picked[i] === it.answer).length
-  const answered = Object.keys(picked).length
-
-  return (
-    <div>
-      <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2 text-[11.5px] text-muted">
-        <span>Read the Vietnamese hint, then choose. Say the whole sentence out loud.</span>
-        <span className="tabular-nums">
-          {answered} / {items.length} answered · <span className="font-semibold text-ink">{right} right</span>
-        </span>
-      </div>
-      <ul className="grid gap-2.5 sm:grid-cols-2">
-        {items.map((it, i) => {
-          const pick = picked[i]
-          const chosen = pick !== undefined
-          const ok = pick === it.answer
-          return (
-            <li
-              key={`${it.prompt}-${i}`}
-              className={cn(
-                'rounded-2xl border px-4 py-3 transition-colors',
-                !chosen && 'border-[#e7e2f5] bg-[#fbf8ff]',
-                chosen && ok && 'border-[#bfe7d3] bg-[#f1fbf5]',
-                chosen && !ok && 'border-[#E7D2CD] bg-[#fdf3f2]',
-              )}
-            >
-              <p className="text-[14px] font-medium leading-snug text-ink">
-                {it.prompt.split(/_+/).map((chunk, k) => (
-                  <span key={k}>
-                    {k > 0 && (
-                      <span className="mx-1 inline-block w-8 border-b-2 border-dashed border-primary/50 align-baseline">&nbsp;</span>
-                    )}
-                    <Highlight text={chunk} />
-                  </span>
-                ))}
-              </p>
-              {it.vi && <p className="mt-1 text-[11.5px] italic text-ink/55">{it.vi}</p>}
-              <div className="mt-2 flex items-center gap-1.5">
-                {it.options.map((opt) => {
-                  const isRight = opt === it.answer
-                  const isPick = opt === pick
+                    )
+                  }
+                  if (isQ) {
+                    return (
+                      <div key={li} className={cn('rounded-xl border px-4 py-3', presentMode ? 'border-white/10 bg-white/5' : cn(meta.border, 'bg-white'))}>
+                        <p className={cn('text-[15px] font-medium leading-relaxed', presentMode ? 'text-white/90' : 'text-ink')}>
+                          {l}
+                        </p>
+                      </div>
+                    )
+                  }
                   return (
-                    <button
-                      key={opt}
-                      disabled={chosen}
-                      aria-pressed={isPick && !chosen}
-                      onClick={() => {
-                        setPicked((p) => ({ ...p, [i]: opt }))
-                        if (opt === it.answer) playCorrect()
-                        else playWrong()
-                      }}
-                      className={cn(
-                        'rounded-lg border px-3 py-1 text-[12px] font-semibold transition-colors disabled:cursor-default',
-                        CHOICE[choiceState({ isChosen: isPick, isCorrect: isRight, revealed: chosen })],
-                      )}
-                    >
-                      {opt}
-                    </button>
-                  )
-                })}
-                {chosen && !ok && <span className="ml-1 text-[11.5px] text-[#7A3F35]">It is “{it.answer}”.</span>}
-                {chosen && ok && <span className="ml-1 text-[11.5px] text-[#2F5D45]">Correct!</span>}
-              </div>
-            </li>
-          )
-        })}
-      </ul>
-    </div>
-  )
-}
-
-const LINK_MARK = /‿/
-
-function ReadCard({ title, lines, pal }: { title: string; lines: string[]; pal: Palette }) {
-  const body = lines.map((l) => l.trim()).filter((l) => l.length > 0 && l.toLowerCase() !== title.trim().toLowerCase())
-  const links = body.filter((l) => LINK_MARK.test(l))
-  if (links.length < 2) return null
-  const prose = body.filter((l) => !LINK_MARK.test(l) && l.length > 90)
-  const head = body.filter((l) => !LINK_MARK.test(l) && l.length <= 90)
-  const heading = head[0] ?? ''
-  const instruction = head.slice(1).find((l) => l.length > 20) ?? ''
-  const footer = head.filter((l) => l !== heading && l !== instruction).pop() ?? ''
-  return (
-    <article className="overflow-hidden rounded-2xl border border-line bg-surface lg:col-span-2">
-      <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
-        <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
-        <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{title}</p>
-      </header>
-
-      <div className="grid gap-2.5 px-3.5 py-3 sm:grid-cols-[1.6fr_1fr]">
-        <div>
-          {heading && <p className="text-[14px] font-bold leading-snug text-ink">{heading}</p>}
-          {instruction && <p className="mt-0.5 text-[11.5px] italic leading-relaxed text-ink/60">{instruction}</p>}
-          <div className="mt-2 space-y-1.5 rounded-xl border border-line/70 px-3 py-2">
-            {prose.map((para, i) => (
-              <p key={i} className="text-[13.5px] leading-[1.75] text-ink/85">
-                {para}
-              </p>
-            ))}
-          </div>
-        </div>
-
-        <div className={cn('rounded-xl border px-2.5 py-2', pal.border, pal.soft)}>
-          <p className={cn('mb-1.5 text-[9.5px] font-bold uppercase tracking-[.12em]', pal.text)}>Link the sounds</p>
-          <div className="space-y-1">
-            {links.map((l, i) => (
-              <p key={i} className={cn('rounded-md px-1.5 py-0.5 font-mono text-[11.5px]', pal.chip)}>
-                {l}
-              </p>
-            ))}
-          </div>
-          {footer && <p className="mt-1.5 text-[11px] italic leading-relaxed text-ink/55">{footer}</p>}
-        </div>
-      </div>
-    </article>
-  )
-}
-
-
-const IPA_ONLY = /^\/.*\/\s*$/
-const SOUND_LABEL = /^[A-Z][A-Z0-9 /’'&.…?-]{2,28}$/
-const NOTE_START = /^(Short answers|Trả lời|Câu trả lời|Đổi lượt|Nghe |Nhấn |Chọn |Giữ |Nói |Lượt |Vòng |Tự kiểm tra|Mỗi lần)/
-
-function bodyOf(title: string, lines: string[]) {
-  return lines.map((l) => l.trim()).filter((l) => l.length > 0 && l.toLowerCase() !== title.trim().toLowerCase())
-}
-
-/** The shaded word is the one the speaker leans on, so keep the capitals but make them read as stress. */
-function Emphasis({ text, pal }: { text: string; pal: Palette }) {
-  return (
-    <>
-      {text.split(/(\s+)/).map((word, i) =>
-        /^[A-Z][A-Z’'0-9]{1,}$/.test(word) ? (
-          <b key={i} className={cn('font-bold', pal.text)}>
-            {word}
-          </b>
-        ) : (
-          <span key={i}>{word}</span>
-        ),
-      )}
-    </>
-  )
-}
-
-type SoundRow = { text: string; ipa?: string }
-type SoundGroup = { label: string; rows: SoundRow[] }
-
-function parseSound(title: string, lines: string[]) {
-  if (!/^PRONUNCIATION/i.test(title)) return null
-  const body = bodyOf(title, lines)
-  const head: string[] = []
-  const groups: SoundGroup[] = []
-  const notes: string[] = []
-  for (let i = 0; i < body.length; i++) {
-    const line = body[i]
-    const label = SOUND_LABEL.test(line) && !IPA_ONLY.test(line) && !/[a-z]/.test(line)
-    if (label) {
-      groups.push({ label: line, rows: [] })
-      continue
-    }
-    if (!groups.length) {
-      head.push(line)
-      continue
-    }
-    if (NOTE_START.test(line)) {
-      const next = body[i + 1]
-      if (next && /^(Yes|No)[, ]/.test(next)) {
-        notes.push(`${line} — ${next}`)
-        i += 1
-      } else {
-        notes.push(line)
-      }
-      continue
-    }
-    const group = groups[groups.length - 1]
-    if (IPA_ONLY.test(line)) {
-      const last = group.rows[group.rows.length - 1]
-      if (last && !last.ipa) last.ipa = line.trim()
-      else group.rows.push({ text: '', ipa: line.trim() })
-      continue
-    }
-    group.rows.push({ text: line })
-  }
-  return groups.length ? { head, groups, notes } : null
-}
-
-function SoundCard({ title, lines, pal }: { title: string; lines: string[]; pal: Palette }) {
-  const sound = parseSound(title, lines)
-  if (!sound) return null
-  const sub = sound.head[0] ?? ''
-  const instruction = sound.head[1] ?? ''
-  return (
-    <article className="overflow-hidden rounded-2xl border border-line bg-surface lg:col-span-2">
-      <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
-        <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
-        <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{title}</p>
-
-      </header>
-
-      {(sub || instruction) && (
-        <div className="px-3.5 pt-2">
-          {sub && <p className="text-[13px] font-bold leading-snug text-ink">{sub}</p>}
-          {instruction && <p className="mt-0.5 text-[11.5px] italic leading-relaxed text-ink/60">{instruction}</p>}
-        </div>
-      )}
-
-      <div className="divide-y divide-line/60">
-        {sound.groups.map((group) => (
-          <div key={group.label} className="grid gap-x-3 gap-y-1.5 px-3.5 py-2.5 sm:grid-cols-[7.5rem_1fr]">
-            <p className={cn('text-[9.5px] font-bold uppercase leading-relaxed tracking-[.12em]', pal.text)}>{group.label}</p>
-            <div className="grid gap-x-4 gap-y-1.5 sm:grid-cols-2">
-              {group.rows.map((row, i) => (
-                <div key={`${row.text}-${i}`} className="min-w-0">
-                  {row.text && (
-                    <p className="text-[13px] leading-snug text-ink">
-                      <Emphasis text={row.text} pal={pal} />
-                    </p>
-                  )}
-                  {row.ipa && (
-                    <span className={cn('mt-0.5 inline-flex items-center gap-1 rounded px-1.5 py-0.5 font-mono text-[11px]', pal.chip)}>
-                      <Volume2 className="h-2.5 w-2.5" />
-                      {row.ipa}
-                    </span>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {sound.notes.length > 0 && (
-        <ul className="space-y-0.5 border-t border-line/60 px-3.5 py-1.5">
-          {sound.notes.map((note, i) => (
-            <li key={i} className="text-[11.5px] leading-relaxed text-ink/65">
-              {note}
-            </li>
-          ))}
-        </ul>
-      )}
-    </article>
-  )
-}
-
-type DrillRow = { label: string; vi?: string; cue?: string }
-
-function parseScript(title: string, lines: string[]) {
-  const body = bodyOf(title, lines)
-  const start = body.findIndex((l) => /^QUESTION$/i.test(l))
-  if (start < 0) return null
-  const rows: { label: string; text: string }[] = []
-  const notes: string[] = []
-  let current: { label: string; text: string } | null = null
-  for (const line of body.slice(start)) {
-    if (/^(QUESTION|ANSWER|ADD|ASK BACK)$/i.test(line)) {
-      current = { label: line, text: '' }
-      rows.push(current)
-      continue
-    }
-    if (NOTE_START.test(line)) {
-      notes.push(line)
-      continue
-    }
-    if (current) current.text = current.text ? `${current.text} ${line}` : line
-  }
-  return {
-    head: body.slice(0, start),
-    rows: rows.map((r) => ({ ...r, text: r.text.replace(/\s+([?.!,])/g, '$1') })),
-    notes,
-  }
-}
-
-function parseDrill(title: string, lines: string[]) {
-  if (!/^ACTIVATE/i.test(title)) return null
-  const body = bodyOf(title, lines)
-  const head: string[] = []
-  const rows: DrillRow[] = []
-  const notes: string[] = []
-  for (const line of body) {
-    const label = /^[A-Z][A-Z /’'&.-]{0,16}$/.test(line) && !/[a-z]/.test(line)
-    if (label) {
-      rows.push({ label: line })
-      continue
-    }
-    if (!rows.length) {
-      head.push(line)
-      continue
-    }
-    const current = rows[rows.length - 1]
-    if (VI_CHARS.test(line) && !current.vi) {
-      current.vi = line
-      continue
-    }
-    if (!current.cue) {
-      current.cue = line
-      continue
-    }
-    notes.push(line)
-  }
-  return rows.length ? { head, rows, notes } : null
-}
-
-function DrillCard({ title, lines, pal }: { title: string; lines: string[]; pal: Palette }) {
-  const script = parseScript(title, lines)
-  if (script) {
-    return (
-      <article className="overflow-hidden rounded-2xl border border-line bg-surface">
-        <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
-          <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
-          <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{title}</p>
-        </header>
-        <div className="px-3.5 pt-2">
-          {script.head[0] && <p className="text-[13px] font-bold leading-snug text-ink">{script.head[0]}</p>}
-          {script.head[1] && <p className="mt-0.5 text-[11.5px] italic leading-relaxed text-ink/60">{script.head[1]}</p>}
-        </div>
-        <div className="space-y-1 px-3.5 py-2.5">
-          {script.rows.map((row, i) => (
-            <div key={i} className="flex items-start gap-2">
-              <span className={cn('mt-0.5 shrink-0 rounded px-1.5 py-0.5 text-[9.5px] font-bold uppercase tracking-wide', pal.chip)}>
-                {row.label}
-              </span>
-              <p className="min-w-0 flex-1 text-[13px] leading-relaxed text-ink/85">{row.text}</p>
-            </div>
-          ))}
-        </div>
-        {script.notes.length > 0 && (
-          <p className="border-t border-line/60 px-3.5 py-1.5 text-[11.5px] leading-relaxed text-ink/60">{script.notes.join(' ')}</p>
-        )}
-      </article>
-    )
-  }
-
-  const drill = parseDrill(title, lines)
-  if (!drill) return null
-  const pairs = drill.rows.filter((r) => r.cue)
-  return (
-    <article className="overflow-hidden rounded-2xl border border-line bg-surface lg:col-span-2">
-      <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
-        <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
-        <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{title}</p>
-        <span className="text-[10.5px] text-muted">{pairs.length} cues</span>
-      </header>
-
-      <div className="px-3.5 pt-2">
-        {drill.head[0] && <p className="text-[13px] font-bold leading-snug text-ink">{drill.head[0]}</p>}
-        {drill.head[1] && <p className="mt-0.5 text-[11.5px] italic leading-relaxed text-ink/60">{drill.head[1]}</p>}
-      </div>
-
-      <div className="grid gap-1.5 px-3.5 py-2.5 sm:grid-cols-2">
-        {pairs.map((row, i) => (
-          <div key={`${row.label}-${i}`} className={cn('rounded-xl border px-2.5 py-1.5', pal.border, pal.soft)}>
-            <div className="flex items-center gap-1.5">
-              <span className="text-[10px] font-bold text-ink/35">{String(i + 1).padStart(2, '0')}</span>
-              <span className={cn('rounded px-1.5 py-0.5 font-mono text-[10.5px] font-bold', pal.chip)}>{row.label}</span>
-              {row.cue && <span className="min-w-0 flex-1 truncate font-mono text-[11px] text-ink/70">{row.cue}</span>}
-            </div>
-            {row.vi && <p className="mt-0.5 text-[12px] italic leading-snug text-ink/70">{row.vi}</p>}
-          </div>
-        ))}
-      </div>
-
-      {drill.notes.length > 0 && (
-        <ul className="space-y-0.5 border-t border-line/60 px-3.5 py-1.5">
-          {drill.notes.map((note, i) => (
-            <li key={i} className="text-[11.5px] leading-relaxed text-ink/60">
-              {note}
-            </li>
-          ))}
-        </ul>
-      )}
-    </article>
-  )
-}
-
-function DayCard({ title, lines, pal }: { title: string; lines: string[]; pal: Palette }) {
-  if (!/3-DAY PRACTICE/i.test(title)) return null
-  const body = bodyOf(title, lines)
-  const head: string[] = []
-  const days: { label: string; items: string[] }[] = []
-  const strips: string[] = []
-  for (const line of body) {
-    if (/^DAY \d(\s*\/\s*DAY \d)?$/i.test(line)) {
-      days.push({ label: line, items: [] })
-      continue
-    }
-    if (/^(NEXT CLASS|Tự kiểm tra)/i.test(line)) {
-      strips.push(line)
-      continue
-    }
-    if (!days.length) {
-      head.push(line)
-      continue
-    }
-    const items = days[days.length - 1].items
-    const wraps = items.length > 0 && (/^[a-zà-ỹ]/.test(line) || /^(và|hoặc|rồi)\b/.test(line))
-    if (wraps) items[items.length - 1] = `${items[items.length - 1]} ${line}`
-    else items.push(line)
-  }
-  if (!days.length) return null
-  return (
-    <article className="overflow-hidden rounded-2xl border border-line bg-surface lg:col-span-2">
-      <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
-        <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
-        <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{title}</p>
-        <span className="text-[10.5px] text-muted">{days.length} blocks</span>
-      </header>
-
-      <div className="px-3.5 pt-2">
-        {head[0] && <p className="text-[13px] font-bold leading-snug text-ink">{head[0]}</p>}
-        {head[1] && <p className="mt-0.5 text-[11.5px] italic leading-relaxed text-ink/60">{head[1]}</p>}
-      </div>
-
-      <div className={cn('grid gap-2 px-3.5 py-2.5', days.length > 1 && 'sm:grid-cols-2')}>
-        {days.map((day) => (
-          <div key={day.label} className={cn('rounded-xl border px-2.5 py-2', pal.border, pal.soft)}>
-            <p className={cn('mb-1 text-[9.5px] font-bold uppercase tracking-[.12em]', pal.text)}>{day.label}</p>
-            <ul className="space-y-0.5">
-              {day.items.map((item, i) => (
-                <li key={i} className="flex items-start gap-1.5 text-[12.5px] leading-relaxed text-ink/85">
-                  <span className={cn('mt-[7px] h-1 w-1 shrink-0 rounded-full', pal.solid)} />
-                  <span className="min-w-0">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-
-      {strips.length > 0 && (
-        <ul className="space-y-0.5 border-t border-line/60 px-3.5 py-1.5">
-          {strips.map((strip, i) => (
-            <li key={i} className="flex items-start gap-1.5 text-[11.5px] leading-relaxed text-ink/70">
-              <Info className="mt-0.5 h-3 w-3 shrink-0 text-[#6B4E12]" />
-              <span className="min-w-0">{strip}</span>
-            </li>
-          ))}
-        </ul>
-      )}
-    </article>
-  )
-}
-
-function TaskCard({ title, lines, pal }: { title: string; lines: string[]; pal: Palette }) {
-  if (!/EXTRA LISTENING/i.test(title)) return null
-  const body = bodyOf(title, lines)
-  const head: string[] = []
-  const blocks: { label: string; items: string[] }[] = []
-  const notes: string[] = []
-  for (const line of body) {
-    const label = /^[A-Z][A-Z /’'&.-]{2,26}$/.test(line) && !/[a-z]/.test(line)
-    if (label) {
-      blocks.push({ label: line, items: [] })
-      continue
-    }
-    if (!blocks.length) {
-      head.push(line)
-      continue
-    }
-    if (/\?$/.test(line)) blocks[blocks.length - 1].items.push(line)
-    else notes.push(line)
-  }
-  if (!blocks.length) return null
-  return (
-    <article className="overflow-hidden rounded-2xl border border-line bg-surface">
-      <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
-        <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
-        <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{title}</p>
-      </header>
-      <div className="px-3.5 pt-2">
-        {head.map((line, i) => (
-          <p key={i} className={cn(i === 0 ? 'text-[11px] font-bold uppercase tracking-wide' : 'mt-0.5 text-[11.5px] italic leading-relaxed', i === 0 ? pal.text : 'text-ink/60')}>
-            {line}
-          </p>
-        ))}
-      </div>
-      <div className="space-y-2 px-3.5 py-2.5">
-        {blocks.map((block) => (
-          <div key={block.label} className={cn('rounded-xl border px-2.5 py-2', pal.border, pal.soft)}>
-            <p className={cn('mb-1 text-[9.5px] font-bold uppercase tracking-[.12em]', pal.text)}>{block.label}</p>
-            <ol className="space-y-0.5">
-              {block.items.map((item, i) => (
-                <li key={i} className="flex items-start gap-1.5 text-[12.5px] leading-relaxed text-ink/85">
-                  <span className="text-[10px] font-bold text-ink/30">{i + 1}</span>
-                  <span className="min-w-0">{item}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
-        ))}
-      </div>
-      {notes.length > 0 && (
-        <p className="border-t border-line/60 px-3.5 py-1.5 text-[11.5px] leading-relaxed text-ink/60">{notes.join(' ')}</p>
-      )}
-    </article>
-  )
-}
-
-const NAME_LINE = /^[A-Z][A-Z0-9 .'’&-]{1,22}$/
-
-function parseTalk(title: string, lines: string[]) {
-  const body = lines.map((l) => l.trim()).filter((l) => l.length > 0 && l.toLowerCase() !== title.trim().toLowerCase())
-  const turns: { who: string; text: string }[] = []
-  const notes: string[] = []
-  for (let i = 0; i < body.length; i++) {
-    const name = body[i]
-    const tag = body[i + 1]
-    const text = body[i + 2]
-    if (NAME_LINE.test(name) && /^[A-Z]$/.test(tag ?? '') && text && !NAME_LINE.test(text)) {
-      turns.push({ who: name, text })
-      i += 2
-      continue
-    }
-    notes.push(body[i])
-  }
-  return turns.length >= 4 ? { turns, notes } : null
-}
-
-function TalkCard({ title, lines, pal }: { title: string; lines: string[]; pal: Palette }) {
-  const t = parseTalk(title, lines)
-  if (!t) return null
-  const names = [...new Set(t.turns.map((x) => x.who))]
-  const sub = t.notes.find((l) => !/^NOTICE/i.test(l)) ?? ''
-  const foot = t.notes.filter((l) => /^NOTICE/i.test(l))
-  return (
-    <article className="overflow-hidden rounded-2xl border border-line bg-surface lg:col-span-2">
-      <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
-        <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
-        <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{title}</p>
-        <span className="text-[10.5px] text-muted">{t.turns.length} turns</span>
-      </header>
-
-      {sub && <p className="px-3.5 pt-2 text-[12px] italic leading-relaxed text-ink/60">{sub}</p>}
-
-      <div className="space-y-1.5 px-3.5 py-3">
-        {t.turns.map((turn, i) => {
-          const right = names.indexOf(turn.who) === 1
-          return (
-            <div key={i} className={cn('flex flex-col', right ? 'items-end' : 'items-start')}>
-              <span className="mb-0.5 px-0.5 text-[9.5px] font-bold uppercase tracking-[.12em] text-muted">{turn.who}</span>
-              <p
-                className={cn(
-                  'max-w-[86%] rounded-2xl border px-3 py-1.5 text-[13px] leading-relaxed text-ink',
-                  pal.border,
-                  right ? 'rounded-tr-sm' : 'rounded-tl-sm',
-                  right ? 'bg-surface' : pal.soft,
-                )}
-              >
-                {turn.text}
-              </p>
-            </div>
-          )
-        })}
-      </div>
-
-      {foot.length > 0 && (
-        <p className="border-t border-line/60 px-3.5 py-1.5 text-[11.5px] leading-relaxed text-ink/55">{foot.join(' · ')}</p>
-      )}
-    </article>
-  )
-}
-
-const REFLECT_LEFT = /^(MY NEXT TRY|VIẾT LẠI)$/i
-const REFLECT_RIGHT = /^(PARTNER CHECK|CÙNG HỌC KIỂM TRA)$/i
-const CHECK_LINE = /^(Tôi|Chủ ngữ|Sau |Câu trả lời|Cuộc)/
-
-function parseReflect(title: string, lines: string[]) {
-  const body = lines.map((l) => l.trim()).filter((l) => l.length > 0 && l.toLowerCase() !== title.trim().toLowerCase())
-  if (!body.some((l) => REFLECT_LEFT.test(l)) || !body.some((l) => REFLECT_RIGHT.test(l))) return null
-  const firstLabel = body.findIndex((l) => REFLECT_LEFT.test(l) || REFLECT_RIGHT.test(l))
-  const head = body.slice(0, firstLabel)
-  const rest = body.slice(firstLabel).filter((l) => !REFLECT_LEFT.test(l) && !REFLECT_RIGHT.test(l))
-  const left: string[] = []
-  const right: string[] = []
-  let side: 'left' | 'right' = 'left'
-  for (const line of rest) {
-    if (CHECK_LINE.test(line)) side = 'right'
-    ;(side === 'left' ? left : right).push(line)
-  }
-  return { head, left, right }
-}
-
-function ReflectCard({ title, lines, pal }: { title: string; lines: string[]; pal: Palette }) {
-  const r = parseReflect(title, lines)
-  if (!r) return null
-  const subtitle = r.head[0] ?? ''
-  const instruction = r.head.slice(1).join(' ')
-  const fill = r.left.filter((l) => /_{3,}/.test(l))
-  const leftNotes = r.left.filter((l) => !/_{3,}/.test(l))
-  const rightChecks = r.right.filter((l) => !/^(Lượt|Đổi) /.test(l))
-  const rightNotes = r.right.filter((l) => /^(Lượt|Đổi) /.test(l))
-  return (
-    <article className="overflow-hidden rounded-2xl border border-line bg-surface lg:col-span-2">
-      <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
-        <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
-        <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{title}</p>
-      </header>
-
-      <div className="px-3.5 pt-2.5">
-        {subtitle && <p className="text-[14px] font-bold leading-snug text-ink">{subtitle}</p>}
-        {instruction && <p className="mt-0.5 text-[12px] italic leading-relaxed text-ink/60">{instruction}</p>}
-      </div>
-
-      <div className="mt-2.5 grid gap-2.5 px-3.5 pb-3 sm:grid-cols-2">
-        <div className={cn('rounded-xl border px-2.5 py-2', pal.border, pal.soft)}>
-          <p className={cn('mb-1.5 text-[9.5px] font-bold uppercase tracking-[.12em]', pal.text)}>My next try</p>
-          <div className="space-y-1.5">
-            {fill.map((line, i) => {
-              const [label] = line.split(/_{3,}/)
-              return (
-                <div key={i} className="text-[12.5px] leading-relaxed text-ink/85">
-                  <span className="block text-[11.5px] text-ink/60">{label.trim()}</span>
-                  <span className="mt-0.5 block border-b border-dashed border-ink/35">&nbsp;</span>
-                </div>
-              )
-            })}
-          </div>
-          {leftNotes.length > 0 && (
-            <p className="mt-1.5 text-[11px] italic leading-relaxed text-ink/55">{leftNotes.join(' · ')}</p>
-          )}
-        </div>
-
-        <div className="rounded-xl border border-line/70 px-2.5 py-2">
-          <p className="mb-1.5 text-[9.5px] font-bold uppercase tracking-[.12em] text-muted">Partner check</p>
-          <ul className="space-y-1">
-            {rightChecks.map((line, i) => (
-              <li key={i} className="flex items-start gap-1.5 text-[12.5px] leading-relaxed text-ink/85">
-                <span className="mt-0.5 grid h-3.5 w-3.5 shrink-0 place-items-center rounded border border-ink/25" />
-                <span className="min-w-0 break-words">{line}</span>
-              </li>
-            ))}
-          </ul>
-          {rightNotes.length > 0 && (
-            <p className="mt-1.5 text-[11px] italic leading-relaxed text-ink/55">{rightNotes.join(' · ')}</p>
-          )}
-        </div>
-      </div>
-    </article>
-  )
-}
-
-const SCENE_MARK = /^NOW KEEP IT GOING$/
-
-function parseScene(title: string, lines: string[]) {
-  const body = lines.map((l) => l.trim()).filter((l) => l.length > 0 && l.toLowerCase() !== title.trim().toLowerCase())
-  const out = { sub: [] as string[], imagine: [] as string[], ideas: [] as string[], opener: [] as string[], keep: [] as { q: string; pattern: string }[], notes: [] as string[] }
-  let mode: 'sub' | 'imagine' | 'ideas' | 'opener' | 'keep' = 'sub'
-  for (const line of body) {
-    if (/^IMAGINE THE MOMENT$/i.test(line)) { mode = 'imagine'; continue }
-    if (/^IDEA PATHS/i.test(line)) { mode = 'ideas'; continue }
-    if (/^START WITH/i.test(line)) { mode = 'opener'; continue }
-    if (SCENE_MARK.test(line)) { mode = 'keep'; continue }
-    if (mode === 'sub') out.sub.push(line)
-    else if (mode === 'imagine') out.imagine.push(line)
-    else if (mode === 'ideas') out.ideas.push(line)
-    else if (mode === 'opener') out.opener.push(line)
-    else if (/^Q\d+$/.test(line)) out.keep.push({ q: line, pattern: '' })
-    else if (out.keep.length > 0 && out.keep[out.keep.length - 1].pattern === '') out.keep[out.keep.length - 1].pattern = line
-    else out.notes.push(line)
-  }
-  return out
-}
-
-function SceneCard({ title, lines, pal }: { title: string; lines: string[]; pal: Palette }) {
-  const sc = parseScene(title, lines)
-  const subtitle = sc.sub[0] ?? ''
-  const setup = sc.sub.slice(1).join(' ')
-  return (
-    <article className="overflow-hidden rounded-2xl border border-line bg-surface lg:col-span-2">
-      <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
-        <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
-        <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{title}</p>
-      </header>
-
-      <div className="px-3.5 pt-2.5">
-        {subtitle && <p className="text-[14px] font-bold leading-snug text-ink">{subtitle}</p>}
-        {setup && <p className="mt-0.5 text-[12px] italic leading-relaxed text-ink/60">{setup}</p>}
-      </div>
-
-      <div className="mt-2.5 grid gap-2.5 px-3.5 pb-3 sm:grid-cols-2">
-        <div className="space-y-2">
-          {sc.imagine.length > 0 && (
-            <div className={cn('rounded-xl border px-2.5 py-2', pal.border, pal.soft)}>
-              <p className={cn('mb-1 text-[9.5px] font-bold uppercase tracking-[.12em]', pal.text)}>Imagine the moment</p>
-              <ol className="space-y-1">
-                {sc.imagine.map((line, i) => (
-                  <li key={`${line}-${i}`} className="flex items-start gap-1.5 text-[12.5px] leading-relaxed text-ink/80">
-                    <span className={cn('mt-[2px] grid h-4 w-4 shrink-0 place-items-center rounded-full text-[9px] font-bold', pal.chip)}>{i + 1}</span>
-                    <span className="min-w-0 break-words">{line}</span>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          )}
-
-          {sc.ideas.length > 0 && (
-            <div className="rounded-xl border border-line/70 px-2.5 py-2">
-              <p className="mb-1 text-[9.5px] font-bold uppercase tracking-[.12em] text-muted">Idea paths</p>
-              <div className="flex flex-wrap gap-1">
-                {sc.ideas.map((idea) => (
-                  <span key={idea} className={cn('rounded-full border px-2 py-0.5 text-[11px]', pal.border, pal.chip)}>
-                    {idea}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          {sc.opener.length > 0 && (
-            <div className={cn('rounded-xl border px-2.5 py-2', pal.border)}>
-              <p className={cn('mb-1 text-[9.5px] font-bold uppercase tracking-[.12em]', pal.text)}>Start with</p>
-              {sc.opener.map((line, i) => (
-                <p key={i} className="text-[13px] font-medium leading-snug text-ink">
-                  {line}
-                </p>
-              ))}
-            </div>
-          )}
-
-          {sc.keep.length > 0 && (
-            <div className="rounded-xl border border-line/70 px-2.5 py-2">
-              <p className="mb-1 text-[9.5px] font-bold uppercase tracking-[.12em] text-muted">Keep it going</p>
-              <div className="space-y-1">
-                {sc.keep.map(({ q, pattern }) => {
-                  const [head, ...rest] = pattern.split(/_{3,}/)
-                  return (
-                    <div key={q} className="flex items-baseline gap-1.5 text-[12.5px] text-ink/85">
-                      <span className="w-5 shrink-0 text-[10px] font-bold text-muted">{q}</span>
-                      <span className={cn('shrink-0 rounded px-1 py-0.5 font-mono text-[10.5px]', pal.chip)}>{head.trim()}</span>
-                      {rest.length > 0 && <span className="min-w-0 flex-1 border-b border-dashed border-ink/35">&nbsp;</span>}
+                    <div key={li} className={cn('flex items-start gap-3 rounded-xl px-4 py-3', presentMode ? 'bg-white/5' : 'bg-bg/50')}>
+                      <span className={cn('mt-2 h-2 w-2 shrink-0 rounded-full', presentMode ? 'bg-white/30' : meta.accent)} />
+                      <p className={cn('text-[15px] leading-relaxed', presentMode ? 'text-white/90' : 'text-ink')}>
+                        {l}
+                      </p>
                     </div>
                   )
                 })}
               </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {sc.notes.length > 0 && (
-        <p className="border-t border-line/60 px-3.5 py-1.5 text-[11.5px] leading-relaxed text-ink/55">{sc.notes.join(' · ')}</p>
-      )}
-    </article>
-  )
-}
-
-const GENERIC_LABEL = /^[A-Z][A-Z0-9 ,&/'’+…-]{2,30}$/
-
-type Palette = (typeof TONES)[Tone]
-
-function LineRow({ line, pal, reading }: { line: string; pal: Palette; reading: boolean }) {
-  const vi = VI_CHARS.test(line)
-  const pattern = isPattern(line)
-  const check = /^(Tôi|Có |Câu trả lời|Cuộc|Do \/ Are)/.test(line)
-  const teacher = /^Giáo viên/i.test(line)
-  return (
-    <li className={cn('flex items-start gap-1.5 text-[12.5px] leading-relaxed', reading ? 'text-ink/75' : vi ? 'text-ink/55' : 'text-ink/85')}>
-      {check && <span className="mt-0.5 grid h-3.5 w-3.5 shrink-0 place-items-center rounded border border-ink/25" />}
-      {!vi && !pattern && !check && <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-ink/20" />}
-      <span
-        className={cn(
-          'min-w-0 break-words',
-          pattern ? cn('rounded-md px-1.5 py-0.5 font-mono text-[11px]', pal.chip) : 'flex-1',
-          vi && !reading && 'italic',
-          reading && vi && 'font-medium',
-        )}
-      >
-        {teacher && <Info className="mr-1 inline h-3 w-3 text-[#6B4E12]" />}
-        {line.split(/_{3,}/).map((chunk, ci, arr) => (
-          <span key={ci}>
-            {chunk}
-            {ci < arr.length - 1 && <span className="mx-1 inline-block w-16 border-b border-dashed border-ink/40 align-baseline">&nbsp;</span>}
-          </span>
-        ))}
-      </span>
-    </li>
-  )
-}
-
-function Flow({ groups, tone: sectionTone }: { groups: FlowGroup[]; tone?: Tone }) {
-  return (
-    <div className="space-y-3">
-      {groups.map((g) => {
-        const pal = TONES[sectionTone ?? FLOW_TONE[g.group] ?? 'violet']
-        return (
-          <div key={g.group} className="grid gap-2.5 lg:grid-cols-2">
-            {g.slides.map((slide, i) => {
-              const dup = g.slides.filter((x) => x.title === slide.title).length > 1
-              const body = slide.lines.filter((line) => line.trim().toLowerCase() !== slide.title.trim().toLowerCase())
-              const viShare = body.filter((l) => VI_CHARS.test(l)).length / Math.max(body.length, 1)
-              const readingSlide = viShare >= 0.6
-
-              // A slide made of stage labels (ENTER THE SCENE, DAY 1, PREDICT…) reads better as steps.
-              const blocks: { label?: string; lines: string[] }[] = [{ lines: [] }]
-              for (const line of body) {
-                const t = line.trim()
-                if (GENERIC_LABEL.test(t) && !t.includes('+') && !t.endsWith('?')) blocks.push({ label: t, lines: [] })
-                else blocks[blocks.length - 1].lines.push(line)
-              }
-              const labelled = blocks.filter((b) => b.label && b.lines.length > 0)
-              const stepped = labelled.length >= 2
-              // Labels written before their items ("MY NEXT TRY", "PARTNER CHECK") stay as a chip row.
-              const looseLabels = stepped ? [] : [...new Set(blocks.map((b) => b.label).filter(Boolean) as string[])]
-
-              if (body.some((line) => SCENE_MARK.test(line.trim())) && body.some((l) => /^START WITH/i.test(l.trim()))) {
-                return <SceneCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
-              }
-
-              if (slide.lines.filter((l) => LINK_MARK.test(l)).length >= 2) {
-                return <ReadCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
-              }
-
-              if (/^PRONUNCIATION/i.test(slide.title)) {
-                return <SoundCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
-              }
-
-              if (/^ACTIVATE/i.test(slide.title)) {
-                return <DrillCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
-              }
-
-              if (/3-DAY PRACTICE/i.test(slide.title)) {
-                return <DayCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
-              }
-
-              if (/EXTRA LISTENING/i.test(slide.title)) {
-                return <TaskCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
-              }
-
-              const talk = parseTalk(slide.title, slide.lines)
-              if (talk) {
-                return <TalkCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
-              }
-
-              const reflect = parseReflect(slide.title, slide.lines)
-              if (reflect) {
-                return <ReflectCard key={`${slide.title}-${i}`} title={slide.title} lines={slide.lines} pal={pal} />
-              }
-
-              return (
-                <article
-                  key={`${slide.title}-${i}`}
-                  className={cn('overflow-hidden rounded-2xl border border-line bg-surface', g.slides.length === 1 && 'lg:col-span-2')}
-                >
-                  <header className={cn('flex items-center gap-2 border-b border-line/50 px-3.5 py-1.5', pal.soft)}>
-                    <span className={cn('h-2 w-2 shrink-0 rounded-full', pal.solid)} />
-                    <p className={cn('min-w-0 flex-1 truncate text-[11.5px] font-bold uppercase tracking-wide', pal.text)}>{slide.title}</p>
-                    {dup && (
-                      <span className="text-[10.5px] text-muted">
-                        {i + 1}/{g.slides.length}
-                      </span>
-                    )}
-                  </header>
-
-                  {stepped ? (
-                    <div className="grid gap-2 px-3.5 py-3 sm:grid-cols-2">
-                      {blocks
-                        .filter((b) => b.lines.length > 0)
-                        .map((b, bi) => (
-                          <div key={`${b.label}-${bi}`} className={cn('rounded-xl border px-2.5 py-2', pal.border, pal.soft, !b.label && 'sm:col-span-2')}>
-                            {b.label && (
-                              <p className={cn('mb-1 text-[9.5px] font-bold uppercase tracking-[.12em]', pal.text)}>{b.label}</p>
-                            )}
-                            <ul className="space-y-0.5">
-                              {b.lines.map((line, li) => (
-                                <LineRow key={`${line}-${li}`} line={line} pal={pal} reading={readingSlide} />
-                              ))}
-                            </ul>
-                          </div>
-                        ))}
-                    </div>
-                  ) : (
-                    <div className="px-3.5 py-2.5">
-                      {looseLabels.length > 0 && (
-                        <div className="mb-1.5 flex flex-wrap gap-1">
-                          {looseLabels.map((l) => (
-                            <span key={l} className={cn('rounded px-1.5 py-0.5 text-[9.5px] font-bold uppercase tracking-wide', pal.chip)}>
-                              {l}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                      <ul className="space-y-1">
-                        {body
-                          .filter((line) => !looseLabels.includes(line.trim()))
-                          .map((line, k) => (
-                            <LineRow key={`${line}-${k}`} line={line} pal={pal} reading={readingSlide} />
-                          ))}
-                      </ul>
-                    </div>
-                  )}
-                </article>
-              )
-            })}
-          </div>
-        )
+            )
+        }
       })}
     </div>
   )
 }
+
+// ── Main component ───────────────────────────────────────────────────
+
+type Props = { lessonN: number; onPickLesson: (n: number) => void }
 
 export function Lesson({ lessonN, onPickLesson }: Props) {
-  const lesson = lessonA1(lessonN) ?? A1[0]
-  const [active, setActive] = useState(0)
-  const [seen, setSeen] = useState<number[]>([])
+  const [activeSection, setActiveSection] = useState<string>(SEASON1_SECTIONS[0])
+  const [slideIdx, setSlideIdx] = useState(0)
+  const [presentMode, setPresentMode] = useState(false)
+  const [showEx, setShowEx] = useState<Set<number>>(new Set())
 
-  const plan = useMemo(() => (lesson ? partPlan(lesson) : []), [lesson])
+  const prevLesson = A1.find((l) => l.n === lessonN - 1)
+  const nextLesson = A1.find((l) => l.n === lessonN + 1)
+  const currentLesson = A1.find((l) => l.n === lessonN)
 
-  const nodes = useMemo<Record<string, React.ReactNode>>(() => {
-    if (!lesson) return {}
-    const n: Record<string, React.ReactNode> = {
-      vocab: <Vocabulary items={lesson.parts.vocab} />,
-      grammar: <Grammar sections={lesson.parts.grammar.filter((g) => !/CHOOSE/i.test(g.section))} />,
-      dialogue: <Dialogue turns={lesson.parts.dialogue} />,
-      check: <Checks items={lesson.parts.listenCheck} />,
-      choose: (
-        <Choose
-          items={quizFor(lesson.n)
-            .filter((q) => q.kind === 'choice' && q.options && q.options.length > 1)
-            .slice(0, 10)
-            .map((q) => ({
-              prompt: q.prompt,
-              vi: q.vi ?? lesson.parts.grammarChoose.find((c) => c.prompt === q.prompt)?.vi,
-              options: q.options ?? [],
-              answer: q.answer,
-            }))}
-        />
-      ),
-    }
-    for (const g of lesson.parts.flow) {
-      if (g.group === 'Overview') continue
-      n[`flow-${g.group}`] = <Flow groups={[g]} tone={FLOW_TONE[g.group]} />
-    }
-    n['flow-Overview'] = <Overview lesson={lesson} agenda={sectionDefs(lesson).slice(1)} onStart={() => setActive(1)} />
-    return n
-  }, [lesson])
+  const sectionSlides = useMemo(() => season1Slides.filter((s) => s.section === activeSection), [activeSection])
+  const currentSlide = sectionSlides[slideIdx] ?? sectionSlides[0]
+  const meta = SECTION_META[activeSection] ?? SECTION_META.RECONNECTION
 
-  const defs = useMemo(() => (lesson ? sectionDefs(lesson) : []), [lesson])
+  const lines = useMemo(() => currentSlide ? currentSlide.blocks.flatMap((b) => b.content) : [], [currentSlide])
 
-  const sections = useMemo(
-    () =>
-      defs
-        .map((sec) => ({
-          ...sec,
-          blocks: sec.keys
-            .filter((k) => nodes[k])
-            .map((k) => ({ key: k, label: plan.find((p) => p.key === k)?.label ?? '', node: nodes[k] })),
-        }))
-        .filter((sec) => sec.blocks.length > 0),
-    [defs, nodes, plan],
-  )
+  const vocabItems = useMemo(() => {
+    if (!currentSlide) return []
+    return isVocabSlide(currentSlide) ? parseVocab(lines) : []
+  }, [currentSlide, lines])
 
-  useEffect(() => {
-    if (!lesson) return
-    // Reopening a lesson returns the learner to the section they left, not to the top.
-    const saved = Number(localStorage.getItem(`mt2_lesson_at_${lesson.n}`) ?? 0)
-    setActive(Number.isFinite(saved) && saved > 0 ? saved : 0)
-    setSeen(partsSeen(lesson.n))
-  }, [lessonN, lesson])
+  const recallItems = useMemo(() => {
+    if (!currentSlide) return []
+    return isRecallSlide(currentSlide) ? parseRecall(lines) : []
+  }, [currentSlide, lines])
 
-  useEffect(() => {
-    if (!lesson) return
-    try {
-      localStorage.setItem(`mt2_lesson_at_${lesson.n}`, String(active))
-    } catch {
-      /* private mode */
-    }
-  }, [active, lesson])
+  const chunkItems = useMemo(() => {
+    if (!currentSlide) return []
+    return isChunksSlide(currentSlide) ? parseChunks(lines) : []
+  }, [currentSlide, lines])
 
-  const current = sections[active] ?? sections[0]
+  const isSpecialSlide = vocabItems.length > 0 || recallItems.length > 0 || chunkItems.length > 0
 
-  useEffect(() => {
-    if (!lesson || !current) return
-    const t = window.setTimeout(() => {
-      for (const b of current.blocks) {
-        const i = plan.findIndex((p) => p.key === b.key)
-        if (i >= 0) markPart(lesson.n, i)
-        void pushPart(lesson.n, b.key)
-      }
-      setSeen(partsSeen(lesson.n))
-    }, 1200)
-    return () => window.clearTimeout(t)
-  }, [active, lesson, current, plan])
-
-  if (!lesson) return null
-
-  const opened = (sec: (typeof sections)[number]) => sec.blocks.some((b) => seen.includes(plan.findIndex((p) => p.key === b.key)))
-  const openedCount = sections.filter(opened).length
-  const percent = plan.length ? Math.round((seen.length / plan.length) * 100) : 0
-  const prevLesson = A1.find((l) => l.n === lesson.n - 1)
-  const nextLesson = A1.find((l) => l.n === lesson.n + 1)
-  const tone = TONES[current?.tone ?? 'violet']
+  const goSection = useCallback((sec: string) => { setActiveSection(sec); setSlideIdx(0) }, [])
+  const prevSlide = useCallback(() => setSlideIdx((i) => Math.max(0, i - 1)), [])
+  const nextSlide = useCallback(() => setSlideIdx((i) => Math.min(sectionSlides.length - 1, i + 1)), [sectionSlides.length])
 
   return (
-    <div className="w-full px-3 pb-10 pt-3 sm:px-5 lg:px-7">
-      <div className="flex flex-wrap items-center justify-end gap-2">
-        <div className="flex items-center gap-1.5">
-          <Button variant="outline" size="icon" aria-label="Previous lesson" disabled={!prevLesson} onClick={() => prevLesson && onPickLesson(prevLesson.n)}>
-            <ArrowLeft className="h-3.5 w-3.5" />
-          </Button>
-          <select
-            value={lesson.n}
-            onChange={(e) => onPickLesson(Number(e.target.value))}
-            className="focus-ring h-8 w-[calc(100vw-200px)] max-w-[280px] truncate rounded-xl border border-line bg-surface px-2 text-[12px] font-semibold tabular-nums sm:w-auto"
-            aria-label="Choose a lesson"
-          >
-            {A1.map((l) => (
-              <option key={l.n} value={l.n}>
-                Lesson {l.n} · {titleOf(l) || 'A1'}
-              </option>
-            ))}
-          </select>
-          <Button variant="outline" size="icon" aria-label="Next lesson" disabled={!nextLesson} onClick={() => nextLesson && onPickLesson(nextLesson.n)}>
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Button>
-        </div>
-      </div>
-
-      <div className="mt-2.5 flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
-        <div className="min-w-0">
-          <p className="text-[10.5px] font-bold uppercase tracking-[.16em] text-primary">
-            A1 · Lesson {lesson.n} of {A1.length}
-          </p>
-          <h2 className="mt-0.5 truncate text-[22px] font-semibold leading-tight tracking-tight sm:text-[25px]">
-            {titleOf(lesson) || `Lesson ${lesson.n}`}
-          </h2>
-        </div>
-        <div className="flex min-w-[160px] flex-1 items-center gap-3 sm:max-w-[300px]">
-          <Progress value={percent} className="h-1.5 flex-1" />
-          <span className="shrink-0 text-[11.5px] font-semibold tabular-nums text-ink">
-            {openedCount}/{sections.length} sections · {seen.length}/{plan.length} parts
-          </span>
-        </div>
-      </div>
-
-      <div className="no-scrollbar mt-3 flex gap-1.5 overflow-x-auto pb-1 lg:flex-wrap lg:overflow-visible">
-        {sections.map((sec, i) => {
-          const t = TONES[sec.tone]
-          const on = i === active
-          return (
-            <button
-              key={sec.id}
-              onClick={() => setActive(i)}
-              aria-current={on ? 'step' : undefined}
-              className={cn(
-                'flex shrink-0 items-center gap-1.5 rounded-xl border px-3 py-1.5 text-[12.5px] font-semibold transition-colors',
-                on
-                  ? cn(t.soft, t.border, t.text, 'shadow-[inset_0_0_0_1px_hsl(var(--ink)/.08)]')
-                  : 'border-line bg-surface text-ink/65 hover:border-primary/35 hover:text-ink',
-              )}
-            >
-              <span
-                className={cn(
-                  'grid h-4 w-4 shrink-0 place-items-center rounded-[5px] text-[9.5px] font-bold tabular-nums',
-                  on ? cn(t.solid, 'text-white') : cn(t.soft, t.text),
-                )}
-              >
-                {i + 1}
-              </span>
-              {sec.label}
-              {opened(sec) && <Check className={cn('h-3 w-3', on ? t.text : 'text-ok')} />}
-            </button>
-          )
-        })}
-      </div>
-
-      {current && (
-        <section key={current.id} className={cn('mt-3 overflow-hidden rounded-3xl border bg-surface', tone.border)}>
-          <header className={cn('flex flex-wrap items-center justify-between gap-2 px-4 py-3 sm:px-6', tone.soft)}>
-            <div className="min-w-0">
-              <p className={cn('text-[10.5px] font-bold uppercase tracking-[.16em]', tone.text)}>
-                Section {active + 1} of {sections.length}
-              </p>
-              <h3 className="mt-0.5 text-[19px] font-semibold leading-tight tracking-tight sm:text-[21px]">{current.label}</h3>
-            </div>
-            <div className="flex items-center gap-1.5">
-              {active > 0 && (
-                <Button variant="ghost" size="sm" onClick={() => setActive(active - 1)}>
-                  <ArrowLeft className="h-3.5 w-3.5" /> Back
-                </Button>
-              )}
-              {active < sections.length - 1 ? (
-                <Button size="sm" onClick={() => setActive(active + 1)}>
-                  Next section <ArrowRight className="h-3.5 w-3.5" />
-                </Button>
-              ) : (
-                <Button size="sm" onClick={() => nextLesson && onPickLesson(nextLesson.n)} disabled={!nextLesson}>
-                  {nextLesson ? `Lesson ${nextLesson.n}` : 'Done'} <ArrowRight className="h-3.5 w-3.5" />
-                </Button>
-              )}
-            </div>
-          </header>
-
-          <div className="space-y-5 px-4 py-4 sm:px-6 sm:py-5">
-            {current.blocks.map((b) => {
-              const i = plan.findIndex((p) => p.key === b.key)
-              const done = seen.includes(i)
-              return (
-                <div key={b.key}>
-                  {current.blocks.length > 1 && (
-                    <div className="mb-2 flex items-center gap-2">
-                      <p className={cn('text-[10.5px] font-bold uppercase tracking-[.14em]', tone.text)}>{b.label}</p>
-                      <span className="h-px flex-1 bg-line/70" />
-                      {done && <Check className="h-3 w-3 text-ok" />}
-                    </div>
-                  )}
-                  {b.node}
-                </div>
-              )
-            })}
+    <div className={cn('w-full min-h-screen transition-colors duration-500', presentMode ? 'bg-[#0f1410] text-white' : 'bg-bg')}>
+      {/* Top bar */}
+      <div className={cn('sticky top-0 z-20 border-b backdrop-blur-md', presentMode ? 'border-white/10 bg-[#0f1410]/90' : 'border-line bg-surface/95')}>
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="icon" className={cn('h-8 w-8', presentMode && 'border-white/20 bg-white/5 text-white hover:bg-white/10')} disabled={!prevLesson} onClick={() => prevLesson && onPickLesson(prevLesson.n)}>
+              <ArrowLeft className="h-3.5 w-3.5" />
+            </Button>
+            <select value={lessonN} onChange={(e) => onPickLesson(Number(e.target.value))} className={cn('focus-ring h-8 max-w-[200px] truncate rounded-xl border px-3 text-[12px] font-semibold tabular-nums', presentMode ? 'border-white/20 bg-white/5 text-white' : 'border-line bg-surface')} aria-label="Choose a lesson">
+              {A1.map((l) => (<option key={l.n} value={l.n}>Lesson {l.n} · {titleOf(l) || 'A1'}</option>))}
+            </select>
+            <Button variant="outline" size="icon" className={cn('h-8 w-8', presentMode && 'border-white/20 bg-white/5 text-white hover:bg-white/10')} disabled={!nextLesson} onClick={() => nextLesson && onPickLesson(nextLesson.n)}>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Button>
           </div>
-        </section>
-      )}
+          <div className="hidden min-w-0 flex-1 text-center sm:block">
+            <p className={cn('text-[10px] font-bold uppercase tracking-[.2em]', presentMode ? 'text-white/40' : 'text-muted')}>A1 · Lesson {lessonN} of {A1.length}</p>
+            <h2 className={cn('truncate text-[15px] font-semibold', presentMode ? 'text-white' : 'text-ink')}>{titleOf(currentLesson!) || `Lesson ${lessonN}`}</h2>
+          </div>
+          <Button variant="outline" size="sm" className={cn('gap-1.5', presentMode && 'border-white/20 bg-white/5 text-white hover:bg-white/10')} onClick={() => setPresentMode(!presentMode)}>
+            {presentMode ? <Minimize2 className="h-3.5 w-3.5" /> : <Maximize2 className="h-3.5 w-3.5" />}
+            <span className="hidden sm:inline">{presentMode ? 'Exit' : 'Present'}</span>
+          </Button>
+        </div>
+      </div>
+
+      {/* Section tabs */}
+      <div className={cn('border-b', presentMode ? 'border-white/10' : 'border-line')}>
+        <div className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4 py-2 sm:px-6">
+          {SEASON1_SECTIONS.map((sec) => {
+            const m = SECTION_META[sec]
+            const active = sec === activeSection
+            const count = season1Slides.filter((s) => s.section === sec).length
+            return (
+              <button key={sec} onClick={() => goSection(sec)} className={cn('group flex shrink-0 items-center gap-2 rounded-xl px-4 py-2 text-[13px] font-semibold transition-all duration-200', active ? cn(m.accent, 'text-white shadow-lg shadow-black/10') : presentMode ? 'text-white/60 hover:bg-white/10 hover:text-white' : cn('text-ink/60 hover:bg-bg hover:text-ink'))}>
+                <span className="text-base">{m.icon}</span>
+                <span>{m.label}</span>
+                <span className={cn('rounded-full px-1.5 py-0.5 text-[10px] font-bold', active ? 'bg-white/20 text-white' : presentMode ? 'bg-white/10 text-white/50' : 'bg-bg text-muted')}>{count}</span>
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Main content */}
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+        {/* Slide nav bar */}
+        <div className="mb-4 flex items-center justify-between">
+          <div className={cn('flex h-8 items-center gap-2 rounded-full px-4 text-[12px] font-semibold', presentMode ? 'bg-white/10 text-white/70' : cn(meta.bg, meta.color))}>
+            <span>{meta.icon}</span><span>{meta.label}</span><span className="opacity-40">·</span><span>Slide {slideIdx + 1}/{sectionSlides.length}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Button variant="outline" size="sm" className={cn('gap-1', presentMode && 'border-white/20 bg-white/5 text-white hover:bg-white/10')} onClick={prevSlide} disabled={slideIdx === 0}><ArrowLeft className="h-3.5 w-3.5" /></Button>
+            <Button variant="outline" size="sm" className={cn('gap-1', presentMode && 'border-white/20 bg-white/5 text-white hover:bg-white/10')} onClick={nextSlide} disabled={slideIdx === sectionSlides.length - 1}><ArrowRight className="h-3.5 w-3.5" /></Button>
+          </div>
+        </div>
+
+        {/* Slide card */}
+        {currentSlide && (
+          <div className={cn('relative overflow-hidden rounded-3xl border-2 shadow-2xl transition-all duration-300', presentMode ? 'border-white/10 bg-[#1a2018]' : cn(meta.border, 'bg-surface'))}>
+            {/* Slide header */}
+            <div className={cn('px-6 py-5 sm:px-8 sm:py-6', presentMode ? 'bg-white/5' : `bg-gradient-to-r ${meta.gradient}`)}>
+              <div className="flex items-center gap-3">
+                <div className={cn('flex h-12 w-12 items-center justify-center rounded-2xl text-2xl shadow-md', presentMode ? 'bg-white/10' : 'bg-white/70')}>{meta.icon}</div>
+                <div className="min-w-0 flex-1">
+                  <p className={cn('text-[10px] font-bold uppercase tracking-[.2em]', presentMode ? 'text-white/40' : 'text-ink/50')}>Slide {currentSlide.num} · {meta.label}</p>
+                  <h3 className={cn('mt-0.5 text-[22px] font-bold leading-tight sm:text-[26px]', presentMode ? 'text-white' : meta.color)}>{currentSlide.title}</h3>
+                </div>
+              </div>
+              {currentSlide.subtitle && (<p className={cn('mt-3 text-[14px] italic leading-relaxed', presentMode ? 'text-white/60' : 'text-ink/70')}>{currentSlide.subtitle}</p>)}
+            </div>
+
+            {/* Slide body */}
+            <div className="px-6 py-5 sm:px-8 sm:py-6">
+              {/* Vocabulary cards */}
+              {vocabItems.length > 0 && (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  {vocabItems.map((v, i) => (
+                    <div key={i} className={cn('group relative overflow-hidden rounded-2xl border p-4 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5', presentMode ? 'border-white/10 bg-white/5 hover:bg-white/8' : cn(meta.border, 'bg-white hover:shadow-xl'))}>
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <h4 className={cn('text-[20px] font-bold leading-tight', presentMode ? 'text-white' : meta.color)}>{v.word}</h4>
+                          <span className={cn('mt-0.5 inline-block rounded-md px-1.5 py-0.5 text-[10px] font-bold uppercase', presentMode ? 'bg-white/10 text-white/60' : cn(meta.bg, meta.color))}>{v.pos}</span>
+                        </div>
+                        <SpeakButton text={v.word} size="sm" label={`Listen to ${v.word}`} />
+                      </div>
+                      <p className={cn('mt-2 font-mono text-[13px] tracking-wide', presentMode ? 'text-white/50' : 'text-muted')}>{v.ipa}</p>
+                      <p className={cn('mt-1.5 text-[14px] font-medium', presentMode ? 'text-white/80' : 'text-ink')}>{v.meaning}</p>
+                      <div className={cn('mt-3 rounded-xl px-3 py-2', presentMode ? 'bg-white/5' : 'bg-bg/60')}>
+                        <button
+                          onClick={() => setShowEx((s) => { const n = new Set(s); if (n.has(i)) n.delete(i); else n.add(i); return n })}
+                          className={cn('text-[11px] font-semibold', presentMode ? 'text-white/60' : 'text-primary')}
+                        >
+                          {showEx.has(i) ? 'Ẩn ví dụ' : 'Xem ví dụ'}
+                        </button>
+                        {showEx.has(i) && (
+                          <p className={cn('mt-1.5 text-[12.5px] italic leading-relaxed', presentMode ? 'text-white/60' : 'text-ink/70')}>{v.example}</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Recall cards */}
+              {recallItems.length > 0 && (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  {recallItems.map((r, i) => (
+                    <div key={i} className={cn('group relative overflow-hidden rounded-2xl border p-4 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5', presentMode ? 'border-white/10 bg-white/5 hover:bg-white/8' : cn(meta.border, 'bg-white hover:shadow-xl'))}>
+                      <div className="mb-3">
+                        <p className={cn('text-[11px] font-bold uppercase tracking-[.14em]', presentMode ? 'text-white/40' : 'text-muted')}>Meaning</p>
+                        <p className={cn('mt-1 text-[22px] font-bold leading-tight', presentMode ? 'text-white' : meta.color)}>{r.meaning}</p>
+                      </div>
+                      <div className={cn('rounded-xl px-3 py-2.5', presentMode ? 'bg-white/5' : 'bg-bg/60')}>
+                        <p className={cn('text-[12px] font-bold uppercase tracking-[.12em]', presentMode ? 'text-white/40' : 'text-muted')}>Say</p>
+                        <p className={cn('mt-1 font-mono text-[16px] font-semibold tracking-wide', presentMode ? 'text-white/80' : 'text-ink')}>{r.frame}</p>
+                      </div>
+                      <div className="mt-3 flex items-center gap-2">
+                        <span className={cn('rounded-lg px-2 py-1 text-[10.5px] font-bold uppercase', presentMode ? 'bg-white/10 text-white/50' : 'bg-bg text-muted')}>Recall the word →</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Chunks cards */}
+              {chunkItems.length > 0 && (
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  {chunkItems.map((c, i) => (
+                    <div key={i} className={cn('group relative overflow-hidden rounded-2xl border p-4 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5', presentMode ? 'border-white/10 bg-white/5 hover:bg-white/8' : cn(meta.border, 'bg-white hover:shadow-xl'))}>
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0 flex-1">
+                          <p className={cn('text-[17px] font-bold leading-tight', presentMode ? 'text-white' : meta.color)}>{c.chunk}</p>
+                          <p className={cn('mt-1.5 text-[13px]', presentMode ? 'text-white/60' : 'text-ink/70')}>{c.meaning}</p>
+                        </div>
+                        <SpeakButton text={c.chunk} size="sm" label={`Listen to ${c.chunk}`} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Smart text slides (Grammar, Listening, Pronunciation, Activation, Real Talk, Reflection) */}
+              {!isSpecialSlide && (
+                <SmartSlideBody lines={lines} presentMode={presentMode} meta={meta} />
+              )}
+            </div>
+
+            {/* Slide footer */}
+            <div className={cn('flex items-center justify-between border-t px-6 py-3 sm:px-8', presentMode ? 'border-white/10' : 'border-line')}>
+              <button onClick={prevSlide} disabled={slideIdx === 0} className={cn('flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-semibold transition', slideIdx === 0 ? 'opacity-30' : presentMode ? 'text-white/70 hover:bg-white/10' : 'text-muted hover:bg-bg')}>
+                <ArrowLeft className="h-3.5 w-3.5" /> Prev
+              </button>
+              <div className="flex items-center gap-1">
+                {sectionSlides.map((_, i) => (
+                  <button key={i} onClick={() => setSlideIdx(i)} className={cn('h-2 rounded-full transition-all duration-200', i === slideIdx ? cn('w-6', presentMode ? 'bg-white' : meta.accent) : cn('w-2', presentMode ? 'bg-white/20 hover:bg-white/40' : 'bg-line hover:bg-muted'))} />
+                ))}
+              </div>
+              <button onClick={nextSlide} disabled={slideIdx === sectionSlides.length - 1} className={cn('flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-semibold transition', slideIdx === sectionSlides.length - 1 ? 'opacity-30' : presentMode ? 'text-white/70 hover:bg-white/10' : 'text-muted hover:bg-bg')}>
+                Next <ArrowRight className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Thumbnail grid */}
+        <div className="mt-6">
+          <p className={cn('mb-3 text-[11px] font-bold uppercase tracking-[.14em]', presentMode ? 'text-white/40' : 'text-muted')}>All slides · {meta.label}</p>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {sectionSlides.map((s, i) => (
+              <button key={s.num} onClick={() => setSlideIdx(i)} className={cn('group relative overflow-hidden rounded-xl border p-3 text-left transition-all duration-200 hover:shadow-md hover:-translate-y-0.5', i === slideIdx ? presentMode ? 'border-white/30 bg-white/10 ring-2 ring-white/20' : cn(meta.border, meta.bg, 'ring-2 ring-primary/20 shadow-md') : presentMode ? 'border-white/10 bg-white/5 hover:bg-white/8' : 'border-line bg-surface hover:border-primary/30 hover:shadow-sm')}>
+                <div className="mb-1.5 flex items-center gap-1.5">
+                  <span className={cn('flex h-5 w-5 items-center justify-center rounded-md text-[10px] font-bold', i === slideIdx ? (presentMode ? 'bg-white text-black' : cn(meta.accent, 'text-white')) : presentMode ? 'bg-white/10 text-white/50' : 'bg-bg text-muted')}>{s.num}</span>
+                </div>
+                <p className={cn('text-[11.5px] font-semibold leading-snug line-clamp-2', presentMode ? 'text-white/80' : 'text-ink')}>{s.title}</p>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
+
