@@ -1,1 +1,64 @@
-{"lines": [{"s": "TOM", "t": "Hi, Linh. Are you busy now?", "start": 0.0, "end": 3.82}, {"s": "LINH", "t": "Yes, I am. I’m busy until three.", "start": 4.24, "end": 7.88}, {"s": "TOM", "t": "Are you free after three?", "start": 8.3, "end": 10.66}, {"s": "LINH", "t": "Yes, I am. Do you need help?", "start": 11.08, "end": 14.22}, {"s": "TOM", "t": "No, I don’t. Do you want some coffee?", "start": 14.64, "end": 18.65}, {"s": "LINH", "t": "Yes, please. I’m a little tired.", "start": 19.07, "end": 22.45}, {"s": "TOM", "t": "Do you like the cafe near the office?", "start": 22.87, "end": 25.61}, {"s": "LINH", "t": "Yes, I do. I like the coffee there.", "start": 26.03, "end": 29.41}, {"s": "TOM", "t": "Great. Do you need milk?", "start": 29.83, "end": 33.22}, {"s": "LINH", "t": "No, thanks. Black coffee is fine.", "start": 33.64, "end": 37.07}]}
+{
+ "lines": [
+  {
+   "s": "",
+   "t": "Hi, Linh. Are you busy now?",
+   "start": 0.0,
+   "end": 1.5
+  },
+  {
+   "s": "",
+   "t": "Yes, I am. I’m busy until three.",
+   "start": 1.8,
+   "end": 4.08
+  },
+  {
+   "s": "",
+   "t": "Are you free after three?",
+   "start": 4.56,
+   "end": 5.66
+  },
+  {
+   "s": "",
+   "t": "Yes, I am. Do you need help?",
+   "start": 5.96,
+   "end": 7.9
+  },
+  {
+   "s": "",
+   "t": "No, I don’t. Do you want some coffee?",
+   "start": 8.26,
+   "end": 10.14
+  },
+  {
+   "s": "",
+   "t": "Yes, please. I’m a little tired.",
+   "start": 10.46,
+   "end": 12.5
+  },
+  {
+   "s": "",
+   "t": "Do you like the cafe near the office?",
+   "start": 13.06,
+   "end": 14.52
+  },
+  {
+   "s": "",
+   "t": "Yes, I do. I like the coffee there.",
+   "start": 14.92,
+   "end": 17.12
+  },
+  {
+   "s": "",
+   "t": "Great. Do you need milk?",
+   "start": 17.46,
+   "end": 18.82
+  },
+  {
+   "s": "",
+   "t": "No, thanks. Black coffee is fine.",
+   "start": 19.14,
+   "end": 20.96
+  }
+ ]
+}

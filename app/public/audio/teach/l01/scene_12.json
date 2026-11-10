@@ -1,1 +1,52 @@
-{"lines": [{"s": "MAI", "t": "Hi, I’m Mai. Are you new here?", "start": 0.0, "end": 3.1}, {"s": "NAM", "t": "Yes, I am. Do you come here often?", "start": 3.52, "end": 7.64}, {"s": "MAI", "t": "No, I don’t. Do you work nearby?", "start": 8.06, "end": 11.38}, {"s": "NAM", "t": "Yes, I do. I work in sales.", "start": 11.8, "end": 16.24}, {"s": "MAI", "t": "Are you busy after work?", "start": 16.66, "end": 18.7}, {"s": "NAM", "t": "Sometimes. I’m usually free after six.", "start": 19.12, "end": 23.65}, {"s": "MAI", "t": "Do you like coffee?", "start": 24.07, "end": 25.94}, {"s": "NAM", "t": "Yes, I do. What about you?", "start": 26.36, "end": 30.2}]}
+{
+ "lines": [
+  {
+   "s": "",
+   "t": "Hi, I’m Mai. Are you new here?",
+   "start": 0.0,
+   "end": 2.26
+  },
+  {
+   "s": "",
+   "t": "Yes, I am. Do you come here often?",
+   "start": 2.6,
+   "end": 4.74
+  },
+  {
+   "s": "",
+   "t": "No, I don’t. Do you work nearby?",
+   "start": 5.1,
+   "end": 7.18
+  },
+  {
+   "s": "",
+   "t": "Yes, I do. I work in sales.",
+   "start": 7.7,
+   "end": 9.5
+  },
+  {
+   "s": "",
+   "t": "Are you busy after work?",
+   "start": 9.98,
+   "end": 11.1
+  },
+  {
+   "s": "",
+   "t": "Sometimes. I’m usually free after six.",
+   "start": 11.46,
+   "end": 13.86
+  },
+  {
+   "s": "",
+   "t": "Do you like coffee?",
+   "start": 14.32,
+   "end": 14.96
+  },
+  {
+   "s": "",
+   "t": "Yes, I do. What about you?",
+   "start": 15.38,
+   "end": 17.08
+  }
+ ]
+}

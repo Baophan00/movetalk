@@ -127,10 +127,10 @@ function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }
   const [activeIdx, setActiveIdx] = useState(-1)
   const [timeline, setTimeline] = useState<{ s: string; t: string; start: number; end: number }[] | null>(null)
   const base = `/audio/teach/l${String(lesson).padStart(2, '0')}`
-  const src = `${base}/scene_${slide.num}.mp3`
+  const src = `${base}/scene_${slide.num}.mp3?v=2`
 
   useEffect(() => {
-    fetch(`${base}/scene_${slide.num}.json`)
+    fetch(`${base}/scene_${slide.num}.json?v=2`)
       .then((r) => (r.ok ? r.json() : null))
       .then((j) => setTimeline(j ? j.lines : null))
       .catch(() => setTimeline(null))
@@ -283,11 +283,11 @@ function StoryReader({ slide }: { lesson: number; slide: TeachSlide }) {
   const [time, setTime] = useState(0)
   const [duration, setDuration] = useState(26)
   const [wordTimes, setWordTimes] = useState<{ w: string; s: number; e: number }[] | null>(null)
-  const src = `/audio/teach/l01/scene_${slide.num}.mp3`
+  const src = `/audio/teach/l01/scene_${slide.num}.mp3?v=2`
 
   useEffect(() => {
     let alive = true
-    fetch(`/audio/teach/l01/scene_${slide.num}.json`)
+    fetch(`/audio/teach/l01/scene_${slide.num}.json?v=2`)
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => { if (alive && Array.isArray(d?.words) && d.words.length) setWordTimes(d.words) })
       .catch(() => {})
@@ -457,7 +457,7 @@ function PreListen({ lines }: { lines: string[] }) {
 
 function StoryPlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }) {
   const base = `/audio/teach/l${String(lesson).padStart(2, '0')}`
-  const src = `${base}/scene_${slide.num}.mp3`
+  const src = `${base}/scene_${slide.num}.mp3?v=2`
   const [playing, setPlaying] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   useEffect(() => () => { audioRef.current?.pause(); audioRef.current = null }, [])
