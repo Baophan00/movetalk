@@ -8,7 +8,7 @@ export function VoiceToggle() {
   useEffect(() => subscribeVoice(() => setLocal(getVoice())), [])
 
   return (
-    <div className="hidden items-center rounded-lg border border-line bg-surface/70 p-0.5 sm:flex" title="Vocabulary voice">
+    <div className="flex items-center rounded-lg border border-line bg-surface/70 p-0.5" title="Vocabulary voice">
       {(['female', 'male'] as const).map((mode) => (
         <button
           key={mode}
