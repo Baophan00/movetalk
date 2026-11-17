@@ -148,7 +148,7 @@ function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }
   const [open, setOpen] = useState(false)
   const base = `/audio/teach/l${String(lesson).padStart(2, '0')}`
   const src = `${base}/scene_${slide.num}.mp3?v=2`
-  const deckPic = DECK_IMAGES[lesson]?.[slide.num]
+  const deckPic = lesson === 1 ? slide.images[0] : DECK_IMAGES[lesson]?.[slide.num]
 
   useEffect(() => {
     fetch(`${base}/scene_${slide.num}.json?v=2`)
@@ -225,8 +225,8 @@ function DialoguePlayer({ lesson, slide }: { lesson: number; slide: TeachSlide }
         <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
           <button onClick={hasAudio ? toggle : undefined} disabled={!hasAudio} className="group relative block min-h-[260px] w-full flex-1 text-left" aria-label={playing ? 'Pause conversation' : 'Play conversation'}>
             <div className="absolute inset-0 overflow-hidden bg-[#EDE7DC]">
-              {deckPic || slide.images[0] ? (
-                <img src={deckPic || slide.images[0]} alt={slide.title} className="h-full w-full object-cover object-top" />
+              {deckPic ? (
+                <img src={deckPic} alt={slide.title} className="h-full w-full object-cover object-top" />
               ) : (
                 <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#E7F0F0] to-[#CBE0E0]">
                   <span className="text-6xl">💬</span>
@@ -553,7 +553,10 @@ function SlideBody({
     ...(shape.instruction && shape.instruction !== slide.instruction ? [{ from: slide.instruction, to: shape.instruction }] : []),
     ...displayLines.map((to, i) => ({ from: baseLines[i] ?? '', to, i })).filter((e) => e.from && e.to && e.to !== e.from),
   ]
-  if (lesson > 1 && !audioOk) return <DeckFlow lesson={lesson} num={slide.num} edits={edits} />
+  const vocab = parseVocab(displayLines)
+  const isBack = /·\s*BACK\s*$/i.test(shapeTitle) || /BACK/i.test(slide.kind)
+  const vocabCards = isVocabSlide(shapeLines) && vocab.length >= 2
+  if (lesson > 1 && !audioOk && !vocabCards) return <DeckFlow lesson={lesson} num={slide.num} edits={edits} />
   if (/OPTIONAL CHECK/i.test(slide.kind) && displayLines.length >= 2) return <CheckBoard lines={displayLines} />
 
   // ── Real Talk briefs, reflection board, daily plan, reference ─────────
@@ -581,12 +584,8 @@ function SlideBody({
     if (/your question, then their answer/i.test(shapeTitle)) return <FocusList items={displayLines} variant="question" />
   }
 
-  const vocab = parseVocab(displayLines)
-  const isBack = /·\s*BACK\s*$/i.test(shapeTitle) || /BACK/i.test(slide.kind)
-
   // Back sides ("nghĩa + phiên âm + khung câu") are recall cards, not word cards.
-  const vnHead = /[ăâđêôơưĂÂĐÊÔƠƯáàảãạấầẩẫậắằẳẵặéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/
-  if (isVocabSlide(shapeLines) && vocab.length >= 2 && !vnHead.test(vocab[0].word)) {
+  if (vocabCards) {
     if (isBack) {
       return (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
