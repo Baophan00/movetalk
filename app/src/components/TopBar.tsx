@@ -1,5 +1,6 @@
 import { Menu } from 'lucide-react'
 import { SfxToggle } from './SfxToggle'
+import { VoiceToggle } from './VoiceToggle'
 import { BackButton } from './BackButton'
 import { cn } from '../lib/utils'
 
@@ -51,6 +52,7 @@ export function TopBar({ title, crumb, onMenu, onBack, backTo, right, className,
             <Menu className="h-5 w-5" />
           </button>
         )}
+        <VoiceToggle />
         <SfxToggle />
         {right}
       </div>

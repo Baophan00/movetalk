@@ -1,9 +1,32 @@
 import map from '../content/audio-map.json'
 import words from '../content/word-audio.json'
+import usFemale from '../content/audio-map-us-female.json'
+import usMale from '../content/audio-map-us-male.json'
 
-// Recorded dialogue lines from the old pass, plus one clip per vocabulary word generated with the
-// macOS voice; the sentence table wins if the same key appears in both.
-const table = { ...(words as Record<string, string>), ...(map as Record<string, string>) }
+export type VoiceMode = 'female' | 'male'
+const VOICE_KEY = 'mt2_voice'
+const usMaps: Record<VoiceMode, Record<string, string>> = {
+  female: usFemale as Record<string, string>,
+  male: usMale as Record<string, string>,
+}
+const base = { ...(words as Record<string, string>), ...(map as Record<string, string>) }
+let voice: VoiceMode = (() => {
+  try { return localStorage.getItem(VOICE_KEY) === 'male' ? 'male' : 'female' } catch { return 'female' }
+})()
+let table: Record<string, string> = { ...base, ...usMaps[voice] }
+const voiceListeners = new Set<() => void>()
+
+export function getVoice(): VoiceMode { return voice }
+export function setVoice(next: VoiceMode) {
+  voice = next
+  table = { ...base, ...usMaps[next] }
+  try { localStorage.setItem(VOICE_KEY, next) } catch {}
+  voiceListeners.forEach((fn) => fn())
+}
+export function subscribeVoice(fn: () => void) {
+  voiceListeners.add(fn)
+  return () => { voiceListeners.delete(fn) }
+}
 
 let current: HTMLAudioElement | null = null
 
