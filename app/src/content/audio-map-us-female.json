@@ -116,5 +116,13 @@
   "passport": "audio/clips/usf_8ab5e3be4aa2.mp3",
   "ticket": "audio/clips/usf_b44dc54d9c75.mp3",
   "luggage": "audio/clips/usf_06b800ac4a71.mp3",
-  "souvenir": "audio/clips/usf_b320ac79d047.mp3"
+  "souvenir": "audio/clips/usf_b320ac79d047.mp3",
+  "mug": "audio/clips/usf_776d797a0ccc.mp3",
+  "notebook": "audio/clips/usf_703ffcaf0246.mp3",
+  "charger": "audio/clips/usf_aa7664e65c1f.mp3",
+  "receipt": "audio/clips/usf_e7d4a1a0adaf.mp3",
+  "counter": "audio/clips/usf_7498eb8565eb.mp3",
+  "shelf": "audio/clips/usf_e53d160037e7.mp3",
+  "socket": "audio/clips/usf_c4e3c0874be7.mp3",
+  "entrance": "audio/clips/usf_0f9e57e60e8a.mp3"
 }
