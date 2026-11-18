@@ -556,7 +556,7 @@ function SlideBody({
   const vocab = parseVocab(displayLines)
   const isBack = /·\s*BACK\s*$/i.test(shapeTitle) || /BACK/i.test(slide.kind)
   const vocabCards = isVocabSlide(shapeLines) && vocab.length >= 2
-  if (lesson > 1 && !audioOk && !vocabCards) return <DeckFlow lesson={lesson} num={slide.num} edits={edits} />
+  if (lesson > 1 && !audioOk && !vocabCards && !/^A SHORT STORY$/i.test(slide.kind)) return <DeckFlow lesson={lesson} num={slide.num} edits={edits} />
   if (/OPTIONAL CHECK/i.test(slide.kind) && displayLines.length >= 2) return <CheckBoard lines={displayLines} />
 
   // ── Real Talk briefs, reflection board, daily plan, reference ─────────

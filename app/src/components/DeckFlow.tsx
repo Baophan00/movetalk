@@ -182,7 +182,7 @@ export function DeckFlow({ lesson, num, edits = [] }: { lesson: number; num: num
     const label = items.filter((i) => i.y < 55 && i.text === i.text.toUpperCase() && i.text.length < 60).sort((a, b) => a.y - b.y)[0]
     const rest = items.filter((i) => i !== label)
     const title = rest.slice().sort((a, b) => b.sz - a.sz || a.y - b.y)[0]
-    const subtitle = rest.filter((i) => i !== title && i.y < 180 && i.sz <= 14).sort((a, b) => a.y - b.y)[0]
+    const subtitle = rest.filter((i) => i !== title && i.y < 180 && i.sz <= 14 && i.text.length < 40).sort((a, b) => a.y - b.y)[0]
     const body = rest.filter((i) => i !== title && i !== subtitle)
 
     // text that sits inside a panel belongs to that panel
