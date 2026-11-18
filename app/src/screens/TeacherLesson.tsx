@@ -593,7 +593,7 @@ function SlideBody({
             <div key={i} className="rounded-xl border border-line bg-bg/40 p-4">
               <p className="text-[17px] font-bold text-ink">{v.word}</p>
               <p className="mt-0.5 text-[13px] text-muted">{v.ipa}</p>
-              {v.example && <p className="mt-2.5 border-l-2 border-primary/30 pl-3 text-[14.5px] leading-relaxed text-ink/80">{v.example}</p>}
+              {v.meaning && <p className="mt-2.5 border-l-2 border-primary/30 pl-3 text-[14.5px] leading-relaxed text-ink/80">{v.meaning}</p>}
             </div>
           ))}
         </div>
