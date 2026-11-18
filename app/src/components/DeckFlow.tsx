@@ -130,7 +130,7 @@ function TableBlock({ s }: { s: Shape }) {
   )
 }
 
-export function DeckFlow({ lesson, num, edits = [] }: { lesson: number; num: number; edits?: { from: string; to: string; i?: number }[] }) {
+export function DeckFlow({ lesson, num, edits = [], title = '', instruction = '', section = '', kind = '' }: { lesson: number; num: number; edits?: { from: string; to: string; i?: number }[]; title?: string; instruction?: string; section?: string; kind?: string }) {
   const [deck, setDeck] = useState<Deck | null>(null)
   const host = useRef<HTMLDivElement | null>(null)
 
@@ -147,9 +147,9 @@ export function DeckFlow({ lesson, num, edits = [] }: { lesson: number; num: num
       if (sh.type === 'image') images.push(sh)
       else if (sh.type === 'table') tables.push(sh)
       else if (sh.type === 'text') {
-        if (sh.y > 660 || sh.h < 8) continue
+        if (sh.h < 8) continue
         const text = textOf(sh.paras || [])
-        if (!text) continue
+        if (!text || /©|MOVE English|MOVE ·/.test(text)) continue
         items.push({ x: sh.x, y: sh.y, w: sh.w, h: sh.h, paras: sh.paras || [], sz: sizeOf(sh.paras || []), text, align: (sh.paras?.[0]?.algn as string) || 'left' })
       }
     }
@@ -178,12 +178,9 @@ export function DeckFlow({ lesson, num, edits = [] }: { lesson: number; num: num
     }
     for (const it of items) it.text = it.paras.map((pp) => pp.runs.map((r) => r.t).join('')).join(' ')
 
-    // deck chrome
-    const label = items.filter((i) => i.y < 55 && i.text === i.text.toUpperCase() && i.text.length < 60).sort((a, b) => a.y - b.y)[0]
-    const rest = items.filter((i) => i !== label)
-    const title = rest.slice().sort((a, b) => b.sz - a.sz || a.y - b.y)[0]
-    const subtitle = rest.filter((i) => i !== title && i.y < 180 && i.sz <= 14 && i.text.length < 40).sort((a, b) => a.y - b.y)[0]
-    const body = rest.filter((i) => i !== title && i !== subtitle)
+    // Only drop lines the card header already shows; keep every other line from the slide.
+    const skip = new Set([title, instruction, section, kind].filter(Boolean).map((x) => (x || '').trim().toLowerCase()))
+    const body = items.filter((i) => !skip.has(i.text.trim().toLowerCase()))
 
     // text that sits inside a panel belongs to that panel
     const panels = boxes.map((b) => ({ box: b, items: [] as Item[] }))
@@ -240,7 +237,7 @@ export function DeckFlow({ lesson, num, edits = [] }: { lesson: number; num: num
         break
       }
     }
-    return { label, title, subtitle, blocks, images, tables, rowPanels: rows }
+    return { blocks, images, tables, rowPanels: rows }
   }, [deck, num])
 
   if (!deck) return <div className="h-[280px] animate-pulse rounded-2xl border border-line bg-bg/40" />

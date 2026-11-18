@@ -556,7 +556,15 @@ function SlideBody({
   const vocab = parseVocab(displayLines)
   const isBack = /·\s*BACK\s*$/i.test(shapeTitle) || /BACK/i.test(slide.kind)
   const vocabCards = isVocabSlide(shapeLines) && vocab.length >= 2
-  if (lesson > 1 && !audioOk && !vocabCards && !/^A SHORT STORY$/i.test(slide.kind)) return <DeckFlow lesson={lesson} num={slide.num} edits={edits} />
+  const textFirst = new Set(['2:22', '3:26', '3:31', '9:30', '9:31'])
+  if (textFirst.has(`${lesson}:${slide.num}`) && displayLines.length) {
+    return (
+      <div className="space-y-1.5 text-[15px] leading-relaxed text-ink/90">
+        {displayLines.map((line, i) => <p key={i} className="break-words rounded-lg bg-bg/40 px-3 py-1.5">{line}</p>)}
+      </div>
+    )
+  }
+  if (lesson > 1 && !audioOk && !vocabCards && slide.num < 1000 && !/^A SHORT STORY$/i.test(slide.kind)) return <DeckFlow lesson={lesson} num={slide.num} edits={edits} title={slide.title} instruction={slide.instruction} section={slide.section} kind={slide.kind} />
   if (/OPTIONAL CHECK/i.test(slide.kind) && displayLines.length >= 2) return <CheckBoard lines={displayLines} />
 
   // ── Real Talk briefs, reflection board, daily plan, reference ─────────
