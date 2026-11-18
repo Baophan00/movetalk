@@ -599,8 +599,13 @@ function SlideBody({
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {vocab.map((v, i) => (
             <div key={i} className="rounded-xl border border-line bg-bg/40 p-4">
-              <p className="text-[17px] font-bold text-ink">{v.word}</p>
-              <p className="mt-0.5 text-[13px] text-muted">{v.ipa}</p>
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="text-[17px] font-bold text-ink">{v.word}</p>
+                  <p className="mt-0.5 text-[13px] text-muted">{v.ipa}</p>
+                </div>
+                {v.meaning && <SpeakButton text={v.meaning.replace(/_{2,}/g, 'blank')} size="sm" />}
+              </div>
               {v.meaning && <p className="mt-2.5 border-l-2 border-primary/30 pl-3 text-[14.5px] leading-relaxed text-ink/80">{v.meaning}</p>}
             </div>
           ))}
